@@ -2,7 +2,7 @@ import * as validate from 'koa-joi-validate'
 import * as Joi from 'joi';
 import * as Router from 'koa-router'
 import * as Constant from '../constant'
-import * as utils from '../utils'
+import * as helper from '../utils'
 import { AnonymousController } from '../controllers';
 
 export default (router: Router) => {
@@ -22,10 +22,10 @@ export default (router: Router) => {
                     payload['appVersion'] = ctx.request.header['appVersion'];
                     payload['deviceModel'] = ctx.request.header['deviceModel'];
                     let registerResponse = await AnonymousController.register(payload);
-                    ctx.body = utils.sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, registerResponse)
+                    ctx.body = helper.sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, registerResponse)
                 }
                 catch (error) {
-                    throw (utils.sendError(error))
+                    throw (helper.sendError(error))
                 }
             })
 }

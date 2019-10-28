@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Koa from 'koa'
 import { bootstrap } from './utils'
 import middleware from './middlewares'
@@ -10,7 +11,7 @@ app.use(route());
 
 export const start = (async () => {
   try {
-    const port = 3000
+    const port = config.get("server.port")
     const server = app.listen(port)
 
     await bootstrap(server)

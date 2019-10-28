@@ -30,7 +30,7 @@ gulp.task("compile", function () {
 });
 
 gulp.task("copyContent", function () {
-	return gulp.src(["config.json", "Dockerfile"]).pipe(gulp.dest(outputFolder));
+	return gulp.src(["Dockerfile"]).pipe(gulp.dest(outputFolder));
 });
 
 /**

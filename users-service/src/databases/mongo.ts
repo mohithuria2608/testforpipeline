@@ -1,27 +1,28 @@
 import { connect, set, connection as db } from 'mongoose'
 import * as config from 'config'
-import * as utils from '../utils'
+import * as helper from '../utils'
 
 export class mongo {
-  private mongoDbUrl = config.get<string>('dbConfig.dbUrl')
+  private mongoUrl = config.get<string>('mongo.url')
 
   constructor() { }
 
   async mongoConnect(server) {
     set('debug', true)
     set('useFindAndModify', false)
-    db.on('error', err => { console.error('Database error. ', err) })
+    db.on('error', err => {
+      helper.consolelog('Database error. ', err, false)
+    })
       .on('close', (error) => {
-        utils.consolelog('Database connection closed. ', error, false)
-
+        helper.consolelog('Database connection closed. ', error, false)
       })
-    connect(this.mongoDbUrl, { useCreateIndex: true, useNewUrlParser: true }, function (err) {
+    connect(this.mongoUrl, { useCreateIndex: true, useNewUrlParser: true }, function (err) {
       if (err) {
-        console.error('Database connection error. ', err)
+        helper.consolelog('Database connection error. ', err, false)
         return Promise.reject(err)
       }
     })
-    console.info(`Connected to ${this.mongoDbUrl}`)
+    console.info(`Connected to ${this.mongoUrl}`)
     return {}
   }
 }
