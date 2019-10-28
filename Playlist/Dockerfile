@@ -9,7 +9,7 @@ COPY ./gulpfile.js .
 COPY ./package.json .
 COPY ./tsconfig.json .
 COPY ./tslint.json .
-COPY ./config.json .
+COPY ./config ./config.
 COPY ./Dockerfile .
 
 # Install app dependencies

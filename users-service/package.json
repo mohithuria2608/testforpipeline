@@ -2,12 +2,12 @@
   "name": "americana",
   "version": "1.0.0",
   "description": "americana - kfc",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "test-mocha": "node_modules/.bin/ts-mocha ./test/*.ts",
     "test-jest": "node_modules/.bin/jest",
     "test-jasmine": "ts-node node_modules/jasmine/bin/jasmine ./test/*.ts",
-    "start": "node dist/server.js"
+    "start": "node dist/app.js"
   },
   "author": "Ankit Kumar",
   "license": "MIT",
