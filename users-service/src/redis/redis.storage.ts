@@ -1,20 +1,17 @@
-import * as redis from 'ioredis';
-import * as config from 'config';
-import * as util from 'util';
-import * as utils from '../utils'
-
+import * as redis from "ioredis";
+import * as config from "config";
+import * as util from "util";
+import * as utils from "../utils"
 
 export class RedisStorage {
     private client = new redis({
-        port: config.get('redis.port'), // Redis port
-        host: config.get('redis.host'), // Redis host
-        db: config.get('redis.db')
+        port: config.get("redis.port"), // Redis port
+        host: config.get("redis.host"), // Redis host
+        db: config.get("redis.db")
     })
 
     constructor() { }
-
     /////////////////////////////////////////////////////REDIS KEY VALUE///////////////////////////////////////////////////////////////////////////
-
     /**
     * @description Insert in redis
     */
@@ -155,8 +152,7 @@ export class RedisStorage {
             let hget = util.promisify(this.client.hget).bind(this.client)
             let data = await hget(key.toString(), field)
             return data
-        }
-        catch (error) {
+        } catch (error) {
             utils.consolelog('getKeyFromRedisHash', error, false)
             return Promise.reject(error)
         }
@@ -171,8 +167,7 @@ export class RedisStorage {
         try {
             let hgetall = util.promisify(this.client.hgetall).bind(this.client)
             return await hgetall(key.toString())
-        }
-        catch (error) {
+        } catch (error) {
             utils.consolelog('getAllFromRedisHash', error, false)
             return Promise.reject(error)
         }

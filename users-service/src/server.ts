@@ -1,7 +1,7 @@
 import * as Koa from 'koa'
-import * as config from '../config'
-import middleware from '../middlewares'
-import route from '../route'
+import { bootstrap } from './utils'
+import middleware from './middlewares'
+import route from './route'
 const app = new Koa()
 
 
@@ -12,6 +12,8 @@ export const start = (async () => {
   try {
     const port = 3000
     const server = app.listen(port)
+
+    await bootstrap(server)
 
   } catch (err) {
     console.error(err)

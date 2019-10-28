@@ -1,8 +1,8 @@
 import * as validate from 'koa-joi-validate'
 import * as Joi from 'joi';
 import * as Router from 'koa-router'
-import * as Constant from '../../../constant/appConstants'
-import * as utils from '../../../utils'
+import * as Constant from '../constant'
+import * as utils from '../utils'
 import { AnonymousController } from '../controllers';
 
 export default (router: Router) => {

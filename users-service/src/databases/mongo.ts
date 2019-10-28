@@ -1,30 +1,29 @@
-import * as MongoClient from 'mongodb'
+import { connect, set, connection as db } from 'mongoose'
+import * as config from 'config'
+import * as utils from '../utils'
 
-const getMongoURL = (options) => {
-  const url = options.servers
-    .reduce((prev, cur) => prev + cur + ',', 'mongodb://')
+export class mongo {
+  private mongoDbUrl = config.get<string>('dbConfig.dbUrl')
 
-  return `${url.substr(0, url.length - 1)}/${options.db}`
-}
+  constructor() { }
 
-export const mongoConnect = (options, mediator) => {
-  mediator.once('boot.ready', () => {
-    MongoClient.connect(
-      getMongoURL(options), {
-      db: options.dbParameters(),
-      server: options.serverParameters(),
-      replset: options.replsetParameters(options.repl)
-    }, (err, db) => {
-      if (err) {
-        mediator.emit('db.error', err)
-      }
+  async mongoConnect(server) {
+    set('debug', true)
+    set('useFindAndModify', false)
+    db.on('error', err => { console.error('Database error. ', err) })
+      .on('close', (error) => {
+        utils.consolelog('Database connection closed. ', error, false)
 
-      db.admin().authenticate(options.user, options.pass, (err, result) => {
-        if (err) {
-          mediator.emit('db.error', err)
-        }
-        mediator.emit('db.ready', db)
       })
+    connect(this.mongoDbUrl, { useCreateIndex: true, useNewUrlParser: true }, function (err) {
+      if (err) {
+        console.error('Database connection error. ', err)
+        return Promise.reject(err)
+      }
     })
-  })
+    console.info(`Connected to ${this.mongoDbUrl}`)
+    return {}
+  }
 }
+
+export const mongoC = new mongo();

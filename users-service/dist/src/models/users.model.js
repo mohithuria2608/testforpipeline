@@ -1,17 +1,8 @@
-import { Schema, Document, model } from 'mongoose'
-import * as Constant from '../constant';
-
-export interface IUser extends Document {
-    language?: string,
-    name?: string,
-    email?: string,
-    countryCode: string,
-    phoneNo: string,
-    fullPhoneNo: string,
-    registrationDate: Number,
-}
-
-const userSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+const Constant = require("../constant");
+const userSchema = new mongoose_1.Schema({
     language: {
         type: String, enum: [
             Constant.DATABASE.LANGUAGE.EN,
@@ -25,5 +16,4 @@ const userSchema = new Schema({
     fullPhoneNo: { type: String, index: true, required: true, sparse: true },
     registrationDate: { type: Number, required: true },
 });
-
-export let User = model<IUser>("User", userSchema)
+exports.User = mongoose_1.model("User", userSchema);

@@ -1,7 +1,6 @@
 'use strict';
 import * as Models from '../models';
 import * as mongoose from "mongoose";
-import * as utils from '../utils'
 
 export class DAOManager {
     public ObjectId = mongoose.Types.ObjectId;
@@ -143,7 +142,7 @@ export class DAOManager {
             // utils.consolelog('aggregateArray', JSON.stringify(aggregateArray), false)
             let ModelName = Models[model]
             let aggregation = ModelName.aggregate(aggregateArray);
-            if (options) { aggregation.options = options; }
+            if (options) { aggregation.option = options; }
             return await aggregation.exec();
         } catch (error) {
             return Promise.reject(error)

@@ -1,2 +1,1 @@
-export { dbSettings, serverSettings } from './mongoConfig';
-export { mongoConnect } from './mongo';
+export { mongoC } from './mongo';
