@@ -5,7 +5,7 @@
         "port": 4000
     },
     "mongo": {
-        "url": "mongodb://localhost:27017/americana"
+        "url": "mongodb://uchatdev_usr:bN9XMhccGvS9WwSh@192.82.95.14:27017/uchatdev_db"
     },
     "redis": {
         "host": "localhost",

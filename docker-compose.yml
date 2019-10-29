@@ -1,8 +1,8 @@
 version: '2'
 services:
 
-  songs:
-    image: songs52
+  users:
+    image: americana-user
     ports:
       - "3000:3000"
     restart: always
@@ -12,19 +12,8 @@ services:
       - ./service-registry.env
     depends_on:
       - mongo
-      - etcd
       - redis
       
-  frontend:
-    image: frontend52
-    ports:
-      - "3001:3001"
-    restart: always
-    networks:
-      - test-net
-    env_file:
-      - ./service-registry.env
-
   auth:
     image: auth
     ports:
