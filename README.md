@@ -1,3 +1,5 @@
+![](./cover.png)
+
 # Hands-on-Microservices-with-TypeScript-3
 Hands-on Microservices with TypeScript 3 
 
