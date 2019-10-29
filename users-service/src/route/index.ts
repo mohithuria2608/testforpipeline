@@ -1,12 +1,12 @@
 import * as compose from 'koa-compose'
 import * as Router from 'koa-router'
 import { Context } from 'koa'
+import anonymous from './v1/anonymous.route'
 
-
-import anonymous from './anonymous.route'
+const version1 = "/v1"
 
 const children = [
-  { routes: anonymous, prefix: '/v1/anonymous/user' },
+  { routes: anonymous, prefix: version1 + '/anonymous/user' },
 ]
 
 export default function routes() {
@@ -22,7 +22,9 @@ export default function routes() {
       ctx.body = { method: ctx.method, headers: ctx.headers, params: ctx.request.body }
     })
 
-  // Nested routers
+  /**
+   * @description Nested routers
+   * */
   children.forEach(child => {
     const nestedRouter = new Router()
     child.routes(nestedRouter)
