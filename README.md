@@ -23,18 +23,18 @@ for dockerized examples (sections 4-5) build container images
 * use run.bat to run the example, or run similar commands on mac cmdline.
 
 .........................................................................................................................
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ VPN connection data\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-vpn.americana-food.com
-username : 
+# VPN connection data
+* vpn.americana-food.com
+* username : 
 Kfcapptestuser1
 Kfcapptestuser2 
 Kfcapptestuser3
-password : kfc@pp01 
+* password : kfc@pp01 
 
 
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ SDM Credentials\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-HOST = 192.168.204.72
-PORT = 1521
-SERVICE_NAME =sdm.americana.global
-User : mobility
-Pass : u10mob34amr
+# SDM Credentials
+* HOST = 192.168.204.72
+* PORT = 1521
+* SERVICE_NAME =sdm.americana.global
+* User : mobility
+* Pass : u10mob34amr
