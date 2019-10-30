@@ -12,6 +12,8 @@ COPY ./tslint.json .
 COPY ./config ./config.
 COPY ./Dockerfile .
 
+# Install aerospike dependencies
+RUN apt-get install g++ libssl1.0.0 libssl-dev libz-dev
 # Install app dependencies
 RUN npm install --no-optional
 

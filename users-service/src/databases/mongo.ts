@@ -19,7 +19,7 @@ export class Mongo {
         return Promise.reject(err)
       }
     })
-    console.info(`Connected to ${this.mongoUrl}`)
+    helper.consolelog('Connected to ', this.mongoUrl, true)
     return {}
   }
 }

@@ -5,6 +5,7 @@
 */
 
 const aerospike = require('aerospike');
+import * as helper from '../utils'
 
 class AerospikeClass {
 
@@ -17,8 +18,9 @@ class AerospikeClass {
         if (!this.client) { // only init if client not already initialized
             try {
                 this.client = await aerospike.connect({ hosts: 'localhost:3000' });
-                if (this.client) console.log("Aerospike Client Connected");
-            } catch (err) { console.log("ERROR -> AEROSPIKE -> ", err); }
+                if (this.client)
+                    helper.consolelog('Aerospike Client Connected', "", true)
+            } catch (err) { helper.consolelog('Error in Aerospike Connection', err, false) }
         } else throw Error('AEROSPIKE -> Client already initialized');
     }
 
@@ -37,7 +39,7 @@ class AerospikeClass {
                 }
                 // insert the data into aerospike database based on the key
                 this.client.put(key, payload, metaOption, policy, function (err) {
-                    if (err) { console.log("AEROSPIKE -> INSERT ERROR -> ", err); reject(err); }
+                    if (err) { helper.consolelog('Error in Insert Aerospike', err, false) }
                     else resolve(true);
                 });
             } else reject('AEROSPIKE -> Client not initialized');
@@ -53,7 +55,7 @@ class AerospikeClass {
             if (this.client) { // if client is initialized
                 // remove the data based on the key
                 this.client.remove(key, function (err) {
-                    if (err) { console.log("DELETE ERROR -> ", err); reject(err); }
+                    if (err) { helper.consolelog('Error in Delete Aerospike', err, false) }
                     else resolve(true);
                 });
             } else reject('AEROSPIKE -> Client not initialized');

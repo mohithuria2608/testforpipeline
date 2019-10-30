@@ -6,6 +6,7 @@ import * as Constant from '../constant/appConstants'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { isArray } from 'util';
+import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let sendError = function (data) {
@@ -155,17 +156,17 @@ export let consolelog = function (identifier: string, value: any, status: boolea
         if (isArray(value)) {
             value.forEach((obj, i) => {
                 if (status) {
-                    console.info(displayColors ? '\x1b[31m%s\x1b[0m' : '%s', "<--------------" + identifier + "--------------" + i + "-------------->", obj)
+                    logger.info(`${identifier}--------------${i}--------------${obj}`);
                 } else {
-                    console.error(displayColors ? '\x1b[31m%s\x1b[0m' : '%s', "<--------------" + identifier + "--------------" + i + "-------------->", obj)
+                    logger.error(`${identifier}--------------${i}--------------${obj}`);
                 }
             })
             return
         } else {
             if (status) {
-                console.info(displayColors ? '\x1b[31m%s\x1b[0m' : '%s', "<--------------" + identifier + "-------------->", value)
+                logger.info(`${identifier}--------------${value}`);
             } else {
-                console.error(displayColors ? '\x1b[31m%s\x1b[0m' : '%s', "<--------------" + identifier + "-------------->", value)
+                logger.error(`${identifier}--------------${value}`);
             }
             return
         }

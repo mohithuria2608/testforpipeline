@@ -1,0 +1,86 @@
+import * as kafka from 'kafka-node';
+import { kafkaClient } from './client';
+import * as helper from "../utils"
+
+enum KAFKA_PRODUCERS {
+    AUTH = 'AUTH'
+}
+
+class KafkaProducer {
+
+    producer: kafka.Producer;
+
+    constructor() {
+        this.producer = new kafka.Producer(kafkaClient.getKafkaInstance(), {
+            partitionerType: 2,
+            requireAcks: 1,
+        });
+
+        this.producer.on('error', function (err) { helper.consolelog('Err in starting the producer', [err], false); })
+
+        /**
+         * @param 
+         * var topicsToCreate = [{
+            topic: 'topic1',
+            partitions: 1,
+            replicationFactor: 2
+        },
+        {
+            topic: 'topic2',
+            partitions: 5,
+            replicationFactor: 3,
+            // Optional set of config entries
+            configEntries: [
+                {
+                    name: 'compression.type',
+                    value: 'gzip'
+                },
+                {
+                    name: 'min.compaction.lag.ms',
+                    value: '50'
+                }
+            ],
+            // Optional explicit partition / replica assignment
+            // When this property exists, partitions and replicationFactor properties are ignored
+            replicaAssignment: [
+                {
+                    partition: 0,
+                    replicas: [3, 4]
+                },
+                {
+                    partition: 1,
+                    replicas: [2, 1]
+                }
+            ]
+        }]; */
+
+        this.producer.on('ready', () => {
+            this.producer.createTopics([KAFKA_PRODUCERS.AUTH], (err, data) => {
+                if (err) {
+                    helper.consolelog('Err in producer auth', [err.messages], false);
+                } else {
+                    helper.consolelog('kafka topics created successfully', [data], true);
+                }
+            });
+        });
+    }
+
+    sendMessage(req: kafka.ProduceRequest) {
+        this.producer.send([
+            {
+                partition: req.partition,
+                topic: req.topic,
+                messages: req.messages,
+            }
+        ], (err, data) => {
+            if (err) {
+                helper.consolelog('Err in producer auth', [err.messages], false);
+            }
+            helper.consolelog('send message successfully', [data], true);
+        })
+    }
+
+}
+
+
+export const kafkaProducer = new KafkaProducer();
