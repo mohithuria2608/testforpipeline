@@ -1,7 +1,7 @@
 
 
 import * as kafka from 'kafka-node';
-import * as helper from "../utils"
+import { consolelog } from "../utils"
 
 
 class KafkaClientClass {
@@ -10,15 +10,15 @@ class KafkaClientClass {
 
     constructor() {
         this.kafkaClient = new kafka.KafkaClient({
-            kafkaHost: 'localhost:9093'
+            kafkaHost: 'localhost:9093',
+            sasl: { mechanism: 'plain', username: 'kafka', password: 'kafka' }
         })
         this.kafkaClient.on('error', (err) => {
-            helper.consolelog('insertKeyInRedis', [err], false)
+            consolelog('Kafka client error in connection', err, false)
         });
     }
 
     getKafkaInstance() {
-        helper.consolelog('Kafka client', [this.kafkaClient], false)
         return this.kafkaClient;
     }
 }

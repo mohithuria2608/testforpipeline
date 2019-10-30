@@ -151,11 +151,11 @@ export let arrayToObject = function (array: any) {
 
 }
 
-export let consolelog = function (identifier: string, value: any, status: boolean) {
+export let consolelog = function (identifier: string, value: any, isError: boolean) {
     try {
         if (isArray(value)) {
             value.forEach((obj, i) => {
-                if (status) {
+                if (isError) {
                     logger.info(`${identifier}--------------${i}--------------${obj}`);
                 } else {
                     logger.error(`${identifier}--------------${i}--------------${obj}`);
@@ -163,7 +163,7 @@ export let consolelog = function (identifier: string, value: any, status: boolea
             })
             return
         } else {
-            if (status) {
+            if (isError) {
                 logger.info(`${identifier}--------------${value}`);
             } else {
                 logger.error(`${identifier}--------------${value}`);

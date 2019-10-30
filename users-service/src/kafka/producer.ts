@@ -1,6 +1,6 @@
 import * as kafka from 'kafka-node';
 import { kafkaClient } from './client';
-import * as helper from "../utils"
+import { consolelog } from "../utils"
 
 enum KAFKA_PRODUCERS {
     AUTH = 'AUTH'
@@ -16,7 +16,7 @@ class KafkaProducer {
             requireAcks: 1,
         });
 
-        this.producer.on('error', function (err) { helper.consolelog('Err in starting the producer', [err], false); })
+        this.producer.on('error', function (err) { consolelog('Err in starting the producer', err, false); })
 
         /**
          * @param 
@@ -57,9 +57,9 @@ class KafkaProducer {
         this.producer.on('ready', () => {
             this.producer.createTopics([KAFKA_PRODUCERS.AUTH], (err, data) => {
                 if (err) {
-                    helper.consolelog('Err in producer auth', [err.messages], false);
+                    consolelog('Err in creating topics', err, false);
                 } else {
-                    helper.consolelog('kafka topics created successfully', [data], true);
+                    consolelog('kafka topics created successfully', data, true);
                 }
             });
         });
@@ -74,13 +74,14 @@ class KafkaProducer {
             }
         ], (err, data) => {
             if (err) {
-                helper.consolelog('Err in producer auth', [err.messages], false);
+                consolelog('Err in producing to kafka topic', err, false);
+            } else {
+                consolelog('message produced to kafka successfully', data, true);
             }
-            helper.consolelog('send message successfully', [data], true);
         })
     }
 
 }
 
 
-export const kafkaProducer = new KafkaProducer();
+export const kafkaProducerE = new KafkaProducer();

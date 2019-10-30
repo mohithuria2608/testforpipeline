@@ -1,11 +1,12 @@
-var gulp = require("gulp");
-var ts = require("gulp-typescript");
-var del = require("del");
-var tsProject = ts.createProject("tsconfig.json");
-var tslint = require("gulp-tslint");
-var runSequence = require('run-sequence');
+const gulp = require("gulp");
+const ts = require("gulp-typescript");
+const del = require("del");
+const tsProject = ts.createProject("tsconfig.json");
+const tslint = require("gulp-tslint");
+const runSequence = require('run-sequence');
+const spawn = require('child_process').spawn;
 
-var outputFolder = "dist";
+const outputFolder = "dist";
 
 gulp.task("clean", function () {
 	return del([outputFolder]);
@@ -33,7 +34,11 @@ gulp.task("copyContent", function () {
 	return gulp.src(["Dockerfile"]).pipe(gulp.dest(outputFolder));
 });
 
+gulp.task('server', function () {
+	return spawn('node', ['dist/src/app.js'], { stdio: 'inherit' });
+})
+
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "server"));

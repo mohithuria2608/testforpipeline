@@ -1,6 +1,6 @@
 import * as mongoose from "mongoose";
 import * as Services from '../databases/dao';
-import * as helper from '../utils'
+import { consolelog } from '../utils'
 
 export class BaseEntity {
     public ObjectId = mongoose.Types.ObjectId;
@@ -15,7 +15,7 @@ export class BaseEntity {
             let data = await this.DAOManager.saveData(this.modelName, saveData)
             return data
         } catch (error) {
-            helper.consolelog('Base entity createOneEntity', error, false)
+            consolelog('Base entity createOneEntity', error, false)
             return Promise.reject(error)
         }
     }
@@ -25,7 +25,7 @@ export class BaseEntity {
             let data = await this.DAOManager.insertMany(this.modelName, saveData, {})
             return data
         } catch (error) {
-            helper.consolelog('Base entity createMulti', error, false)
+            consolelog('Base entity createMulti', error, false)
             return Promise.reject(error)
         }
     }
@@ -40,7 +40,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findOne(this.modelName, criteria, projection, option)
             return data
         } catch (error) {
-            helper.consolelog('Base entity getOneEntity', error, false)
+            consolelog('Base entity getOneEntity', error, false)
             return Promise.reject(error)
         }
 
@@ -52,7 +52,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findAndUpdate(this.modelName, criteria, dataToUpdate, option)
             return data
         } catch (error) {
-            helper.consolelog('Base entity updateOneEntity', error, false)
+            consolelog('Base entity updateOneEntity', error, false)
             return Promise.reject(error)
         }
     }
@@ -64,7 +64,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findAndReplaceOne(this.modelName, criteria, replacement, option)
             return data
         } catch (error) {
-            helper.consolelog('Base entity replaceOneEntity', error, false)
+            consolelog('Base entity replaceOneEntity', error, false)
             return Promise.reject(error)
         }
 
@@ -75,7 +75,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findOne(this.modelName, { _id: _id }, projection, { lean: true })
             return data
         } catch (error) {
-            helper.consolelog('Base entity getById', error, false)
+            consolelog('Base entity getById', error, false)
             return Promise.reject(error)
         }
     }
@@ -85,7 +85,7 @@ export class BaseEntity {
             let data = await this.DAOManager.getData(this.modelName, criteria, projection, { lean: true })
             return data
         } catch (error) {
-            helper.consolelog('Base entity getMultiple', error, false)
+            consolelog('Base entity getMultiple', error, false)
             return Promise.reject(error)
         }
     }
@@ -95,7 +95,7 @@ export class BaseEntity {
             let data = await this.DAOManager.distinct(this.modelName, key, criteria)
             return data
         } catch (error) {
-            helper.consolelog('Base entity getDistinct', error, false)
+            consolelog('Base entity getDistinct', error, false)
             return Promise.reject(error)
         }
     }
@@ -107,7 +107,7 @@ export class BaseEntity {
             let data = await this.DAOManager.updateMany(this.modelName, criteria, projection, option)
             return data
         } catch (error) {
-            helper.consolelog('Base entity updateMultiple', error, false)
+            consolelog('Base entity updateMultiple', error, false)
             return Promise.reject(error)
         }
     }
@@ -119,7 +119,7 @@ export class BaseEntity {
             let data = await this.DAOManager.aggregateData(this.modelName, pipeline, option)
             return data
         } catch (error) {
-            helper.consolelog('Base entity aggregate', error, false)
+            consolelog('Base entity aggregate', error, false)
             return Promise.reject(error)
         }
     }
@@ -129,7 +129,7 @@ export class BaseEntity {
             let data = await this.DAOManager.remove(this.modelName, criteria)
             return data
         } catch (error) {
-            helper.consolelog('Base entity removeEntity', error, false)
+            consolelog('Base entity removeEntity', error, false)
             return Promise.reject(error)
         }
     }
@@ -139,7 +139,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findAndRemove(this.modelName, criteria, {});
             return data;
         } catch (error) {
-            helper.consolelog('Base entity findAndRemove', error, false)
+            consolelog('Base entity findAndRemove', error, false)
             return Promise.reject(error)
         }
     };
@@ -149,7 +149,7 @@ export class BaseEntity {
             let data = await this.DAOManager.count(this.modelName, criteria)
             return data
         } catch (error) {
-            helper.consolelog('Base entity count', error, false)
+            consolelog('Base entity count', error, false)
             return Promise.reject(error)
         }
     }

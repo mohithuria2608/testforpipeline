@@ -1,7 +1,7 @@
 import * as redis from "ioredis";
 import * as config from "config";
 import * as util from "util";
-import * as helper from "../utils"
+import { consolelog } from "../utils"
 
 export class RedisStorage {
     private client = new redis({
@@ -22,12 +22,12 @@ export class RedisStorage {
             } else {
                 let promise1 = util.promisify(this.client.set).bind(this.client)
                 let appSocket = await promise1(key.toString() + prefix, value.toString())
-                helper.consolelog('insertKeyInRedis', [key.toString(), value], true)
+                consolelog('insertKeyInRedis', [key.toString(), value], true)
                 return {}
             }
 
         } catch (error) {
-            helper.consolelog('Redis storage insertKeyInRedis', error, false)
+            consolelog('Redis storage insertKeyInRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -39,10 +39,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.get).bind(this.client)
             let value = await promise1(key.toString() + prefix);
-            // helper.consolelog('getKeyFromRedis', [key.toString() + prefix, value, fileName, functionName], true)
+            // consolelog('getKeyFromRedis', [key.toString() + prefix, value, fileName, functionName], true)
             return value
         } catch (error) {
-            helper.consolelog('Redis storage getKeyFromRedis', error, false)
+            consolelog('Redis storage getKeyFromRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -54,10 +54,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.del).bind(this.client)
             await promise1(key.toString() + prefix);
-            helper.consolelog('delKeyFromRedis', key.toString() + prefix, true)
+            consolelog('delKeyFromRedis', key.toString() + prefix, true)
             return
         } catch (error) {
-            helper.consolelog('Redis storage delKeyFromRedis', error, false)
+            consolelog('Redis storage delKeyFromRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -68,13 +68,13 @@ export class RedisStorage {
     //         if (socketId == currentSocketId) {
     //             let promise1 = util.promisify(this.client.del).bind(this.client)
     //             await promise1(key.toString() + prefix);
-    //             helper.consolelog('delKeyFromRedis', key.toString() + prefix, true)
+    //             consolelog('delKeyFromRedis', key.toString() + prefix, true)
     //             return
     //         } else {
     //             return
     //         }
     //     } catch (error) {
-    //         helper.consolelog('Redis storage delKeyFromRedis', error, false)
+    //         consolelog('Redis storage delKeyFromRedis', error, false)
     //         return Promise.reject(error)
     //     }
     // }
@@ -86,10 +86,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.expire).bind(this.client)
             let value = await promise1(key.toString() + prefix, expireAt);
-            helper.consolelog('expireKeyFromRedis', [key.toString() + prefix, value], true)
+            consolelog('expireKeyFromRedis', [key.toString() + prefix, value], true)
             return value
         } catch (error) {
-            helper.consolelog('Redis storage expireKeyFromRedis', error, false)
+            consolelog('Redis storage expireKeyFromRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -110,7 +110,7 @@ export class RedisStorage {
             return
         }
         catch (error) {
-            helper.consolelog('insertKeyInRedisHash', error, false)
+            consolelog('insertKeyInRedisHash', error, false)
             return Promise.reject(error)
         }
     }
@@ -127,7 +127,7 @@ export class RedisStorage {
                 let hexists = util.promisify(this.client.hexists).bind(this.client);
                 let keyExists = await hexists(key.toString(), field)
                 if (keyExists == 0) {
-                    helper.consolelog('deleteKeyFromRedisHash', keyExists, false)
+                    consolelog('deleteKeyFromRedisHash', keyExists, false)
                     return {}
                 }
             }
@@ -136,7 +136,7 @@ export class RedisStorage {
             await hdel(key.toString(), field.toString())
         }
         catch (error) {
-            helper.consolelog('deleteKeyFromRedisHash', error, false)
+            consolelog('deleteKeyFromRedisHash', error, false)
             return Promise.reject(error)
         }
     }
@@ -153,7 +153,7 @@ export class RedisStorage {
             let data = await hget(key.toString(), field)
             return data
         } catch (error) {
-            helper.consolelog('getKeyFromRedisHash', error, false)
+            consolelog('getKeyFromRedisHash', error, false)
             return Promise.reject(error)
         }
     }
@@ -168,7 +168,7 @@ export class RedisStorage {
             let hgetall = util.promisify(this.client.hgetall).bind(this.client)
             return await hgetall(key.toString())
         } catch (error) {
-            helper.consolelog('getAllFromRedisHash', error, false)
+            consolelog('getAllFromRedisHash', error, false)
             return Promise.reject(error)
         }
     }
@@ -179,10 +179,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.rpush).bind(this.client)
             let addRoomToSet = await promise1(key.toString() + prefix, element);
-            helper.consolelog('rPushInRedis', [key.toString() + prefix, element], true)
+            consolelog('rPushInRedis', [key.toString() + prefix, element], true)
             return {}
         } catch (error) {
-            helper.consolelog('Redis storage rPushInRedis', error, false)
+            consolelog('Redis storage rPushInRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -191,10 +191,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.lpush).bind(this.client)
             let addRoomToSet = await promise1(key.toString() + prefix, element);
-            helper.consolelog('lPushInRedis', [key.toString() + prefix, element], true)
+            consolelog('lPushInRedis', [key.toString() + prefix, element], true)
             return {}
         } catch (error) {
-            helper.consolelog('Redis storage lPushInRedis', error, false)
+            consolelog('Redis storage lPushInRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -206,10 +206,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.lrange).bind(this.client)
             let listInfo = await promise1(key.toString() + prefix, lRange, uRange);
-            helper.consolelog('getListInRedis', [key.toString() + prefix, JSON.stringify(listInfo)], true)
+            consolelog('getListInRedis', [key.toString() + prefix, JSON.stringify(listInfo)], true)
             return listInfo
         } catch (error) {
-            helper.consolelog('Redis storage getListInRedis', error, false)
+            consolelog('Redis storage getListInRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -218,10 +218,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.del).bind(this.client)
             let deleteList = await promise1(key.toString() + prefix);
-            helper.consolelog('deleteListInRedis', [key.toString() + prefix], true)
+            consolelog('deleteListInRedis', [key.toString() + prefix], true)
             return {}
         } catch (error) {
-            helper.consolelog('Redis storage deleteListInRedis', error, false)
+            consolelog('Redis storage deleteListInRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -230,10 +230,10 @@ export class RedisStorage {
         try {
             let promise1 = util.promisify(this.client.lrem).bind(this.client)
             let removeELementFromList = await promise1(key.toString() + prefix, 0, element.toString()); //@comment : removes all matching element from the array
-            helper.consolelog('removeElementFromListInRedis', [key.toString() + prefix, element], true)
+            consolelog('removeElementFromListInRedis', [key.toString() + prefix, element], true)
             return {}
         } catch (error) {
-            helper.consolelog('Redis storage removeElementFromListInRedis', error, false)
+            consolelog('Redis storage removeElementFromListInRedis', error, false)
             return Promise.reject(error)
         }
     }
@@ -246,10 +246,10 @@ export class RedisStorage {
     //     try {
     //         let promise1 = util.promisify(this.client.sadd).bind(this.client)
     //         let addRoomToSet = await promise1(key.toString() + prefix, element);
-    //         helper.consolelog('insertSetInRedis', [key.toString() + prefix, element], true)
+    //         consolelog('insertSetInRedis', [key.toString() + prefix, element], true)
     //         return {}
     //     } catch (error) {
-    //         helper.consolelog('Redis storage insertSetInRedis', error, false)
+    //         consolelog('Redis storage insertSetInRedis', error, false)
     //         return Promise.reject(error)
     //     }
     // }
@@ -261,10 +261,10 @@ export class RedisStorage {
     //     try {
     //         let promise1 = util.promisify(this.client.smembers).bind(this.client)
     //         let setInfo = await promise1(key.toString() + prefix);
-    //         helper.consolelog('getSetInRedis', [key.toString() + prefix, JSON.stringify(setInfo)], true)
+    //         consolelog('getSetInRedis', [key.toString() + prefix, JSON.stringify(setInfo)], true)
     //         return setInfo
     //     } catch (error) {
-    //         helper.consolelog('Redis storage getSetInRedis', error, false)
+    //         consolelog('Redis storage getSetInRedis', error, false)
     //         return Promise.reject(error)
     //     }
     // }
@@ -273,10 +273,10 @@ export class RedisStorage {
     //     try {
     //         let promise1 = util.promisify(this.client.del).bind(this.client)
     //         let addRoomToSet = await promise1(key.toString() + prefix);
-    //         helper.consolelog('deleteSetInRedis', [key.toString() + prefix], true)
+    //         consolelog('deleteSetInRedis', [key.toString() + prefix], true)
     //         return {}
     //     } catch (error) {
-    //         helper.consolelog('Redis storage deleteSetInRedis', error, false)
+    //         consolelog('Redis storage deleteSetInRedis', error, false)
     //         return Promise.reject(error)
     //     }
     // }
@@ -289,10 +289,10 @@ export class RedisStorage {
     //     try {
     //         let promise1 = util.promisify(this.client.srem).bind(this.client)
     //         let addRoomToSet = await promise1(key.toString() + prefix, element.toString());
-    //         helper.consolelog('removeElementFromSetInRedis', [key.toString() + prefix, element], true)
+    //         consolelog('removeElementFromSetInRedis', [key.toString() + prefix, element], true)
     //         return {}
     //     } catch (error) {
-    //         helper.consolelog('Redis storage removeElementFromSetInRedis', error, false)
+    //         consolelog('Redis storage removeElementFromSetInRedis', error, false)
     //         return Promise.reject(error)
     //     }
     // }
@@ -304,11 +304,11 @@ export class RedisStorage {
     //     try {
     //         let promise1 = util.promisify(this.client.multi).bind(this.client)
     //         let execMultiCommands = await promise1.exec(commands);
-    //         helper.consolelog('execMulti', commands, true)
+    //         consolelog('execMulti', commands, true)
     //         return {}
 
     //     } catch (error) {
-    //         helper.consolelog('Redis storage execMulti', error, false)
+    //         consolelog('Redis storage execMulti', error, false)
     //         return Promise.reject(error)
     //     }
     // }

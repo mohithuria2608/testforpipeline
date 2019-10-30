@@ -1,6 +1,6 @@
 import { Middleware, Context } from 'koa'
 import * as CONSTANT from '../constant/appConstants'
-import * as helper from '../utils'
+import { consolelog } from '../utils'
 
 export default (opts?): Middleware => {
   return async (ctx: Context, next) => {
@@ -15,7 +15,7 @@ export default (opts?): Middleware => {
 }
 
 let errorHandler = async (err) => {
-  helper.consolelog('errorHandler', JSON.stringify(err), false)
+  consolelog('errorHandler', JSON.stringify(err), false)
   if (err.isBoom) {
     return err.output
   } else {
