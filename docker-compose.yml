@@ -1,10 +1,10 @@
 version: '2'
 services:
 
-  users:
-    image: americana-user
+  user:
+    image: user-service
     ports:
-      - "3000:3000"
+      - "4000:4000"
     restart: always
     networks:
       - test-net
@@ -13,51 +13,30 @@ services:
     depends_on:
       - mongo
       - redis
+      - aerospike
       
   auth:
-    image: auth
+    image: auth-service
     ports:
-      - "3003:3003"
+      - "4001:4001"
     restart: always
     networks:
       - test-net
     env_file:
       - ./service-registry.env
       
-  playlist:
-    image: playlist52
+  menu:
+    image: menu-service
     ports:
-      - "3002:3002"
+      - "4002:4002"
     restart: always
     networks:
       - test-net
     env_file:
       - ./service-registry.env
-      
-  mongo:
-    image: mongo
-    restart: always
-    ports:
-      - 3017:27017
-    #environment:
-      #MONGO_INITDB_ROOT_USERNAME: root
-      #MONGO_INITDB_ROOT_PASSWORD: example
-    networks:
-      - test-net
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 3018:8081
-    #environment:
-      #ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      #ME_CONFIG_MONGODB_ADMINPASSWORD: example
-    networks:
-      - test-net
       
   nginx:
-    image: mynginx52
+    image: mynginx
     networks:
       - test-net
     ports:
@@ -66,46 +45,9 @@ services:
     env_file:
       - ./service-registry.env
     depends_on:
-      - songs
-      - playlist
+      - user
       - auth
-      - frontend
-   
-  redis:
-    image: redis
-    ports:
-      - 3020:6379
-    command: redis-server --appendonly yes
-    restart: always
-    networks:
-      - test-net
-  redis-commander:
-    image: rediscommander/redis-commander
-    ports:
-      - 3022:8081
-    restart: always
-    networks:
-      - test-net
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    depends_on:
-      - redis
-      
-  etcd:
-    image: bitnami/etcd
-    ports:
-      - 3021:2379
-    restart: always
-    networks:
-      - test-net
-    environment:
-      - ALLOW_NONE_AUTHENTICATION=yes
-    volumes:
-      - etcd_data:/bitnami
-
-volumes:
-  etcd_data:
-    driver: local
+      - menu
 
 networks:
   test-net:

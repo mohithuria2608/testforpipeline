@@ -4,14 +4,8 @@
         "url": "http://localhost",
         "port": 4000
     },
-    "mongo": {
-        "url": "mongodb://uchatdev_usr:bN9XMhccGvS9WwSh@192.82.95.14:27017/uchatdev_db"
-    },
-    "redis": {
-        "host": "localhost",
-        "port": 6379,
-        "db": 0,
-        "connectionString": "redis://localhost:6379"
+    "kafka": {
+        "url": "localhost:9093"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj"

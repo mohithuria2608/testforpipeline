@@ -1,8 +1,8 @@
 FROM node:8.13-slim AS build-env
 
 # Create app directory
-RUN mkdir -p /opt/americana-user/
-WORKDIR /opt/americana-user/
+RUN mkdir -p /opt/user-service/
+WORKDIR /opt/user-service/
 RUN npm install typescript -g
 
 COPY ./gulpfile.js .
@@ -25,13 +25,13 @@ RUN "node_modules/.bin/gulp"
 
 # final stage
 FROM node:8.13-slim
-RUN mkdir -p /opt/americana-user/
-WORKDIR /opt/americana-user/
-COPY --from=build-env /opt/americana-user/dist ./dist
-COPY --from=build-env /opt/americana-user/package.json ./
-COPY --from=build-env /opt/americana-user/config.json ./
+RUN mkdir -p /opt/user-service/
+WORKDIR /opt/user-service/
+COPY --from=build-env /opt/user-service/dist ./dist
+COPY --from=build-env /opt/user-service/package.json ./
+COPY --from=build-env /opt/user-service/config.json ./
 RUN npm install --no-optional --only=prod
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD [ "node", "dist/app.js" ]
