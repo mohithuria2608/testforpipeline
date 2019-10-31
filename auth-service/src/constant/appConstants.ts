@@ -83,6 +83,10 @@ export let DATABASE = {
     }
 };
 
+export enum KAFKA_TOPIC {
+    CREATE_TOKEN = "create_token"
+}
+
 export let STATUS_MSG = {
     ERROR: {
         E400: {

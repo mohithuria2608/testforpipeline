@@ -1,10 +1,7 @@
+import * as Constant from '../constant'
 import * as kafka from 'kafka-node';
 import { kafkaClient } from './client';
 import { consolelog } from "../utils"
-
-enum KAFKA_PRODUCERS {
-    AUTH = 'AUTH'
-}
 
 class KafkaProducer {
 
@@ -55,7 +52,9 @@ class KafkaProducer {
         }]; */
 
         this.producer.on('ready', () => {
-            this.producer.createTopics([KAFKA_PRODUCERS.AUTH], (err, data) => {
+            this.producer.createTopics([
+                Constant.KAFKA_TOPIC.CREATE_TOKEN
+            ], (err, data) => {
                 if (err) {
                     consolelog('Err in creating topics', err, false);
                 } else {

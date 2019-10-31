@@ -1,13 +1,11 @@
 import * as config from "config"
 import * as Koa from 'koa'
+require('./grpc')
 import { bootstrap, consolelog } from './utils'
 import middleware from './middlewares'
 import route from './route'
-import { kafkaProducerE, initConsumers } from './kafka';
-
 
 const app = new Koa()
-
 
 app.use(middleware());
 app.use(route());
@@ -18,15 +16,6 @@ export const start = (async () => {
     const server = app.listen(port)
 
     await bootstrap(server)
-
-    // kafkaProducerE.sendMessage({
-    //   messages: JSON.stringify({ userId: "1" }),
-    //   topic: 'AUTH',
-    //   partition: 0,
-    // });
-
-    initConsumers()
-
 
   } catch (err) {
     console.error(err)

@@ -1,7 +1,7 @@
 {
-  "name": "kfc_user_service",
+  "name": "kfc_grpc_service",
   "version": "1.0.0",
-  "description": "americana - kfc user service",
+  "description": "americana - kfc grpc service",
   "main": "app.js",
   "scripts": {
     "test-mocha": "node_modules/.bin/ts-mocha ./test/*.ts",

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service AuthService {
+    rpc Token (ICreateToken) returns (ITokenObject) {}
+}
+
+message ICreateToken {
+        string deviceId = 1;
+}
+
+message ITokenObject {
+    string accesstoken = 1;
+    string refreshtoken = 2;
+}
