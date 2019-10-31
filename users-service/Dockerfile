@@ -12,8 +12,6 @@ COPY ./tslint.json .
 COPY ./config ./config.
 COPY ./Dockerfile .
 
-# Install aerospike dependencies
-RUN apt-get install g++ libssl1.0.0 libssl-dev libz-dev
 # Install app dependencies
 RUN npm install --no-optional
 
@@ -32,6 +30,6 @@ COPY --from=build-env /opt/user-service/package.json ./
 COPY --from=build-env /opt/user-service/config.json ./
 RUN npm install --no-optional --only=prod
 
-EXPOSE 4000
+EXPOSE 4001
 
 CMD [ "node", "dist/app.js" ]

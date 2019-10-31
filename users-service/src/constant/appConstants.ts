@@ -2,7 +2,8 @@ import * as config from 'config'
 
 export let DATABASE = {
     LANGUAGE: {
-        EN: 'en',
+        EN: 'En',
+        AR: 'Ar'
     },
 
     ENTITY: {

@@ -2,7 +2,7 @@
     "environment": "development",
     "server": {
         "url": "http://localhost",
-        "port": 4000
+        "port": 4001
     },
     "kafka": {
         "url": "localhost:9093"
