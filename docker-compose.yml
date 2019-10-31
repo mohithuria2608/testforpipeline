@@ -1,8 +1,38 @@
-version: '2'
+version: '3.7'
 services:
 
-  user:
-    image: user-service
+  zookeeper:
+    image: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    build: .
+    ports:
+      - "9093"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.99.100
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  aerospikedb:
+    image: aerospike/aerospike-server:latest
+    networks:
+    - aerospikenetwork
+    deploy:
+        replicas: 2
+        endpoint_mode: dnsrr
+    labels:
+        com.aerospike.cluster: "myproject"
+    command: [ "--config-file","/run/secrets/aerospike.conf"]
+    secrets:
+    - source: conffile
+      target: aerospike.conf
+      mode: 0440
+
+  auth:
+    image: auth
     ports:
       - "4000:4000"
     restart: always
@@ -10,13 +40,9 @@ services:
       - test-net
     env_file:
       - ./service-registry.env
-    depends_on:
-      - mongo
-      - redis
-      - aerospike
-      
-  auth:
-    image: auth-service
+
+  user:
+    image: user
     ports:
       - "4001:4001"
     restart: always
@@ -24,9 +50,11 @@ services:
       - test-net
     env_file:
       - ./service-registry.env
+    depends_on:
+      - auth
       
   menu:
-    image: menu-service
+    image: menu
     ports:
       - "4002:4002"
     restart: always
@@ -34,7 +62,9 @@ services:
       - test-net
     env_file:
       - ./service-registry.env
-      
+    depends_on:
+      - auth
+
   nginx:
     image: mynginx
     networks:
@@ -49,6 +79,9 @@ services:
       - auth
       - menu
 
-networks:
-  test-net:
-    driver: bridge
+  networks:
+    test-net:
+      driver: bridge
+    aerospikenetwork:
+      driver: overlay
+      attachable: true
