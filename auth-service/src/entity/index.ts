@@ -1,1 +1,0 @@
-export { UserC } from './user.entity'

@@ -2,7 +2,8 @@ import * as config from 'config'
 
 export let DATABASE = {
     LANGUAGE: {
-        EN: 'en',
+        EN: 'En',
+        AR: 'Ar'
     },
 
     ENTITY: {
@@ -82,6 +83,7 @@ export let DATABASE = {
         }
     }
 };
+
 
 export enum KAFKA_TOPIC {
     CREATE_TOKEN = "create_token"

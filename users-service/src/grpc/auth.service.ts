@@ -1,12 +1,23 @@
-const grpc = require('grpc');
+import * as config from "config"
 import * as Constant from '../constant'
+const grpc = require('grpc');
+const protoLoader = require('@grpc/proto-loader');
 import { consolelog } from '../utils'
 
 export class AuthService {
 
-    private authProto = __dirname + '/../../../../proto/auth.proto';
-    private loadAuth = grpc.load(this.authProto).AuthService
-    private authClient = new this.loadAuth('localhost:50051', grpc.credentials.createInsecure());
+    private authProto = __dirname + config.get("directory.static.proto");
+    private packageDefinition = protoLoader.loadSync(
+        this.authProto,
+        {
+            keepCase: true,
+            longs: String,
+            enums: String,
+            defaults: true,
+            oneofs: true
+        });
+    private loadAuth = grpc.loadPackageDefinition(this.packageDefinition).AuthService
+    private authClient = new this.loadAuth(config.get("grpc.url"), grpc.credentials.createInsecure());
 
     constructor() { }
 

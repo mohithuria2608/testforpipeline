@@ -12,6 +12,7 @@
   "author": "Ankit Kumar",
   "license": "MIT",
   "dependencies": {
+    "@grpc/proto-loader": "^0.5.2",
     "@koa/cors": "^3.0.0",
     "@types/node": "^10.12.2",
     "aerospike": "^3.13.0",

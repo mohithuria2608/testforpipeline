@@ -4,8 +4,16 @@
         "url": "http://localhost",
         "port": 4001
     },
+    "grpc": {
+        "url": "127.0.0.1:50051"
+    },
     "kafka": {
         "url": "localhost:9093"
+    },
+    "directory": {
+        "static": {
+            "proto": "/../../../../proto/auth.proto"
+        }
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj"
