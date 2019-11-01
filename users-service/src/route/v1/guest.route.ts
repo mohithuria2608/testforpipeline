@@ -16,6 +16,11 @@ export default (router: Router) => {
                     ]).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
+                    platform: Joi.string().valid([
+                        Constant.DATABASE.TYPE.DEVICE.ANDROID,
+                        Constant.DATABASE.TYPE.DEVICE.IOS
+                    ]).required(),
+                    osversion: Joi.string().required(),
                 },
                 body: {
                     deviceId: Joi.string().trim().required()

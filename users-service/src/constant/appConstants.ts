@@ -40,10 +40,9 @@ export let DATABASE = {
 
     TYPE: {
         TOKEN: {
-            ADMIN: "ADMIN",
-            USER: "USER",
-            VERIFY_EMAIL: "VERIFY_EMAIL",
-            REFRESH_TOKEN: "REFRESH_TOKEN"
+            GUEST_AUTH: "GUEST_AUTH",
+            USER_AUTH: "USER_AUTH",
+            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {

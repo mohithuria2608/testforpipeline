@@ -4,6 +4,8 @@ declare namespace ICommonRequest {
         language: string,
         appversion: string,
         devicemodel: string,
+        platform: string,
+        osversion: string,
     }
 
     export interface IPagination {

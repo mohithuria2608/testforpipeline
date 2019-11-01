@@ -21,19 +21,17 @@ export class AuthService {
 
     constructor() { }
 
-    async createToken(payload: IAuthServiceRequest.ICreateToken) {
+    async createToken(payload: IAuthServiceRequest.ICreateToken): Promise<IAuthServiceRequest.ICreateTokenRes> {
         return new Promise((resolve, reject) => {
-            try {
-                this.authClient.token({ deviceId: payload.deviceId }, (err, res) => {
-                    if (!err) {
-                        consolelog("successfully created access and refresh token", JSON.stringify(res), false)
-                        resolve(res)
-                    } else
-                        reject(err)
-                })
-            } catch (error) {
-                reject(error)
-            }
+            this.authClient.createToken({ deviceId: payload.deviceId, tokenType: payload.tokenType }, (err, res) => {
+                if (!err) {
+                    consolelog("successfully created access and refresh token", JSON.stringify(res), false)
+                    resolve(res)
+                } else {
+                    consolelog("Error in creating token", JSON.stringify(err), false)
+                    reject(err)
+                }
+            })
         })
     }
 

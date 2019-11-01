@@ -40,10 +40,9 @@ export let DATABASE = {
 
     TYPE: {
         TOKEN: {
-            ADMIN: "ADMIN",
-            USER: "USER",
-            VERIFY_EMAIL: "VERIFY_EMAIL",
-            REFRESH_TOKEN: "REFRESH_TOKEN"
+            GUEST_AUTH: "GUEST_AUTH",
+            USER_AUTH: "USER_AUTH",
+            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {
@@ -151,6 +150,16 @@ export let STATUS_MSG = {
                 statusCode: 400,
                 message: 'Validation Error',
                 type: 'VALIDATION_ERROR'
+            },
+
+            INFO_MISSING: (customMessage?: string) => {
+                let errorMessage = customMessage ? customMessage : "Some required information is missing"
+                return {
+                    statusCode: 400,
+                    message: errorMessage,
+                    type: "INFO_MISSING",
+                    data: {}
+                }
             },
 
             CUSTOM_VALIDATION_ERROR: (customErrorMessage) => {
