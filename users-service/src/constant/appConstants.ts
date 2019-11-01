@@ -88,6 +88,12 @@ export enum KAFKA_TOPIC {
     CREATE_TOKEN = "create_token"
 }
 
+export enum MIDDLEWARE {
+    API_AUTH = "api_auth",
+    BASIC_AUTH = "basic_auth",
+    ACTIVITY_LOG = "activity_log"
+}
+
 export let STATUS_MSG = {
     ERROR: {
         E400: {

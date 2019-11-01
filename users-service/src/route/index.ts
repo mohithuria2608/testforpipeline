@@ -1,12 +1,16 @@
 import * as compose from 'koa-compose'
 import * as Router from 'koa-router'
 import { Context } from 'koa'
+
+import staticRoutes from './v1/static.route'
 import guest from './v1/guest.route'
 
 const version1 = "/v1"
 
 const children = [
+  { routes: staticRoutes, prefix: '' },
   { routes: guest, prefix: version1 + '/guest' },
+
 ]
 
 export default function routes() {

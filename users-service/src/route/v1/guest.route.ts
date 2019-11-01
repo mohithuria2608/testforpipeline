@@ -1,13 +1,19 @@
 import * as validate from 'koa-joi-validate'
 import * as Joi from 'joi';
 import * as Router from 'koa-router'
+import { getMiddleware } from '../../middlewares'
 import * as Constant from '../../constant'
-import { sendSuccess, sendError, consolelog } from '../../utils'
+import { sendSuccess, sendError } from '../../utils'
 import { guestController } from '../../controllers';
 
 export default (router: Router) => {
     router
         .post('/login',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.API_AUTH,
+                Constant.MIDDLEWARE.BASIC_AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
             validate({
                 headers: {
                     language: Joi.string().valid([
@@ -30,7 +36,9 @@ export default (router: Router) => {
                 try {
                     let payload: IGuestRequest.IGuestLogin = { ...ctx.request.body, ...ctx.request.header };
                     let res = await guestController.guestLogin(payload);
-                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.set({ 'accessToken': res.accessToken, refreshToken: res.refreshToken })
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, {})
+                    ctx.body = sendResponse
                 }
                 catch (error) {
                     throw (sendError(error))
