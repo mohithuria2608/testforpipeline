@@ -7,6 +7,7 @@ export class AuthController {
 
     async createToken(payload: IAuthServiceRequest.ICreateToken) {
         try {
+            
             consolelog("token", JSON.stringify(payload.request), true)
             return { accesstoken: "accesstoken", refreshtoken: "refreshtoken" }
         } catch (err) {

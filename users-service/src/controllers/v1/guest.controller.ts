@@ -11,7 +11,7 @@ export class GuestController {
             const dataToCreateToken: IAuthServiceRequest.ICreateToken = {
                 deviceId: payload.deviceId
             }
-
+            
             let response = await authService.createToken(dataToCreateToken)
             return response
         } catch (err) {

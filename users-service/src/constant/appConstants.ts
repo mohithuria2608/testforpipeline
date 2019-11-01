@@ -361,7 +361,7 @@ export let STATUS_MSG = {
             DEFAULT: {
                 statusCode: 200,
                 message: 'Success',
-                type: 'DEFAULT'
+                type: 'DEFAULT',
             },
 
             ACCOUNT_DELETED: {

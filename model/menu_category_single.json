@@ -1,0 +1,71 @@
+[
+    {
+        "_id": "system_generated_id",
+        "name": "Super KFC",
+        "address": {
+            "latitude": 23.9231,
+            "longitude": 23.9231,
+            "location": "123 Baker Street",
+            "country": "UAE",
+            "area": "Al Ain",
+            "service_fence": []
+        },
+        "id": "OUT_1",
+        "currency": "AED",
+        "menuTempId": 17,
+        "conceptId": 3,
+        "menuId": 1,
+        "language": "En",
+        "categories": [
+            {
+                "sequence": 6,
+                "_id": "system_generated_id",
+                "name": "Beverage",
+                "id": "CAT_6",
+                "products": [
+                    {
+                        "sequence": 1,
+                        "name": "Pepsi",
+                        "imageUrl": "pepsi.png",
+                        "description": "Sparkling beverage",
+                        "globalProdId": "BVG01",
+                        "itemType": "beverage",
+                        "custScreen": "outside",
+                        "steps": [
+                            {
+                                "sequence": 1,
+                                "title": "Regular",
+                                "itemName": "Regular",
+                                "originalPrice": 3,
+                                "skuId": "SKU_101005",
+                                "itemId": "ITM_673",
+                                "default": true,
+                                "hasChild": false
+                            },
+                            {
+                                "sequence": 2,
+                                "title": "Medium",
+                                "itemName": "Medium",
+                                "originalPrice": 3.10,
+                                "skuId": "SKU_101005",
+                                "itemId": "ITM_673",
+                                "default": true,
+                                "hasChild": false
+                            },
+                            {
+                                "sequence": 3,
+                                "title": "Large",
+                                "itemName": "Large",
+                                "originalPrice": 3.5,
+                                "skuId": "SKU_101005",
+                                "itemId": "ITM_673",
+                                "default": true,
+                                "hasChild": false
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
