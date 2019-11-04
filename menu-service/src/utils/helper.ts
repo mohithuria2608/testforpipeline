@@ -130,10 +130,6 @@ export let formatUserData = function (userObj: Object) {
         else
             delete userObj['backup']
 
-        delete userObj['lastActivityTime']
-        delete userObj['refreshToken']
-        delete userObj['cards']
-        delete userObj['banks']
 
         return userObj
     } catch (error) {

@@ -18,7 +18,7 @@ export class GuestController {
                 devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH
             })
-            let tokens: IAuthServiceRequest.ICreateTokenRes[] = await Promise.all([accessToken, refreshToken])
+            let tokens: IAuthServiceRequest.IToken[] = await Promise.all([accessToken, refreshToken])
             return { accessToken: tokens[0].token, refreshToken: tokens[0].token }
         } catch (err) {
             consolelog("guestLogin", err, false)

@@ -7,8 +7,8 @@ import * as Constant from '../constant/appConstants'
 export class AuthServiceValidator {
     constructor() {
     }
-    
-    async verifyTokenValidator(data: IAuthServiceRequest.IVerifyToken) {
+
+    async verifyTokenValidator(data: IAuthServiceRequest.IToken) {
         return new Promise((resolve, reject) => {
             let dataToValidate = Joi.object().keys({
                 token: Joi.string().required()

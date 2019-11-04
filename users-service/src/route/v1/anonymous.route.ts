@@ -4,12 +4,13 @@ import * as Router from 'koa-router'
 import { getMiddleware } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess, sendError } from '../../utils'
-import { guestController } from '../../controllers';
+import { anonymousUserController } from '../../controllers';
 
 export default (router: Router) => {
     router
-        .post('/login',
+        .post('/refresh-token',
             ...getMiddleware([
+                Constant.MIDDLEWARE.REFRESH_AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -32,10 +33,10 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IGuestRequest.IGuestLogin = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await guestController.guestLogin(payload);
-                    ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, {})
+                    let payload: IUserRequest.IRefreshToken = { ...ctx.request.body, ...ctx.request.header };
+                    let res = await anonymousUserController.refreshToken(payload);
+                    ctx.set({ 'accessToken': res.accessToken })
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {})
                     ctx.body = sendResponse
                 }
                 catch (error) {

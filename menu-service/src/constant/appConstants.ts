@@ -42,7 +42,6 @@ export let DATABASE = {
         TOKEN: {
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
-            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {
@@ -458,6 +457,5 @@ export let SERVER = {
         },
     },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }

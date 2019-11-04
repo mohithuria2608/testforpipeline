@@ -7,7 +7,7 @@ import * as Constant from '../constant/appConstants'
 export class AuthServiceValidator {
     constructor() {
     }
-    async  createTokenValidator(data: IAuthServiceRequest.ICreateToken) {
+    async  createTokenValidator(data: IAuthServiceRequest.ICreateTokenData) {
         return new Promise((resolve, reject) => {
             let dataToValidate = Joi.object().keys({
                 deviceId: Joi.string().required(),
@@ -32,6 +32,21 @@ export class AuthServiceValidator {
         })
     }
 
+    async verifyTokenValidator(data: IAuthServiceRequest.IToken) {
+        return new Promise((resolve, reject) => {
+            let dataToValidate = Joi.object().keys({
+                token: Joi.string().required()
+            });
+            dataToValidate.validate(data, { abortEarly: true })
+                .then(validate => {
+                    resolve({})
+                })
+                .catch(validationError => {
+                    consolelog('verifyTokenValidator', validationError, false)
+                    reject(validationError.message)
+                });
+        })
+    }
 
 }
 

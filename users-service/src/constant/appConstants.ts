@@ -90,6 +90,7 @@ export enum KAFKA_TOPIC {
 
 export enum MIDDLEWARE {
     API_AUTH = "api_auth",
+    REFRESH_AUTH = "refresh_auth",
     ACTIVITY_LOG = "activity_log"
 }
 
