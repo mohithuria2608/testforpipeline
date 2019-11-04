@@ -413,6 +413,33 @@ export let STATUS_MSG = {
                 type: 'NO_SUCH_REQUEST'
             }
         }
+    },
+    GRPC_ERROR: {
+        TYPE: {
+            OK: '0',
+            CANCELLED: '1',
+            UNKNOWN: '2',
+            INVALID_ARGUMENT: '3',
+            DEADLINE_EXCEEDED: '4',
+            NOT_FOUND: '5',
+            ALREADY_EXISTS: '6',
+            PERMISSION_DENIED: '7',
+            UNAUTHENTICATED: '16',
+            RESOURCE_EXHAUSTED: '8',
+            FAILED_PRECONDITION: '9',
+            ABORTED: '10',
+            OUT_OF_RANGE: '11',
+            UNIMPLEMENTED: '12',
+            INTERNAL: '13',
+            UNAVAILABLE: '14',
+            DATA_LOSS: '15'
+        },
+        ERROR: (code, type, message) => {
+            return {
+                code: parseInt(code),
+                details: `${type} : ${message}`
+            }
+        }
     }
 };
 
@@ -461,7 +488,7 @@ export let SERVER = {
             HEIGHT: 100,
         },
     },
-    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    ACCESS_TOKEN_EXPIRE_TIME: (15 * 60 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (30 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }

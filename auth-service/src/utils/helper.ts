@@ -9,6 +9,17 @@ import { isArray } from 'util';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
+
+export let grpcSendError = function (data) {
+    if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
+        let message = data.hasOwnProperty('message') || data.hasOwnProperty('customMessage')
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR('UNAUTHENTICATED', Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED, message)
+    } else {
+        let message = typeof data == 'string' ? data : 'Some internal error occured'
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR("INTERNAL", Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, message)
+    }
+}
+
 export let sendError = function (data) {
     if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
         let errorToSend

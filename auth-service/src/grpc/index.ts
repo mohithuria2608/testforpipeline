@@ -1,5 +1,5 @@
 import * as config from "config"
-import { consolelog } from "../utils"
+import { consolelog, grpcSendError } from "../utils"
 import { authController } from '../controllers'
 
 const grpc = require('grpc')
@@ -25,10 +25,7 @@ server.addService(authProto.AuthService.service, {
             callback(null, res)
         } catch (error) {
             consolelog("createToken", error, false)
-            callback({
-                code: grpc.status.NOT_FOUND,
-                details: JSON.stringify(error)
-            })
+            callback(grpcSendError(error))
         }
     },
     verifyToken: async (call: IAuthServiceRequest.IVerifyTokenForUser, callback) => {

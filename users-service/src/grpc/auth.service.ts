@@ -1,5 +1,4 @@
 import * as config from "config"
-import * as Constant from '../constant'
 import { authServiceValidator } from './auth.service.validator'
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
