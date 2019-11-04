@@ -4,7 +4,7 @@ import * as Router from 'koa-router'
 import { getMiddleware } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess, sendError } from '../../utils'
-import { anonymousUserController } from '../../controllers';
+import { miscUserController } from '../../controllers';
 
 export default (router: Router) => {
     router
@@ -34,7 +34,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let payload: IUserRequest.IRefreshToken = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await anonymousUserController.refreshToken(payload);
+                    let res = await miscUserController.refreshToken(payload);
                     ctx.set({ 'accessToken': res.accessToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {})
                     ctx.body = sendResponse

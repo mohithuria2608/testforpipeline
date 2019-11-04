@@ -209,49 +209,11 @@ export let STATUS_MSG = {
                 type: 'INVALID_LINK'
             },
 
-            INVALID_SESSION_REQUEST: {
-                statusCode: 401,
-                type: 'INVALID_SESSION_REQUEST',
-                message: 'You have requested for an invalid login'
-            },
-
-            TOKEN_ALREADY_EXPIRED: {
-                statusCode: 401,
-                message: 'You logged into other device.',
-                type: 'TOKEN_ALREADY_EXPIRED'
-            },
-
-            INVALID_TOKEN: {
-                statusCode: 401,
-                message: 'Invalid token provided',
-                type: 'INVALID_TOKEN'
-            },
-
-            ADMIN_DELETED: {
-                statusCode: 401,
-                message: 'You are blocked by Admin',
-                type: 'ADMIN_DELETED'
-            },
-
-            ADMIN_BLOCKED: {
-                statusCode: 401,
-                message: 'You are blocked by Admin',
-                type: 'ADMIN_BLOCKED'
-            },
-
             UNAUTHORIZED: {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
                 type: 'UNAUTHORIZED'
-            },
-
-            MISSINING_AUTHENTICATION: (tokenType) => {
-                return {
-                    statusCode: 401,
-                    message: 'Missing authentication ' + tokenType,
-                    type: 'MISSINING_AUTHENTICATION'
-                }
-            },
+            }
         },
         E403: {
             INVALID_PASSWORD: {
@@ -284,6 +246,13 @@ export let STATUS_MSG = {
                 message: 'User not found',
                 type: 'USER_NOT_FOUND'
             },
+        },
+        E406: {
+            ACCESS_TOKEN_EXPIRED: {
+                statusCode: 404,
+                type: 'ACCESS_TOKEN_EXPIRED',
+                message: 'Access token has expired.'
+            }
         },
         E500: {
             IMP_ERROR: {

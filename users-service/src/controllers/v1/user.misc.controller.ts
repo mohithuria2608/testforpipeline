@@ -2,7 +2,7 @@ import * as Constant from '../../constant'
 import { authService } from '../../grpc'
 import { consolelog } from '../../utils'
 
-export class AnonymousUserController {
+export class MiscUserController {
 
     constructor() { }
 
@@ -21,4 +21,4 @@ export class AnonymousUserController {
     }
 }
 
-export const anonymousUserController = new AnonymousUserController();
+export const miscUserController = new MiscUserController();

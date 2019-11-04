@@ -15,18 +15,18 @@ export default (opts?): Middleware => {
             const [tokenType, token] = authorization.split(/\s+/);
 
             if (!token || tokenType.toLowerCase() !== settings.tokenType.toLowerCase()) {
-                return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.MISSINING_AUTHENTICATION(settings.tokenType)))
+                return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED))
             }
 
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
 
             if (!tokenData || !tokenData.deviceId || !tokenData.devicetype || !tokenData.tokenType) {
-                return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.TOKEN_ALREADY_EXPIRED))
+                return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED))
             } else {
                 ctx.state.user = tokenData
             }
         } catch (error) {
-            return Promise.reject(error)
+            return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED))
         }
         await next()
     }
