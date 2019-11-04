@@ -2,7 +2,7 @@ syntax = "proto3";
 
 service AuthService {
     rpc CreateToken (ICreateToken) returns (IToken) {}
-    rpc VerifyToken (IToken) returns (IAuthorizationObj) {}
+    rpc VerifyToken (IVerifyToken) returns (IAuthorizationObj) {}
 }
 
 message ICreateToken {
@@ -14,6 +14,11 @@ message ICreateToken {
 
 message IToken {
     string token = 1;
+}
+
+message IVerifyToken {
+    required string token = 1;
+    required string tokenType = 2;
 }
 
 message IAuthorizationObj {

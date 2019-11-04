@@ -18,7 +18,7 @@ export default (opts?): Middleware => {
                 return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED))
             }
 
-            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
+            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH })
 
             if (!tokenData || !tokenData.deviceId || !tokenData.devicetype || !tokenData.tokenType) {
                 return Promise.reject(sendError(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED))

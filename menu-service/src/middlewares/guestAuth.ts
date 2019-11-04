@@ -18,7 +18,7 @@ export default (opts?): Middleware => {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)
             }
 
-            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
+            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH })
 
             if (!tokenData || !tokenData.deviceId || !tokenData.devicetype || !tokenData.tokenType) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)

@@ -8,12 +8,12 @@ export class MiscUserController {
 
     async refreshToken(payload: IUserRequest.IRefreshToken) {
         try {
-            let accessToken: IAuthServiceRequest.IToken = await authService.createToken({
+            let res: IAuthServiceRequest.IToken = await authService.createToken({
                 deviceId: payload.deviceId,
                 devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             })
-            return { accessToken }
+            return { accessToken: res.token }
         } catch (err) {
             consolelog("guestLogin", err, false)
             return Promise.reject(err)

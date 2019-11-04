@@ -16,7 +16,7 @@ export class AuthController {
         }
     }
 
-    async verifyToken(payload: IAuthServiceRequest.IToken) {
+    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj) {
         try {
             let tokenData: ICommonRequest.AuthorizationObj = await tokenManager.verifyToken(payload.token)
             return tokenData

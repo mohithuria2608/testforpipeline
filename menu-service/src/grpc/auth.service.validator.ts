@@ -8,10 +8,13 @@ export class AuthServiceValidator {
     constructor() {
     }
 
-    async verifyTokenValidator(data: IAuthServiceRequest.IToken) {
+    async verifyTokenValidator(data: IAuthServiceRequest.IVerifyTokenObj) {
         return new Promise((resolve, reject) => {
             let dataToValidate = Joi.object().keys({
-                token: Joi.string().required()
+                token: Joi.string().required(),
+                tokenType: Joi.string().valid(
+                    Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
+                ).required()
             });
             dataToValidate.validate(data, { abortEarly: true })
                 .then(validate => {

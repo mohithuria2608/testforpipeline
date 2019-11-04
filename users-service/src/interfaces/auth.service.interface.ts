@@ -7,6 +7,11 @@ declare namespace IAuthServiceRequest {
         id?: string,
     }
 
+    interface IVerifyTokenObj {
+        token: string,
+        tokenType: string,
+    }
+
     interface IToken {
         token: string
     }

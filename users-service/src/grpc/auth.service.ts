@@ -35,7 +35,7 @@ export class AuthService {
             })
         })
     }
-    async verifyToken(payload: IAuthServiceRequest.IToken): Promise<ICommonRequest.AuthorizationObj> {
+    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (err, res) => {
