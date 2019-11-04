@@ -10,8 +10,6 @@ export default (router: Router) => {
     router
         .post('/login',
             ...getMiddleware([
-                Constant.MIDDLEWARE.API_AUTH,
-                Constant.MIDDLEWARE.BASIC_AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -22,7 +20,7 @@ export default (router: Router) => {
                     ]).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
-                    platform: Joi.string().valid([
+                    devicetype: Joi.string().valid([
                         Constant.DATABASE.TYPE.DEVICE.ANDROID,
                         Constant.DATABASE.TYPE.DEVICE.IOS
                     ]).required(),

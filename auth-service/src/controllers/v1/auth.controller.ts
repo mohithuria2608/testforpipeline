@@ -16,6 +16,17 @@ export class AuthController {
             return Promise.reject(err)
         }
     }
+
+    async verifyToken(payload: IAuthServiceRequest.IToken) {
+        try {
+            let token = await tokenManager.verifyToken(payload)
+            consolelog("verifyToken", token, true)
+            return token
+        } catch (err) {
+            consolelog("verifyToken", err, false)
+            return Promise.reject(err)
+        }
+    }
 }
 
 export const authController = new AuthController();

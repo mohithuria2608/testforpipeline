@@ -8,15 +8,18 @@ export class GuestController {
 
     async guestLogin(payload: IGuestRequest.IGuestLogin) {
         try {
-            let accessToken: IAuthServiceRequest.ICreateTokenRes = await authService.createToken({
+            let accessToken = authService.createToken({
                 deviceId: payload.deviceId,
+                devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             })
-            let refreshToken: IAuthServiceRequest.ICreateTokenRes = await authService.createToken({
+            let refreshToken = authService.createToken({
                 deviceId: payload.deviceId,
+                devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH
             })
-            return { accessToken: accessToken.token, refreshToken: refreshToken.token }
+            let tokens: IAuthServiceRequest.ICreateTokenRes[] = await Promise.all([accessToken, refreshToken])
+            return { accessToken: tokens[0].token, refreshToken: tokens[0].token }
         } catch (err) {
             consolelog("guestLogin", err, false)
             return Promise.reject(err)

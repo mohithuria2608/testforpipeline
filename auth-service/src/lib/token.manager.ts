@@ -23,7 +23,7 @@ export class TokenManager {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
                 }
             }
-            let token = await Jwt.sign(tokenData, cert, { algorithm: 'HS256' });
+            const token = await Jwt.sign(tokenData, cert, { algorithm: 'HS256' });
             consolelog('token', token, false)
 
             return token
@@ -32,90 +32,36 @@ export class TokenManager {
             return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
         }
     };
+
+    async  verifyToken(token) {
+        try {
+            const tokenData: IAuthServiceRequest.ITokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
+            consolelog('verifyToken', [token, tokenData], true)
+            switch (tokenData.tokenType) {
+                case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
+                    const tokenVerifiedData: IAuthServiceRequest.IPostVerifyTokenForUserRes = {
+                        tokenType: tokenData.tokenType,
+                        deviceId: tokenData.deviceId,
+                        devicetype: tokenData.devicetype
+                    };
+                    return tokenVerifiedData
+                }
+                case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
+                    break;
+                }
+                default: {
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
+                }
+            }
+        } catch (error) {
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
+        }
+    };
 }
 
 export const tokenManager = new TokenManager();
 
 
-
-// export let verifyToken = async function (token, tokenType) {
-//     try {
-//         let result = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
-//         utils.consolelog('verifyToken', [tokenType, token, result], true)
-//         if (tokenType == result['tokenType']) {
-//             switch (result['tokenType']) {
-//                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
-//                     let userData: any = {};
-//                     let bucket = await utils.getBucket(result.id.toString())
-//                     let checkValidSessionFromRedis = await REDIS_ENTITY.RedisStorageC.getKeyFromRedisHash(`${Constant.DATABASE.TYPE.REDIS_HASH_TYPES.SESSION}:${bucket}`, result.id.toString());
-//                     checkValidSessionFromRedis = JSON.parse(checkValidSessionFromRedis)
-//                     if (!checkValidSessionFromRedis) {
-//                         userData = {};
-//                         let userCriteria = { _id: result['id'] }
-//                         let checkUserExist = await ENTITY.UserC.getOneEntity(userCriteria, {})
-//                         if (!checkUserExist)
-//                             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//                         else {
-//                             let sessionCriteria = {
-//                                 userId: result['id'],
-//                                 deviceId: result['deviceId'],
-//                                 loginStatus: true
-//                             };
-//                             let checkValidSessionFromMongo = await ENTITY.SessionC.getOneEntity(sessionCriteria, { _id: 1 })
-//                             if (!checkValidSessionFromMongo)
-//                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//                             else {
-//                                 userData['id'] = checkUserExist['_id'];
-//                                 userData['type'] = tokenType;
-//                                 userData['userData'] = checkUserExist
-//                                 userData["refreshToken"] = await updateRefreshToken(userData, result)
-//                                 return userData
-//                             }
-//                         }
-//                     } else {
-//                         if (checkValidSessionFromRedis.deviceId != result.deviceId || !checkValidSessionFromRedis.loginStatus) {
-//                             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//                         } else {
-//                             userData['id'] = checkValidSessionFromRedis['id'];
-//                             userData['type'] = checkValidSessionFromRedis['tokenType'];
-//                             userData['userData'] = JSON.parse(checkValidSessionFromRedis['userData'])
-//                             userData["refreshToken"] = await updateRefreshToken(userData, result)
-//                             return userData
-//                         }
-//                     }
-//                 }
-//                 case Constant.DATABASE.TYPE.TOKEN.VERIFY_EMAIL: {
-//                     let userCriteria = {
-//                         _id: result['id'],
-//                         email: result['email']
-//                     }
-//                     let checkUserExist = await ENTITY.UserC.getOneEntity(userCriteria, {})
-//                     if (!checkUserExist)
-//                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//                     return checkUserExist
-//                 }
-//                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
-//                     let userData: any = {};
-//                     let userCriteria = { _id: result['id'] }
-//                     let checkUserExist = await ENTITY.UserC.getOneEntity(userCriteria, {})
-//                     if (!checkUserExist)
-//                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//                     else {
-//                         userData['id'] = checkUserExist['_id'];
-//                         userData['type'] = tokenType;
-//                         userData['userData'] = checkUserExist
-//                         return userData
-//                     }
-//                 }
-//             }
-//         } else {
-//             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//         }
-
-//     } catch (error) {
-//         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//     }
-// };
 
 // export let decodeToken = async function (token: string) {
 //     let decodedData = Jwt.verify(token, cert, { algorithms: ['HS256'] })
@@ -155,36 +101,3 @@ export const tokenManager = new TokenManager();
 //     }
 
 // }
-
-// export let socketAuth = async function (userData: UserRequest.UserData, deviceId: string) {
-//     try {
-//         if (deviceId == undefined)
-//             return true
-//         let bucket = await utils.getBucket(userData._id.toString())
-//         let checkValidSessionFromRedis = await REDIS_ENTITY.RedisStorageC.getKeyFromRedisHash(`${Constant.DATABASE.TYPE.REDIS_HASH_TYPES.SESSION}:${bucket}`, userData._id.toString());
-//         checkValidSessionFromRedis = JSON.parse(checkValidSessionFromRedis)
-//         if (!checkValidSessionFromRedis) {
-//             let sessionCriteria = {
-//                 userId: userData._id,
-//                 deviceId: deviceId,
-//                 loginStatus: true
-//             };
-//             let checkValidSessionFromMongo = await ENTITY.SessionC.getOneEntity(sessionCriteria, { _id: 1 })
-//             if (!checkValidSessionFromMongo)
-//                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//             else {
-//                 return true
-//             }
-//         } else {
-//             if (checkValidSessionFromRedis.deviceId != deviceId || !checkValidSessionFromRedis.loginStatus) {
-//                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//             } else {
-//                 return true
-//             }
-//         }
-//     } catch (error) {
-//         utils.consolelog('socketAuth', error, false)
-//         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
-//     }
-// }
-

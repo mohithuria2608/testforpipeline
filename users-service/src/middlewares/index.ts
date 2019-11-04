@@ -8,7 +8,6 @@ import * as Constant from '../constant'
 
 import handleErrors from './error'
 import apiAuth from './apiAuth'
-import basicAuth from './basicAuth'
 import activityLog from './activityLog'
 
 
@@ -28,8 +27,6 @@ export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[]
   let temp: IMiddleware[] = []
   if (middlewares.indexOf(Constant.MIDDLEWARE.API_AUTH) != -1)
     temp.push(apiAuth())
-  if (middlewares.indexOf(Constant.MIDDLEWARE.BASIC_AUTH) != -1)
-    temp.push(basicAuth())
   if (middlewares.indexOf(Constant.MIDDLEWARE.ACTIVITY_LOG) != -1)
     temp.push(activityLog())
   return temp

@@ -1,5 +1,6 @@
 import { Middleware, Context } from 'koa'
 import * as Constant from '../constant';
+import { consolelog } from '../utils';
 // import * as ENTITY from '../entity'
 
 export default (opts?): Middleware => {
@@ -29,6 +30,7 @@ export default (opts?): Middleware => {
                 description: "",
                 createdAt: new Date().getTime(),
             }
+            consolelog("activity log", dataToSave, true, 'entryLog')
             // ENTITY.ActivitylogClassC.createOneEntity(dataToSave)
         })
 

@@ -4,7 +4,7 @@ declare namespace ICommonRequest {
         language: string,
         appversion: string,
         devicemodel: string,
-        platform: string,
+        devicetype: string,
         osversion: string,
     }
 

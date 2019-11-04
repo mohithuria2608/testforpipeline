@@ -1,12 +1,27 @@
 declare namespace IAuthServiceRequest {
 
-    interface ICreateTokenForUserService {
+    interface ICreateTokenForUser {
         request: ITokenData
     }
 
     interface ITokenData {
         tokenType: string,
-        deviceId: string,
+        deviceId?: string,
+        devicetype?: string,
         id?: string,
+    }
+
+    interface IVerifyTokenForUser {
+        request: IToken
+    }
+
+    interface IToken {
+        token: string
+    }
+
+    interface IPostVerifyTokenForUserRes {
+        tokenType: string,
+        deviceId: string,
+        devicetype: string,
     }
 }

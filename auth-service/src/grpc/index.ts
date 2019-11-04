@@ -17,15 +17,27 @@ const packageDefinition = protoLoader.loadSync(
 const authProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
-
 server.addService(authProto.AuthService.service, {
-    createToken: async (call: IAuthServiceRequest.ICreateTokenForUserService, callback) => {
+    createToken: async (call: IAuthServiceRequest.ICreateTokenForUser, callback) => {
         try {
-            consolelog("token", JSON.stringify(call.request), true)
+            consolelog("createToken", JSON.stringify(call.request), true)
             let res = await authController.createToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("token error", error, false)
+            consolelog("createToken", error, false)
+            callback({
+                code: grpc.status.NOT_FOUND,
+                details: JSON.stringify(error)
+            })
+        }
+    },
+    verifyToken: async (call: IAuthServiceRequest.IVerifyTokenForUser, callback) => {
+        try {
+            consolelog("verifyToken", JSON.stringify(call.request), true)
+            let res = await authController.verifyToken(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog("verifyToken", error, false)
             callback({
                 code: grpc.status.NOT_FOUND,
                 details: JSON.stringify(error)

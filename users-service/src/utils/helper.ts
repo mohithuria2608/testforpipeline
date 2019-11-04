@@ -10,7 +10,23 @@ import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let sendError = function (data) {
-    if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
+    if (data && data.code && data.details) {
+        /**
+         * @desciption
+         * GRPC error handler
+         *  */
+        let customErrorMessage = data.details
+        if (typeof customErrorMessage === 'string') {
+            if (customErrorMessage.indexOf("[") > -1) {
+                customErrorMessage = customErrorMessage.substr(customErrorMessage.indexOf("["))
+            }
+            customErrorMessage = customErrorMessage && customErrorMessage.replace(/"/g, '')
+            customErrorMessage = customErrorMessage && customErrorMessage.replace('[', '')
+            customErrorMessage = customErrorMessage && customErrorMessage.replace(']', '')
+        }
+        throw Boom.badRequest(customErrorMessage)
+    }
+    else if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
         let errorToSend
         if (data.hasOwnProperty('message')) {
             let error = new Error(data.message);
@@ -36,7 +52,7 @@ export let sendError = function (data) {
         } else {
             errorToSend = data
         }
-        var customErrorMessage = errorToSend
+        let customErrorMessage = errorToSend
         if (typeof customErrorMessage === 'string') {
             if (errorToSend.indexOf("[") > -1) {
                 customErrorMessage = errorToSend.substr(errorToSend.indexOf("["))
@@ -151,12 +167,14 @@ export let arrayToObject = function (array: any) {
 
 }
 
-export let consolelog = function (identifier: string, value: any, isSuccess: boolean) {
+export let consolelog = function (identifier: string, value: any, isSuccess: boolean, logFunction?: string) {
     try {
+        if (!logFunction)
+            logFunction = 'info'
         if (isArray(value)) {
             value.forEach((obj, i) => {
                 if (isSuccess) {
-                    logger.info(`${identifier}--------------${i}--------------${obj}`);
+                    logger[logFunction](`${identifier}--------------${i}--------------${obj}`);
                 } else {
                     logger.error(`${identifier}--------------${i}--------------${obj}`);
                 }
@@ -164,7 +182,7 @@ export let consolelog = function (identifier: string, value: any, isSuccess: boo
             return
         } else {
             if (isSuccess) {
-                logger.info(`${identifier}--------------${value}`);
+                logger[logFunction](`${identifier}--------------${value}`);
             } else {
                 logger.error(`${identifier}--------------${value}`);
             }

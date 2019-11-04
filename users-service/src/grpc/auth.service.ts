@@ -1,5 +1,6 @@
 import * as config from "config"
 import * as Constant from '../constant'
+import { authServiceValidator } from './auth.service.validator'
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 import { consolelog } from '../utils'
@@ -22,8 +23,9 @@ export class AuthService {
     constructor() { }
 
     async createToken(payload: IAuthServiceRequest.ICreateToken): Promise<IAuthServiceRequest.ICreateTokenRes> {
-        return new Promise((resolve, reject) => {
-            this.authClient.createToken({ deviceId: payload.deviceId, tokenType: payload.tokenType }, (err, res) => {
+        return new Promise(async (resolve, reject) => {
+            await authServiceValidator.createTokenValidator(payload)
+            this.authClient.createToken({ deviceId: payload.deviceId, tokenType: payload.tokenType, devicetype: payload.devicetype }, (err, res) => {
                 if (!err) {
                     consolelog("successfully created access and refresh token", JSON.stringify(res), false)
                     resolve(res)
