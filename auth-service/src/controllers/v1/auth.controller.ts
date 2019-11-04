@@ -19,9 +19,9 @@ export class AuthController {
 
     async verifyToken(payload: IAuthServiceRequest.IToken) {
         try {
-            let token = await tokenManager.verifyToken(payload)
-            consolelog("verifyToken", token, true)
-            return token
+            let tokenData = await tokenManager.verifyToken(payload.token)
+            consolelog("verifyToken", tokenData, true)
+            return tokenData
         } catch (err) {
             consolelog("verifyToken", err, false)
             return Promise.reject(err)

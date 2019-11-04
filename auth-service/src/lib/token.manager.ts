@@ -36,13 +36,13 @@ export class TokenManager {
         }
     };
 
-    async  verifyToken(token) {
+    async  verifyToken(token: string) {
         try {
             const tokenData: IAuthServiceRequest.ITokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
             consolelog('verifyToken', [token, tokenData], true)
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
-                    const tokenVerifiedData: IAuthServiceRequest.IPostVerifyTokenForUserRes = {
+                    const tokenVerifiedData: IAuthServiceRequest.IPostVerifyTokenRes = {
                         tokenType: tokenData.tokenType,
                         deviceId: tokenData.deviceId,
                         devicetype: tokenData.devicetype

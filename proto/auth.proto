@@ -16,7 +16,8 @@ message ITokenObject {
 }
 
 message IVerifyTokenRes {
-    string tokenType = 1;
-    string deviceId = 2;
-    string devicetype = 3;
+    required string tokenType = 1;
+    required string deviceId = 2;
+    required string devicetype = 3;
+    optional string id = 4;
 }

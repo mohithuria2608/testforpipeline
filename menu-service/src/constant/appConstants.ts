@@ -2,7 +2,8 @@ import * as config from 'config'
 
 export let DATABASE = {
     LANGUAGE: {
-        EN: 'en',
+        EN: 'En',
+        AR: 'Ar'
     },
 
     ENTITY: {
@@ -39,10 +40,9 @@ export let DATABASE = {
 
     TYPE: {
         TOKEN: {
-            ADMIN: "ADMIN",
-            USER: "USER",
-            VERIFY_EMAIL: "VERIFY_EMAIL",
-            REFRESH_TOKEN: "REFRESH_TOKEN"
+            GUEST_AUTH: "GUEST_AUTH",
+            USER_AUTH: "USER_AUTH",
+            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {
@@ -82,6 +82,17 @@ export let DATABASE = {
         }
     }
 };
+
+
+export enum KAFKA_TOPIC {
+    CREATE_TOKEN = "create_token"
+}
+
+export enum MIDDLEWARE {
+    API_AUTH = "api_auth",
+    GUEST_AUTH = "guest_auth",
+    ACTIVITY_LOG = "activity_log"
+}
 
 export let STATUS_MSG = {
     ERROR: {
@@ -355,7 +366,7 @@ export let STATUS_MSG = {
             DEFAULT: {
                 statusCode: 200,
                 message: 'Success',
-                type: 'DEFAULT'
+                type: 'DEFAULT',
             },
 
             ACCOUNT_DELETED: {

@@ -10,12 +10,12 @@ import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 
-export let grpcSendError = function (data) {
-    if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
-        let message = data.hasOwnProperty('message') || data.hasOwnProperty('customMessage')
+export let grpcSendError = function (error) {
+    if (typeof error === 'object' && error.hasOwnProperty('statusCode') && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        let message = error.hasOwnProperty('message') || error.hasOwnProperty('customMessage')
         return Constant.STATUS_MSG.GRPC_ERROR.ERROR('UNAUTHENTICATED', Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED, message)
     } else {
-        let message = typeof data == 'string' ? data : 'Some internal error occured'
+        let message = typeof error == 'string' ? error : 'Some error occured'
         return Constant.STATUS_MSG.GRPC_ERROR.ERROR("INTERNAL", Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, message)
     }
 }

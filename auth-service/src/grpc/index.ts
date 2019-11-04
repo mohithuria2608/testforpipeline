@@ -35,10 +35,7 @@ server.addService(authProto.AuthService.service, {
             callback(null, res)
         } catch (error) {
             consolelog("verifyToken", error, false)
-            callback({
-                code: grpc.status.NOT_FOUND,
-                details: JSON.stringify(error)
-            })
+            callback(grpcSendError(error))
         }
     }
 })
@@ -47,3 +44,4 @@ server.bind(config.get("grpc.url"), grpc.ServerCredentials.createInsecure())
 
 consolelog("Grpc Server running at", config.get("grpc.url"), true)
 server.start()
+;
