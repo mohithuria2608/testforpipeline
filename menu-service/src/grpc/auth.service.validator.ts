@@ -10,20 +10,19 @@ export class AuthServiceValidator {
 
     async verifyTokenValidator(data: IAuthServiceRequest.IVerifyTokenObj) {
         return new Promise((resolve, reject) => {
-            let dataToValidate = Joi.object().keys({
-                token: Joi.string().required(),
-                tokenType: Joi.string().valid(
-                    Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-                ).required()
-            });
-            dataToValidate.validate(data, { abortEarly: true })
-                .then(validate => {
-                    resolve({})
-                })
-                .catch(validationError => {
-                    consolelog('verifyTokenValidator', validationError, false)
-                    reject(validationError.message)
+            try {
+                let dataToValidate = Joi.object().keys({
+                    token: Joi.string().required(),
+                    tokenType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
+                    ).required()
                 });
+                dataToValidate.validate(data, { abortEarly: true })
+                resolve()
+            } catch (error) {
+                reject(error.message)
+
+            }
         })
     }
 

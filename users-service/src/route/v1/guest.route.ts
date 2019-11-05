@@ -1,9 +1,9 @@
-import * as validate from 'koa-joi-validate'
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware } from '../../middlewares'
+import { validate } from '../../lib'
 import * as Constant from '../../constant'
-import { sendSuccess, sendError } from '../../utils'
+import { sendSuccess } from '../../utils'
 import { guestController } from '../../controllers';
 
 export default (router: Router) => {
@@ -27,7 +27,7 @@ export default (router: Router) => {
                     osversion: Joi.string().required(),
                 },
                 body: {
-                    deviceId: Joi.string().trim().required()
+                    deviceId: Joi.string().required()
                 }
             }),
             async (ctx) => {
@@ -39,7 +39,7 @@ export default (router: Router) => {
                     ctx.body = sendResponse
                 }
                 catch (error) {
-                    throw (sendError(error))
+                    throw error
                 }
             })
 }

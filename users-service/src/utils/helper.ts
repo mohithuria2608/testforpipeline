@@ -10,7 +10,6 @@ const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let sendError = function (error) {
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
-
     if (error && error.code && error.details) {
         customError.message = error.details
         if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
@@ -56,13 +55,8 @@ export let sendError = function (error) {
         customError.message = customError.message && customError.message.replace(/"/g, '')
         customError.message = customError.message && customError.message.replace('[', '')
         customError.message = customError.message && customError.message.replace(']', '')
-
     }
-    return {
-        statusCode: customError.statusCode,
-        payload: customError,
-        headers: {}
-    }
+    return customError
 }
 
 export let sendSuccess = function (successMsg, data) {

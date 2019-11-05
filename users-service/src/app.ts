@@ -16,7 +16,7 @@ export const start = (async () => {
   try {
     const port = config.get("server.port")
     const server = app.listen(port)
-
+    
     await bootstrap(server)
 
     // kafkaProducerE.sendMessage({
@@ -26,7 +26,6 @@ export const start = (async () => {
     // });
 
     // initConsumers()
-
 
   } catch (err) {
     console.error(err)
