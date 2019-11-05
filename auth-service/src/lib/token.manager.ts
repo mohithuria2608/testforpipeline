@@ -60,11 +60,11 @@ export class TokenManager {
                     return tokenVerifiedData
                 }
                 default: {
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 }
             }
         } catch (error) {
-            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
         }
     };
 }

@@ -1,5 +1,5 @@
 import * as validate from 'koa-joi-validate'
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware } from '../../middlewares'
 import * as Constant from '../../constant'
@@ -15,16 +15,16 @@ export default (router: Router) => {
             ]),
             validate({
                 headers: {
-                    language: Joi.string().valid([
+                    language: Joi.string().valid(
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
-                    ]).required(),
+                    ).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
-                    devicetype: Joi.string().valid([
+                    devicetype: Joi.string().valid(
                         Constant.DATABASE.TYPE.DEVICE.ANDROID,
                         Constant.DATABASE.TYPE.DEVICE.IOS
-                    ]).required(),
+                    ).required(),
                     osversion: Joi.string().required(),
                 },
                 body: {

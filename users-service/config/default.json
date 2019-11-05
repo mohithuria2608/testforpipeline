@@ -12,7 +12,7 @@
     },
     "directory": {
         "static": {
-            "proto": "/../../../../proto/auth.proto"
+            "proto": "/../../../proto/auth.proto"
         }
     },
     "cryptoSecret": "d6F3Efeq",
