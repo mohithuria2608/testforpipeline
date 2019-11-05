@@ -39,6 +39,7 @@ gulp.task('server', function () {
 	return spawn('node', ['dist/src/app.js'], { stdio: 'inherit' });
 })
 
+
 /**
   * @todo add "lint" after "clean"
   */

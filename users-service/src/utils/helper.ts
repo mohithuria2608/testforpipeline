@@ -24,7 +24,7 @@ export let sendError = function (data) {
             customErrorMessage = customErrorMessage && customErrorMessage.replace('[', '')
             customErrorMessage = customErrorMessage && customErrorMessage.replace(']', '')
         }
-        throw Boom.badRequest(customErrorMessage)
+        throw new Error(customErrorMessage)
     }
     else if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
         let errorToSend

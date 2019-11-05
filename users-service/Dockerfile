@@ -18,8 +18,7 @@ RUN npm install --no-optional
 # Bundle app source
 COPY ./src ./src
 
-RUN "node_modules/.bin/gulp"
-
+CMD gulp
 
 # final stage
 FROM node:8.13-slim

@@ -10,9 +10,9 @@ eval "$cmd"
 exit
 }
 
-cd users-service && sudo docker build . -t user
-cd ..
 cd auth-service && sudo docker build . -t auth
+cd ..
+cd users-service && sudo docker build . -t user
 cd ..
 cd menu-service && sudo docker build . -t menu
 cd ..
