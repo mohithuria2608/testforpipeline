@@ -38,7 +38,7 @@ gulp.task("copyContent", function () {
 });
 
 gulp.task("copyProto", function () {
-	return gulp.src(['../proto/**/*']).pipe(gulp.dest(outputFolder + "/proto"));
+	return gulp.src(['../proto/**/*']).pipe(gulp.dest("./proto"));
 });
 
 gulp.task('server', function () {

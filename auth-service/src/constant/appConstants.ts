@@ -238,7 +238,7 @@ export let STATUS_MSG = {
                 message: 'Invalid login credentials'
             }
         },
-        
+
         E404: {
             DATA_NOT_FOUND: {
                 statusCode: 404,
@@ -255,7 +255,7 @@ export let STATUS_MSG = {
 
         E406: {
             ACCESS_TOKEN_EXPIRED: {
-                statusCode: 404,
+                statusCode: 406,
                 type: 'ACCESS_TOKEN_EXPIRED',
                 message: 'Access token has expired.'
             }
@@ -460,7 +460,7 @@ export let SERVER = {
             HEIGHT: 100,
         },
     },
-    ACCESS_TOKEN_EXPIRE_TIME: (15 * 60 * 60),
+    ACCESS_TOKEN_EXPIRE_TIME: (2 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (30 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }

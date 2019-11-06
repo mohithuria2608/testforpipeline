@@ -12,13 +12,14 @@ export class TokenManager {
 
     async setToken(tokenData: IAuthServiceRequest.ICreateTokenData) {
         try {
-            let expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+            let expiretime = Constant.SERVER.ACCESS_TOKEN_EXPIRE_TIME
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                     break;
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
+                    expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
                     tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                     break;
                 }

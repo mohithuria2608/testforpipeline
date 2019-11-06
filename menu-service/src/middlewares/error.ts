@@ -8,7 +8,7 @@ export default (opts?): Middleware => {
     } catch (err) {
       let errReturn = sendError(err)
       ctx.status = errReturn.statusCode;
-      ctx.body = errReturn;
+      ctx.body = errReturn.payload;
     }
   }
 }

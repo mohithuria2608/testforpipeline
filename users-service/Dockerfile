@@ -7,5 +7,5 @@ RUN apt-get update
 RUN npm install -g typescript
 RUN npm install
 RUN "node_modules/.bin/gulp"
-EXPOSE 4000
+EXPOSE 4001
 CMD node dist/src/app.js
