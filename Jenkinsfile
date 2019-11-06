@@ -34,11 +34,11 @@ pipeline {
             steps{
                 script{
                     dir("${env.WORKSPACE}/auth-service/"){
-                        AuthImage=docker.build(registry + "/auth_" + ${env.BUILD_NUMBER} +":latest","-f ${env.WORKSPACE}/auth-service/Dockerfile  .")}
+                        AuthImage=docker.build(registry + "/auth_" + "${env.BUILD_NUMBER}" +":latest","-f ${env.WORKSPACE}/auth-service/Dockerfile  .")}
                     dir("${env.WORKSPACE}/users-service"){
-                        UsersImage=docker.build(registry + "/users_" + ${env.BUILD_NUMBER} +":latest","-f ${env.WORKSPACE}/users-service/Dockerfile .")}
+                        UsersImage=docker.build(registry + "/users_" + "${env.BUILD_NUMBER}" +":latest","-f ${env.WORKSPACE}/users-service/Dockerfile .")}
                     dir("${env.WORKSPACE}/menu-service"){
-                        MenuImage=docker.build(registry + "/menu_"+ ${env.BUILD_NUMBER}+":latest","-f ${env.WORKSPACE}/menu-service/Dockerfile .")}
+                        MenuImage=docker.build(registry + "/menu_"+ "${env.BUILD_NUMBER}" +":latest","-f ${env.WORKSPACE}/menu-service/Dockerfile .")}
     
                 }
             }
