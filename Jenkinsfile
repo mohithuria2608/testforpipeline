@@ -62,7 +62,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                            sh '''
+                         /*   sh '''
                             #!/bin/bash
 
                             set -e
@@ -79,7 +79,8 @@ pipeline {
                             #docker run -d appinventiv/test 
                             az aks get-credentials --resource-group=americana  --name=Americana-backend-cluster
                             "
-                        '''
+                        ''' */
+                        sh "sh script.sh"
                 }
             }
         }
