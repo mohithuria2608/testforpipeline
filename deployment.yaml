@@ -13,6 +13,8 @@ spec:
       labels:
         app: backend
     spec:
+      imagePullSecrets:
+      - name: americanasecretkey
       containers:
       - name: users-service-cont
         image: americana.azurecr.io/users:Users-Image_53
@@ -21,4 +23,4 @@ spec:
       #  image: ${Auth_image}
 
       #- name: Menu-service_cont
-      #  image: ${Menu_image}
+      #  image: ${Menu_image}secret/americanasecretkey
