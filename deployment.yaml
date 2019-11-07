@@ -14,11 +14,11 @@ spec:
         app: backend
     spec:
       imagePullSecrets:
-      - name: americanasecretkey
+      - name: americanasecretkey1
       containers:
       - name: users-service-cont
         image: americana.azurecr.io/users:Users-Image_53
-
+        imagePullPolicy: Always
       #- name: auth-service_cont
       #  image: ${Auth_image}
 
