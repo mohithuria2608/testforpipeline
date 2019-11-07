@@ -38,7 +38,7 @@ pipeline {
                     dir("${env.WORKSPACE}/users-service"){
                         UsersImage=docker.build(registry + "/users" + ":${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/users-service/Dockerfile .")}
                     dir("${env.WORKSPACE}/menu-service"){
-                        MenuImage=docker.build(registry + "/menu"+ ":${env.BUILD_NUMBER}" +","-f ${env.WORKSPACE}/menu-service/Dockerfile .")}
+                        MenuImage=docker.build(registry + "/menu"+ ":${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")}
     
                 }
             }
