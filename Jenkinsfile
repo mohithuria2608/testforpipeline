@@ -70,7 +70,7 @@ pipeline {
                             REMOTE_USERNAME="appinventiv-jenkins"
                             REMOTE_HOST="40.67.180.202"
                             
-                            ssh -tt $REMOTE_USERNAME@$REMOTE_HOST "
+                            ssh -tt $REMOTE_USERNAME@$REMOTE_HOST
                             az login --service-principal -u $AZ_USR -p $AZ_PASS --tenant $AZ_TENANT
                             sudo az acr login --name americana
                             #sudo docker pull ${Auth_image}
