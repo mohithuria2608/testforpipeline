@@ -80,7 +80,7 @@ pipeline {
                             az aks get-credentials --resource-group=americana  --name=Americana-backend-cluster
                             "
                         ''' */
-                        sh "sh script.sh"
+                        sh "sh deploy.sh"
                 }
             }
         }
