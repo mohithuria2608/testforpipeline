@@ -3,11 +3,19 @@ kind: "Deployment"
 metadata:
 name: Americana-backend
 spec:
-    restartPolicy: Never
-containers:
-    #- name: auth-service_cont
-    #  image: ${Auth_image}
-    - name: Users-service_cont
-      image: ${Users_image}
-    #- name: Menu-service_cont
-    #  image: ${Menu_image}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    spec:
+      containers:
+      - name: Users-service_cont
+        image: ${Users_image}
+
+      #- name: auth-service_cont
+      #  image: ${Auth_image}
+
+      #- name: Menu-service_cont
+      #  image: ${Menu_image}
