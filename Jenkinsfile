@@ -2,10 +2,10 @@ pipeline {
     environment {
         registry = "americana.azurecr.io"
         registryCredential = "acr_cred"
-        //Users_image=registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}"
-        Users_image=registry + "/users" + ":Users-Image_52"
-        Auth_image=registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}"
-        Menu_image=registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
+        //Users_image="americana.azurecr.io/users" + ":Users-Image_${env.BUILD_NUMBER}"
+        Users_image="americana.azurecr.io/users" + ":Users-Image_52"
+        Auth_image="americana.azurecr.io/auth" + ":auth-service_${env.BUILD_NUMBER}"
+        Menu_image="americana.azurecr.io/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
         
     }
     agent any
@@ -62,8 +62,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                     
-                }                        sh '''
+                            sh '''
                             #!/bin/bash
 
                             set -e
@@ -81,6 +80,7 @@ pipeline {
                             //echo `docker ps`
                             "
                         '''
+                }
             }
         }
     }
