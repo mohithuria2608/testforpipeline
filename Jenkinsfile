@@ -2,6 +2,11 @@ pipeline {
     environment {
         registry = "americana.azurecr.io"
         registryCredential = "acr_cred"
+        //Users_image=registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}"
+        Users_image=registry + "/users" + ":Users-Image_52"
+        Auth_image=registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}"
+        Menu_image=registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
+        
     }
     agent any
 
@@ -16,7 +21,7 @@ pipeline {
             steps{
                 checkout scm
             }
-        }
+        }/*
         stage('SonarQube Analysis'){
             environment {
                 SONAR_SCANNER_OPTS = "-Xmx2g"
@@ -53,8 +58,32 @@ pipeline {
                     }
                 }
             }
+        }*/
+        stage('Delpoying the App on Azure Kubernetes Service') {
+            steps{
+                script{
+                     
+                }                        sh '''
+                            #!/bin/bash
+
+                            set -e
+                            
+                            REMOTE_USERNAME="appinventiv-jenkins"
+                            REMOTE_HOST="40.67.180.202"
+                            
+                            ssh -tt $REMOTE_USERNAME@$REMOTE_HOST "
+                            az login --service-principal -u $AZ_USR -p $AZ_PASS --tenant $AZ_TENANT
+                            sudo az acr login --name americana
+                            //sudo docker pull ${Auth_image}
+                            sudo docker pull ${Users_image}
+                            //sudo docker pull ${Menu_image}
+                            //docker run -d appinventiv/test 
+                            //echo `docker ps`
+                            "
+                        '''
+            }
         }
-        }
+    }
     post{
         always{
             emailext attachLog: true,
