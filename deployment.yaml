@@ -1,8 +1,14 @@
 apiVersion: "apps/v1beta1"
 kind: "Deployment"
 metadata:
-  name: Americana-backend
+  name: americana-backend
 spec:
+  template:
+        metadata:
+          labels:
+            name: "americana-backend"
+  selector:
+    app: americanca-backend
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -11,7 +17,7 @@ spec:
   template:
     spec:
       containers:
-      - name: Users-service_cont
+      - name: users-service_cont
         image: ${Users_image}
 
       #- name: auth-service_cont
