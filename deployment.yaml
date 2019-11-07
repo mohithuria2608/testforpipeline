@@ -16,6 +16,7 @@ spec:
       containers:
       - name: users-service-cont
         image: americana.azurecr.io/users:Users-Image_53
+        imagePullPolicy: IfNotPresent
 
       #- name: auth-service_cont
       #  image: ${Auth_image}
