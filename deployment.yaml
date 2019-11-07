@@ -19,9 +19,9 @@ spec:
       - name: users-service-cont
         image: americana.azurecr.io/users:Users-Image_53
         imagePullPolicy: Always
-      - name: auth-service_cont
+      - name: auth-service-cont
         image: americana.azurecr.io/auth:auth-service_53
         imagePullPolicy: Always
-      - name: Menu-service_cont
+      - name: menu-service-cont
         image: americana.azurecr.io/menu:Menu-service_53
         imagePullPolicy: Always
