@@ -14,7 +14,7 @@ spec:
         app: backend
     spec:
       containers:
-      - name: users-service_cont
+      - name: users-service-cont
         image: ${Users_image}
 
       #- name: auth-service_cont
