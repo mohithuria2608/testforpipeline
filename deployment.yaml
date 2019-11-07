@@ -1,20 +1,17 @@
-apiVersion: "apps/v1beta1"
+apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
   name: americana-backend
+  labels: 
+    app: backend
 spec:
-  template:
-        metadata:
-          labels:
-            name: "americana-backend"
   selector:
-    app: americanca-backend
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-  minReadySeconds: 5 
+    matchLabels:
+      app: backend
   template:
+    metadata:
+      labels:
+        app: backend
     spec:
       containers:
       - name: users-service_cont
