@@ -77,6 +77,7 @@ pipeline {
                             sudo docker pull ${Users_image}
                             #sudo docker pull ${Menu_image}
                             #docker run -d appinventiv/test 
+                            az aks get-credentials --resource-group=americana  --name=Americana-backend-cluster
                             "
                         '''
                 }
