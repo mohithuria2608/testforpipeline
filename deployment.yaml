@@ -1,7 +1,7 @@
 apiVersion: "apps/v1beta1"
 kind: "Deployment"
 metadata:
-name: Americana-backend
+  name: Americana-backend
 spec:
   strategy:
     rollingUpdate:
