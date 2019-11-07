@@ -73,11 +73,10 @@ pipeline {
                             ssh -tt $REMOTE_USERNAME@$REMOTE_HOST "
                             az login --service-principal -u $AZ_USR -p $AZ_PASS --tenant $AZ_TENANT
                             sudo az acr login --name americana
-                            //sudo docker pull ${Auth_image}
+                            #sudo docker pull ${Auth_image}
                             sudo docker pull ${Users_image}
-                            //sudo docker pull ${Menu_image}
-                            //docker run -d appinventiv/test 
-                            //echo `docker ps`
+                            #sudo docker pull ${Menu_image}
+                            #docker run -d appinventiv/test 
                             "
                         '''
                 }
