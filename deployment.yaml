@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: users-service-cont
-        image: americana.azurecr.io/users/:Users-Image_53
+        image: ${Users_image}
 
       #- name: auth-service_cont
       #  image: ${Auth_image}
