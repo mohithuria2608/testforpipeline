@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 az login --service-principal -u $AZ_USR -p $AZ_PASS --tenant $AZ_TENANT
 az aks get-credentials --resource-group=americana  --name=Americana-backend-cluster
 
