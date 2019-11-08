@@ -24,13 +24,6 @@ export class AuthServiceValidator {
                 });
                 dataToValidate.validate(data, { abortEarly: true })
                 resolve({})
-                // .then(validate => {
-                //     resolve({})
-                // })
-                // .catch(validationError => {
-                //     consolelog('createTokenValidator', validationError, false)
-                //     reject(validationError.message)
-                // });
             } catch (error) {
                 reject(error.message)
             }

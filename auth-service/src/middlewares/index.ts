@@ -7,6 +7,7 @@ import * as serve from 'koa-static';
 
 import handleErrors from './error'
 
+export * from './joi.validator'
 
 export default function middleware() {
   return compose([
