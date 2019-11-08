@@ -10,7 +10,7 @@ pipeline {
     }
     agent any
 
-    stages{/*
+    stages{
     	stage('Email'){
                 steps{
                     emailext body: "Build Started-- > Build Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}", subject: "Jenkins Build Job -- > ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com'
@@ -58,7 +58,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
