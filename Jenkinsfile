@@ -62,7 +62,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                        sh "kubectl apply -f ${env.WORKSPACE}/deployment.yaml"
+                        sh "kubectl apply -f ${env.WORKSPACE}/deployment.yaml  --Users_image=${Users_image} --Auth_image=${Auth_image} --Menu_image=${Menu_image}"
                 }
             }
         }
