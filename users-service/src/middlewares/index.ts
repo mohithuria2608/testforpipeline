@@ -11,7 +11,6 @@ import apiAuth from './apiAuth'
 import refreshAuth from './refreshAuth'
 import activityLog from './activityLog'
 
-
 export default function middleware() {
   return compose([
     logger(),
@@ -23,6 +22,7 @@ export default function middleware() {
   ])
 }
 
+export * from './joi.validator'
 
 export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[] {
   let temp: IMiddleware[] = []

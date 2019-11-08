@@ -14,14 +14,20 @@ export class AuthServiceValidator {
                 let dataToValidate = Joi.object().keys({
                     token: Joi.string().required(),
                     tokenType: Joi.string().valid(
-                        Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-                    ).required()
-                });
+                        Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
+                    ).required(),
+                })
                 dataToValidate.validate(data, { abortEarly: true })
-                resolve()
+                resolve({})
+                // .then(validate => {
+                //     resolve({})
+                // })
+                // .catch(validationError => {
+                //     consolelog('verifyTokenValidator', validationError, false)
+                //     reject(validationError.message)
+                // });
             } catch (error) {
                 reject(error.message)
-
             }
         })
     }

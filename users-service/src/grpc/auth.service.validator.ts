@@ -23,7 +23,14 @@ export class AuthServiceValidator {
                     id: Joi.string().optional(),
                 });
                 dataToValidate.validate(data, { abortEarly: true })
-                resolve()
+                resolve({})
+                // .then(validate => {
+                //     resolve({})
+                // })
+                // .catch(validationError => {
+                //     consolelog('createTokenValidator', validationError, false)
+                //     reject(validationError.message)
+                // });
             } catch (error) {
                 reject(error.message)
             }
@@ -39,15 +46,21 @@ export class AuthServiceValidator {
                         Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH,
                         Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
                     ).required(),
-                });
+                })
                 dataToValidate.validate(data, { abortEarly: true })
-                resolve()
+                resolve({})
+                // .then(validate => {
+                //     resolve({})
+                // })
+                // .catch(validationError => {
+                //     consolelog('verifyTokenValidator', validationError, false)
+                //     reject(validationError.message)
+                // });
             } catch (error) {
                 reject(error.message)
             }
         })
     }
-
 }
 
 

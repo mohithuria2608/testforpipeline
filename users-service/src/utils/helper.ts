@@ -9,7 +9,9 @@ import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let sendError = function (error) {
+
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
+
     if (error && error.code && error.details) {
         customError.message = error.details
         if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
@@ -18,6 +20,10 @@ export let sendError = function (error) {
         }
     } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+        if (error.hasOwnProperty('statusCode'))
+            customError['statusCode'] = error.statusCode
+        if (error.hasOwnProperty('type'))
+            customError['type'] = error.type
     } else {
         if (typeof error === 'object') {
             if (error.name === 'MongoError') {
@@ -55,8 +61,13 @@ export let sendError = function (error) {
         customError.message = customError.message && customError.message.replace(/"/g, '')
         customError.message = customError.message && customError.message.replace('[', '')
         customError.message = customError.message && customError.message.replace(']', '')
+
     }
-    return customError
+    return {
+        statusCode: customError.statusCode,
+        payload: customError,
+        headers: {}
+    }
 }
 
 export let sendSuccess = function (successMsg, data) {

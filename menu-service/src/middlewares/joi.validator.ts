@@ -15,7 +15,8 @@ function validateObject(object = {}, label, schema, options) {
             // Validate the object against the provided schema
             const { error, value } = schema.validate(object, options)
             return {}
-        }
+        } return {}
+
     } catch (error) {
         throw new Error(`Invalid ${label} - ${error.message}`)
     }
@@ -32,6 +33,7 @@ function validateObject(object = {}, label, schema, options) {
  * @param {Object} validationObj.params The request params schema
  * @param {Object} validationObj.query The request query schema
  * @param {Object} validationObj.body The request body schema
+ * @param {Object} validationObj.custom The request body schema
  * @returns A validation middleware function.
  */
 export let validate = function (validationObj) {
@@ -42,7 +44,6 @@ export let validate = function (validationObj) {
             validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true, abortEarly: true })
             validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })
             validateObject(ctx.query, 'URL Query', validationObj.query, { abortEarly: true })
-
             if (ctx.request.body) {
                 validateObject(ctx.request.body, 'Request Body', validationObj.body, { abortEarly: true })
             }

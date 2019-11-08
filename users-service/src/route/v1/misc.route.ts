@@ -1,7 +1,6 @@
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware } from '../../middlewares'
-import { validate } from '../../lib'
+import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess, sendError } from '../../utils'
 import { miscUserController } from '../../controllers';

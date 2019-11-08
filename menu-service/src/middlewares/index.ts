@@ -23,6 +23,7 @@ export default function middleware() {
   ])
 }
 
+export * from './joi.validator'
 
 export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[] {
   let temp: IMiddleware[] = []
