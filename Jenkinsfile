@@ -62,7 +62,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                       sh "az login --service-principal -u $AZ_USR -p $AZ_PASS --tenant $AZ_TENANT"
+                       sh "sh az_login.sh"
                        sh "sh deploy_helm.sh"
                 }
             }
