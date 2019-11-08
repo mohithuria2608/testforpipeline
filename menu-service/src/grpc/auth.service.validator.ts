@@ -17,15 +17,10 @@ export class AuthServiceValidator {
                         Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
                     ).required(),
                 })
-                dataToValidate.validate(data, { abortEarly: true })
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(`Invalid Info- ${error.message}`)
                 resolve({})
-                // .then(validate => {
-                //     resolve({})
-                // })
-                // .catch(validationError => {
-                //     consolelog('verifyTokenValidator', validationError, false)
-                //     reject(validationError.message)
-                // });
             } catch (error) {
                 reject(error.message)
             }

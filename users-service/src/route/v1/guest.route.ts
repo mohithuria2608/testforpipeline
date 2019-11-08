@@ -32,7 +32,6 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let payload: IGuestRequest.IGuestLogin = { ...ctx.request.body, ...ctx.request.header };
-                    console.log("payload", payload)
                     let res = await guestController.guestLogin(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, {})

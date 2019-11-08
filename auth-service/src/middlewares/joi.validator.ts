@@ -8,20 +8,18 @@ import * as Joi from '@hapi/joi';
  * @param {String} label The label to use in the error message.
  * @param {JoiSchema} schema The Joi schema to validate the object against.
  */
-function validateObject(object = {}, label, schema, options) {
-    try {
-        if (schema) {
-            schema = Joi.object({ schema })
-            // Validate the object against the provided schema
-            const { error, value } = schema.validate(object, options)
-            return {}
-        } return {}
-
-    } catch (error) {
-        throw new Error(`Invalid ${label} - ${error.message}`)
-    }
+async function validateObject(object = {}, label, schema, options) {
     // Skip validation if no schema is provided
-
+    if (schema) {
+        schema = Joi.object(schema)
+        // Validate the object against the provided schema
+        try {
+            const value = await schema.validateAsync(object, options)
+        } catch (error) {
+            // Throw error with custom message if validation failed
+            throw new Error(`Invalid ${label} - ${error.message}`)
+        }
+    }
 }
 
 /**
@@ -33,19 +31,19 @@ function validateObject(object = {}, label, schema, options) {
  * @param {Object} validationObj.params The request params schema
  * @param {Object} validationObj.query The request query schema
  * @param {Object} validationObj.body The request body schema
- * @param {Object} validationObj.custom The request body schema
  * @returns A validation middleware function.
  */
-export let validate = function (validationObj) {
+export const validate = function (validationObj) {
     // Return a Koa middleware function
-    return (ctx, next) => {
+    return async (ctx, next) => {
         try {
             // Validate each request data object in the Koa context object
-            validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true, abortEarly: true })
-            validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })
-            validateObject(ctx.query, 'URL Query', validationObj.query, { abortEarly: true })
+            await validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true })
+            await validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })
+            await validateObject(ctx.query, 'URL Query', validationObj.query, { abortEarly: true })
+
             if (ctx.request.body) {
-                validateObject(ctx.request.body, 'Request Body', validationObj.body, { abortEarly: true })
+                await validateObject(ctx.request.body, 'Request Body', validationObj.body, { abortEarly: true })
             }
 
             return next()
@@ -55,5 +53,3 @@ export let validate = function (validationObj) {
         }
     }
 }
-
-// module.exports = validate

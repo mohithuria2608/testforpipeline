@@ -165,7 +165,13 @@ export let STATUS_MSG = {
                     type: 'VALIDATION_ERROR'
                 }
             },
-
+            JOI_VALIDATION_ERROR: (customErrorMessage) => {
+                return {
+                    statusCode: 400,
+                    message: customErrorMessage,
+                    type: 'VALIDATION_ERROR'
+                }
+            },
             INVALID_ID: {
                 statusCode: 400,
                 message: 'Invalid Id Provided ',
