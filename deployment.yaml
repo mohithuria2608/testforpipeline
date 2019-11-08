@@ -36,6 +36,6 @@ spec:
   selector:
     name: americana-backend
   ports:
-    -name: "http"
-     port: 80
-     protocol: "TCP"
+  -name: "http"
+   port: 80
+   protocol: "TCP"
