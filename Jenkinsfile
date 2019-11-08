@@ -63,7 +63,7 @@ pipeline {
             steps{
                 script{
                         sh "sh ${env.WORKSPACE}/test.sh"
-                        #sh "kubectl apply -f ${env.WORKSPACE}/deployment.yaml"
+                        //sh "kubectl apply -f ${env.WORKSPACE}/deployment.yaml"
                 }
             }
         }
