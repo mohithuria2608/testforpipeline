@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+echo $Users_image
 # read the yml template from a file and substitute the string 
 
 cat "./deployment.yaml"
