@@ -17,11 +17,11 @@ spec:
       - name: americanasecretkey1
       containers:
       - name: users-service-cont
-        image: ${env.Users_image}
+        image: ${Users_image}
         imagePullPolicy: Always
       - name: auth-service-cont
-        image: ${env.Auth_image}
+        image: ${Auth_image}
         imagePullPolicy: Always
       - name: menu-service-cont
-        image: ${env.Menu_image}
+        image: ${Menu_image}
         imagePullPolicy: Always
