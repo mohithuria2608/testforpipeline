@@ -62,7 +62,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                        sh "kubectl apply -f ."
+                        sh "kubectl apply -f ${env.WORKSPACE}/deployment.yaml"
                 }
             }
         }
