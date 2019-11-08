@@ -25,6 +25,7 @@ spec:
       - name: menu-service-cont
         image: {{Menu_image}}
         imagePullPolicy: Always
+---
 apiVersion: v1
 kind: Service
 metadata:
