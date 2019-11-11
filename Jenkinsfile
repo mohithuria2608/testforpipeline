@@ -63,7 +63,7 @@ pipeline {
             steps{
                 script{
                        sh "sh ~/az_login.sh"
-                       sh "sh deploy.sh"
+                       sh "sh Deployment_cicd/deploy.sh"
                 }
             }
         }
