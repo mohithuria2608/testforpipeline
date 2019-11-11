@@ -28,7 +28,7 @@ pipeline {
             }
             steps{
                 script{
-                    sh "npm install -g typescript"
+                    //sh "npm install -g typescript"
                     def scannerHome = tool 'SonarQubeScanner1'  
                     withSonarQubeEnv('SonarQube_Americana') {
                         sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties" 
