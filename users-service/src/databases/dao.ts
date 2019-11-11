@@ -5,7 +5,7 @@ import { consolelog } from '../utils'
 
 export class DAOManager extends AerospikeClass {
     constructor() {
-        super();
+        super('myapp');
     }
 
     /**

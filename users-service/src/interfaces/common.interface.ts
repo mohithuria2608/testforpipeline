@@ -8,11 +8,12 @@ declare namespace ICommonRequest {
         osversion: string,
     }
 
-    export interface UserAuth {
+    export interface AuthorizationObj {
         deviceId: string,
         devicetype: string,
         tokenType: string,
-        userData: any
+        id?: string,
+        userData?: any,
     }
 
     export interface IPagination {

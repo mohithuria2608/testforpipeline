@@ -2,14 +2,14 @@ import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
-import { sendSuccess } from '../../utils'
-import { menuController } from '../../controllers';
+import { sendSuccess, sendError } from '../../utils'
+import { miscUserController } from '../../controllers';
 
 export default (router: Router) => {
     router
-        .get('/',
+        .post('/refresh-token',
             ...getMiddleware([
-                Constant.MIDDLEWARE.GUEST_AUTH,
+                Constant.MIDDLEWARE.REFRESH_AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -25,13 +25,17 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.DEVICE.IOS
                     ).required(),
                     osversion: Joi.string().required(),
+                },
+                body: {
+                    deviceId: Joi.string().trim().required()
                 }
             }),
             async (ctx) => {
                 try {
-                    let payload: IGuestMenuRequest.IGuestMenuFetch = { ...ctx.request.header };
-                    let res = await menuController.fetchMenu(payload);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let payload: IUserRequest.IRefreshToken = { ...ctx.request.body, ...ctx.request.header };
+                    let res = await miscUserController.refreshToken(payload);
+                    ctx.set({ 'accessToken': res.accessToken })
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {})
                     ctx.body = sendResponse
                 }
                 catch (error) {

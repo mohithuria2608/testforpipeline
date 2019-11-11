@@ -15,9 +15,4 @@ declare namespace ICommonRequest {
         id?: string,
         userData?: any,
     }
-
-    export interface IPagination {
-        page?: number,
-        // skip?: number
-    }
 }

@@ -1,14 +1,11 @@
 declare namespace IAuthServiceRequest {
 
-    interface IVerifyToken {
+    interface IVerifyTokenObj {
+        token: string,
+        tokenType: string,
+    }
+
+    interface IToken {
         token: string
     }
-
-    interface IPostVerifyTokenRes {
-        tokenType: string,
-        deviceId: string,
-        devicetype: string,
-        id?: string
-    }
-
 }

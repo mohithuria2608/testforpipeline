@@ -5,7 +5,9 @@ const protoLoader = require('@grpc/proto-loader');
 import { consolelog } from '../utils'
 
 export class AuthService {
-
+    /**
+     * @description  : grpc call to auth-service
+     * */
     private authProto = __dirname + config.get("directory.static.proto");
     private packageDefinition = protoLoader.loadSync(
         this.authProto,
@@ -21,10 +23,12 @@ export class AuthService {
 
     constructor() { }
 
-    async verifyToken(payload: IAuthServiceRequest.IVerifyToken): Promise<IAuthServiceRequest.IPostVerifyTokenRes> {
+    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
-            this.authClient.verifyToken({ token: payload.token }, (err, res) => {
+            consolelog("{ token: payload.token, tokenType: payload.tokenType }", JSON.stringify({ token: payload.token, tokenType: payload.tokenType }), false)
+
+            this.authClient.verifyToken({ token: payload.token, tokenType: payload.tokenType }, (err, res) => {
                 if (!err) {
                     consolelog("successfully verified token", JSON.stringify(res), false)
                     resolve(res)

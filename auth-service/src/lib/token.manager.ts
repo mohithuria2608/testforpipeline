@@ -10,15 +10,16 @@ export class TokenManager {
 
     constructor() { }
 
-    async setToken(tokenData: IAuthServiceRequest.ITokenData) {
+    async setToken(tokenData: IAuthServiceRequest.ICreateTokenData) {
         try {
-            let expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+            let expiretime = Constant.SERVER.ACCESS_TOKEN_EXPIRE_TIME
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                     break;
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
+                    expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
                     tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                     break;
                 }
@@ -38,26 +39,33 @@ export class TokenManager {
 
     async  verifyToken(token: string) {
         try {
-            const tokenData: IAuthServiceRequest.ITokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
+            const tokenData: IAuthServiceRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
             consolelog('verifyToken', [token, tokenData], true)
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
-                    const tokenVerifiedData: IAuthServiceRequest.IPostVerifyTokenRes = {
-                        tokenType: tokenData.tokenType,
+                    const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                         deviceId: tokenData.deviceId,
-                        devicetype: tokenData.devicetype
+                        devicetype: tokenData.devicetype,
+                        tokenType: tokenData.tokenType,
                     };
                     return tokenVerifiedData
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
-                    break;
+                    const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
+                        tokenType: tokenData.tokenType,
+                        deviceId: tokenData.deviceId,
+                        devicetype: tokenData.devicetype,
+                        id: tokenData.id ? tokenData.id : undefined,
+                        userData: {}
+                    };
+                    return tokenVerifiedData
                 }
                 default: {
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 }
             }
         } catch (error) {
-            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.INVALID_TOKEN)
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
         }
     };
 }

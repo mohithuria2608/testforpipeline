@@ -1,8 +1,8 @@
 import * as config from 'config'
 import { Middleware, Context } from 'koa'
 import { authService } from '../grpc'
-import * as Constant from '../constant/appConstants'
-import { consolelog } from '../utils'
+import * as Constant from '../constant';
+import { sendError, consolelog } from '../utils';
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
@@ -15,18 +15,18 @@ export default (opts?): Middleware => {
             const [tokenType, token] = authorization.split(/\s+/);
 
             if (!token || tokenType.toLowerCase() !== settings.tokenType.toLowerCase()) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
 
-            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH })
+            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH })
 
             if (!tokenData || !tokenData.deviceId || !tokenData.devicetype || !tokenData.tokenType) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             } else {
                 ctx.state.user = tokenData
             }
         } catch (error) {
-            return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
         }
         await next()
     }

@@ -1,6 +1,5 @@
 import { Middleware, Context } from 'koa'
 import * as CONSTANT from '../constant/appConstants'
-import * as utils from '../utils'
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
@@ -8,7 +7,7 @@ export default (opts?): Middleware => {
             // utils.consolelog('In API Auth', ctx.request.headers.api_key, false)
             let checkApiKeyFunction = await apiKeyFunction(ctx.request.headers.api_key)
             if (!checkApiKeyFunction) {
-                return Promise.reject(utils.sendError(CONSTANT.STATUS_MSG.ERROR.E401.UNAUTHORIZED))
+                return Promise.reject(CONSTANT.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
         } catch (error) {
             return Promise.reject(error)

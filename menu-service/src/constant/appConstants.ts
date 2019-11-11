@@ -42,7 +42,6 @@ export let DATABASE = {
         TOKEN: {
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
-            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {
@@ -209,49 +208,11 @@ export let STATUS_MSG = {
                 type: 'INVALID_LINK'
             },
 
-            INVALID_SESSION_REQUEST: {
-                statusCode: 401,
-                type: 'INVALID_SESSION_REQUEST',
-                message: 'You have requested for an invalid login'
-            },
-
-            TOKEN_ALREADY_EXPIRED: {
-                statusCode: 401,
-                message: 'You logged into other device.',
-                type: 'TOKEN_ALREADY_EXPIRED'
-            },
-
-            INVALID_TOKEN: {
-                statusCode: 401,
-                message: 'Invalid token provided',
-                type: 'INVALID_TOKEN'
-            },
-
-            ADMIN_DELETED: {
-                statusCode: 401,
-                message: 'You are blocked by Admin',
-                type: 'ADMIN_DELETED'
-            },
-
-            ADMIN_BLOCKED: {
-                statusCode: 401,
-                message: 'You are blocked by Admin',
-                type: 'ADMIN_BLOCKED'
-            },
-
             UNAUTHORIZED: {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
                 type: 'UNAUTHORIZED'
-            },
-
-            MISSINING_AUTHENTICATION: (tokenType) => {
-                return {
-                    statusCode: 401,
-                    message: 'Missing authentication ' + tokenType,
-                    type: 'MISSINING_AUTHENTICATION'
-                }
-            },
+            }
         },
         E403: {
             INVALID_PASSWORD: {
@@ -284,6 +245,13 @@ export let STATUS_MSG = {
                 message: 'User not found',
                 type: 'USER_NOT_FOUND'
             },
+        },
+        E406: {
+            ACCESS_TOKEN_EXPIRED: {
+                statusCode: 406,
+                type: 'ACCESS_TOKEN_EXPIRED',
+                message: 'Access token has expired.'
+            }
         },
         E500: {
             IMP_ERROR: {
@@ -409,6 +377,33 @@ export let STATUS_MSG = {
                 type: 'NO_SUCH_REQUEST'
             }
         }
+    },
+    GRPC_ERROR: {
+        TYPE: {
+            OK: '0',
+            CANCELLED: '1',
+            UNKNOWN: '2',
+            INVALID_ARGUMENT: '3',
+            DEADLINE_EXCEEDED: '4',
+            NOT_FOUND: '5',
+            ALREADY_EXISTS: '6',
+            PERMISSION_DENIED: '7',
+            UNAUTHENTICATED: '16',
+            RESOURCE_EXHAUSTED: '8',
+            FAILED_PRECONDITION: '9',
+            ABORTED: '10',
+            OUT_OF_RANGE: '11',
+            UNIMPLEMENTED: '12',
+            INTERNAL: '13',
+            UNAVAILABLE: '14',
+            DATA_LOSS: '15'
+        },
+        ERROR: (code, type, message) => {
+            return {
+                code: parseInt(code),
+                details: `${type} : ${message}`
+            }
+        }
     }
 };
 
@@ -458,6 +453,5 @@ export let SERVER = {
         },
     },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }

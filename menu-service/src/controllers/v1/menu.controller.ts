@@ -1,5 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
+import * as fs from 'fs'
+
 
 export class MenuController {
 
@@ -7,8 +9,10 @@ export class MenuController {
 
     async fetchMenu(payload: IGuestMenuRequest.IGuestMenuFetch) {
         try {
-            
-            return {}
+            let rawdata = fs.readFileSync(__dirname + '/../../../../model/store.json', 'utf-8');
+            let store = JSON.parse(rawdata);
+
+            return store
         } catch (err) {
             consolelog("fetchMenu", err, false)
             return Promise.reject(err)
