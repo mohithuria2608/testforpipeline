@@ -62,7 +62,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                       sh "sh az_login.sh"
+                       sh "sh ~/az_login.sh"
                        sh "sh deploy.sh"
                 }
             }
