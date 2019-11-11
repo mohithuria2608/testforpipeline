@@ -21,7 +21,7 @@ pipeline {
             steps{
                 checkout scm
             }
-        }/*
+        }
         stage('SonarQube Analysis'){
             environment {
                 SONAR_SCANNER_OPTS = "-Xmx2g"
@@ -34,7 +34,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Build image') {
             steps{
                 script{
@@ -48,7 +48,7 @@ pipeline {
                 }
             }
         }
-        stage('Push Image to Azure COntainer Registry') {
+        stage('Push Image to Azure Container Registry') {
             steps{
                 script {
                     docker.withRegistry("https://americana.azurecr.io", registryCredential ) {
