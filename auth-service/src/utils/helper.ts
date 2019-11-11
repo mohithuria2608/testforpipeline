@@ -1,7 +1,6 @@
 'use strict'
 import * as config from 'config'
-import * as Joi from 'joi'
-import * as Boom from 'boom'
+import * as Joi from '@hapi/joi'
 import * as Constant from '../constant/appConstants'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
@@ -10,53 +9,64 @@ import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 
-export let grpcSendError = function (data) {
-    if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
-        let message = data.hasOwnProperty('message') || data.hasOwnProperty('customMessage')
+export let grpcSendError = function (error) {
+    if (typeof error === 'object' && error.hasOwnProperty('statusCode') && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        let message = error.hasOwnProperty('message') || error.hasOwnProperty('customMessage')
         return Constant.STATUS_MSG.GRPC_ERROR.ERROR('UNAUTHENTICATED', Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED, message)
     } else {
-        let message = typeof data == 'string' ? data : 'Some internal error occured'
+        let message = typeof error == 'string' ? error : 'Some error occured'
         return Constant.STATUS_MSG.GRPC_ERROR.ERROR("INTERNAL", Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, message)
     }
 }
 
-export let sendError = function (data) {
-    if (typeof data === 'object' && data.hasOwnProperty('statusCode') && (data.hasOwnProperty('message') || data.hasOwnProperty('customMessage'))) {
-        let errorToSend
-        if (data.hasOwnProperty('message')) {
-            let error = new Error(data.message);
-            errorToSend = Boom.boomify(error, { statusCode: data.statusCode })
-        } else {
-            let error = new Error(data.message);
-            errorToSend = Boom.boomify(error, { statusCode: data.statusCode })
+export let sendError = function (error) {
+
+    let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
+
+    if (error && error.code && error.details) {
+        customError.message = error.details
+        if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED.type
         }
-        errorToSend.output.payload.responseType = data.type
-        return errorToSend
+    } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+        if (error.hasOwnProperty('statusCode'))
+            customError['statusCode'] = error.statusCode
+        if (error.hasOwnProperty('type'))
+            customError['type'] = error.type
     } else {
-        let errorToSend = ''
-        if (typeof data === 'object') {
-            if (data.name === 'MongoError') {
-                errorToSend += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + data.errmsg
-            } else if (data.name === 'ApplicationError') {
-                errorToSend += Constant.STATUS_MSG.ERROR.E400.APP_ERROR.message + ' : '
-            } else if (data.name === 'ValidationError') {
-                errorToSend += Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.message + data.message
-            } else if (data.name === 'CastError') {
-                errorToSend += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + Constant.STATUS_MSG.ERROR.E400.INVALID_ID.message + data.value
+        if (typeof error === 'object') {
+            if (error.name === 'MongoError') {
+                customError.message += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + error.errmsg
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode
+                customError.type = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.type
+            } else if (error.name === 'ApplicationError') {
+                customError.message += Constant.STATUS_MSG.ERROR.E400.APP_ERROR.message + ' : '
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E400.APP_ERROR.statusCode
+                customError.type = Constant.STATUS_MSG.ERROR.E400.APP_ERROR.type
+            } else if (error.name === 'ValidationError') {
+                customError.message += Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.message + error.message
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
+                customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+            } else if (error.name === 'CastError') {
+                customError.message += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + Constant.STATUS_MSG.ERROR.E400.INVALID_ID.message + error.value
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode
+                customError.type = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.type
             }
         } else {
-            errorToSend = data
+            customError.message = error
         }
-        var customErrorMessage = errorToSend
-        if (typeof customErrorMessage === 'string') {
-            if (errorToSend.indexOf("[") > -1) {
-                customErrorMessage = errorToSend.substr(errorToSend.indexOf("["))
-            }
-            customErrorMessage = customErrorMessage && customErrorMessage.replace(/"/g, '')
-            customErrorMessage = customErrorMessage && customErrorMessage.replace('[', '')
-            customErrorMessage = customErrorMessage && customErrorMessage.replace(']', '')
-        }
-        throw Boom.badRequest(customErrorMessage)
+    }
+
+    customError.message = customError.message && customError.message.replace(/"/g, '')
+    customError.message = customError.message && customError.message.replace('[', '')
+    customError.message = customError.message && customError.message.replace(']', '')
+
+    return {
+        statusCode: customError.statusCode,
+        payload: customError,
+        headers: {}
     }
 }
 

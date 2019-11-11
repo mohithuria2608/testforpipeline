@@ -1,103 +1,265 @@
 /* eslint-env mocha */
-import * as request from "request";
-const server = require('../server/server')
 
-// describe('Movies API', () => {
-//   let app = null
-//   let testMovies = [{
-//     'id': '3',
-//     'title': 'xXx: Reactivado',
-//     'format': 'IMAX',
-//     'releaseYear': 2017,
-//     'releaseMonth': 1,
-//     'releaseDay': 20
-//   }, {
-//     'id': '4',
-//     'title': 'Resident Evil: Capitulo Final',
-//     'format': 'IMAX',
-//     'releaseYear': 2017,
-//     'releaseMonth': 1,
-//     'releaseDay': 27
-//   }, {
-//     'id': '1',
-//     'title': 'Assasins Creed',
-//     'format': 'IMAX',
-//     'releaseYear': 2017,
-//     'releaseMonth': 1,
-//     'releaseDay': 6
-//   }]
+import * as chai from "chai";
+import "mocha";
+import { expect } from "chai";
 
-//   let testRepo = {
-//     getAllMovies() {
-//       return Promise.resolve(testMovies)
-//     },
-//     getMoviePremiers() {
-//       return Promise.resolve(testMovies.filter(movie => movie.releaseYear === 2017))
-//     },
-//     getMovieById(id) {
-//       return Promise.resolve(testMovies.find(movie => movie.id === id))
-//     }
-//   }
+import chaiHttp = require("chai-http");
 
-//   beforeEach(() => {
-//     return server.start({
-//       port: 3000,
-//       repo: testRepo
-//     }).then(serv => {
-//       app = serv
-//     })
-//   })
+import * as app from "../src/route/v1/guest.route";
 
-//   afterEach(() => {
-//     app.close()
-//     app = null
-//   })
+chai.use(chaiHttp);
 
-//   it('can return all movies', (done) => {
-//     request(app)
-//       .get('/movies')
-//       .expect((res) => {
-//         res.body.should.containEql({
-//           'id': '1',
-//           'title': 'Assasins Creed',
-//           'format': 'IMAX',
-//           'releaseYear': 2017,
-//           'releaseMonth': 1,
-//           'releaseDay': 6
-//         })
-//       })
-//       .expect(200, done)
-//   })
+// const expect = chai.expect;
 
-//   it('can get movie premiers', (done) => {
-//     request(app)
-//       .get('/movies/premieres')
-//       .expect((res) => {
-//         res.body.should.containEql({
-//           'id': '1',
-//           'title': 'Assasins Creed',
-//           'format': 'IMAX',
-//           'releaseYear': 2017,
-//           'releaseMonth': 1,
-//           'releaseDay': 6
-//         })
-//       })
-//       .expect(200, done)
-//   })
+describe("/login api where language type is English and devicetype is Android ", () => {
+  it("Logged in Successfully", (done) => {
+    const headers = {
+      language: "En",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "ANDROID",
+      osversion: "6.1"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
 
-//   it('returns 200 for an known movie', (done) => {
-//     request(app)
-//       .get('/movies/1')
-//       .expect((res) => {
-//         res.body.should.containEql({
-//           'id': '1',
-//           'title': 'Assasins Creed',
-//           'format': 'IMAX',
-//           'releaseYear': 2017,
-//           'releaseMonth': 1,
-//           'releaseDay': 6
-//         })
-//       })
-//       .expect(200, done)
-//   })
-// })
+        expect(res).to.have.status(200);
+        expect(res.body.statusCode).to.equals(200)
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and device type is android ", () => {
+  it("Logged in Successfully", (done) => {
+    const headers = {
+      language: "Ar",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "ANDROID",
+      osversion: "6.1"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is En but DeviceType is wrong", () => {
+  it("Logged in Failed", (done) => {
+    const headers = {
+      language: "En",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "Symbion",
+      osversion: "6.1"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is English and DeviceType is IOS ", () => {
+  it("Logged in Successfully", (done) => {
+    const headers = {
+      language: "En",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS",
+      osversion: "6.1"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and DeviceType is Ios", () => {
+  it("Logged in Successfully", (done) => {
+    const headers = {
+      language: "Ar",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS",
+      osversion: "6.1"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and DeviceType is Ios but osversion is missing", () => {
+  it("Logged in Failed", (done) => {
+    const headers = {
+      language: "Ar",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and DeviceType is Ios and sending an extra key", () => {
+  it("Logged in Successfully", (done) => {
+    const headers = {
+      language: "Ar",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS",
+      osversion: "6.1",
+      extra: "abbj"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and DeviceType is Ios  and sending deviceid as an integer value instead of a string", () => {
+  it("Logged in Failed", (done) => {
+    const headers = {
+      language: "Ar",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS",
+      osversion: "6"
+    };
+    const body = { deviceId: 123 };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and DeviceType is Ios  and sending osversion as an integer value instead of a string", () => {
+  it("Logged in Successfully", (done) => {
+    const headers = {
+      language: "Ar",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS",
+      osversion: 6.5
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe("/login api where language type is Arab and DeviceType is Ios but language is not as defined in constants", () => {
+  it("Logged in Failed", (done) => {
+    const headers = {
+      language: "AR",
+      appversion: "ACTIVE",
+      devicemodel: "galaxy",
+      devicetype: "IOS",
+      osversion : "6.2"
+    };
+    const body = { deviceId: "123" };
+    chai
+      .request("http://localhost:4001")
+      .post("/v1/guest/login")
+      .set(headers)
+      .send(body)
+      .end((err, res) => {
+        if (err) {
+          return "error occured '{err}'";
+        }
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});

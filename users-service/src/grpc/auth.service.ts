@@ -21,7 +21,7 @@ export class AuthService {
 
     constructor() { }
 
-    async createToken(payload: IAuthServiceRequest.ICreateToken): Promise<IAuthServiceRequest.ICreateTokenRes> {
+    async createToken(payload: IAuthServiceRequest.ICreateTokenData): Promise<IAuthServiceRequest.IToken> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.createTokenValidator(payload)
             this.authClient.createToken({ deviceId: payload.deviceId, tokenType: payload.tokenType, devicetype: payload.devicetype }, (err, res) => {
@@ -35,7 +35,20 @@ export class AuthService {
             })
         })
     }
-
+    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
+        return new Promise(async (resolve, reject) => {
+            await authServiceValidator.verifyTokenValidator(payload)
+            this.authClient.verifyToken({ token: payload.token }, (err, res) => {
+                if (!err) {
+                    consolelog("successfully verified token", JSON.stringify(res), false)
+                    resolve(res)
+                } else {
+                    consolelog("Error in verifying token", JSON.stringify(err), false)
+                    reject(err)
+                }
+            })
+        })
+    }
 }
 
 export const authService = new AuthService();

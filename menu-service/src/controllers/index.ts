@@ -1,1 +1,1 @@
-export * from './anonymous.controller';
+export * from './v1/menu.controller';

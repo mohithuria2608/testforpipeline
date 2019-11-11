@@ -1,9 +1,8 @@
-import * as validate from 'koa-joi-validate'
-import * as Joi from 'joi';
+import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware } from '../../middlewares'
+import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
-import { sendSuccess, sendError } from '../../utils'
+import { sendSuccess } from '../../utils'
 import { guestController } from '../../controllers';
 
 export default (router: Router) => {
@@ -14,32 +13,32 @@ export default (router: Router) => {
             ]),
             validate({
                 headers: {
-                    language: Joi.string().valid([
+                    language: Joi.string().valid(
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
-                    ]).required(),
+                    ).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
-                    devicetype: Joi.string().valid([
+                    devicetype: Joi.string().valid(
                         Constant.DATABASE.TYPE.DEVICE.ANDROID,
                         Constant.DATABASE.TYPE.DEVICE.IOS
-                    ]).required(),
+                    ).required(),
                     osversion: Joi.string().required(),
                 },
                 body: {
-                    deviceId: Joi.string().trim().required()
+                    deviceId: Joi.string().required()
                 }
             }),
             async (ctx) => {
                 try {
                     let payload: IGuestRequest.IGuestLogin = { ...ctx.request.body, ...ctx.request.header };
                     let res = await guestController.guestLogin(payload);
-                    ctx.set({ 'accessToken': res.accessToken, refreshToken: res.refreshToken })
+                    ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, {})
                     ctx.body = sendResponse
                 }
                 catch (error) {
-                    throw (sendError(error))
+                    throw error
                 }
             })
 }

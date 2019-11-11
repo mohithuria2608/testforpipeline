@@ -1,1 +1,2 @@
+export * from './v1/user.misc.controller';
 export * from './v1/guest.controller';

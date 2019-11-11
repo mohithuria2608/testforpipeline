@@ -213,49 +213,11 @@ export let STATUS_MSG = {
                 type: 'INVALID_LINK'
             },
 
-            INVALID_SESSION_REQUEST: {
-                statusCode: 401,
-                type: 'INVALID_SESSION_REQUEST',
-                message: 'You have requested for an invalid login'
-            },
-
-            TOKEN_ALREADY_EXPIRED: {
-                statusCode: 401,
-                message: 'You logged into other device.',
-                type: 'TOKEN_ALREADY_EXPIRED'
-            },
-
-            INVALID_TOKEN: {
-                statusCode: 401,
-                message: 'Invalid token provided',
-                type: 'INVALID_TOKEN'
-            },
-
-            ADMIN_DELETED: {
-                statusCode: 401,
-                message: 'You are blocked by Admin',
-                type: 'ADMIN_DELETED'
-            },
-
-            ADMIN_BLOCKED: {
-                statusCode: 401,
-                message: 'You are blocked by Admin',
-                type: 'ADMIN_BLOCKED'
-            },
-
             UNAUTHORIZED: {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
                 type: 'UNAUTHORIZED'
-            },
-
-            MISSINING_AUTHENTICATION: (tokenType) => {
-                return {
-                    statusCode: 401,
-                    message: 'Missing authentication ' + tokenType,
-                    type: 'MISSINING_AUTHENTICATION'
-                }
-            },
+            }
         },
         E403: {
             INVALID_PASSWORD: {
@@ -276,6 +238,7 @@ export let STATUS_MSG = {
                 message: 'Invalid login credentials'
             }
         },
+
         E404: {
             DATA_NOT_FOUND: {
                 statusCode: 404,
@@ -289,6 +252,15 @@ export let STATUS_MSG = {
                 type: 'USER_NOT_FOUND'
             },
         },
+
+        E406: {
+            ACCESS_TOKEN_EXPIRED: {
+                statusCode: 401,
+                type: 'ACCESS_TOKEN_EXPIRED',
+                message: 'Access token has expired.'
+            }
+        },
+
         E500: {
             IMP_ERROR: {
                 statusCode: 500,
@@ -488,7 +460,7 @@ export let SERVER = {
             HEIGHT: 100,
         },
     },
-    ACCESS_TOKEN_EXPIRE_TIME: (15 * 60 * 60),
+    ACCESS_TOKEN_EXPIRE_TIME: (2 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (30 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }

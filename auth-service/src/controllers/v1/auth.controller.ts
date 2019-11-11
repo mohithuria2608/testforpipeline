@@ -6,10 +6,9 @@ export class AuthController {
 
     constructor() { }
 
-    async createToken(payload: IAuthServiceRequest.ITokenData) {
+    async createToken(payload: IAuthServiceRequest.ICreateTokenData) {
         try {
-            let token = await tokenManager.setToken(payload)
-            consolelog("createToken", token, true)
+            let token: string = await tokenManager.setToken(payload)
             return { token }
         } catch (err) {
             consolelog("createToken", err, false)
@@ -17,11 +16,10 @@ export class AuthController {
         }
     }
 
-    async verifyToken(payload: IAuthServiceRequest.IToken) {
+    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj) {
         try {
-            let token = await tokenManager.verifyToken(payload)
-            consolelog("verifyToken", token, true)
-            return token
+            let tokenData: ICommonRequest.AuthorizationObj = await tokenManager.verifyToken(payload.token)
+            return tokenData
         } catch (err) {
             consolelog("verifyToken", err, false)
             return Promise.reject(err)

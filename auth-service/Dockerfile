@@ -7,5 +7,4 @@ RUN npm install -g typescript
 RUN npm install
 EXPOSE 4000
 RUN tsc
-CMD node dist/src/app.js
-
+CMD node dist/app.js

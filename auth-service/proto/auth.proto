@@ -1,22 +1,32 @@
 syntax = "proto3";
 
 service AuthService {
-    rpc CreateToken (ICreateToken) returns (ITokenObject) {}
-    rpc VerifyToken (ITokenObject) returns (IVerifyTokenRes) {}
+    rpc CreateToken (ICreateToken) returns (IToken) {}
+    rpc VerifyToken (IVerifyToken) returns (IAuthorizationObj) {}
 }
 
 message ICreateToken {
-    string deviceId = 1;
-    string devicetype =2;
-    string tokenType = 3;
+    required string deviceId = 1;
+    required string devicetype =2;
+    required string tokenType = 3;
+    optional string id = 4;
 }
 
-message ITokenObject {
+message IToken {
     string token = 1;
 }
 
-message IVerifyTokenRes {
-    string tokenType = 1;
-    string deviceId = 2;
-    string devicetype = 3;
+message IVerifyToken {
+    required string token = 1;
+    required string tokenType = 2;
 }
+
+message IAuthorizationObj {
+    required string tokenType = 1;
+    required string deviceId = 2;
+    required string devicetype = 3;
+    optional string id = 4;
+    optional IUserData userData = 5;
+}
+
+message IUserData {} 
