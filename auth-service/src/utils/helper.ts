@@ -59,21 +59,10 @@ export let sendError = function (error) {
         }
     }
 
-    if (typeof customError.message === 'string') {
-        if (customError.message.includes("Invalid Request")) {
-            let splitJoiErr = customError.message.split("[")
-            splitJoiErr = splitJoiErr[1] ? splitJoiErr[1].split(']') : [customError.message]
-            customError.message = splitJoiErr[0]
-            customError.message = Constant.STATUS_MSG.ERROR.E400.CUSTOM_VALIDATION_ERROR(customError.message).message
-        }
-        if (customError.message.indexOf("[") > -1) {
-            customError.message = customError.message.substr(customError.message.indexOf("["))
-        }
-        customError.message = customError.message && customError.message.replace(/"/g, '')
-        customError.message = customError.message && customError.message.replace('[', '')
-        customError.message = customError.message && customError.message.replace(']', '')
+    customError.message = customError.message && customError.message.replace(/"/g, '')
+    customError.message = customError.message && customError.message.replace('[', '')
+    customError.message = customError.message && customError.message.replace(']', '')
 
-    }
     return {
         statusCode: customError.statusCode,
         payload: customError,

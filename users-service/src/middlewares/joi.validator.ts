@@ -49,7 +49,7 @@ export const validate = function (validationObj) {
             return next()
         } catch (err) {
             // If any of the objects fails validation, send an HTTP 400 response.
-            ctx.throw(400, err.message)
+            return Promise.reject(err)
         }
     }
 }
