@@ -255,7 +255,7 @@ export let STATUS_MSG = {
 
         E406: {
             ACCESS_TOKEN_EXPIRED: {
-                statusCode: 406,
+                statusCode: 401,
                 type: 'ACCESS_TOKEN_EXPIRED',
                 message: 'Access token has expired.'
             }
