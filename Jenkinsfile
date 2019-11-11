@@ -31,7 +31,7 @@ pipeline {
                     //sh "npm install -g typescript"
                     def scannerHome = tool 'SonarQubeScanner1'  
                     withSonarQubeEnv('SonarQube_Americana') {
-                        sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties" 
+                        sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=${env.WORKSPACE}/Deployment_cicd/sonar-project.properties" 
                     }
                 }
             }
