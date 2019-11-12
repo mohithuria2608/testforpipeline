@@ -2,8 +2,8 @@ const gulp = require("gulp");
 const ts = require("gulp-typescript");
 const del = require("del");
 const tsProject = ts.createProject("tsconfig.json");
-const tslint = require("gulp-tslint");
-const runSequence = require('run-sequence');
+// const tslint = require("gulp-tslint");
+// const runSequence = require('run-sequence');
 const spawn = require('child_process').spawn;
 
 const outputFolder = "dist";
