@@ -1,10 +1,11 @@
-FROM node:9.3.0
+FROM node:10.17.0
 WORKDIR /usr/src/app
 COPY . .
 COPY proto/ /usr/src/app/proto/
 RUN apt-get update
 RUN npm install -g typescript
 RUN npm install
-EXPOSE 4000
+EXPOSE 4000 
+EXPOSE 50051
 RUN tsc
 CMD node dist/app.js
