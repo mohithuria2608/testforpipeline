@@ -63,6 +63,7 @@ pipeline {
                 script{
                        sh "sh ~/az_login.sh"
                        sh "sh Deployment_cicd/deploy.sh"
+                       //Testing
                        
                 }
             }
