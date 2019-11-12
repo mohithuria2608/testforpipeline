@@ -20,7 +20,10 @@ spec:
         image: {{Auth_image}}
         imagePullPolicy: Always
         ports:
-        - containerPort: [4000,50051]
+        - containerPort: 4000
+          name: api
+        - containerPort: 50051
+          name: grpc
 ---
 apiVersion: v1
 kind: Service
