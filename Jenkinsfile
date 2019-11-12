@@ -3,7 +3,6 @@ pipeline {
         registry = "americana.azurecr.io"
         registryCredential = "acr_cred"
         Users_image="americana.azurecr.io/users" + ":Users-Image_${env.BUILD_NUMBER}"
-        //Users_image="americana.azurecr.io/users" + ":Users-Image_53"
         Auth_image="americana.azurecr.io/auth" + ":auth-service_${env.BUILD_NUMBER}"
         Menu_image="americana.azurecr.io/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
         
