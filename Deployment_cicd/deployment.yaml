@@ -27,6 +27,7 @@ kind: Service
 metadata:
   name: auth-service
 spec:
+  type: LoadBalancer
   selector:
     app: auth-service
   ports:
@@ -65,6 +66,7 @@ kind: Service
 metadata:
   name: user-service
 spec:
+  type: LoadBalancer
   selector:
     app: user-service
   ports:
@@ -102,6 +104,7 @@ kind: Service
 metadata:
   name: menu-service
 spec:
+  type: LoadBalancer
   selector:
     app: menu-service
   ports:
