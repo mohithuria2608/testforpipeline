@@ -460,7 +460,7 @@ export let SERVER = {
             HEIGHT: 100,
         },
     },
-    ACCESS_TOKEN_EXPIRE_TIME: (2 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (5 * 60),
+    ACCESS_TOKEN_EXPIRE_TIME: (10 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (30 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }
