@@ -444,7 +444,7 @@ export let SERVER = {
     },
     TEMPLATE_PATH: process.cwd() + '/views/',
     BY_PASS_OTP: 1212,
-    LISTNG_LIMIT: 10,
+    // LISTNG_LIMIT: 10,
     BULK_LIMIT: 2000,
     THUMB_DIMENSION: {
         DEFAULT: {
