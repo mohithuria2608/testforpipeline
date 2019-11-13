@@ -461,6 +461,6 @@ export let SERVER = {
         },
     },
     ACCESS_TOKEN_EXPIRE_TIME: (2 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (30 * 24 * 60 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (5 * 60),
     DISPLAY_COLOR: true
 }
