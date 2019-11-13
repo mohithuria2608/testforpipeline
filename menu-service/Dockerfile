@@ -1,4 +1,4 @@
-FROM node:9.3.0
+FROM node:10.17.0
 WORKDIR /usr/src/app
 COPY . .
 COPY proto/ /usr/src/app/proto/
