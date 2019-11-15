@@ -72,7 +72,7 @@ pipeline {
     post{
         always{
             emailext attachLog: true,
-            body: "Build status -->> ${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n View More info at: ${env.BUILD_URL}",subject: "Jenkins Build Job -- > ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com'
+            body: "Build status -->> ${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n View More info at: ${env.BUILD_URL}",subject: "Jenkins Build Job -- > ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com,abhishek.pathak@appinventiv.com'
         }
     }
 }
