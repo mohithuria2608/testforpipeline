@@ -3068,7 +3068,7 @@ export class MenuController {
                                                 "sequence": 2,
                                                 "name_en": "Spicy Family Fries",
                                                 "name_ar": "فرايز حار حجم عائلي",
-                                                "price": 3,
+                                                "price": 3.5,
                                                 "promoId": 239,
                                                 "selected": 0,
                                                 "id": 510014
@@ -3077,7 +3077,7 @@ export class MenuController {
                                                 "sequence": 3,
                                                 "name_en": "Loaded Fries Family",
                                                 "name_ar": "لوديد فرايز حجم عائلي",
-                                                "price": 5,
+                                                "price": 5.52,
                                                 "promoId": 239,
                                                 "selected": 0,
                                                 "id": 510030
@@ -3086,7 +3086,7 @@ export class MenuController {
                                                 "sequence": 4,
                                                 "name_en": "Coleslaw Salad Large",
                                                 "name_ar": "كول سلو حجم كبير",
-                                                "price": 0,
+                                                "price": 0.56,
                                                 "promoId": 239,
                                                 "selected": 0,
                                                 "id": 510002
@@ -3103,7 +3103,7 @@ export class MenuController {
                                                 "sequence": 6,
                                                 "name_en": "Family Dipper Fries",
                                                 "name_ar": "بطاطا ديبرز حجم عائلي",
-                                                "price": 6,
+                                                "price": 6.789,
                                                 "promoId": 239,
                                                 "selected": 0,
                                                 "id": 510074
