@@ -1,1 +1,1 @@
-export * from './auth.service'
+require('./server')

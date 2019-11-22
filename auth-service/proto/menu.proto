@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+service MenuService {
+    rpc FetchMenu (IFetchMenu) returns (IMenu) {}
+}
+
+message IFetchMenu {
+    required string country = 1;
+    required bool isDefault =2;
+}
+
+message IMenu {}

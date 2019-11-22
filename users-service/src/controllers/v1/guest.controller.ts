@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { authService } from '../../grpc'
+import { authService } from '../../grpc/client'
 import { consolelog } from '../../utils'
 
 export class GuestController {
@@ -9,12 +9,12 @@ export class GuestController {
     async guestLogin(payload: IGuestRequest.IGuestLogin) {
         try {
             let accessToken = authService.createToken({
-                deviceId: payload.deviceId,
+                deviceid: payload.deviceid,
                 devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             })
             let refreshToken = authService.createToken({
-                deviceId: payload.deviceId,
+                deviceid: payload.deviceid,
                 devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH
             })

@@ -6,6 +6,10 @@ export let DATABASE = {
         AR: 'Ar'
     },
 
+    COUNTRY: {
+        UAE: 'UAE',
+    },
+
     ENTITY: {
         APP: "APP",
         USER: "USER",

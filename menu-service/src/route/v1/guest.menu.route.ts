@@ -18,6 +18,9 @@ export default (router: Router) => {
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
                     ).required(),
+                    country: Joi.string().valid(
+                        Constant.DATABASE.COUNTRY.UAE
+                    ).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
                     devicetype: Joi.string().valid(
@@ -25,12 +28,13 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.DEVICE.IOS
                     ).required(),
                     osversion: Joi.string().required(),
+                    deviceid: Joi.string().trim().required()
                 }
             }),
             async (ctx) => {
                 try {
                     let payload: IGuestMenuRequest.IGuestMenuFetch = { ...ctx.request.header };
-                    let res = await menuController.fetchMenu(payload);
+                    let res = await menuController.guestFetchMenu(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.body = sendResponse
                 }

@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { authService } from '../../grpc'
+import { authService } from '../../grpc/client'
 import { consolelog } from '../../utils'
 
 export class MiscUserController {
@@ -9,7 +9,7 @@ export class MiscUserController {
     async refreshToken(payload: IUserRequest.IRefreshToken) {
         try {
             let res: IAuthServiceRequest.IToken = await authService.createToken({
-                deviceId: payload.deviceId,
+                deviceid: payload.deviceid,
                 devicetype: payload.devicetype,
                 tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             })

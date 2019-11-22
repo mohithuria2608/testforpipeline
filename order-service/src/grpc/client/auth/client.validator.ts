@@ -1,8 +1,8 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog } from "../utils"
-import * as Constant from '../constant/appConstants'
+import { consolelog } from "../../../utils"
+import * as Constant from '../../../constant/appConstants'
 
 export class AuthServiceValidator {
     constructor() {
@@ -11,7 +11,7 @@ export class AuthServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    deviceId: Joi.string().required(),
+                    deviceid: Joi.string().required(),
                     tokenType: Joi.string().valid(
                         Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH,
                         Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,

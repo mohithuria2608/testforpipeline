@@ -18,6 +18,9 @@ export default (router: Router) => {
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
                     ).required(),
+                    country: Joi.string().valid(
+                        Constant.DATABASE.COUNTRY.UAE
+                    ).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
                     devicetype: Joi.string().valid(
@@ -25,10 +28,11 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.DEVICE.IOS
                     ).required(),
                     osversion: Joi.string().required(),
+                    deviceid: Joi.string().trim().required()
                 },
-                body: {
-                    deviceId: Joi.string().trim().required()
-                }
+                // body: {
+                //     deviceid: Joi.string().trim().required()
+                // }
             }),
             async (ctx) => {
                 try {

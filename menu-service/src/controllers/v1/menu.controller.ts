@@ -1,13 +1,11 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import * as fs from 'fs'
-
 
 export class MenuController {
 
     constructor() { }
 
-    async fetchMenu(payload: IGuestMenuRequest.IGuestMenuFetch) {
+    async guestFetchMenu(payload: IGuestMenuRequest.IGuestMenuFetch) {
         try {
             // let rawdata = fs.readFileSync(__dirname + '/../../store.json', 'utf-8');
             // let store = JSON.parse(rawdata);
@@ -18596,6 +18594,15 @@ export class MenuController {
                     }
                 ]
             }
+        } catch (err) {
+            consolelog("guestFetchMenu", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    async fetchMenu(payload: IMenuServiceRequest.IFetchMenuData) {
+        try {
+            return {}
         } catch (err) {
             consolelog("fetchMenu", err, false)
             return Promise.reject(err)

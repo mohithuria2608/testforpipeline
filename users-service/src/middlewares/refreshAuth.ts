@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { Middleware, Context } from 'koa'
-import { authService } from '../grpc'
+import { authService } from '../grpc/client'
 import * as Constant from '../constant';
 import { sendError, consolelog } from '../utils';
 
@@ -20,7 +20,7 @@ export default (opts?): Middleware => {
 
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH })
 
-            if (!tokenData || !tokenData.deviceId || !tokenData.devicetype || !tokenData.tokenType) {
+            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             } else {
                 ctx.state.user = tokenData

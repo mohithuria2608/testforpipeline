@@ -6,7 +6,7 @@ service AuthService {
 }
 
 message ICreateToken {
-    required string deviceId = 1;
+    required string deviceid = 1;
     required string devicetype =2;
     required string tokenType = 3;
     optional string id = 4;
@@ -23,7 +23,7 @@ message IVerifyToken {
 
 message IAuthorizationObj {
     required string tokenType = 1;
-    required string deviceId = 2;
+    required string deviceid = 2;
     required string devicetype = 3;
     optional string id = 4;
     optional IUserData userData = 5;
