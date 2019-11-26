@@ -42,16 +42,16 @@ export default (router: Router) => {
                             steps: Joi.array().items(
                                 Joi.object().keys({
                                     sequence: Joi.number().required(),
-                                    title_en: Joi.string().required(),
-                                    title_ar: Joi.string().required(),
-                                    subtitle_ar: Joi.string().required(),
-                                    subtitle_en: Joi.string().required(),
+                                    title_en: Joi.string().required().allow(""),
+                                    title_ar: Joi.string().required().allow(""),
+                                    subtitle_ar: Joi.string().required().allow(""),
+                                    subtitle_en: Joi.string().required().allow(""),
                                     displayType: Joi.string().valid("radio", "checkbox", "stepper"),
                                     options: Joi.array().items(
                                         Joi.object().keys({
                                             sequence: Joi.number().required(),
-                                            name_ar: Joi.string().required(),
-                                            name_en: Joi.string().required(),
+                                            name_ar: Joi.string().required().allow(""),
+                                            name_en: Joi.string().required().allow(""),
                                             price: Joi.number().required(),
                                             promoId: Joi.number(),
                                             id: Joi.number().required(),
@@ -63,8 +63,8 @@ export default (router: Router) => {
                             description_en: Joi.string().required().allow(""),
                             description_ar: Joi.string().required().allow(""),
                             itemType: Joi.string().valid("bundle", "standalone").required(),
-                            title_en: Joi.string().required(),
-                            title_ar: Joi.string().required(),
+                            title_en: Joi.string().required().allow(""),
+                            title_ar: Joi.string().required().allow(""),
                             id: Joi.number().required(),
                             image: Joi.object().keys({
                                 dimension: Joi.string().required(),
