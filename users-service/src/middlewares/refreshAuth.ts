@@ -20,7 +20,7 @@ export default (opts?): Middleware => {
 
             let authObj: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
 
-            if (!authObj || !authObj.deviceid || !authObj.devicetype || !authObj.tokenType) {
+            if (!authObj || !authObj.deviceid || !authObj.devicetype || !authObj.tokenType || authObj.tokenType != Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             } else {
                 ctx.state.user = authObj

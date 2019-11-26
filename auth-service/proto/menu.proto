@@ -1,5 +1,4 @@
 syntax = "proto3";
-import "google/protobuf/any.proto";
 
 service MenuService {
     rpc FetchMenu (IFetchMenu) returns (IMenu) {}
@@ -18,7 +17,8 @@ message IMenu {
     required int32 menuTempId = 5;
     required int32 conceptId = 6;
     required int32 menuId = 7;
-    required google.protobuf.Any categories = 8;
+    repeated ICategory categories = 8;
+    required int32 updatedAt = 9;
 }
 
 message IStoreAdd {
@@ -36,4 +36,52 @@ message ICoords {
 message IServiceFence {
     required string type = 1;
     repeated float coordinates = 2;
+}
+
+message ICategory {
+    required int32 sequence = 1;
+    repeated IProduct products = 2;
+    required string title_en = 3;
+    required string title_ar = 4;
+    required int32 id = 5;
+}
+
+message IProduct {
+    required int32 sequence = 1;
+    repeated IStep steps = 2;
+    required float price = 3;
+    required int32 promoId = 4;
+    required string description_en = 5;
+    required string itemType = 6;
+    required string title_en = 7;
+    required string description_ar = 8;
+    required string title_ar = 9;
+    required int32 id = 10;
+    required IImage image = 11;
+}
+
+message IStep {
+    required int32  sequence = 1;
+    required string title_en = 2;
+    required string subtitle_ar = 3;
+    required string displayType = 4;
+    repeated IOption options = 5;
+    required string title_ar = 6;
+    required string subtitle_en = 7;
+}
+
+message IImage {
+    required string dimension = 1;
+    required string url = 2;
+    required string type = 3;
+}
+
+message IOption {
+    required int32 sequence = 1;
+    required string name_ar = 2;
+    required float price = 3;
+    required int32 promoId = 4;
+    required int32 id = 5;
+    required string name_en = 6;
+    required int32 selected = 7;
 }
