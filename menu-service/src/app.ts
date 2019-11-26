@@ -1,9 +1,9 @@
 import * as config from "config"
+require('./grpc/server/server')
 import * as Koa from 'koa'
 import { bootstrap, consolelog } from './utils'
 import middleware from './middlewares'
 import route from './route'
-import { kafkaProducerE, initConsumers } from './kafka';
 
 
 const app = new Koa()

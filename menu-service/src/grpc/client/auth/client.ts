@@ -1,14 +1,14 @@
 import * as config from "config"
-import { authServiceValidator } from './auth.service.validator'
+import { authServiceValidator } from './client.validator'
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
-import { consolelog } from '../utils'
+import { consolelog } from '../../../utils'
 
 export class AuthService {
     /**
      * @description  : grpc call to auth-service
      * */
-    private authProto = __dirname + config.get("directory.static.proto");
+    private authProto = __dirname + config.get("directory.static.proto.auth.client");
     private packageDefinition = protoLoader.loadSync(
         this.authProto,
         {
@@ -19,16 +19,18 @@ export class AuthService {
             oneofs: true
         });
     private loadAuth = grpc.loadPackageDefinition(this.packageDefinition).AuthService
-    private authClient = new this.loadAuth(config.get("grpc.url"), grpc.credentials.createInsecure());
+    private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
-    constructor() { }
+    constructor() {
+        consolelog('Connection established from menu service to auth service', config.get("grpc.auth.client"), true)
+     }
 
     async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
-            consolelog("{ token: payload.token, tokenType: payload.tokenType }", JSON.stringify({ token: payload.token, tokenType: payload.tokenType }), false)
+            consolelog("{ token: payload.token, tokenType: payload.tokenType }", JSON.stringify({ token: payload.token}), false)
 
-            this.authClient.verifyToken({ token: payload.token, tokenType: payload.tokenType }, (err, res) => {
+            this.authClient.verifyToken({ token: payload.token}, (err, res) => {
                 if (!err) {
                     consolelog("successfully verified token", JSON.stringify(res), false)
                     resolve(res)

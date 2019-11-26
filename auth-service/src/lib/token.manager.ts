@@ -44,7 +44,7 @@ export class TokenManager {
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
-                        deviceId: tokenData.deviceId,
+                        deviceid: tokenData.deviceid,
                         devicetype: tokenData.devicetype,
                         tokenType: tokenData.tokenType,
                     };
@@ -53,7 +53,7 @@ export class TokenManager {
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
                     const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                         tokenType: tokenData.tokenType,
-                        deviceId: tokenData.deviceId,
+                        deviceid: tokenData.deviceid,
                         devicetype: tokenData.devicetype,
                         id: tokenData.id ? tokenData.id : undefined,
                         userData: {}
@@ -87,7 +87,7 @@ export const tokenManager = new TokenManager();
 // export let updateRefreshToken = async function (userData, tokenData) {
 //     try {
 //         let payload = {
-//             deviceId: "123",
+//             deviceid: "123",
 //             deviceType: "123",   // dumy data not in use  just to make code reusable
 //         }
 //         let refreshToken: string

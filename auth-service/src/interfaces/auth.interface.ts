@@ -5,7 +5,7 @@ declare namespace IAuthServiceRequest {
     }
 
     interface ICreateTokenData {
-        deviceId: string,
+        deviceid: string,
         devicetype: string,
         tokenType: string,
         id?: string,
@@ -17,7 +17,6 @@ declare namespace IAuthServiceRequest {
 
     interface IVerifyTokenObj {
         token: string,
-        tokenType: string,
     }
 
     interface IToken {

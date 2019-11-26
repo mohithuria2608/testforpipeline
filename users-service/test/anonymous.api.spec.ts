@@ -21,7 +21,7 @@ describe("/login api where language type is English and devicetype is Android ",
       devicetype: "ANDROID",
       osversion: "6.1"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -48,7 +48,7 @@ describe("/login api where language type is Arab and device type is android ", (
       devicetype: "ANDROID",
       osversion: "6.1"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -73,7 +73,7 @@ describe("/login api where language type is En but DeviceType is wrong", () => {
       devicetype: "Symbion",
       osversion: "6.1"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -98,7 +98,7 @@ describe("/login api where language type is English and DeviceType is IOS ", () 
       devicetype: "IOS",
       osversion: "6.1"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -123,7 +123,7 @@ describe("/login api where language type is Arab and DeviceType is Ios", () => {
       devicetype: "IOS",
       osversion: "6.1"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -147,7 +147,7 @@ describe("/login api where language type is Arab and DeviceType is Ios but osver
       devicemodel: "galaxy",
       devicetype: "IOS"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -173,7 +173,7 @@ describe("/login api where language type is Arab and DeviceType is Ios and sendi
       osversion: "6.1",
       extra: "abbj"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -198,7 +198,7 @@ describe("/login api where language type is Arab and DeviceType is Ios  and send
       devicetype: "IOS",
       osversion: "6"
     };
-    const body = { deviceId: 123 };
+    const body = { deviceid: 123 };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -223,7 +223,7 @@ describe("/login api where language type is Arab and DeviceType is Ios  and send
       devicetype: "IOS",
       osversion: 6.5
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")
@@ -248,7 +248,7 @@ describe("/login api where language type is Arab and DeviceType is Ios but langu
       devicetype: "IOS",
       osversion : "6.2"
     };
-    const body = { deviceId: "123" };
+    const body = { deviceid: "123" };
     chai
       .request("http://localhost:4001")
       .post("/v1/guest/login")

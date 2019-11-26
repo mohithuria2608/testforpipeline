@@ -2,14 +2,16 @@ declare namespace ICommonRequest {
 
     export interface IHeaders {
         language: string,
+        country: string,
         appversion: string,
         devicemodel: string,
         devicetype: string,
         osversion: string,
+        deviceid: string
     }
 
     export interface AuthorizationObj {
-        deviceId: string,
+        deviceid: string,
         devicetype: string,
         tokenType: string,
         id?: string,

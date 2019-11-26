@@ -1,6 +1,6 @@
 import * as config from 'config'
 import { Middleware, Context } from 'koa'
-import { authService } from '../grpc'
+import { authService } from '../grpc/client'
 import * as Constant from '../constant/appConstants'
 import { consolelog } from '../utils'
 
@@ -18,9 +18,9 @@ export default (opts?): Middleware => {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)
             }
 
-            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH })
+            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
 
-            if (!tokenData || !tokenData.deviceId || !tokenData.devicetype || !tokenData.tokenType) {
+            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED)
             } else {
                 ctx.state.user = tokenData

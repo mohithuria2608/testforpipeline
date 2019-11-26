@@ -5,11 +5,31 @@
         "port": 4000
     },
     "grpc": {
-        "url": "0.0.0.0:50051"
+        "auth": {
+            "server": "localhost:50051",
+            "client": "127.0.0.1:50051"
+        },
+        "user": {
+            "server": "localhost:50052",
+            "client": "127.0.0.1:50052"
+        },
+        "menu": {
+            "server": "localhost:50053",
+            "client": "127.0.0.1:50053"
+        },
+        "order": {
+            "server": "localhost:50054",
+            "client": "127.0.0.1:50054"
+        }
     },
     "directory": {
         "static": {
-            "proto": "/../../proto/auth.proto"
+            "proto": {
+                "auth": {
+                    "server": "/../../../proto/auth.proto",
+                    "client": "/../../../../proto/auth.proto"
+                }
+            }
         }
     },
     "cryptoSecret": "d6F3Efeq",

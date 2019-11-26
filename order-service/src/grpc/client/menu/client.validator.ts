@@ -1,22 +1,18 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog } from "../utils"
-import * as Constant from '../constant/appConstants'
+import { consolelog } from "../../../utils"
 
-export class AuthServiceValidator {
+export class MenuServiceValidator {
     constructor() {
     }
-
-    async verifyTokenValidator(data: IAuthServiceRequest.IVerifyTokenObj) {
+    async  fetchMenu(data: IMenuServiceRequest.IFetchMenuData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    token: Joi.string().required(),
-                    tokenType: Joi.string().valid(
-                        Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
-                    ).required(),
-                })
+                    country: Joi.string().required(),
+                    isDefault: Joi.boolean().valid(true, false)
+                });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
                     reject(`Invalid Info- ${error.message}`)
@@ -26,12 +22,9 @@ export class AuthServiceValidator {
             }
         })
     }
-
-
-
 }
 
 
-export const authServiceValidator = new AuthServiceValidator()
+export const menuServiceValidator = new MenuServiceValidator()
 
 

@@ -17,6 +17,9 @@ export default (router: Router) => {
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
                     ).required(),
+                    country: Joi.string().valid(
+                        Constant.DATABASE.COUNTRY.UAE
+                    ).required(),
                     appversion: Joi.string().required(),
                     devicemodel: Joi.string().required(),
                     devicetype: Joi.string().valid(
@@ -24,17 +27,15 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.DEVICE.IOS
                     ).required(),
                     osversion: Joi.string().required(),
+                    deviceid: Joi.string().trim().required()
                 },
-                body: {
-                    deviceId: Joi.string().required()
-                }
             }),
             async (ctx) => {
                 try {
                     let payload: IGuestRequest.IGuestLogin = { ...ctx.request.body, ...ctx.request.header };
                     let res = await guestController.guestLogin(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, {})
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, res.response)
                     ctx.body = sendResponse
                 }
                 catch (error) {
