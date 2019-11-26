@@ -6,5 +6,6 @@ RUN apt-get update
 RUN npm install -g typescript
 RUN npm install
 EXPOSE 4001
+EXPOSE 50054
 RUN tsc
 CMD node dist/app.js
