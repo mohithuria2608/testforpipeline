@@ -28,9 +28,9 @@ export class AuthService {
     async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
-            consolelog("{ token: payload.token, tokenType: payload.tokenType }", JSON.stringify({ token: payload.token, tokenType: payload.tokenType }), false)
+            consolelog("{ token: payload.token, tokenType: payload.tokenType }", JSON.stringify({ token: payload.token}), false)
 
-            this.authClient.verifyToken({ token: payload.token, tokenType: payload.tokenType }, (err, res) => {
+            this.authClient.verifyToken({ token: payload.token}, (err, res) => {
                 if (!err) {
                     consolelog("successfully verified token", JSON.stringify(res), false)
                     resolve(res)

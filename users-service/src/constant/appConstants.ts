@@ -226,16 +226,10 @@ export let STATUS_MSG = {
             }
         },
         E403: {
-            INVALID_PASSWORD: {
+            INVALID_OTP: {
                 statusCode: 403,
-                message: 'Incorrect Password',
-                type: 'INVALID_USER_PASS'
-            },
-
-            INVALID_OLD_PASSWORD: {
-                statusCode: 403,
-                message: 'Please enter the valid old password',
-                type: 'INVALID_OLD_PASSWORD'
+                type: 'INVALID_OTP',
+                message: 'Invalid otp entered'
             },
 
             INVALID_LOGIN: {
@@ -270,6 +264,11 @@ export let STATUS_MSG = {
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
+            INVALID_TOKEN_TYPE:{
+                statusCode: 500,
+                message: 'Invalid token type provided',
+                type: 'INVALID_TOKEN_TYPE'
+            }
         },
         E501: {
             TOKENIZATION_ERROR: {

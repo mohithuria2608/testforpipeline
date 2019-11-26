@@ -12,13 +12,24 @@ export class CartController {
      * */
     async validateCart(payload: ICartRequest.IValidateCart) {
         try {
+            payload.items.map((elem, i) => {
+                if (i == 1)
+                    return elem['isAvailable'] = false
+                else
+                    return elem['isAvailable'] = true
+            })
+            return payload.items
             //step1 = if(lat and lng not present) => getDefault menu
             //step2 = validate defaultMenuId = curMenuId
             //step3 = if match  && update time=> return success
             //
             if (payload.lat != undefined && payload.lng != undefined) {
                 //fetch default menu using country
-                // menuService.fetchMenu()
+                const defaultMenu = await menuService.fetchMenu({
+                    country: payload.country,
+                    isDefault: true
+                })
+                return defaultMenu
             } else {
 
             }

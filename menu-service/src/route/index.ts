@@ -3,13 +3,13 @@ import * as Router from 'koa-router'
 import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
-import guestmenu from './v1/guest.menu.route'
+import menu from './v1/menu.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
-  { routes: guestmenu, prefix: version1 + '/guest/menu' },
+  { routes: menu, prefix: version1 + '/menu' },
 
 ]
 

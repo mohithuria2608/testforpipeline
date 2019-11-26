@@ -1,25 +1,23 @@
 import * as Constant from '../../constant'
-import { authService } from '../../grpc/client'
-import { consolelog } from '../../utils'
+import { cryptData, consolelog } from '../../utils'
+import * as ENTITY from '../../entity'
 
 export class GuestController {
 
     constructor() { }
 
+    /**
+     * @method POST
+     * */
     async guestLogin(payload: IGuestRequest.IGuestLogin) {
         try {
-            let accessToken = authService.createToken({
-                deviceid: payload.deviceid,
-                devicetype: payload.devicetype,
-                tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-            })
-            let refreshToken = authService.createToken({
-                deviceid: payload.deviceid,
-                devicetype: payload.devicetype,
-                tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH
-            })
-            let tokens: IAuthServiceRequest.IToken[] = await Promise.all([accessToken, refreshToken])
-            return { accessToken: tokens[0].token, refreshToken: tokens[1].token }
+            let tokens = await ENTITY.UserE.getTokens(
+                payload.deviceid,
+                payload.devicetype,
+                [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH]
+            )
+            const cartId = await cryptData(payload.deviceid)
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: { cartId } }
         } catch (err) {
             consolelog("guestLogin", err, false)
             return Promise.reject(err)

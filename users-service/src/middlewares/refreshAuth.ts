@@ -18,12 +18,12 @@ export default (opts?): Middleware => {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
 
-            let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token, tokenType: Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH })
+            let authObj: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
 
-            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
+            if (!authObj || !authObj.deviceid || !authObj.devicetype || !authObj.tokenType) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             } else {
-                ctx.state.user = tokenData
+                ctx.state.user = authObj
             }
         } catch (error) {
             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)

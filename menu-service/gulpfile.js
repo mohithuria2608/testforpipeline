@@ -41,6 +41,10 @@ gulp.task("copyProto", function () {
 	return gulp.src(['../proto/**/*']).pipe(gulp.dest("./proto"));
 });
 
+gulp.task("copyModel", function () {
+	return gulp.src(['../model/**/*']).pipe(gulp.dest("./model"));
+});
+
 gulp.task('server', function () {
 	return spawn('node', ['dist/app.js'], { stdio: 'inherit' });
 })
@@ -48,4 +52,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "server"));

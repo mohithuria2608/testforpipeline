@@ -21,7 +21,7 @@ server.addService(menuProto.MenuService.service, {
     fetchMenu: async (call: IMenuServiceRequest.IFetchMenu, callback) => {
         try {
             consolelog("fetchMenu", JSON.stringify(call.request), true)
-            let res: IMenuServiceRequest.IFetchMenuRes = await menuController.fetchMenu(call.request)
+            let res: IMenuServiceRequest.IFetchMenuRes = await menuController.grpcFetchMenu(call.request)
             callback(null, res)
         } catch (error) {
             consolelog("fetchMenu-server", error, false)

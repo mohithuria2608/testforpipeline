@@ -3,13 +3,13 @@ import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
-import { cartController } from '../../controllers';
+import { menuController } from '../../controllers';
 
 export default (router: Router) => {
     router
-        .post('/validate',
+        .get('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.GUEST_AUTH,
+                Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -29,17 +29,12 @@ export default (router: Router) => {
                     ).required(),
                     osversion: Joi.string().required(),
                     deviceid: Joi.string().trim().required()
-                },
-                body: {
-                    curMenuId: Joi.string().required(),
-                    lat: Joi.number().min(0).max(90),
-                    lng: Joi.number().min(-180).max(180)
                 }
             }),
             async (ctx) => {
                 try {
-                    let payload: ICartRequest.IValidateCart = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await cartController.validateCart(payload);
+                    let payload: IMenuRequest.IMenuFetch = { ...ctx.request.header };
+                    let res = await menuController.fetchMenu(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.body = sendResponse
                 }

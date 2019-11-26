@@ -2,7 +2,7 @@ import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
-import { sendSuccess, sendError } from '../../utils'
+import { sendSuccess } from '../../utils'
 import { miscUserController } from '../../controllers';
 
 export default (router: Router) => {
@@ -29,15 +29,13 @@ export default (router: Router) => {
                     ).required(),
                     osversion: Joi.string().required(),
                     deviceid: Joi.string().trim().required()
-                },
-                // body: {
-                //     deviceid: Joi.string().trim().required()
-                // }
+                }
             }),
             async (ctx) => {
                 try {
                     let payload: IUserRequest.IRefreshToken = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await miscUserController.refreshToken(payload);
+                    let authObj = ctx.state.user
+                    let res = await miscUserController.refreshToken(payload, authObj);
                     ctx.set({ 'accessToken': res.accessToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {})
                     ctx.body = sendResponse

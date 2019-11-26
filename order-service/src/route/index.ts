@@ -3,13 +3,13 @@ import * as Router from 'koa-router'
 import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
-import cartAnonymousRoutes from './v1/cart.anonymous.route'
+import cartRoutes from './v1/cart.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
-  { routes: cartAnonymousRoutes, prefix: version1 + '/cart/anonymous' },
+  { routes: cartRoutes, prefix: version1 + '/cart' },
 ]
 
 export default function routes() {

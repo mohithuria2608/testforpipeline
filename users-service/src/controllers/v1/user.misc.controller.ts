@@ -1,21 +1,26 @@
 import * as Constant from '../../constant'
-import { authService } from '../../grpc/client'
 import { consolelog } from '../../utils'
+import * as ENTITY from '../../entity'
 
 export class MiscUserController {
 
     constructor() { }
 
-    async refreshToken(payload: IUserRequest.IRefreshToken) {
+    /**
+    * @method POST
+    * @description : If the accessToken expire create new token using refreshToken with expiry time = 30 days
+    * */
+    async refreshToken(payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
         try {
-            let res: IAuthServiceRequest.IToken = await authService.createToken({
-                deviceid: payload.deviceid,
-                devicetype: payload.devicetype,
-                tokenType: Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-            })
-            return { accessToken: res.token }
+            const tokenType = authObj.tokenType
+            let tokens = await ENTITY.UserE.getTokens(
+                payload.deviceid,
+                payload.devicetype,
+                [tokenType]
+            )
+            return { accessToken: tokens.accessToken }
         } catch (err) {
-            consolelog("guestLogin", err, false)
+            consolelog("refreshToken", err, false)
             return Promise.reject(err)
         }
     }

@@ -36,11 +36,7 @@ export class AuthServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    token: Joi.string().required(),
-                    tokenType: Joi.string().valid(
-                        Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH,
-                        Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
-                    ).required(),
+                    token: Joi.string().required()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

@@ -29,16 +29,13 @@ export default (router: Router) => {
                     osversion: Joi.string().required(),
                     deviceid: Joi.string().trim().required()
                 },
-                // body: {
-                //     deviceid: Joi.string().required()
-                // }
             }),
             async (ctx) => {
                 try {
                     let payload: IGuestRequest.IGuestLogin = { ...ctx.request.body, ...ctx.request.header };
                     let res = await guestController.guestLogin(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, {})
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, res.response)
                     ctx.body = sendResponse
                 }
                 catch (error) {
