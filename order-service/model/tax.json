@@ -2,13 +2,13 @@
     {
         "longName": "5% VAT Exc",
         "shortName": "5% VAT Exc",
-        "rate": 0.05,
+        "rate": "0.05",
         "inclusive": false
     },
     {
         "longName": "5% VAT Inc",
         "shortName": "5% VAT Inc",
-        "rate": 0.05,
+        "rate": "0.05",
         "inclusive": true
     }
 ]

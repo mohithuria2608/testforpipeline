@@ -36,6 +36,7 @@ export default (router: Router) => {
                     let res = await guestController.guestLogin(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, res.response)
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {
