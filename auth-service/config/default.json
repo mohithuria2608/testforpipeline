@@ -6,20 +6,20 @@
     },
     "grpc": {
         "auth": {
-            "server": "localhost:50051",
-            "client": "127.0.0.1:50051"
+            "server": "0.0.0.0:50051",
+            "client": "20.46.147.215:50051"
         },
         "user": {
-            "server": "localhost:50052",
-            "client": "127.0.0.1:50052"
+            "server": "0.0.0.0:50052",
+            "client": "20.46.147.215:50052"
         },
         "menu": {
-            "server": "localhost:50053",
-            "client": "127.0.0.1:50053"
+            "server": "0.0.0.0:50053",
+            "client": "20.46.147.215:50053"
         },
         "order": {
-            "server": "localhost:50054",
-            "client": "127.0.0.1:50054"
+            "server": "0.0.0.0:50054",
+            "client": "20.46.147.215:50054"
         }
     },
     "directory": {
