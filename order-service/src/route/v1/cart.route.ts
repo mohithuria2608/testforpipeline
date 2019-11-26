@@ -61,7 +61,7 @@ export default (router: Router) => {
                             promoId: Joi.number(),
                             description_en: Joi.string().required().allow(""),
                             description_ar: Joi.string().required().allow(""),
-                            itemType: Joi.string().valid("bundle", "standalone", "").required(),
+                            itemType: Joi.string().valid("bundle", "standalone").required(),
                             title_en: Joi.string().required(),
                             title_ar: Joi.string().required(),
                             id: Joi.number().required(),
