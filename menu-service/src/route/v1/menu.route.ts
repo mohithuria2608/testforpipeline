@@ -36,6 +36,7 @@ export default (router: Router) => {
                     let payload: IMenuRequest.IMenuFetch = { ...ctx.request.header };
                     let res = await menuController.fetchMenu(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {

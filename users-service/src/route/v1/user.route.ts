@@ -39,6 +39,7 @@ export default (router: Router) => {
                     let payload: IUserRequest.IAuthSendOtp = { ...ctx.request.body, ...ctx.request.header };
                     let res = await userController.loginSendOtp(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {
@@ -79,6 +80,7 @@ export default (router: Router) => {
                     let res = await userController.loginVerifyOtp(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, res.response)
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {

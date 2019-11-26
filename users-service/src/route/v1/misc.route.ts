@@ -38,6 +38,7 @@ export default (router: Router) => {
                     let res = await miscUserController.refreshToken(payload, authObj);
                     ctx.set({ 'accessToken': res.accessToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {})
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {

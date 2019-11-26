@@ -25,7 +25,7 @@
     "menuId": 5,
     "categories": [
         {
-            "sequence": "1",
+            "sequence": 1,
             "products": [
                 {
                     "sequence": 2,
@@ -4374,10 +4374,10 @@
             ],
             "title_en": "Deals | Top Selling",
             "title_ar": "العروض | الأكثر مبيعا",
-            "id": "19"
+            "id": 19
         },
         {
-            "sequence": "2",
+            "sequence": 2,
             "products": [
                 {
                     "sequence": 42,
@@ -10505,14 +10505,234 @@
                         "url": "https://i2-prod.mirror.co.uk/incoming/article7046286.ece/ALTERNATES/s1200/KFC-Logo.jpg",
                         "type": "image/jpg"
                     }
+                },
+                {
+                    "sequence": 44,
+                    "steps": [
+                        {
+                            "maximum": 0,
+                            "sequence": 1,
+                            "minimum": 0,
+                            "subtitle_en": "Add Some Cheese",
+                            "ingredient": 1,
+                            "title_ar": "جبنة",
+                            "displayType": "checkbox",
+                            "options": [
+                                {
+                                    "sequence": 1,
+                                    "name_ar": "جبنة أمريكية",
+                                    "price": 0,
+                                    "id": 810001,
+                                    "displayType": "radio",
+                                    "name_en": "American Cheese",
+                                    "subOptions": [
+                                        {
+                                            "price": 0,
+                                            "selected": 1,
+                                            "name_en": "None"
+                                        },
+                                        {
+                                            "price": 2,
+                                            "selected": 0,
+                                            "name_en": "Regular"
+                                        },
+                                        {
+                                            "price": 4,
+                                            "selected": 0,
+                                            "name_en": "Extra"
+                                        }
+                                    ],
+                                    "selected": 1
+                                },
+                                {
+                                    "sequence": 2,
+                                    "name_ar": "الخس",
+                                    "price": 0,
+                                    "id": 811701,
+                                    "displayType": "radio",
+                                    "name_en": "Lettuce",
+                                    "subOptions": [
+                                        {
+                                            "price": 0,
+                                            "selected": 1,
+                                            "name_en": "None"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Regular"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Extra"
+                                        }
+                                    ],
+                                    "selected": 1
+                                },
+                                {
+                                    "sequence": 3,
+                                    "name_ar": "طماطم",
+                                    "price": 0,
+                                    "id": 811703,
+                                    "displayType": "radio",
+                                    "name_en": "Tomato",
+                                    "subOptions": [
+                                        {
+                                            "price": 0,
+                                            "selected": 1,
+                                            "name_en": "None"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Regular"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Extra"
+                                        }
+                                    ],
+                                    "selected": 1
+                                }
+                            ],
+                            "subtitle_ar": "اضف الجبنة",
+                            "title_en": "Cheese",
+                            "itemStyle": 2
+                        }
+                    ],
+                    "price": 5,
+                    "description_en": null,
+                    "itemType": "standalone",
+                    "title_en": "Snacker Sandwich Classic",
+                    "description_ar": null,
+                    "title_ar": "سناكر ساندويتش - كلاسيك",
+                    "id": 110019,
+                    "image": {
+                        "dimension": "1200x630",
+                        "url": "https://i2-prod.mirror.co.uk/incoming/article7046286.ece/ALTERNATES/s1200/KFC-Logo.jpg",
+                        "uploadBy": "admin",
+                        "type": "image/jpg"
+                    }
+                },
+                {
+                    "sequence": 45,
+                    "steps": [
+                        {
+                            "maximum": 0,
+                            "sequence": 1,
+                            "minimum": 0,
+                            "subtitle_en": "Add Some Cheese",
+                            "ingredient": 1,
+                            "title_ar": "جبنة",
+                            "displayType": "checkbox",
+                            "options": [
+                                {
+                                    "sequence": 1,
+                                    "name_ar": "جبنة أمريكية",
+                                    "price": 0,
+                                    "id": 810001,
+                                    "displayType": "radio",
+                                    "name_en": "American Cheese",
+                                    "subOptions": [
+                                        {
+                                            "price": 0,
+                                            "selected": 1,
+                                            "name_en": "None"
+                                        },
+                                        {
+                                            "price": 2,
+                                            "selected": 0,
+                                            "name_en": "Regular"
+                                        },
+                                        {
+                                            "price": 4,
+                                            "selected": 0,
+                                            "name_en": "Extra"
+                                        }
+                                    ],
+                                    "selected": 1
+                                },
+                                {
+                                    "sequence": 2,
+                                    "name_ar": "الخس",
+                                    "price": 0,
+                                    "id": 811701,
+                                    "displayType": "radio",
+                                    "name_en": "Lettuce",
+                                    "subOptions": [
+                                        {
+                                            "price": 0,
+                                            "selected": 1,
+                                            "name_en": "None"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Regular"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Extra"
+                                        }
+                                    ],
+                                    "selected": 1
+                                },
+                                {
+                                    "sequence": 3,
+                                    "name_ar": "طماطم",
+                                    "price": 0,
+                                    "id": 811703,
+                                    "displayType": "radio",
+                                    "name_en": "Tomato",
+                                    "subOptions": [
+                                        {
+                                            "price": 0,
+                                            "selected": 1,
+                                            "name_en": "None"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Regular"
+                                        },
+                                        {
+                                            "price": 0,
+                                            "selected": 0,
+                                            "name_en": "Extra"
+                                        }
+                                    ],
+                                    "selected": 1
+                                }
+                            ],
+                            "subtitle_ar": "اضف الجبنة",
+                            "title_en": "Cheese",
+                            "itemStyle": 2
+                        }
+                    ],
+                    "price": 5,
+                    "description_en": null,
+                    "itemType": "standalone",
+                    "title_en": "Snacker Sandwich Spicy",
+                    "description_ar": null,
+                    "title_ar": "سناكر ساندويتش - سبايسي",
+                    "id": 110020,
+                    "image": {
+                        "dimension": "1200x630",
+                        "url": "https://i2-prod.mirror.co.uk/incoming/article7046286.ece/ALTERNATES/s1200/KFC-Logo.jpg",
+                        "uploadBy": "admin",
+                        "type": "image/jpg"
+                    }
                 }
             ],
             "title_en": "Sandwich & Wraps",
             "title_ar": "االساندويش و الراب",
-            "id": "21"
+            "id": 21
         },
         {
-            "sequence": "3",
+            "sequence": 3,
             "products": [
                 {
                     "sequence": 1,
@@ -17075,10 +17295,10 @@
             ],
             "title_en": "Variety Boxes",
             "title_ar": "البوكس المتنوع",
-            "id": "22"
+            "id": 22
         },
         {
-            "sequence": "4",
+            "sequence": 4,
             "products": [
                 {
                     "sequence": 4,
@@ -17105,7 +17325,7 @@
                         {
                             "maximum": 2,
                             "sequence": 2,
-                            "minimum": 0,
+                            "minimum": 2,
                             "subtitle_en": null,
                             "ingredient": 0,
                             "title_ar": "الاختيار من الدجاج",
@@ -17117,7 +17337,7 @@
                                     "price": 0,
                                     "id": 910001,
                                     "name_en": "Chicken Pc - Original",
-                                    "default": 0
+                                    "default": 1
                                 },
                                 {
                                     "sequence": 2,
@@ -17125,7 +17345,7 @@
                                     "price": 0,
                                     "id": 910002,
                                     "name_en": "Chicken Pc - Spicy",
-                                    "default": 0
+                                    "default": 1
                                 }
                             ],
                             "subtitle_ar": null,
@@ -19459,7 +19679,7 @@
                         {
                             "maximum": 2,
                             "sequence": 2,
-                            "minimum": 0,
+                            "minimum": 2,
                             "subtitle_en": null,
                             "ingredient": 0,
                             "title_ar": "الاختيار من الدجاج",
@@ -19471,7 +19691,7 @@
                                     "price": 0,
                                     "id": 910001,
                                     "name_en": "Chicken Pc - Original",
-                                    "default": 0
+                                    "default": 1
                                 },
                                 {
                                     "sequence": 2,
@@ -19479,7 +19699,7 @@
                                     "price": 0,
                                     "id": 910002,
                                     "name_en": "Chicken Pc - Spicy",
-                                    "default": 0
+                                    "default": 1
                                 }
                             ],
                             "subtitle_ar": null,
@@ -20779,7 +20999,7 @@
                         {
                             "maximum": 2,
                             "sequence": 2,
-                            "minimum": 0,
+                            "minimum": 2,
                             "subtitle_en": null,
                             "ingredient": 0,
                             "title_ar": "الاختيار من الدجاج",
@@ -20791,7 +21011,7 @@
                                     "price": 0,
                                     "id": 910001,
                                     "name_en": "Chicken Pc - Original",
-                                    "default": 0
+                                    "default": 1
                                 },
                                 {
                                     "sequence": 2,
@@ -20799,7 +21019,7 @@
                                     "price": 0,
                                     "id": 910002,
                                     "name_en": "Chicken Pc - Spicy",
-                                    "default": 0
+                                    "default": 1
                                 }
                             ],
                             "subtitle_ar": null,
@@ -21400,10 +21620,10 @@
             ],
             "title_en": "Chicken Meals",
             "title_ar": "وجبات الدجاج",
-            "id": "20"
+            "id": 20
         },
         {
-            "sequence": "5",
+            "sequence": 5,
             "products": [
                 {
                     "sequence": 4,
@@ -23323,10 +23543,10 @@
             ],
             "title_en": "Buckets to Share",
             "title_ar": "وجبات للمشاركة",
-            "id": "24"
+            "id": 24
         },
         {
-            "sequence": "6",
+            "sequence": 6,
             "products": [
                 {
                     "sequence": 1,
@@ -25061,10 +25281,10 @@
             ],
             "title_en": "Shrimps",
             "title_ar": "الروبيان",
-            "id": "23"
+            "id": 23
         },
         {
-            "sequence": "7",
+            "sequence": 7,
             "products": [
                 {
                     "sequence": 1,
@@ -25304,10 +25524,10 @@
             ],
             "title_en": "Sides | Quick Bites",
             "title_ar": "الأصناف الجانبية | أكلات سريعة",
-            "id": "25"
+            "id": 25
         },
         {
-            "sequence": "8",
+            "sequence": 8,
             "products": [
                 {
                     "sequence": 4,
@@ -25669,10 +25889,10 @@
             ],
             "title_en": "Drinks & Desserts",
             "title_ar": "المشروبات & الحلويات",
-            "id": "29"
+            "id": 29
         },
         {
-            "sequence": "9",
+            "sequence": 9,
             "products": [
                 {
                     "sequence": 1,
@@ -26145,10 +26365,10 @@
             ],
             "title_en": "Kids",
             "title_ar": "وجبات الأطفال",
-            "id": "28"
+            "id": 28
         },
         {
-            "sequence": "10",
+            "sequence": 10,
             "products": [
                 {
                     "sequence": 11,
@@ -26484,7 +26704,8 @@
             ],
             "title_en": "Fancy a Little More?",
             "title_ar": "ترقب أكثر القليل؟",
-            "id": "30"
+            "id": 30
         }
-    ]
+    ],
+    "updatedAt": 1574768041000
 }

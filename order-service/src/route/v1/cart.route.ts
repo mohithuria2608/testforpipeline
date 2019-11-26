@@ -9,7 +9,7 @@ export default (router: Router) => {
     router
         .post('/validate',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
+                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -31,8 +31,9 @@ export default (router: Router) => {
                     deviceid: Joi.string().trim().required()
                 },
                 body: {
-                    curMenuId: Joi.string().required(),
+                    curMenuId: Joi.number().required(),
                     menuUpdatedAt: Joi.number().required(),
+                    categoryId: Joi.number().required(),
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),
                     items: Joi.array().items(
@@ -78,6 +79,7 @@ export default (router: Router) => {
                     let payload: ICartRequest.IValidateCart = { ...ctx.request.body, ...ctx.request.header };
                     let res = await cartController.validateCart(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {
@@ -113,6 +115,7 @@ export default (router: Router) => {
                     let payload: ICartRequest.ICartSuggestion = { ...ctx.request.body, ...ctx.request.header };
                     let res = await cartController.cartSuggestion(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
                 catch (error) {

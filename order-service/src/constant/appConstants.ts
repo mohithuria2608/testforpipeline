@@ -361,6 +361,19 @@ export let STATUS_MSG = {
                 type: 'CREATED'
             },
         },
+        S202: {
+            MENU_CHANGED: {
+                statusCode: 202,
+                message: 'Menu has been changed. Please refresh your menu.',
+                type: 'MENU_CHANGED'
+            },
+
+            ITEM_CHANGED: {
+                statusCode: 202,
+                message: 'Item info has been changed. Please refresh your menu.',
+                type: 'ITEM_CHANGED'
+            }
+        },
         S209: {
             FORGET_PASSWORD_EMAIL: {
                 statusCode: 209,
@@ -376,17 +389,7 @@ export let STATUS_MSG = {
             }
         },
         S304: {
-            REQUEST_EXISTS: {
-                statusCode: 304,
-                message: 'Friend request already Exists',
-                type: 'REQUEST_EXISTS'
-            },
 
-            NO_SUCH_REQUEST: {
-                statusCode: 304,
-                message: 'No such request exists',
-                type: 'NO_SUCH_REQUEST'
-            }
         }
     },
     GRPC_ERROR: {
