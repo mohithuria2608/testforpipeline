@@ -32,42 +32,43 @@ export default (router: Router) => {
                 },
                 body: {
                     curMenuId: Joi.string().required(),
+                    menuUpdatedAt: Joi.number().required(),
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),
                     items: Joi.array().items(
                         Joi.object().keys({
-                            sequence: Joi.number(),
+                            sequence: Joi.number().required(),
                             steps: Joi.array().items(
                                 Joi.object().keys({
-                                    sequence: Joi.number(),
-                                    title_en: Joi.string(),
-                                    subtitle_ar: Joi.string(),
-                                    displayType: Joi.string(),
+                                    sequence: Joi.number().required(),
+                                    title_en: Joi.string().required(),
+                                    title_ar: Joi.string().required(),
+                                    subtitle_ar: Joi.string().required(),
+                                    subtitle_en: Joi.string().required(),
+                                    displayType: Joi.string().valid("radio", "checkbox", "stepper"),
                                     options: Joi.array().items(
                                         Joi.object().keys({
-                                            sequence: Joi.number(),
-                                            name_ar: Joi.string(),
-                                            price: Joi.number(),
+                                            sequence: Joi.number().required(),
+                                            name_ar: Joi.string().required(),
+                                            name_en: Joi.string().required(),
+                                            price: Joi.number().required(),
                                             promoId: Joi.number(),
-                                            id: Joi.number(),
-                                            name_en: Joi.string(),
-                                            selected: Joi.number()
+                                            id: Joi.number().required(),
+                                            selected: Joi.number().required()
                                         })),
-                                    title_ar: Joi.string(),
-                                    subtitle_en: Joi.string()
                                 })),
-                            price: Joi.number(),
+                            price: Joi.number().required(),
                             promoId: Joi.number(),
-                            description_en: Joi.string().required(),
-                            itemType: Joi.string().required(),
+                            description_en: Joi.string().required().allow(""),
+                            description_ar: Joi.string().required().allow(""),
+                            itemType: Joi.string().valid("bundle", "standalone", "").required(),
                             title_en: Joi.string().required(),
                             title_ar: Joi.string().required(),
-                            description_ar: Joi.string().required(),
-                            id: Joi.number(),
+                            id: Joi.number().required(),
                             image: Joi.object().keys({
-                                dimension: Joi.string(),
-                                url: Joi.string(),
-                                type: Joi.string()
+                                dimension: Joi.string().required(),
+                                url: Joi.string().required(),
+                                type: Joi.string().valid("image/jpg").required()
                             })
                         })).required()
                 }
@@ -83,7 +84,7 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .post('/suggestion',
+        .post('/addon',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG

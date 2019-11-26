@@ -12,7 +12,7 @@ export class MiscUserController {
     * */
     async refreshToken(payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
         try {
-            const tokenType = authObj.tokenType
+            const tokenType = Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             let tokens = await ENTITY.UserE.getTokens(
                 payload.deviceid,
                 payload.devicetype,
