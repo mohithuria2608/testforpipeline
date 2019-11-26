@@ -43,7 +43,9 @@ pipeline {
                         UsersImage=docker.build(registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/users-service/Dockerfile .")}
                     dir("${env.WORKSPACE}/menu-service"){
                         MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")}
-    
+                    dir("${env.WORKSPACE}/order-service"){
+                        OrderImage=docker.build(registry + "/order"+ ":Order-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/order-service/Dockerfile .")}
+                    }
                 }
             }
         }
@@ -54,6 +56,7 @@ pipeline {
                         AuthImage.push()
                         UsersImage.push()
                         MenuImage.push()
+                        OrderImage.push()
                     }
                 }
             }
