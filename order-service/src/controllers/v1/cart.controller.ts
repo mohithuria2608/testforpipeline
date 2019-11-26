@@ -1,6 +1,8 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { menuService } from '../../grpc/client'
+import * as fs from 'fs'
+
 export class CartController {
 
     constructor() { }
@@ -18,7 +20,18 @@ export class CartController {
                 else
                     return elem['isAvailable'] = true
             })
-            return payload.items
+            let taxRawdata = fs.readFileSync(__dirname + '/../../../model/tax.json', 'utf-8');
+            let tax = JSON.parse(taxRawdata);
+            let res = {
+                items: payload.items,
+                tax: {
+                    subTotal: "",
+                    tax: tax,
+                    delivery: "",
+                    grandTotal: ""
+                }
+            }
+            return res
             //step1 = if(lat and lng not present) => getDefault menu
             //step2 = validate defaultMenuId = curMenuId
             //step3 = if match  && update time=> return success
@@ -37,6 +50,14 @@ export class CartController {
         } catch (err) {
             consolelog("validateCart", err, false)
             return Promise.reject(err)
+        }
+    }
+
+    async cartSuggestion(payload: ICartRequest.ICartSuggestion) {
+        try {
+            return []
+        } catch (error) {
+
         }
     }
 }

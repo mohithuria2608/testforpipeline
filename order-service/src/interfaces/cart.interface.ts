@@ -7,4 +7,8 @@ declare namespace ICartRequest {
             name: string
         }]
     }
+
+    interface ICartSuggestion extends ICommonRequest.IHeaders {
+    }
+
 }
