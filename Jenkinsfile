@@ -5,6 +5,8 @@ pipeline {
         Users_image="americana.azurecr.io/users" + ":Users-Image_${env.BUILD_NUMBER}"
         Auth_image="americana.azurecr.io/auth" + ":auth-service_${env.BUILD_NUMBER}"
         Menu_image="americana.azurecr.io/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
+        Order_image="americana.azurecr.io/order"+ ":Order-service_${env.BUILD_NUMBER}"
+
         
     }
     agent any
