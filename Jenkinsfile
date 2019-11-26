@@ -45,7 +45,6 @@ pipeline {
                         MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")}
                     dir("${env.WORKSPACE}/order-service"){
                         OrderImage=docker.build(registry + "/order"+ ":Order-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/order-service/Dockerfile .")}
-                    }
                 }
             }
         }
