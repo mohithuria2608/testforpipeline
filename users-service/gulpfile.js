@@ -42,7 +42,9 @@ gulp.task("copyProto", function () {
 });
 
 gulp.task('server', function () {
-	return spawn('node', ['dist/app.js'], { stdio: 'inherit' });
+	const env = Object.create(process.env);
+	env.NODE_ENV = 'default';
+	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
 })
 
 /**

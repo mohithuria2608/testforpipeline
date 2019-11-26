@@ -14,7 +14,23 @@ export class CartController {
      * */
     async validateCart(payload: ICartRequest.IValidateCart) {
         try {
+            let subTotal = 0;
+            let delivery = {
+                rate: 6.5,
+                type: "add"
+            }
             payload.items.map((elem, i) => {
+                if (elem.price)
+                    subTotal = subTotal + elem.price
+                if (elem.steps && elem.steps.length > 0) {
+                    if (elem.steps.options && elem.steps.options.length > 0) {
+                        if (elem.steps.options.selected == 1) {
+                            if (elem.steps.options.price)
+                                subTotal = subTotal + elem.steps.options.price
+                        }
+                    }
+                }
+
                 if (i == 1)
                     return elem['isAvailable'] = false
                 else
@@ -22,16 +38,29 @@ export class CartController {
             })
             let taxRawdata = fs.readFileSync(__dirname + '/../../../model/tax.json', 'utf-8');
             let tax = JSON.parse(taxRawdata);
-            let res = {
+            if (tax && typeof tax == 'object' && tax.length > 0) {
+                tax = tax.filter(elem => {
+                    elem = {
+                        longName: elem.longName,
+                        shortName: elem.shortName,
+                        rate: elem.rate,
+                        inclusive: elem.inclusive,
+                        type: "add"
+                    }
+                    return elem.inclusive == true
+                })
+            }
+            let grandTotal = subTotal + delivery.rate
+            return {
                 items: payload.items,
-                tax: {
-                    subTotal: "",
+                amount: {
+                    subTotal: subTotal,
                     tax: tax,
-                    delivery: "",
-                    grandTotal: ""
+                    delivery: delivery,
+                    promo: [],
+                    grandTotal: grandTotal
                 }
             }
-            return res
             //step1 = if(lat and lng not present) => getDefault menu
             //step2 = validate defaultMenuId = curMenuId
             //step3 = if match  && update time=> return success
