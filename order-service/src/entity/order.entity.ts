@@ -11,16 +11,22 @@ export class OrderClass extends BaseEntity {
     }
     async mapInternalKeys(payload: ICartRequest.IValidateCart, defaultMenu: IMenuServiceRequest.IFetchMenuRes) {
         try {
-            let defaultCategoryIndex = -1
-            defaultMenu.categories.map((cat, i) => {
-                if (cat.id == payload.categoryId) {
-                    defaultCategoryIndex = i
-                }
-            })
-            if (defaultCategoryIndex >= 0) {
-                payload.items.map((item, j) => {
-                    item['isAvailable'] = true
-                    item['isPriceChange'] = false
+            let change = false
+            // if (defaultCategoryIndex >= 0) {
+            payload.items.map((item, j) => {
+                item['isAvailable'] = true
+                item['isPriceChange'] = false
+                let defaultCategoryIndex = -1
+                defaultMenu.categories.map((cat, i) => {
+                    console.log("cat.id == item.categoryId", cat.id, item.categoryId)
+
+                    if (cat.id == item.categoryId) {
+                        defaultCategoryIndex = i
+                    }
+                })
+                console.log("defaultCategoryIndex, typeof defaultCategoryIndex, (defaultCategoryIndex >= 0)", defaultCategoryIndex, typeof defaultCategoryIndex, (defaultCategoryIndex >= 0))
+                if (defaultCategoryIndex >= 0) {
+
                     let productIndex = -1
                     defaultMenu.categories[defaultCategoryIndex].products.map((product, j) => {
                         if (product.id == item.id) {
@@ -76,14 +82,17 @@ export class OrderClass extends BaseEntity {
                                 if (validOptionPriceStore[elem] == -1)
                                     validOptionPrice = false
                             })
-                            if (!isValidStep || !validOptionId)
+                            if (!isValidStep || !validOptionId) {
+                                change = true
                                 item['isAvailable'] = false
+                            }
                             else
                                 item['isAvailable'] = true
 
-                            if (!validOptionPrice)
+                            if (!validOptionPrice) {
+                                change = true
                                 item['isPriceChange'] = true
-                            else
+                            } else
                                 item['isPriceChange'] = false
 
                         } else {
@@ -92,15 +101,22 @@ export class OrderClass extends BaseEntity {
                                 item['isPriceChange'] = false
                         }
                     } else {
+                        change = true
                         item['isAvailable'] = false
                         item['isPriceChange'] = false
                     }
-                })
-            } else {
-                return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.MENU_CHANGED, {})
-            }
+                } else {
+                    change = true
+                    item['isAvailable'] = false
+                    item['isPriceChange'] = false
+                }
+                return
+            })
+            // } else {
+            //     return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.MENU_CHANGED, {})
+            // }
 
-            return true
+            return change
         } catch (error) {
             consolelog("mapInternalKeys", error, false)
             return Promise.reject(error)
@@ -109,6 +125,8 @@ export class OrderClass extends BaseEntity {
 
     async createCheckoutRes(items: IMenuServiceRequest.IProduct[], defaultMenu: IMenuServiceRequest.IFetchMenuRes) {
         try {
+            let amount = []
+
             let subTotal = 0;
             let delivery = {
                 rate: 6.5,
@@ -132,30 +150,48 @@ export class OrderClass extends BaseEntity {
                     }
                 }
             })
+            amount.push({
+                type: 'subTotal',
+                longName: 'Sub Total',
+                shortName: 'Sub Total',
+                rate: subTotal,
+                action: "display"
+            })
             let taxRawdata = fs.readFileSync(__dirname + '/../../model/tax.json', 'utf-8');
             let tax = JSON.parse(taxRawdata);
             if (tax && typeof tax == 'object' && tax.length > 0) {
-                tax = tax.filter(elem => {
-                    elem = {
-                        longName: elem.longName,
-                        shortName: elem.shortName,
-                        rate: elem.rate,
-                        inclusive: elem.inclusive,
-                        type: "add"
+                tax.map(obj => {
+                    if (obj.inclusive == true) {
+                        amount.push({
+                            longName: obj.longName,
+                            shortName: obj.shortName,
+                            rate: (100 * 100) / (obj.rate + 1) * 100,
+                            inclusive: obj.inclusive,
+                            type: "tax",
+                            action: "add"
+                        })
                     }
-                    return elem.inclusive == true
+                    return
                 })
             }
+            amount.push({
+                longName: 'Delivery Charge',
+                shortName: 'Delivery Charge',
+                rate: 6.5,
+                type: "delivery",
+                action: "add"
+            })
             let grandTotal = subTotal + delivery.rate
+            amount.push({
+                longName: 'Grand Total',
+                shortName: 'Grand Total',
+                rate: grandTotal,
+                type: "total",
+                action: "display"
+            })
             return {
                 items: items,
-                amount: {
-                    subTotal: subTotal,
-                    tax: tax,
-                    delivery: delivery,
-                    promo: [],
-                    grandTotal: grandTotal
-                }
+                amount: amount
             }
         } catch (error) {
             consolelog("createCheckoutRes", error, false)
