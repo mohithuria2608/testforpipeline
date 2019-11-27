@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    #kubernetes.io/ingress.class: nginx
+    #certmanager.k8s.io/cluster-issuer: letsencrypt-staging
+spec:
+  #tls:
+  #- host: americana.appskeeper.com
+   # secretName: tls-secret
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: americana.appskeeper.com
+    http:
+      paths:
+      - path: /auth-service/(.*)
+        backend:
+          serviceName: auth-service
+          servicePort: 4000
+      - path: /user-service/(.*)
+        backend:
+          serviceName: user-service
+          servicePort: 4001
+      - path: /menu-service/(.*)
+        backend:
+          serviceName: menu-service
+          servicePort: 4002
+      - path: /order-service/(.*)
+        backend:
+          serviceName: order-service
+          servicePort: 4003
