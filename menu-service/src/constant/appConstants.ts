@@ -216,6 +216,12 @@ export let STATUS_MSG = {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
                 type: 'UNAUTHORIZED'
+            },
+
+            ACCESS_TOKEN_EXPIRED: {
+                statusCode: 401,
+                type: 'ACCESS_TOKEN_EXPIRED',
+                message: 'Access token has expired.'
             }
         },
         E403: {
@@ -250,13 +256,7 @@ export let STATUS_MSG = {
                 type: 'USER_NOT_FOUND'
             },
         },
-        E406: {
-            ACCESS_TOKEN_EXPIRED: {
-                statusCode: 401,
-                type: 'ACCESS_TOKEN_EXPIRED',
-                message: 'Access token has expired.'
-            }
-        },
+        
         E500: {
             IMP_ERROR: {
                 statusCode: 500,

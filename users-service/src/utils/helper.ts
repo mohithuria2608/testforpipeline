@@ -15,8 +15,8 @@ export let sendError = function (error) {
     if (error && error.code && error.details) {
         customError.message = error.details
         if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
-            customError.statusCode = Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED.statusCode
-            customError.type = Constant.STATUS_MSG.ERROR.E406.ACCESS_TOKEN_EXPIRED.type
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type
         }
     } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
