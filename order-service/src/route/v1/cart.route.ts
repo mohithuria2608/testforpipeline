@@ -37,6 +37,7 @@ export default (router: Router) => {
                     lng: Joi.number().min(-180).max(180),
                     items: Joi.array().items(
                         Joi.object().keys({
+                            quantity: Joi.number().required(),
                             categoryId: Joi.number().required(),
                             sequence: Joi.number().required(),
                             steps: Joi.array().items(
@@ -47,6 +48,10 @@ export default (router: Router) => {
                                     subtitle_ar: Joi.string().required().allow(""),
                                     subtitle_en: Joi.string().required().allow(""),
                                     displayType: Joi.string().valid("radio", "checkbox", "stepper"),
+                                    maximum: Joi.number(),
+                                    minimum: Joi.number(),
+                                    ingredient: Joi.number().valid(1, 0),
+                                    itemStyle: Joi.number().valid(1, 0),
                                     options: Joi.array().items(
                                         Joi.object().keys({
                                             sequence: Joi.number().required(),
@@ -55,7 +60,8 @@ export default (router: Router) => {
                                             price: Joi.number().required(),
                                             promoId: Joi.number(),
                                             id: Joi.number().required(),
-                                            selected: Joi.number().required()
+                                            selected: Joi.number(),
+                                            default: Joi.number()
                                         })),
                                 })),
                             price: Joi.number().required(),

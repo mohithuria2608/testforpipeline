@@ -19,6 +19,7 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
+    console.log("-------------------in sendError-------------------", error)
 
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
 

@@ -12,7 +12,6 @@ export class OrderClass extends BaseEntity {
     async mapInternalKeys(payload: ICartRequest.IValidateCart, defaultMenu: IMenuServiceRequest.IFetchMenuRes) {
         try {
             let change = false
-            // if (defaultCategoryIndex >= 0) {
             payload.items.map((item, j) => {
                 item['isAvailable'] = true
                 item['isPriceChange'] = false
@@ -112,10 +111,6 @@ export class OrderClass extends BaseEntity {
                 }
                 return
             })
-            // } else {
-            //     return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.MENU_CHANGED, {})
-            // }
-
             return change
         } catch (error) {
             consolelog("mapInternalKeys", error, false)
@@ -150,22 +145,24 @@ export class OrderClass extends BaseEntity {
                     }
                 }
             })
-            amount.push({
+            let subTotalObj = {
                 type: 'subTotal',
                 longName: 'Sub Total',
                 shortName: 'Sub Total',
                 rate: subTotal,
                 action: "display"
-            })
+            }
             let taxRawdata = fs.readFileSync(__dirname + '/../../model/tax.json', 'utf-8');
             let tax = JSON.parse(taxRawdata);
             if (tax && typeof tax == 'object' && tax.length > 0) {
                 tax.map(obj => {
                     if (obj.inclusive == true) {
+                        let taxAmount = Math.round(subTotal / (1 + obj.rate) * 100) / 100
+                        subTotalObj.rate = subTotalObj.rate - taxAmount
                         amount.push({
                             longName: obj.longName,
                             shortName: obj.shortName,
-                            rate: (100 * 100) / (obj.rate + 1) * 100,
+                            rate: taxAmount,
                             inclusive: obj.inclusive,
                             type: "tax",
                             action: "add"
@@ -174,6 +171,7 @@ export class OrderClass extends BaseEntity {
                     return
                 })
             }
+            amount.push(subTotalObj)
             amount.push({
                 longName: 'Delivery Charge',
                 shortName: 'Delivery Charge',
