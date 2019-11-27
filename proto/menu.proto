@@ -68,6 +68,10 @@ message IStep {
     repeated IOption options = 5;
     required string title_ar = 6;
     required string subtitle_en = 7;
+    required int32 maximum = 8;
+    required int32 minimum = 9;
+    required int32 ingredient = 10;
+    required int32 itemStyle = 11;
 }
 
 message IImage {
@@ -84,4 +88,5 @@ message IOption {
     required int32 id = 5;
     required string name_en = 6;
     required int32 selected = 7;
+    required int32 default = 8;
 }
