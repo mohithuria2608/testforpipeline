@@ -19,6 +19,7 @@ export default (opts?): Middleware => {
             }
 
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
+            console.log("-------------------in menu service--------------------", JSON.stringify(tokenData))
 
             if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
                 console.log("-------------------A1-------------------")
