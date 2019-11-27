@@ -23,19 +23,25 @@ export let sendError = function (error) {
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
 
     if (error && error.code && error.details) {
+        console.log("-------------------1-------------------")
+
         customError.message = error.details
         if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
+            console.log("-------------------2-------------------")
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type
         }
     } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        console.log("-------------------3-------------------")
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
         if (error.hasOwnProperty('statusCode'))
             customError['statusCode'] = error.statusCode
         if (error.hasOwnProperty('type'))
             customError['type'] = error.type
     } else {
+        console.log("-------------------4-------------------")
         if (typeof error === 'object') {
+            console.log("-------------------5-------------------")
             if (error.name === 'MongoError') {
                 customError.message += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + error.errmsg
                 customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode
@@ -54,6 +60,7 @@ export let sendError = function (error) {
                 customError.type = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.type
             }
         } else {
+            console.log("-------------------6-------------------")
             customError.message = error
         }
     }
