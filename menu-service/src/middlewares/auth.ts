@@ -21,15 +21,23 @@ export default (opts?): Middleware => {
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
 
             if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
+                console.log("-------------------A1-------------------")
+
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
             }
             else {
+                console.log("-------------------A2-------------------")
+
                 if (tokenData.tokenType == Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH || tokenData.tokenType == Constant.DATABASE.TYPE.TOKEN.USER_AUTH) {
+                    console.log("-------------------A3-------------------")
                     ctx.state.user = tokenData
-                } else
+                } else {
+                    console.log("-------------------A4-------------------")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
+                }
             }
         } catch (error) {
+            console.log("-------------------A5-------------------", error)
             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
         }
         await next()
