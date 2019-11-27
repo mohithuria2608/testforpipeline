@@ -263,7 +263,7 @@ export let STATUS_MSG = {
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
-            INVALID_TOKEN_TYPE:{
+            INVALID_TOKEN_TYPE: {
                 statusCode: 500,
                 message: 'Invalid token type provided',
                 type: 'INVALID_TOKEN_TYPE'
@@ -433,8 +433,9 @@ export let SERVER = {
     DEFAULT_USER_NAME: 'App User',
     IOS_URL: "",
     ANDROID_URL: "",
-    ANDROID_PACKAGE_NAME: "",
-    DEEPLINK_FALLBACK: 'https://www.google.co.in/',
+    ANDROID_PACKAGE_NAME: "com.android.kfc",
+    IOS_SCHEME_HOST: "",
+    DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
     APP_URL: config.get("server.user.url"),
     LINKS: {
         TERMS_COND: '',
