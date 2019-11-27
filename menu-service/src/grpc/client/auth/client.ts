@@ -29,6 +29,7 @@ export class AuthService {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (err, res) => {
+                console.log("i am here in validate token in menu", err, res)
                 if (!err) {
                     consolelog("successfully verified token", JSON.stringify(res), false)
                     resolve(res)
