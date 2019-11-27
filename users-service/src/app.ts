@@ -14,7 +14,7 @@ app.use(route());
 
 export const start = (async () => {
   try {
-    const port = config.get("server.port")
+    const port = config.get("server.user.port")
     const server = app.listen(port)
     
     await bootstrap(server)

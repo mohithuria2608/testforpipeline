@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+service AuthService {
+    rpc CreateToken (ICreateToken) returns (IToken) {}
+    rpc VerifyToken (IVerifyToken) returns (IAuthorizationObj) {}
+}
+
+message ICreateToken {
+    required string deviceid = 1;
+    required string devicetype =2;
+    required string tokenType = 3;
+    optional string id = 4;
+}
+
+message IToken {
+    string token = 1;
+}
+
+message IVerifyToken {
+    required string token = 1;
+    required string tokenType = 2;
+}
+
+message IAuthorizationObj {
+    required string tokenType = 1;
+    required string deviceid = 2;
+    required string devicetype = 3;
+    optional string id = 4;
+    optional IUserData userData = 5;
+}
+
+message IUserData {} 

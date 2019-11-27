@@ -440,10 +440,10 @@ export let SERVER = {
     ANDROID_URL: "",
     ANDROID_PACKAGE_NAME: "",
     DEEPLINK_FALLBACK: 'https://www.google.co.in/',
-    APP_URL: config.get("server.url"),
+    APP_URL: config.get("server.order.url"),
     LINKS: {
         TERMS_COND: '',
-        PRIVACY: config.get("server.url") + "/privacy_policy/",
+        PRIVACY: config.get("server.order.url") + "/privacy_policy/",
     },
     OTP_TEXT: (otp) => {
         return `Your App code is ${otp}. Welcome to the community!`
