@@ -37,6 +37,7 @@ export default (router: Router) => {
                     lng: Joi.number().min(-180).max(180),
                     items: Joi.array().items(
                         Joi.object().keys({
+                            quantity: Joi.number().required(),
                             categoryId: Joi.number().required(),
                             sequence: Joi.number().required(),
                             steps: Joi.array().items(
