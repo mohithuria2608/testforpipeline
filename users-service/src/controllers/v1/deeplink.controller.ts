@@ -43,7 +43,6 @@ export class DeeplinkController {
             //         }
             //     }
             // }
-            console.log("Constant.SERVER.TEMPLATE_PATH", Constant.SERVER.TEMPLATE_PATH)
             let content = await templateLib.compileFile(Constant.SERVER.TEMPLATE_PATH + 'deeplink.html', option)
             return (content)
         } catch (error) {
