@@ -33,11 +33,11 @@ export default (router: Router) => {
                 body: {
                     curMenuId: Joi.number().required(),
                     menuUpdatedAt: Joi.number().required(),
-                    categoryId: Joi.number().required(),
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),
                     items: Joi.array().items(
                         Joi.object().keys({
+                            categoryId: Joi.number().required(),
                             sequence: Joi.number().required(),
                             steps: Joi.array().items(
                                 Joi.object().keys({

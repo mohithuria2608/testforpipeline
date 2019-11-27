@@ -1,8 +1,8 @@
-import * as Services from '../databases/dao';
+import { Aerospike } from "../databases/aerospike";
 import { consolelog } from '../utils'
 
 export class BaseEntity {
-    public DAOManager = new Services.DAOManager();
+    public DAOManager = Aerospike;
     protected modelName: ModelNames;
     constructor(modelName?) {
         this.modelName = modelName

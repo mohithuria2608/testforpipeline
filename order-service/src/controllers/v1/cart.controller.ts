@@ -29,9 +29,10 @@ export class CartController {
                     let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
                     if (internalKeyCheck) {
                         let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
-                        return res
+                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, res)
                     } else {
-                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, {})
+                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
+                        return res
                     }
                 }
             } else {
@@ -41,9 +42,10 @@ export class CartController {
                     let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
                     if (internalKeyCheck) {
                         let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
-                        return res
+                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, res)
                     } else {
-                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, {})
+                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
+                        return res
                     }
                 }
             }

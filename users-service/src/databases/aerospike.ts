@@ -1,30 +1,32 @@
 /**
- * @file aerospike
- * @description defines aerospike database methods
- * @created 2019-10-30 00:19:03
+ * @file aerospike.database
+ * @description defines aerospike connection and operations
+ * @created 2019-11-04 16:58:03
 */
 
 const aerospike = require('aerospike');
-import { consolelog } from '../utils'
 
-export class AerospikeClass {
+class AerospikeClass {
 
-    protected client;
+    private client: any;
     private dbName: string;
 
     constructor(dbName: string) {
         this.dbName = dbName;
     }
 
-    /** connects to aerospike database */
+    /** initializes client instance */
     async init() {
-        if (!this.client) { // only init if client not already initialized
+        if (!this.client) {
             try {
-                this.client = await aerospike.connect({ hosts: 'localhost:3000' });
-                if (this.client)
-                    consolelog('Aerospike Client Connected', "", true)
-            } catch (err) { consolelog('Error in Aerospike Connection', err, false) }
-        } else throw Error('AEROSPIKE -> Client already initialized');
+                this.client = await aerospike.connect({
+                    hosts: 'localhost:3000'
+                });
+                if (this.client) {
+                    console.log("> Aerospike Client Connected");
+                }
+            } catch (err) { console.log("ERROR IN AEROSPIKE -> ", err); }
+        } else throw Error('Client already initialized');
     }
 
     /** registers user defined functions on aerospike client */
@@ -56,7 +58,44 @@ export class AerospikeClass {
                     if (err) { console.log("INSERT ERROR -> ", err); reject(err); }
                     else resolve(true);
                 });
+            } else reject('Client not initialized');
+        });
+    }
 
+    /**
+     * reads from the database
+     * @param keyData - key object data
+     */
+    async read(key: any) {
+        return new Promise((resolve, reject) => {
+            if (this.client) {
+                this.client.get(key, function (err, data) {
+                    if (err) { console.log("READ ERROR -> ", err); reject(err); }
+                    else resolve(data);
+                });
+            } else reject('Client not initialized');
+        });
+    }
+
+    /**
+     * scans a namespace
+     * @param keyData - key object data
+     */
+    async scan(set: string) {
+        return new Promise((resolve, reject) => {
+            if (this.client) {
+                let scan = this.client.scan(this.dbName, set, { concurrent: true, nobins: false }),
+                    stream = scan.foreach(),
+                    tempData: any = [];
+                stream.on('data', function (record) { tempData.push(record); });
+                stream.on('error', function (error) { reject(error); });
+                stream.on('end', function () {
+                    let records: any = [];
+                    for (let item of tempData) {
+                        records.push(item.bins);
+                    }
+                    resolve(records);
+                });
             } else reject('Client not initialized');
         });
     }
@@ -93,13 +132,49 @@ export class AerospikeClass {
     }
 
     /**
+     * creates an index
+     */
+    async createIndex(set, bin, index) {
+        return new Promise((resolve, reject) => {
+            if (this.client) {
+                this.client.createIntegerIndex({ ns: this.dbName, set, bin, index }, function (err, job) {
+                    if (err) { console.log("INDEX ERROR -> ", err); reject(err); }
+                    else {
+                        // wait for index creation to complete
+                        let pollInterval = 100;
+                        job.waitUntilDone(pollInterval, (error) => {
+                            if (error) { console.log("INDEX ERROR -> ", error); reject(error); }
+                            console.log('Secondary index %s on %s was created successfully', index, bin);
+                            resolve();
+                        });
+                    }
+                });
+            } else reject('Client not initialized');
+        });
+    }
+
+    /**
+     * removes an index
+     */
+    async removeIndex(indexName: string) {
+        return new Promise((resolve, reject) => {
+            if (this.client) {
+                this.client.indexRemove(this.dbName, indexName, function (err, job) {
+                    if (err) { console.log("INDEX Remove ERROR -> ", err); reject(err); }
+                    else resolve();
+                });
+            } else reject('Client not initialized');
+        });
+    }
+
+    /**
      * generates a new key
      * @param setName - name of database set
      * @param keyName - the primary key name
      */
-    generateKey(setName: string, keyName: string) {
+    generateKey(setName: string, keyName: any) {
         return new aerospike.Key(this.dbName, setName, keyName);
     }
 }
 
-export default new AerospikeClass('myapp');
+export const Aerospike = new AerospikeClass('myapp');
