@@ -10,7 +10,7 @@ app.use(middleware());
 
 export const start = (async () => {
   try {
-    const port = config.get("server.port")
+    const port = config.get("server.auth.port")
     const server = app.listen(port)
 
     await bootstrap(server)

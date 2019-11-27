@@ -1,8 +1,26 @@
 {
     "environment": "local",
     "server": {
-        "url": "http://localhost",
-        "port": 4003
+        "auth": {
+            "url": "http://localhost",
+            "port": 4000
+        },
+        "user": {
+            "url": "http://localhost",
+            "port": 4001
+        },
+        "menu": {
+            "url": "http://localhost",
+            "port": 4002
+        },
+        "order": {
+            "url": "http://localhost",
+            "port": 4003
+        },
+        "sync": {
+            "url": "http://localhost",
+            "port": 4004
+        }
     },
     "grpc": {
         "auth": {
@@ -20,6 +38,10 @@
         "order": {
             "server": "localhost:50054",
             "client": "127.0.0.1:50054"
+        },
+        "sync": {
+            "server": "localhost:50055",
+            "client": "127.0.0.1:50055"
         }
     },
     "kafka": {

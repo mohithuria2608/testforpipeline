@@ -223,6 +223,12 @@ export let STATUS_MSG = {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
                 type: 'UNAUTHORIZED'
+            },
+
+            ACCESS_TOKEN_EXPIRED: {
+                statusCode: 401,
+                type: 'ACCESS_TOKEN_EXPIRED',
+                message: 'Access token has expired.'
             }
         },
         E403: {
@@ -256,13 +262,6 @@ export let STATUS_MSG = {
                 message: 'User not found',
                 type: 'USER_NOT_FOUND'
             },
-        },
-        E406: {
-            ACCESS_TOKEN_EXPIRED: {
-                statusCode: 401,
-                type: 'ACCESS_TOKEN_EXPIRED',
-                message: 'Access token has expired.'
-            }
         },
         E500: {
             IMP_ERROR: {
@@ -440,10 +439,10 @@ export let SERVER = {
     ANDROID_URL: "",
     ANDROID_PACKAGE_NAME: "",
     DEEPLINK_FALLBACK: 'https://www.google.co.in/',
-    APP_URL: config.get("server.url"),
+    APP_URL: config.get("server.order.url"),
     LINKS: {
         TERMS_COND: '',
-        PRIVACY: config.get("server.url") + "/privacy_policy/",
+        PRIVACY: config.get("server.order.url") + "/privacy_policy/",
     },
     OTP_TEXT: (otp) => {
         return `Your App code is ${otp}. Welcome to the community!`

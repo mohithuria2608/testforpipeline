@@ -41,6 +41,10 @@ gulp.task("copyProto", function () {
 	return gulp.src(['../proto/**/*']).pipe(gulp.dest("./proto"));
 });
 
+gulp.task("copyConfig", function () {
+	return gulp.src(['../config/**/*']).pipe(gulp.dest("./config"));
+});
+
 gulp.task('server', function () {
 	const env = Object.create(process.env);
 	env.NODE_ENV = 'default';
@@ -50,4 +54,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "server"));
