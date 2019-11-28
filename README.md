@@ -38,3 +38,9 @@ Kfcapptestuser3
 * SERVICE_NAME =sdm.americana.global
 * User : mobility
 * Pass : u10mob34amr
+
+# pm2 -dev environment SSH Credentials
+* ssh americana-nodeapi@40.123.210.73		
+* jy9ypeF8DQf2ZTLT
+* https://americananode.appskeeper.com/
+ 
