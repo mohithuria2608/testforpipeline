@@ -76,6 +76,7 @@ declare namespace IMenuServiceRequest {
         dimension: string,
         url: string,
         type: string,
+        uploadBy: string,
     }
 
     interface IOption {

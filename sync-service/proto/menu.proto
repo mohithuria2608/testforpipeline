@@ -78,6 +78,7 @@ message IImage {
     required string dimension = 1;
     required string url = 2;
     required string type = 3;
+    optional string uploadBy =4;
 }
 
 message IOption {
