@@ -18,6 +18,10 @@ export let sendError = function (error) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type
         }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+        }
     } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
         if (error.hasOwnProperty('statusCode'))
