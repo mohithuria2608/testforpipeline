@@ -54,7 +54,7 @@
         deepLink: url,
         iosLink: iosLink,
         iosStoreLink: iosStoreLink,
-        android_intent: 'https://' +
+        android_intent: 'intent://' +
           path +
           '#Intent;scheme=' +
           scheme +
@@ -65,7 +65,7 @@
         fallback: fallback
       };
       console.log("urls", JSON.stringify(urls))
-      // alert(JSON.stringify(urls))
+      alert(JSON.stringify(urls))
       // let urlss = {
       //   "deepLink": "http://",
       //   "iosLink": "34uih",
