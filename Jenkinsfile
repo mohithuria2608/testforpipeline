@@ -64,7 +64,7 @@ pipeline {
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
-                       sh "docker system prune -a"
+                       // sh "docker system prune -a"
                        sh "sh ~/az_login.sh"
                        sh "sh Deployment_cicd/deploy.sh"
  
