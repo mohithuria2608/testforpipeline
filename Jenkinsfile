@@ -21,7 +21,7 @@ pipeline {
             steps{
                 checkout scm
             }
-        }
+        }/*
         stage('SonarQube Analysis'){
             environment {
                 SONAR_SCANNER_OPTS = "-Xmx2g"
@@ -34,7 +34,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Build image') {
             steps{
                 script{
