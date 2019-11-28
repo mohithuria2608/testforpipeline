@@ -61,7 +61,13 @@ export default (router: Router) => {
                                             promoId: Joi.number(),
                                             id: Joi.number().required(),
                                             selected: Joi.number(),
-                                            default: Joi.number()
+                                            default: Joi.number(),
+
+                                            //@ignore
+                                            hasChild: Joi.boolean(),
+                                            isSelected: Joi.boolean(),
+                                            defaultValue: Joi.number(),
+                                            parentId: Joi.number()
                                         })),
                                 })),
                             price: Joi.number().required(),
@@ -76,7 +82,11 @@ export default (router: Router) => {
                                 dimension: Joi.string().required(),
                                 url: Joi.string().required(),
                                 type: Joi.string().valid("image/jpg").required()
-                            })
+                            }),
+
+                            //@ignore
+                            isAvailable: Joi.boolean(),
+                            isPriceChange: Joi.boolean(),
                         })).required()
                 }
             }),
