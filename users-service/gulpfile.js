@@ -48,7 +48,7 @@ gulp.task("copyConfig", function () {
 gulp.task('server', function () {
 	const env = Object.create(process.env);
 	env.NODE_ENV = 'default';
-	return spawn('pm2 start', ['dist/app.js'], { env: env, stdio: 'inherit' });
+	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
 })
 
 /**
