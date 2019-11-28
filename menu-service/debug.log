@@ -1,2 +1,0 @@
-{"level":"info","message":"Connected to --------------mongodb://uchatdev_usr:bN9XMhccGvS9WwSh@192.82.95.14:27017/uchatdev_db","timestamp":"2019-10-31T07:19:01.284Z"}
-{"level":"error","message":"Error in Aerospike Connection--------------AerospikeError: Failed to connect","timestamp":"2019-10-31T07:19:01.291Z"}
