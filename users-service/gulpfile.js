@@ -1,4 +1,5 @@
 const gulp = require("gulp");
+const pm2 = require('pm2');
 const ts = require("gulp-typescript");
 const del = require("del");
 const tsProject = ts.createProject("tsconfig.json");
@@ -45,13 +46,48 @@ gulp.task("copyConfig", function () {
 	return gulp.src(['../config/**/*']).pipe(gulp.dest("./config"));
 });
 
+// gulp.task('stop-server', function () {
+// 	pm2.connect(true, function () {
+// 		pm2.stop('user', function (data) {
+// 			console.log('user pm2 stoped', data);
+// 			return
+// 		})
+
+// 		// pm2.start({
+// 		//     name: 'user',
+// 		//     script: 'dist/app.js',
+// 		//     env: {
+// 		//         "NODE_ENV": "default"
+// 		//     }
+// 		// }, function () {
+// 		//     console.log('pm2 started');
+// 		//     pm2.streamLogs('all', 0);
+// 		// });
+// 	});
+// });
+
 gulp.task('server', function () {
-	const env = Object.create(process.env);
-	env.NODE_ENV = 'default';
-	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
-})
+	pm2.connect(true, function () {
+		pm2.start({
+			name: 'user',
+			script: 'dist/app.js',
+			env: {
+				"NODE_ENV": "default"
+			}
+		}, function () {
+			console.log('user pm2 started');
+			pm2.streamLogs('all', 0);
+		});
+	});
+});
+
+// gulp.task('server', function () {
+// 	const env = Object.create(process.env);
+// 	env.NODE_ENV = 'default';
+// 	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
+// })
 
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig",  "server"));
