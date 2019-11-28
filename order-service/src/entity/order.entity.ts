@@ -17,9 +17,9 @@ export class OrderClass extends BaseEntity {
                 item['isPriceChange'] = false
                 let defaultCategoryIndex = -1
                 defaultMenu.categories.map((cat, i) => {
-                    console.log("cat.id == item.categoryId", cat.id, item.categoryId)
+                    console.log("cat.id == item.catId", cat.id, item.catId)
 
-                    if (cat.id == item.categoryId) {
+                    if (cat.id == item.catId) {
                         defaultCategoryIndex = i
                     }
                 })

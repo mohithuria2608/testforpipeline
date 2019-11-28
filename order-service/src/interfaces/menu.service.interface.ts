@@ -44,7 +44,7 @@ declare namespace IMenuServiceRequest {
 
     interface IProduct {
         quantity?: number
-        categoryId?: number,
+        catId?: number,
         sequence: number,
         steps: IStep[],
         price: number,

@@ -35,6 +35,10 @@ export let sendError = function (error) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
         }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+        }
     } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
         console.log("-------------------3-------------------")
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']

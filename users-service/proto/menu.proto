@@ -10,8 +10,8 @@ message IFetchMenu {
 }
 
 message IMenu {
-    required string name_en = 1;
-    required string name_ar = 2;
+    optional string name_en = 1;
+    optional string name_ar = 2;
     required IStoreAdd address = 3;
     required int32 id = 4;
     required int32 menuTempId = 5;
@@ -51,42 +51,42 @@ message IProduct {
     repeated IStep steps = 2;
     required float price = 3;
     required int32 promoId = 4;
-    required string description_en = 5;
+    optional string description_en = 5;
     required string itemType = 6;
-    required string title_en = 7;
-    required string description_ar = 8;
-    required string title_ar = 9;
+    optional string title_en = 7;
+    optional string description_ar = 8;
+    optional string title_ar = 9;
     required int32 id = 10;
-    required IImage image = 11;
+    optional IImage image = 11;
 }
 
 message IStep {
     required int32  sequence = 1;
-    required string title_en = 2;
-    required string subtitle_ar = 3;
+    optional string title_en = 2;
+    optional string subtitle_ar = 3;
     required string displayType = 4;
     repeated IOption options = 5;
-    required string title_ar = 6;
-    required string subtitle_en = 7;
-    required int32 maximum = 8;
-    required int32 minimum = 9;
+    optional string title_ar = 6;
+    optional string subtitle_en = 7;
+    optional int32 maximum = 8;
+    optional int32 minimum = 9;
     required int32 ingredient = 10;
     required int32 itemStyle = 11;
 }
 
 message IImage {
-    required string dimension = 1;
+    optional string dimension = 1;
     required string url = 2;
     required string type = 3;
 }
 
 message IOption {
     required int32 sequence = 1;
-    required string name_ar = 2;
+    optional string name_ar = 2;
     required float price = 3;
     required int32 promoId = 4;
     required int32 id = 5;
-    required string name_en = 6;
+    optional string name_en = 6;
     required int32 selected = 7;
     required int32 default = 8;
 }
