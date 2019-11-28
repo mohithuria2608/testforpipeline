@@ -38,7 +38,7 @@ export default (router: Router) => {
                     items: Joi.array().items(
                         Joi.object().keys({
                             quantity: Joi.number().required(),
-                            categoryId: Joi.number().required(),
+                            catId: Joi.number().required(),
                             sequence: Joi.number().required(),
                             steps: Joi.array().items(
                                 Joi.object().keys({
@@ -85,6 +85,8 @@ export default (router: Router) => {
                             }),
 
                             //@ignore
+                            groupData: Joi.any(),
+                            virtualGroupId: Joi.any(),
                             isAvailable: Joi.boolean(),
                             isPriceChange: Joi.boolean(),
                         })).required()
