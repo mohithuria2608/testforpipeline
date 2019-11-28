@@ -47,8 +47,10 @@ declare namespace IMenuServiceRequest {
     }
 
     interface IProduct {
+        quantity?: number
+        catId?: number,
         sequence: number,
-        steps: [IStep],
+        steps: IStep[],
         price: number,
         promoId: number,
         description_en: string,
@@ -65,7 +67,7 @@ declare namespace IMenuServiceRequest {
         title_en: string,
         subtitle_ar: string,
         displayType: string,
-        options: [IOption],
+        options: IOption[],
         title_ar: string,
         subtitle_en: string,
     }
@@ -84,5 +86,12 @@ declare namespace IMenuServiceRequest {
         id: number,
         name_en: string,
         selected: number,
+        subOptions: ISubOptions[]
+    }
+
+    interface ISubOptions {
+        price: number,
+        selected: number,
+        name_en: string
     }
 }
