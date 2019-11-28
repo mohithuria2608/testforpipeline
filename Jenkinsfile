@@ -11,18 +11,17 @@ pipeline {
     }
     agent any
 
-    stages{/*
+    stages{
     	stage('Email'){
                 steps{
                     emailext body: "<body><p><font size='+2'><b>Build Status: </b>Started <br> <b>Build Job: </b> ${env.JOB_NAME} <br><b> Build Number: </b> ${env.BUILD_NUMBER} </font> <br><br> <font size='+1'>More info at:  ${env.BUILD_URL}</font></p></body>", subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com,abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
                 }
         }
-    
         stage('Clone repository') {
             steps{
                 checkout scm
             }
-        }*/
+        }
         stage('SonarQube Analysis'){
             environment {
                 SONAR_SCANNER_OPTS = "-Xmx2g"
@@ -35,7 +34,7 @@ pipeline {
                     }
                 }
             }
-        }/*
+        }
         stage('Build image') {
             steps{
                 script{
@@ -70,7 +69,7 @@ pipeline {
  
                 }
             }
-        }*/
+        }
     }
     post{
         always{
