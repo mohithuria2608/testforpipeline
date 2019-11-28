@@ -2,7 +2,7 @@ import * as config from "config"
 import { menuServiceValidator } from './client.validator'
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
-import { consolelog } from '../../../utils'
+import { consolelog, sendError } from '../../../utils'
 
 export class MenuService {
 
@@ -21,7 +21,7 @@ export class MenuService {
 
     constructor() {
         consolelog('Connection established from order service to menu service', config.get("grpc.menu.client"), true)
-     }
+    }
 
     async fetchMenu(payload: IMenuServiceRequest.IFetchMenuData): Promise<IMenuServiceRequest.IFetchMenuRes> {
         return new Promise(async (resolve, reject) => {
@@ -32,7 +32,7 @@ export class MenuService {
                     resolve(res)
                 } else {
                     consolelog("Error in fetching Menu", JSON.stringify(err), false)
-                    reject(err)
+                    reject(sendError(err))
                 }
             })
         })

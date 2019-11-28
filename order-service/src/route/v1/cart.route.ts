@@ -79,7 +79,7 @@ export default (router: Router) => {
                             title_ar: Joi.string().required().allow(""),
                             id: Joi.number().required(),
                             image: Joi.object().keys({
-                                dimension: Joi.string().required(),
+                                dimension: Joi.string().required().allow(""),
                                 url: Joi.string().required(),
                                 type: Joi.string().valid("image/jpg").required()
                             }),
