@@ -50,8 +50,8 @@ export default (router: Router) => {
                                     displayType: Joi.string().valid("radio", "checkbox", "stepper"),
                                     maximum: Joi.number(),
                                     minimum: Joi.number(),
-                                    ingredient: Joi.number().valid(1, 0),
-                                    itemStyle: Joi.number().valid(1, 0),
+                                    ingredient: Joi.number().valid(0, 1),
+                                    itemStyle: Joi.number().valid(0, 1, 2),
                                     options: Joi.array().items(
                                         Joi.object().keys({
                                             sequence: Joi.number().required(),
@@ -62,6 +62,7 @@ export default (router: Router) => {
                                             id: Joi.number().required(),
                                             selected: Joi.number(),
                                             default: Joi.number(),
+                                            displayType: Joi.string().valid("radio", "checkbox", "stepper"),
                                             subOptions: Joi.array().items(
                                                 Joi.object().keys({
                                                     price: Joi.number(),
@@ -86,6 +87,7 @@ export default (router: Router) => {
                             id: Joi.number().required(),
                             image: Joi.object().keys({
                                 dimension: Joi.string().required().allow(""),
+                                uploadBy: Joi.string(),
                                 url: Joi.string().required(),
                                 type: Joi.string().valid("image/jpg").required()
                             }),
