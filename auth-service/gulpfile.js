@@ -1,4 +1,5 @@
 const gulp = require("gulp");
+const pm2 = require('pm2');
 const ts = require("gulp-typescript");
 const del = require("del");
 const tsProject = ts.createProject("tsconfig.json");
@@ -46,10 +47,25 @@ gulp.task("copyConfig", function () {
 });
 
 gulp.task('server', function () {
-	const env = Object.create(process.env);
-	env.NODE_ENV = 'default';
-	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
-})
+	pm2.connect(true, function () {
+		pm2.start({
+			name: 'auth',
+			script: 'dist/app.js',
+			env: {
+				"NODE_ENV": "default"
+			}
+		}, function () {
+			console.log('auth pm2 started');
+			pm2.streamLogs('auth', 0);
+		});
+	});
+});
+
+// gulp.task('server', function () {
+// 	const env = Object.create(process.env);
+// 	env.NODE_ENV = 'default';
+// 	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
+// })
 
 /**
   * @todo add "lint" after "clean"
