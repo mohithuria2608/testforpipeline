@@ -89,4 +89,11 @@ message IOption {
     optional string name_en = 6;
     required int32 selected = 7;
     required int32 default = 8;
+    repeated ISubOptions subOptions = 9;
+}
+
+message ISubOptions {
+    required int32 price = 1;
+    required int32 selected = 2;
+    required string name_en = 3;
 }

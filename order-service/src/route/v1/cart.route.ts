@@ -62,6 +62,12 @@ export default (router: Router) => {
                                             id: Joi.number().required(),
                                             selected: Joi.number(),
                                             default: Joi.number(),
+                                            subOptions: Joi.array().items(
+                                                Joi.object().keys({
+                                                    price: Joi.number(),
+                                                    selected: Joi.number(),
+                                                    name_en: Joi.string()
+                                                })),
 
                                             //@ignore
                                             hasChild: Joi.boolean(),

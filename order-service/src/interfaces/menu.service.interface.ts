@@ -82,5 +82,12 @@ declare namespace IMenuServiceRequest {
         id: number,
         name_en: string,
         selected: number,
+        subOptions: ISubOptions[]
+    }
+
+    interface ISubOptions {
+        price: number,
+        selected: number,
+        name_en: string
     }
 }
