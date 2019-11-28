@@ -35,69 +35,70 @@ export default (router: Router) => {
                     menuUpdatedAt: Joi.number(),
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),
-                    items: Joi.array().items(
-                        Joi.object().keys({
-                            quantity: Joi.number(),
-                            catId: Joi.number(),
-                            sequence: Joi.number(),
-                            steps: Joi.array().items(
-                                Joi.object().keys({
-                                    sequence: Joi.number(),
-                                    title_en: Joi.string().allow(""),
-                                    title_ar: Joi.string().allow(""),
-                                    subtitle_ar: Joi.string().allow(""),
-                                    subtitle_en: Joi.string().allow(""),
-                                    displayType: Joi.string().valid("radio", "checkbox", "stepper"),
-                                    maximum: Joi.number(),
-                                    minimum: Joi.number(),
-                                    ingredient: Joi.number().valid(0, 1),
-                                    itemStyle: Joi.number().valid(0, 1, 2),
-                                    options: Joi.array().items(
-                                        Joi.object().keys({
-                                            sequence: Joi.number(),
-                                            name_ar: Joi.string().allow(""),
-                                            name_en: Joi.string().allow(""),
-                                            price: Joi.number(),
-                                            promoId: Joi.number(),
-                                            id: Joi.number(),
-                                            selected: Joi.number(),
-                                            default: Joi.number(),
-                                            displayType: Joi.string().valid("radio", "checkbox", "stepper"),
-                                            subOptions: Joi.array().items(
-                                                Joi.object().keys({
-                                                    price: Joi.number(),
-                                                    selected: Joi.number(),
-                                                    name_en: Joi.string()
-                                                })),
+                    items: Joi.any()
+                    // .array().items(
+                    //     Joi.object().keys({
+                    //         quantity: Joi.number(),
+                    //         catId: Joi.number(),
+                    //         sequence: Joi.number(),
+                    //         steps: Joi.array().items(
+                    //             Joi.object().keys({
+                    //                 sequence: Joi.number(),
+                    //                 title_en: Joi.string().allow(""),
+                    //                 title_ar: Joi.string().allow(""),
+                    //                 subtitle_ar: Joi.string().allow(""),
+                    //                 subtitle_en: Joi.string().allow(""),
+                    //                 displayType: Joi.string().valid("radio", "checkbox", "stepper"),
+                    //                 maximum: Joi.number(),
+                    //                 minimum: Joi.number(),
+                    //                 ingredient: Joi.number().valid(0, 1),
+                    //                 itemStyle: Joi.number().valid(0, 1, 2),
+                    //                 options: Joi.array().items(
+                    //                     Joi.object().keys({
+                    //                         sequence: Joi.number(),
+                    //                         name_ar: Joi.string().allow(""),
+                    //                         name_en: Joi.string().allow(""),
+                    //                         price: Joi.number(),
+                    //                         promoId: Joi.number(),
+                    //                         id: Joi.number(),
+                    //                         selected: Joi.number(),
+                    //                         default: Joi.number(),
+                    //                         displayType: Joi.string().valid("radio", "checkbox", "stepper"),
+                    //                         subOptions: Joi.array().items(
+                    //                             Joi.object().keys({
+                    //                                 price: Joi.number(),
+                    //                                 selected: Joi.number(),
+                    //                                 name_en: Joi.string()
+                    //                             })),
 
-                                            //@ignore
-                                            hasChild: Joi.boolean(),
-                                            isSelected: Joi.boolean(),
-                                            defaultValue: Joi.number(),
-                                            parentId: Joi.number()
-                                        })),
-                                })),
-                            price: Joi.number(),
-                            promoId: Joi.number(),
-                            description_en: Joi.string().allow(""),
-                            description_ar: Joi.string().allow(""),
-                            itemType: Joi.string().valid("bundle", "standalone"),
-                            title_en: Joi.string().allow(""),
-                            title_ar: Joi.string().allow(""),
-                            id: Joi.number(),
-                            image: Joi.object().keys({
-                                dimension: Joi.string().allow(""),
-                                uploadBy: Joi.string(),
-                                url: Joi.string(),
-                                type: Joi.string().valid("image/jpg")
-                            }),
+                    //                         //@ignore
+                    //                         hasChild: Joi.boolean(),
+                    //                         isSelected: Joi.boolean(),
+                    //                         defaultValue: Joi.number(),
+                    //                         parentId: Joi.number()
+                    //                     })),
+                    //             })),
+                    //         price: Joi.number(),
+                    //         promoId: Joi.number(),
+                    //         description_en: Joi.string().allow(""),
+                    //         description_ar: Joi.string().allow(""),
+                    //         itemType: Joi.string().valid("bundle", "standalone"),
+                    //         title_en: Joi.string().allow(""),
+                    //         title_ar: Joi.string().allow(""),
+                    //         id: Joi.number(),
+                    //         image: Joi.object().keys({
+                    //             dimension: Joi.string().allow(""),
+                    //             uploadBy: Joi.string(),
+                    //             url: Joi.string(),
+                    //             type: Joi.string().valid("image/jpg")
+                    //         }),
 
-                            //@ignore
-                            groupData: Joi.any(),
-                            virtualGroupId: Joi.any(),
-                            isAvailable: Joi.boolean(),
-                            isPriceChange: Joi.boolean(),
-                        }))
+                    //         //@ignore
+                    //         groupData: Joi.any(),
+                    //         virtualGroupId: Joi.any(),
+                    //         isAvailable: Joi.boolean(),
+                    //         isPriceChange: Joi.boolean(),
+                    //     }))
                 }
             }),
             async (ctx) => {
