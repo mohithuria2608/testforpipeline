@@ -10,6 +10,6 @@ template=`echo "$template" | sed "s@{{Menu_image}}@$Menu_image@g"`
 template=`echo "$template" | sed "s@{{Order_image}}@$Order_image@g"`
 
 # apply the yml with the substituted value
-echo "$template" | kubectl apply -f ./deployment.yaml
+echo "$template" | kubectl apply -f .
 
 kubectl apply -f ./Deployment_cicd/ingress.yaml
