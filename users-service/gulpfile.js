@@ -76,7 +76,7 @@ gulp.task('server', function () {
 			}
 		}, function () {
 			console.log('user pm2 started');
-			pm2.streamLogs('all', 0);
+			pm2.streamLogs('user', 0);
 		});
 	});
 });
