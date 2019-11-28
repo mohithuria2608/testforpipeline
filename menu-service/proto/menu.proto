@@ -57,7 +57,7 @@ message IProduct {
     required string description_ar = 8;
     required string title_ar = 9;
     required int32 id = 10;
-    required IImage image = 11;
+    optional IImage image = 11;
 }
 
 message IStep {
