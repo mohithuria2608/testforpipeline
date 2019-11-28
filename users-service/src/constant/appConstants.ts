@@ -431,8 +431,7 @@ export let SERVER = {
         APP_ADDRESS: ""
     },
     DEFAULT_USER_NAME: 'App User',
-    IOS_URL: "",
-    ANDROID_URL: "",
+    ANDROID_SCHEME_HOST: "http://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
     IOS_SCHEME_HOST: "",
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',

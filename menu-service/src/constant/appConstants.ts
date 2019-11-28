@@ -256,7 +256,7 @@ export let STATUS_MSG = {
                 type: 'USER_NOT_FOUND'
             },
         },
-        
+
         E500: {
             IMP_ERROR: {
                 statusCode: 500,
@@ -426,10 +426,10 @@ export let SERVER = {
         APP_ADDRESS: ""
     },
     DEFAULT_USER_NAME: 'App User',
-    IOS_URL: "",
-    ANDROID_URL: "",
-    ANDROID_PACKAGE_NAME: "",
-    DEEPLINK_FALLBACK: 'https://www.google.co.in/',
+    ANDROID_SCHEME_HOST: "http://",
+    ANDROID_PACKAGE_NAME: "com.android.kfc",
+    IOS_SCHEME_HOST: "",
+    DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
     APP_URL: config.get("server.menu.url"),
     LINKS: {
         TERMS_COND: '',
