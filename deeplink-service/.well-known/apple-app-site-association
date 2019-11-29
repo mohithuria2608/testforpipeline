@@ -4,7 +4,7 @@
         "details": [
             {
                 "appID": "YV87LWGXGF.com.appinventiv.Americana",
-                "paths": [ "/menu/*"]
+                "paths": [ "*"]
             }
         ]
     }

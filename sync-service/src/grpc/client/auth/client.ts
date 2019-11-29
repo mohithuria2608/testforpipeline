@@ -26,7 +26,7 @@ export class AuthService {
     async createToken(payload: IAuthServiceRequest.ICreateTokenData): Promise<IAuthServiceRequest.IToken> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.createTokenValidator(payload)
-            this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype }, (err, res) => {
+            this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype, authCred: payload.authCred }, (err, res) => {
                 if (!err) {
                     consolelog("successfully created access and refresh token", JSON.stringify(res), false)
                     resolve(res)
