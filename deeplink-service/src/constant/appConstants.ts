@@ -86,7 +86,9 @@ export let DATABASE = {
         },
 
         DEEPLINK_REDIRECTION: {
-            HOME: "HOME"
+            HOME: "/#",
+            CATEGORY: "/#/menu/",
+            ITEM_DETAIL: "/#/customize/",
         }
     }
 };

@@ -7,21 +7,21 @@ import { deeplinkController } from '../../controllers';
 
 export default (router: Router) => {
     router
-        .get('/deeplink',
+        .get('/deeplink/:path/:id',
             ...getMiddleware([
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                query: {
-                    type: Joi.string().valid(
-                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
-                    ).required(),
+                params: {
+                    "0": Joi.string(),
+                    path: Joi.string().required(),
+                    id: Joi.number().required(),
                     // url: Joi.string().required(),
                     // ios: Joi.string().required()
                 },
             }), async (ctx) => {
                 try {
-                    let payload: DeeplinkRequest.ICreateDeeplink = { ...ctx.request.query, ...ctx.request.header };
+                    let payload: DeeplinkRequest.ICreateDeeplink = { ...ctx.request.params, ...ctx.request.header };
                     let deeplink = await deeplinkController.createDeepLink(payload)
                     ctx.type = 'html';
                     ctx.body = deeplink
@@ -56,7 +56,9 @@ export default (router: Router) => {
                 },
                 query: {
                     type: Joi.string().valid(
-                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME,
+                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY,
+                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL
                     ).required(),
                 },
             }), async (ctx) => {

@@ -36,11 +36,27 @@ export class DeeplinkController {
     * */
     async deepLinkMapper(payload: DeeplinkRequest.IDeeplinkMapper) {
         try {
-            let res = {
-                type: payload.type,
+            let res: DeeplinkRequest.IDeeplinkMapperRes
+            res['type'] = payload.type
 
+            switch (payload.type) {
+                case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME: {
+
+                    break;
+                }
+                case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY: {
+
+                    break;
+                }
+                case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL: {
+
+                    break;
+                }
+                default: {
+                    res['type'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                    break;
+                }
             }
-
             return res
         } catch (error) {
             consolelog("deepLinkMapper", error, false)

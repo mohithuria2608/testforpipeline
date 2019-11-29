@@ -1,11 +1,17 @@
 declare namespace DeeplinkRequest {
 
     interface ICreateDeeplink {
-        url: string,
-        ios: string
+        path: string,
+        // url: string,
+        // ios: string
     }
 
     interface IDeeplinkMapper extends ICommonRequest.IHeaders {
         type: string,
+    }
+
+    interface IDeeplinkMapperRes {
+        type:string,
+
     }
 }
