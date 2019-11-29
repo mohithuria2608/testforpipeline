@@ -23,6 +23,11 @@ export class TokenManager {
                     tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                     break;
                 }
+                case Constant.DATABASE.TYPE.TOKEN.CMS_AUTH: {
+                    expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+                    // tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
+                    break;
+                }
                 default: {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
                 }
@@ -57,6 +62,17 @@ export class TokenManager {
                         devicetype: tokenData.devicetype,
                         id: tokenData.id ? tokenData.id : undefined,
                         userData: {}
+                    };
+                    return tokenVerifiedData
+                }
+                case Constant.DATABASE.TYPE.TOKEN.CMS_AUTH: {
+                    const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
+                        tokenType: tokenData.tokenType,
+                        deviceid: tokenData.deviceid,
+                        devicetype: tokenData.devicetype,
+                        id: tokenData.id ? tokenData.id : undefined,
+                        userData: {},
+                        authCred: tokenData.authCred
                     };
                     return tokenVerifiedData
                 }

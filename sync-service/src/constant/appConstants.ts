@@ -44,6 +44,7 @@ export let DATABASE = {
 
     TYPE: {
         TOKEN: {
+            CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
             REFRESH_AUTH: "REFRESH_AUTH"
@@ -264,7 +265,7 @@ export let STATUS_MSG = {
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
-            INVALID_TOKEN_TYPE:{
+            INVALID_TOKEN_TYPE: {
                 statusCode: 500,
                 message: 'Invalid token type provided',
                 type: 'INVALID_TOKEN_TYPE'

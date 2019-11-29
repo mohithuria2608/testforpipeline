@@ -10,6 +10,12 @@ message ICreateToken {
     required string devicetype =2;
     required string tokenType = 3;
     optional string id = 4;
+    optional IAuthCred authCred = 5;
+}
+
+message IAuthCred {
+    required string username = 1;
+    required string password =2;
 }
 
 message IToken {

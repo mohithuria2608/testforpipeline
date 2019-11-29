@@ -1,13 +1,10 @@
 declare namespace ICommonRequest {
 
     export interface IHeaders {
-        language: string,
         country: string,
         appversion: string,
-        devicemodel: string,
         devicetype: string,
-        osversion: string,
-        deviceid: string
+        deviceid: string,
     }
 
     export interface AuthorizationObj {
@@ -16,7 +13,14 @@ declare namespace ICommonRequest {
         tokenType: string,
         id?: string,
         userData?: any,
+        authCred?: IAuthCred
     }
+
+    interface IAuthCred {
+        username: string,
+        password: string
+    }
+
 
     export interface IPagination {
         page?: number,

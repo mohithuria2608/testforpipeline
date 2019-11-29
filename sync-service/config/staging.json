@@ -1,5 +1,5 @@
 {
-    "environment": "development",
+    "environment": "staging",
     "server": {
         "auth": {
             "url": "http://localhost",
@@ -28,24 +28,24 @@
     },
     "grpc": {
         "auth": {
-            "server": "localhost:50051",
-            "client": "127.0.0.1:50051"
+            "server": "0.0.0.0:50051",
+            "client": "20.46.144.91:50051"
         },
         "user": {
-            "server": "localhost:50052",
-            "client": "127.0.0.1:50052"
+            "server": "0.0.0.0:50052",
+            "client": "20.46.147.85:50052"
         },
         "menu": {
-            "server": "localhost:50053",
-            "client": "127.0.0.1:50053"
+            "server": "0.0.0.0:50053",
+            "client": "20.46.147.86:50053"
         },
         "order": {
-            "server": "localhost:50054",
-            "client": "127.0.0.1:50054"
+            "server": "0.0.0.0:50054",
+            "client": "20.46.147.215:50054"
         },
         "sync": {
-            "server": "localhost:50055",
-            "client": "127.0.0.1:50055"
+            "server": "0.0.0.0:50055",
+            "client": "20.46.147.215:50055"
         },
         "deeplink": {
             "server": "localhost:50056",

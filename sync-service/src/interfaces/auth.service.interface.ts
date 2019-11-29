@@ -5,6 +5,12 @@ declare namespace IAuthServiceRequest {
         devicetype: string,
         tokenType: string,
         id?: string,
+        authCred?: IAuthCred
+    }
+
+    interface IAuthCred {
+        username: string,
+        password: string
     }
 
     interface IVerifyTokenObj {

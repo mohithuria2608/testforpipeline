@@ -4,21 +4,23 @@ import * as Constant from '../constant'
 import { authService } from '../grpc/client'
 import { consolelog } from '../utils'
 
-export class UserEntity extends BaseEntity {
+export class CmsEntity extends BaseEntity {
     constructor() {
-        super('User')
+        super('Cms')
     }
 
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[]) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], authCred?: IAuthServiceRequest.IAuthCred) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
                 tokentype.map(elem => {
-                    return promise.push(authService.createToken({
+                    let createTokenData = {
                         deviceid: deviceid,
                         devicetype: devicetype,
-                        tokenType: elem
-                    }))
+                        tokenType: elem,
+                        authCred: authCred,
+                    }
+                    return promise.push(authService.createToken(createTokenData))
                 })
                 let tokens: IAuthServiceRequest.IToken[] = await Promise.all(promise)
 
@@ -27,7 +29,7 @@ export class UserEntity extends BaseEntity {
                     refreshToken: undefined
                 }
                 tokentype.map((elem, i) => {
-                    if (elem == Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH) {
+                    if (elem == Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH || elem == Constant.DATABASE.TYPE.TOKEN.CMS_AUTH) {
                         res['accessToken'] = tokens[i].token
                     } else if (elem == Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH) {
                         res['refreshToken'] = tokens[i].token
@@ -45,4 +47,4 @@ export class UserEntity extends BaseEntity {
     }
 }
 
-export const UserE = new UserEntity()
+export const CmsE = new CmsEntity()

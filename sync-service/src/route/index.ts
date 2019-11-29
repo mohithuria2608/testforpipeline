@@ -3,17 +3,13 @@ import * as Router from 'koa-router'
 import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
-import guest from './v1/guest.route'
-import miscRoutes from './v1/misc.route'
-import userRoutes from './v1/user.route'
+import cmsRoutes from './v1/cms.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
-  { routes: guest, prefix: version1 + '/guest' },
-  { routes: miscRoutes, prefix: version1 + '/user' },
-  { routes: userRoutes, prefix: version1 + '/user' },
+  { routes: cmsRoutes, prefix: version1 + '/cms' },
 ]
 
 export default function routes() {

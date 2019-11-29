@@ -40,6 +40,7 @@ export let DATABASE = {
 
     TYPE: {
         TOKEN: {
+            CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
             REFRESH_AUTH: "REFRESH_AUTH"

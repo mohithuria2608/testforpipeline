@@ -16,5 +16,11 @@ declare namespace ICommonRequest {
         tokenType: string,
         id?: string,
         userData?: any,
+        authCred?: IAuthCred
+    }
+
+    interface IAuthCred {
+        username: string,
+        password: string
     }
 }
