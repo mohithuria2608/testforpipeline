@@ -27,16 +27,19 @@ export class OrderClass extends BaseEntity {
                 if (defaultCategoryIndex >= 0) {
 
                     let productIndex = -1
+                    let validStepStore = {}
+                    let validOptionIdStore = {}
+                    let validOptionPriceStore = {}
                     defaultMenu.categories[defaultCategoryIndex].products.map((product, j) => {
                         if (product.id == item.id) {
+                            if (product.price != item.price) {
+                                validOptionPriceStore[item.id] = -1
+                            }
                             productIndex = j
                         }
                     })
                     if (productIndex >= 0) {
                         if (item.steps && item.steps.length > 0) {
-                            let validStepStore = {}
-                            let validOptionIdStore = {}
-                            let validOptionPriceStore = {}
                             item.steps.map((curStep, k) => {
                                 defaultMenu.categories[defaultCategoryIndex].products[productIndex].steps.map((defaultStep, l) => {
                                     if (curStep.title_en == defaultStep.title_en) {
@@ -128,8 +131,9 @@ export class OrderClass extends BaseEntity {
                 type: "add"
             }
             items.map((elem, i) => {
+                let qty = elem.quantity
                 if (elem.price)
-                    subTotal = subTotal + elem.price
+                    subTotal = (subTotal + elem.price) * qty
                 if (elem.steps && elem.steps.length > 0) {
                     if (elem.steps && elem.steps.length > 0) {
                         elem.steps.map(stepObj => {
@@ -137,7 +141,7 @@ export class OrderClass extends BaseEntity {
                                 stepObj.options.map(optionObj => {
                                     if (optionObj.selected == 1) {
                                         if (optionObj.price)
-                                            subTotal = subTotal + optionObj.price
+                                            subTotal = subTotal + (optionObj.price * qty)
                                     }
                                 })
                             }
