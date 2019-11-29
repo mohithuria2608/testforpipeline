@@ -55,21 +55,15 @@ export default (router: Router) => {
                     deviceid: Joi.string().trim().required()
                 },
                 query: {
-                    type: Joi.string().valid(
-                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME,
-                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY,
-                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL
-                    ).required(),
+                    url: Joi.string().required()
                 },
             }), async (ctx) => {
                 try {
                     let payload: DeeplinkRequest.IDeeplinkMapper = { ...ctx.request.query, ...ctx.request.header };
-                    let deeplink = await deeplinkController.deepLinkMapper(payload)
-                    ctx.type = 'html';
-                    ctx.body = deeplink
+                    let res = await deeplinkController.deepLinkMapper(payload)
+                    ctx.body = res
                 }
                 catch (error) {
-                    consolelog('deeplink', error, false)
                     throw error
                 }
             })

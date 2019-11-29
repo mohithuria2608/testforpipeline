@@ -37,27 +37,39 @@ export class DeeplinkController {
     async deepLinkMapper(payload: DeeplinkRequest.IDeeplinkMapper) {
         try {
             let res: DeeplinkRequest.IDeeplinkMapperRes
-            res['type'] = payload.type
+            const delimiter = payload.url.split('#')[1]
+            const split = payload.url.split('#')[1].split("/").filter(obj => obj != "")
 
-            switch (payload.type) {
-                case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME: {
+            const type = split[0]
+            const id = split[1]
 
-                    break;
-                }
-                case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY: {
 
-                    break;
-                }
-                case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL: {
 
-                    break;
-                }
-                default: {
-                    res['type'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
-                    break;
-                }
+
+            // switch (payload.type) {
+            //     case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME: {
+
+            //         break;
+            //     }
+            //     case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY: {
+
+            //         break;
+            //     }
+            //     case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL: {
+
+            //         break;
+            //     }
+            //     default: {
+            //         res['type'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+            //         break;
+            //     }
+            // }
+            return {
+                type: type,
+                action: "HOME",
+                id: id,
+                delimiter: delimiter
             }
-            return res
         } catch (error) {
             consolelog("deepLinkMapper", error, false)
             return Promise.reject(error)
