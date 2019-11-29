@@ -87,7 +87,7 @@ export let DATABASE = {
 
         DEEPLINK_REDIRECTION: {
             HOME: "/#",
-            CATEGORY: "/#/menu/",
+            CATEGORY: "CATEGORY",
             ITEM_DETAIL: "/#/customize/",
         }
     }
