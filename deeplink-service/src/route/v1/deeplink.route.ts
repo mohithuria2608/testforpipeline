@@ -13,12 +13,15 @@ export default (router: Router) => {
             ]),
             validate({
                 query: {
-                    url: Joi.string().required(),
-                    ios: Joi.string().required()
+                    type: Joi.string().valid(
+                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                    ).required(),
+                    // url: Joi.string().required(),
+                    // ios: Joi.string().required()
                 },
             }), async (ctx) => {
                 try {
-                    let payload: DeeplinkRequest.CreateDeeplink = { ...ctx.request.query, ...ctx.request.header };
+                    let payload: DeeplinkRequest.ICreateDeeplink = { ...ctx.request.query, ...ctx.request.header };
                     let deeplink = await deeplinkController.createDeepLink(payload)
                     ctx.type = 'html';
                     ctx.body = deeplink
@@ -34,14 +37,32 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
+                headers: {
+                    language: Joi.string().valid(
+                        Constant.DATABASE.LANGUAGE.AR,
+                        Constant.DATABASE.LANGUAGE.EN
+                    ).required(),
+                    country: Joi.string().valid(
+                        Constant.DATABASE.COUNTRY.UAE
+                    ).required(),
+                    appversion: Joi.string().required(),
+                    devicemodel: Joi.string().required(),
+                    devicetype: Joi.string().valid(
+                        Constant.DATABASE.TYPE.DEVICE.ANDROID,
+                        Constant.DATABASE.TYPE.DEVICE.IOS
+                    ).required(),
+                    osversion: Joi.string().required(),
+                    deviceid: Joi.string().trim().required()
+                },
                 query: {
-                    url: Joi.string().required(),
-                    ios: Joi.string().required()
+                    type: Joi.string().valid(
+                        Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                    ).required(),
                 },
             }), async (ctx) => {
                 try {
-                    let payload: DeeplinkRequest.CreateDeeplink = { ...ctx.request.query, ...ctx.request.header };
-                    let deeplink = await deeplinkController.createDeepLink(payload)
+                    let payload: DeeplinkRequest.IDeeplinkMapper = { ...ctx.request.query, ...ctx.request.header };
+                    let deeplink = await deeplinkController.deepLinkMapper(payload)
                     ctx.type = 'html';
                     ctx.body = deeplink
                 }

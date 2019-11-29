@@ -83,6 +83,10 @@ export let DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST"
+        },
+
+        DEEPLINK_REDIRECTION: {
+            HOME: "HOME"
         }
     }
 };
