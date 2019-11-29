@@ -66,7 +66,7 @@ export class DeeplinkController {
             // }
             return {
                 type: type,
-                action: "HOME",
+                action: Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY,
                 id: id,
                 delimiter: delimiter
             }
