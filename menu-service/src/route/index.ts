@@ -3,14 +3,12 @@ import * as Router from 'koa-router'
 import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
-import menuDeeplink from './v1/menu.deeplink.route'
 import menu from './v1/menu.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
-  { routes: menuDeeplink, prefix: version1 + '/deeplink' },
   { routes: menu, prefix: version1 + '/menu' },
 
 ]

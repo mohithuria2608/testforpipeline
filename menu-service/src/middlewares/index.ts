@@ -18,7 +18,6 @@ export default function middleware() {
     handleErrors(),
     serve('./views',),  // static resources don't need authorization
     serve('./doc'),
-    serve('./.well-known'),
     cors(),
     bodyParser({ formLimit: '100mb', jsonLimit: '100mb' }),
   ])

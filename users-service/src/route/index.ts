@@ -3,7 +3,6 @@ import * as Router from 'koa-router'
 import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
-import userDeeplink from './v1/user.deeplink.route'
 import guest from './v1/guest.route'
 import miscRoutes from './v1/misc.route'
 import userRoutes from './v1/user.route'
@@ -12,7 +11,6 @@ const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
-  { routes: userDeeplink, prefix: version1 + '/deeplink' },
   { routes: guest, prefix: version1 + '/guest' },
   { routes: miscRoutes, prefix: version1 + '/user' },
   { routes: userRoutes, prefix: version1 + '/user' },
