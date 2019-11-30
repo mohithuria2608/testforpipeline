@@ -37,35 +37,44 @@ export class DeeplinkController {
     async deepLinkMapper(payload: DeeplinkRequest.IDeeplinkMapper) {
         try {
             let res = {}
-            const delimiter = payload.url.split('#')[1]
-            const split = payload.url.split('#')[1].split("/").filter(obj => obj != "")
-            console.log("here........", split)
-            const type = split[0] ? split[0] : Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
-            const id = split[1] ? split[1] : ""
 
-            switch (type) {
-                case 'menu': {
-                    res['type'] = 'menu'
-                    res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY
-                    res['id'] = id
-                    res['delimiter'] = delimiter
-                    break;
+            const delimiter = payload.url.split('#')[1]
+            if (delimiter) {
+                const split = payload.url.split('#')[1].split("/").filter(obj => obj != "")
+                console.log("here........", split)
+                const type = split[0] ? split[0] : Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                const id = split[1] ? split[1] : ""
+
+                switch (type) {
+                    case 'menu': {
+                        res['type'] = 'menu'
+                        res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY
+                        res['id'] = id
+                        res['delimiter'] = delimiter
+                        break;
+                    }
+                    case 'customize': {
+                        res['type'] = 'customize'
+                        res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL
+                        res['id'] = id
+                        res['delimiter'] = delimiter
+                        break;
+                    }
+                    default: {
+                        res['type'] = 'home'
+                        res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                        res['id'] = id
+                        res['delimiter'] = delimiter
+                        break;
+                    }
                 }
-                case 'customize': {
-                    res['type'] = 'customize'
-                    res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL
-                    res['id'] = id
-                    res['delimiter'] = delimiter
-                    break;
-                }
-                default: {
-                    res['type'] = 'home'
-                    res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
-                    res['id'] = id
-                    res['delimiter'] = delimiter
-                    break;
-                }
+            } else {
+                res['type'] = 'home'
+                res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                res['id'] = ''
+                res['delimiter'] = ''
             }
+
             return res
         } catch (error) {
             consolelog("deepLinkMapper", error, false)

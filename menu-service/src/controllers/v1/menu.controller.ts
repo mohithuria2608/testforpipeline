@@ -3,7 +3,6 @@ import { consolelog } from '../../utils'
 import * as fs from 'fs'
 
 export class MenuController {
-
     constructor() { }
 
     /**
