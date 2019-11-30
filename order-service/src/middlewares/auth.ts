@@ -12,6 +12,9 @@ export default (opts?): Middleware => {
                 tokenType: "Bearer"
             }
             let authorization = ctx.header.authorization;
+            if (!authorization) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            }
             const [tokenType, token] = authorization.split(/\s+/);
 
             if (!token || tokenType.toLowerCase() !== settings.tokenType.toLowerCase()) {
@@ -30,7 +33,7 @@ export default (opts?): Middleware => {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
             }
         } catch (error) {
-            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
         }
         await next()
     }

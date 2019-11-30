@@ -12,6 +12,9 @@ export default (opts?): Middleware => {
                 tokenType: "Bearer"
             }
             let authorization = ctx.header.authorization;
+            if (!authorization) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            }
             const [tokenType, token] = authorization.split(/\s+/);
 
             if (!token || tokenType.toLowerCase() !== settings.tokenType.toLowerCase()) {
