@@ -86,9 +86,10 @@ export let DATABASE = {
         },
 
         DEEPLINK_REDIRECTION: {
-            HOME: "/#",
+            HOME: "HOME",
             CATEGORY: "CATEGORY",
-            ITEM_DETAIL: "/#/customize/",
+            ITEM_DETAIL: "ITEM_DETAIL",
+            ADD_TO_CART: "ADD_TO_CART",
         }
     }
 };

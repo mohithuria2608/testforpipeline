@@ -28,10 +28,10 @@ export class CartController {
                 } else {
                     let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
                     if (internalKeyCheck) {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
+                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
                         return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, res)
                     } else {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
+                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
                         return res
                     }
                 }
@@ -41,10 +41,10 @@ export class CartController {
                 } else {
                     let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
                     if (internalKeyCheck) {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
+                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
                         return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, res)
                     } else {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items, defaultMenu)
+                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
                         return res
                     }
                 }
@@ -52,14 +52,6 @@ export class CartController {
         } catch (err) {
             consolelog("validateCart", err, false)
             return Promise.reject(err)
-        }
-    }
-
-    async cartSuggestion(payload: ICartRequest.ICartSuggestion) {
-        try {
-            return []
-        } catch (error) {
-
         }
     }
 }

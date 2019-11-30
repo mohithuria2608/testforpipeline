@@ -121,7 +121,7 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async createCheckoutRes(items: IMenuServiceRequest.IProduct[], defaultMenu: IMenuServiceRequest.IFetchMenuRes) {
+    async createCheckoutRes(items: IMenuServiceRequest.IProduct[]) {
         try {
             let amount = []
 

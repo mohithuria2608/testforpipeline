@@ -5,8 +5,4 @@ declare namespace ICartRequest {
         menuUpdatedAt: number,
         items: IMenuServiceRequest.IProduct[]
     }
-
-    interface ICartSuggestion extends ICommonRequest.IHeaders {
-    }
-
 }

@@ -11,9 +11,10 @@ declare namespace DeeplinkRequest {
         url: string,
     }
 
-    interface IDeeplinkMapperRes {
-        type: string,
-        action: string,
-        id: string
-    }
+    // interface IDeeplinkMapperRes {
+    //     type: string,
+    //     action: string,
+    //     id: string,
+    //     delimiter: string
+    // }
 }

@@ -1,1 +1,1 @@
-export { UserC } from './user.entity'
+export { MenuC } from './menu.entity'

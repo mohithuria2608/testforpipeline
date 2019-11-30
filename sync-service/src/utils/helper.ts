@@ -82,11 +82,11 @@ export let sendSuccess = function (successMsg, data) {
 
     } else if (successMsg != null && typeof successMsg === 'object' && successMsg.hasOwnProperty('statusCode') && successMsg.hasOwnProperty('message')) {
         successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.message
-        return { statusCode: successMsg.statusCode, message: successMsg.message, data: data || null, type: (data.type) ? data.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type }
+        return { statusCode: successMsg.statusCode, message: successMsg.message, data: data || null, type: (successMsg.type) ? successMsg.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type }
 
     } else {
         successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.message
-        return { statusCode: 200, message: successMsg, data: data || null, type: (data.type) ? data.type : "" }
+        return { statusCode: 200, message: successMsg, data: data || null, type: (data.type) ? data.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type }
     }
 }
 

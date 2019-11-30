@@ -36,40 +36,37 @@ export class DeeplinkController {
     * */
     async deepLinkMapper(payload: DeeplinkRequest.IDeeplinkMapper) {
         try {
-            let res: DeeplinkRequest.IDeeplinkMapperRes
+            let res = {}
             const delimiter = payload.url.split('#')[1]
             const split = payload.url.split('#')[1].split("/").filter(obj => obj != "")
+            console.log("here........", split)
+            const type = split[0] ? split[0] : Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+            const id = split[1] ? split[1] : ""
 
-            const type = split[0]
-            const id = split[1]
-
-
-
-
-            // switch (payload.type) {
-            //     case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME: {
-
-            //         break;
-            //     }
-            //     case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY: {
-
-            //         break;
-            //     }
-            //     case Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL: {
-
-            //         break;
-            //     }
-            //     default: {
-            //         res['type'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
-            //         break;
-            //     }
-            // }
-            return {
-                type: type,
-                action: Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY,
-                id: id,
-                delimiter: delimiter
+            switch (type) {
+                case 'menu': {
+                    res['type'] = 'menu'
+                    res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.CATEGORY
+                    res['id'] = id
+                    res['delimiter'] = delimiter
+                    break;
+                }
+                case 'customize': {
+                    res['type'] = 'customize'
+                    res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.ITEM_DETAIL
+                    res['id'] = id
+                    res['delimiter'] = delimiter
+                    break;
+                }
+                default: {
+                    res['type'] = 'home'
+                    res['action'] = Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
+                    res['id'] = id
+                    res['delimiter'] = delimiter
+                    break;
+                }
             }
+            return res
         } catch (error) {
             consolelog("deepLinkMapper", error, false)
             return Promise.reject(error)

@@ -3,7 +3,7 @@ import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
-import { cmsController } from '../../controllers';
+import { syncController } from '../../controllers';
 import * as JOI from './common.route.validator'
 
 export default (router: Router) => {
@@ -15,14 +15,13 @@ export default (router: Router) => {
             validate({
                 headers: JOI.JOI_CMS_HEADERS,
                 body: {
-                    username: Joi.string().required(),
-                    password: Joi.string().required(),
+                    menu: Joi.any().required()
                 }
             }),
             async (ctx) => {
                 try {
-                    let payload: ICmsRequest.ICmsAuth = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await cmsController.auth(payload);
+                    let payload: ISyncMenuRequest.ISyncMenu = { ...ctx.request.body, ...ctx.request.header };
+                    let res = await syncController.syncMenu(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
