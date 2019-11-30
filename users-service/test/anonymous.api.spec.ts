@@ -1,13 +1,8 @@
 /* eslint-env mocha */
-
 import * as chai from "chai";
 import "mocha";
 import { expect } from "chai";
-
 import chaiHttp = require("chai-http");
-
-import * as app from "../src/route/v1/guest.route";
-
 chai.use(chaiHttp);
 
 // const expect = chai.expect;
@@ -246,7 +241,7 @@ describe("/login api where language type is Arab and DeviceType is Ios but langu
       appversion: "ACTIVE",
       devicemodel: "galaxy",
       devicetype: "IOS",
-      osversion : "6.2"
+      osversion: "6.2"
     };
     const body = { deviceid: "123" };
     chai

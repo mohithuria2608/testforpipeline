@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { cmsController } from '../../controllers';
-
+import * as JOI from './common.route.validator'
 export default (router: Router) => {
     router
         .post('/auth',
@@ -12,14 +12,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: {
-                    country: Joi.string().valid(
-                        Constant.DATABASE.COUNTRY.UAE
-                    ).required(),
-                    appversion: Joi.string().required(),
-                    devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS, Constant.DATABASE.TYPE.DEVICE.WEB).required(),
-                    deviceid: Joi.string().required()
-                },
+                headers: JOI.JOI_CMS_HEADERS,
                 body: {
                     username: Joi.string().required(),
                     password: Joi.string().required(),

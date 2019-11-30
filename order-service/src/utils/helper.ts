@@ -1,7 +1,7 @@
 'use strict'
 import * as config from 'config'
 import * as Joi from '@hapi/joi'
-import * as Constant from '../constant/appConstants'
+import * as Constant from '../constant'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { isArray } from 'util';

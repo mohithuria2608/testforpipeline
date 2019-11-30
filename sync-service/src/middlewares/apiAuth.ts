@@ -1,5 +1,5 @@
 import { Middleware, Context } from 'koa'
-import * as CONSTANT from '../constant/appConstants'
+import * as CONSTANT from '../constant'
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {

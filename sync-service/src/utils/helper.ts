@@ -1,12 +1,22 @@
 'use strict'
 import * as config from 'config'
 import * as Joi from '@hapi/joi'
-import * as Constant from '../constant/appConstants'
+import * as Constant from '../constant'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { isArray } from 'util';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
+
+export let grpcSendError = function (error) {
+    if (typeof error === 'object' && error.hasOwnProperty('statusCode') && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        let message = error.hasOwnProperty('message') || error.hasOwnProperty('customMessage')
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR('UNAUTHENTICATED', Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED, message)
+    } else {
+        let message = typeof error == 'string' ? error : 'Some error occured'
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR("INTERNAL", Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, message)
+    }
+}
 
 export let sendError = function (error) {
 

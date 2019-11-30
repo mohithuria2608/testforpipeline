@@ -4,6 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { consolelog, sendSuccess } from '../../utils'
 import { deeplinkController } from '../../controllers';
+import * as JOI from './common.route.validator';
 
 export default (router: Router) => {
     router
@@ -37,23 +38,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: {
-                    language: Joi.string().valid(
-                        Constant.DATABASE.LANGUAGE.AR,
-                        Constant.DATABASE.LANGUAGE.EN
-                    ).required(),
-                    country: Joi.string().valid(
-                        Constant.DATABASE.COUNTRY.UAE
-                    ).required(),
-                    appversion: Joi.string().required(),
-                    devicemodel: Joi.string().required(),
-                    devicetype: Joi.string().valid(
-                        Constant.DATABASE.TYPE.DEVICE.ANDROID,
-                        Constant.DATABASE.TYPE.DEVICE.IOS
-                    ).required(),
-                    osversion: Joi.string().required(),
-                    deviceid: Joi.string().trim().required()
-                },
+                headers: JOI.JOI_HEADERS,
                 query: {
                     url: Joi.string().required()
                 },

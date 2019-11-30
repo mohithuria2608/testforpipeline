@@ -1,7 +1,7 @@
 'use strict';
 import * as config from 'config';
 import * as Jwt from 'jsonwebtoken';
-import * as Constant from '../constant/appConstants';
+import * as Constant from '../constant';
 const cert = config.get('jwtSecret')
 import { consolelog } from '../utils'
 
