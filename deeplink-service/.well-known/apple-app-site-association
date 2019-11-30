@@ -1,9 +1,10 @@
 {
     "applinks": {
         "apps": [],
-        "details": [{
-                "appID": "YV87LWGXGF.com.appinventiv.Americana",
-                "paths": [ "*"]
-        }]
+        "details": {
+            "YV87LWGXGF.com.appinventiv.Americana": {
+                "paths": [ "*" ]
+            }
+        }
     }
 }
