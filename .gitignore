@@ -31,7 +31,7 @@ menu-service/proto
 order-service/proto
 deeplink-service/proto
 sync-service/proto
-
+kafka-service/proto
 
 #config directories in each service
 auth-service/config
@@ -41,6 +41,7 @@ menu-service/config
 order-service/config
 deeplink-service/config
 sync-service/config
+kafka-service/config
 
 #model directories in each service
 auth-service/model
@@ -50,3 +51,4 @@ menu-service/model
 order-service/model
 deeplink-service/model
 sync-service/model
+kafka-service/model
