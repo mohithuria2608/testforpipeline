@@ -90,7 +90,7 @@ export let DATABASE = {
 
 
 export enum KAFKA_TOPIC {
-    CREATE_TOKEN = "create_token"
+    MENU_NEW = "menu_new"
 }
 
 export enum MIDDLEWARE {

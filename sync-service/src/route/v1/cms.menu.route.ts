@@ -8,7 +8,7 @@ import * as JOI from './common.route.validator'
 
 export default (router: Router) => {
     router
-        .post('/auth',
+        .post('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),

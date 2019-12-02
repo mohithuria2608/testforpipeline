@@ -37,7 +37,7 @@ export class DeeplinkController {
     async deepLinkMapper(payload: DeeplinkRequest.IDeeplinkMapper) {
         try {
             let res = {}
-
+            console.log("mapper", payload.url)
             const delimiter = payload.url.split('#')[1]
             if (delimiter) {
                 const split = payload.url.split('#')[1].split("/").filter(obj => obj != "")

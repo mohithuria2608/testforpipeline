@@ -13,7 +13,6 @@ export class AuthServiceValidator {
                 let dataToValidate = Joi.object().keys({
                     deviceid: Joi.string().required(),
                     tokenType: Joi.string().valid(
-                        Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH,
                         Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
                     ).required(),
                     devicetype: Joi.string().valid(

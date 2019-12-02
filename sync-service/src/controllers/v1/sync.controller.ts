@@ -1,5 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
+import { kafkaService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 
 export class SyncController {
@@ -12,7 +13,7 @@ export class SyncController {
      * */
     async syncMenu(payload: ISyncMenuRequest.ISyncMenu) {
         try {
-            
+            kafkaService.produceMessage({ data: payload.menu })
             return {}
         } catch (err) {
             consolelog("syncMenu", err, false)
