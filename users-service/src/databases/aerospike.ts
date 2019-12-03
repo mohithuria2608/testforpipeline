@@ -170,7 +170,7 @@ class AerospikeClass {
         })
     }
 
-    async  queryForeach(query) {
+    private async  queryForeach(query) {
         return new Promise((resolve, reject) => {
             try {
                 const stream = query.foreach()
@@ -195,13 +195,13 @@ class AerospikeClass {
         })
     }
 
-    async  queryBackground(query, udf) {
+    private  async  queryBackground(query, udf) {
         const job = await query.background(udf.module, udf.func, udf.args)
         console.info('Running query in background - Job ID:', job.jobID)
         return job
     }
 
-    async  queryApply(query, udf: IAerospike.Udf) {
+    private async  queryApply(query, udf: IAerospike.Udf) {
         const result = await query.apply(udf.module, udf.func, udf.args)
         console.info('Query result:', result)
         return result

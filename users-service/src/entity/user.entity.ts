@@ -9,7 +9,6 @@ export class UserEntity extends BaseEntity {
     protected model = 'user'
     constructor() {
         super('user')
-        // this.DAO.createSecondaryIndex('user', 'fullphnNo')
     }
 
     public addressSchema = Joi.object().keys({
@@ -33,7 +32,6 @@ export class UserEntity extends BaseEntity {
         userName: Joi.string().lowercase().trim().required(),
         cCode: Joi.string().trim().required(),
         phnNo: Joi.string().trim().regex(/^[0-9]+$/).required(),
-        fullphnNo: Joi.string().trim().required(),
         phoneVerified: Joi.number().valid(1, 2).required(),
         dob: Joi.number(),
         email: Joi.string().lowercase().trim().required(),
