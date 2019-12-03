@@ -1,6 +1,7 @@
 'use strict'
 import * as config from 'config'
 import * as Joi from '@hapi/joi'
+const uuidv1 = require('uuid/v1');
 import * as Constant from '../constant'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
@@ -9,7 +10,6 @@ import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let sendError = function (error) {
-
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
 
     if (error && error.code && error.details) {
@@ -22,13 +22,22 @@ export let sendError = function (error) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
         }
-    } else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+    } else if (typeof error === 'object' && error.name == "AerospikeError") {
+        customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+        customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode
+        customError.type = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.type
+        if (error.code == 200) {
+            customError.type = 'DUPLICATE_INDEX'
+        }
+    }
+    else if (typeof error === 'object' && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
         if (error.hasOwnProperty('statusCode'))
             customError['statusCode'] = error.statusCode
         if (error.hasOwnProperty('type'))
             customError['type'] = error.type
-    } else {
+    }
+    else {
         if (typeof error === 'object') {
             if (error.name === 'MongoError') {
                 customError.message += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + error.errmsg
@@ -209,3 +218,5 @@ export function sleep(ms: number) {
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
 };
+
+export let uuid = uuidv1();

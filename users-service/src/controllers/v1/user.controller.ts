@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
-import { consolelog, cryptData } from '../../utils'
+import { consolelog, cryptData, uuid } from '../../utils'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../databases/aerospike'
 
 export class UserController {
 
@@ -8,24 +9,67 @@ export class UserController {
 
     /**
     * @method POST
-    * @param {string} phoneNo : phone number max length 9 digits
-    * @param {string} countryCode : country code with +, eg: +976
+    * @param {string} phnNo : phone number max length 9 digits
+    * @param {string} cCode : country code with +, eg: +976
     * */
-    async loginSendOtp(payload: IUserRequest.IRefreshToken) {
+    async loginSendOtp(payload: IUserRequest.IAuthSendOtp) {
         try {
-            
-
-            // ENTITY.UserE.DAO.read()
-            //step1 : check user exists
-            const userExists = true
-            if (userExists) {
-                //step2 : send otp
-                return {}
-            } else {
-                //step4 : create user
-                //step5 : send otp
-                return {}
+            let queryArg: IAerospike.Query = {
+                udf: {
+                    module: 'user',
+                    func: Constant.UDF.USER.check_user_exist,
+                    args: [payload.phnNo, payload.cCode, payload.deviceid],
+                },
+                set: 'user',
+                background: false,
             }
+            let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
+            if (checkUserExist && checkUserExist.id) {
+                let otpExpiryTime = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
+                let dataToUpdate = {
+                    isLogin: 0,
+                    otpExpAt: otpExpiryTime,
+                }
+                if (checkUserExist.otpExpAt <= new Date().getTime()) {
+                    dataToUpdate['otp'] = (checkUserExist.otp == Constant.SERVER.BY_PASS_OTP) ? Constant.SERVER.BY_PASS_OTP_2 : Constant.SERVER.BY_PASS_OTP
+                }
+                let putArg: IAerospike.Put = {
+                    bins: dataToUpdate,
+                    set: 'user',
+                    key: checkUserExist.id,
+                    update: true,
+                }
+                let updateUser = await Aerospike.put(putArg)
+            } else {
+                let id = uuid;
+                let otpExpiryTime = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
+                let dataToSave: IUserRequest.IUserData = {
+                    id: id,
+                    cCode: payload.cCode,
+                    phnNo: payload.phnNo,
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    phnVerified: 0,
+                    otp: Constant.SERVER.BY_PASS_OTP,
+                    otpExpAt: otpExpiryTime,
+                    language: payload.language,
+                    country: payload.country,
+                    appversion: payload.appversion,
+                    devicemodel: payload.devicemodel,
+                    devicetype: payload.devicetype,
+                    osversion: payload.osversion,
+                    deviceid: payload.deviceid,
+                    isLogin: 0
+                }
+                let putArg: IAerospike.Put = {
+                    bins: dataToSave,
+                    set: 'user',
+                    key: id,
+                    ttl: Constant.SERVER.INITIAL_USER_TTL,
+                    create: true,
+                }
+                let savedUser = await Aerospike.put(putArg)
+            }
+            return {}
         } catch (err) {
             consolelog("loginSendOtp", err, false)
             return Promise.reject(err)
@@ -34,8 +78,8 @@ export class UserController {
 
     /**
     * @method POST
-    * @param {string} phoneNo : phone number max length 9 digits
-    * @param {string} countryCode : country code with +, eg: +976
+    * @param {string} phnNo : phone number max length 9 digits
+    * @param {string} cCode : country code with +, eg: +976
     * @param {number} otp : 4 digit otp
     * */
     async loginVerifyOtp(payload: IUserRequest.IAuthVerifyOtp) {

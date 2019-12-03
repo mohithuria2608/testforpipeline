@@ -83,11 +83,20 @@ export let DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST"
+        },
+
+        PROFILE_STEP: {
+            INIT: 0,
+            FIRST: 1,
         }
     }
 };
 
-
+export let UDF = {
+    USER: {
+        check_user_exist: "check_user_exist"
+    }
+}
 export enum KAFKA_TOPIC {
     CREATE_TOKEN = "create_token"
 }
@@ -440,7 +449,10 @@ export let SERVER = {
         return `Your App code is ${otp}. Welcome to the community!`
     },
     TEMPLATE_PATH: process.cwd() + '/views/',
+    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     BY_PASS_OTP: 1212,
+    BY_PASS_OTP_2: 1313,
+    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
     LISTNG_LIMIT: 10,
     BULK_LIMIT: 2000,
     THUMB_DIMENSION: {

@@ -15,8 +15,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.JOI_HEADERS,
                 body: {
-                    countryCode: Joi.string().required(),
-                    phoneNo: Joi.string().max(9).required(),
+                    cCode: Joi.string().required(),
+                    phnNo: Joi.string().max(9).required(),
                 }
             }),
             async (ctx) => {
@@ -38,8 +38,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.JOI_HEADERS,
                 body: {
-                    countryCode: Joi.string().required(),
-                    phoneNo: Joi.string().max(9).required(),
+                    cCode: Joi.string().required(),
+                    phnNo: Joi.string().max(9).required(),
                     otp: Joi.number().max(4).required().error(new Error('Enter a valid OTP of 4 digits.')),
                 }
             }),

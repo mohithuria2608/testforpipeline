@@ -3,8 +3,8 @@ declare namespace IUserRequest {
     }
 
     interface IPhone {
-        countryCode: string,
-        phoneNo: string
+        cCode: string,
+        phnNo: string
     }
 
     interface IAuthSendOtp extends ICommonRequest.IHeaders, IPhone {
@@ -12,5 +12,23 @@ declare namespace IUserRequest {
 
     interface IAuthVerifyOtp extends ICommonRequest.IHeaders, IPhone {
         otp: number
+    }
+
+    interface IUserData {
+        id: string,
+        cCode: string,
+        phnNo: string,
+        profileStep: number
+        phnVerified: number,
+        otp: number,
+        otpExpAt: number,
+        language: string,
+        country: string,
+        appversion: string,
+        devicemodel: string,
+        devicetype: string,
+        osversion: string,
+        deviceid: string,
+        isLogin: number
     }
 }
