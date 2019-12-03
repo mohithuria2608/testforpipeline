@@ -40,16 +40,19 @@ export class UserEntity extends BaseEntity {
         createdAt: Joi.number().required(),
     });
 
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[]) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id?: string) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
                 tokentype.map(elem => {
-                    return promise.push(authService.createToken({
+                    let dataToSend = {
                         deviceid: deviceid,
                         devicetype: devicetype,
                         tokenType: elem
-                    }))
+                    }
+                    if (id)
+                        dataToSend['id'] = id
+                    return promise.push(authService.createToken(dataToSend))
                 })
                 let tokens: IAuthServiceRequest.IToken[] = await Promise.all(promise)
 
@@ -58,7 +61,7 @@ export class UserEntity extends BaseEntity {
                     refreshToken: undefined
                 }
                 tokentype.map((elem, i) => {
-                    if (elem == Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH) {
+                    if (elem == Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH || elem == Constant.DATABASE.TYPE.TOKEN.USER_AUTH) {
                         res['accessToken'] = tokens[i].token
                     } else if (elem == Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH) {
                         res['refreshToken'] = tokens[i].token

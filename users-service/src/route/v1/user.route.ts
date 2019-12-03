@@ -23,7 +23,7 @@ export default (router: Router) => {
                 try {
                     let payload: IUserRequest.IAuthSendOtp = { ...ctx.request.body, ...ctx.request.header };
                     let res = await userController.loginSendOtp(payload);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_SENT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -40,7 +40,7 @@ export default (router: Router) => {
                 body: {
                     cCode: Joi.string().required(),
                     phnNo: Joi.string().max(9).required(),
-                    otp: Joi.number().max(4).required().error(new Error('Enter a valid OTP of 4 digits.')),
+                    otp: Joi.number().required().error(new Error('Enter a valid OTP of 4 digits.')),
                 }
             }),
             async (ctx) => {
@@ -48,7 +48,7 @@ export default (router: Router) => {
                     let payload: IUserRequest.IAuthVerifyOtp = { ...ctx.request.body, ...ctx.request.header };
                     let res = await userController.loginVerifyOtp(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, res.response)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

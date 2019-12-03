@@ -11,7 +11,7 @@ export class AuthController {
             let token: string = await tokenManager.setToken(payload)
             return { token }
         } catch (err) {
-            consolelog("createToken", err, false)
+            consolelog("createToken", JSON.stringify(err), false)
             return Promise.reject(err)
         }
     }

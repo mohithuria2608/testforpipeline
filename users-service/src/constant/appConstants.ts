@@ -216,18 +216,6 @@ export let STATUS_MSG = {
             }
         },
         E401: {
-            RESET_PASSWORD_EXPIRED: {
-                statusCode: 401,
-                message: 'Your reset password token is expired!',
-                type: 'TOKEN_EXPIRED'
-            },
-
-            INVALID_LINK: {
-                statusCode: 401,
-                message: 'Link is no more valid',
-                type: 'INVALID_LINK'
-            },
-
             UNAUTHORIZED: {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
@@ -241,6 +229,18 @@ export let STATUS_MSG = {
             }
         },
         E403: {
+            OTP_SESSION_EXPIRED: {
+                statusCode: 403,
+                type: 'OTP_SESSION_EXPIRED',
+                message: 'Otp session has expired'
+            },
+
+            OTP_EXPIRED: {
+                statusCode: 403,
+                type: 'OTP_EXPIRED',
+                message: 'Otp entered has expired'
+            },
+
             INVALID_OTP: {
                 statusCode: 403,
                 type: 'INVALID_OTP',
@@ -251,7 +251,19 @@ export let STATUS_MSG = {
                 statusCode: 403,
                 type: 'INVALID_LOGIN',
                 message: 'Invalid login credentials'
-            }
+            },
+
+            INVALID_LINK: {
+                statusCode: 403,
+                message: 'Link is no more valid',
+                type: 'INVALID_LINK'
+            },
+
+            RESET_PASSWORD_EXPIRED: {
+                statusCode: 403,
+                message: 'Your reset password token is expired!',
+                type: 'TOKEN_EXPIRED'
+            },
         },
         E404: {
             DATA_NOT_FOUND: {
@@ -288,6 +300,12 @@ export let STATUS_MSG = {
     },
     SUCCESS: {
         S200: {
+
+            OTP_SENT: {
+                statusCode: 200,
+                type: 'OTP_SENT',
+                message: 'Otp sent successfully'
+            },
 
             OTP_VERIFIED: {
                 statusCode: 200,

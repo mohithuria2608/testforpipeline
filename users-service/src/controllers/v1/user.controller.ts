@@ -84,22 +84,48 @@ export class UserController {
     * */
     async loginVerifyOtp(payload: IUserRequest.IAuthVerifyOtp) {
         try {
-            if (payload.otp == Constant.SERVER.BY_PASS_OTP) {
-                const profileComplete = true
-                let tokens = await ENTITY.UserE.getTokens(
-                    payload.deviceid,
-                    payload.devicetype,
-                    [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH]
-                )
-                if (profileComplete) {
-                    const cartId = await cryptData(payload.deviceid)
-                    return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: { cartId } }
-                } else {
-                    return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: { profileComplete: false } }
-                }
-            } else {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E403.INVALID_OTP)
+            let queryArg: IAerospike.Query = {
+                udf: {
+                    module: 'user',
+                    func: Constant.UDF.USER.check_user_exist,
+                    args: [payload.phnNo, payload.cCode, payload.deviceid],
+                },
+                set: 'user',
+                background: false,
             }
+            let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
+            if (checkUserExist && checkUserExist.id) {
+                if (checkUserExist.otp == 0 && checkUserExist.otpExpAt == 0)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E403.OTP_SESSION_EXPIRED)
+
+                if (checkUserExist.otp == payload.otp) {
+                    if (checkUserExist.otpExpAt > new Date().getTime()) {
+                        let dataToUpdate = {
+                            isLogin: 1,
+                            phnVerified: 1,
+                            otp: 0,
+                            otpExpAt: 0,
+                        }
+                        let putArg: IAerospike.Put = {
+                            bins: dataToUpdate,
+                            set: 'user',
+                            key: checkUserExist.id,
+                            update: true,
+                        }
+                        let updateUser = await Aerospike.put(putArg)
+                        let tokens = await ENTITY.UserE.getTokens(
+                            payload.deviceid,
+                            payload.devicetype,
+                            [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
+                            checkUserExist.id
+                        )
+                        return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: {} }
+                    } else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E403.OTP_EXPIRED)
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E403.INVALID_OTP)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E403.INVALID_OTP)
         } catch (err) {
             consolelog("authVerifyOtp", err, false)
             return Promise.reject(err)
