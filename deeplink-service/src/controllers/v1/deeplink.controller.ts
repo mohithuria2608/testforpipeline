@@ -38,10 +38,10 @@ export class DeeplinkController {
         try {
             let res = {}
             console.log("mapper", payload.url)
-            const delimiter = payload.url.split('#')[1]
+            const delimiter = (payload.url.split('#').length == 1) ? payload.url.split('%23')[1] : payload.url.split('#')[1]
+
             if (delimiter) {
-                const split = payload.url.split('#')[1].split("/").filter(obj => obj != "")
-                console.log("here........", split)
+                const split = delimiter.split("/").filter(obj => obj != "")
                 const type = split[0] ? split[0] : Constant.DATABASE.TYPE.DEEPLINK_REDIRECTION.HOME
                 const id = split[1] ? split[1] : ""
 

@@ -7,21 +7,29 @@ declare namespace IUserRequest {
         phnNo: string
     }
 
+    interface IEmail {
+        email: string
+    }
     interface IAuthSendOtp extends ICommonRequest.IHeaders, IPhone {
     }
 
     interface IAuthVerifyOtp extends ICommonRequest.IHeaders, IPhone {
         otp: number
     }
+    interface IAuthSocial extends ICommonRequest.IHeaders, IPhone, IEmail {
+        socialKey: string,
+        mdeium: string,
+    }
 
     interface IUserData {
         id: string,
         cCode: string,
         phnNo: string,
-        profileStep: number
         phnVerified: number,
         otp: number,
         otpExpAt: number,
+        email: string,
+        profileStep: number,
         language: string,
         country: string,
         appversion: string,
@@ -30,6 +38,9 @@ declare namespace IUserRequest {
         osversion: string,
         deviceid: string,
         isLogin: number,
+        socialKey: string,
+        mdeium: string,
         // cartId: string
+        createdAt: number,
     }
 }

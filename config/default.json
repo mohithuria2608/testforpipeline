@@ -63,6 +63,11 @@
     "kafka": {
         "url": "localhost:9093"
     },
+    "aerospike": {
+        "hosts": "40.123.212.40:8081",
+        "username": "aerospikeusr",
+        "password": "GM2nGDQkN5yMdPZs"
+    },
     "directory": {
         "static": {
             "proto": {

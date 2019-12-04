@@ -55,6 +55,11 @@ export let DATABASE = {
             WEB: 'WEB'
         },
 
+        SOCIAL_PLATFORM: {
+            GOOGLE: "GOOGLE",
+            FB: "FB"
+        },
+
         VERSION_UPDATE: {
             FORCE: "FORCE",
             SKIP: "SKIP",
@@ -94,7 +99,9 @@ export let DATABASE = {
 
 export let UDF = {
     USER: {
-        check_user_exist: "check_user_exist"
+        check_user_exist: "check_user_exist",
+        check_device_id: "check_device_id",
+        check_email_or_phnNo: "check_email_or_phnNo",
     }
 }
 export enum KAFKA_TOPIC {

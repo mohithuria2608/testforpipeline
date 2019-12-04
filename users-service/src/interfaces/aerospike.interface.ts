@@ -14,7 +14,7 @@ declare namespace IAerospike {
         geoWithinRadius?: Geo,
         udf?: Udf,
         set: string,
-        background: boolean,
+        background?: boolean,
     }
 
     interface Equal {

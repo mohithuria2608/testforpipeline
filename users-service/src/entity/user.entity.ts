@@ -27,16 +27,24 @@ export class UserEntity extends BaseEntity {
     })
 
     public userSchema = Joi.object().keys({
-        firstName: Joi.string().trim().required(),
-        lastName: Joi.string().trim().required(),
-        userName: Joi.string().lowercase().trim().required(),
+        id: Joi.string().trim().required().description("pk"),
         cCode: Joi.string().trim().required(),
-        phnNo: Joi.string().trim().regex(/^[0-9]+$/).required(),
-        phoneVerified: Joi.number().valid(1, 2).required(),
-        dob: Joi.number(),
-        email: Joi.string().lowercase().trim().required(),
-        password: Joi.string().trim().required(),
-        address: Joi.array().items(this.addressSchema),
+        phnNo: Joi.string().trim().required().description("sk"),
+        phnVerified: Joi.number().valid(0, 1).required(),
+        otp: Joi.number().required(),
+        otpExpAt: Joi.number().required(),
+        email: Joi.string().email().lowercase().trim().required().description("sk"),
+        profileStep: Joi.number().valid(Constant.DATABASE.TYPE.PROFILE_STEP.INIT, Constant.DATABASE.TYPE.PROFILE_STEP.FIRST).required(),
+        language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
+        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
+        appversion: Joi.string().trim().required(),
+        devicemodel: Joi.string().trim().required(),
+        devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
+        osversion: Joi.string().trim().required(),
+        deviceid: Joi.string().trim().required().description("sk"),
+        isLogin: Joi.number().required(),
+        socialKey: Joi.string().trim().required(),
+        mdeium: Joi.string().trim().required(),
         createdAt: Joi.number().required(),
     });
 

@@ -4,6 +4,7 @@
  * @created 2019-11-04 16:58:03
 */
 
+import * as config from "config"
 const aerospike = require('aerospike');
 const path = require('path');
 class AerospikeClass {
@@ -21,7 +22,9 @@ class AerospikeClass {
             if (!this.client) {
                 try {
                     this.client = await aerospike.connect({
-                        hosts: 'localhost:3000',
+                        hosts: config.get("aerospike.hosts"),//'localhost:3000',
+                        username: config.get("aerospike.username"),
+                        password: config.get("aerospike.password"),
                         modlua: {
                             userPath: path.normalize(path.join(__dirname, '../..', 'lua'))
                         },
@@ -195,7 +198,7 @@ class AerospikeClass {
         })
     }
 
-    private  async  queryBackground(query, udf) {
+    private async  queryBackground(query, udf) {
         const job = await query.background(udf.module, udf.func, udf.args)
         console.info('Running query in background - Job ID:', job.jobID)
         return job

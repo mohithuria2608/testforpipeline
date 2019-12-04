@@ -58,7 +58,11 @@ export class UserController {
                     devicetype: payload.devicetype,
                     osversion: payload.osversion,
                     deviceid: payload.deviceid,
-                    isLogin: 0
+                    isLogin: 0,
+                    socialKey: "",
+                    mdeium: "",
+                    email: "",
+                    createdAt: new Date().getTime()
                 }
                 let putArg: IAerospike.Put = {
                     bins: dataToSave,
@@ -128,6 +132,67 @@ export class UserController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E403.INVALID_OTP)
         } catch (err) {
             consolelog("authVerifyOtp", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method POST
+    * @param {string} socialKey : social id
+    * @param {string} mdeium : Social Platform type : FB, GOOGLE
+    * */
+    async socialAuth(payload: IUserRequest.IAuthSocial) {
+        try {
+            let queryArg: IAerospike.Query = {
+                udf: {
+                    module: 'user',
+                    func: Constant.UDF.USER.check_device_id,
+                    args: [payload.deviceid],
+                },
+                equal: {
+                    bin: "socialKey",
+                    value: payload.socialKey
+                },
+                set: 'user',
+                background: false,
+            }
+            let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
+
+            if (!checkUserExist) {
+                if ((payload.cCode && payload.phnNo) || payload.email) {
+                    let queryArg: IAerospike.Query = {
+                        udf: {
+                            module: 'user',
+                            func: Constant.UDF.USER.check_email_or_phnNo,
+                            args: [payload.cCode, payload.phnNo, payload.email],
+                        },
+                        set: 'user',
+                        background: false,
+                    }
+                    let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
+                }
+            }
+            let dataToUpdate = {
+                isLogin: 1,
+                socialKey: payload.socialKey,
+                mdeium: payload.mdeium
+            }
+            let putArg: IAerospike.Put = {
+                bins: dataToUpdate,
+                set: 'user',
+                key: checkUserExist.id,
+                update: true,
+            }
+            let updateUser = await Aerospike.put(putArg)
+            let tokens = await ENTITY.UserE.getTokens(
+                payload.deviceid,
+                payload.devicetype,
+                [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
+                checkUserExist.id
+            )
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: {} }
+        } catch (err) {
+            consolelog("socialAuth", err, false)
             return Promise.reject(err)
         }
     }
