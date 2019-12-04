@@ -24,7 +24,6 @@ message IToken {
 
 message IVerifyToken {
     required string token = 1;
-    required string tokenType = 2;
 }
 
 message IAuthorizationObj {

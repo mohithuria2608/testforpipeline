@@ -53,7 +53,7 @@ export class TokenManager {
     async  verifyToken(token: string) {
         try {
             const tokenData: IAuthServiceRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
-            consolelog('verifyToken', [token, tokenData], true)
+            consolelog('tokenManager : verifyToken', [JSON.stringify(token), JSON.stringify(tokenData)], true)
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
@@ -102,7 +102,7 @@ export class TokenManager {
                 }
             }
         } catch (error) {
-            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            return error
         }
     };
 }

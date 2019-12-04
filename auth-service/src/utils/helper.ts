@@ -25,7 +25,7 @@ export let grpcSendError = function (error) {
         }
     } else {
         let message = typeof error == 'string' ? error : 'Some error occured'
-        return Constant.STATUS_MSG.GRPC_ERROR.ERROR("INTERNAL", Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, message)
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, "INTERNAL", message)
     }
 }
 
