@@ -101,7 +101,7 @@ export let UDF = {
     USER: {
         check_user_exist: "check_user_exist",
         check_device_id: "check_device_id",
-        check_email_or_phnNo: "check_email_or_phnNo",
+        check_cCode_or_phnNo: "check_cCode_or_phnNo",
     }
 }
 export enum KAFKA_TOPIC {
@@ -111,12 +111,36 @@ export enum KAFKA_TOPIC {
 export enum MIDDLEWARE {
     API_AUTH = "api_auth",
     REFRESH_AUTH = "refresh_auth",
+    AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
 }
 
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            PHONE_NO_REQ: {
+                statusCode: 400,
+                message: 'Phone number is required',
+                type: 'PHONE_NO_REQ'
+            },
+
+            EMAIL_REQ: {
+                statusCode: 400,
+                message: 'Email is required',
+                type: 'EMAIL_REQ'
+            },
+
+            NAME_REQ: {
+                statusCode: 400,
+                message: 'Name is required',
+                type: 'NAME_REQ'
+            },
+
+            SOCIAL_KEY_REQ:{
+                statusCode: 400,
+                message: 'Social key is required',
+                type: 'SOCIAL_KEY_REQ'
+            },
 
             CANNOT_PERFORM_UPDATE_OPERATION: {
                 statusCode: 400,
@@ -307,7 +331,6 @@ export let STATUS_MSG = {
     },
     SUCCESS: {
         S200: {
-
             OTP_SENT: {
                 statusCode: 200,
                 type: 'OTP_SENT',

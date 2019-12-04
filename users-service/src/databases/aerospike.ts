@@ -21,14 +21,15 @@ class AerospikeClass {
         return new Promise(async (resolve, reject) => {
             if (!this.client) {
                 try {
-                    this.client = await aerospike.connect({
-                        hosts: config.get("aerospike.hosts"),//'localhost:3000',
-                        username: config.get("aerospike.username"),
-                        password: config.get("aerospike.password"),
+                    let aerospikeConfig = {
+                        hosts: config.get("aerospike.hosts"),
+                        username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
+                        password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {
                             userPath: path.normalize(path.join(__dirname, '../..', 'lua'))
                         },
-                    });
+                    }
+                    this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         console.log("> Aerospike Client Connected");
                     }
@@ -150,6 +151,24 @@ class AerospikeClass {
         })
     }
 
+    async  get(argv: IAerospike.Get): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                let record
+                if (argv.bins) {
+                    record = await this.client.select(key, argv.bins)
+                } else {
+                    record = await this.client.get(key)
+                }
+                console.info(record)
+                resolve((record && record.bins) ? record.bins : record)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
     async  query(argv: IAerospike.Query): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -164,6 +183,7 @@ class AerospikeClass {
                 } else if (argv.udf) {
                     res = await this.queryApply(query, argv.udf)
                 } else {
+                    console.log("111111111111111")
                     res = await this.queryForeach(query)
                 }
                 resolve(res)
@@ -173,25 +193,23 @@ class AerospikeClass {
         })
     }
 
+    private printRecord(record) {
+        const key = record.key.key || record.key.digest.toString('hex')
+    }
+
+    private consume(stream) {
+        return new Promise(function (resolve, reject) {
+            stream.on('error', reject)
+            stream.on('end', resolve)
+        })
+    }
+
     private async  queryForeach(query) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const stream = query.foreach()
-                let tempData: any = [];
-                stream.on('data', function (record) { tempData.push(record); });
-                stream.on('error', function (error) {
-                    if (error.code == 201) {
-                        resolve([])
-                    }
-                    reject(error);
-                });
-                stream.on('end', function () {
-                    let records: any = [];
-                    for (let item of tempData) {
-                        records.push(item.bins);
-                    }
-                    resolve(records);
-                });
+                stream.on('data', this.printRecord)
+                resolve(await this.consume(stream))
             } catch (error) {
                 reject(error)
             }

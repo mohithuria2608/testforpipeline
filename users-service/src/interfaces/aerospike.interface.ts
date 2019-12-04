@@ -7,6 +7,20 @@ declare namespace IAerospike {
         type: string
     }
 
+    interface Put {
+        bins?: object,
+        set: string,
+        key?: string,
+        ttl?: number,
+        create?: boolean,
+        replace?: boolean,
+        update?: boolean
+    }
+    interface Get {
+        set: string,
+        key: string,
+        bins?: string
+    }
     interface Query {
         bins?: string,
         equal?: Equal,
@@ -42,13 +56,5 @@ declare namespace IAerospike {
         args: any,
     }
 
-    interface Put {
-        bins?: object,
-        set: string,
-        key?: string,
-        ttl?: number,
-        create?: boolean,
-        replace?: boolean,
-        update?: boolean
-    }
+
 }

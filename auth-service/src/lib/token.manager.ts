@@ -4,6 +4,7 @@ import * as Jwt from 'jsonwebtoken';
 import * as Constant from '../constant';
 const cert = config.get('jwtSecret')
 import { consolelog } from '../utils'
+import { userGrpcService } from '../grpc/client'
 
 
 export class TokenManager {
@@ -69,20 +70,25 @@ export class TokenManager {
                         deviceid: tokenData.deviceid,
                         devicetype: tokenData.devicetype,
                         id: tokenData.id ? tokenData.id : undefined,
-                        userData: {}
+                        // userData: {}
                     };
                     return tokenVerifiedData
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
-                        const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
-                            tokenType: tokenData.tokenType,
-                            deviceid: tokenData.deviceid,
-                            devicetype: tokenData.devicetype,
-                            id: tokenData.id,
-                            userData: {}
-                        };
-                        return tokenVerifiedData
+                        consolelog("tokenData.id", tokenData.id, true)
+                        let userData = await userGrpcService.getUserById({ id: tokenData.id })
+                        if (userData && userData.id) {
+                            const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
+                                tokenType: tokenData.tokenType,
+                                deviceid: tokenData.deviceid,
+                                devicetype: tokenData.devicetype,
+                                id: tokenData.id,
+                                userData: userData
+                            };
+                            return tokenVerifiedData
+                        } else
+                            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 }
@@ -92,7 +98,7 @@ export class TokenManager {
                         deviceid: tokenData.deviceid,
                         devicetype: tokenData.devicetype,
                         id: tokenData.id ? tokenData.id : undefined,
-                        userData: {},
+                        // userData: {},
                         authCred: tokenData.authCred
                     };
                     return tokenVerifiedData

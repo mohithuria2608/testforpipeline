@@ -8,7 +8,7 @@ import * as JOI from './common.route.validator';
 
 export default (router: Router) => {
     router
-        .post('/login/send-otp',
+        .post('/send-otp',
             ...getMiddleware([
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
@@ -31,7 +31,7 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .post('/login/verify-otp',
+        .post('/verify-otp',
             ...getMiddleware([
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
@@ -56,7 +56,7 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .post('/login/social',
+        .post('/social-validate',
             ...getMiddleware([
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
@@ -73,9 +73,9 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let payload: IUserRequest.IAuthSocial = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await userController.socialAuth(payload);
+                    let res = await userController.socialAuthValidate(payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, res.response)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

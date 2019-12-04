@@ -9,6 +9,26 @@ import { isArray } from 'util';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
+export let grpcSendError = function (error) {
+    if (typeof error === 'object' && error.hasOwnProperty('statusCode') && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        let message = error.hasOwnProperty('message') ? error.message : (error.hasOwnProperty('customMessage') ? error.customMessage : 'Some error occured in GRPC error handler')
+        if (error.statusCode == 401 || error.statusCode == 403) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'UNAUTHENTICATED', message)
+        }
+        else if (error.statusCode >= 400 && error.statusCode < 500 && error.statusCode != 401 && error.statusCode != 403) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION, 'FAILED_PRECONDITION', message)
+        }
+        else if (error.statusCode >= 500) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'INTERNAL', message)
+        } else {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED, 'UNIMPLEMENTED', message)
+        }
+    } else {
+        let message = typeof error == 'string' ? error : 'Some error occured'
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, "INTERNAL", message)
+    }
+}
+
 export let sendError = function (error) {
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
 

@@ -10,9 +10,11 @@ const spawn = require('child_process').spawn;
 const outputFolder = "dist";
 const logFolder = "log";
 const protoFolder = "proto";
+const configFolder = "config";
+const luaFolder = "lua";
 
 gulp.task("clean", function () {
-	return del([outputFolder, logFolder, protoFolder]);
+	return del([outputFolder, logFolder, protoFolder, configFolder, luaFolder]);
 });
 
 
@@ -46,6 +48,10 @@ gulp.task("copyConfig", function () {
 	return gulp.src(['../config/**/*']).pipe(gulp.dest("./config"));
 });
 
+gulp.task("copyLua", function () {
+	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
+});
+
 gulp.task('server', function () {
 	pm2.connect(true, function () {
 		pm2.start({
@@ -70,4 +76,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig",  "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));

@@ -1,25 +1,4 @@
 declare namespace IUserRequest {
-    interface IRefreshToken extends ICommonRequest.IHeaders {
-    }
-
-    interface IPhone {
-        cCode: string,
-        phnNo: string
-    }
-
-    interface IEmail {
-        email: string
-    }
-    interface IAuthSendOtp extends ICommonRequest.IHeaders, IPhone {
-    }
-
-    interface IAuthVerifyOtp extends ICommonRequest.IHeaders, IPhone {
-        otp: number
-    }
-    interface IAuthSocial extends ICommonRequest.IHeaders, IPhone, IEmail {
-        socialKey: string,
-        mdeium: string,
-    }
 
     interface IUserData {
         id: string,
@@ -42,5 +21,35 @@ declare namespace IUserRequest {
         mdeium: string,
         // cartId: string
         createdAt: number,
+    }
+    interface IRefreshToken extends ICommonRequest.IHeaders {
+    }
+
+    interface IPhone {
+        cCode: string,
+        phnNo: string
+    }
+
+    interface IEmail {
+        email: string
+    }
+    interface IAuthSendOtp extends ICommonRequest.IHeaders, IPhone {
+    }
+
+    interface IAuthVerifyOtp extends ICommonRequest.IHeaders, IPhone {
+        otp: number
+    }
+    interface IAuthSocial extends ICommonRequest.IHeaders, IPhone, IEmail {
+        socialKey: string,
+        mdeium: string,
+    }
+
+    interface IEditProf extends ICommonRequest.IHeaders {
+        socialKey?: string,
+        mdeium?: string,
+        cCode?: string,
+        phnNo?: string,
+        email?: string,
+        name?: string
     }
 }
