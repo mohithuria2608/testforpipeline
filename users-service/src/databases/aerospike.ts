@@ -170,6 +170,22 @@ class AerospikeClass {
         })
     }
 
+    async append(argv: IAerospike.Append): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                const bins = argv.bins
+                const meta = this.buildMeta(argv)
+                const policy = this.buildPolicy(argv)
+                console.info(">>>>>>>>>>>>>>>>>>>>", key, bins, meta, policy)
+                let res = await this.client.append(key, bins)
+                resolve(res)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
     private async  queryForeach(query) {
         return new Promise((resolve, reject) => {
             try {
@@ -195,7 +211,7 @@ class AerospikeClass {
         })
     }
 
-    private  async  queryBackground(query, udf) {
+    private async  queryBackground(query, udf) {
         const job = await query.background(udf.module, udf.func, udf.args)
         console.info('Running query in background - Job ID:', job.jobID)
         return job
@@ -236,4 +252,4 @@ class AerospikeClass {
     }
 }
 
-export const Aerospike = new AerospikeClass('myapp');
+export const Aerospike = new AerospikeClass('americana');

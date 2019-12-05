@@ -29,6 +29,7 @@ declare namespace IUserRequest {
         devicetype: string,
         osversion: string,
         deviceid: string,
-        isLogin: number
+        isLogin: number,
+        address?: string[]
     }
 }

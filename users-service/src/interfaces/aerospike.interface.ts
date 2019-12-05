@@ -51,4 +51,11 @@ declare namespace IAerospike {
         replace?: boolean,
         update?: boolean
     }
+
+    interface Append {
+        key?: string,
+        bins?: object,
+        set: string,
+        ttl?: number,
+    }
 }

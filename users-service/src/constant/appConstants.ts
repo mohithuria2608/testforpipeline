@@ -104,6 +104,7 @@ export enum KAFKA_TOPIC {
 export enum MIDDLEWARE {
     API_AUTH = "api_auth",
     REFRESH_AUTH = "refresh_auth",
+    AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
 }
 
@@ -450,6 +451,7 @@ export let SERVER = {
     },
     TEMPLATE_PATH: process.cwd() + '/views/',
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
+    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
     BY_PASS_OTP: 1212,
     BY_PASS_OTP_2: 1313,
     OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
