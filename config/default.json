@@ -63,12 +63,21 @@
     "kafka": {
         "url": "localhost:9093"
     },
+    "aerospike": {
+        "hosts": "localhost:3000",
+        "username": "",
+        "password": ""
+    },
     "directory": {
         "static": {
             "proto": {
                 "auth": {
                     "server": "/../../../proto/auth.proto",
                     "client": "/../../../../proto/auth.proto"
+                },
+                "user": {
+                    "server": "/../../../proto/user.proto",
+                    "client": "/../../../../proto/user.proto"
                 },
                 "menu": {
                     "server": "/../../../proto/menu.proto",

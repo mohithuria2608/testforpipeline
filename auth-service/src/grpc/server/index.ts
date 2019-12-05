@@ -34,7 +34,7 @@ server.addService(authProto.AuthService.service, {
             let res: ICommonRequest.AuthorizationObj = await authController.verifyToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("verifyToken", error, false)
+            consolelog("grpc : verifyToken", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

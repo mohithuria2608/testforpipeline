@@ -15,6 +15,7 @@ export class AuthServiceValidator {
                     tokenType: Joi.string().valid(
                         Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH,
                         Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
+                        Constant.DATABASE.TYPE.TOKEN.USER_AUTH,
                     ).required(),
                     devicetype: Joi.string().valid(
                         Constant.DATABASE.TYPE.DEVICE.ANDROID,
