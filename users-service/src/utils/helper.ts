@@ -9,19 +9,47 @@ import { isArray } from 'util';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
+export let grpcSendError = function (error) {
+    if (typeof error === 'object' && error.hasOwnProperty('statusCode') && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        let message = error.hasOwnProperty('message') ? error.message : (error.hasOwnProperty('customMessage') ? error.customMessage : 'Some error occured in GRPC error handler')
+        if (error.statusCode == 401 || error.statusCode == 403) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'UNAUTHENTICATED', message)
+        }
+        else if (error.statusCode >= 400 && error.statusCode < 500 && error.statusCode != 401 && error.statusCode != 403) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION, 'FAILED_PRECONDITION', message)
+        }
+        else if (error.statusCode >= 500) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'INTERNAL', message)
+        } else {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED, 'UNIMPLEMENTED', message)
+        }
+    } else {
+        let message = typeof error == 'string' ? error : 'Some error occured'
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, "INTERNAL", message)
+    }
+}
+
 export let sendError = function (error) {
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
 
     if (error && error.code && error.details) {
         customError.message = error.details
-        if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
+        if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED || error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
+        }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type
         }
-        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
-            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
-            customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DEFAULT.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E400.DEFAULT.type
+        } else {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DEFAULT.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E400.DEFAULT.type
         }
+
     } else if (typeof error === 'object' && error.name == "AerospikeError") {
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
         customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode
@@ -124,23 +152,15 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: Object) {
+export let formatUserData = function (userObj: IUserRequest.IUserData) {
     try {
-        userObj = JSON.parse(JSON.stringify(userObj))
-
-        let emailVerify = userObj['emailVerify'] ? userObj['emailVerify']['status'] : false
-        let phoneVerify = userObj['phoneVerify'] ? userObj['phoneVerify']['status'] : false
-        userObj['emailVerify'] = emailVerify
-        userObj['phoneVerify'] = phoneVerify
-
-        if (userObj['backup'] && userObj['backup']['fileName']) { }
-        else
-            delete userObj['backup']
-
-        delete userObj['lastActivityTime']
-        delete userObj['refreshToken']
-        delete userObj['cards']
-        delete userObj['banks']
+        delete userObj['osversion']
+        delete userObj['isLogin']
+        delete userObj['appversion']
+        delete userObj['devicemodel']
+        delete userObj['otpExpAt']
+        delete userObj['otp']
+        delete userObj['deviceid']
 
         return userObj
     } catch (error) {
@@ -218,5 +238,3 @@ export function sleep(ms: number) {
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
 };
-
-export let uuid = uuidv1();

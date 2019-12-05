@@ -1,11 +1,8 @@
 import * as Constant from '../../constant'
-import { consolelog, uuid } from '../../utils'
-import * as ENTITY from '../../entity'
+import { consolelog } from '../../utils'
 import { Aerospike } from '../../databases/aerospike'
-const aerospike = require('aerospike')
-let key = new aerospike.Key('americana', 'users', 10001)
 export class AddressController {
-
+    private uuidv1 = require('uuid/v1');
     constructor() { }
 
     /**
@@ -14,7 +11,7 @@ export class AddressController {
     * */
     async registerAddressById(payload: IAddressRequest.IRegisterAddress) {
         try {
-            let id = uuid;
+            let id = this.uuidv1();
             let dataToSave: IAddressRequest.IRegisterAddress = {
                 id: id,
                 areaId: payload.areaId,

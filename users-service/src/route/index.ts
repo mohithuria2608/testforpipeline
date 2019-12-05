@@ -6,8 +6,9 @@ import staticRoutes from './v1/static.route'
 import aerospikeRoutes from './v1/aerospike.route'
 import guest from './v1/guest.route'
 import miscRoutes from './v1/misc.route'
-import userRoutes from './v1/user.route'
-import address from './v1/address.route'
+import userOnboardingRoutes from './v1/user.onboarding.route'
+import userProfileRoutes from './v1/user.profile.route'
+import userAddress from './v1/user.address.route'
 
 const version1 = "/v1"
 
@@ -16,8 +17,9 @@ const children = [
   { routes: aerospikeRoutes, prefix: version1 + '/aerospike' },
   { routes: guest, prefix: version1 + '/guest' },
   { routes: miscRoutes, prefix: version1 + '/user' },
-  { routes: userRoutes, prefix: version1 + '/user' },
-  { routes: address, prefix: version1 + '/user' }
+  { routes: userOnboardingRoutes, prefix: version1 + '/login' },
+  { routes: userProfileRoutes, prefix: version1 + '/profile' },
+  { routes: userAddress, prefix: version1 + '/address' }
 ]
 
 export default function routes() {

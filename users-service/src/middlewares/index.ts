@@ -9,6 +9,7 @@ import * as Constant from '../constant'
 import handleErrors from './error'
 import apiAuth from './apiAuth'
 import refreshAuth from './refreshAuth'
+import auth from './auth'
 import activityLog from './activityLog'
 
 export default function middleware() {
@@ -30,6 +31,8 @@ export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[]
     temp.push(apiAuth())
   if (middlewares.indexOf(Constant.MIDDLEWARE.REFRESH_AUTH) != -1)
     temp.push(refreshAuth())
+  if (middlewares.indexOf(Constant.MIDDLEWARE.AUTH) != -1)
+    temp.push(auth())
   if (middlewares.indexOf(Constant.MIDDLEWARE.ACTIVITY_LOG) != -1)
     temp.push(activityLog())
   return temp

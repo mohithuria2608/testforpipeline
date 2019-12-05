@@ -7,6 +7,27 @@ declare namespace IAerospike {
         type: string
     }
 
+    interface Put {
+        bins?: object,
+        set: string,
+        key?: string,
+        ttl?: number,
+        create?: boolean,
+        replace?: boolean,
+        update?: boolean
+    }
+
+    interface Append {
+        key?: string,
+        bins?: object,
+        set: string,
+        ttl?: number,
+    }
+    interface Get {
+        set: string,
+        key: string,
+        bins?: string
+    }
     interface Query {
         bins?: string,
         equal?: Equal,
@@ -14,7 +35,7 @@ declare namespace IAerospike {
         geoWithinRadius?: Geo,
         udf?: Udf,
         set: string,
-        background: boolean,
+        background?: boolean,
     }
 
     interface Equal {

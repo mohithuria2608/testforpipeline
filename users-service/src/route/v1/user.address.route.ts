@@ -4,32 +4,17 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { addressController } from '../../controllers';
+import { JOI_HEADERS } from './common.route.validator';
 
 export default (router: Router) => {
     router
-        .post('/address',
+        .post('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: {
-                    language: Joi.string().valid(
-                        Constant.DATABASE.LANGUAGE.AR,
-                        Constant.DATABASE.LANGUAGE.EN
-                    ).required(),
-                    country: Joi.string().valid(
-                        Constant.DATABASE.COUNTRY.UAE
-                    ).required(),
-                    appversion: Joi.string().required(),
-                    devicemodel: Joi.string().required(),
-                    devicetype: Joi.string().valid(
-                        Constant.DATABASE.TYPE.DEVICE.ANDROID,
-                        Constant.DATABASE.TYPE.DEVICE.IOS
-                    ).required(),
-                    osversion: Joi.string().required(),
-                    deviceid: Joi.string().trim().required()
-                },
+                headers: JOI_HEADERS,
                 body: {
                     areaId: Joi.number().required(),
                     bldgName: Joi.string(),
@@ -68,7 +53,7 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .patch('/address',
+        .patch('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG

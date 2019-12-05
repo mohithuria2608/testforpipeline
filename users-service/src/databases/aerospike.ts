@@ -4,6 +4,7 @@
  * @created 2019-11-04 16:58:03
 */
 
+import * as config from "config"
 const aerospike = require('aerospike');
 const op = aerospike.operations
 const lists = aerospike.lists;
@@ -24,12 +25,29 @@ class AerospikeClass {
         return new Promise(async (resolve, reject) => {
             if (!this.client) {
                 try {
-                    this.client = await aerospike.connect({
-                        hosts: 'localhost:3000',
+                    const defaultPolicy = {
+                        totalTimeout: 1000
+                    }
+                    let aerospikeConfig = {
+                        hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
+                        username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
+                        password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {
                             userPath: path.normalize(path.join(__dirname, '../..', 'lua'))
                         },
-                    });
+                        policies: {
+                            apply: defaultPolicy,
+                            batch: defaultPolicy,
+                            info: defaultPolicy,
+                            operate: defaultPolicy,
+                            query: defaultPolicy,
+                            read: defaultPolicy,
+                            remove: defaultPolicy,
+                            scan: defaultPolicy,
+                            write: defaultPolicy,
+                        },
+                    }
+                    this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         console.log("> Aerospike Client Connected");
                     }
@@ -151,6 +169,40 @@ class AerospikeClass {
         })
     }
 
+    async append(argv: IAerospike.Append): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                const bins = argv.bins
+                const meta = this.buildMeta(argv)
+                const policy = this.buildPolicy(argv)
+                console.info(key, bins, meta, policy)
+                let res = await this.client.append(key, bins)
+                resolve(res)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async  get(argv: IAerospike.Get): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                let record
+                if (argv.bins) {
+                    record = await this.client.select(key, argv.bins)
+                } else {
+                    record = await this.client.get(key)
+                }
+                console.info(record)
+                resolve((record && record.bins) ? record.bins : record)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
     async  query(argv: IAerospike.Query): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -165,6 +217,7 @@ class AerospikeClass {
                 } else if (argv.udf) {
                     res = await this.queryApply(query, argv.udf)
                 } else {
+                    console.log("111111111111111")
                     res = await this.queryForeach(query)
                 }
                 resolve(res)
@@ -188,25 +241,22 @@ class AerospikeClass {
             }
         })
     }
+    private printRecord(record) {
+        const key = record.key.key || record.key.digest.toString('hex')
+    }
+
+    private consume(stream) {
+        return new Promise(function (resolve, reject) {
+            stream.on('error', reject)
+            stream.on('end', resolve)
+        })
+    }
     private async  queryForeach(query) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const stream = query.foreach()
-                let tempData: any = [];
-                stream.on('data', function (record) { tempData.push(record); });
-                stream.on('error', function (error) {
-                    if (error.code == 201) {
-                        resolve([])
-                    }
-                    reject(error);
-                });
-                stream.on('end', function () {
-                    let records: any = [];
-                    for (let item of tempData) {
-                        records.push(item.bins);
-                    }
-                    resolve(records);
-                });
+                stream.on('data', this.printRecord)
+                resolve(await this.consume(stream))
             } catch (error) {
                 reject(error)
             }

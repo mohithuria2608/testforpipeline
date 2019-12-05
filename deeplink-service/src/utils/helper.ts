@@ -13,14 +13,22 @@ export let sendError = function (error) {
 
     if (error && error.code && error.details) {
         customError.message = error.details
-        if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
+        if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED || error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
+        }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type
         }
-        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
-            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
-            customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DEFAULT.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E400.DEFAULT.type
+        } else {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DEFAULT.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E400.DEFAULT.type
         }
+
     } else if (typeof error === 'object' && error.name == "AerospikeError") {
         customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
         customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode

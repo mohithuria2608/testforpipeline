@@ -36,7 +36,6 @@ kafka-service/proto
 
 #config directories in each service
 auth-service/config
-auth-service/config
 users-service/config
 menu-service/config
 order-service/config
@@ -46,10 +45,18 @@ kafka-service/config
 
 #model directories in each service
 auth-service/model
-auth-service/model
 users-service/model
 menu-service/model
 order-service/model
 deeplink-service/model
 sync-service/model
 kafka-service/model
+
+#lua directories in each service
+auth-service/lua
+users-service/lua
+menu-service/lua
+order-service/lua
+deeplink-service/lua
+sync-service/lua
+kafka-service/lua
