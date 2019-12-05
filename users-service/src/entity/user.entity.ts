@@ -44,7 +44,7 @@ export class UserEntity extends BaseEntity {
         deviceid: Joi.string().trim().required().description("sk"),
         isLogin: Joi.number().required(),
         socialKey: Joi.string().trim().required(),
-        mdeium: Joi.string().trim().required(),
+        medium: Joi.string().trim().required(),
         createdAt: Joi.number().required(),
     });
 

@@ -1,10 +1,10 @@
 import * as Constant from '../../constant'
-import { consolelog, cryptData, uuid } from '../../utils'
+import { consolelog, cryptData, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../databases/aerospike'
 
 export class UserController {
-
+    private uuidv1 = require('uuid/v1');
     constructor() { }
 
     /**
@@ -63,7 +63,7 @@ export class UserController {
                 }
                 let updateUser = await Aerospike.put(putArg)
             } else {
-                let id = uuid;
+                let id = this.uuidv1();
                 let otpExpiryTime = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
                 let dataToSave: IUserRequest.IUserData = {
                     id: id,
@@ -82,8 +82,9 @@ export class UserController {
                     deviceid: payload.deviceid,
                     isLogin: 0,
                     socialKey: "",
-                    mdeium: "",
+                    medium: "",
                     email: "",
+                    name: "",
                     createdAt: new Date().getTime()
                 }
                 let putArg: IAerospike.Put = {
@@ -145,7 +146,7 @@ export class UserController {
                             [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                             checkUserExist.id
                         )
-                        return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: {} }
+                        return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(checkUserExist) }
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E403.OTP_EXPIRED)
                 } else
@@ -161,7 +162,7 @@ export class UserController {
     /**
     * @method POST
     * @param {string} socialKey : social id
-    * @param {string} mdeium : Social Platform type : FB, GOOGLE
+    * @param {string} medium : Social Platform type : FB, GOOGLE
     * */
     async socialAuthValidate(payload: IUserRequest.IAuthSocial) {
         try {
@@ -205,8 +206,18 @@ export class UserController {
                         userObj = checkPhoneOrEmailExist
                         let dataToUpdate = {
                             socialKey: payload.socialKey,
-                            mdeium: payload.mdeium,
+                            medium: payload.medium,
                             isLogin: 0
+                        }
+                        if (payload.name) {
+                            dataToUpdate['name'] = payload.name
+                        }
+                        if (payload.cCode && payload.phnNo) {
+                            dataToUpdate['cCode'] = payload.cCode
+                            dataToUpdate['phnNo'] = payload.phnNo
+                        }
+                        if (payload.email) {
+                            dataToUpdate['email'] = payload.email
                         }
                         if (checkPhoneOrEmailExist.phnVerified == 0) {
                             console.log("1..............", 5)
@@ -232,7 +243,7 @@ export class UserController {
             }
             if (isInsert) {
                 console.log("8..............", 8)
-                let id = uuid;
+                let id = this.uuidv1();
                 let otpExpiryTime = 0
                 userObj = {
                     id: id,
@@ -251,9 +262,20 @@ export class UserController {
                     deviceid: payload.deviceid,
                     isLogin: 0,
                     socialKey: payload.socialKey,
-                    mdeium: payload.mdeium,
+                    medium: payload.medium,
                     email: "",
+                    name: payload.name,
                     createdAt: new Date().getTime()
+                }
+                if (payload.name) {
+                    userObj['name'] = payload.name
+                }
+                if (payload.cCode && payload.phnNo) {
+                    userObj['cCode'] = payload.cCode
+                    userObj['phnNo'] = payload.phnNo
+                }
+                if (payload.email) {
+                    userObj['email'] = payload.email
                 }
                 let putArg: IAerospike.Put = {
                     bins: userObj,
@@ -271,7 +293,7 @@ export class UserController {
                     [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                     userObj.id
                 )
-                return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: userObj }
+                return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userObj) }
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
@@ -284,7 +306,7 @@ export class UserController {
     /**
     * @method POST
     * @param {string=} socialKey : social id
-    * @param {string=} mdeium : Social Platform type : FB, GOOGLE
+    * @param {string=} medium : Social Platform type : FB, GOOGLE
     * @param {string=} cCode : country code with +, eg: +976
     * @param {string=} phnNo : phone number max length 9 digits
     * @param {string=} email : email
@@ -295,11 +317,11 @@ export class UserController {
             console.log("auth", auth)
             let dataToUpdate = {}
             if (auth && auth.userData && auth.userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.INIT) {
-                if ((auth.userData.mdeium == Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB || auth.userData.mdeium == Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE) &&
+                if ((auth.userData.medium == Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB || auth.userData.medium == Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE) &&
                     auth.userData.socialKey != "") {
-                    if (payload.socialKey && payload.mdeium) {
+                    if (payload.socialKey && payload.medium) {
                         dataToUpdate['socialKey'] = payload.socialKey
-                        dataToUpdate['mdeium'] = payload.mdeium
+                        dataToUpdate['medium'] = payload.medium
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SOCIAL_KEY_REQ)
                 }
@@ -318,9 +340,9 @@ export class UserController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.EMAIL_REQ)
                 dataToUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
             } else {
-                if (payload.socialKey && payload.mdeium) {
+                if (payload.socialKey && payload.medium) {
                     dataToUpdate['socialKey'] = payload.socialKey
-                    dataToUpdate['mdeium'] = payload.mdeium
+                    dataToUpdate['medium'] = payload.medium
                 }
                 if (payload.cCode && payload.phnNo) {
                     dataToUpdate['cCode'] = payload.cCode

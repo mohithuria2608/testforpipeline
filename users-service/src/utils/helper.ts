@@ -152,23 +152,15 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: Object) {
+export let formatUserData = function (userObj: IUserRequest.IUserData) {
     try {
-        userObj = JSON.parse(JSON.stringify(userObj))
-
-        let emailVerify = userObj['emailVerify'] ? userObj['emailVerify']['status'] : false
-        let phoneVerify = userObj['phoneVerify'] ? userObj['phoneVerify']['status'] : false
-        userObj['emailVerify'] = emailVerify
-        userObj['phoneVerify'] = phoneVerify
-
-        if (userObj['backup'] && userObj['backup']['fileName']) { }
-        else
-            delete userObj['backup']
-
-        delete userObj['lastActivityTime']
-        delete userObj['refreshToken']
-        delete userObj['cards']
-        delete userObj['banks']
+        delete userObj['osversion']
+        delete userObj['isLogin']
+        delete userObj['appversion']
+        delete userObj['devicemodel']
+        delete userObj['otpExpAt']
+        delete userObj['otp']
+        delete userObj['deviceid']
 
         return userObj
     } catch (error) {
@@ -246,5 +238,3 @@ export function sleep(ms: number) {
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
 };
-
-export let uuid = uuidv1();

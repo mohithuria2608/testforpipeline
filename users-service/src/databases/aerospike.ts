@@ -22,7 +22,7 @@ class AerospikeClass {
             if (!this.client) {
                 try {
                     let aerospikeConfig = {
-                        hosts: config.get("aerospike.hosts"),
+                        hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {

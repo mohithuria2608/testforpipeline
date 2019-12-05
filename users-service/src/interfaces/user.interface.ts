@@ -2,6 +2,7 @@ declare namespace IUserRequest {
 
     interface IUserData {
         id: string,
+        name: string,
         cCode: string,
         phnNo: string,
         phnVerified: number,
@@ -18,7 +19,7 @@ declare namespace IUserRequest {
         deviceid: string,
         isLogin: number,
         socialKey: string,
-        mdeium: string,
+        medium: string,
         // cartId: string
         createdAt: number,
     }
@@ -41,12 +42,13 @@ declare namespace IUserRequest {
     }
     interface IAuthSocial extends ICommonRequest.IHeaders, IPhone, IEmail {
         socialKey: string,
-        mdeium: string,
+        medium: string,
+        name: string,
     }
 
     interface IEditProf extends ICommonRequest.IHeaders {
         socialKey?: string,
-        mdeium?: string,
+        medium?: string,
         cCode?: string,
         phnNo?: string,
         email?: string,
