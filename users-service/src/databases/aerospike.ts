@@ -21,12 +21,26 @@ class AerospikeClass {
         return new Promise(async (resolve, reject) => {
             if (!this.client) {
                 try {
+                    const defaultPolicy = {
+                        totalTimeout: 1000
+                    }
                     let aerospikeConfig = {
                         hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {
                             userPath: path.normalize(path.join(__dirname, '../..', 'lua'))
+                        },
+                        policies: {
+                            apply: defaultPolicy,
+                            batch: defaultPolicy,
+                            info: defaultPolicy,
+                            operate: defaultPolicy,
+                            query: defaultPolicy,
+                            read: defaultPolicy,
+                            remove: defaultPolicy,
+                            scan: defaultPolicy,
+                            write: defaultPolicy,
                         },
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
