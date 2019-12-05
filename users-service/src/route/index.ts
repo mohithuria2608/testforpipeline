@@ -8,6 +8,7 @@ import guest from './v1/guest.route'
 import miscRoutes from './v1/misc.route'
 import userOnboardingRoutes from './v1/user.onboarding.route'
 import userProfileRoutes from './v1/user.profile.route'
+import address from './v1/address.route'
 
 const version1 = "/v1"
 
@@ -18,6 +19,7 @@ const children = [
   { routes: miscRoutes, prefix: version1 + '/user' },
   { routes: userOnboardingRoutes, prefix: version1 + '/login' },
   { routes: userProfileRoutes, prefix: version1 + '/profile' },
+  { routes: address, prefix: version1 + '/user' }
 ]
 
 export default function routes() {

@@ -12,18 +12,31 @@ export class UserEntity extends BaseEntity {
     }
 
     public addressSchema = Joi.object().keys({
-        type: Joi.string(),
-        city: Joi.string(),
-        area: Joi.string(),
-        road: Joi.string(),
-        buildingName: Joi.string(),
-        buildingNo: Joi.number(),
-        floor: Joi.number(),
-        pincode: Joi.number(),
-        flatNo: Joi.string(),
-        cCode: Joi.number(),
-        provinceId: Joi.number(),
-        addId: Joi.number()
+        areaId: Joi.number().required(),
+        bldgName: Joi.string(),
+        bldgNameUn: Joi.string(),
+        bldgNum: Joi.string(),
+        cityId: Joi.number().required(),
+        classId: Joi.number(),
+        countryId: Joi.number().required(),
+        userId: Joi.number().required(),
+        description: Joi.string(),
+        districtId: Joi.number().required(),
+        flatNum: Joi.number(),
+        floor: Joi.string(),
+        language: Joi.string(),
+        phoneAreaCode: Joi.string(),
+        phoneLookup: Joi.string(),
+        phoneNumber: Joi.string().required(),
+        phoneType: Joi.number(),
+        postalCode: Joi.string().required(),
+        provinceCode: Joi.number().required(),
+        sketch: Joi.string(),
+        streetId: Joi.number(),
+        useMap: Joi.number(),
+        createdAt: Joi.number().required(),
+        createdBy: Joi.string(),
+        updatedBy: Joi.string()
     })
 
     public userSchema = Joi.object().keys({

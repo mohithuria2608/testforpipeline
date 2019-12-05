@@ -12,12 +12,8 @@ export class MiscUserController {
     * */
     async refreshToken(payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
         try {
-            const tokenType = Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-            let tokens = await ENTITY.UserE.getTokens(
-                payload.deviceid,
-                payload.devicetype,
-                [tokenType]
-            )
+            const tokenType = authObj.id ? Constant.DATABASE.TYPE.TOKEN.USER_AUTH : Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
+            let tokens = await ENTITY.UserE.getTokens(payload.deviceid, payload.devicetype, [tokenType], authObj.id ? authObj.id : undefined)
             return { accessToken: tokens.accessToken }
         } catch (err) {
             consolelog("refreshToken", err, false)

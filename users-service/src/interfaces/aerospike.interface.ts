@@ -16,6 +16,13 @@ declare namespace IAerospike {
         replace?: boolean,
         update?: boolean
     }
+
+    interface Append {
+        key?: string,
+        bins?: object,
+        set: string,
+        ttl?: number,
+    }
     interface Get {
         set: string,
         key: string,
@@ -55,6 +62,5 @@ declare namespace IAerospike {
         func: any,
         args: any,
     }
-
 
 }

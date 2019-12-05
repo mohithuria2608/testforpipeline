@@ -165,6 +165,22 @@ class AerospikeClass {
         })
     }
 
+    async append(argv: IAerospike.Append): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                const bins = argv.bins
+                const meta = this.buildMeta(argv)
+                const policy = this.buildPolicy(argv)
+                console.info(">>>>>>>>>>>>>>>>>>>>", key, bins, meta, policy)
+                let res = await this.client.append(key, bins)
+                resolve(res)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
     async  get(argv: IAerospike.Get): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -271,4 +287,4 @@ class AerospikeClass {
     }
 }
 
-export const Aerospike = new AerospikeClass('myapp');
+export const Aerospike = new AerospikeClass('americana');

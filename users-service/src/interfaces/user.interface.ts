@@ -22,6 +22,7 @@ declare namespace IUserRequest {
         medium: string,
         // cartId: string
         createdAt: number,
+        address?: string[]
     }
     interface IRefreshToken extends ICommonRequest.IHeaders {
     }

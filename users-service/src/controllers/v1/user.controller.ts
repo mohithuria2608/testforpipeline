@@ -85,6 +85,7 @@ export class UserController {
                     medium: "",
                     email: "",
                     name: "",
+                    address: [],
                     createdAt: new Date().getTime()
                 }
                 let putArg: IAerospike.Put = {
