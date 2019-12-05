@@ -172,7 +172,7 @@ class AerospikeClass {
                 const bins = argv.bins
                 const meta = this.buildMeta(argv)
                 const policy = this.buildPolicy(argv)
-                console.info(">>>>>>>>>>>>>>>>>>>>", key, bins, meta, policy)
+                console.info(key, bins, meta, policy)
                 let res = await this.client.append(key, bins)
                 resolve(res)
             } catch (error) {
