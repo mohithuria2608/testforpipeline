@@ -124,7 +124,7 @@ export class UserController {
             let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
             if (checkUserExist && checkUserExist.id) {
                 if (checkUserExist.otp == 0 && checkUserExist.otpExpAt == 0)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E403.OTP_SESSION_EXPIRED)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
 
                 if (checkUserExist.otp == payload.otp) {
                     if (checkUserExist.otpExpAt > new Date().getTime()) {
@@ -149,11 +149,11 @@ export class UserController {
                         )
                         return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(checkUserExist) }
                     } else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E403.OTP_EXPIRED)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_EXPIRED)
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E403.INVALID_OTP)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E403.INVALID_OTP)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
         } catch (err) {
             consolelog("authVerifyOtp", err, false)
             return Promise.reject(err)

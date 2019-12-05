@@ -217,7 +217,6 @@ class AerospikeClass {
                 } else if (argv.udf) {
                     res = await this.queryApply(query, argv.udf)
                 } else {
-                    console.log("111111111111111")
                     res = await this.queryForeach(query)
                 }
                 resolve(res)

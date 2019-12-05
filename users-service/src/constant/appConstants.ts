@@ -118,6 +118,24 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            OTP_SESSION_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_SESSION_EXPIRED',
+                message: 'Otp session has expired'
+            },
+
+            OTP_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_EXPIRED',
+                message: 'Otp entered has expired'
+            },
+
+            INVALID_OTP: {
+                statusCode: 400,
+                type: 'INVALID_OTP',
+                message: 'Invalid otp entered'
+            },
+
             PHONE_NO_REQ: {
                 statusCode: 400,
                 message: 'Phone number is required',
@@ -183,13 +201,7 @@ export let STATUS_MSG = {
                 type: 'INVALID_EMAIL_TOKEN',
                 message: "Wrong email token entered"
             },
-
-            INVALID_OTP: {
-                statusCode: 400,
-                type: 'INVALID_OTP',
-                message: "Invalid OTP"
-            },
-
+            
             APP_VERSION_ERROR: {
                 statusCode: 400,
                 message: 'One of the latest version or updated version value must be present',
@@ -260,24 +272,6 @@ export let STATUS_MSG = {
             }
         },
         E403: {
-            OTP_SESSION_EXPIRED: {
-                statusCode: 403,
-                type: 'OTP_SESSION_EXPIRED',
-                message: 'Otp session has expired'
-            },
-
-            OTP_EXPIRED: {
-                statusCode: 403,
-                type: 'OTP_EXPIRED',
-                message: 'Otp entered has expired'
-            },
-
-            INVALID_OTP: {
-                statusCode: 403,
-                type: 'INVALID_OTP',
-                message: 'Invalid otp entered'
-            },
-
             INVALID_LOGIN: {
                 statusCode: 403,
                 type: 'INVALID_LOGIN',

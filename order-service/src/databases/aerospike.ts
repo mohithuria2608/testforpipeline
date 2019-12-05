@@ -102,4 +102,4 @@ export class AerospikeClass {
     }
 }
 
-export default new AerospikeClass('myapp');
+export default new AerospikeClass('americana');

@@ -177,4 +177,4 @@ class AerospikeClass {
     }
 }
 
-export const Aerospike = new AerospikeClass('myapp');
+export const Aerospike = new AerospikeClass('americana');

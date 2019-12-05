@@ -9,7 +9,7 @@ export class AddressController {
     * @method POST
     * @description REGISTER USER ADDRESS BY ID
     * */
-    async registerAddressById(payload: IAddressRequest.IRegisterAddress) {
+    async registerAddressById(payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let id = this.uuidv1();
             let dataToSave: IAddressRequest.IRegisterAddress = {
@@ -49,7 +49,7 @@ export class AddressController {
                 bins: dataToSave,
                 bin: 'address',
                 set: 'user',
-                key: id
+                key: auth.userData.id
             }
             let registerUserAddress: IAddressRequest.IRegisterAddress = await Aerospike.listOperations(putArg)
             console.log("response from database:-", JSON.stringify(registerUserAddress), true);
