@@ -48,13 +48,13 @@ export class AddressController {
                 deviceid: payload.deviceid,
                 country: payload.country,
             };
-            let putArg: IAerospike.Append = {
+            let putArg: IAerospike.ListOperation = {
                 bins: dataToSave,
+                bin: 'address',
                 set: 'user',
-                key: id,
-                ttl: Constant.SERVER.INITIAL_ADDRESS_TTL,
+                key: id
             }
-            let registerUserAddress: IAddressRequest.IRegisterAddress = await Aerospike.append(putArg)
+            let registerUserAddress: IAddressRequest.IRegisterAddress = await Aerospike.listOperations(putArg)
             console.log("response from database:-", JSON.stringify(registerUserAddress), true);
 
         } catch (err) {

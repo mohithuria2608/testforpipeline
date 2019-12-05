@@ -5,7 +5,11 @@
 */
 
 const aerospike = require('aerospike');
+const op = aerospike.operations
+const lists = aerospike.lists;
+const map = aerospike.maps;
 const path = require('path');
+
 class AerospikeClass {
 
     public client: any;
@@ -170,22 +174,20 @@ class AerospikeClass {
         })
     }
 
-    async append(argv: IAerospike.Append): Promise<any> {
+    async  listOperations(argv: IAerospike.ListOperation): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 const key = new aerospike.Key(this.namespace, argv.set, argv.key)
-                const bins = argv.bins
-                const meta = this.buildMeta(argv)
-                const policy = this.buildPolicy(argv)
-                console.info(">>>>>>>>>>>>>>>>>>>>", key, bins, meta, policy)
-                let res = await this.client.append(key, bins)
+                let operations = [
+                    lists.append(argv.bin, argv.bins)
+                ]
+                let res = await this.client.operate(key, operations)
                 resolve(res)
             } catch (error) {
                 reject(error)
             }
         })
     }
-
     private async  queryForeach(query) {
         return new Promise((resolve, reject) => {
             try {

@@ -52,9 +52,10 @@ declare namespace IAerospike {
         update?: boolean
     }
 
-    interface Append {
+    interface ListOperation {
         key?: string,
         bins?: object,
+        bin?: string,
         set: string,
         ttl?: number,
     }

@@ -58,8 +58,7 @@ export class UserController {
                     devicetype: payload.devicetype,
                     osversion: payload.osversion,
                     deviceid: payload.deviceid,
-                    isLogin: 0,
-                    address: []
+                    isLogin: 0
                 }
                 let putArg: IAerospike.Put = {
                     bins: dataToSave,
