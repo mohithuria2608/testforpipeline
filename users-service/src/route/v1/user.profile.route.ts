@@ -8,7 +8,7 @@ import * as JOI from './common.route.validator';
 
 export default (router: Router) => {
     router
-        .patch('/',
+        .patch('/create',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
@@ -18,18 +18,18 @@ export default (router: Router) => {
                 body: {
                     socialKey: Joi.string(),
                     medium: Joi.string().valid(Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB, Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE),
-                    cCode: Joi.string(),
-                    phnNo: Joi.string().max(9),
-                    email: Joi.string().email().lowercase(),
-                    name: Joi.string()
+                    cCode: Joi.string().required(),
+                    phnNo: Joi.string().max(9).required(),
+                    email: Joi.string().email().lowercase().required(),
+                    name: Joi.string().required()
                 }
             }),
             async (ctx) => {
                 try {
-                    let payload: IUserRequest.IAuthSocial = { ...ctx.request.body, ...ctx.request.header };
+                    let payload: IUserRequest.ICreateProfile = { ...ctx.request.body, ...ctx.request.header };
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await userController.profileUpdate(payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.UPDATED, res)
+                    let res = await userController.createProfile(payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

@@ -6,10 +6,23 @@ declare namespace IUserRequest {
         cCode: string,
         phnNo: string,
         phnVerified: number,
+        email: string,
+        emailVerified: number,
+        profileStep: number,
+        socialKey: string,
+        medium: string,
+        createdAt: number,
+        address?: string[],
+        session: {
+            [deviceid: string]: ISession
+        },
+        removeUserId?: string
+    }
+
+    interface ISession {
         otp: number,
         otpExpAt: number,
-        email: string,
-        profileStep: number,
+        otpVerified: number,
         language: string,
         country: string,
         appversion: string,
@@ -18,11 +31,8 @@ declare namespace IUserRequest {
         osversion: string,
         deviceid: string,
         isLogin: number,
-        socialKey: string,
-        medium: string,
-        // cartId: string
+        cartId: string,
         createdAt: number,
-        address?: string[]
     }
     interface IRefreshToken extends ICommonRequest.IHeaders {
     }
@@ -41,13 +51,13 @@ declare namespace IUserRequest {
     interface IAuthVerifyOtp extends ICommonRequest.IHeaders, IPhone {
         otp: number
     }
-    interface IAuthSocial extends ICommonRequest.IHeaders, IPhone, IEmail {
+    interface IAuthSocial extends ICommonRequest.IHeaders, IEmail {
         socialKey: string,
         medium: string,
         name: string,
     }
 
-    interface IEditProf extends ICommonRequest.IHeaders {
+    interface ICreateProfile extends ICommonRequest.IHeaders {
         socialKey?: string,
         medium?: string,
         cCode?: string,

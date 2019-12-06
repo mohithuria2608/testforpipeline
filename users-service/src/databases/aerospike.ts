@@ -5,6 +5,7 @@
 */
 
 import * as config from "config"
+import { resolve } from "dns";
 const aerospike = require('aerospike');
 const op = aerospike.operations
 const lists = aerospike.lists;
@@ -169,6 +170,17 @@ class AerospikeClass {
         })
     }
 
+    async remove(argv:IAerospike.Remove) {
+        try {
+            const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+            await this.client.remove(key)
+            console.info('Removed record:', key)
+            return {}
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    }
+
     async append(argv: IAerospike.Append): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -296,6 +308,22 @@ class AerospikeClass {
                 await job.waitUntilDone()
                 console.info('UDF module removed successfully')
                 resolve(job)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async operationsOnMap(argv: IAerospike.MapOperation, operations) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // let operations = [
+                //     map.putItems('dob', { dd: 28 })
+                // ]
+
+                let result = await this.client.operate(argv.key, operations)
+                console.info('Map updated successfully', result)
+                resolve(result)
             } catch (error) {
                 reject(error)
             }

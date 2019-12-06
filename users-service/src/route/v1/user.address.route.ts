@@ -74,7 +74,7 @@ export default (router: Router) => {
                     description: Joi.string(),
                     districtId: Joi.number(),
                     flatNum: Joi.number(),
-                    id: Joi.number().required(),
+                    id: Joi.number(),
                     language: Joi.string(),
                     phoneAreaCode: Joi.string(),
                     phoneLookup: Joi.string(),
@@ -90,8 +90,12 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IAddressRequest.IRegisterAddress = { ...ctx.required.body, ...ctx.required.header };
-                    let res = await addressController.updateAddressById(payload);
+                    let payload: IAddressRequest.IRegisterAddress = { ...ctx.request.body, ...ctx.request.header };
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await addressController.updateAddressById(payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
                 } catch (error) {
                     throw error
                 }

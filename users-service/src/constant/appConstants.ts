@@ -99,9 +99,10 @@ export let DATABASE = {
 
 export let UDF = {
     USER: {
-        check_user_exist: "check_user_exist",
-        check_device_id: "check_device_id",
-        check_cCode_or_phnNo: "check_cCode_or_phnNo",
+        check_phone_exist: "check_phone_exist"
+    },
+    ADDRESS: {
+        update_address: "update_address",
     }
 }
 export enum KAFKA_TOPIC {
@@ -118,6 +119,12 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            PROFILE_SETUP_ALLREADY_COMPLETE:{
+                statusCode: 400,
+                type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
+                message: 'Profile setup is already complete'
+            },
+
             OTP_SESSION_EXPIRED: {
                 statusCode: 400,
                 type: 'OTP_SESSION_EXPIRED',
@@ -154,7 +161,7 @@ export let STATUS_MSG = {
                 type: 'NAME_REQ'
             },
 
-            SOCIAL_KEY_REQ:{
+            SOCIAL_KEY_REQ: {
                 statusCode: 400,
                 message: 'Social key is required',
                 type: 'SOCIAL_KEY_REQ'
@@ -201,7 +208,7 @@ export let STATUS_MSG = {
                 type: 'INVALID_EMAIL_TOKEN',
                 message: "Wrong email token entered"
             },
-            
+
             APP_VERSION_ERROR: {
                 statusCode: 400,
                 message: 'One of the latest version or updated version value must be present',

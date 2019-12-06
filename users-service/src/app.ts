@@ -6,6 +6,7 @@ import middleware from './middlewares'
 import route from './route'
 
 
+
 const app = new Koa()
 
 
@@ -18,6 +19,8 @@ export const start = (async () => {
     const server = app.listen(port)
 
     await bootstrap(server)
+
+
 
 
   } catch (err) {

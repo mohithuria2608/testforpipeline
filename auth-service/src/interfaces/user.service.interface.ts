@@ -6,13 +6,27 @@ declare namespace IUserServiceRequest {
 
     interface IUserData {
         id: string,
+        name: string,
         cCode: string,
         phnNo: string,
         phnVerified: number,
+        email: string,
+        emailVerified: number,
+        profileStep: number,
+        socialKey: string,
+        medium: string,
+        createdAt: number,
+        address?: string[],
+        session: {
+            [deviceid: string]: ISession
+        },
+        removeUserId?: string
+    }
+
+    interface ISession {
         otp: number,
         otpExpAt: number,
-        email: string,
-        profileStep: number,
+        otpVerified: number,
         language: string,
         country: string,
         appversion: string,
@@ -21,9 +35,7 @@ declare namespace IUserServiceRequest {
         osversion: string,
         deviceid: string,
         isLogin: number,
-        socialKey: string,
-        mdeium: string,
-        // cartId: string
+        cartId: string,
         createdAt: number,
     }
 }

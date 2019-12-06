@@ -35,23 +35,16 @@ message IAuthorizationObj {
 }
 
 message IUserData {
-    required string id = 1;
-    required string cCode = 2;
-    required string phnNo = 3;
-    required int32 phnVerified = 4;
-    required int32 otp = 5;
-    required int32 otpExpAt = 6;
-    required string email = 7;
+    required string  id = 1;
+    required string name = 2;
+    required string cCode = 3;
+    required string phnNo = 4;
+    required int32 phnVerified = 5;
+    required string email = 6;
+    required int32 emailVerified = 7;
     required int32 profileStep = 8;
-    required string language = 9;
-    required string country = 10;
-    required string appversion = 11;
-    required string devicemodel = 12;
-    required string devicetype = 13;
-    required string osversion = 14;
-    required string deviceid = 15;
-    required int32 isLogin = 16;
-    required string socialKey = 17;
-    required string mdeium = 18;
-    required int32 createdAt = 19;
+    required string socialKey = 9;
+    required string medium = 10;
+    required int32 createdAt = 11;
+    optional string removeUserId = 12;
 }

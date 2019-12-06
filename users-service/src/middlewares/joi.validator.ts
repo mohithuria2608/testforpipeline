@@ -38,6 +38,7 @@ export const validate = function (validationObj) {
     return async (ctx, next) => {
         try {
             console.log("ctx.req.body", ctx.request.body)
+            console.log("ctx.query", ctx.query)
             // Validate each request data object in the Koa context object
             await validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true })
             await validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })

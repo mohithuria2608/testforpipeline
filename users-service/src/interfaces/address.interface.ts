@@ -1,6 +1,7 @@
 declare namespace IAddressRequest {
 
     interface IRegisterAddress extends ICommonRequest.IHeaders {
+        addressId?: string,
         areaId: string,
         bldgName: string,
         bldgNameUn: string,

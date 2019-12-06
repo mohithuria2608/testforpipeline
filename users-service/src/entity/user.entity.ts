@@ -41,7 +41,7 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        cCode: Joi.string().trim().required(),
+        cCode: Joi.string().trim().required().description("sk"),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
         otp: Joi.number().required(),

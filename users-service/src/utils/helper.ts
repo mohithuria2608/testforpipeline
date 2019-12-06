@@ -152,16 +152,14 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: IUserRequest.IUserData) {
+export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid) {
     try {
-        delete userObj['osversion']
-        delete userObj['isLogin']
-        delete userObj['appversion']
-        delete userObj['devicemodel']
-        delete userObj['otpExpAt']
-        delete userObj['otp']
-        delete userObj['deviceid']
+        userObj['country'] = userObj['session'][deviceid].country
+        userObj['language'] = userObj['session'][deviceid].language
+        userObj['cartId'] = userObj['session'][deviceid].cartId
 
+        delete userObj['createdAt']
+        delete userObj['session']
         return userObj
     } catch (error) {
         consolelog('formatUserData', error, false)

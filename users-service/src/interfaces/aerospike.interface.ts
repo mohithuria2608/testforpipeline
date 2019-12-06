@@ -7,6 +7,10 @@ declare namespace IAerospike {
         type: string
     }
 
+    interface Remove {
+        key: string,
+        set: string,
+    }
     interface Put {
         bins?: object,
         set: string,
@@ -79,5 +83,9 @@ declare namespace IAerospike {
         bin?: string,
         set: string,
         ttl?: number,
+    }
+
+    interface MapOperation {
+        key: string,
     }
 }

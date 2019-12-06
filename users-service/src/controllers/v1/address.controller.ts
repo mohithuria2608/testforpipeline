@@ -64,14 +64,48 @@ export class AddressController {
     * @method POST
     * @description UPDATE USER ADDRESS BY ID
     * */
-    async updateAddressById(payload: IAddressRequest.IRegisterAddress) {
+    async updateAddressById(payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-
+            let address = auth.userData.address
+            if (address && address.length > 0) {
+                address = address.map(elem => {
+                    if (elem['id'] == payload.addressId) {
+                        
+                    }
+                    return elem
+                })
+                let dataToUpdate = {
+                    address: address
+                }
+                let putArg: IAerospike.Put = {
+                    bins: dataToUpdate,
+                    set: 'user',
+                    key: auth.userData.id,
+                    update: true,
+                }
+                let updateUser = await Aerospike.put(putArg)
+                return updateUser
+            } else {
+                return {}
+            }
         } catch (err) {
             consolelog("updateAddressById", err, false)
             return Promise.reject(err)
         }
     }
 }
+
+// local function addressId_filter(rec)
+//         local address = rec['address']
+//         local val = address['id']
+//         if val == addressId then
+//            return true
+//         else
+//            return false
+//         end
+//     end
+
+//     rec['userId'] = newUserId
+//     aerospike:update(rec)
 
 export const addressController = new AddressController();
