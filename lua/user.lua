@@ -18,3 +18,24 @@ function check_phone_exist(stream, cCode)
 
   return stream:filter(cCode_filter):map(rec_to_map)
 end
+
+function check_social_key(stream, medium, socialKey)
+   local function medium_filter(rec)
+      local val = rec['medium']
+      if val == medium then
+         return true
+      else
+         return false
+      end
+   end
+   local function socialKey_filter(rec)
+      local val = rec['socialKey']
+      if val == socialKey then
+         return true
+      else
+         return false
+      end
+   end
+
+return stream:filter(medium_filter):filter(socialKey_filter):map(rec_to_map)
+end

@@ -360,24 +360,3 @@ class AerospikeClass {
 }
 
 export const Aerospike = new AerospikeClass('americana');
-
-// <-- POST /v1/aerospike/test
-// 1|user  | context CdtContext { items: [ [ 34, 'sdfghgfdsdfg' ] ] }
-// 1|user  | operations [ MapOperation {
-// 1|user  |     op: 41,
-// 1|user  |     bin: 'session',
-// 1|user  |     items: { otp: 9 },
-// 1|user  |     policy: { writeFlags: 14 },
-// 1|user  |     context: CdtContext { items: [Array] } } ]
-// 1|user  | Map updated successfully Record {
-// 1|user  |   key:
-// 1|user  |    Key {
-// 1|user  |      ns: 'americana',
-// 1|user  |      set: 'user',
-// 1|user  |      key: '155e0680-19b5-11ea-bf45-d91ad9310ae6',
-// 1|user  |      digest:
-// 1|user  |       <Buffer a7 03 a4 75 53 be b7 6a 9a 3e 64 84 bf 28 f5 2b 5b 19 15 89> },
-// 1|user  |   bins: { session: 13 },
-// 1|user  |   ttl: 2592000,
-// 1|user  |   gen: 2 }
-// 1|user  |   --> POST /v1/aerospike/test 200 29ms 2b

@@ -130,14 +130,16 @@ export class UserController {
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
             let queryArg: IAerospike.Query = {
-                equal: {
-                    bin: "socialKey",
-                    value: payload.socialKey
+                udf: {
+                    module: 'user',
+                    func: Constant.UDF.USER.check_social_key,
+                    args: [payload.medium, payload.socialKey],
                 },
                 set: 'user',
                 background: false,
             }
             let userObj: IUserRequest.IUserData = await Aerospike.query(queryArg)
+            console.log("userObj", userObj)
             if (userObj && userObj.id) {
                 let userUpdate: IUserRequest.IUserUpdate = {
                     socialKey: payload.socialKey,

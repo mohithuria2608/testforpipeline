@@ -99,7 +99,8 @@ export let DATABASE = {
 
 export let UDF = {
     USER: {
-        check_phone_exist: "check_phone_exist"
+        check_phone_exist: "check_phone_exist",
+        check_social_key: "check_social_key"
     },
     ADDRESS: {
         update_address: "update_address",
@@ -119,7 +120,7 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
-            PROFILE_SETUP_ALLREADY_COMPLETE:{
+            PROFILE_SETUP_ALLREADY_COMPLETE: {
                 statusCode: 400,
                 type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
                 message: 'Profile setup is already complete'
