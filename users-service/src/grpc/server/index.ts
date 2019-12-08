@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import { userController } from '../../controllers'
+import * as ENTITY from '../../entity'
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -21,7 +21,7 @@ server.addService(userProto.UserService.service, {
     getUserById: async (call: IUserServiceRequest.IGetUserById, callback) => {
         try {
             consolelog("getUserById", JSON.stringify(call.request), true)
-            let res: IUserRequest.IUserData = await userController.getById(call.request)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.getById(call.request)
             callback(null, res)
         } catch (error) {
             consolelog("getUserById", error, false)

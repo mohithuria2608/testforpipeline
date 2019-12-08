@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/any.proto";
 
 service AuthService {
     rpc CreateToken (ICreateToken) returns (IToken) {}
@@ -47,4 +48,5 @@ message IUserData {
     required string medium = 10;
     required int32 createdAt = 11;
     optional string removeUserId = 12;
+    optional Any address = 13;
 }

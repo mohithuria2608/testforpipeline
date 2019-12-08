@@ -8,7 +8,7 @@ export class MenuController {
     /**
     * @method GET
     * */
-    async fetchMenu(payload: IMenuRequest.IMenuFetch) {
+    async fetchMenu(headers: ICommonRequest.IHeaders) {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
             let menu = JSON.parse(rawdata);

@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { miscUserController } from '../../controllers';
-import * as JOI from './common.route.validator';
+import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
@@ -18,9 +18,10 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IUserRequest.IRefreshToken = { ...ctx.request.body, ...ctx.request.header };
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IUserRequest.IRefreshToken = ctx.request.body;
                     let authObj = ctx.state.user
-                    let res = await miscUserController.refreshToken(payload, authObj);
+                    let res = await miscUserController.refreshToken(headers, payload, authObj);
                     ctx.set({ 'accessToken': res.accessToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {})
                     ctx.status = sendResponse.statusCode;

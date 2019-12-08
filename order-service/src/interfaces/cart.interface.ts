@@ -1,6 +1,6 @@
 declare namespace ICartRequest {
 
-    interface IValidateCart extends ICommonRequest.IHeaders, ICommonRequest.ICordinatesOpt {
+    interface IValidateCart extends  ICommonRequest.ICordinatesOpt {
         curMenuId: number,
         menuUpdatedAt: number,
         items: IMenuServiceRequest.IProduct[]

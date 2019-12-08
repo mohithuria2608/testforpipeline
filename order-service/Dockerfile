@@ -3,6 +3,7 @@ WORKDIR /usr/src/app
 COPY . .
 COPY proto/ /usr/src/app/proto/
 RUN apt-get update
+RUN npm cache clean --force
 RUN npm install -g typescript
 RUN npm install
 EXPOSE 4003

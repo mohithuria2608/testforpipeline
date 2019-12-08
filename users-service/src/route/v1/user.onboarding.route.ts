@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { userController } from '../../controllers';
-import * as JOI from './common.route.validator';
+import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
@@ -21,8 +21,9 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IUserRequest.IAuthSendOtp = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await userController.loginSendOtp(payload);
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IUserRequest.IAuthSendOtp = ctx.request.body;
+                    let res = await userController.loginSendOtp(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_SENT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
@@ -45,8 +46,9 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IUserRequest.IAuthVerifyOtp = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await userController.loginVerifyOtp(payload);
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IUserRequest.IAuthVerifyOtp = ctx.request.body;
+                    let res = await userController.loginVerifyOtp(headers, payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, res.response)
                     ctx.status = sendResponse.statusCode;
@@ -71,8 +73,9 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IUserRequest.IAuthSocial = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await userController.socialAuthValidate(payload);
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IUserRequest.IAuthSocial = ctx.request.body;
+                    let res = await userController.socialAuthValidate(headers, payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res.response)
                     ctx.status = sendResponse.statusCode;

@@ -5,18 +5,17 @@
 */
 
 import * as config from "config"
-import { resolve } from "dns";
 const aerospike = require('aerospike');
-const op = aerospike.operations
 const lists = aerospike.lists;
-const map = aerospike.maps;
+
 const path = require('path');
 
 class AerospikeClass {
 
     public client: any;
     public namespace: string;
-
+    public cdt = aerospike.cdt;
+    public maps = aerospike.maps;
     constructor(namespace: string) {
         this.namespace = namespace;
     }
@@ -161,8 +160,8 @@ class AerospikeClass {
                 const bins = argv.bins
                 const meta = this.buildMeta(argv)
                 const policy = this.buildPolicy(argv)
-                console.info(key, bins, meta, policy)
                 let res = await this.client.put(key, bins, meta, policy)
+                console.log(res)
                 resolve(res)
             } catch (error) {
                 reject(error)
@@ -170,7 +169,7 @@ class AerospikeClass {
         })
     }
 
-    async remove(argv:IAerospike.Remove) {
+    async remove(argv: IAerospike.Remove) {
         try {
             const key = new aerospike.Key(this.namespace, argv.set, argv.key)
             await this.client.remove(key)
@@ -314,14 +313,43 @@ class AerospikeClass {
         })
     }
 
+    // private async  applyMapOp(ops: IAerospike.ApplyMapOp[]) {
+    //     const Context = aerospike.cdt.Context
+    //     let operations = []
+    //     ops.forEach(obj => {
+    //         let context
+    //         if (obj.func == 'putItems') {
+    //             let policy = {
+    //                 writeFlags: this.maps.writeFlags.UPDATE_ONLY | this.maps.writeFlags.NO_FAIL | this.maps.writeFlags.PARTIAL
+    //             }
+    //             if (obj.context) {
+    //                 context = new Context().addMapKey(obj.context)
+    //                 operations.push(this.maps.putItems(obj.key, obj.bins, policy).withContext(context))
+    //             } else
+    //                 operations.push(this.maps.putItems(obj.key, obj.bins), policy)
+    //         }
+    //     })
+    //     return operations
+    // }
+
     async operationsOnMap(argv: IAerospike.MapOperation, operations) {
         return new Promise(async (resolve, reject) => {
             try {
-                // let operations = [
-                //     map.putItems('dob', { dd: 28 })
+                const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+
+
+                // const Context = aerospike.cdt.Context
+                // const context = new Context().addMapKey('sdfghgfdsdfg')
+                // console.log("context", context)
+                // operations = [
+                //     this.maps.putItems('session', { otp: 9 }, {
+                //         writeFlags: this.maps.writeFlags.UPDATE_ONLY | this.maps.writeFlags.NO_FAIL | this.maps.writeFlags.PARTIAL
+                //     }).withContext(context)
                 // ]
 
-                let result = await this.client.operate(argv.key, operations)
+                // console.log("operations", operations)
+
+                let result = await this.client.operate(key, operations)
                 console.info('Map updated successfully', result)
                 resolve(result)
             } catch (error) {
@@ -332,3 +360,24 @@ class AerospikeClass {
 }
 
 export const Aerospike = new AerospikeClass('americana');
+
+// <-- POST /v1/aerospike/test
+// 1|user  | context CdtContext { items: [ [ 34, 'sdfghgfdsdfg' ] ] }
+// 1|user  | operations [ MapOperation {
+// 1|user  |     op: 41,
+// 1|user  |     bin: 'session',
+// 1|user  |     items: { otp: 9 },
+// 1|user  |     policy: { writeFlags: 14 },
+// 1|user  |     context: CdtContext { items: [Array] } } ]
+// 1|user  | Map updated successfully Record {
+// 1|user  |   key:
+// 1|user  |    Key {
+// 1|user  |      ns: 'americana',
+// 1|user  |      set: 'user',
+// 1|user  |      key: '155e0680-19b5-11ea-bf45-d91ad9310ae6',
+// 1|user  |      digest:
+// 1|user  |       <Buffer a7 03 a4 75 53 be b7 6a 9a 3e 64 84 bf 28 f5 2b 5b 19 15 89> },
+// 1|user  |   bins: { session: 13 },
+// 1|user  |   ttl: 2592000,
+// 1|user  |   gen: 2 }
+// 1|user  |   --> POST /v1/aerospike/test 200 29ms 2b

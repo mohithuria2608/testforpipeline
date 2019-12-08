@@ -1,6 +1,6 @@
 declare namespace ISyncMenuRequest {
 
-    interface ISyncMenu extends ICommonRequest.IHeaders {
+    interface ISyncMenu  {
         menu: any
     }
 

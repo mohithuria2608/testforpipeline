@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { syncController } from '../../controllers';
-import * as JOI from './common.route.validator'
+import * as JOI from './common.joi.validator'
 
 export default (router: Router) => {
     router

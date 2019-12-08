@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { userController } from '../../controllers';
-import * as JOI from './common.route.validator';
+import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
@@ -26,9 +26,10 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: IUserRequest.ICreateProfile = { ...ctx.request.body, ...ctx.request.header };
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IUserRequest.ICreateProfile = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await userController.createProfile(payload, auth);
+                    let res = await userController.createProfile(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

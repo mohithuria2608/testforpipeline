@@ -41,4 +41,35 @@ export default (router: Router) => {
                     throw error
                 }
             })
+
+        .post('/test',
+            async (ctx) => {
+                try {
+                    const aerospike = require('aerospike');
+                    const maps = aerospike.maps;
+                    // Aerospike.put({
+                    //     bins: {
+                    //         name: "ankit",
+                    //         session: {
+                    //             sdfghgfdsdfg: {
+                    //                 "otpExpAt": 0,
+                    //                 "otp": 0,
+                    //             }
+                    //         }
+
+                    //     },
+                    //     set: 'user',
+                    //     key: "8f271e00-19b2-11ea-a8ee-afd6b5536623",
+                    //     create: true
+                    // })
+
+
+                    await Aerospike.operationsOnMap({ set: 'user', key: '155e0680-19b5-11ea-bf45-d91ad9310ae6' }, [])
+
+                    ctx.body = {}
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 }

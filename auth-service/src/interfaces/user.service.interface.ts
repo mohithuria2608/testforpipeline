@@ -16,7 +16,9 @@ declare namespace IUserServiceRequest {
         socialKey: string,
         medium: string,
         createdAt: number,
-        address?: string[],
+        address: {
+            [deviceid: string]: IAddressRequest.IRegisterAddress
+        },
         session: {
             [deviceid: string]: ISession
         },

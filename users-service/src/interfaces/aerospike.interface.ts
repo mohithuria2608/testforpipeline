@@ -84,8 +84,9 @@ declare namespace IAerospike {
         set: string,
         ttl?: number,
     }
-
+    
     interface MapOperation {
+        set: string,
         key: string,
     }
 }

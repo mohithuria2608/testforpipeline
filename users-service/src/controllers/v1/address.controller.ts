@@ -1,6 +1,8 @@
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, formatUserData } from '../../utils'
 import { Aerospike } from '../../databases/aerospike'
+import * as ENTITY from '../../entity'
+
 export class AddressController {
     private uuidv1 = require('uuid/v1');
     constructor() { }
@@ -9,7 +11,7 @@ export class AddressController {
     * @method POST
     * @description REGISTER USER ADDRESS BY ID
     * */
-    async registerAddressById(payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
+    async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let id = this.uuidv1();
             let dataToSave: IAddressRequest.IRegisterAddress = {
@@ -37,23 +39,21 @@ export class AddressController {
                 streetId: payload.streetId,
                 useMap: payload.useMap,
                 createdBy: 'App',
-                updatedBy: 'App',
-                appversion: payload.appversion,
-                devicemodel: payload.devicemodel,
-                devicetype: payload.devicetype,
-                osversion: payload.osversion,
-                deviceid: payload.deviceid,
-                country: payload.country,
+                updatedBy: 'App'
             };
-            let putArg: IAerospike.ListOperation = {
-                bins: dataToSave,
-                bin: 'address',
-                set: 'user',
-                key: auth.userData.id
+            let dataToUpdate = {
+                address: auth.userData.address
             }
-            let registerUserAddress: IAddressRequest.IRegisterAddress = await Aerospike.listOperations(putArg)
-            console.log("response from database:-", JSON.stringify(registerUserAddress), true);
-
+            dataToUpdate['address'][id] = dataToSave
+            let putArg: IAerospike.Put = {
+                bins: dataToUpdate,
+                set: 'user',
+                key: auth.userData.id,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
+            return formatUserData(userObj, headers.deviceid)
         } catch (err) {
             consolelog("registerAddressById", err, false)
             return Promise.reject(err)
@@ -64,30 +64,20 @@ export class AddressController {
     * @method POST
     * @description UPDATE USER ADDRESS BY ID
     * */
-    async updateAddressById(payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
+    async updateAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let address = auth.userData.address
-            if (address && address.length > 0) {
-                address = address.map(elem => {
-                    if (elem['id'] == payload.addressId) {
-                        
+            let op = [
+                {
+                    func: "putItems",
+                    key: 'address',
+                    bins: {
+                        areaId: payload.areaId
                     }
-                    return elem
-                })
-                let dataToUpdate = {
-                    address: address
                 }
-                let putArg: IAerospike.Put = {
-                    bins: dataToUpdate,
-                    set: 'user',
-                    key: auth.userData.id,
-                    update: true,
-                }
-                let updateUser = await Aerospike.put(putArg)
-                return updateUser
-            } else {
-                return {}
-            }
+            ]
+            await Aerospike.operationsOnMap({ set: 'user', key: auth.userData.id }, op)
+            let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
+            return formatUserData(userObj, headers.deviceid)
         } catch (err) {
             consolelog("updateAddressById", err, false)
             return Promise.reject(err)

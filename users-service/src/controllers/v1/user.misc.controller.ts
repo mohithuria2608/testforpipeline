@@ -10,10 +10,10 @@ export class MiscUserController {
     * @method POST
     * @description : If the accessToken expire create new token using refreshToken with expiry time = 30 days
     * */
-    async refreshToken(payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
+    async refreshToken(headers: ICommonRequest.IHeaders, payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
         try {
             const tokenType = authObj.id ? Constant.DATABASE.TYPE.TOKEN.USER_AUTH : Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-            let tokens = await ENTITY.UserE.getTokens(payload.deviceid, payload.devicetype, [tokenType], authObj.id ? authObj.id : undefined)
+            let tokens = await ENTITY.UserE.getTokens(headers.deviceid, headers.devicetype, [tokenType], authObj.id ? authObj.id : undefined)
             return { accessToken: tokens.accessToken }
         } catch (err) {
             consolelog("refreshToken", err, false)

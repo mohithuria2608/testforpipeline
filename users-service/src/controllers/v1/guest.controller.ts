@@ -9,14 +9,14 @@ export class GuestController {
     /**
      * @method POST
      * */
-    async guestLogin(payload: IGuestRequest.IGuestLogin) {
+    async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
             let tokens = await ENTITY.UserE.getTokens(
-                payload.deviceid,
-                payload.devicetype,
+                headers.deviceid,
+                headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH]
             )
-            const cartId = await cryptData(payload.deviceid)
+            const cartId = await cryptData(headers.deviceid)
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: { cartId } }
         } catch (err) {
             consolelog("guestLogin", err, false)
