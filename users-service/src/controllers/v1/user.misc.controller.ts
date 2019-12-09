@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
 
 export class MiscUserController {
@@ -12,9 +12,15 @@ export class MiscUserController {
     * */
     async refreshToken(headers: ICommonRequest.IHeaders, payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
         try {
+
             const tokenType = authObj.id ? Constant.DATABASE.TYPE.TOKEN.USER_AUTH : Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             let tokens = await ENTITY.UserE.getTokens(headers.deviceid, headers.devicetype, [tokenType], authObj.id ? authObj.id : undefined)
-            return { accessToken: tokens.accessToken }
+            if (authObj.id) {
+                let user = await ENTITY.UserE.getById({ id: authObj.id })
+                return { accessToken: tokens.accessToken, response: formatUserData(user, headers.deviceid) }
+            } else
+                return { accessToken: tokens.accessToken, response: {} }
+
         } catch (err) {
             consolelog("refreshToken", err, false)
             return Promise.reject(err)
