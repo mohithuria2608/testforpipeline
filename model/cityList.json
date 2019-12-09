@@ -1,0 +1,56 @@
+[
+    {
+        "cityId": 17,
+        "countryId": 1,
+        "name_en": "Abu Dhabi",
+        "name_ar": "أبو ظبي"
+    },
+    {
+        "cityId": 22,
+        "countryId": 1,
+        "name_en": "Ras Al Khaimah",
+        "name_ar": "رأس الخيمة"
+    },
+    {
+        "cityId": 20,
+        "countryId": 1,
+        "name_en": "Ajman",
+        "name_ar": "عجمان"
+    },
+    {
+        "cityId": 18,
+        "countryId": 1,
+        "name_en": "Al Ain",
+        "name_ar": "العين"
+    },
+    {
+        "cityId": 24,
+        "countryId": 1,
+        "name_en": "Sharjah",
+        "name_ar": "الشارقة"
+    },
+    {
+        "cityId": 25,
+        "countryId": 1,
+        "name_en": "Khor Fakkan",
+        "name_ar": "خورفكان"
+    },
+    {
+        "cityId": 21,
+        "countryId": 1,
+        "name_en": "Fujairah",
+        "name_ar": "الفجيرة"
+    },
+    {
+        "cityId": 23,
+        "countryId": 1,
+        "name_en": "Umm Al Quwain",
+        "name_ar": "أم القيوين"
+    },
+    {
+        "cityId": 19,
+        "countryId": 1,
+        "name_en": "Dubai",
+        "name_ar": "دبي"
+    }
+]
