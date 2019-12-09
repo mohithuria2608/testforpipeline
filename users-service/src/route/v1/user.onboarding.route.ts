@@ -77,7 +77,7 @@ export default (router: Router) => {
                     let payload: IUserRequest.IAuthSocial = ctx.request.body;
                     let res = await userController.socialAuthValidate(headers, payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res.response)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.SOCIAL_LOGIN, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

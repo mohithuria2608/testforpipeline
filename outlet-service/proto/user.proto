@@ -1,0 +1,26 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+
+service UserService {
+    rpc GetUserById (IId) returns (IUserData) {}
+}
+
+message IId {
+    required string id = 1;
+}
+
+message IUserData {
+    required string  id = 1;
+    required string name = 2;
+    required string cCode = 3;
+    required string phnNo = 4;
+    required int32 phnVerified = 5;
+    required string email = 6;
+    required int32 emailVerified = 7;
+    required int32 profileStep = 8;
+    required string socialKey = 9;
+    required string medium = 10;
+    required int32 createdAt = 11;
+    optional string removeUserId = 12;
+    optional Any address = 13;
+}

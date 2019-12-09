@@ -16,17 +16,6 @@ export let DATABASE = {
         ADMIN: "ADMIN",
     },
 
-    DB_CHANGE_TYPE: {
-        INSERT: "insert",
-        DELETE: "delete",
-        REPLACE: "replace",
-        UPDATE: "update",
-        DROP: "drop",
-        RENAME: "rename",
-        DROP_DATABASE: "dropDatabase",
-        INVALIDATE: "invalidate",
-    },
-
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,
@@ -385,6 +374,11 @@ export let STATUS_MSG = {
                 statusCode: 200,
                 message: 'Blocked Successfully',
                 type: 'BLOCKED'
+            },
+            SOCIAL_LOGIN:{
+                statusCode: 200,
+                message: 'Logged In Successfully',
+                type: 'SOCIAL_LOGIN'
             },
 
             LOGIN: {

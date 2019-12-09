@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+service OutletService {
+    rpc GetOutlet (IOutletReq) returns (IOutletRes) {}
+}
+
+message IOutletReq { }
+
+message IOutletRes { }

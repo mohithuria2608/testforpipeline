@@ -12,17 +12,6 @@ export let DATABASE = {
         ADMIN: "ADMIN",
     },
 
-    DB_CHANGE_TYPE: {
-        INSERT: "insert",
-        DELETE: "delete",
-        REPLACE: "replace",
-        UPDATE: "update",
-        DROP: "drop",
-        RENAME: "rename",
-        DROP_DATABASE: "dropDatabase",
-        INVALIDATE: "invalidate",
-    },
-
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,

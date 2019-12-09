@@ -1,0 +1,1 @@
+export { OutletE } from './outlet.entity'

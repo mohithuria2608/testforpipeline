@@ -15,7 +15,7 @@ export let DATABASE = {
         USER: "USER",
         ADMIN: "ADMIN",
     },
-    
+
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,
@@ -35,12 +35,18 @@ export let DATABASE = {
         TOKEN: {
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
+            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {
             IOS: 'IOS',
             ANDROID: 'ANDROID',
             WEB: 'WEB'
+        },
+
+        SOCIAL_PLATFORM: {
+            GOOGLE: "GOOGLE",
+            FB: "FB"
         },
 
         VERSION_UPDATE: {
@@ -71,17 +77,31 @@ export let DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST"
+        },
+
+        PROFILE_STEP: {
+            INIT: 0,
+            FIRST: 1,
         }
     }
 };
 
-
+export let UDF = {
+    USER: {
+        check_phone_exist: "check_phone_exist",
+        check_social_key: "check_social_key"
+    },
+    ADDRESS: {
+        update_address: "update_address",
+    }
+}
 export enum KAFKA_TOPIC {
     CREATE_TOKEN = "create_token"
 }
 
 export enum MIDDLEWARE {
     API_AUTH = "api_auth",
+    REFRESH_AUTH = "refresh_auth",
     AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
 }
@@ -89,6 +109,53 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            PROFILE_SETUP_ALLREADY_COMPLETE: {
+                statusCode: 400,
+                type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
+                message: 'Profile setup is already complete'
+            },
+
+            OTP_SESSION_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_SESSION_EXPIRED',
+                message: 'Otp session has expired'
+            },
+
+            OTP_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_EXPIRED',
+                message: 'Otp entered has expired'
+            },
+
+            INVALID_OTP: {
+                statusCode: 400,
+                type: 'INVALID_OTP',
+                message: 'Invalid otp entered'
+            },
+
+            PHONE_NO_REQ: {
+                statusCode: 400,
+                message: 'Phone number is required',
+                type: 'PHONE_NO_REQ'
+            },
+
+            EMAIL_REQ: {
+                statusCode: 400,
+                message: 'Email is required',
+                type: 'EMAIL_REQ'
+            },
+
+            NAME_REQ: {
+                statusCode: 400,
+                message: 'Name is required',
+                type: 'NAME_REQ'
+            },
+
+            SOCIAL_KEY_REQ: {
+                statusCode: 400,
+                message: 'Social key is required',
+                type: 'SOCIAL_KEY_REQ'
+            },
 
             CANNOT_PERFORM_UPDATE_OPERATION: {
                 statusCode: 400,
@@ -132,12 +199,6 @@ export let STATUS_MSG = {
                 message: "Wrong email token entered"
             },
 
-            INVALID_OTP: {
-                statusCode: 400,
-                type: 'INVALID_OTP',
-                message: "Invalid OTP"
-            },
-
             APP_VERSION_ERROR: {
                 statusCode: 400,
                 message: 'One of the latest version or updated version value must be present',
@@ -157,7 +218,13 @@ export let STATUS_MSG = {
                     type: 'VALIDATION_ERROR'
                 }
             },
-
+            JOI_VALIDATION_ERROR: (customErrorMessage) => {
+                return {
+                    statusCode: 400,
+                    message: customErrorMessage,
+                    type: 'VALIDATION_ERROR'
+                }
+            },
             INVALID_ID: {
                 statusCode: 400,
                 message: 'Invalid Id Provided ',
@@ -189,18 +256,6 @@ export let STATUS_MSG = {
             }
         },
         E401: {
-            RESET_PASSWORD_EXPIRED: {
-                statusCode: 401,
-                message: 'Your reset password token is expired!',
-                type: 'TOKEN_EXPIRED'
-            },
-
-            INVALID_LINK: {
-                statusCode: 401,
-                message: 'Link is no more valid',
-                type: 'INVALID_LINK'
-            },
-
             UNAUTHORIZED: {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
@@ -214,23 +269,23 @@ export let STATUS_MSG = {
             }
         },
         E403: {
-            INVALID_PASSWORD: {
-                statusCode: 403,
-                message: 'Incorrect Password',
-                type: 'INVALID_USER_PASS'
-            },
-
-            INVALID_OLD_PASSWORD: {
-                statusCode: 403,
-                message: 'Please enter the valid old password',
-                type: 'INVALID_OLD_PASSWORD'
-            },
-
             INVALID_LOGIN: {
                 statusCode: 403,
                 type: 'INVALID_LOGIN',
                 message: 'Invalid login credentials'
-            }
+            },
+
+            INVALID_LINK: {
+                statusCode: 403,
+                message: 'Link is no more valid',
+                type: 'INVALID_LINK'
+            },
+
+            RESET_PASSWORD_EXPIRED: {
+                statusCode: 403,
+                message: 'Your reset password token is expired!',
+                type: 'TOKEN_EXPIRED'
+            },
         },
         E404: {
             DATA_NOT_FOUND: {
@@ -245,13 +300,17 @@ export let STATUS_MSG = {
                 type: 'USER_NOT_FOUND'
             },
         },
-
         E500: {
             IMP_ERROR: {
                 statusCode: 500,
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
+            INVALID_TOKEN_TYPE: {
+                statusCode: 500,
+                message: 'Invalid token type provided',
+                type: 'INVALID_TOKEN_TYPE'
+            }
         },
         E501: {
             TOKENIZATION_ERROR: {
@@ -263,6 +322,11 @@ export let STATUS_MSG = {
     },
     SUCCESS: {
         S200: {
+            OTP_SENT: {
+                statusCode: 200,
+                type: 'OTP_SENT',
+                message: 'Otp sent successfully'
+            },
 
             OTP_VERIFIED: {
                 statusCode: 200,
@@ -415,16 +479,20 @@ export let SERVER = {
         APP_ADDRESS: ""
     },
     DEFAULT_USER_NAME: 'App User',
-    APP_URL: config.get("server.menu.url"),
+    APP_URL: config.get("server.user.url"),
     LINKS: {
         TERMS_COND: '',
-        PRIVACY: config.get("server.menu.url") + "/privacy_policy/",
+        PRIVACY: config.get("server.user.url") + "/privacy_policy/",
     },
     OTP_TEXT: (otp) => {
         return `Your App code is ${otp}. Welcome to the community!`
     },
     TEMPLATE_PATH: process.cwd() + '/views/',
+    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
+    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
     BY_PASS_OTP: 1212,
+    BY_PASS_OTP_2: 1313,
+    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
     LISTNG_LIMIT: 10,
     BULK_LIMIT: 2000,
     THUMB_DIMENSION: {
@@ -442,5 +510,6 @@ export let SERVER = {
         },
     },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     DISPLAY_COLOR: true
 }
