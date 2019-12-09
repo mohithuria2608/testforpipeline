@@ -1,1 +1,1 @@
-export { MenuC } from './menu.entity'
+export { MenuE } from './menu.entity'

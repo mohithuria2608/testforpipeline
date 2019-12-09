@@ -1,9 +1,9 @@
 declare namespace IOutletRequest {
 
-    interface IGetOutletByCoord {
-
+    interface IGetOutletStoreId {
+        storeId: number
     }
     interface IOutlet {
-        
+
     }
 }

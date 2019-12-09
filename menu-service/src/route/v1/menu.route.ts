@@ -8,6 +8,18 @@ import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
+        .post('/',
+            async (ctx) => {
+                try {
+                    let res = await menuController.postMenu();
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
         .get('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
@@ -15,11 +27,16 @@ export default (router: Router) => {
             ]),
             validate({
                 headers: JOI.JOI_HEADERS,
+                body: {
+                    lat: Joi.number().min(0).max(90),
+                    lng: Joi.number().min(-180).max(180),
+                }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let res = await menuController.fetchMenu(headers);
+                    let payload: IMenuRequest.IFetchMenu = ctx.request.body;
+                    let res = await menuController.fetchMenu(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

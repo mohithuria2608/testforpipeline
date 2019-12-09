@@ -148,6 +148,25 @@ class AerospikeClass {
 
     }
 
+    async secondaryIndexForGeoQuery() {
+        return new Promise(async (res, rej) => {
+            try {
+                var options = {
+                    ns: 'americana',
+                    set: 'outlet',
+                    bin: 'geoFence',
+                    index: 'idx_' + 'outlet' + '_' + 'geoFence',
+                }
+
+                let responseData = await this.client.createGeo2DSphereIndex(options)
+                console.log(responseData);
+                res(responseData);
+            } catch (err) {
+                rej(err);
+            }
+        })
+    }
+
     async  indexRemove(argv) {
         await this.client.indexRemove(this.namespace, argv.index)
         console.info(`Removing index "${argv.index}"`)

@@ -294,10 +294,10 @@ export let STATUS_MSG = {
                 message: 'Result not found'
             },
 
-            USER_NOT_FOUND: {
+            STORE_NOT_FOUND: {
                 statusCode: 404,
-                message: 'User not found',
-                type: 'USER_NOT_FOUND'
+                message: 'Store not found',
+                type: 'STORE_NOT_FOUND'
             },
         },
         E500: {
@@ -478,37 +478,7 @@ export let SERVER = {
         INSTA_LINK: "",
         APP_ADDRESS: ""
     },
-    DEFAULT_USER_NAME: 'App User',
-    APP_URL: config.get("server.user.url"),
-    LINKS: {
-        TERMS_COND: '',
-        PRIVACY: config.get("server.user.url") + "/privacy_policy/",
-    },
-    OTP_TEXT: (otp) => {
-        return `Your App code is ${otp}. Welcome to the community!`
-    },
     TEMPLATE_PATH: process.cwd() + '/views/',
-    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
-    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
-    BY_PASS_OTP: 1212,
-    BY_PASS_OTP_2: 1313,
-    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
-    LISTNG_LIMIT: 10,
-    BULK_LIMIT: 2000,
-    THUMB_DIMENSION: {
-        DEFAULT: {
-            WIDTH: 10,
-            HEIGHT: 10,
-        },
-        PROFILE_PIC: {
-            WIDTH: 200,
-            HEIGHT: 200,
-        },
-        GIF: {
-            WIDTH: 100,
-            HEIGHT: 100,
-        },
-    },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     DISPLAY_COLOR: true

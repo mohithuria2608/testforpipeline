@@ -44,6 +44,10 @@ gulp.task("copyProto", function () {
 	return gulp.src(['../proto/**/*']).pipe(gulp.dest("./proto"));
 });
 
+gulp.task("copyModel", function () {
+	return gulp.src(['../model/**/*']).pipe(gulp.dest("./model"));
+});
+
 gulp.task("copyConfig", function () {
 	return gulp.src(['../config/**/*']).pipe(gulp.dest("./config"));
 });
@@ -76,4 +80,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "server"));

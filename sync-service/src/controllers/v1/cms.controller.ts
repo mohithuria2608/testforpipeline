@@ -9,11 +9,11 @@ export class CmsController {
     /**
      * @method POST
      * */
-    async auth(payload: ICmsRequest.ICmsAuth) {
+    async auth(headers: ICommonRequest.IHeaders, payload: ICmsRequest.ICmsAuth) {
         try {
             let tokens = await ENTITY.CmsE.getTokens(
-                payload.deviceid,
-                payload.devicetype,
+                headers.deviceid,
+                headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.CMS_AUTH],
                 { username: payload.username, password: payload.password }
             )

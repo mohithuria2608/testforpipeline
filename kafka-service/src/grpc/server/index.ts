@@ -2,8 +2,6 @@ import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import { kafkaController } from '../../controllers'
 
-console.log("Grpc Kafka Server running at", __dirname + config.get("directory.static.proto.kafka"))
-
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
 const PROTO_PATH = __dirname + config.get("directory.static.proto.kafka.server")

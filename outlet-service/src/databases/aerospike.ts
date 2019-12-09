@@ -214,6 +214,29 @@ class AerospikeClass {
         })
     }
 
+    async scan(set: string) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.client) {
+                    let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false }),
+                        stream = scan.foreach(),
+                        tempData: any = [];
+                    stream.on('data', function (record) { tempData.push(record); });
+                    stream.on('error', function (error) { reject(error); });
+                    stream.on('end', function () {
+                        let records: any = [];
+                        for (let item of tempData) {
+                            records.push(item.bins);
+                        }
+                        resolve(records);
+                    });
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        });
+    }
+
     async  query(argv: IAerospike.Query): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -221,7 +244,6 @@ class AerospikeClass {
                 this.selectBins(query, argv)
                 this.applyFilter(query, argv)
 
-                // const udf = this.udfParams(argv)
                 let res
                 if (argv.udf && argv.background) {
                     res = await this.queryBackground(query, argv.udf)
@@ -336,19 +358,6 @@ class AerospikeClass {
         return new Promise(async (resolve, reject) => {
             try {
                 const key = new aerospike.Key(this.namespace, argv.set, argv.key)
-
-
-                // const Context = aerospike.cdt.Context
-                // const context = new Context().addMapKey('sdfghgfdsdfg')
-                // console.log("context", context)
-                // operations = [
-                //     this.maps.putItems('session', { otp: 9 }, {
-                //         writeFlags: this.maps.writeFlags.UPDATE_ONLY | this.maps.writeFlags.NO_FAIL | this.maps.writeFlags.PARTIAL
-                //     }).withContext(context)
-                // ]
-
-                // console.log("operations", operations)
-
                 let result = await this.client.operate(key, operations)
                 console.info('Map updated successfully', result)
                 resolve(result)

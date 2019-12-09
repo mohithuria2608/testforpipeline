@@ -5,14 +5,14 @@ import { authService } from '../grpc/client'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
-export class MenuClass extends BaseEntity {
+export class AreaEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     protected set: SetNames;
     constructor() {
-        super('menu')
+        super('area')
     }
 
-    async postMenu(data) {
+    async postArea(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
@@ -22,11 +22,19 @@ export class MenuClass extends BaseEntity {
             }
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog("postMenu", error, false)
+            consolelog("postArea", error, false)
             return Promise.reject(error)
         }
     }
 
+    async getArea() {
+        try {
+            return await Aerospike.scan(this.set)
+        } catch (error) {
+            consolelog("getArea", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
 
-export const MenuE = new MenuClass()
+export const AreaE = new AreaEntity()

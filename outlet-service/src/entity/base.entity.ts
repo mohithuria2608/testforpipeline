@@ -1,36 +1,52 @@
 import * as Joi from '@hapi/joi';
-import { Aerospike } from "../databases/aerospike";
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 
 export class BaseEntity {
-    public DAO = Aerospike;
     protected set: SetNames;
     constructor(set?) {
         this.set = set
     }
 
-    
+    public areaSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        cityId: Joi.number().required().description("sk"),
+        countryId: Joi.number().required().description("sk"),
+        name_en: Joi.string().required(),
+        name_ar: Joi.string().required(),
+        area: Joi.array().items(
+            Joi.object().keys({
+                id: Joi.string().required(),
+                cityId: Joi.number().required(),
+                districtId: Joi.number().required(),
+                streetId: Joi.number().required(),
+                areaId: Joi.number().required(),
+                provinceId: Joi.number().required(),
+                countryId: Joi.number().required(),
+                name_en: Joi.string().required(),
+                name_ar: Joi.string().required(),
+                storeId: Joi.number().required()
+            })
+        )
+    });
+
     public outletSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        cCode: Joi.string().trim().required().description("sk"),
-        phnNo: Joi.string().trim().required().description("sk"),
-        phnVerified: Joi.number().valid(0, 1).required(),
-        otp: Joi.number().required(),
-        otpExpAt: Joi.number().required(),
-        email: Joi.string().email().lowercase().trim().required().description("sk"),
-        profileStep: Joi.number().valid(Constant.DATABASE.TYPE.PROFILE_STEP.INIT, Constant.DATABASE.TYPE.PROFILE_STEP.FIRST).required(),
-        language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-        appversion: Joi.string().trim().required(),
-        devicemodel: Joi.string().trim().required(),
-        devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
-        osversion: Joi.string().trim().required(),
-        deviceid: Joi.string().trim().required().description("sk"),
-        isLogin: Joi.number().required(),
-        socialKey: Joi.string().trim().required().description("sk"),
-        medium: Joi.string().trim().required(),
-        createdAt: Joi.number().required(),
+        storeId: Joi.number().required().description("sk"),
+        menuId: Joi.number().required().description("sk"),
+        name_en: Joi.string().trim().required(),
+        name_ar: Joi.string().trim().required(),
+        phone1: Joi.string().trim().required(),
+        phone2: Joi.string().trim().required(),
+        services: Joi.object().keys({
+            din: Joi.number(),
+            del: Joi.number(),
+            tak: Joi.number(),
+        }),
+        active: Joi.number().required(),
+        geoData: Joi.any(),
+        startTime: Joi.any(),
+        endTime: Joi.any(),
     });
 
 

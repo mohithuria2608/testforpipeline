@@ -1,10 +1,8 @@
 import * as Joi from '@hapi/joi';
-import { Aerospike } from "../databases/aerospike";
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 
 export class BaseEntity {
-    public DAO = Aerospike;
     protected set: SetNames;
     constructor(set?) {
         this.set = set

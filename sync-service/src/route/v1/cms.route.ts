@@ -21,8 +21,9 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let payload: ICmsRequest.ICmsAuth = { ...ctx.request.body, ...ctx.request.header };
-                    let res = await cmsController.auth(payload);
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: ICmsRequest.ICmsAuth = ctx.request.body;
+                    let res = await cmsController.auth(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
