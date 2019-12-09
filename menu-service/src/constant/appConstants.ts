@@ -239,10 +239,10 @@ export let STATUS_MSG = {
                 message: 'Result not found'
             },
 
-            USER_NOT_FOUND: {
+            MENU_NOT_FOUND: {
                 statusCode: 404,
                 message: 'User not found',
-                type: 'USER_NOT_FOUND'
+                type: 'MENU_NOT_FOUND'
             },
         },
 

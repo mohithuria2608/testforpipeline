@@ -27,6 +27,26 @@ export class MenuClass extends BaseEntity {
         }
     }
 
+    /**
+    * @method GRPC
+    * @param {string} id : user id
+    * */
+    async getById() {
+        try {
+            let getArg: IAerospike.Get = {
+                set: this.set,
+                key: 1
+            }
+            let menu = await Aerospike.get(getArg)
+            if (menu && menu.id) {
+                return menu
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.MENU_NOT_FOUND)
+        } catch (error) {
+            consolelog("getById", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const MenuE = new MenuClass()

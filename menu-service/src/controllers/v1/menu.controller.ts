@@ -1,7 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import * as fs from 'fs'
 import * as ENTITY from '../../entity'
+import * as fs from 'fs'
 
 export class MenuController {
     constructor() { }
@@ -13,8 +13,8 @@ export class MenuController {
     async postMenu() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
-            let area = JSON.parse(rawdata);
-            for (const iterator of area) {
+            let menu = JSON.parse(rawdata);
+            for (const iterator of menu) {
                 ENTITY.MenuE.postMenu(iterator)
             }
             return {}
@@ -26,12 +26,12 @@ export class MenuController {
 
     /**
     * @method GET
+    * @param {number=} lat : latitude
+    * @param {number=} lng : longitude
     * */
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
-            let menu = JSON.parse(rawdata);
-            return menu
+            return await ENTITY.MenuE.getById()
         } catch (err) {
             consolelog("fetchMenu", err, false)
             return Promise.reject(err)
@@ -45,9 +45,7 @@ export class MenuController {
     * */
     async grpcFetchMenu(payload: IMenuServiceRequest.IFetchMenuData) {
         try {
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
-            let menu = JSON.parse(rawdata);
-            return menu
+            return await ENTITY.MenuE.getById()
         } catch (err) {
             consolelog("grpcFetchMenu", err, false)
             return Promise.reject(err)

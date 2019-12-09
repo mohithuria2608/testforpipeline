@@ -83,4 +83,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
- gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "server"));
