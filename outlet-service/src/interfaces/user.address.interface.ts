@@ -1,7 +1,6 @@
 declare namespace IAddressRequest {
 
-    interface IRegisterAddress {
-        addressId?: string,
+    interface IAddress {
         id?: string,
         areaId?: string,
         bldgName?: string,

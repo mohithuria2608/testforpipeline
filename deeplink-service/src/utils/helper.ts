@@ -17,6 +17,10 @@ export let sendError = function (error) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
         }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.type
+        }
         else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type

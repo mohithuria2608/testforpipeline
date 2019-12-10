@@ -16,6 +16,7 @@ class AerospikeClass {
     public namespace: string;
     public cdt = aerospike.cdt;
     public maps = aerospike.maps;
+    public GeoJSON = aerospike.GeoJSON;
     constructor(namespace: string) {
         this.namespace = namespace;
     }
@@ -361,6 +362,28 @@ class AerospikeClass {
                 let result = await this.client.operate(key, operations)
                 console.info('Map updated successfully', result)
                 resolve(result)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async geoWithin(argv: IAerospike.GeoWithin): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let query = this.client.query(this.namespace, argv.set);
+
+                query.where(aerospike.filter.geoWithinGeoJSONRegion(argv.key, this.GeoJSON.Point(
+                    argv.lat,
+                    argv.lng
+                )))
+                let stream = query.foreach();
+                stream.on('error', (error) => {
+                    reject(error)
+                })
+                stream.on('data', (record) => {
+                    resolve(record);
+                })
             } catch (error) {
                 reject(error)
             }

@@ -13,7 +13,7 @@ declare namespace IUserRequest {
         medium: string,
         createdAt: number,
         address: {
-            [deviceid: string]: IAddressRequest.IRegisterAddress
+            [deviceid: string]: IAddressRequest.IAddress
         },
         session: {
             [deviceid: string]: ISession

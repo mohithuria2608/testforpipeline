@@ -1,9 +1,40 @@
 syntax = "proto3";
 
 service OutletService {
-    rpc GetOutlet (IOutletReq) returns (IOutletRes) {}
+    rpc ValidateCoordinate (IValidateCoordinateReq) returns (IOutlet) {}
 }
 
-message IOutletReq { }
+message IValidateCoordinateReq {
+    required float lat = 1;
+    required float lng = 2;
+}
 
-message IOutletRes { }
+message IOutlet { 
+    required int32 storeId = 1;
+    required int32 menuId = 2;
+    required string name_en = 3;
+    required string name_ar = 4;
+    required string phone1 = 5;
+    required string phone2 = 6;
+    required IService services = 7;
+    required int32 active = 8;
+    required IGeoData geoData = 9;
+    required IStarttime startTime = 10;
+    required IEndtime endTime = 11;
+    required string id = 12;
+}
+
+message IService {
+    required int32 din = 1;
+    required int32 del = 2;
+    required int32 tak = 3;
+} 
+
+message IGeoData {
+    required string address_en = 1;
+    required string address_ar = 2;
+    required string coords = 3;
+}
+
+message IStarttime {}
+message IEndtime {}

@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import * as ENTITY from '../../entity'
+import { storeController } from '../../controllers'
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -18,16 +18,16 @@ const outletProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(outletProto.OutletService.service, {
-    getOutletByCoord: async (call: IOutletServiceRequest.IGetOutletByCoord, callback) => {
+    validateCoordinate: async (call: IStoreServiceRequest.IValidateCoordinate, callback) => {
         try {
-            consolelog("getOutletByCoord", JSON.stringify(call.request), true)
-            // let res: IOutletRequest.IOutlet = await ENTITY.OutletE.getById(call.request)
-            // callback(null, res)
+            consolelog("validateCoordinate", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IOutlet = await storeController.validateCoordinates(call.request)
+            callback(null, res)
         } catch (error) {
-            consolelog("getOutletByCoord", error, false)
+            consolelog("validateCoordinate", error, false)
             callback(grpcSendError(error))
         }
-    }
+    },
 })
 
 server.bind(config.get("grpc.outlet.server"), grpc.ServerCredentials.createInsecure())

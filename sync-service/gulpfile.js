@@ -61,10 +61,10 @@ gulp.task('server', function () {
 			name: 'sync',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('sync pm2 started');
+			console.log('sync pm2 started', process.env.NODE_ENV);
 			pm2.streamLogs('sync', 0);
 		});
 	});
@@ -78,4 +78,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
- gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));

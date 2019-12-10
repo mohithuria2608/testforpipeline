@@ -1,7 +1,6 @@
 declare namespace IAddressRequest {
 
-    interface IRegisterAddress {
-        addressId?: string,
+    interface IAddress {
         id?: string,
         areaId?: string,
         bldgName?: string,
@@ -27,5 +26,21 @@ declare namespace IAddressRequest {
         useMap?: number,
         createdBy?: string,
         updatedBy?: string
+    }
+    interface IRegisterAddress {
+        lat: number,
+        lng: number,
+        bldgName: string,
+        description: string,
+        flatNum: string,
+        tag: string
+    }
+
+    interface IUpdateAddress {
+        addressId: string
+        bldgName?: string,
+        description?: string,
+        flatNum?: string,
+        tag?: string
     }
 }

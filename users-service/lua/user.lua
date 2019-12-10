@@ -39,17 +39,3 @@ function check_social_key(stream, medium, socialKey)
 
 return stream:filter(medium_filter):filter(socialKey_filter):map(rec_to_map)
 end
-
-
-function check_store_id(stream, storeId)
-   local function storeId_filter(rec)
-      local val = rec['storeId']
-      if val == storeId then
-         return true
-      else
-         return false
-      end
-   end
-
-  return stream:filter(storeId_filter):map(rec_to_map)
-end

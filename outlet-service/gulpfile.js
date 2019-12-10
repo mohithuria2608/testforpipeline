@@ -62,10 +62,10 @@ gulp.task('server', function () {
 			name: 'outlet',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('outlet pm2 started');
+			console.log('outlet pm2 started',process.env.NODE_ENV);
 			pm2.streamLogs('outlet', 0);
 		});
 	});

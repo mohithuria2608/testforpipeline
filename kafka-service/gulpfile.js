@@ -65,10 +65,10 @@ gulp.task('server', function () {
 			name: 'kafka',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('kafka pm2 started');
+			console.log('kafka pm2 started',process.env.NODE_ENV);
 			pm2.streamLogs('kafka', 0);
 		});
 	});

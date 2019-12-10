@@ -84,9 +84,17 @@ declare namespace IAerospike {
         set: string,
         ttl?: number,
     }
-    
+
     interface MapOperation {
         set: string,
         key: string,
+    }
+
+    interface GeoWithin {
+        set: string,
+        key: string,
+        // point: any
+        lat: number,
+        lng: number,
     }
 }

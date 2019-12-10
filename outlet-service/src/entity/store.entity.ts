@@ -25,6 +25,22 @@ export class StoreEntity extends BaseEntity {
             return Promise.reject(error)
         }
     }
+
+    async validateCoords(payload: IStoreRequest.IValidateCoordinates) {
+        try {
+            let geoWithinArg: IAerospike.GeoWithin = {
+                set: this.set,
+                key: 'geoFence',
+                lat: payload.lat,
+                lng: payload.lng,
+            }
+            let res = await Aerospike.geoWithin(geoWithinArg)
+            return res.bins
+        } catch (error) {
+            consolelog("validateCoords", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const StoreE = new StoreEntity()

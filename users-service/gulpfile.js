@@ -7,6 +7,7 @@ const tslint = require("gulp-tslint");
 const runSequence = require('run-sequence');
 const spawn = require('child_process').spawn;
 
+const NODE_ENV = process.NODE_ENV ? process.NODE_ENV : "default"
 const outputFolder = "dist";
 const logFolder = "log";
 const protoFolder = "proto";
@@ -58,10 +59,10 @@ gulp.task('server', function () {
 			name: 'user',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('user pm2 started');
+			console.log('user pm2 started', process.env.NODE_ENV);
 			pm2.streamLogs('user', 0);
 		});
 	});

@@ -65,10 +65,10 @@ gulp.task('server', function () {
 			name: 'order',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('order pm2 started');
+			console.log('order pm2 started',process.env.NODE_ENV);
 			pm2.streamLogs('order', 0);
 		});
 	});

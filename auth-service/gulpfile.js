@@ -61,10 +61,10 @@ gulp.task('server', function () {
 			name: 'auth',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default" ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('auth pm2 started');
+			console.log('auth pm2 started', process.env.NODE_ENV);
 			pm2.streamLogs('auth', 0);
 		});
 	});
@@ -79,4 +79,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
- gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));

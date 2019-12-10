@@ -14,6 +14,9 @@ export let grpcSendError = function (error) {
         if (error.statusCode == 401 || error.statusCode == 403) {
             return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'UNAUTHENTICATED', message)
         }
+        else if (error.statusCode == 404) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE, 'UNAVAILABLE', message)
+        }
         else if (error.statusCode >= 400 && error.statusCode < 500 && error.statusCode != 401 && error.statusCode != 403) {
             return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION, 'FAILED_PRECONDITION', message)
         }
@@ -36,6 +39,10 @@ export let sendError = function (error) {
         if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED || error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
+        }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.type
         }
         else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode

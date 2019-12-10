@@ -16,29 +16,41 @@ export default (router: Router) => {
             validate({
                 headers: JOI_HEADERS,
                 body: {
-                    areaId: Joi.number().required(),
-                    bldgName: Joi.string(),
-                    bldgNameUn: Joi.string(),
-                    bldgNum: Joi.string(),
-                    cityId: Joi.number().required(),
-                    classId: Joi.number(),
-                    countryId: Joi.number().required(),
-                    userId: Joi.number().required(),
-                    description: Joi.string(),
-                    districtId: Joi.number().required(),
-                    flatNum: Joi.number(),
-                    floor: Joi.string(),
-                    language: Joi.string(),
-                    phoneAreaCode: Joi.string(),
-                    phoneLookup: Joi.string(),
-                    phoneNumber: Joi.string().required(),
-                    phoneType: Joi.number(),
-                    postalCode: Joi.string().required(),
-                    provinceCode: Joi.number().required(),
-                    sketch: Joi.string(),
-                    streetId: Joi.number(),
-                    useMap: Joi.number(),
-                    //@todo home work other
+                    lat: Joi.number().min(0).max(90).required(),
+                    lng: Joi.number().min(-180).max(180).required(),
+                    bldgName: Joi.string().required(),
+                    description: Joi.string().required(),
+                    flatNum: Joi.number().required(),
+                    tag: Joi.string().valid(
+                        Constant.DATABASE.TYPE.TAG.HOME,
+                        Constant.DATABASE.TYPE.TAG.OFFICE,
+                        Constant.DATABASE.TYPE.TAG.HOTEl,
+                        Constant.DATABASE.TYPE.TAG.OTHER).required(),
+
+
+
+
+                    // areaId: Joi.number().required(),
+                    // cityId: Joi.number().required(),
+                    // countryId: Joi.number().required(),
+                    // userId: Joi.number().required(),
+                    // districtId: Joi.number().required(),
+                    // language: Joi.string(),
+                    // provinceCode: Joi.number().required(),//provinceId
+                    // streetId: Joi.number(),
+
+
+                    // bldgNameUn: Joi.string(),
+                    // bldgNum: Joi.string(),
+                    // classId: Joi.number(),
+                    // floor: Joi.string(),
+                    // phoneAreaCode: Joi.string(),
+                    // phoneLookup: Joi.string(),
+                    // phoneNumber: Joi.string().required(),
+                    // phoneType: Joi.number(),
+                    // postalCode: Joi.string().required(),
+                    // sketch: Joi.string(),
+                    // useMap: Joi.number(),
                 }
             }),
             async (ctx) => {
@@ -64,35 +76,16 @@ export default (router: Router) => {
                 headers: JOI_HEADERS,
                 body: {
                     addressId: Joi.string().required(),
-                    areaId: Joi.number(),
                     bldgName: Joi.string(),
-                    bldgNameUn: Joi.string(),
-                    bldgNum: Joi.string(),
-                    cityId: Joi.number(),
-                    classId: Joi.number(),
-                    countryId: Joi.number(),
-                    userId: Joi.number(),
                     description: Joi.string(),
-                    districtId: Joi.number(),
-                    flatNum: Joi.number(),
-                    id: Joi.number(),
-                    language: Joi.string(),
-                    phoneAreaCode: Joi.string(),
-                    phoneLookup: Joi.string(),
-                    phoneNumber: Joi.string(),
-                    phoneType: Joi.number(),
-                    provinceCode: Joi.number(),
-                    sketch: Joi.string(),
-                    streetId: Joi.number(),
-                    useMap: Joi.number(),
-                    createdBy: Joi.string(),
-                    updatedBy: Joi.string()
+                    flatNum: Joi.string(),
+                    tag: Joi.string(),
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IAddressRequest.IRegisterAddress = ctx.request.body;
+                    let payload: IAddressRequest.IUpdateAddress = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await addressController.updateAddressById(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)

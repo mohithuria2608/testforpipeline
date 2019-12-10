@@ -82,6 +82,13 @@ export let DATABASE = {
         PROFILE_STEP: {
             INIT: 0,
             FIRST: 1,
+        },
+
+        TAG: {
+            HOME: "HOME",
+            OFFICE: "OFFICE",
+            HOTEl: "HOTEl",
+            OTHER: "OTHER"
         }
     }
 };
@@ -375,7 +382,7 @@ export let STATUS_MSG = {
                 message: 'Blocked Successfully',
                 type: 'BLOCKED'
             },
-            SOCIAL_LOGIN:{
+            SOCIAL_LOGIN: {
                 statusCode: 200,
                 message: 'Logged In Successfully',
                 type: 'SOCIAL_LOGIN'
