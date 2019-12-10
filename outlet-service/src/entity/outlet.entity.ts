@@ -29,16 +29,15 @@ export class OutletEntity extends BaseEntity {
     async getOutletByStoreId(payload: IOutletRequest.IGetOutletStoreId) {
         try {
             let queryArg: IAerospike.Query = {
-                equal: {
-                    bin: "storeId",
-                    value: parseInt(payload.storeId.toString())
+                udf: {
+                    module: 'user',
+                    func: Constant.UDF.USER.check_store_id,
+                    args: [parseInt(payload.storeId.toString())],
                 },
                 set: this.set,
                 background: false,
             }
-
             let outlet = await Aerospike.query(queryArg)
-            console.log("outlet", JSON.stringify(outlet))
             if (outlet && outlet.id) {
                 return [outlet]
             } else

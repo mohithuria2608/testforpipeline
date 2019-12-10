@@ -30,7 +30,7 @@ export class UserController {
             if (checkUser && checkUser.id) {
                 let otp = Constant.SERVER.BY_PASS_OTP
                 let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
-                if (checkUser.session[headers.deviceid].otpExpAt <= new Date().getTime() && checkUser.session[headers.deviceid].otpExpAt != 0) {
+                if (checkUser && checkUser.session && checkUser.session[headers.deviceid] && checkUser.session[headers.deviceid].otpExpAt <= new Date().getTime() && checkUser.session[headers.deviceid].otpExpAt != 0) {
                     otp = (checkUser.session[headers.deviceid].otp == Constant.SERVER.BY_PASS_OTP) ? Constant.SERVER.BY_PASS_OTP_2 : Constant.SERVER.BY_PASS_OTP
                     otpExpAt = checkUser.session[headers.deviceid].otpExpAt
                 }

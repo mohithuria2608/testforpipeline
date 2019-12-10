@@ -89,7 +89,9 @@ export let DATABASE = {
 export let UDF = {
     USER: {
         check_phone_exist: "check_phone_exist",
-        check_social_key: "check_social_key"
+        check_social_key: "check_social_key",
+
+        check_store_id: "check_store_id"
     },
     ADDRESS: {
         update_address: "update_address",
