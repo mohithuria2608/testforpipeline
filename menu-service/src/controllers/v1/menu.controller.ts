@@ -19,7 +19,7 @@ export class MenuController {
             }
             return {}
         } catch (err) {
-            consolelog("postAreaList", err, false)
+            consolelog("postMenu", err, false)
             return Promise.reject(err)
         }
     }

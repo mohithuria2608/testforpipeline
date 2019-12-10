@@ -1,2 +1,2 @@
-export * from './v1/area.controller';
-export * from './v1/outlet.controller';
+export * from './v1/pickup.controller';
+export * from './v1/store.controller';

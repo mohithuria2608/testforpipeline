@@ -3,7 +3,7 @@ import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
-import { areaController } from '../../controllers';
+import { pickupController } from '../../controllers';
 import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
@@ -11,7 +11,7 @@ export default (router: Router) => {
         .post('/',
             async (ctx) => {
                 try {
-                    let res = await areaController.postAreaList();
+                    let res = await pickupController.postPickup();
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
@@ -30,7 +30,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let res = await areaController.getAreaList(headers);
+                    let res = await pickupController.getPickupList(headers);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

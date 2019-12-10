@@ -1,2 +1,2 @@
-export { AreaE } from './area.entity'
-export { OutletE } from './outlet.entity'
+export { PickupE } from './pickup.entity'
+export { StoreE } from './store.entity'

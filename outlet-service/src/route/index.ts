@@ -3,15 +3,15 @@ import * as Router from 'koa-router'
 import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
-import areaRoutes from './v1/area.route'
-import outletRoutes from './v1/outlet.route'
+import pickupRoutes from './v1/pickup.route'
+import storeRoutes from './v1/store.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
-  { routes: areaRoutes, prefix: version1 + '/area' },
-  { routes: outletRoutes, prefix: version1 + '/outlet' }
+  { routes: storeRoutes, prefix: version1 + '/store' },
+  { routes: pickupRoutes, prefix: version1 + '/pickup' },
 ]
 
 export default function routes() {
