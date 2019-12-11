@@ -16,7 +16,7 @@ export class CountryController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/country.json', 'utf-8');
             let countries = JSON.parse(rawdata);
             for (const country of countries) {
-                ENTITY.CountryE.post(country)
+                ENTITY.CountryE.postCountry(country)
             }
             return {}
         } catch (err) {

@@ -222,7 +222,7 @@ class AerospikeClass {
         })
     }
 
-    async scan(set: string) {
+    async scan(set: string): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {

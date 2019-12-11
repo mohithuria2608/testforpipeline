@@ -1,5 +1,4 @@
 export { CountryE } from './country.entity'
 export { CityE } from './city.entity'
 export { AreaE } from './area.entity'
-export { PickupE } from './pickup.entity'
 export { StoreE } from './store.entity'

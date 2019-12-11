@@ -17,7 +17,7 @@ export class AreaController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/area.json', 'utf-8');
             let areas = JSON.parse(rawdata);
             for (const area of areas) {
-                ENTITY.AreaE.post(area)
+                ENTITY.AreaE.postArea(area)
             }
             return {}
         } catch (err) {

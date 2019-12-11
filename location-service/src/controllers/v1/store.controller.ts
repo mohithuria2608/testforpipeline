@@ -16,7 +16,7 @@ export class StoreController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
             let stores = JSON.parse(rawdata);
             for (const store of stores) {
-                ENTITY.StoreE.post(store)
+                ENTITY.StoreE.postStore(store)
             }
             return stores
         } catch (err) {

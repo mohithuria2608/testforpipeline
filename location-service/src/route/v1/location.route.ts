@@ -32,4 +32,28 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/pickup',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.JOI_HEADERS,
+                query: {
+                    lat: Joi.number().min(0).max(90),
+                    lng: Joi.number().min(-180).max(180),
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: ILocationRequest.IPickupLocation = ctx.request.query;
+                    let res = await locationController.getPickupList(headers, payload);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 }

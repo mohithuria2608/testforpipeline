@@ -17,7 +17,7 @@ export class CityController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/city.json', 'utf-8');
             let cities = JSON.parse(rawdata);
             for (const city of cities) {
-                ENTITY.CityE.post(city)
+                ENTITY.CityE.postCity(city)
             }
             return {}
         } catch (err) {

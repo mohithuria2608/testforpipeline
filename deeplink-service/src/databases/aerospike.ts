@@ -222,8 +222,8 @@ class AerospikeClass {
         })
     }
 
-    async scan(set: string) {
-        return new Promise(async (resolve, reject) => {
+    async scan(set: string): Promise<any> {
+                return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {
                     let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false })

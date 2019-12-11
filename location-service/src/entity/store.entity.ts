@@ -1,7 +1,7 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { authService } from '../grpc/client'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 const aerospike = require('aerospike');
@@ -12,7 +12,42 @@ export class StoreEntity extends BaseEntity {
         super('store')
     }
 
-    async post(data) {
+    public storeSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        storeId: Joi.number().required().description("sk NUMERIC"),
+        countryId: Joi.number().required(),
+        provinceId: Joi.number().required(),
+        areaId: Joi.number().required(),
+        streetId: Joi.number().required(),
+        districtId: Joi.number().required(),
+        mapId: Joi.number().required(),
+        menuId: Joi.number().required().description("sk NUMERIC"),
+        name_en: Joi.string().trim().required(),
+        name_ar: Joi.string().trim().required(),
+        phone1: Joi.string().trim().required(),
+        phone2: Joi.string().trim().required(),
+        services: Joi.object().keys({
+            din: Joi.number(),
+            del: Joi.number(),
+            tak: Joi.number(),
+        }),
+        active: Joi.number().required(),
+        location: Joi.object().keys({
+            description: Joi.string(),
+            latitude: Joi.number(),
+            longitude: Joi.number(),
+        }),
+        address_en: Joi.string(),
+        address_ar: Joi.string(),
+        startTime: Joi.string(),
+        endTime: Joi.string(),
+        geoFence: Joi.object().keys({
+            type: Joi.string().valid('Polygon'),
+            coordinates: Joi.array().items(Joi.array().items(Joi.number()))
+        })
+    });
+
+    async postStore(data) {
         try {
             let GeoJSON = aerospike.GeoJSON;
             data['geoFence'] = new GeoJSON(data['geoFence'])
@@ -36,7 +71,7 @@ export class StoreEntity extends BaseEntity {
      * @param {number=} lat : latitude
      * @param {number=} lng : longitude
      * */
-    async validateCoords(payload: IStoreRequest.IValidateCoordinates) {
+    async validateCoords(payload: IStoreRequest.IValidateCoordinates): Promise<IStoreRequest.IStore[]> {
         try {
             let geoWithinArg: IAerospike.Query = {
                 set: this.set,

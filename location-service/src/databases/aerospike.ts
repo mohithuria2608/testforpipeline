@@ -222,7 +222,7 @@ class AerospikeClass {
         })
     }
 
-    async scan(set: string) {
+    async scan(set: string): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {
@@ -284,7 +284,7 @@ class AerospikeClass {
                     for (let item of tempData) {
                         records.push(item.bins);
                     }
-                    console.log("records", records)
+                    // console.log("records", records)
                     resolve(records);
                 });
             } catch (error) {

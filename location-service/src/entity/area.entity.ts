@@ -1,4 +1,5 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
@@ -8,6 +9,19 @@ export class AreaEntity extends BaseEntity {
     constructor() {
         super('area')
     }
+
+    public areaSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        areaId: Joi.number().required().description("sk NUMERIC"),
+        storeId: Joi.number().required().description("sk NUMERIC"),
+        countryId: Joi.number().required(),
+        cityId: Joi.number().required(),
+        provinceId: Joi.number().required(),
+        streetId: Joi.number().required(),
+        districtId: Joi.number().required(),
+        name_en: Joi.string().trim().required(),
+        name_ar: Joi.string().trim().required()
+    });
 
     async postArea(data) {
         try {
