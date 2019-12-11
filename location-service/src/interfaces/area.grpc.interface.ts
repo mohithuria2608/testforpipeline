@@ -1,8 +1,8 @@
 declare namespace IAreaGrpcRequest {
-    interface IGetAreaByStoreId {
-        request: IGetAreaByStoreIdData
-    }
-    interface IGetAreaByStoreIdData {
-        storeId: number
-    }
+    // interface IGetAreaByStoreId {
+    //     request: IGetAreaByStoreIdData
+    // }
+    // interface IGetAreaByStoreIdData {
+    //     storeId: number
+    // }
 }

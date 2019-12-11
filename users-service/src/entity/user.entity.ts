@@ -188,7 +188,7 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    private buildNewAddress(deviceid: string, addressInfo: IAddressRequest.IRegisterAddress, area: IAreaGrpcRequest.IArea, userData: IUserRequest.IUserData) {
+    private buildNewAddress(deviceid: string, addressInfo: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
         let id = this.uuidv1();
         let address = {
             id: id,
@@ -203,12 +203,12 @@ export class UserEntity extends BaseEntity {
         // address['userId'] = addressInfo.userId
         address['language'] = userData.session[deviceid].language
 
-        address['areaId'] = area.areaId
-        address['cityId'] = area.cityId
-        address['countryId'] = area.countryId
-        address['districtId'] = area.districtId
-        address['provinceCode'] = area.provinceId
-        address['streetId'] = area.streetId
+        address['areaId'] = store.areaId
+        // address['cityId'] = store.cityId
+        address['countryId'] = store.countryId
+        address['districtId'] = store.districtId
+        address['provinceCode'] = store.provinceId
+        address['streetId'] = store.streetId
 
 
         // if (addressInfo.bldgNameUn != undefined)
@@ -245,10 +245,10 @@ export class UserEntity extends BaseEntity {
         deviceid: string,
         userData: IUserRequest.IUserData,
         addressData: IAddressRequest.IRegisterAddress,
-        area: IAreaGrpcRequest.IArea
+        store: IStoreGrpcRequest.IStore
     ): Promise<IUserRequest.IUserData> {
         try {
-            let address: IAddressRequest.IAddress = { ...this.buildNewAddress(deviceid, addressData, area, userData) }
+            let address: IAddressRequest.IAddress = { ...this.buildNewAddress(deviceid, addressData, store, userData) }
             let data = {}
             data[address['id']] = address
             let op = [

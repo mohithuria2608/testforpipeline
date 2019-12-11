@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 service LocationService {
-    rpc ValidateCoordinate (IValidateCoordinateReq) returns (IOutlet) {}
+    rpc ValidateCoordinate (IValidateCoordinateReq) returns (IStore) {}
 }
 
 message IValidateCoordinateReq {
@@ -9,19 +9,27 @@ message IValidateCoordinateReq {
     required float lng = 2;
 }
 
-message IOutlet { 
-    required int32 storeId = 1;
-    required int32 menuId = 2;
-    required string name_en = 3;
-    required string name_ar = 4;
-    required string phone1 = 5;
-    required string phone2 = 6;
-    required IService services = 7;
-    required int32 active = 8;
-    required IGeoData geoData = 9;
-    required IStarttime startTime = 10;
-    required IEndtime endTime = 11;
-    required string id = 12;
+message IStore {
+    required string id = 1;
+    required int32 countryId = 2;
+    required int32 provinceId = 3;
+    required int32 areaId = 4;
+    required int32 streetId = 5;
+    required int32 districtId = 6;
+    required int32 mapId = 7;
+    required int32 menuId = 8;
+    required string name_en = 9;
+    required string name_ar = 10;
+    required string phone1 = 11;
+    required string phone2 = 12;
+    required IService services = 13;
+    required int32 active = 14;
+    required string address_en = 15;
+    required string address_ar = 16;
+    required string startTime = 17;
+    required string endTime = 18;
+    required IService geoFence = 19;
+    required ILocation location = 20;
 }
 
 message IService {
@@ -30,11 +38,8 @@ message IService {
     required int32 tak = 3;
 } 
 
-message IGeoData {
-    required string address_en = 1;
-    required string address_ar = 2;
-    required string coords = 3;
-}
-
-message IStarttime {}
-message IEndtime {}
+message ILocation {
+    required string description = 1;
+    required float latitude = 2;
+    required float longitude = 3;
+} 

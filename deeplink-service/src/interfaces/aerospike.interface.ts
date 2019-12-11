@@ -29,7 +29,7 @@ declare namespace IAerospike {
     }
     interface Get {
         set: string,
-        key: string,
+        key: any,
         bins?: string
     }
     interface Query {
@@ -37,6 +37,7 @@ declare namespace IAerospike {
         equal?: Equal,
         range?: Range,
         geoWithinRadius?: Geo,
+        geoWithin?: GeoWithin,
         udf?: Udf,
         set: string,
         background?: boolean,
@@ -44,7 +45,7 @@ declare namespace IAerospike {
 
     interface Equal {
         bin: string,
-        value: string
+        value: string | number
     }
 
     interface Range {
@@ -60,6 +61,11 @@ declare namespace IAerospike {
         radius: string,
     }
 
+    interface GeoWithin {
+        key: string,
+        lat: number,
+        lng: number,
+    }
 
     interface Udf {
         module: any,
@@ -88,13 +94,5 @@ declare namespace IAerospike {
     interface MapOperation {
         set: string,
         key: string,
-    }
-
-    interface GeoWithin {
-        set: string,
-        key: string,
-        // point: any
-        lat: number,
-        lng: number,
     }
 }

@@ -3,6 +3,12 @@ declare namespace IStoreRequest {
     interface IStore {
         id: string,
         storeId: number,
+        countryId: number,
+        provinceId: number,
+        areaId: number,
+        streetId: number,
+        districtId: number,
+        mapId: number,
         menuId: number,
         name_en: string,
         name_ar: string,
@@ -13,16 +19,17 @@ declare namespace IStoreRequest {
             del: number,
             tak: number,
         },
-
         active: number,
-        geoData: {
-            address_en: string,
-            address_ar: string,
-            coords: any,
+        geoFence: any,
+        location: {
+            description: string,
+            latitude: number,
+            longitude: number
         },
-        startTime: any,
-        endTime: any,
-        geoFence: any
+        address_en: string,
+        address_ar: string,
+        startTime: string,
+        endTime: string
     }
 
     interface IValidateCoordinates extends ICommonRequest.ICordinatesOpt { }

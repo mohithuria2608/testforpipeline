@@ -28,16 +28,16 @@ server.addService(locationProto.LocationService.service, {
             callback(grpcSendError(error))
         }
     },
-    getAreaByStoreId: async (call: IAreaGrpcRequest.IGetAreaByStoreId, callback) => {
-        try {
-            consolelog("grpc getAreaByStoreId", JSON.stringify(call.request), true)
-            let res: IAreaRequest.IArea = await ENTITY.AreaE.getAreaByStoreId(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog("getAreaByStoreId", error, false)
-            callback(grpcSendError(error))
-        }
-    },
+    // getAreaByStoreId: async (call: IAreaGrpcRequest.IGetAreaByStoreId, callback) => {
+    //     try {
+    //         consolelog("grpc getAreaByStoreId", JSON.stringify(call.request), true)
+    //         let res: IAreaRequest.IArea = await ENTITY.AreaE.getAreaByStoreId(call.request)
+    //         callback(null, res)
+    //     } catch (error) {
+    //         consolelog("getAreaByStoreId", error, false)
+    //         callback(grpcSendError(error))
+    //     }
+    // },
 })
 
 server.bind(config.get("grpc.location.server"), grpc.ServerCredentials.createInsecure())

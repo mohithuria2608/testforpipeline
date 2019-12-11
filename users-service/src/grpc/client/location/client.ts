@@ -42,24 +42,24 @@ export class LocationService {
         })
     }
 
-    async getAreaByStoreId(payload: IAreaGrpcRequest.IGetAreaByStoreIdData): Promise<IAreaGrpcRequest.IArea> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await locationServiceValidator.getAreaByStoreIdValidator(payload)
-                this.locationClient.getAreaByStoreId({ storeId: payload.storeId }, (err, res) => {
-                    if (!err) {
-                        consolelog("area by store id ", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog("Error in getAreaByStoreId", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
+    // async getAreaByStoreId(payload: IAreaGrpcRequest.IGetAreaByStoreIdData): Promise<IAreaGrpcRequest.IArea> {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             await locationServiceValidator.getAreaByStoreIdValidator(payload)
+    //             this.locationClient.getAreaByStoreId({ storeId: payload.storeId }, (err, res) => {
+    //                 if (!err) {
+    //                     consolelog("area by store id ", JSON.stringify(res), false)
+    //                     resolve(res)
+    //                 } else {
+    //                     consolelog("Error in getAreaByStoreId", JSON.stringify(err), false)
+    //                     reject(err)
+    //                 }
+    //             })
+    //         } catch (error) {
+    //             reject(error)
+    //         }
+    //     })
+    // }
 }
 
 export const locationService = new LocationService();

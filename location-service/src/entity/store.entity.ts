@@ -4,6 +4,7 @@ import * as Constant from '../constant'
 import { authService } from '../grpc/client'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
+const aerospike = require('aerospike');
 
 export class StoreEntity extends BaseEntity {
     protected set: SetNames;
@@ -11,14 +12,17 @@ export class StoreEntity extends BaseEntity {
         super('store')
     }
 
-    async postStore(data) {
+    async post(data) {
         try {
+            let GeoJSON = aerospike.GeoJSON;
+            data['geoFence'] = new GeoJSON(data['geoFence'])
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
                 key: data.id,
                 create: true,
             }
+
             await Aerospike.put(putArg)
         } catch (error) {
             consolelog("postStore", error, false)
@@ -34,13 +38,15 @@ export class StoreEntity extends BaseEntity {
      * */
     async validateCoords(payload: IStoreRequest.IValidateCoordinates) {
         try {
-            let geoWithinArg: IAerospike.GeoWithin = {
+            let geoWithinArg: IAerospike.Query = {
                 set: this.set,
-                key: 'geoFence',
-                lat: parseFloat(payload.lat.toString()),
-                lng: parseFloat(payload.lng.toString()),
+                geoWithin: {
+                    key: 'geoFence',
+                    lat: parseFloat(payload.lat.toString()),
+                    lng: parseFloat(payload.lng.toString()),
+                }
             }
-            let res = await Aerospike.geoWithin(geoWithinArg)
+            let res = await Aerospike.query(geoWithinArg)
             console.log("res", res)
             if (res && res.length > 0) {
                 return res

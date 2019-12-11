@@ -22,7 +22,6 @@ export class BaseEntity {
             tak: Joi.number(),
         }),
         active: Joi.number().required(),
-        geoData: Joi.any(),
         startTime: Joi.any(),
         endTime: Joi.any(),
     });

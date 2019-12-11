@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
+import { stream } from 'winston'
 
 export class AddressController {
     constructor() { }
@@ -11,15 +12,15 @@ export class AddressController {
     * */
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+            let store: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
             if (store && store.id) {
-                let area = await ENTITY.UserE.getAreaByStoreId(parseInt(store.id))
-                if (area && area.id) {
-                    await ENTITY.UserE.addAddress(headers.deviceid, auth.userData, payload, area)
-                    let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
-                    return formatUserData(userObj, headers.deviceid)
-                } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
+                // let area = await ENTITY.UserE.getAreaByStoreId(parseInt(store.id))
+                // if (area && area.id) {
+                await ENTITY.UserE.addAddress(headers.deviceid, auth.userData, payload, store)
+                let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
+                return formatUserData(userObj, headers.deviceid)
+                // } else
+                //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
 

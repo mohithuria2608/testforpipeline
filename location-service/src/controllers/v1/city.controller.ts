@@ -15,9 +15,9 @@ export class CityController {
     async post() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/city.json', 'utf-8');
-            let outlet = JSON.parse(rawdata);
-            for (const iterator of outlet) {
-                ENTITY.CountryE.post(iterator)
+            let cities = JSON.parse(rawdata);
+            for (const city of cities) {
+                ENTITY.CityE.post(city)
             }
             return {}
         } catch (err) {

@@ -14,11 +14,11 @@ export class StoreController {
     async post() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
-            let outlet = JSON.parse(rawdata);
-            for (const iterator of outlet) {
-                ENTITY.StoreE.postStore(iterator)
+            let stores = JSON.parse(rawdata);
+            for (const store of stores) {
+                ENTITY.StoreE.post(store)
             }
-            return {}
+            return stores
         } catch (err) {
             consolelog("post store", err, false)
             return Promise.reject(err)

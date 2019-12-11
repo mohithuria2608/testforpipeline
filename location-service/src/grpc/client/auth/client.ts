@@ -20,7 +20,7 @@ export class AuthService {
     private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from outlet service to auth service', config.get("grpc.auth.client"), true)
+        consolelog('Connection established from location service to auth service', config.get("grpc.auth.client"), true)
     }
 
     async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {

@@ -108,6 +108,11 @@ class AerospikeClass {
             const lat = filter.lat
             const radius = filter.radius
             query.where(aerospike.filter.geoWithinRadius(bin, lng, lat, radius))
+        } else if (argv.geoWithin) {
+            const filter = argv.geoWithinRadius
+            const bin = filter.bin
+            const point = this.GeoJSON.Point(filter.lat, filter.lng)
+            query.where(aerospike.filter.geoWithinGeoJSONRegion(bin, point))
         }
         return query
     }
@@ -352,22 +357,6 @@ class AerospikeClass {
                 let result = await this.client.operate(key, operations)
                 console.info('Map updated successfully', result)
                 resolve(result)
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    async geoWithin(argv: IAerospike.GeoWithin): Promise<any> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                console.log("lat,lng", argv)
-                let query = this.client.query(this.namespace, argv.set);
-                query.where(aerospike.filter.geoWithinGeoJSONRegion(argv.key, this.GeoJSON.Point(
-                    argv.lat,
-                    argv.lng
-                )))
-                resolve(await this.queryForeach(query))
             } catch (error) {
                 reject(error)
             }

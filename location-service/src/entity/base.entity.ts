@@ -23,11 +23,8 @@ export class BaseEntity {
             tak: Joi.number(),
         }),
         active: Joi.number().required(),
-        geoData: Joi.object().keys({
-            address_en: Joi.string(),
-            address_ar: Joi.string(),
-            coords: Joi.string(),
-        }),
+        address_en: Joi.string(),
+        address_ar: Joi.string(),
         startTime: Joi.any(),
         endTime: Joi.any(),
         geoFence: Joi.array().items(Joi.array().items(Joi.array())).description('geo spatial index')
@@ -55,6 +52,19 @@ export class BaseEntity {
             }))
     });
 
+    chunk(array, size) {
+        const chunked_arr = [];
+        for (let i = 0; i < array.length; i++) {
+            const last = chunked_arr[chunked_arr.length - 1];
+            if (!last || last.length === size) {
+                chunked_arr.push([array[i]]);
+            } else {
+                last.push(array[i]);
+            }
+        }
+        return chunked_arr;
+    }
+
     async post(data) {
         try {
             let putArg: IAerospike.Put = {
@@ -63,7 +73,8 @@ export class BaseEntity {
                 key: data.id,
                 create: true,
             }
-            return await Aerospike.put(putArg)
+            Aerospike.put(putArg)
+            return {}
         } catch (error) {
             consolelog("post", error, false)
             return Promise.reject(error)
