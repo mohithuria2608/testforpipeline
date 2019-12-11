@@ -1,31 +1,38 @@
 declare namespace IAddressRequest {
 
     interface IAddress {
-        id?: string,
-        areaId?: string,
-        bldgName?: string,
-        bldgNameUn?: string,
-        bldgNum?: string,
-        cityId?: string,
-        classId?: string,
-        countryId?: string,
-        userId?: string,
-        description?: string,
-        districtId?: string,
-        flatNum?: string,
-        floor?: string,
-        language?: string,
-        phoneAreaCode?: string,
-        phoneLookup?: string,
-        phoneNumber?: string,
-        phoneType?: string,
-        postalCode?: string,
-        provinceCode?: string,
-        sketch?: string,
-        streetId?: string,
-        useMap?: number,
-        createdBy?: string,
-        updatedBy?: string
+        id: string,
+        bldgName: string,
+        description: string,
+        flatNum: string,
+        tag: string,
+
+        phoneAreaCode: string,
+        phoneLookup: string,
+        phoneNumber: string,
+        userId: string,
+
+        language: string,
+
+        areaId: number,
+        cityId: number,
+        countryId: number,
+        districtId: number,
+        provinceCode: number,
+        streetId: number,
+
+        classId: number,
+        bldgNameUn: string,
+        bldgNum: string,
+        floor: string,
+        phoneType: string,
+        postalCode: string,
+        sketch: string,
+        useMap: number,
+        createdBy: string,
+        updatedBy: string,
+
+        isActive: number
     }
     interface IRegisterAddress {
         lat: number,
@@ -42,5 +49,9 @@ declare namespace IAddressRequest {
         description?: string,
         flatNum?: string,
         tag?: string
+    }
+
+    interface IFetchAddress {
+
     }
 }

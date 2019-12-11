@@ -26,28 +26,6 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.TAG.OFFICE,
                         Constant.DATABASE.TYPE.TAG.HOTEl,
                         Constant.DATABASE.TYPE.TAG.OTHER).required(),
-
-
-
-
-                    // areaId: Joi.number().required(),
-                    // cityId: Joi.number().required(),
-                    // countryId: Joi.number().required(),
-                    // userId: Joi.number().required(),
-                    // districtId: Joi.number().required(),// default -1
-                    // language: Joi.string(),
-                    // provinceCode: Joi.number().required(), //provinceId
-                    // streetId: Joi.number(),
-
-
-                    // bldgNameUn: Joi.string(),
-                    // bldgNum: Joi.string(),
-                    // classId: Joi.number(),  //default -1
-                    // phoneAreaCode: Joi.string(), //coutryCode
-                    // phoneLookup: Joi.string(), //phoneNumber
-                    // phoneNumber: Joi.string().required(), //phoneNumber
-                    // phoneType: Joi.number(), //
-                    // useMap: Joi.number(),  //1
                 }
             }),
             async (ctx) => {
@@ -91,7 +69,28 @@ export default (router: Router) => {
                 } catch (error) {
                     throw error
                 }
-            }
-        )
+            })
+        .get('/',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI_HEADERS
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IAddressRequest.IFetchAddress = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await addressController.fetchAddress(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 
 }

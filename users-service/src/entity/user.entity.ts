@@ -19,7 +19,7 @@ export class UserEntity extends BaseEntity {
         try {
             consolelog("getById", payload.id, true)
             let getArg: IAerospike.Get = {
-                set: 'user',
+                set: this.set,
                 key: payload.id
             }
             let user: IUserRequest.IUserData = await Aerospike.get(getArg)
@@ -47,7 +47,6 @@ export class UserEntity extends BaseEntity {
             socialKey: "",
             medium: "",
             createdAt: 0,
-            address: {},
             session: {},
             removeUserId: ""
         } : {}
@@ -184,117 +183,6 @@ export class UserEntity extends BaseEntity {
             return user
         } catch (err) {
             consolelog("createSession", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    private buildNewAddress(deviceid: string, addressInfo: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
-        let id = this.uuidv1();
-        let address = {
-            id: id,
-            bldgName: addressInfo.bldgName,
-            description: addressInfo.description,
-            flatNum: addressInfo.flatNum,
-            tag: addressInfo.tag,
-            createdBy: 'App',
-            updatedBy: 'App',
-        };
-
-        // address['userId'] = addressInfo.userId
-        address['language'] = userData.session[deviceid].language
-
-        address['areaId'] = store.areaId
-        // address['cityId'] = store.cityId
-        address['countryId'] = store.countryId
-        address['districtId'] = store.districtId
-        address['provinceCode'] = store.provinceId
-        address['streetId'] = store.streetId
-
-
-        // if (addressInfo.bldgNameUn != undefined)
-        //     address['bldgNameUn'] = addressInfo.bldgNameUn
-        // if (addressInfo.bldgNum != undefined)
-        //     address['bldgNum'] = addressInfo.bldgNum
-        // if (addressInfo.classId != undefined)
-        //     address['classId'] = addressInfo.classId
-        // if (addressInfo.userId != undefined)
-        //     address['userId'] = addressInfo.userId
-        // if (addressInfo.floor != undefined)
-        //     address['floor'] = addressInfo.floor
-        // if (addressInfo.language != undefined)
-        //     address['language'] = addressInfo.language
-        // if (addressInfo.phoneAreaCode != undefined)
-        //     address['phoneAreaCode'] = addressInfo.phoneAreaCode
-        // if (addressInfo.phoneLookup != undefined)
-        //     address['phoneLookup'] = addressInfo.phoneLookup
-        // if (addressInfo.phoneNumber != undefined)
-        //     address['phoneNumber'] = addressInfo.phoneNumber
-        // if (addressInfo.phoneType != undefined)
-        //     address['phoneType'] = addressInfo.phoneType
-        // if (addressInfo.postalCode != undefined)
-        //     address['postalCode'] = addressInfo.postalCode
-        // if (addressInfo.sketch != undefined)
-        //     address['sketch'] = addressInfo.sketch
-        // if (addressInfo.useMap != undefined)
-        //     address['useMap'] = addressInfo.useMap
-
-        return address
-    }
-
-    async addAddress(
-        deviceid: string,
-        userData: IUserRequest.IUserData,
-        addressData: IAddressRequest.IRegisterAddress,
-        store: IStoreGrpcRequest.IStore
-    ): Promise<IUserRequest.IUserData> {
-        try {
-            let address: IAddressRequest.IAddress = { ...this.buildNewAddress(deviceid, addressData, store, userData) }
-            let data = {}
-            data[address['id']] = address
-            let op = [
-                Aerospike.maps.putItems('address', data, {
-                    writeFlags: Aerospike.maps.writeFlags.CREATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
-                })
-            ]
-            await Aerospike.operationsOnMap({ set: this.set, key: userData.id }, op)
-            let user = await this.getById({ id: userData.id })
-            return user
-        } catch (err) {
-            consolelog("addAddress", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    private buildOldAddress(addressInfo: IAddressRequest.IUpdateAddress) {
-        let bins = {};
-        if (addressInfo.bldgName)
-            bins['bldgName'] = addressInfo.bldgName
-        if (addressInfo.description)
-            bins['description'] = addressInfo.description
-        if (addressInfo.flatNum)
-            bins['flatNum'] = addressInfo.flatNum
-        if (addressInfo.tag)
-            bins['tag'] = addressInfo.tag
-        return bins
-    }
-
-    async updateAddress(
-        userData: IUserRequest.IUserData,
-        addressUpdate: IAddressRequest.IUpdateAddress,
-    ): Promise<IUserRequest.IUserData> {
-        try {
-            const Context = Aerospike.cdt.Context
-            const context = new Context().addMapKey(addressUpdate.addressId)
-            let op = [
-                Aerospike.maps.putItems('address', { ...this.buildOldAddress(addressUpdate) }, {
-                    writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
-                }).withContext(context)
-            ]
-            await Aerospike.operationsOnMap({ set: this.set, key: userData.id }, op)
-            let user = await this.getById({ id: userData.id })
-            return user
-        } catch (err) {
-            consolelog("updateAddress", err, false)
             return Promise.reject(err)
         }
     }

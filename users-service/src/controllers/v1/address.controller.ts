@@ -1,14 +1,19 @@
 import * as Constant from '../../constant'
-import { consolelog, formatUserData } from '../../utils'
+import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
-import { stream } from 'winston'
 
 export class AddressController {
     constructor() { }
 
     /**
     * @method POST
-    * @description REGISTER USER ADDRESS BY ID
+    * @description Register user address
+    * @param {number} lat
+    * @param {number} lng
+    * @param {string} bldgName
+    * @param {string} description
+    * @param {string} flatNum
+    * @param {string} tag
     * */
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -16,9 +21,7 @@ export class AddressController {
             if (store && store.id) {
                 // let area = await ENTITY.UserE.getAreaByStoreId(parseInt(store.id))
                 // if (area && area.id) {
-                await ENTITY.UserE.addAddress(headers.deviceid, auth.userData, payload, store)
-                let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
-                return formatUserData(userObj, headers.deviceid)
+                return await ENTITY.AddressE.addAddress(headers.deviceid, auth.userData, payload, store)
                 // } else
                 //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
             } else
@@ -32,15 +35,31 @@ export class AddressController {
 
     /**
     * @method POST
-    * @description UPDATE USER ADDRESS BY ID
+    * @description Update user address by addressId
+    * @param {string} addressId
+    * @param {string=} bldgName
+    * @param {string=} description
+    * @param {string=} flatNum
+    * @param {string=} tag
     * */
     async updateAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IUpdateAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            await ENTITY.UserE.updateAddress(auth.userData, payload)
-            let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
-            return formatUserData(userObj, headers.deviceid)
+            return await ENTITY.AddressE.updateAddress(payload)
         } catch (err) {
             consolelog("updateAddressById", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method GET
+    * @description Fetch user related address
+    * */
+    async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            return []
+        } catch (err) {
+            consolelog("fetchAddress", err, false)
             return Promise.reject(err)
         }
     }

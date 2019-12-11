@@ -97,9 +97,6 @@ export let UDF = {
     USER: {
         check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key"
-    },
-    ADDRESS: {
-        update_address: "update_address",
     }
 }
 export enum KAFKA_TOPIC {

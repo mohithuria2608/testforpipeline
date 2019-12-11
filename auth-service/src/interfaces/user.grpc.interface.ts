@@ -16,9 +16,6 @@ declare namespace IUserGrpcRequest {
         socialKey: string,
         medium: string,
         createdAt: number,
-        address: {
-            [deviceid: string]: IAddressRequest.IAddress
-        },
         session: {
             [deviceid: string]: ISession
         },

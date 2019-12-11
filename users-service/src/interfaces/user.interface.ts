@@ -20,9 +20,6 @@ declare namespace IUserRequest {
         socialKey: string,
         medium: string,
         createdAt: number,
-        address: {
-            [deviceid: string]: IAddressRequest.IAddress
-        },
         session: {
             [deviceid: string]: ISession
         },
