@@ -11,7 +11,7 @@ export class TokenManager {
 
     constructor() { }
 
-    async setToken(tokenData: IAuthServiceRequest.ICreateTokenData) {
+    async setToken(tokenData: IAuthGrpcRequest.ICreateTokenData) {
         try {
             let expiretime = Constant.SERVER.ACCESS_TOKEN_EXPIRE_TIME
             switch (tokenData.tokenType) {
@@ -53,7 +53,7 @@ export class TokenManager {
 
     async  verifyToken(token: string) {
         try {
-            const tokenData: IAuthServiceRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
+            const tokenData: IAuthGrpcRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
             consolelog('tokenManager : verifyToken', [JSON.stringify(token), JSON.stringify(tokenData)], true)
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {

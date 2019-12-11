@@ -1,11 +1,11 @@
-import * as Services from '../databases/dao';
+import * as Joi from '@hapi/joi';
+import * as Constant from '../constant'
 import { consolelog } from '../utils'
 
 export class BaseEntity {
-    public DAOManager = new Services.DAOManager();
-    protected modelName: ModelNames;
-    constructor(modelName?) {
-        this.modelName = modelName
+    protected set: SetNames;
+    constructor(set?) {
+        this.set = set
     }
 
 }

@@ -9,7 +9,7 @@ export class KafkaController {
     /**
      * @param {object} data :any
      * */
-    async produceMessage(payload: IKafkaServiceRequest.IProduceMessage) {
+    async produceMessage(payload: IKafkaGrpcRequest.IProduceMessage) {
         try {
             consolelog("produceMessage in KAFKA service", payload, true)
             kafkaProducerE.sendMessage({

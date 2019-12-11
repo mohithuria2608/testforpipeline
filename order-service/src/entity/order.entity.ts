@@ -7,9 +7,9 @@ import { consolelog, sendSuccess } from '../utils'
 
 export class OrderClass extends BaseEntity {
     constructor() {
-        super('Order')
+        super('order')
     }
-    async mapInternalKeys(payload: ICartRequest.IValidateCart, defaultMenu: IMenuServiceRequest.IFetchMenuRes) {
+    async mapInternalKeys(payload: ICartRequest.IValidateCart, defaultMenu: IMenuGrpcRequest.IFetchMenuRes) {
         try {
             let change = false
             payload.items.map((item, j) => {
@@ -121,7 +121,7 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async createCheckoutRes(items: IMenuServiceRequest.IProduct[]) {
+    async createCheckoutRes(items: IMenuGrpcRequest.IProduct[]) {
         try {
             let amount = []
 

@@ -1,7 +1,8 @@
 declare namespace IMenuRequest {
 
-    interface IFetchMenu extends  ICommonRequest.ICordinatesOpt {
-        country: string,
-        isDefault: boolean,
+    interface IFetchMenu {
+        menuId: number
+        // country: string,
+        // isDefault: boolean,
     }
 }

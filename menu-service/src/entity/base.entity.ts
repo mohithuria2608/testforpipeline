@@ -26,6 +26,4 @@ export class BaseEntity {
         startTime: Joi.any(),
         endTime: Joi.any(),
     });
-
-
 }

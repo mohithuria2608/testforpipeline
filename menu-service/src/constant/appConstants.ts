@@ -15,7 +15,7 @@ export let DATABASE = {
         USER: "USER",
         ADMIN: "ADMIN",
     },
-    
+
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,
@@ -89,6 +89,11 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            SERVICE_UNAVAILABLE: {
+                statusCode: 400,
+                message: 'Service unavailable for selected location',
+                type: 'SERVICE_UNAVAILABLE'
+            },
 
             CANNOT_PERFORM_UPDATE_OPERATION: {
                 statusCode: 400,
@@ -241,7 +246,7 @@ export let STATUS_MSG = {
 
             MENU_NOT_FOUND: {
                 statusCode: 404,
-                message: 'User not found',
+                message: 'Menu not found',
                 type: 'MENU_NOT_FOUND'
             },
         },
@@ -358,6 +363,15 @@ export let STATUS_MSG = {
             }
         },
         S304: {
+
+            MENU_EXISTS: (data) => {
+                return {
+                    statusCode: 304,
+                    message: 'Menu exists',
+                    type: 'MENU_EXISTS',
+                    data: data
+                }
+            },
             REQUEST_EXISTS: {
                 statusCode: 304,
                 message: 'Friend request already Exists',

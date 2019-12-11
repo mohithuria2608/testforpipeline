@@ -27,15 +27,14 @@ export default (router: Router) => {
             ]),
             validate({
                 headers: JOI.JOI_HEADERS,
-                body: {
-                    lat: Joi.number().min(0).max(90),
-                    lng: Joi.number().min(-180).max(180),
+                query: {
+                    menuId: Joi.number(),
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IMenuRequest.IFetchMenu = ctx.request.body;
+                    let payload: IMenuRequest.IFetchMenu = ctx.request.query;
                     let res = await menuController.fetchMenu(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;

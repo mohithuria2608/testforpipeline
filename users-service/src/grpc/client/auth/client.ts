@@ -23,7 +23,7 @@ export class AuthService {
         consolelog('Connection established from user service to auth service', config.get("grpc.auth.client"), true)
     }
 
-    async createToken(payload: IAuthServiceRequest.ICreateTokenData): Promise<IAuthServiceRequest.IToken> {
+    async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {
         return new Promise(async (resolve, reject) => {
             try {
                 await authServiceValidator.createTokenValidator(payload)
@@ -48,7 +48,7 @@ export class AuthService {
             }
         })
     }
-    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
+    async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             try {
                 await authServiceValidator.verifyTokenValidator(payload)

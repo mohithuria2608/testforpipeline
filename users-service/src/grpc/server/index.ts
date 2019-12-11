@@ -18,7 +18,7 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
-    getUserById: async (call: IUserServiceRequest.IGetUserById, callback) => {
+    getUserById: async (call: IUserGrpcRequest.IGetUserById, callback) => {
         try {
             consolelog("getUserById", JSON.stringify(call.request), true)
             let res: IUserRequest.IUserData = await ENTITY.UserE.getById(call.request)

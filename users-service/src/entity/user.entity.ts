@@ -1,10 +1,8 @@
 'use strict';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { authService, outletService } from '../grpc/client'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
-import { add } from 'winston';
 
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
@@ -17,7 +15,7 @@ export class UserEntity extends BaseEntity {
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getById(payload: IUserServiceRequest.IId) {
+    async getById(payload: IUserGrpcRequest.IId) {
         try {
             consolelog("getById", payload.id, true)
             let getArg: IAerospike.Get = {
@@ -190,7 +188,7 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    private buildNewAddress(addressInfo: IAddressRequest.IRegisterAddress) {
+    private buildNewAddress(deviceid: string, addressInfo: IAddressRequest.IRegisterAddress, area: IAreaGrpcRequest.IArea, userData: IUserRequest.IUserData) {
         let id = this.uuidv1();
         let address = {
             id: id,
@@ -203,14 +201,14 @@ export class UserEntity extends BaseEntity {
         };
 
         // address['userId'] = addressInfo.userId
-        // address['language'] = addressInfo.language
+        address['language'] = userData.session[deviceid].language
 
-        // address['areaId'] = store.areaId
-        // address['cityId'] = store.cityId
-        // address['countryId'] = store.countryId
-        // address['districtId'] = store.districtId
-        // address['provinceCode'] = store.provinceCode
-        // address['streetId'] = store.streetId
+        address['areaId'] = area.areaId
+        address['cityId'] = area.cityId
+        address['countryId'] = area.countryId
+        address['districtId'] = area.districtId
+        address['provinceCode'] = area.provinceId
+        address['streetId'] = area.streetId
 
 
         // if (addressInfo.bldgNameUn != undefined)
@@ -243,22 +241,14 @@ export class UserEntity extends BaseEntity {
         return address
     }
 
-    async validateAddres(lat: number, lng: number) {
-        try {
-            await outletService.validateCoordinate({ lat, lng })
-        } catch (error) {
-            consolelog("validateAddres", error, false)
-            return Promise.reject(error)
-        }
-    }
-
     async addAddress(
+        deviceid: string,
         userData: IUserRequest.IUserData,
         addressData: IAddressRequest.IRegisterAddress,
-        // store: IOutletServiceRequest.IOutlet
+        area: IAreaGrpcRequest.IArea
     ): Promise<IUserRequest.IUserData> {
         try {
-            let address: IAddressRequest.IAddress = { ...this.buildNewAddress(addressData) }
+            let address: IAddressRequest.IAddress = { ...this.buildNewAddress(deviceid, addressData, area, userData) }
             let data = {}
             data[address['id']] = address
             let op = [
@@ -321,9 +311,9 @@ export class UserEntity extends BaseEntity {
                     }
                     if (id)
                         dataToSend['id'] = id
-                    return promise.push(authService.createToken(dataToSend))
+                    return promise.push(this.createToken(dataToSend))
                 })
-                let tokens: IAuthServiceRequest.IToken[] = await Promise.all(promise)
+                let tokens: IAuthGrpcRequest.IToken[] = await Promise.all(promise)
 
                 let res = {
                     accessToken: undefined,

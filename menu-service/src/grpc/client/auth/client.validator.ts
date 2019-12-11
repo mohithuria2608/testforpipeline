@@ -8,7 +8,7 @@ export class AuthServiceValidator {
     constructor() {
     }
 
-    async verifyTokenValidator(data: IAuthServiceRequest.IVerifyTokenObj) {
+    async verifyTokenValidator(data: IAuthGrpcRequest.IVerifyTokenObj) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

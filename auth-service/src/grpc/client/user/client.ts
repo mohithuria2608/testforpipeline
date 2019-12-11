@@ -23,7 +23,7 @@ export class UserGrpcService {
         // consolelog("Connection established from auth service to user service", config.get("grpc.user.client"), true)
     }
 
-    async getUserById(payload: IUserServiceRequest.IId): Promise<IUserServiceRequest.IUserData> {
+    async getUserById(payload: IUserGrpcRequest.IId): Promise<IUserGrpcRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
                 await userServiceValidator.getUserByIdValidator(payload)

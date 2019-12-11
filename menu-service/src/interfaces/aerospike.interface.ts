@@ -89,4 +89,11 @@ declare namespace IAerospike {
         set: string,
         key: string,
     }
+
+    interface GeoWithin {
+        set: string,
+        key: string,
+        lat: number,
+        lng: number,
+    }
 }

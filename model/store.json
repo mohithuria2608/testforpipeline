@@ -1,6 +1,9 @@
 [
     {
+        "id": "ef801b00-1abe-11ea-8153-7526aef7d0f7",
         "storeId": 82,
+        "areaId": 12,
+        "streetId": 12,
         "menuId": 5,
         "name_en": "MUSSAFAH ADNOC - ABU DHABI",
         "name_ar": "كنتاكى المصفح-أدنوك  - أبو ظبى",
@@ -12,17 +15,15 @@
             "tak": 1
         },
         "active": 1,
-        "geoData": {
-            "address_en": "Mussafah Industrial Area, at the ADNOC Petrol Station M22",
-            "address_ar": "مصفح الصناعية داخل محطة أدنوك  إم 22",
-            "coords": {
-                "type": "Point",
-                "coordinates": []
-            }
+        "location": {
+            "description": "Mussafah Industrial Area, at the ADNOC Petrol Station M22",
+            "address_ar": "مصفح الصناعية داخل محطة أدنوك  إم 22"
         },
-        "startTime": {},
-        "endTime": {},
-        "id": "ef801b00-1abe-11ea-8153-7526aef7d0f7"
+        "address_en": "",
+        "address_ar": "مصفح الصناعية داخل محطة أدنوك  إم 22",
+        "geoFence": [],
+        "startTime": "",
+        "endTime": ""
     },
     {
         "storeId": 233,

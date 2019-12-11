@@ -16,6 +16,7 @@ class AerospikeClass {
     public namespace: string;
     public cdt = aerospike.cdt;
     public maps = aerospike.maps;
+    public GeoJSON = aerospike.GeoJSON;
     constructor(namespace: string) {
         this.namespace = namespace;
     }
@@ -209,27 +210,21 @@ class AerospikeClass {
                 console.info(record)
                 resolve((record && record.bins) ? record.bins : record)
             } catch (error) {
-                reject(error)
+                console.log(JSON.stringify(error))
+                if (error.code == 2)
+                    resolve({})
+                else
+                    reject(error)
             }
         })
     }
 
     async scan(set: string) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {
-                    let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false }),
-                        stream = scan.foreach(),
-                        tempData: any = [];
-                    stream.on('data', function (record) { tempData.push(record); });
-                    stream.on('error', function (error) { reject(error); });
-                    stream.on('end', function () {
-                        let records: any = [];
-                        for (let item of tempData) {
-                            records.push(item.bins);
-                        }
-                        resolve(records);
-                    });
+                    let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false })
+                    resolve(await this.queryForeach(scan))
                 } else reject('Client not initialized');
             } catch (error) {
                 reject(error)
@@ -273,24 +268,24 @@ class AerospikeClass {
             }
         })
     }
-    private printRecord(record) {
-        const key = record.key.key || record.key.digest.toString('hex')
-    }
 
-    private consume(stream) {
-        return new Promise(function (resolve, reject) {
-            stream.on('error', reject)
-            stream.on('end', resolve)
-        })
-    }
-    private async  queryForeach(query) {
+    private async queryForeach(query) {
         return new Promise(async (resolve, reject) => {
             try {
-                const stream = query.foreach()
-                stream.on('data', this.printRecord)
-                resolve(await this.consume(stream))
+                let stream = query.foreach(),
+                    tempData: any = [];
+                stream.on('data', function (record) { tempData.push(record); });
+                stream.on('error', function (error) { reject(error); });
+                stream.on('end', function () {
+                    let records: any = [];
+                    for (let item of tempData) {
+                        records.push(item.bins);
+                    }
+                    console.log("records", records)
+                    resolve(records);
+                });
             } catch (error) {
-                reject(error)
+                reject(error);
             }
         })
     }
@@ -361,6 +356,22 @@ class AerospikeClass {
                 let result = await this.client.operate(key, operations)
                 console.info('Map updated successfully', result)
                 resolve(result)
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async geoWithin(argv: IAerospike.GeoWithin): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                console.log("lat,lng", argv)
+                let query = this.client.query(this.namespace, argv.set);
+                query.where(aerospike.filter.geoWithinGeoJSONRegion(argv.key, this.GeoJSON.Point(
+                    argv.lat,
+                    argv.lng
+                )))
+                resolve(await this.queryForeach(query))
             } catch (error) {
                 reject(error)
             }

@@ -17,7 +17,7 @@ export class MenuClass extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.id,
+                key: data.menuId,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -31,11 +31,11 @@ export class MenuClass extends BaseEntity {
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getById() {
+    async getMenuById(id: number) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: 1
+                key: id
             }
             let menu = await Aerospike.get(getArg)
             if (menu && menu.id) {
@@ -45,6 +45,21 @@ export class MenuClass extends BaseEntity {
         } catch (error) {
             consolelog("getById", error, false)
             return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method GRPC
+    * @param {string} country :current country of user
+    * @param {boolean} isDefault :want to fetch default menu or not
+    * */
+    async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
+        try {
+            let menuId = 5;
+            return await this.getMenuById(menuId)
+        } catch (err) {
+            consolelog("grpcFetchMenu", err, false)
+            return Promise.reject(err)
         }
     }
 }

@@ -1,2 +1,2 @@
 export * from './auth/client'
-export * from './outlet/client'
+export * from './location/client'

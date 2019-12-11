@@ -18,10 +18,10 @@ const kafkaProto = grpc.loadPackageDefinition(packageDefinition);
 export const server = new grpc.Server()
 
 server.addService(kafkaProto.KafkaService.service, {
-    produceMessage: async (call: IKafkaServiceRequest.IProduceMessageReq, callback) => {
+    produceMessage: async (call: IKafkaGrpcRequest.IProduceMessageReq, callback) => {
         try {
             consolelog("produceMessage", JSON.stringify(call.request), true)
-            let res: IKafkaServiceRequest.IProduceMessageRes = await kafkaController.produceMessage(call.request)
+            let res: IKafkaGrpcRequest.IProduceMessageRes = await kafkaController.produceMessage(call.request)
             callback(null, res)
         } catch (error) {
             consolelog("produceMessage", error, false)

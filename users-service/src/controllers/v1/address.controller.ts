@@ -1,6 +1,5 @@
 import * as Constant from '../../constant'
 import { consolelog, formatUserData } from '../../utils'
-import { Aerospike } from '../../databases/aerospike'
 import * as ENTITY from '../../entity'
 
 export class AddressController {
@@ -12,10 +11,18 @@ export class AddressController {
     * */
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let store = await ENTITY.UserE.validateAddres(payload.lat, payload.lng)
-            await ENTITY.UserE.addAddress(auth.userData, payload)
-            let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
-            return formatUserData(userObj, headers.deviceid)
+            let store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+            if (store && store.id) {
+                let area = await ENTITY.UserE.getAreaByStoreId(parseInt(store.id))
+                if (area && area.id) {
+                    await ENTITY.UserE.addAddress(headers.deviceid, auth.userData, payload, area)
+                    let userObj = await ENTITY.UserE.getById({ id: auth.userData.id })
+                    return formatUserData(userObj, headers.deviceid)
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
+
         } catch (err) {
             consolelog("registerAddress", err, false)
             return Promise.reject(err)

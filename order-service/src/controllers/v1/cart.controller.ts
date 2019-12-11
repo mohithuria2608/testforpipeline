@@ -18,7 +18,7 @@ export class CartController {
      * */
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart) {
         try {
-            const defaultMenu: IMenuServiceRequest.IFetchMenuRes = await menuService.fetchMenu({
+            const defaultMenu: IMenuGrpcRequest.IFetchMenuRes = await menuService.fetchMenu({
                 country: headers.country,
                 isDefault: true
             })

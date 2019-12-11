@@ -29,7 +29,7 @@
             "url": "http://localhost",
             "port": 4006
         },
-        "outlet": {
+        "location": {
             "url": "http://localhost",
             "port": 4007
         }
@@ -63,7 +63,7 @@
             "server": "localhost:50057",
             "client": "127.0.0.1:50057"
         },
-        "outlet": {
+        "location": {
             "server": "localhost:50058",
             "client": "127.0.0.1:50058"
         }
@@ -95,9 +95,9 @@
                     "server": "/../../../proto/kafka.proto",
                     "client": "/../../../../proto/kafka.proto"
                 },
-                "outlet": {
-                    "server": "/../../../proto/outlet.proto",
-                    "client": "/../../../../proto/outlet.proto"
+                "location": {
+                    "server": "/../../../proto/location.proto",
+                    "client": "/../../../../proto/location.proto"
                 }
             }
         }

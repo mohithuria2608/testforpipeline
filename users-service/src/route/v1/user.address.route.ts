@@ -34,23 +34,20 @@ export default (router: Router) => {
                     // cityId: Joi.number().required(),
                     // countryId: Joi.number().required(),
                     // userId: Joi.number().required(),
-                    // districtId: Joi.number().required(),
+                    // districtId: Joi.number().required(),// default -1
                     // language: Joi.string(),
-                    // provinceCode: Joi.number().required(),//provinceId
+                    // provinceCode: Joi.number().required(), //provinceId
                     // streetId: Joi.number(),
 
 
                     // bldgNameUn: Joi.string(),
                     // bldgNum: Joi.string(),
-                    // classId: Joi.number(),
-                    // floor: Joi.string(),
-                    // phoneAreaCode: Joi.string(),
-                    // phoneLookup: Joi.string(),
-                    // phoneNumber: Joi.string().required(),
-                    // phoneType: Joi.number(),
-                    // postalCode: Joi.string().required(),
-                    // sketch: Joi.string(),
-                    // useMap: Joi.number(),
+                    // classId: Joi.number(),  //default -1
+                    // phoneAreaCode: Joi.string(), //coutryCode
+                    // phoneLookup: Joi.string(), //phoneNumber
+                    // phoneNumber: Joi.string().required(), //phoneNumber
+                    // phoneType: Joi.number(), //
+                    // useMap: Joi.number(),  //1
                 }
             }),
             async (ctx) => {

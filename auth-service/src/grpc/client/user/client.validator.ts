@@ -7,7 +7,7 @@ import * as Constant from '../../../constant'
 export class UserServiceValidator {
     constructor() {
     }
-    async  getUserByIdValidator(data: IUserServiceRequest.IId) {
+    async  getUserByIdValidator(data: IUserGrpcRequest.IId) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

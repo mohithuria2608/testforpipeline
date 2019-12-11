@@ -26,28 +26,14 @@ export class MenuController {
 
     /**
     * @method GET
-    * @param {number=} lat : latitude
-    * @param {number=} lng : longitude
+    * @param {string} menuId :  menu id
     * */
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
-            return await ENTITY.MenuE.getById()
+            let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
+            return await ENTITY.MenuE.getMenuById(menuId)
         } catch (err) {
             consolelog("fetchMenu", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    /**
-    * @method GRPC
-    * @param {string} country :current country of user
-    * @param {boolean} isDefault :want to fetch default menu or not
-    * */
-    async grpcFetchMenu(payload: IMenuServiceRequest.IFetchMenuData) {
-        try {
-            return await ENTITY.MenuE.getById()
-        } catch (err) {
-            consolelog("grpcFetchMenu", err, false)
             return Promise.reject(err)
         }
     }

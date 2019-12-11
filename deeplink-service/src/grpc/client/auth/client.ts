@@ -23,7 +23,7 @@ export class AuthService {
         consolelog('Connection established from deeplink service to auth service', config.get("grpc.auth.client"), true)
     }
 
-    async createToken(payload: IAuthServiceRequest.ICreateTokenData): Promise<IAuthServiceRequest.IToken> {
+    async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.createTokenValidator(payload)
             this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype }, (err, res) => {
@@ -37,7 +37,7 @@ export class AuthService {
             })
         })
     }
-    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
+    async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (err, res) => {

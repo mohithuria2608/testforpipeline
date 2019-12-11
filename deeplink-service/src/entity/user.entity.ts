@@ -20,7 +20,7 @@ export class UserEntity extends BaseEntity {
                         tokenType: elem
                     }))
                 })
-                let tokens: IAuthServiceRequest.IToken[] = await Promise.all(promise)
+                let tokens: IAuthGrpcRequest.IToken[] = await Promise.all(promise)
 
                 let res = {
                     accessToken: undefined,

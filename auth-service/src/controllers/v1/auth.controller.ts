@@ -6,7 +6,7 @@ export class AuthController {
 
     constructor() { }
 
-    async createToken(payload: IAuthServiceRequest.ICreateTokenData) {
+    async createToken(payload: IAuthGrpcRequest.ICreateTokenData) {
         try {
             let token: string = await tokenManager.setToken(payload)
             return { token }
@@ -16,7 +16,7 @@ export class AuthController {
         }
     }
 
-    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj) {
+    async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj) {
         try {
             let tokenData: ICommonRequest.AuthorizationObj = await tokenManager.verifyToken(payload.token)
             return tokenData

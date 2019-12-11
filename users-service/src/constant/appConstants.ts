@@ -116,6 +116,12 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            INVALID_LOCATION:{
+                statusCode: 400,
+                type: 'INVALID_LOCATION',
+                message: 'Invalid location'
+            },
+
             PROFILE_SETUP_ALLREADY_COMPLETE: {
                 statusCode: 400,
                 type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
