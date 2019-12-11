@@ -84,10 +84,10 @@ export class UserController {
             }
             let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
             if (checkUserExist && checkUserExist.id) {
-                if (checkUserExist.session[headers.deviceid].otp == 0 && checkUserExist.session[headers.deviceid].otpExpAt == 0)
+                if (checkUserExist && checkUserExist.session && checkUserExist.session[headers.deviceid] && checkUserExist.session[headers.deviceid].otp == 0 && checkUserExist.session[headers.deviceid].otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
 
-                if (checkUserExist.session[headers.deviceid].otp == payload.otp) {
+                if (checkUserExist && checkUserExist.session && checkUserExist.session[headers.deviceid] && checkUserExist.session[headers.deviceid].otp == payload.otp) {
                     if (checkUserExist.session[headers.deviceid].otpExpAt > new Date().getTime()) {
                         let userUpdate: IUserRequest.IUserUpdate = {
                             phnVerified: 1,
