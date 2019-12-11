@@ -109,7 +109,7 @@ class AerospikeClass {
             const radius = filter.radius
             query.where(aerospike.filter.geoWithinRadius(bin, lng, lat, radius))
         } else if (argv.geoWithin) {
-            const filter = argv.geoWithinRadius
+            const filter = argv.geoWithin
             const bin = filter.bin
             const point = this.GeoJSON.Point(filter.lat, filter.lng)
             query.where(aerospike.filter.geoWithinGeoJSONRegion(bin, point))
@@ -215,6 +215,8 @@ class AerospikeClass {
                 console.info(record)
                 resolve((record && record.bins) ? record.bins : record)
             } catch (error) {
+                if (error.code == 2)
+                    resolve({})
                 reject(error)
             }
         })

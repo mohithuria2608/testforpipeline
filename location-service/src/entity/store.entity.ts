@@ -41,13 +41,12 @@ export class StoreEntity extends BaseEntity {
             let geoWithinArg: IAerospike.Query = {
                 set: this.set,
                 geoWithin: {
-                    key: 'geoFence',
+                    bin: 'geoFence',
                     lat: parseFloat(payload.lat.toString()),
                     lng: parseFloat(payload.lng.toString()),
                 }
             }
             let res = await Aerospike.query(geoWithinArg)
-            console.log("res", res)
             if (res && res.length > 0) {
                 return res
             } else

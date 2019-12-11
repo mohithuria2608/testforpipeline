@@ -15,7 +15,7 @@ export class MenuController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {
-                ENTITY.MenuE.postMenu(iterator)
+                ENTITY.MenuE.post(iterator)
             }
             return {}
         } catch (err) {

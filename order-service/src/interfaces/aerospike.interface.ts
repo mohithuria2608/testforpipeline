@@ -36,8 +36,8 @@ declare namespace IAerospike {
         bins?: string,
         equal?: Equal,
         range?: Range,
-        geoWithinRadius?: Geo,
-        geoWithin?: GeoWithin,
+        geoWithinRadius?: GeoWIthinRadius,
+        geoWithin?: GeoWithinPoint,
         udf?: Udf,
         set: string,
         background?: boolean,
@@ -54,15 +54,15 @@ declare namespace IAerospike {
         end: string
     }
 
-    interface Geo {
+    interface GeoWIthinRadius {
         bin: string,
         lng: string,
         lat: string,
         radius: string,
     }
 
-    interface GeoWithin {
-        key: string,
+    interface GeoWithinPoint {
+        bin: string,
         lat: number,
         lng: number,
     }
