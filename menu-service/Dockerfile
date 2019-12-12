@@ -1,6 +1,6 @@
 FROM node:10.17.0
 WORKDIR /usr/src/app
-COPY . .
+COPY menu-service/ .
 COPY proto/ /usr/src/app/proto/
 RUN apt-get update
 RUN npm cache clean --force
