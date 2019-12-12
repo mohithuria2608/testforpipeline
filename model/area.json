@@ -1,5 +1,17 @@
 [
     {
+        "id": "c7c76450-1c31-11ea-964e-c13f240dc3c5",
+        "cityId": 19,
+        "districtId": 1010,
+        "streetId": 4,
+        "areaId": 520,
+        "provinceId": 7,
+        "countryId": -1,
+        "name_en": "Al Jaddaf",
+        "name_ar": "الجداف",
+        "storeId": 28
+    },
+    {
         "id": "c13654c0-1c31-11ea-964e-c13f240dc3c5",
         "cityId": 19,
         "districtId": 1010,
@@ -9838,18 +9850,6 @@
         "name_en": "Al Forsan Village",
         "name_ar": "قرية الفرسان",
         "storeId": 71
-    },
-    {
-        "id": "c7c76450-1c31-11ea-964e-c13f240dc3c5",
-        "cityId": 19,
-        "districtId": 1010,
-        "streetId": 4,
-        "areaId": 520,
-        "provinceId": 7,
-        "countryId": -1,
-        "name_en": "Al Jaddaf",
-        "name_ar": "الجداف",
-        "storeId": 28
     },
     {
         "id": "c136f100-1c31-11ea-964e-c13f240dc3c5",

@@ -20,7 +20,8 @@ export class MiscController {
                         defaultCCode: '+971',
                         phnRegex: `/^[1-9]\d{8}$|^[1-9]\d{8}$/`
                     }
-                ]
+                ],
+                errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
         } catch (err) {
             consolelog("configuration", err, false)

@@ -1,4 +1,5 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
@@ -10,6 +11,36 @@ export class AddressEntity extends BaseEntity {
     constructor() {
         super('address')
     }
+
+
+    public addressSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        areaId: Joi.number().required(),
+        bldgName: Joi.string(),
+        bldgNameUn: Joi.string(),
+        bldgNum: Joi.string(),
+        cityId: Joi.number().required(),
+        classId: Joi.number(),
+        countryId: Joi.number().required(),
+        userId: Joi.number().required(),
+        description: Joi.string(),
+        districtId: Joi.number().required(),
+        flatNum: Joi.number(),
+        floor: Joi.string(),
+        language: Joi.string(),
+        phoneAreaCode: Joi.string(),
+        phoneLookup: Joi.string(),
+        phoneNumber: Joi.string().required(),
+        phoneType: Joi.number(),
+        postalCode: Joi.string().required(),
+        provinceCode: Joi.number().required(),
+        sketch: Joi.string(),
+        streetId: Joi.number(),
+        useMap: Joi.number(),
+        createdAt: Joi.number().required(),
+        createdBy: Joi.string(),
+        updatedBy: Joi.string()
+    })
 
     /**
     * @method GRPC

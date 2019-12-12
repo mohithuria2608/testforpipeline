@@ -117,7 +117,7 @@ class AerospikeClass {
         return query
     }
 
-    async  indexCreate(argv) {
+    async  indexCreate(argv: IAerospike.CreateIndex) {
         return new Promise(async (resolve, reject) => {
             try {
                 const options = {

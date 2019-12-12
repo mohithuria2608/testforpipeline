@@ -82,13 +82,13 @@ export class UserController {
                 set: 'user',
                 background: false,
             }
-            let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
-            if (checkUserExist && checkUserExist.id) {
-                if (checkUserExist && checkUserExist.session && checkUserExist.session[headers.deviceid] && checkUserExist.session[headers.deviceid].otp == 0 && checkUserExist.session[headers.deviceid].otpExpAt == 0)
+            let userFromDb: IUserRequest.IUserData = await Aerospike.query(queryArg)
+            if (userFromDb && userFromDb.id) {
+                if (userFromDb && userFromDb.session && userFromDb.session[headers.deviceid] && userFromDb.session[headers.deviceid].otp == 0 && userFromDb.session[headers.deviceid].otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
 
-                if (checkUserExist && checkUserExist.session && checkUserExist.session[headers.deviceid] && checkUserExist.session[headers.deviceid].otp == payload.otp) {
-                    if (checkUserExist.session[headers.deviceid].otpExpAt > new Date().getTime()) {
+                if (userFromDb && userFromDb.session && userFromDb.session[headers.deviceid] && userFromDb.session[headers.deviceid].otp == payload.otp) {
+                    if (userFromDb.session[headers.deviceid].otpExpAt > new Date().getTime()) {
                         let userUpdate: IUserRequest.IUserUpdate = {
                             phnVerified: 1,
                             removeUserId: "",
@@ -100,9 +100,9 @@ export class UserController {
                             isLogin: 1,
                             // createdAt: new Date().getTime()
                         }
-                        let user: IUserRequest.IUserData = await ENTITY.UserE.createSession(headers, checkUserExist, userUpdate, sessionUpdate)
-                        if (checkUserExist.removeUserId && checkUserExist.removeUserId != "")
-                            await Aerospike.remove({ set: "user", key: checkUserExist.removeUserId })
+                        let user: IUserRequest.IUserData = await ENTITY.UserE.createSession(headers, userFromDb, userUpdate, sessionUpdate)
+                        if (userFromDb.removeUserId && userFromDb.removeUserId != "")
+                            await Aerospike.remove({ set: "user", key: userFromDb.removeUserId })
                         let tokens = await ENTITY.UserE.getTokens(
                             headers.deviceid,
                             headers.devicetype,

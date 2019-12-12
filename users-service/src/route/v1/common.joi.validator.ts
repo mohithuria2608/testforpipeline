@@ -3,6 +3,9 @@
 import * as Joi from '@hapi/joi';
 import * as Constant from '../../constant'
 
+//
+//@generic headers :on basis of platforms that which keys are required + mandatory
+//@app version seperate apis
 export const JOI_HEADERS = {
     language: Joi.string().valid(
         Constant.DATABASE.LANGUAGE.AR,
@@ -12,7 +15,7 @@ export const JOI_HEADERS = {
         Constant.DATABASE.COUNTRY.UAE
     ).required(),
     appversion: Joi.string().required(),
-    devicemodel: Joi.string().required(),
+    devicemodel: Joi.string().required(), 
     devicetype: Joi.string().valid(
         Constant.DATABASE.TYPE.DEVICE.ANDROID,
         Constant.DATABASE.TYPE.DEVICE.IOS

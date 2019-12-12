@@ -41,6 +41,9 @@ export class LocationController {
             const area: IAreaRequest.IArea[] = promise[1]
             const store: IStoreRequest.IStore[] = promise[2]
 
+            console.log("city", city.length)
+            console.log("area", area.length)
+            console.log("store", store.length)
             let res = []
             if (city && city.length > 0) {
                 for (const c of city) {
@@ -51,6 +54,8 @@ export class LocationController {
                                 let storeCollection = []
                                 if (store && store.length > 0) {
                                     for (const s of store) {
+                                        console.log("s.areaId", s.areaId, a.areaId)
+
                                         delete s.geoFence
                                         s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
                                         if (s.areaId == a.areaId) {

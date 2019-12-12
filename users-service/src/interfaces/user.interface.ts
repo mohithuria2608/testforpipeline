@@ -25,6 +25,21 @@ declare namespace IUserRequest {
         },
         removeUserId?: string
     }
+    interface ISession {
+        otp: number,
+        otpExpAt: number,
+        otpVerified: number,
+        language: string,
+        country: string,
+        appversion: string,
+        devicemodel: string,
+        devicetype: string,
+        osversion: string,
+        deviceid: string,
+        isLogin: number,
+        cartId: string,
+        createdAt: number,
+    }
 
     interface IUserUpdate {
         name?: string,

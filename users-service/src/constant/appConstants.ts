@@ -32,6 +32,7 @@ export let DATABASE = {
     },
 
     TYPE: {
+
         TOKEN: {
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
@@ -113,7 +114,7 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
-            INVALID_LOCATION:{
+            INVALID_LOCATION: {
                 statusCode: 400,
                 type: 'INVALID_LOCATION',
                 message: 'Invalid location'
@@ -475,6 +476,19 @@ export let STATUS_MSG = {
                 code: parseInt(code),
                 details: `${type} : ${message}`
             }
+        }
+    },
+    FRONTEND_ERROR: {
+        VALIDATION: {
+            INVALID_PHONE_NO: "Invalid phone number",
+            INVALID_EMAIL: "Invalid email",
+            INVALID_OTP: "Invalid otp",
+            INAVLID_NAME: "Invalid name",
+            EMPTY_PHONE_NO: "Empty phone number",
+            EMPTY_EMAIL: "Empty email",
+            EMPTY_OTP: "Empty otp",
+            EMPTY_NAME: "Empty name",
+
         }
     }
 };
