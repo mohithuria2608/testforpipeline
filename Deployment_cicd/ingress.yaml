@@ -33,3 +33,19 @@ spec:
         backend:
           serviceName: order-service
           servicePort: 4003
+      - path: /deeplink-service/(.*)
+        backend:
+          serviceName: deeplink-service
+          servicePort: 4005
+      - path: /kafka-service/(.*)
+        backend:
+          serviceName: kafka-service
+          servicePort: 4006
+      - path: /sync-service/(.*)
+        backend:
+          serviceName: sync-service
+          servicePort: 4004
+      - path: /location-service/(.*)
+        backend:
+          serviceName: location-service
+          servicePort: 4007
