@@ -8,12 +8,26 @@ import { Aerospike } from '../databases/aerospike'
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     protected set: SetNames;
-    public sindex: IAerospike.CreateIndex[] = [{
-        set: this.set,
-        bin: 'phnNo',
-        index: 'idx_' + this.set + '_' + 'phnNo',
-        type: "STRING"
-    }]
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'phnNo',
+            index: 'idx_' + this.set + '_' + 'phnNo',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'email',
+            index: 'idx_' + this.set + '_' + 'email',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'socialKey',
+            index: 'idx_' + this.set + '_' + 'socialKey',
+            type: "STRING"
+        }
+    ]
 
     constructor() {
         super('user')
@@ -27,7 +41,7 @@ export class UserEntity extends BaseEntity {
         devicemodel: Joi.string().trim().required(),
         devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
         osversion: Joi.string().trim().required(),
-        deviceid: Joi.string().trim().required().description("sk"),
+        deviceid: Joi.string().trim().required(),
         isLogin: Joi.number().required(),
         createdAt: Joi.number().required(),
     });

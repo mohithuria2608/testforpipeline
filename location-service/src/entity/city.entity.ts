@@ -6,6 +6,14 @@ import { Aerospike } from '../databases/aerospike'
 
 export class CityEntity extends BaseEntity {
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'cityId',
+            index: 'idx_' + this.set + '_' + 'cityId',
+            type: "NUMERIC"
+        }
+    ]
     constructor() {
         super('city')
     }

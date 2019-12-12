@@ -458,6 +458,12 @@ export let STATUS_MSG = {
                 details: `${type} : ${message}`
             }
         }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
+        }
     }
 };
 

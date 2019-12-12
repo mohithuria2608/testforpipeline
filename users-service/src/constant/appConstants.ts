@@ -490,6 +490,12 @@ export let STATUS_MSG = {
             EMPTY_NAME: "Empty name",
 
         }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
+        }
     }
 };
 

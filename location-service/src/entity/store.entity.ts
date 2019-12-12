@@ -8,6 +8,26 @@ const aerospike = require('aerospike');
 
 export class StoreEntity extends BaseEntity {
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'menuId',
+            index: 'idx_' + this.set + '_' + 'menuId',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'storeId',
+            index: 'idx_' + this.set + '_' + 'storeId',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'geoFence',
+            index: 'idx_' + this.set + '_' + 'geoFence',
+            type: "GEO2DSPHERE"
+        }
+    ]
     constructor() {
         super('store')
     }

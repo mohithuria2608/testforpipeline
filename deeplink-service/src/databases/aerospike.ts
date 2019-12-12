@@ -5,10 +5,10 @@
 */
 
 import * as config from "config"
+import * as Constant from '../constant'
 const aerospike = require('aerospike');
-const lists = aerospike.lists;
-
 const path = require('path');
+import * as ENTITY from '../entity'
 
 class AerospikeClass {
 
@@ -16,6 +16,7 @@ class AerospikeClass {
     public namespace: string;
     public cdt = aerospike.cdt;
     public maps = aerospike.maps;
+    public lists = aerospike.lists;
     public GeoJSON = aerospike.GeoJSON;
     constructor(namespace: string) {
         this.namespace = namespace;
@@ -30,6 +31,7 @@ class AerospikeClass {
                         totalTimeout: 1000
                     }
                     let aerospikeConfig = {
+                        //@todo : check for pem file for auth
                         hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
@@ -50,13 +52,31 @@ class AerospikeClass {
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
-                        console.log("> Aerospike Client Connected");
+                        console.log("Aerospike Client Connected");
                     }
                 } catch (err) {
                     console.log("ERROR IN AEROSPIKE -> ", err);
                     reject(err)
                 }
             } else reject(Error('Client already initialized'))
+        })
+    }
+
+    async bootstrapIndex(sindex: IAerospike.CreateIndex[]) {
+        const self = this
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.client) {
+                    sindex.forEach(ind => {
+                        self.indexCreate(ind)
+                    })
+                    resolve({})
+                }
+                else reject('Client not initialized');
+            } catch (error) {
+                console.log("bootstrap index error ", error);
+                reject(error)
+            }
         })
     }
 
@@ -148,6 +168,8 @@ class AerospikeClass {
                 console.info(`Creating ${type} index "${options.index}" on bin "${options.bin}"`)
                 resolve({})
             } catch (error) {
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DUPLICATE_INDEX)
+                    resolve({})
                 reject(error)
             }
         })
@@ -215,7 +237,7 @@ class AerospikeClass {
                 console.info(record)
                 resolve((record && record.bins) ? record.bins : record)
             } catch (error) {
-                if (error.code == 2)
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DATA_NOT_FOUND)
                     resolve({})
                 reject(error)
             }
@@ -223,7 +245,7 @@ class AerospikeClass {
     }
 
     async scan(set: string): Promise<any> {
-                return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {
                     let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false })
@@ -262,7 +284,7 @@ class AerospikeClass {
             try {
                 const key = new aerospike.Key(this.namespace, argv.set, argv.key)
                 let operations = [
-                    lists.append(argv.bin, argv.bins)
+                    this.lists.append(argv.bin, argv.bins)
                 ]
                 let res = await this.client.operate(key, operations)
                 resolve(res)

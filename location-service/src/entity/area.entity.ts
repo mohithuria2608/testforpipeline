@@ -6,6 +6,20 @@ import { Aerospike } from '../databases/aerospike'
 
 export class AreaEntity extends BaseEntity {
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'areaId',
+            index: 'idx_' + this.set + '_' + 'areaId',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'storeId',
+            index: 'idx_' + this.set + '_' + 'storeId',
+            type: "NUMERIC"
+        }
+    ]
     constructor() {
         super('area')
     }

@@ -8,6 +8,7 @@ import { Aerospike } from '../databases/aerospike'
 export class AddressEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = []
     constructor() {
         super('address')
     }

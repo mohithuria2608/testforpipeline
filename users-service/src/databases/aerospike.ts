@@ -5,6 +5,7 @@
 */
 
 import * as config from "config"
+import * as Constant from '../constant'
 const aerospike = require('aerospike');
 const path = require('path');
 import * as ENTITY from '../entity'
@@ -52,7 +53,8 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         console.log("Aerospike Client Connected");
-                        this.bootstrapIndex(ENTITY.UserE.sindex)
+                        if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)
+                            this.bootstrapIndex(ENTITY.UserE.sindex)
                     }
                 } catch (err) {
                     console.log("ERROR IN AEROSPIKE -> ", err);
@@ -168,7 +170,7 @@ class AerospikeClass {
                 console.info(`Creating ${type} index "${options.index}" on bin "${options.bin}"`)
                 resolve({})
             } catch (error) {
-                if (error.code == 200)
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DUPLICATE_INDEX)
                     resolve({})
                 reject(error)
             }
@@ -237,7 +239,7 @@ class AerospikeClass {
                 console.info(record)
                 resolve((record && record.bins) ? record.bins : record)
             } catch (error) {
-                if (error.code == 2)
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DATA_NOT_FOUND)
                     resolve({})
                 reject(error)
             }

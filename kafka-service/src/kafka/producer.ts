@@ -54,6 +54,7 @@ class KafkaProducer {
         this.producer.on('ready', () => {
             this.producer.createTopics([
                 Constant.KAFKA_TOPIC.NEW_MENU,
+                
             ], (err, data) => {
                 if (err) {
                     consolelog('Err in creating topics', err, false);

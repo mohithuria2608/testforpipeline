@@ -54,8 +54,7 @@ export class LocationController {
                                 let storeCollection = []
                                 if (store && store.length > 0) {
                                     for (const s of store) {
-                                        console.log("s.areaId", s.areaId, a.areaId)
-
+                                        // console.log("s.areaId", s.areaId, a.areaId)
                                         delete s.geoFence
                                         s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
                                         if (s.areaId == a.areaId) {

@@ -6,8 +6,8 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class MenuClass extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = []
     constructor() {
         super('menu')
     }
