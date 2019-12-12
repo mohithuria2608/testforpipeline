@@ -1,7 +1,7 @@
 FROM node:10.17.0
 WORKDIR /usr/src/app
-COPY . .
-COPY proto/ /usr/src/app/proto/
+COPY auth-service/ .
+ADD proto/ /usr/src/app/proto/
 RUN apt-get update
 RUN npm cache clean --force
 RUN npm install -g typescript
