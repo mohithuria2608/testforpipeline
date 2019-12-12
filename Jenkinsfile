@@ -69,7 +69,7 @@ pipeline {
                     }
                 }
             }
-        }/*
+        }
         stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
@@ -79,7 +79,7 @@ pipeline {
  
                 }
             }
-        }*/
+        }
     }
     post{
         always{
