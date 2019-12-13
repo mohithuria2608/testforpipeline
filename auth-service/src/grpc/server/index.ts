@@ -20,7 +20,6 @@ const server = new grpc.Server()
 server.addService(authProto.AuthService.service, {
     createToken: async (call: IAuthGrpcRequest.ICreateToken, callback) => {
         try {
-            consolelog("createToken", JSON.stringify(call.request), true)
             let res: IAuthGrpcRequest.IToken = await authController.createToken(call.request)
             callback(null, res)
         } catch (error) {
@@ -30,7 +29,6 @@ server.addService(authProto.AuthService.service, {
     },
     verifyToken: async (call: IAuthGrpcRequest.IVerifyToken, callback) => {
         try {
-            consolelog("verifyToken", JSON.stringify(call.request), true)
             let res: ICommonRequest.AuthorizationObj = await authController.verifyToken(call.request)
             callback(null, res)
         } catch (error) {

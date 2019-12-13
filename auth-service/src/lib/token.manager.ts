@@ -4,8 +4,6 @@ import * as Jwt from 'jsonwebtoken';
 import * as Constant from '../constant';
 const cert = config.get('jwtSecret')
 import { consolelog } from '../utils'
-import { userGrpcService } from '../grpc/client'
-
 
 export class TokenManager {
 
@@ -24,9 +22,12 @@ export class TokenManager {
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
-                    expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
-                    tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
-                    break;
+                    if (tokenData.id) {
+                        expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+                        tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
+                        break;
+                    } else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
@@ -63,54 +64,39 @@ export class TokenManager {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {
                         consolelog("tokenData.id", tokenData.id, true)
-                        let userData = await userGrpcService.getUserById({ id: tokenData.id })
-                        if (userData && userData.id) {
-                            const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
-                                tokenType: tokenData.tokenType,
-                                deviceid: tokenData.deviceid,
-                                devicetype: tokenData.devicetype,
-                                id: tokenData.id,
-                                userData: userData
-                            };
-                            return tokenVerifiedData
-                        } else
-                            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                        const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
+                            tokenType: tokenData.tokenType,
+                            deviceid: tokenData.deviceid,
+                            devicetype: tokenData.devicetype,
+                            id: tokenData.id,
+                        };
+                        return tokenVerifiedData
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
                     if (tokenData.id) {
                         consolelog("tokenData.id", tokenData.id, true)
-                        let userData = await userGrpcService.getUserById({ id: tokenData.id })
-                        if (userData && userData.id) {
-                            const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
-                                tokenType: tokenData.tokenType,
-                                deviceid: tokenData.deviceid,
-                                devicetype: tokenData.devicetype,
-                                id: tokenData.id,
-                                userData: userData
-                            };
-                            return tokenVerifiedData
-                        } else
-                            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                        const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
+                            tokenType: tokenData.tokenType,
+                            deviceid: tokenData.deviceid,
+                            devicetype: tokenData.devicetype,
+                            id: tokenData.id,
+                        };
+                        return tokenVerifiedData
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
                         consolelog("tokenData.id", tokenData.id, true)
-                        let userData = await userGrpcService.getUserById({ id: tokenData.id })
-                        if (userData && userData.id) {
-                            const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
-                                tokenType: tokenData.tokenType,
-                                deviceid: tokenData.deviceid,
-                                devicetype: tokenData.devicetype,
-                                id: tokenData.id,
-                                userData: userData
-                            };
-                            return tokenVerifiedData
-                        } else
-                            return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                        const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
+                            tokenType: tokenData.tokenType,
+                            deviceid: tokenData.deviceid,
+                            devicetype: tokenData.devicetype,
+                            id: tokenData.id,
+                        };
+                        return tokenVerifiedData
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 }
