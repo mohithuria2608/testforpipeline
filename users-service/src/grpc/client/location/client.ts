@@ -27,7 +27,8 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.validateCoordinateValidator(payload)
-                this.locationClient.validateCoordinate({ lat: payload.lat, lng: payload.lng }, (err, res) => {
+                console.log(parseFloat(payload.lat.toString()),parseFloat(payload.lng.toString()))
+                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (err, res) => {
                     if (!err) {
                         consolelog("successfully verified coordinates", JSON.stringify(res), false)
                         resolve(res)

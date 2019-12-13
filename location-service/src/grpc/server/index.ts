@@ -22,6 +22,7 @@ server.addService(locationProto.LocationService.service, {
         try {
             consolelog("grpc validateCoordinate", JSON.stringify(call.request), true)
             let res: IStoreRequest.IStore[] = await ENTITY.StoreE.validateCoords(call.request)
+            res[0].geoFence = {}
             callback(null, res[0])
         } catch (error) {
             consolelog("validateCoordinate", error, false)

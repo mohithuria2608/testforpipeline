@@ -6,6 +6,8 @@ declare namespace IUserGrpcRequest {
 
     interface IUserData {
         id: string,
+        isGuest: number,
+        sessionId: string,
         name: string,
         cCode: string,
         phnNo: string,

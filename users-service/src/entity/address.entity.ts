@@ -88,7 +88,7 @@ export class AddressEntity extends BaseEntity {
                 isActive: 1,
 
                 //@description = from session
-                language: userData.session[deviceid].language,
+                language: "En",// userData.session[deviceid].language,
 
                 //@description = from store
                 areaId: store.areaId,

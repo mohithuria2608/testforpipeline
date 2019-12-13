@@ -49,4 +49,7 @@ message IUserData {
     required int32 createdAt = 11;
     optional string removeUserId = 12;
     optional Any address = 13;
+    required int32  isGuest = 14;
+    required string  sessionId = 15;
+
 }

@@ -26,6 +26,12 @@ export class UserEntity extends BaseEntity {
             bin: 'socialKey',
             index: 'idx_' + this.set + '_' + 'socialKey',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'sessionId',
+            index: 'idx_' + this.set + '_' + 'sessionId',
+            type: "STRING"
         }
     ]
 
@@ -48,6 +54,8 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
+        isGuest: Joi.number().valid(0, 1),
+        sessionId: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().trim().required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
@@ -81,10 +89,12 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    private buildUser(userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
+    private buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
         const id = this.uuidv1();
         const user = isCreate ? {
             id: id,
+            isGuest: 0,
+            sessionId: "",
             name: "",
             cCode: "",
             phnNo: "",
@@ -98,6 +108,12 @@ export class UserEntity extends BaseEntity {
             session: {},
             removeUserId: ""
         } : {}
+        if (userInfo.isGuest != undefined) {
+            if (userInfo.isGuest == 1) {
+                user['isGuest'] = userInfo.isGuest
+                user['sessionId'] = headers.deviceid
+            }
+        }
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
         if (userInfo.cCode != undefined)
@@ -176,14 +192,14 @@ export class UserEntity extends BaseEntity {
     ): Promise<IUserRequest.IUserData> {
         try {
             let dataToSave = {
-                ...this.buildUser(userInfo, true)
+                ...this.buildUser(headers, userInfo, true)
             }
             dataToSave['session'][headers.deviceid] = { ...this.buildSession(headers, sessionCreate, true) }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
                 key: dataToSave.id,
-                ttl: Constant.SERVER.INITIAL_USER_TTL,
+                ttl: userInfo.isGuest ? Constant.SERVER.INITIAL_GUEST_USER_TTL : Constant.SERVER.INITIAL_USER_TTL,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -203,7 +219,7 @@ export class UserEntity extends BaseEntity {
     ): Promise<IUserRequest.IUserData> {
         try {
             let dataToUpdate = {
-                ...this.buildUser(userUpdate, false),
+                ...this.buildUser(headers, userUpdate, false),
                 session: {}
             }
             if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
@@ -235,7 +251,7 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id?: string) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
