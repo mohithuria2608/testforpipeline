@@ -1,12 +1,16 @@
 syntax = "proto3";
 
 service LocationService {
-    rpc ValidateCoordinate (IValidateCoordinateReq) returns (IStore) {}
+    rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
 }
 
 message IValidateCoordinateReq {
     required float lat = 1;
     required float lng = 2;
+}
+
+message IValidateCoordinateRes {
+    repeated IStore store = 1;
 }
 
 message IStore {
@@ -28,7 +32,7 @@ message IStore {
     required string address_ar = 16;
     required string startTime = 17;
     required string endTime = 18;
-    required IService geoFence = 19;
+    required IGeoFence geoFence = 19;
     required ILocation location = 20;
 }
 
@@ -43,3 +47,5 @@ message ILocation {
     required float latitude = 2;
     required float longitude = 3;
 } 
+
+message IGeoFence { } 

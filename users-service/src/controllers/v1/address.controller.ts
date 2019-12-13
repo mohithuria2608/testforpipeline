@@ -17,15 +17,15 @@ export class AddressController {
     * */
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let store: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-            if (store && store.id) {
+            let store: IStoreGrpcRequest.IStore[] = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+            if (store && store.length) {
                 // let area = await ENTITY.UserE.getAreaByStoreId(parseInt(store.id))
                 // if (area && area.id) {
-                return await ENTITY.AddressE.addAddress(headers.deviceid, auth.userData, payload, store)
+                return await ENTITY.AddressE.addAddress(headers.deviceid, auth.userData, payload, store[0])
                 // } else
                 //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_LOCATION)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SERVICE_UNAVAILABLE)
 
         } catch (err) {
             consolelog("registerAddress", err, false)

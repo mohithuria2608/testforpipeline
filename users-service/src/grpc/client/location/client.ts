@@ -23,7 +23,7 @@ export class LocationService {
         consolelog('Connection established from user service to location service', config.get("grpc.location.client"), true)
     }
 
-    async validateCoordinate(payload: IStoreGrpcRequest.IValidateCoordinateData): Promise<IStoreGrpcRequest.IStore> {
+    async validateCoordinate(payload: IStoreGrpcRequest.IValidateCoordinateData): Promise<IStoreGrpcRequest.IStore[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.validateCoordinateValidator(payload)
@@ -31,7 +31,7 @@ export class LocationService {
                 this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (err, res) => {
                     if (!err) {
                         consolelog("successfully verified coordinates", JSON.stringify(res), false)
-                        resolve(res)
+                        resolve(res.store)
                     } else {
                         consolelog("Error in verifying coordinates", JSON.stringify(err), false)
                         reject(err)

@@ -105,6 +105,11 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            SERVICE_UNAVAILABLE: {
+                statusCode: 400,
+                type: 'SERVICE_UNAVAILABLE',
+                message: "Sorry, we don't, deliver at this location"
+            },
             PROFILE_SETUP_ALLREADY_COMPLETE: {
                 statusCode: 400,
                 type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
@@ -288,13 +293,7 @@ export let STATUS_MSG = {
                 statusCode: 404,
                 type: 'DATA_NOT_FOUND',
                 message: 'Result not found'
-            },
-
-            STORE_NOT_FOUND: {
-                statusCode: 404,
-                message: 'Store not found',
-                type: 'STORE_NOT_FOUND'
-            },
+            }
         },
         E500: {
             IMP_ERROR: {

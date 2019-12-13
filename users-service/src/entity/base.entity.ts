@@ -17,7 +17,7 @@ export class BaseEntity {
         }
     }
 
-    async validateCoordinate(lat: number, lng: number) {
+    async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore[]> {
         try {
             return await locationService.validateCoordinate({ lat, lng })
         } catch (error) {

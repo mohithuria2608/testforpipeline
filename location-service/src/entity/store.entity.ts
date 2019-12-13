@@ -102,10 +102,7 @@ export class StoreEntity extends BaseEntity {
                 }
             }
             let res = await Aerospike.query(geoWithinArg)
-            if (res && res.length > 0) {
-                return res
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.STORE_NOT_FOUND)
+            return res
         } catch (error) {
             consolelog("validateCoords", error, false)
             return Promise.reject(error)
