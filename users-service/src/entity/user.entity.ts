@@ -51,20 +51,12 @@ export class UserEntity extends BaseEntity {
         cCode: Joi.string().trim().required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
-        otp: Joi.number().required(),
-        otpExpAt: Joi.number().required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
         profileStep: Joi.number().valid(Constant.DATABASE.TYPE.PROFILE_STEP.INIT, Constant.DATABASE.TYPE.PROFILE_STEP.FIRST).required(),
-        language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-        appversion: Joi.string().trim().required(),
-        devicemodel: Joi.string().trim().required(),
-        devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
-        osversion: Joi.string().trim().required(),
-        deviceid: Joi.string().trim().required().description("sk"),
-        isLogin: Joi.number().required(),
         socialKey: Joi.string().trim().required().description("sk"),
         medium: Joi.string().trim().required(),
+        removeUserId: Joi.string(),
+        session: Joi.any(),
         createdAt: Joi.number().required(),
     });
 
@@ -74,7 +66,6 @@ export class UserEntity extends BaseEntity {
     * */
     async getById(payload: IUserGrpcRequest.IId) {
         try {
-            consolelog("getById", payload.id, true)
             let getArg: IAerospike.Get = {
                 set: this.set,
                 key: payload.id
