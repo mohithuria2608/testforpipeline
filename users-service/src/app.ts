@@ -1,3 +1,7 @@
+export const Constant = require('../../constant/constant.js');
+
+// console.log("Constant",Constant)
+
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')

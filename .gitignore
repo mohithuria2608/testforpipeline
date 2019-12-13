@@ -36,3 +36,6 @@ log
 
 #lua directories in each service
 *-service/lua
+
+#constant directories in each service
+*-service/constant

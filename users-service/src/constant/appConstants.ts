@@ -1,4 +1,76 @@
 import * as config from 'config'
+// import { Constant } from '../app'
+// export const Common = Constant
+
+export let UDF = {
+    USER: {
+        check_phone_exist: "check_phone_exist",
+        check_social_key: "check_social_key"
+    }
+}
+export enum KAFKA_TOPIC {
+    CREATE_TOKEN = "create_token"
+}
+
+export enum MIDDLEWARE {
+    API_AUTH = "api_auth",
+    AUTH = "auth",
+    ACTIVITY_LOG = "activity_log"
+}
+
+
+
+export let SERVER = {
+    ENV: {
+        DEV: "development",
+        QA: "testing",
+        STAG: "staging",
+        PROD: "production"
+    },
+    APP_INFO: {
+        APP_NAME: "App",
+        FB_LINK: "",
+        TWITTER_LINK: "",
+        INSTA_LINK: "",
+        APP_ADDRESS: ""
+    },
+    DEFAULT_USER_NAME: 'App User',
+    APP_URL: config.get("server.user.url"),
+    LINKS: {
+        TERMS_COND: '',
+        PRIVACY: config.get("server.user.url") + "/privacy_policy/",
+    },
+    OTP_TEXT: (otp) => {
+        return `Your App code is ${otp}. Welcome to the community!`
+    },
+    TEMPLATE_PATH: process.cwd() + '/views/',
+    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
+    INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
+    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
+    BY_PASS_OTP: 1212,
+    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
+    LISTNG_LIMIT: 10,
+    BULK_LIMIT: 2000,
+    THUMB_DIMENSION: {
+        DEFAULT: {
+            WIDTH: 10,
+            HEIGHT: 10,
+        },
+        PROFILE_PIC: {
+            WIDTH: 200,
+            HEIGHT: 200,
+        },
+        GIF: {
+            WIDTH: 100,
+            HEIGHT: 100,
+        },
+    },
+    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    DISPLAY_COLOR: true
+}
+
+
 
 export let DATABASE = {
     LANGUAGE: {
@@ -93,22 +165,6 @@ export let DATABASE = {
         }
     }
 };
-
-export let UDF = {
-    USER: {
-        check_phone_exist: "check_phone_exist",
-        check_social_key: "check_social_key"
-    }
-}
-export enum KAFKA_TOPIC {
-    CREATE_TOKEN = "create_token"
-}
-
-export enum MIDDLEWARE {
-    API_AUTH = "api_auth",
-    AUTH = "auth",
-    ACTIVITY_LOG = "activity_log"
-}
 
 export let STATUS_MSG = {
     ERROR: {
@@ -480,14 +536,13 @@ export let STATUS_MSG = {
     FRONTEND_ERROR: {
         VALIDATION: {
             INVALID_PHONE_NO: "Invalid phone number",
-            INVALID_EMAIL: "Invalid email",
+            INVALID_EMAIL: "Please enter email address in a valid format",
             INVALID_OTP: "Invalid otp",
-            INAVLID_NAME: "Invalid name",
+            INAVLID_NAME: "Please enter a valid name",
             EMPTY_PHONE_NO: "Empty phone number",
             EMPTY_EMAIL: "Empty email",
             EMPTY_OTP: "Empty otp",
             EMPTY_NAME: "Empty name",
-
         }
     },
     AEROSPIKE_ERROR: {
@@ -497,53 +552,3 @@ export let STATUS_MSG = {
         }
     }
 };
-
-export let SERVER = {
-    ENV: {
-        DEV: "development",
-        QA: "testing",
-        STAG: "staging",
-        PROD: "production"
-    },
-    APP_INFO: {
-        APP_NAME: "App",
-        FB_LINK: "",
-        TWITTER_LINK: "",
-        INSTA_LINK: "",
-        APP_ADDRESS: ""
-    },
-    DEFAULT_USER_NAME: 'App User',
-    APP_URL: config.get("server.user.url"),
-    LINKS: {
-        TERMS_COND: '',
-        PRIVACY: config.get("server.user.url") + "/privacy_policy/",
-    },
-    OTP_TEXT: (otp) => {
-        return `Your App code is ${otp}. Welcome to the community!`
-    },
-    TEMPLATE_PATH: process.cwd() + '/views/',
-    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
-    INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
-    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
-    BY_PASS_OTP: 1212,
-    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
-    LISTNG_LIMIT: 10,
-    BULK_LIMIT: 2000,
-    THUMB_DIMENSION: {
-        DEFAULT: {
-            WIDTH: 10,
-            HEIGHT: 10,
-        },
-        PROFILE_PIC: {
-            WIDTH: 200,
-            HEIGHT: 200,
-        },
-        GIF: {
-            WIDTH: 100,
-            HEIGHT: 100,
-        },
-    },
-    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    DISPLAY_COLOR: true
-}
