@@ -1,10 +1,11 @@
 declare namespace IUserGrpcRequest {
 
-    interface IGetUserById {
-        request: IId
+    interface IUpdateUserInfoReq {
+        request: IUpdateUserInfo
     }
 
-    interface IId {
-        id: string,
+    interface IUpdateUserInfo {
+        aerospikeId: string
+        id: number,
     }
 }

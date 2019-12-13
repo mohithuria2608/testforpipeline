@@ -82,6 +82,11 @@ export let DATABASE = {
         UAE: 'UAE',
     },
 
+    CCODE: {
+        UAE: '+971',
+
+    },
+
     ENTITY: {
         APP: "APP",
         USER: "USER",

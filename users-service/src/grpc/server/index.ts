@@ -18,10 +18,10 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
-    getUserById: async (call: IUserGrpcRequest.IGetUserById, callback) => {
+    updateCmsId: async (call: IUserGrpcRequest.IUpdateUserInfoReq, callback) => {
         try {
-            consolelog("getUserById", JSON.stringify(call.request), true)
-            let res: IUserRequest.IUserData = await ENTITY.UserE.getById(call.request)
+            consolelog("updateCmsId", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.updateCmsId(call.request)
             callback(null, res)
         } catch (error) {
             consolelog("getUserById", error, false)

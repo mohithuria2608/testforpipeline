@@ -1,15 +1,12 @@
 declare namespace IKafkaGrpcRequest {
 
-    interface ICreateUserData {
+    interface ISyncUserData {
+        aerospikeId: string,
         lastname: string
         firstname: string
         email: string
         storeId: number
-        websiteId: number
-        addresses: any
-    }
-
-    interface ICmsCustomer {
-        id: number
+        websiteId: number,
+        password: string
     }
 }

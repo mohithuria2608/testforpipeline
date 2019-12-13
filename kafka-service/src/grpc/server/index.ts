@@ -1,7 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import { kafkaController } from '../../controllers'
-import { async } from "rxjs/internal/scheduler/async";
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -19,24 +18,13 @@ const kafkaProto = grpc.loadPackageDefinition(packageDefinition);
 export const server = new grpc.Server()
 
 server.addService(kafkaProto.KafkaService.service, {
-    produceMessage: async (call: IKafkaGrpcRequest.IProduceMessageReq, callback) => {
+    syncUser: async (call: IUserGrpcRequest.ICreateUserReq, callback) => {
         try {
-            consolelog("produceMessage", JSON.stringify(call.request), true)
-            let res: IKafkaGrpcRequest.IProduceMessageRes = await kafkaController.produceMessage(call.request)
+            consolelog("syncUser ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.syncUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("produceMessage", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    
-    createUser: async (call: IKafkaGrpcRequest.IProduceMessageReq, callback) => {
-        try {
-            consolelog("createUser ", JSON.stringify(call.request), true)
-            let res: IKafkaGrpcRequest.IProduceMessageRes = await kafkaController.produceMessage(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog("createUser", error, false)
+            consolelog("syncUser", error, false)
             callback(grpcSendError(error))
         }
     },

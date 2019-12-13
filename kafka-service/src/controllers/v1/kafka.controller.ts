@@ -7,20 +7,45 @@ export class KafkaController {
     constructor() { }
 
     /**
-     * @param {object} data :any
+     * @method KAFKA
+     * @description : In case of failure of consumer produce data in failure topic (UNIVERSAL)
      * */
-    async produceMessage(payload: IKafkaGrpcRequest.IProduceMessage) {
+    async produceToFailureTopic(payload: any) {
         try {
-            consolelog("produceMessage in KAFKA service", payload, true)
+            consolelog("produce data in failed KAFKA q", payload, true)
             kafkaProducerE.sendMessage({
-                messages: JSON.stringify(payload.data),
-                topic: Constant.KAFKA_TOPIC.NEW_MENU,
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.FAIL_Q,
                 partition: 0,
             });
-
-            // initConsumers()
+            return {}
         } catch (err) {
-            consolelog("produceMessage", err, false)
+            consolelog("produceToFailureTopic", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * @param {string} aerospikeId :any
+     * @param {string} lastname :any
+     * @param {string} firstname :any
+     * @param {string} email :any
+     * @param {number} storeId :any
+     * @param {number} websiteId :any
+     * @param {number} password :any
+     * */
+    async syncUser(payload: IUserGrpcRequest.ICreateUserData) {
+        try {
+            consolelog("produce user in KAFKA service", payload, true)
+            kafkaProducerE.sendMessage({
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.NEW_USER,
+                partition: 0,
+            });
+            return {}
+        } catch (err) {
+            consolelog("syncUser", err, false)
             return Promise.reject(err)
         }
     }

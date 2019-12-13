@@ -23,16 +23,16 @@ export class KafkaService {
         consolelog('Connection established from user service to kafka service', config.get("grpc.kafka.client"), true)
     }
 
-    async createUser(payload: IKafkaGrpcRequest.ICreateUserData): Promise<IStoreGrpcRequest.IStore> {
+    async syncUser(payload: IKafkaGrpcRequest.ISyncUserData): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await kafkaServiceValidator.createUserValidator(payload)
-                this.kafkaClient.createUser(payload, (err, res) => {
+                await kafkaServiceValidator.syncUserValidator(payload)
+                this.kafkaClient.syncUser(payload, (err, res) => {
                     if (!err) {
-                        consolelog("successfully produced data on kafka", JSON.stringify(res), false)
-                        resolve(res.store)
+                        consolelog("successfully produced user on kafka for syncing", JSON.stringify(res), false)
+                        resolve(res)
                     } else {
-                        consolelog("Error in producing data on kafka", JSON.stringify(err), false)
+                        consolelog("Error in producing user on kafka  for syncing", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

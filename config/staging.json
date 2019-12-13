@@ -98,6 +98,10 @@
                 "location": {
                     "server": "/../../../proto/location.proto",
                     "client": "/../../../../proto/location.proto"
+                },
+                "sync": {
+                    "server": "/../../../proto/sync.proto",
+                    "client": "/../../../../proto/sync.proto"
                 }
             }
         }

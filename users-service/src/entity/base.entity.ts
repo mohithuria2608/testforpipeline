@@ -1,6 +1,6 @@
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { authService, locationService } from '../grpc/client'
+import { authService, locationService, kafkaService } from '../grpc/client'
 
 export class BaseEntity {
     protected set: SetNames;
@@ -26,6 +26,24 @@ export class BaseEntity {
         }
     }
 
+    async syncUser(user: IUserRequest.IUserData) {
+        try {
+            let data: IKafkaGrpcRequest.ISyncUserData = {
+                aerospikeId: user.id,
+                lastname: user.cCode + user.phnNo,
+                firstname: user.name,
+                email: user.email,
+                storeId: 1,
+                websiteId: 1,
+                password: user.password,
+            }
+            kafkaService.syncUser(data)
+            return {}
+        } catch (error) {
+            consolelog("syncUser", error, false)
+            return Promise.reject(error)
+        }
+    }
     // async getAreaByStoreId(storeId: number) {
     //     try {
     //         return await locationService.getAreaByStoreId({ storeId })

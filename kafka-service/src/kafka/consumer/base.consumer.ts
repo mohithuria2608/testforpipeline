@@ -1,11 +1,9 @@
 import * as kafka from 'kafka-node';
+import * as Constant from '../../constant'
 import { kafkaClient } from '../client';
 import { Observable, Subject } from 'rxjs';
 import { consolelog } from "../../utils"
 
-enum KAFKA_PRODUCERS {
-    AUTH = 'AUTH'
-}
 
 export class BaseConsumer {
 
@@ -13,7 +11,7 @@ export class BaseConsumer {
     private topic: string;
 
     private _onMessage: Subject<any> = new Subject();
-    constructor(topic: KAFKA_PRODUCERS, groupId?: string) {
+    constructor(topic: Constant.KAFKA_TOPIC, groupId?: string) {
         this.topic = topic;
         this.initConsumer(groupId);
         this.handleMessages();

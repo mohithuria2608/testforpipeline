@@ -1,7 +1,3 @@
-export const Constant = require('../../constant/constant.js');
-
-// console.log("Constant",Constant)
-
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
@@ -16,7 +12,6 @@ const app = new Koa()
 
 app.use(middleware());
 app.use(route());
-
 
 
 export const start = (async () => {

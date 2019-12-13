@@ -2,7 +2,7 @@
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog } from '../utils'
+import { consolelog, cryptData } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class UserEntity extends BaseEntity {
@@ -32,6 +32,12 @@ export class UserEntity extends BaseEntity {
             bin: 'sessionId',
             index: 'idx_' + this.set + '_' + 'sessionId',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'cmsRefId',
+            index: 'idx_' + this.set + '_' + 'cmsRefId',
+            type: "NUMERIC"
         }
     ]
 
@@ -54,6 +60,7 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
+        cmsRefId: Joi.number().required().description("sk"),
         isGuest: Joi.number().valid(0, 1),
         sessionId: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().trim().required(),
@@ -64,6 +71,7 @@ export class UserEntity extends BaseEntity {
         socialKey: Joi.string().trim().required().description("sk"),
         medium: Joi.string().trim().required(),
         removeUserId: Joi.string(),
+        password: Joi.string(),
         session: Joi.any(),
         createdAt: Joi.number().required(),
     });
@@ -72,7 +80,7 @@ export class UserEntity extends BaseEntity {
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getById(payload: IUserGrpcRequest.IId) {
+    async getById(payload: IUserRequest.IId) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
@@ -89,10 +97,11 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    private buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
+    private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
         const id = this.uuidv1();
         const user = isCreate ? {
             id: id,
+            cmsRefId: 0,
             isGuest: 0,
             sessionId: "",
             name: "",
@@ -106,7 +115,8 @@ export class UserEntity extends BaseEntity {
             medium: "",
             createdAt: 0,
             session: {},
-            removeUserId: ""
+            removeUserId: "",
+            password: 'Password1'//await cryptData(id)
         } : {}
         if (userInfo.isGuest != undefined) {
             if (userInfo.isGuest == 1) {
@@ -141,7 +151,7 @@ export class UserEntity extends BaseEntity {
         return user
     }
 
-    public buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
+    public async buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
         let session = isCreate ? {
             otp: 0,
             otpExpAt: 0,
@@ -155,7 +165,7 @@ export class UserEntity extends BaseEntity {
             devicetype: headers.devicetype,
             osversion: headers.osversion,
             createdAt: new Date().getTime(),
-            cartId: ""
+            cartId: await cryptData(headers.deviceid)
         } : {}
         if (sessionInfo.otp != undefined)
             session['otp'] = sessionInfo.otp
@@ -192,9 +202,9 @@ export class UserEntity extends BaseEntity {
     ): Promise<IUserRequest.IUserData> {
         try {
             let dataToSave = {
-                ...this.buildUser(headers, userInfo, true)
+                ...await this.buildUser(headers, userInfo, true)
             }
-            dataToSave['session'][headers.deviceid] = { ...this.buildSession(headers, sessionCreate, true) }
+            dataToSave['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionCreate, true) }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
@@ -219,21 +229,21 @@ export class UserEntity extends BaseEntity {
     ): Promise<IUserRequest.IUserData> {
         try {
             let dataToUpdate = {
-                ...this.buildUser(headers, userUpdate, false),
+                ...await this.buildUser(headers, userUpdate, false),
                 session: {}
             }
             if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
                 const Context = Aerospike.cdt.Context
                 const context = new Context().addMapKey(headers.deviceid)
                 let op = [
-                    Aerospike.maps.putItems('session', { ...this.buildSession(headers, sessionUpdate, false) }, {
+                    Aerospike.maps.putItems('session', { ...await this.buildSession(headers, sessionUpdate, false) }, {
                         writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
                     }).withContext(context)
                 ]
                 await Aerospike.operationsOnMap({ set: this.set, key: userData.id }, op)
                 delete dataToUpdate['session']
             } else {
-                dataToUpdate['session'][headers.deviceid] = { ...this.buildSession(headers, sessionUpdate, true) }
+                dataToUpdate['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionUpdate, true) }
             }
 
             let putArg: IAerospike.Put = {
@@ -283,11 +293,28 @@ export class UserEntity extends BaseEntity {
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
-        } catch (err) {
-            consolelog("getTokens", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog("getTokens", error, false)
+            return Promise.reject(error)
         }
     }
+
+    async updateCmsId(payload: IUserGrpcRequest.IUpdateUserInfo) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: { cmsRefId: parseInt(payload.id.toString()) },
+                set: this.set,
+                key: payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog("updateCmsId", error, false)
+            return Promise.reject(error)
+        }
+    }
+
 }
 
 export const UserE = new UserEntity()

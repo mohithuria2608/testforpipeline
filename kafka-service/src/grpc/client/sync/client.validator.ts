@@ -4,10 +4,10 @@ import * as Joi from '@hapi/joi';
 import { consolelog } from "../../../utils"
 import * as Constant from '../../../constant'
 
-export class KafkaServiceValidator {
+export class SyncServiceValidator {
     constructor() {
     }
-    async syncUserValidator(data: IKafkaGrpcRequest.ISyncUserData) {
+    async createUserOnCmsValidator(data: ISyncGrpcRequest.ICreateUserData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
@@ -31,6 +31,6 @@ export class KafkaServiceValidator {
 }
 
 
-export const kafkaServiceValidator = new KafkaServiceValidator()
+export const syncServiceValidator = new SyncServiceValidator()
 
 

@@ -1,5 +1,7 @@
-import { entityConsumerE } from './entity.consumer';
+import { failConsumerE } from './failure.consumer';
+import { userConsumerE } from './user.consumer';
 
 export function initConsumers() {
-    entityConsumerE.handleMessage();
+    // failConsumerE.handleMessage();
+    userConsumerE.handleMessage();
 }

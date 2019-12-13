@@ -53,8 +53,9 @@ class KafkaProducer {
 
         this.producer.on('ready', () => {
             this.producer.createTopics([
+                Constant.KAFKA_TOPIC.FAIL_Q,
                 Constant.KAFKA_TOPIC.NEW_MENU,
-                
+                Constant.KAFKA_TOPIC.NEW_USER,
             ], (err, data) => {
                 if (err) {
                     consolelog('Err in creating topics', err, false);
@@ -76,7 +77,7 @@ class KafkaProducer {
             if (err) {
                 consolelog('Err in producing to kafka topic', err, false);
             } else {
-                consolelog('message produced to kafka successfully', data, true);
+                consolelog('message produced to kafka successfully', JSON.stringify(data), true);
             }
         })
     }

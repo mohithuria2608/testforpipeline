@@ -44,10 +44,10 @@ export class AddressEntity extends BaseEntity {
     })
 
     /**
-    * @method GRPC
+    * @method INTERNAL
     * @param {string} id : user id
     * */
-    async getById(payload: IUserGrpcRequest.IId) {
+    async getById(payload: IUserRequest.IId) {
         try {
             consolelog("getById", payload.id, true)
             let getArg: IAerospike.Get = {

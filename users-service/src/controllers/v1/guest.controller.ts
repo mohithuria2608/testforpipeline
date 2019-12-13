@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { cryptData, consolelog } from '../../utils'
+import { formatUserData, consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../databases/aerospike'
 
@@ -12,7 +12,6 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            const cartId = await cryptData(headers.deviceid)
             let queryArg: IAerospike.Query = {
                 equal: {
                     bin: "sessionId",
@@ -29,7 +28,6 @@ export class GuestController {
                 let userCreate = {
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     isGuest: 1,
-                    cartId: cartId
                 }
                 let sessionCreate: IUserRequest.ISessionUpdate = {
                     otp: 0,
@@ -39,14 +37,14 @@ export class GuestController {
                 }
                 user = await ENTITY.UserE.createUser(headers, userCreate, sessionCreate)
             }
-            
+
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                 user.id
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: { cartId } }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid) }
         } catch (err) {
             consolelog("guestLogin", err, false)
             return Promise.reject(err)

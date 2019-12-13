@@ -4,15 +4,16 @@ import * as Joi from '@hapi/joi';
 import { consolelog } from "../../../utils"
 import * as Constant from '../../../constant'
 
-export class KafkaServiceValidator {
+export class UserServiceValidator {
     constructor() {
     }
-    async  produceMessageValidator(data: IKafkaServiceRequest.IProduceMessage) {
+    async updateCmsIdValidator(data: IUserGrpcRequest.IUpdateUserInfo) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    data: Joi.any()
-                });
+                    aerospikeId: Joi.string().required(),
+                    id: Joi.number().required()
+                })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
                     reject(`Invalid Info- ${error.message}`)
@@ -25,6 +26,6 @@ export class KafkaServiceValidator {
 }
 
 
-export const kafkaServiceValidator = new KafkaServiceValidator()
+export const userServiceValidator = new UserServiceValidator()
 
 

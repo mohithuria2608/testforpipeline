@@ -167,6 +167,8 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid)
 
         delete userObj['session']
         delete userObj['removeUserId']
+        delete userObj['password']
+        delete userObj['cmsRefId']
         return userObj
     } catch (error) {
         consolelog('formatUserData', error, false)
