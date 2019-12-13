@@ -18,7 +18,7 @@ export class MiscController {
                         country: Constant.DATABASE.COUNTRY.UAE,
                         language: Constant.DATABASE.LANGUAGE.AR,
                         defaultCCode: '+971',
-                        phnRegex: String.raw`/^[1-9]\d{8}$|^[1-9]\d{8}$/`,
+                        phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
                         phnLength: 9
                     }
                 ],
