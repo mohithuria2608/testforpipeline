@@ -20,11 +20,11 @@ const server = new grpc.Server()
 server.addService(userProto.UserService.service, {
     updateCmsId: async (call: IUserGrpcRequest.IUpdateUserInfoReq, callback) => {
         try {
-            consolelog("updateCmsId", JSON.stringify(call.request), true)
+            consolelog(process.cwd(),"updateCmsId", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.UserE.updateCmsId(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("getUserById", error, false)
+            consolelog(process.cwd(),"getUserById", error, false)
             callback(grpcSendError(error))
         }
     }
@@ -32,6 +32,6 @@ server.addService(userProto.UserService.service, {
 
 server.bind(config.get("grpc.user.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc User Server running at", config.get("grpc.user.server"), true)
+consolelog(process.cwd(),"GRPC server running at", config.get("grpc.user.server"), true)
 server.start();
 

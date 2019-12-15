@@ -20,7 +20,7 @@ export class UserService {
     private userClient = new this.loadUser(config.get("grpc.user.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from kafka service to user service', config.get("grpc.user.client"), true)
+        consolelog(process.cwd(),'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
     async updateCmsId(payload: IUserGrpcRequest.IUpdateUserInfo) {
@@ -29,10 +29,10 @@ export class UserService {
                 await userServiceValidator.updateCmsIdValidator(payload)
                 this.userClient.updateCmsId(payload, (err, res) => {
                     if (!err) {
-                        consolelog("successfully created user on cms", JSON.stringify(res), false)
+                        consolelog(process.cwd(),"successfully created user on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog("Error in creating user on cms", JSON.stringify(err), false)
+                        consolelog(process.cwd(),"Error in creating user on cms", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

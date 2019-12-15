@@ -11,16 +11,16 @@ class FailConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                console.log("consumer failed_messages ", message)
+                consolelog(process.cwd(), "consumer failed_messages", message, true)
                 this.handleFailReq(message);
             })
     }
 
     private async handleFailReq(message) {
         try {
-            console.log("Data in fail queue", message)
+            consolelog(process.cwd(), "Data in fail queue", message, true)
         } catch (err) {
-            consolelog(`handleFailReq`, err, false);
+            consolelog(process.cwd(), `handleFailReq`, err, false);
             return Promise.reject(err)
         }
     }

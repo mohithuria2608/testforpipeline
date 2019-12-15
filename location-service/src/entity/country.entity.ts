@@ -35,7 +35,7 @@ export class CountryEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog("postCountry", error, false)
+            consolelog(process.cwd(),"postCountry", error, false)
             return Promise.reject(error)
         }
     }

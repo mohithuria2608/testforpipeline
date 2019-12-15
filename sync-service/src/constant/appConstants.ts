@@ -412,6 +412,27 @@ export let STATUS_MSG = {
     }
 };
 
+export let CMS = {
+    AUTH_CRED: {
+        "username": "shashi.bhushan@appinventiv.com",
+        "password": "shashi@123"
+    },
+    GLOBAL_VAR: {
+        AUTH_TOKEN: 'cms-auth-token',
+        AUTH_API_HIT: 'cms-auth-hit-time'
+    },
+    END_POINTS: {
+        AUTH: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/integration/customer/token",
+        },
+        CREATE_CUSTOMER: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/customers/",
+        }
+    },
+
+}
 export let SERVER = {
     ENV: {
         DEV: "development",
@@ -459,5 +480,6 @@ export let SERVER = {
     },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    CMS_AUTH_EXP: (10 * 60 * 1000),
     DISPLAY_COLOR: true
 }

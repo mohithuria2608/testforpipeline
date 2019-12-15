@@ -51,7 +51,7 @@ export class CartController {
                 }
             }
         } catch (err) {
-            consolelog("validateCart", err, false)
+            consolelog(process.cwd(),"validateCart", err, false)
             return Promise.reject(err)
         }
     }

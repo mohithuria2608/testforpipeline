@@ -21,7 +21,7 @@ export class AreaController {
             }
             return {}
         } catch (err) {
-            consolelog("post area", err, false)
+            consolelog(process.cwd(),"post area", err, false)
             return Promise.reject(err)
         }
     }

@@ -22,19 +22,18 @@ export class AuthService {
     private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from menu service to auth service', config.get("grpc.auth.client"), true)
+        consolelog(process.cwd(),'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
     }
 
     async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (err, res) => {
-                console.log("i am here in validate token in menu", err, res)
                 if (!err) {
-                    consolelog("successfully verified token", JSON.stringify(res), false)
+                    consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog("Error in verifying token", JSON.stringify(err), false)
+                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(err), false)
                     reject(err)
                 }
             })

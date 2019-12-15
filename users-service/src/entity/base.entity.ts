@@ -12,7 +12,7 @@ export class BaseEntity {
         try {
             return authService.createToken(dataToSend)
         } catch (error) {
-            consolelog("createToken", error, false)
+            consolelog(process.cwd(),"createToken", error, false)
             return Promise.reject(error)
         }
     }
@@ -21,7 +21,7 @@ export class BaseEntity {
         try {
             return await locationService.validateCoordinate({ lat, lng })
         } catch (error) {
-            consolelog("validateCoordinate", error, false)
+            consolelog(process.cwd(),"validateCoordinate", error, false)
             return Promise.reject(error)
         }
     }
@@ -40,7 +40,7 @@ export class BaseEntity {
             kafkaService.syncUser(data)
             return {}
         } catch (error) {
-            consolelog("syncUser", error, false)
+            consolelog(process.cwd(),"syncUser", error, false)
             return Promise.reject(error)
         }
     }
@@ -48,7 +48,7 @@ export class BaseEntity {
     //     try {
     //         return await locationService.getAreaByStoreId({ storeId })
     //     } catch (error) {
-    //         consolelog("getAreaByStoreId", error, false)
+    //         consolelog(process.cwd(),"getAreaByStoreId", error, false)
     //         return Promise.reject(error)
     //     }
     // }

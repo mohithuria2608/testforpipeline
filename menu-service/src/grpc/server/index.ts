@@ -20,11 +20,11 @@ const server = new grpc.Server()
 server.addService(menuProto.MenuService.service, {
     fetchMenu: async (call: IMenuGrpcRequest.IFetchMenu, callback) => {
         try {
-            consolelog("grpcFetchMenu", JSON.stringify(call.request), true)
+            consolelog(process.cwd(),"grpcFetchMenu", JSON.stringify(call.request), true)
             let res: IMenuGrpcRequest.IFetchMenuRes = await ENTITY.MenuE.grpcFetchMenu(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("fetchMenu-server", error, false)
+            consolelog(process.cwd(),"fetchMenu-server", error, false)
             callback(grpcSendError(error))
         }
     }
@@ -32,5 +32,5 @@ server.addService(menuProto.MenuService.service, {
 
 server.bind(config.get("grpc.menu.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc Menu Server running at", config.get("grpc.menu.server"), true)
+consolelog(process.cwd(),"GRPC server running at", config.get("grpc.menu.server"), true)
 server.start();

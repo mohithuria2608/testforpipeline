@@ -20,7 +20,7 @@ export class SyncService {
     private syncClient = new this.loadSync(config.get("grpc.sync.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from kafka service to sync service', config.get("grpc.sync.client"), true)
+        consolelog(process.cwd(),'GRPC connection established with sync-service', config.get("grpc.sync.client"), true)
     }
 
     async syncUser(payload: ISyncGrpcRequest.ICreateUserData): Promise<ISyncGrpcRequest.ICreateUserRes> {
@@ -29,10 +29,10 @@ export class SyncService {
                 await syncServiceValidator.createUserOnCmsValidator(payload)
                 this.syncClient.createUserOnCms(payload, (err, res) => {
                     if (!err) {
-                        consolelog("successfully created user on cms", JSON.stringify(res), false)
+                        consolelog(process.cwd(),"successfully created user on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog("Error in creating user on cms", JSON.stringify(err), false)
+                        consolelog(process.cwd(),"Error in creating user on cms", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

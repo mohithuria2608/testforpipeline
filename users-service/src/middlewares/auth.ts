@@ -8,7 +8,7 @@ import * as ENTITY from '../entity'
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
-            consolelog('authorization', ctx.header.authorization, true)
+            consolelog(process.cwd(),'authorization', ctx.header.authorization, true)
             let settings = {
                 tokenType: "Bearer"
             }

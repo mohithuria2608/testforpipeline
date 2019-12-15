@@ -55,7 +55,7 @@ export class UserController {
             }
             return {}
         } catch (err) {
-            consolelog("loginSendOtp", err, false)
+            consolelog(process.cwd(),"loginSendOtp", err, false)
             return Promise.reject(err)
         }
     }
@@ -116,7 +116,7 @@ export class UserController {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
         } catch (err) {
-            consolelog("authVerifyOtp", err, false)
+            consolelog(process.cwd(),"authVerifyOtp", err, false)
             return Promise.reject(err)
         }
     }
@@ -138,7 +138,6 @@ export class UserController {
                 background: false,
             }
             let userObj: IUserRequest.IUserData = await Aerospike.query(queryArg)
-            console.log("userObj", userObj)
             if (userObj && userObj.id) {
                 let userUpdate: IUserRequest.IUserUpdate = {
                     socialKey: payload.socialKey,
@@ -188,7 +187,7 @@ export class UserController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userObj, headers.deviceid) }
         } catch (err) {
-            consolelog("socialAuthValidate", err, false)
+            consolelog(process.cwd(),"socialAuthValidate", err, false)
             return Promise.reject(err)
         }
     }
@@ -301,7 +300,7 @@ export class UserController {
                 return formatUserData(user, headers.deviceid)
             }
         } catch (error) {
-            consolelog("profileUpdate", error, false)
+            consolelog(process.cwd(),"profileUpdate", error, false)
             return Promise.reject(error)
         }
     }

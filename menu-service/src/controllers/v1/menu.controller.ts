@@ -19,7 +19,7 @@ export class MenuController {
             }
             return {}
         } catch (err) {
-            consolelog("postMenu", err, false)
+            consolelog(process.cwd(),"postMenu", err, false)
             return Promise.reject(err)
         }
     }
@@ -33,7 +33,7 @@ export class MenuController {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
             return await ENTITY.MenuE.getMenuById(menuId)
         } catch (err) {
-            consolelog("fetchMenu", err, false)
+            consolelog(process.cwd(),"fetchMenu", err, false)
             return Promise.reject(err)
         }
     }

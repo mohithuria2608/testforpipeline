@@ -20,7 +20,7 @@ export class CountryController {
             }
             return {}
         } catch (err) {
-            consolelog("post country", err, false)
+            consolelog(process.cwd(),"post country", err, false)
             return Promise.reject(err)
         }
     }

@@ -20,7 +20,7 @@ export class StoreController {
             }
             return stores
         } catch (err) {
-            consolelog("post store", err, false)
+            consolelog(process.cwd(),"post store", err, false)
             return Promise.reject(err)
         }
     }

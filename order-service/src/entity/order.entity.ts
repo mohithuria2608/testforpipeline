@@ -17,13 +17,10 @@ export class OrderClass extends BaseEntity {
                 item['isPriceChange'] = false
                 let defaultCategoryIndex = -1
                 defaultMenu.categories.map((cat, i) => {
-                    console.log("cat.id == item.catId", cat.id, item.catId)
-
                     if (cat.id == item.catId) {
                         defaultCategoryIndex = i
                     }
                 })
-                console.log("defaultCategoryIndex, typeof defaultCategoryIndex, (defaultCategoryIndex >= 0)", defaultCategoryIndex, typeof defaultCategoryIndex, (defaultCategoryIndex >= 0))
                 if (defaultCategoryIndex >= 0) {
 
                     let productIndex = -1
@@ -65,9 +62,9 @@ export class OrderClass extends BaseEntity {
                                     }
                                 })
                             })
-                            consolelog("validStepStore", validStepStore, true)
-                            consolelog("validOptionIdStore", validOptionIdStore, true)
-                            consolelog("validOptionPriceStore", validOptionPriceStore, true)
+                            consolelog(process.cwd(),"validStepStore", validStepStore, true)
+                            consolelog(process.cwd(),"validOptionIdStore", validOptionIdStore, true)
+                            consolelog(process.cwd(),"validOptionPriceStore", validOptionPriceStore, true)
 
                             let isValidStep = true;
                             let validOptionId = true;
@@ -116,7 +113,7 @@ export class OrderClass extends BaseEntity {
             })
             return change
         } catch (error) {
-            consolelog("mapInternalKeys", error, false)
+            consolelog(process.cwd(),"mapInternalKeys", error, false)
             return Promise.reject(error)
         }
     }
@@ -196,7 +193,7 @@ export class OrderClass extends BaseEntity {
                 amount: amount
             }
         } catch (error) {
-            consolelog("createCheckoutRes", error, false)
+            consolelog(process.cwd(),"createCheckoutRes", error, false)
             return Promise.reject(error)
         }
     }

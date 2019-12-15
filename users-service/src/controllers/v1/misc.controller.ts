@@ -25,7 +25,7 @@ export class MiscController {
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
         } catch (err) {
-            consolelog("configuration", err, false)
+            consolelog(process.cwd(),"configuration", err, false)
             return Promise.reject(err)
         }
     }

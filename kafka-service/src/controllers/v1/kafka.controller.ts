@@ -12,7 +12,7 @@ export class KafkaController {
      * */
     async produceToFailureTopic(payload: any) {
         try {
-            consolelog("produce data in failed KAFKA q", payload, true)
+            consolelog(process.cwd(),"produce data in failed KAFKA q", payload, true)
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
                 topic: Constant.KAFKA_TOPIC.FAIL_Q,
@@ -20,7 +20,7 @@ export class KafkaController {
             });
             return {}
         } catch (err) {
-            consolelog("produceToFailureTopic", err, false)
+            consolelog(process.cwd(),"produceToFailureTopic", err, false)
             return Promise.reject(err)
         }
     }
@@ -37,7 +37,7 @@ export class KafkaController {
      * */
     async syncUser(payload: IUserGrpcRequest.ICreateUserData) {
         try {
-            consolelog("produce user in KAFKA service", payload, true)
+            consolelog(process.cwd(),"produce user in KAFKA service", payload, true)
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
                 topic: Constant.KAFKA_TOPIC.NEW_USER,
@@ -45,7 +45,7 @@ export class KafkaController {
             });
             return {}
         } catch (err) {
-            consolelog("syncUser", err, false)
+            consolelog(process.cwd(),"syncUser", err, false)
             return Promise.reject(err)
         }
     }

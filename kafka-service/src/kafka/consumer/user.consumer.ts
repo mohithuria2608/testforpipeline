@@ -13,7 +13,7 @@ class UserConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                console.log("consumer new_user message", message)
+                consolelog(process.cwd(), "consumer new_user", message, true)
                 this.sendUserToCMSGrpc(message);
             })
     }
@@ -22,10 +22,9 @@ class UserConsumer extends BaseConsumer {
         try {
             let res = await syncService.syncUser(message)
             await userService.updateCmsId({ aerospikeId: message.aerospikeId, id: res.id })
-            console.log("final response from cms for the user created", res)
             return res
         } catch (err) {
-            consolelog(`sendUserToCMSGrpc`, err, false);
+            consolelog(process.cwd(), `sendUserToCMSGrpc`, err, false);
             kafkaController.produceToFailureTopic(message)
             return {}
         }

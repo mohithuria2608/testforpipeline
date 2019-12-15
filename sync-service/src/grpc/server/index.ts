@@ -20,11 +20,11 @@ export const server = new grpc.Server()
 server.addService(syncProto.SyncService.service, {
     createUserOnCms: async (call: IKafkaGrpcRequest.ICreateUserReq, callback) => {
         try {
-            consolelog("createUserOnCms", JSON.stringify(call.request), true)
+            consolelog(process.cwd(),"createUserOnCms", JSON.stringify(call.request), true)
             let res: IKafkaGrpcRequest.ICreateUserRes = await cmsController.createUserOnCms(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("createUserOnCms", error, false)
+            consolelog(process.cwd(),"createUserOnCms", error, false)
             callback(grpcSendError(error))
         }
     }
@@ -32,5 +32,5 @@ server.addService(syncProto.SyncService.service, {
 
 server.bind(config.get("grpc.sync.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc Sync Server running at", config.get("grpc.sync.server"), true)
+consolelog(process.cwd(),"GRPC server running at", config.get("grpc.sync.server"), true)
 server.start();

@@ -1,4 +1,5 @@
 import * as Joi from '@hapi/joi';
+import { consolelog } from '../utils'
 
 /**
  * Helper function to validate an object against the provided schema,
@@ -37,8 +38,9 @@ export const validate = function (validationObj) {
     // Return a Koa middleware function
     return async (ctx, next) => {
         try {
-            console.log("ctx.req.body", ctx.request.body)
-            console.log("ctx.query", ctx.query)
+            consolelog(process.cwd(), "Body parameters", ctx.request.body, true)
+            consolelog(process.cwd(), "Query parameters", ctx.query, true)
+            consolelog(process.cwd(), "Path parameters", ctx.request.body, true)
             // Validate each request data object in the Koa context object
             await validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true })
             await validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })

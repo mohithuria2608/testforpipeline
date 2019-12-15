@@ -1,3 +1,3 @@
 'use strict';
 export * from './logger';
-export * from './request';
+export * from './cms-request';

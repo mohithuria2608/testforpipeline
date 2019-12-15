@@ -20,7 +20,7 @@ export class AuthService {
     private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from sync service to auth service', config.get("grpc.auth.client"), true)
+        consolelog(process.cwd(),'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
     }
 
     async createToken(payload: IAuthServiceRequest.ICreateTokenData): Promise<IAuthServiceRequest.IToken> {
@@ -28,10 +28,10 @@ export class AuthService {
             await authServiceValidator.createTokenValidator(payload)
             this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype, authCred: payload.authCred }, (err, res) => {
                 if (!err) {
-                    consolelog("successfully created access and refresh token", JSON.stringify(res), false)
+                    consolelog(process.cwd(),"successfully created access and refresh token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog("Error in creating token", JSON.stringify(err), false)
+                    consolelog(process.cwd(),"Error in creating token", JSON.stringify(err), false)
                     reject(err)
                 }
             })
@@ -42,10 +42,10 @@ export class AuthService {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (err, res) => {
                 if (!err) {
-                    consolelog("successfully verified token", JSON.stringify(res), false)
+                    consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog("Error in verifying token", JSON.stringify(err), false)
+                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(err), false)
                     reject(err)
                 }
             })

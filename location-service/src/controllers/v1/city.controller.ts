@@ -21,7 +21,7 @@ export class CityController {
             }
             return {}
         } catch (err) {
-            consolelog("post city", err, false)
+            consolelog(process.cwd(),"post city", err, false)
             return Promise.reject(err)
         }
     }

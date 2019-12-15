@@ -92,7 +92,7 @@ export class UserEntity extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
         } catch (error) {
-            consolelog("getById", error, false)
+            consolelog(process.cwd(),"getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -216,7 +216,7 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: dataToSave.id })
             return user
         } catch (err) {
-            consolelog("createUser", err, false)
+            consolelog(process.cwd(),"createUser", err, false)
             return Promise.reject(err)
         }
     }
@@ -256,7 +256,7 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: userData.id })
             return user
         } catch (err) {
-            consolelog("createSession", err, false)
+            consolelog(process.cwd(),"createSession", err, false)
             return Promise.reject(err)
         }
     }
@@ -294,7 +294,7 @@ export class UserEntity extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
         } catch (error) {
-            consolelog("getTokens", error, false)
+            consolelog(process.cwd(),"getTokens", error, false)
             return Promise.reject(error)
         }
     }
@@ -310,7 +310,7 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog("updateCmsId", error, false)
+            consolelog(process.cwd(),"updateCmsId", error, false)
             return Promise.reject(error)
         }
     }

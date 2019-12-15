@@ -46,7 +46,7 @@ export class GuestController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid) }
         } catch (err) {
-            consolelog("guestLogin", err, false)
+            consolelog(process.cwd(),"guestLogin", err, false)
             return Promise.reject(err)
         }
     }

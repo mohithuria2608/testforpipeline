@@ -18,7 +18,7 @@ export class MiscUserController {
             let user = await ENTITY.UserE.getById({ id: authObj.id })
             return { accessToken: tokens.accessToken, response: formatUserData(user, headers.deviceid) }
         } catch (err) {
-            consolelog("refreshToken", err, false)
+            consolelog(process.cwd(),"refreshToken", err, false)
             return Promise.reject(err)
         }
     }

@@ -21,9 +21,6 @@ export const start = (async () => {
 
     await bootstrap(server)
 
-
-
-
   } catch (err) {
     console.error(err)
   }

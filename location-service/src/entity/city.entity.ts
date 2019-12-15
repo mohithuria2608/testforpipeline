@@ -36,7 +36,7 @@ export class CityEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog("postCity", error, false)
+            consolelog(process.cwd(),"postCity", error, false)
             return Promise.reject(error)
         }
     }

@@ -23,7 +23,7 @@ server.addService(authProto.AuthService.service, {
             let res: IAuthGrpcRequest.IToken = await authController.createToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("createToken", error, false)
+            consolelog(process.cwd(),"createToken", error, false)
             callback(grpcSendError(error))
         }
     },
@@ -32,7 +32,7 @@ server.addService(authProto.AuthService.service, {
             let res: ICommonRequest.AuthorizationObj = await authController.verifyToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("grpc : verifyToken", JSON.stringify(error), false)
+            consolelog(process.cwd(),"grpc : verifyToken", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }
@@ -40,5 +40,5 @@ server.addService(authProto.AuthService.service, {
 
 server.bind(config.get("grpc.auth.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc Auth Server running at", config.get("grpc.auth.server"), true)
+consolelog(process.cwd(),"GRPC server running at", config.get("grpc.auth.server"), true)
 server.start();

@@ -47,11 +47,11 @@ export class TokenManager {
                 }
             }
             const token = await Jwt.sign(tokenData, cert, { algorithm: 'HS256' });
-            consolelog('token', token, false)
+            consolelog(process.cwd(),'token', token, false)
 
             return token
         } catch (error) {
-            consolelog('setToken', error, false)
+            consolelog(process.cwd(),'setToken', error, false)
             return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
         }
     };
@@ -59,11 +59,11 @@ export class TokenManager {
     async  verifyToken(token: string) {
         try {
             const tokenData: IAuthGrpcRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
-            consolelog('tokenManager : verifyToken', [JSON.stringify(token), JSON.stringify(tokenData)], true)
+            consolelog(process.cwd(),'tokenManager : verifyToken', [JSON.stringify(token), JSON.stringify(tokenData)], true)
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {
-                        consolelog("tokenData.id", tokenData.id, true)
+                        consolelog(process.cwd(),"tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,
@@ -76,7 +76,7 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
                     if (tokenData.id) {
-                        consolelog("tokenData.id", tokenData.id, true)
+                        consolelog(process.cwd(),"tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,
@@ -89,7 +89,7 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
-                        consolelog("tokenData.id", tokenData.id, true)
+                        consolelog(process.cwd(),"tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,

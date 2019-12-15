@@ -48,3 +48,6 @@ Kfcapptestuser3
 
  # protobuf any type for address 
  * https://github.com/protobufjs/protobuf.js/issues/1082
+
+ # retry option for kafka
+ * https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a

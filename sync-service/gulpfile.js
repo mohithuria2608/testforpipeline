@@ -64,7 +64,7 @@ gulp.task('server', function () {
 				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('sync pm2 started', process.env.NODE_ENV);
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
 			pm2.streamLogs('sync', 0);
 		});
 	});
