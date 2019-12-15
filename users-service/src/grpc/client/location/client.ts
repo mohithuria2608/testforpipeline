@@ -20,19 +20,19 @@ export class LocationService {
     private locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from user service to location service', config.get("grpc.location.client"), true)
+        consolelog(process.cwd(),'GRPC connection established location-service', config.get("grpc.location.client"), true)
     }
 
-    async validateCoordinate(payload: IStoreGrpcRequest.IValidateCoordinateData): Promise<IStoreGrpcRequest.IStore> {
+    async validateCoordinate(payload: IStoreGrpcRequest.IValidateCoordinateData): Promise<IStoreGrpcRequest.IStore[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.validateCoordinateValidator(payload)
-                this.locationClient.validateCoordinate({ lat: payload.lat, lng: payload.lng }, (err, res) => {
+                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (err, res) => {
                     if (!err) {
-                        consolelog("successfully verified coordinates", JSON.stringify(res), false)
-                        resolve(res)
+                        consolelog(process.cwd(),"successfully verified coordinates", JSON.stringify(res), false)
+                        resolve(res.store)
                     } else {
-                        consolelog("Error in verifying coordinates", JSON.stringify(err), false)
+                        consolelog(process.cwd(),"Error in verifying coordinates", JSON.stringify(err), false)
                         reject(err)
                     }
                 })
@@ -48,10 +48,10 @@ export class LocationService {
     //             await locationServiceValidator.getAreaByStoreIdValidator(payload)
     //             this.locationClient.getAreaByStoreId({ storeId: payload.storeId }, (err, res) => {
     //                 if (!err) {
-    //                     consolelog("area by store id ", JSON.stringify(res), false)
+    //                     consolelog(process.cwd(),"area by store id ", JSON.stringify(res), false)
     //                     resolve(res)
     //                 } else {
-    //                     consolelog("Error in getAreaByStoreId", JSON.stringify(err), false)
+    //                     consolelog(process.cwd(),"Error in getAreaByStoreId", JSON.stringify(err), false)
     //                     reject(err)
     //                 }
     //             })

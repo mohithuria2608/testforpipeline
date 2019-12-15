@@ -179,7 +179,7 @@ export let formatUserData = function (userObj: Object) {
 
         return userObj
     } catch (error) {
-        consolelog('formatUserData', error, false)
+        consolelog(process.cwd(),'formatUserData', error, false)
         return Promise.reject(error)
     }
 }
@@ -193,7 +193,7 @@ export const getBucket = (id) => {
     id = id.toString()
     let bucket = id.replace(/\D/g, "")               //regex to replace alphabets from stringified object id
     bucket = bucket.substr(0, 3)
-    consolelog('bucket', bucket, true)
+    consolelog(process.cwd(),'bucket', bucket, true)
     return bucket
 }
 
@@ -209,25 +209,17 @@ export let arrayToObject = function (array: any) {
 
 }
 
-export let consolelog = function (identifier: string, value: any, isSuccess: boolean) {
+export let consolelog = function (cwd: string, identifier: string, value: any, isSuccess: boolean, logFunction?: string) {
     try {
-        if (isArray(value)) {
-            value.forEach((obj, i) => {
-                if (isSuccess) {
-                    logger.info(`${identifier}--------------${i}--------------${obj}`);
-                } else {
-                    logger.error(`${identifier}--------------${i}--------------${obj}`);
-                }
-            })
-            return
+        const service = cwd.split('/')[cwd.split('/').length - 1]
+        if (!logFunction)
+            logFunction = 'info'
+        if (isSuccess) {
+            logger[logFunction](`${service}--------------${identifier}--------------${value}`);
         } else {
-            if (isSuccess) {
-                logger.info(`${identifier}--------------${value}`);
-            } else {
-                logger.error(`${identifier}--------------${value}`);
-            }
-            return
+            logger.error(`${service}--------------${identifier}--------------${value}`);
         }
+        return
     } catch (error) {
         return
     }

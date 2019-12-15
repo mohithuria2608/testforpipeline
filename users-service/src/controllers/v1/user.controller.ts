@@ -31,7 +31,6 @@ export class UserController {
                 let otp = Constant.SERVER.BY_PASS_OTP
                 let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
                 if (checkUser && checkUser.session && checkUser.session[headers.deviceid] && checkUser.session[headers.deviceid].otpExpAt <= new Date().getTime() && checkUser.session[headers.deviceid].otpExpAt != 0) {
-                    otp = (checkUser.session[headers.deviceid].otp == Constant.SERVER.BY_PASS_OTP) ? Constant.SERVER.BY_PASS_OTP_2 : Constant.SERVER.BY_PASS_OTP
                     otpExpAt = checkUser.session[headers.deviceid].otpExpAt
                 }
                 let sessionUpdate: IUserRequest.ISessionUpdate = {
@@ -56,7 +55,7 @@ export class UserController {
             }
             return {}
         } catch (err) {
-            consolelog("loginSendOtp", err, false)
+            consolelog(process.cwd(),"loginSendOtp", err, false)
             return Promise.reject(err)
         }
     }
@@ -82,13 +81,13 @@ export class UserController {
                 set: 'user',
                 background: false,
             }
-            let checkUserExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
-            if (checkUserExist && checkUserExist.id) {
-                if (checkUserExist && checkUserExist.session && checkUserExist.session[headers.deviceid] && checkUserExist.session[headers.deviceid].otp == 0 && checkUserExist.session[headers.deviceid].otpExpAt == 0)
+            let userFromDb: IUserRequest.IUserData = await Aerospike.query(queryArg)
+            if (userFromDb && userFromDb.id) {
+                if (userFromDb && userFromDb.session && userFromDb.session[headers.deviceid] && userFromDb.session[headers.deviceid].otp == 0 && userFromDb.session[headers.deviceid].otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
 
-                if (checkUserExist && checkUserExist.session && checkUserExist.session[headers.deviceid] && checkUserExist.session[headers.deviceid].otp == payload.otp) {
-                    if (checkUserExist.session[headers.deviceid].otpExpAt > new Date().getTime()) {
+                if (userFromDb && userFromDb.session && userFromDb.session[headers.deviceid] && userFromDb.session[headers.deviceid].otp == payload.otp) {
+                    if (userFromDb.session[headers.deviceid].otpExpAt > new Date().getTime()) {
                         let userUpdate: IUserRequest.IUserUpdate = {
                             phnVerified: 1,
                             removeUserId: "",
@@ -100,9 +99,9 @@ export class UserController {
                             isLogin: 1,
                             // createdAt: new Date().getTime()
                         }
-                        let user: IUserRequest.IUserData = await ENTITY.UserE.createSession(headers, checkUserExist, userUpdate, sessionUpdate)
-                        if (checkUserExist.removeUserId && checkUserExist.removeUserId != "")
-                            await Aerospike.remove({ set: "user", key: checkUserExist.removeUserId })
+                        let user: IUserRequest.IUserData = await ENTITY.UserE.createSession(headers, userFromDb, userUpdate, sessionUpdate)
+                        if (userFromDb.removeUserId && userFromDb.removeUserId != "")
+                            await Aerospike.remove({ set: "user", key: userFromDb.removeUserId })
                         let tokens = await ENTITY.UserE.getTokens(
                             headers.deviceid,
                             headers.devicetype,
@@ -117,7 +116,7 @@ export class UserController {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
         } catch (err) {
-            consolelog("authVerifyOtp", err, false)
+            consolelog(process.cwd(),"authVerifyOtp", err, false)
             return Promise.reject(err)
         }
     }
@@ -139,7 +138,6 @@ export class UserController {
                 background: false,
             }
             let userObj: IUserRequest.IUserData = await Aerospike.query(queryArg)
-            console.log("userObj", userObj)
             if (userObj && userObj.id) {
                 let userUpdate: IUserRequest.IUserUpdate = {
                     socialKey: payload.socialKey,
@@ -189,7 +187,7 @@ export class UserController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userObj, headers.deviceid) }
         } catch (err) {
-            consolelog("socialAuthValidate", err, false)
+            consolelog(process.cwd(),"socialAuthValidate", err, false)
             return Promise.reject(err)
         }
     }
@@ -240,6 +238,7 @@ export class UserController {
                             createdAt: new Date().getTime(),
                         }
                         let user = await ENTITY.UserE.createSession(headers, checkPhoneExist, userUpdate, sessionUpdate)
+                        ENTITY.UserE.syncUser(user)
                         return formatUserData(user, headers.deviceid)
                     } else {
                         let userUpdate = {
@@ -260,6 +259,7 @@ export class UserController {
                             createdAt: new Date().getTime(),
                         }
                         let user = await ENTITY.UserE.createSession(headers, checkPhoneExist, userUpdate, sessionUpdate)
+                        ENTITY.UserE.syncUser(user)
                         return formatUserData(user, headers.deviceid)
                     }
                 } else {
@@ -280,6 +280,7 @@ export class UserController {
                         createdAt: new Date().getTime(),
                     }
                     let user = await ENTITY.UserE.createSession(headers, auth.userData, userUpdate, sessionUpdate)
+                    ENTITY.UserE.syncUser(user)
                     return formatUserData(user, headers.deviceid)
                 }
             } else {
@@ -295,10 +296,11 @@ export class UserController {
                     otpExpAt: auth.userData.phnVerified ? 0 : (new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME),
                 }
                 let user = await ENTITY.UserE.createSession(headers, auth.userData, userUpdate, sessionUpdate)
+                ENTITY.UserE.syncUser(user)
                 return formatUserData(user, headers.deviceid)
             }
         } catch (error) {
-            consolelog("profileUpdate", error, false)
+            consolelog(process.cwd(),"profileUpdate", error, false)
             return Promise.reject(error)
         }
     }

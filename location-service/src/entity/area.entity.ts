@@ -6,6 +6,20 @@ import { Aerospike } from '../databases/aerospike'
 
 export class AreaEntity extends BaseEntity {
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'areaId',
+            index: 'idx_' + this.set + '_' + 'areaId',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'storeId',
+            index: 'idx_' + this.set + '_' + 'storeId',
+            type: "NUMERIC"
+        }
+    ]
     constructor() {
         super('area')
     }
@@ -33,7 +47,7 @@ export class AreaEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog("postArea", error, false)
+            consolelog(process.cwd(),"postArea", error, false)
             return Promise.reject(error)
         }
     }
@@ -51,7 +65,7 @@ export class AreaEntity extends BaseEntity {
     //         let area: IAreaRequest.IArea = await Aerospike.query(queryArg)
     //         return area[0]
     //     } catch (error) {
-    //         consolelog("getAreaByStoreId", error, false)
+    //         consolelog(process.cwd(),"getAreaByStoreId", error, false)
     //         return Promise.reject(error)
     //     }
     // }

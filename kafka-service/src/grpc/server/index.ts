@@ -18,19 +18,19 @@ const kafkaProto = grpc.loadPackageDefinition(packageDefinition);
 export const server = new grpc.Server()
 
 server.addService(kafkaProto.KafkaService.service, {
-    produceMessage: async (call: IKafkaGrpcRequest.IProduceMessageReq, callback) => {
+    syncUser: async (call: IUserGrpcRequest.ICreateUserReq, callback) => {
         try {
-            consolelog("produceMessage", JSON.stringify(call.request), true)
-            let res: IKafkaGrpcRequest.IProduceMessageRes = await kafkaController.produceMessage(call.request)
+            consolelog(process.cwd(),"syncUser ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.syncUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("produceMessage", error, false)
+            consolelog(process.cwd(),"syncUser", error, false)
             callback(grpcSendError(error))
         }
-    }
+    },
 })
 
 server.bind(config.get("grpc.kafka.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc Kafka Server running at", config.get("grpc.kafka.server"), true)
+consolelog(process.cwd(),"GRPC server running at", config.get("grpc.kafka.server"), true)
 server.start();

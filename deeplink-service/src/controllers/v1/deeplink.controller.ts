@@ -37,7 +37,6 @@ export class DeeplinkController {
     async deepLinkMapper(payload: DeeplinkRequest.IDeeplinkMapper) {
         try {
             let res = {}
-            console.log("mapper", payload.url)
             const delimiter = (payload.url.split('#').length == 1) ? payload.url.split('%23')[1] : payload.url.split('#')[1]
 
             if (delimiter) {
@@ -77,7 +76,7 @@ export class DeeplinkController {
 
             return res
         } catch (error) {
-            consolelog("deepLinkMapper", error, false)
+            consolelog(process.cwd(),"deepLinkMapper", error, false)
             return Promise.reject(error)
         }
     }

@@ -30,7 +30,7 @@ export default (opts?): Middleware => {
                 description: "",
                 createdAt: new Date().getTime(),
             }
-            consolelog("activity log", dataToSave, true, 'entryLog')
+            consolelog(process.cwd(),"activity log", dataToSave, true, 'entryLog')
             // ENTITY.ActivitylogClassC.createOneEntity(dataToSave)
         })
 

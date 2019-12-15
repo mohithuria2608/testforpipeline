@@ -8,6 +8,26 @@ const aerospike = require('aerospike');
 
 export class StoreEntity extends BaseEntity {
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'menuId',
+            index: 'idx_' + this.set + '_' + 'menuId',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'storeId',
+            index: 'idx_' + this.set + '_' + 'storeId',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'geoFence',
+            index: 'idx_' + this.set + '_' + 'geoFence',
+            type: "GEO2DSPHERE"
+        }
+    ]
     constructor() {
         super('store')
     }
@@ -60,7 +80,7 @@ export class StoreEntity extends BaseEntity {
 
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog("postStore", error, false)
+            consolelog(process.cwd(),"postStore", error, false)
             return Promise.reject(error)
         }
     }
@@ -82,12 +102,9 @@ export class StoreEntity extends BaseEntity {
                 }
             }
             let res = await Aerospike.query(geoWithinArg)
-            if (res && res.length > 0) {
-                return res
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.STORE_NOT_FOUND)
+            return res
         } catch (error) {
-            consolelog("validateCoords", error, false)
+            consolelog(process.cwd(),"validateCoords", error, false)
             return Promise.reject(error)
         }
     }

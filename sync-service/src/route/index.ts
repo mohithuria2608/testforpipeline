@@ -4,14 +4,12 @@ import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
 import cmsRoutes from './v1/cms.route'
-import cmsMenuRoutes from './v1/cms.menu.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: cmsRoutes, prefix: version1 + '/cms' },
-  { routes: cmsMenuRoutes, prefix: version1 + '/cms/menu' },
 ]
 
 export default function routes() {

@@ -11,7 +11,7 @@ export class AuthController {
             let token: string = await tokenManager.setToken(payload)
             return { token }
         } catch (err) {
-            consolelog("AuthController : createToken", JSON.stringify(err), false)
+            consolelog(process.cwd(),"AuthController : createToken", JSON.stringify(err), false)
             return Promise.reject(err)
         }
     }
@@ -21,7 +21,7 @@ export class AuthController {
             let tokenData: ICommonRequest.AuthorizationObj = await tokenManager.verifyToken(payload.token)
             return tokenData
         } catch (err) {
-            consolelog("AuthController : verifyToken", JSON.stringify(err), false)
+            consolelog(process.cwd(),"AuthController : verifyToken", JSON.stringify(err), false)
             return Promise.reject(err)
         }
     }

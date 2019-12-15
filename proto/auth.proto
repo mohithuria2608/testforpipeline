@@ -32,21 +32,4 @@ message IAuthorizationObj {
     required string deviceid = 2;
     required string devicetype = 3;
     optional string id = 4;
-    optional IUserData userData = 5;
-}
-
-message IUserData {
-    required string  id = 1;
-    required string name = 2;
-    required string cCode = 3;
-    required string phnNo = 4;
-    required int32 phnVerified = 5;
-    required string email = 6;
-    required int32 emailVerified = 7;
-    required int32 profileStep = 8;
-    required string socialKey = 9;
-    required string medium = 10;
-    required int32 createdAt = 11;
-    optional string removeUserId = 12;
-    optional Any address = 13;
 }

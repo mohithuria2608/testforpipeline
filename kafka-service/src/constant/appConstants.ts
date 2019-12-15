@@ -78,7 +78,9 @@ export let DATABASE = {
 
 
 export enum KAFKA_TOPIC {
-    NEW_MENU = "new_menu"
+    FAIL_Q = "fail_q",
+    NEW_MENU = "new_menu",
+    NEW_USER = "new_user"
 }
 
 export enum MIDDLEWARE {
@@ -403,6 +405,12 @@ export let STATUS_MSG = {
                 code: parseInt(code),
                 details: `${type} : ${message}`
             }
+        }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
         }
     }
 };

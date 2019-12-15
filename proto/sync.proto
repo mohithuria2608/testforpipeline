@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+service SyncService {
+    rpc CreateUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
+}
+
+message ICreateUserOnCmsReq {
+    required string aerospikeId = 1;
+    required string lastname = 2;
+    required string firstname = 3;
+    required string email = 4;
+    required int32 storeId = 5;
+    required int32 websiteId = 6;
+    required string password = 7;
+}
+
+message ICreateUserOnCmsRes {
+    required string aerospikeId = 1;
+    required string id = 2;
+}

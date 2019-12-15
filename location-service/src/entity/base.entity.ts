@@ -1,4 +1,3 @@
-import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
@@ -26,7 +25,7 @@ export class BaseEntity {
         try {
             return await Aerospike.scan(this.set)
         } catch (error) {
-            consolelog("scanAerospike", error, false)
+            consolelog(process.cwd(),"scanAerospike", error, false)
             return Promise.reject(error)
         }
     }

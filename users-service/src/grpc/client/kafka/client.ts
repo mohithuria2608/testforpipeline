@@ -20,21 +20,25 @@ export class KafkaService {
     private kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from sync service to kafka service', config.get("grpc.kafka.client"), true)
+        consolelog(process.cwd(),'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
     }
 
-    async produceMessage(payload: IKafkaServiceRequest.IProduceMessage): Promise<IKafkaServiceRequest.IProduceMessageRes> {
+    async syncUser(payload: IKafkaGrpcRequest.ISyncUserData): Promise<{}> {
         return new Promise(async (resolve, reject) => {
-            await kafkaServiceValidator.produceMessageValidator(payload)
-            this.kafkaClient.produceMessage({ data: payload.data }, (err, res) => {
-                if (!err) {
-                    consolelog("successfully produced message on kafka", JSON.stringify(res), false)
-                    resolve(res)
-                } else {
-                    consolelog("Error in producing message", JSON.stringify(err), false)
-                    reject(err)
-                }
-            })
+            try {
+                await kafkaServiceValidator.syncUserValidator(payload)
+                this.kafkaClient.syncUser(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(),"successfully produced user on kafka for syncing", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(),"Error in producing user on kafka  for syncing", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
         })
     }
 }

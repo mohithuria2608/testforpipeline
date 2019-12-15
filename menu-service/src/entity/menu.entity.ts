@@ -6,8 +6,8 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class MenuClass extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = []
     constructor() {
         super('menu')
     }
@@ -23,7 +23,7 @@ export class MenuClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog("post menu", error, false)
+            consolelog(process.cwd(),"post menu", error, false)
             return Promise.reject(error)
         }
     }
@@ -44,7 +44,7 @@ export class MenuClass extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E404.MENU_NOT_FOUND)
         } catch (error) {
-            consolelog("getById", error, false)
+            consolelog(process.cwd(),"getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -59,7 +59,7 @@ export class MenuClass extends BaseEntity {
             let menuId = 5;
             return await this.getMenuById(menuId)
         } catch (err) {
-            consolelog("grpcFetchMenu", err, false)
+            consolelog(process.cwd(),"grpcFetchMenu", err, false)
             return Promise.reject(err)
         }
     }

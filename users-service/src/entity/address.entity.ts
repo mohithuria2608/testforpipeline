@@ -1,4 +1,5 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
@@ -7,17 +8,48 @@ import { Aerospike } from '../databases/aerospike'
 export class AddressEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = []
     constructor() {
         super('address')
     }
 
+
+    public addressSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        areaId: Joi.number().required(),
+        bldgName: Joi.string(),
+        bldgNameUn: Joi.string(),
+        bldgNum: Joi.string(),
+        cityId: Joi.number().required(),
+        classId: Joi.number(),
+        countryId: Joi.number().required(),
+        userId: Joi.number().required(),
+        description: Joi.string(),
+        districtId: Joi.number().required(),
+        flatNum: Joi.number(),
+        floor: Joi.string(),
+        language: Joi.string(),
+        phoneAreaCode: Joi.string(),
+        phoneLookup: Joi.string(),
+        phoneNumber: Joi.string().required(),
+        phoneType: Joi.number(),
+        postalCode: Joi.string().required(),
+        provinceCode: Joi.number().required(),
+        sketch: Joi.string(),
+        streetId: Joi.number(),
+        useMap: Joi.number(),
+        createdAt: Joi.number().required(),
+        createdBy: Joi.string(),
+        updatedBy: Joi.string()
+    })
+
     /**
-    * @method GRPC
+    * @method INTERNAL
     * @param {string} id : user id
     * */
-    async getById(payload: IUserGrpcRequest.IId) {
+    async getById(payload: IUserRequest.IId) {
         try {
-            consolelog("getById", payload.id, true)
+            consolelog(process.cwd(),"getById", payload.id, true)
             let getArg: IAerospike.Get = {
                 set: this.set,
                 key: payload.id
@@ -28,7 +60,7 @@ export class AddressEntity extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
         } catch (error) {
-            consolelog("getById", error, false)
+            consolelog(process.cwd(),"getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -56,7 +88,7 @@ export class AddressEntity extends BaseEntity {
                 isActive: 1,
 
                 //@description = from session
-                language: userData.session[deviceid].language,
+                language: "En",// userData.session[deviceid].language,
 
                 //@description = from store
                 areaId: store.areaId,
@@ -87,7 +119,7 @@ export class AddressEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return await this.getById({ id: address.id })
         } catch (err) {
-            consolelog("addAddress", err, false)
+            consolelog(process.cwd(),"addAddress", err, false)
             return Promise.reject(err)
         }
     }
@@ -112,7 +144,7 @@ export class AddressEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return await this.getById({ id: addressUpdate.addressId })
         } catch (err) {
-            consolelog("updateAddress", err, false)
+            consolelog(process.cwd(),"updateAddress", err, false)
             return Promise.reject(err)
         }
     }

@@ -17,9 +17,9 @@ export class LocationController {
             if (store && store.length > 0)
                 return { menuId: store[0].menuId }
             else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.STORE_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SERVICE_UNAVAILABLE)
         } catch (err) {
-            consolelog("validateLocation", err, false)
+            consolelog(process.cwd(), "validateLocation", err, false)
             return Promise.reject(err)
         }
     }
@@ -41,6 +41,9 @@ export class LocationController {
             const area: IAreaRequest.IArea[] = promise[1]
             const store: IStoreRequest.IStore[] = promise[2]
 
+            consolelog(process.cwd(), "city", city.length, true)
+            consolelog(process.cwd(), "area", area.length, true)
+            consolelog(process.cwd(), "store", store.length, true)
             let res = []
             if (city && city.length > 0) {
                 for (const c of city) {
@@ -69,7 +72,7 @@ export class LocationController {
             }
             return res
         } catch (err) {
-            consolelog("getPickupList", err, false)
+            consolelog(process.cwd(), "getPickupList", err, false)
             return Promise.reject(err)
         }
     }

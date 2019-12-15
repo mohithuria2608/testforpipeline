@@ -64,7 +64,7 @@ gulp.task('server', function () {
 				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default" ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('auth pm2 started', process.env.NODE_ENV);
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
 			pm2.streamLogs('auth', 0);
 		});
 	});

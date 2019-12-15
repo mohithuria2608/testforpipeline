@@ -15,8 +15,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.JOI_HEADERS,
                 body: {
-                    cCode: Joi.string().required(),
-                    phnNo: Joi.string().max(9).required(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+                    phnNo: Joi.string().max(9).required(),//@todo : Country specific regex
                 }
             }),
             async (ctx) => {

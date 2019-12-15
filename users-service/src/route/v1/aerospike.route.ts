@@ -541,7 +541,6 @@ export default (router: Router) => {
                         }
                     })
                     // SELECT * FROM americana.store WHERE geoFence CONTAINS GeoJSON('{"type":"Point", "coordinates": [77.3651218, 28.5911163]}')
-                    console.log(res)
                     // await Aerospike.operationsOnMap({ set: 'user', key: '155e0680-19b5-11ea-bf45-d91ad9310ae6' }, [])
 
                     ctx.body = {}

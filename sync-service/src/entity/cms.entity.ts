@@ -41,7 +41,7 @@ export class CmsEntity extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
         } catch (err) {
-            consolelog("getTokens", err, false)
+            consolelog(process.cwd(),"getTokens", err, false)
             return Promise.reject(err)
         }
     }

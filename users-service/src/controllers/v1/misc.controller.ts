@@ -18,12 +18,14 @@ export class MiscController {
                         country: Constant.DATABASE.COUNTRY.UAE,
                         language: Constant.DATABASE.LANGUAGE.AR,
                         defaultCCode: '+971',
-                        phnRegex: `/^[1-9]\d{8}$|^[1-9]\d{8}$/`
+                        phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
+                        phnLength: 9
                     }
-                ]
+                ],
+                errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
         } catch (err) {
-            consolelog("configuration", err, false)
+            consolelog(process.cwd(),"configuration", err, false)
             return Promise.reject(err)
         }
     }

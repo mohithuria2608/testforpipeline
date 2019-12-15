@@ -6,6 +6,14 @@ import { Aerospike } from '../databases/aerospike'
 
 export class CountryEntity extends BaseEntity {
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'countryId',
+            index: 'idx_' + this.set + '_' + 'countryId',
+            type: "NUMERIC"
+        }
+    ]
     constructor() {
         super('country')
     }
@@ -27,7 +35,7 @@ export class CountryEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog("postCountry", error, false)
+            consolelog(process.cwd(),"postCountry", error, false)
             return Promise.reject(error)
         }
     }

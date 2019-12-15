@@ -1,13 +1,13 @@
 import { Middleware, Context } from 'koa'
-import * as CONSTANT from '../constant'
+import * as Constant from '../constant'
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
-            // utils.consolelog('In API Auth', ctx.request.headers.api_key, false)
+            // utils.consolelog(process.cwd(),'In API Auth', ctx.request.headers.api_key, false)
             let checkApiKeyFunction = await apiKeyFunction(ctx.request.headers.api_key)
             if (!checkApiKeyFunction) {
-                return Promise.reject(CONSTANT.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
         } catch (error) {
             return Promise.reject(error)

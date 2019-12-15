@@ -10,7 +10,7 @@ export default (router: Router) => {
     router
         .post('/refresh-token',
             ...getMiddleware([
-                Constant.MIDDLEWARE.REFRESH_AUTH,
+                Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({

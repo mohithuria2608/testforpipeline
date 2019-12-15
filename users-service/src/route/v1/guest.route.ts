@@ -1,4 +1,3 @@
-import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'

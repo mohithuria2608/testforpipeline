@@ -7,12 +7,13 @@ import * as Constant from '../../../constant'
 export class UserServiceValidator {
     constructor() {
     }
-    async  getUserByIdValidator(data: IUserGrpcRequest.IId) {
+    async updateCmsIdValidator(data: IUserGrpcRequest.IUpdateUserInfo) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    id: Joi.string().required()
-                });
+                    aerospikeId: Joi.string().required(),
+                    id: Joi.number().required()
+                })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
                     reject(`Invalid Info- ${error.message}`)

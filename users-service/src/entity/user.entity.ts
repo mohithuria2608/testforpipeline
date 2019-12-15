@@ -1,23 +1,87 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog } from '../utils'
+import { consolelog, cryptData } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     protected set: SetNames;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'phnNo',
+            index: 'idx_' + this.set + '_' + 'phnNo',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'email',
+            index: 'idx_' + this.set + '_' + 'email',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'socialKey',
+            index: 'idx_' + this.set + '_' + 'socialKey',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'sessionId',
+            index: 'idx_' + this.set + '_' + 'sessionId',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'cmsRefId',
+            index: 'idx_' + this.set + '_' + 'cmsRefId',
+            type: "NUMERIC"
+        }
+    ]
+
     constructor() {
         super('user')
     }
+
+    public sessionSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
+        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
+        appversion: Joi.string().trim().required(),
+        devicemodel: Joi.string().trim().required(),
+        devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
+        osversion: Joi.string().trim().required(),
+        deviceid: Joi.string().trim().required(),
+        isLogin: Joi.number().required(),
+        createdAt: Joi.number().required(),
+    });
+
+    public userSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+        cmsRefId: Joi.number().required().description("sk"),
+        isGuest: Joi.number().valid(0, 1),
+        sessionId: Joi.string().trim().required().description("sk"),
+        cCode: Joi.string().trim().required(),
+        phnNo: Joi.string().trim().required().description("sk"),
+        phnVerified: Joi.number().valid(0, 1).required(),
+        email: Joi.string().email().lowercase().trim().required().description("sk"),
+        profileStep: Joi.number().valid(Constant.DATABASE.TYPE.PROFILE_STEP.INIT, Constant.DATABASE.TYPE.PROFILE_STEP.FIRST).required(),
+        socialKey: Joi.string().trim().required().description("sk"),
+        medium: Joi.string().trim().required(),
+        removeUserId: Joi.string(),
+        password: Joi.string(),
+        session: Joi.any(),
+        createdAt: Joi.number().required(),
+    });
 
     /**
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getById(payload: IUserGrpcRequest.IId) {
+    async getById(payload: IUserRequest.IId) {
         try {
-            consolelog("getById", payload.id, true)
             let getArg: IAerospike.Get = {
                 set: this.set,
                 key: payload.id
@@ -28,15 +92,18 @@ export class UserEntity extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
         } catch (error) {
-            consolelog("getById", error, false)
+            consolelog(process.cwd(),"getById", error, false)
             return Promise.reject(error)
         }
     }
 
-    private buildUser(userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
+    private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
         const id = this.uuidv1();
         const user = isCreate ? {
             id: id,
+            cmsRefId: 0,
+            isGuest: 0,
+            sessionId: "",
             name: "",
             cCode: "",
             phnNo: "",
@@ -48,8 +115,15 @@ export class UserEntity extends BaseEntity {
             medium: "",
             createdAt: 0,
             session: {},
-            removeUserId: ""
+            removeUserId: "",
+            password: 'Password1'//await cryptData(id)
         } : {}
+        if (userInfo.isGuest != undefined) {
+            if (userInfo.isGuest == 1) {
+                user['isGuest'] = userInfo.isGuest
+                user['sessionId'] = headers.deviceid
+            }
+        }
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
         if (userInfo.cCode != undefined)
@@ -77,7 +151,7 @@ export class UserEntity extends BaseEntity {
         return user
     }
 
-    public buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
+    public async buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
         let session = isCreate ? {
             otp: 0,
             otpExpAt: 0,
@@ -91,7 +165,7 @@ export class UserEntity extends BaseEntity {
             devicetype: headers.devicetype,
             osversion: headers.osversion,
             createdAt: new Date().getTime(),
-            cartId: ""
+            cartId: await cryptData(headers.deviceid)
         } : {}
         if (sessionInfo.otp != undefined)
             session['otp'] = sessionInfo.otp
@@ -128,21 +202,21 @@ export class UserEntity extends BaseEntity {
     ): Promise<IUserRequest.IUserData> {
         try {
             let dataToSave = {
-                ...this.buildUser(userInfo, true)
+                ...await this.buildUser(headers, userInfo, true)
             }
-            dataToSave['session'][headers.deviceid] = { ...this.buildSession(headers, sessionCreate, true) }
+            dataToSave['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionCreate, true) }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
                 key: dataToSave.id,
-                ttl: Constant.SERVER.INITIAL_USER_TTL,
+                ttl: userInfo.isGuest ? Constant.SERVER.INITIAL_GUEST_USER_TTL : Constant.SERVER.INITIAL_USER_TTL,
                 create: true,
             }
             await Aerospike.put(putArg)
             let user = await this.getById({ id: dataToSave.id })
             return user
         } catch (err) {
-            consolelog("createUser", err, false)
+            consolelog(process.cwd(),"createUser", err, false)
             return Promise.reject(err)
         }
     }
@@ -155,21 +229,21 @@ export class UserEntity extends BaseEntity {
     ): Promise<IUserRequest.IUserData> {
         try {
             let dataToUpdate = {
-                ...this.buildUser(userUpdate, false),
+                ...await this.buildUser(headers, userUpdate, false),
                 session: {}
             }
             if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
                 const Context = Aerospike.cdt.Context
                 const context = new Context().addMapKey(headers.deviceid)
                 let op = [
-                    Aerospike.maps.putItems('session', { ...this.buildSession(headers, sessionUpdate, false) }, {
+                    Aerospike.maps.putItems('session', { ...await this.buildSession(headers, sessionUpdate, false) }, {
                         writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
                     }).withContext(context)
                 ]
                 await Aerospike.operationsOnMap({ set: this.set, key: userData.id }, op)
                 delete dataToUpdate['session']
             } else {
-                dataToUpdate['session'][headers.deviceid] = { ...this.buildSession(headers, sessionUpdate, true) }
+                dataToUpdate['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionUpdate, true) }
             }
 
             let putArg: IAerospike.Put = {
@@ -182,12 +256,12 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: userData.id })
             return user
         } catch (err) {
-            consolelog("createSession", err, false)
+            consolelog(process.cwd(),"createSession", err, false)
             return Promise.reject(err)
         }
     }
 
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id?: string) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
@@ -219,11 +293,28 @@ export class UserEntity extends BaseEntity {
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
-        } catch (err) {
-            consolelog("getTokens", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(),"getTokens", error, false)
+            return Promise.reject(error)
         }
     }
+
+    async updateCmsId(payload: IUserGrpcRequest.IUpdateUserInfo) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: { cmsRefId: parseInt(payload.id.toString()) },
+                set: this.set,
+                key: payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(),"updateCmsId", error, false)
+            return Promise.reject(error)
+        }
+    }
+
 }
 
 export const UserE = new UserEntity()
