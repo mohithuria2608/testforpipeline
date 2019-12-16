@@ -63,7 +63,7 @@ export class UserEntity extends BaseEntity {
         cmsRefId: Joi.number().required().description("sk"),
         isGuest: Joi.number().valid(0, 1),
         sessionId: Joi.string().trim().required().description("sk"),
-        cCode: Joi.string().trim().required(),
+        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),

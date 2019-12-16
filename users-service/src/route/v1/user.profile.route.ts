@@ -18,7 +18,7 @@ export default (router: Router) => {
                 body: {
                     socialKey: Joi.string(),
                     medium: Joi.string().valid(Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB, Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE),
-                    cCode: Joi.string().required(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
                     email: Joi.string().email().lowercase().required(),
                     name: Joi.string().required()

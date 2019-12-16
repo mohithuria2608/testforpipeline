@@ -39,7 +39,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.JOI_HEADERS,
                 body: {
-                    cCode: Joi.string().required(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
                     otp: Joi.number().required().error(new Error('Enter a valid OTP of 4 digits.')),
                 }

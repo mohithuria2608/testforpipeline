@@ -3,7 +3,6 @@
 import * as config from 'config'
 import { consolelog } from '../utils'
 import * as Constant from '../constant/appConstants'
-import { CONNREFUSED } from 'dns';
 const rp = require('request-promise');
 
 export class CMSRequestManager {
