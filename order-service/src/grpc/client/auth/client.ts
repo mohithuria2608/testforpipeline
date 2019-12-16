@@ -20,32 +20,32 @@ export class AuthService {
     private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from order service to auth service', config.get("grpc.auth.client"), true)
+        consolelog(process.cwd(),'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
     }
 
-    async createToken(payload: IAuthServiceRequest.ICreateTokenData): Promise<IAuthServiceRequest.IToken> {
+    async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.createTokenValidator(payload)
             this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype }, (err, res) => {
                 if (!err) {
-                    consolelog("successfully created access and refresh token", JSON.stringify(res), false)
+                    consolelog(process.cwd(),"successfully created access and refresh token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog("Error in creating token", JSON.stringify(err), false)
+                    consolelog(process.cwd(),"Error in creating token", JSON.stringify(err), false)
                     reject(err)
                 }
             })
         })
     }
-    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
+    async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (err, res) => {
                 if (!err) {
-                    consolelog("successfully verified token", JSON.stringify(res), false)
+                    consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog("Error in verifying token", JSON.stringify(err), false)
+                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(err), false)
                     reject(err)
                 }
             })

@@ -1,49 +1,39 @@
 import * as fs from 'fs';
-import { consolelog, getRequest } from '../../utils';
-import * as Constant from '../../constant';
+import * as Constant from '../../constant'
+import { consolelog } from '../../utils'
+import * as ENTITY from '../../entity'
 
 export class MenuController {
     constructor() { }
 
     /**
-    * @method GET
-    * */
-    async fetchMenu(payload: IMenuRequest.IMenuFetch) {
+     * @method POST
+     * @description : Post bulk menu data
+     * */
+    async postMenu() {
         try {
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
+            let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
-            return menu
+            for (const iterator of menu) {
+                ENTITY.MenuE.post(iterator)
+            }
+            return {}
         } catch (err) {
-            consolelog("fetchMenu", err, false)
+            consolelog(process.cwd(), "postMenu", err, false)
             return Promise.reject(err)
         }
     }
 
     /**
     * @method GET
+    * @param {string} menuId :  menu id
     * */
-    async fetchSuggestion(payload: IMenuRequest.ISuggestionFetch) {
+    async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
-            let products = await getRequest('http://40.123.207.192/rest/V1/products?searchCriteria[filterGroups][0][filters][0][field]=category_id&%20searchCriteria[filterGroups][0][filters][0][value]=6');
-            return JSON.parse(products);
+            let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
+            return await ENTITY.MenuE.getMenuById(menuId)
         } catch (err) {
-            consolelog("fetchSuggestion", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    /**
-    * @method GRPC
-    * @param {string} country :current country of user
-    * @param {boolean} isDefault :want to fetch default menu or not
-    * */
-    async grpcFetchMenu(payload: IMenuServiceRequest.IFetchMenuData) {
-        try {
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
-            let menu = JSON.parse(rawdata);
-            return menu
-        } catch (err) {
-            consolelog("grpcFetchMenu", err, false)
+            consolelog(process.cwd(), "fetchMenu", err, false)
             return Promise.reject(err)
         }
     }

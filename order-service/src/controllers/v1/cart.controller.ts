@@ -9,16 +9,17 @@ export class CartController {
     constructor() { }
 
     /**
+     * @method POST
      * @param {string} curMenuId :current menu id
      * @param {number} menuUpdatedAt :current menu id
      * @param {number=} lat :latitude
      * @param {number=} lng :longitude
      * @param {Array} items :array of products
      * */
-    async validateCart(payload: ICartRequest.IValidateCart) {
+    async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart) {
         try {
-            const defaultMenu: IMenuServiceRequest.IFetchMenuRes = await menuService.fetchMenu({
-                country: payload.country,
+            const defaultMenu: IMenuGrpcRequest.IFetchMenuRes = await menuService.fetchMenu({
+                country: headers.country,
                 isDefault: true
             })
             if (payload.lat && payload.lng) {
@@ -50,7 +51,7 @@ export class CartController {
                 }
             }
         } catch (err) {
-            consolelog("validateCart", err, false)
+            consolelog(process.cwd(),"validateCart", err, false)
             return Promise.reject(err)
         }
     }

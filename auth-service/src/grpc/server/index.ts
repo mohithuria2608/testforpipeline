@@ -18,23 +18,21 @@ const authProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(authProto.AuthService.service, {
-    createToken: async (call: IAuthServiceRequest.ICreateToken, callback) => {
+    createToken: async (call: IAuthGrpcRequest.ICreateToken, callback) => {
         try {
-            consolelog("createToken", JSON.stringify(call.request), true)
-            let res: IAuthServiceRequest.IToken = await authController.createToken(call.request)
+            let res: IAuthGrpcRequest.IToken = await authController.createToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("createToken", error, false)
+            consolelog(process.cwd(),"createToken", error, false)
             callback(grpcSendError(error))
         }
     },
-    verifyToken: async (call: IAuthServiceRequest.IVerifyToken, callback) => {
+    verifyToken: async (call: IAuthGrpcRequest.IVerifyToken, callback) => {
         try {
-            consolelog("verifyToken", JSON.stringify(call.request), true)
             let res: ICommonRequest.AuthorizationObj = await authController.verifyToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog("verifyToken", error, false)
+            consolelog(process.cwd(),"grpc : verifyToken", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }
@@ -42,5 +40,5 @@ server.addService(authProto.AuthService.service, {
 
 server.bind(config.get("grpc.auth.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc Auth Server running at", config.get("grpc.auth.server"), true)
+consolelog(process.cwd(),"GRPC server running at", config.get("grpc.auth.server"), true)
 server.start();

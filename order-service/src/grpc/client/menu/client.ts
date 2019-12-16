@@ -20,18 +20,18 @@ export class MenuService {
     private menuClient = new this.loadMenu(config.get("grpc.menu.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog('Connection established from order service to menu service', config.get("grpc.menu.client"), true)
+        consolelog(process.cwd(),'GRPC connection established menu-service', config.get("grpc.menu.client"), true)
     }
 
-    async fetchMenu(payload: IMenuServiceRequest.IFetchMenuData): Promise<IMenuServiceRequest.IFetchMenuRes> {
+    async fetchMenu(payload: IMenuGrpcRequest.IFetchMenuData): Promise<IMenuGrpcRequest.IFetchMenuRes> {
         return new Promise(async (resolve, reject) => {
             await menuServiceValidator.fetchMenu(payload)
             this.menuClient.fetchMenu({ country: payload.country, isDefault: payload.isDefault }, (err, res) => {
                 if (!err) {
-                    consolelog("successfully fetched Menu", JSON.stringify(res), false)
+                    consolelog(process.cwd(),"successfully fetched Menu", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog("Error in fetching Menu", JSON.stringify(err), false)
+                    consolelog(process.cwd(),"Error in fetching Menu", JSON.stringify(err), false)
                     reject(sendError(err))
                 }
             })

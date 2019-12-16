@@ -9,6 +9,29 @@ import { isArray } from 'util';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
+export let grpcSendError = function (error) {
+    if (typeof error === 'object' && error.hasOwnProperty('statusCode') && (error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+        let message = error.hasOwnProperty('message') ? error.message : (error.hasOwnProperty('customMessage') ? error.customMessage : 'Some error occured in GRPC error handler')
+        if (error.statusCode == 401 || error.statusCode == 403) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'UNAUTHENTICATED', message)
+        }
+        else if (error.statusCode == 404) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE, 'UNAVAILABLE', message)
+        }
+        else if (error.statusCode >= 400 && error.statusCode < 500 && error.statusCode != 401 && error.statusCode != 403) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION, 'FAILED_PRECONDITION', message)
+        }
+        else if (error.statusCode >= 500) {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, 'INTERNAL', message)
+        } else {
+            return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED, 'UNIMPLEMENTED', message)
+        }
+    } else {
+        let message = typeof error == 'string' ? error : 'Some error occured'
+        return Constant.STATUS_MSG.GRPC_ERROR.ERROR(Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL, "INTERNAL", message)
+    }
+}
+
 export let sendError = function (error) {
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
 
@@ -17,6 +40,10 @@ export let sendError = function (error) {
         if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED || error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
+        }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.type
         }
         else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
@@ -132,27 +159,19 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: Object) {
+export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid) {
     try {
-        userObj = JSON.parse(JSON.stringify(userObj))
+        userObj['country'] = userObj['session'][deviceid].country
+        userObj['language'] = userObj['session'][deviceid].language
+        userObj['cartId'] = userObj['session'][deviceid].cartId
 
-        let emailVerify = userObj['emailVerify'] ? userObj['emailVerify']['status'] : false
-        let phoneVerify = userObj['phoneVerify'] ? userObj['phoneVerify']['status'] : false
-        userObj['emailVerify'] = emailVerify
-        userObj['phoneVerify'] = phoneVerify
-
-        if (userObj['backup'] && userObj['backup']['fileName']) { }
-        else
-            delete userObj['backup']
-
-        delete userObj['lastActivityTime']
-        delete userObj['refreshToken']
-        delete userObj['cards']
-        delete userObj['banks']
-
+        delete userObj['session']
+        delete userObj['removeUserId']
+        delete userObj['password']
+        delete userObj['cmsRefId']
         return userObj
     } catch (error) {
-        consolelog('formatUserData', error, false)
+        consolelog(process.cwd(), 'formatUserData', error, false)
         return Promise.reject(error)
     }
 }
@@ -166,7 +185,7 @@ export const getBucket = (id) => {
     id = id.toString()
     let bucket = id.replace(/\D/g, "")               //regex to replace alphabets from stringified object id
     bucket = bucket.substr(0, 3)
-    consolelog('bucket', bucket, true)
+    consolelog(process.cwd(), 'bucket', bucket, true)
     return bucket
 }
 
@@ -182,27 +201,17 @@ export let arrayToObject = function (array: any) {
 
 }
 
-export let consolelog = function (identifier: string, value: any, isSuccess: boolean, logFunction?: string) {
+export let consolelog = function (cwd: string, identifier: string, value: any, isSuccess: boolean, logFunction?: string) {
     try {
+        const service = cwd.split('/')[cwd.split('/').length - 1]
         if (!logFunction)
             logFunction = 'info'
-        if (isArray(value)) {
-            value.forEach((obj, i) => {
-                if (isSuccess) {
-                    logger[logFunction](`${identifier}--------------${i}--------------${obj}`);
-                } else {
-                    logger.error(`${identifier}--------------${i}--------------${obj}`);
-                }
-            })
-            return
+        if (isSuccess) {
+            logger[logFunction](`${service}--------------${identifier}--------------${value}`);
         } else {
-            if (isSuccess) {
-                logger[logFunction](`${identifier}--------------${value}`);
-            } else {
-                logger.error(`${identifier}--------------${value}`);
-            }
-            return
+            logger.error(`${service}--------------${identifier}--------------${value}`);
         }
+        return
     } catch (error) {
         return
     }
@@ -226,5 +235,3 @@ export function sleep(ms: number) {
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
 };
-
-export let uuid = uuidv1();

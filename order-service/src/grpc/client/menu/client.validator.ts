@@ -6,7 +6,7 @@ import { consolelog } from "../../../utils"
 export class MenuServiceValidator {
     constructor() {
     }
-    async  fetchMenu(data: IMenuServiceRequest.IFetchMenuData) {
+    async  fetchMenu(data: IMenuGrpcRequest.IFetchMenuData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

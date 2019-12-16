@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
-import { cryptData, consolelog } from '../../utils'
+import { formatUserData, consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../databases/aerospike'
 
 export class GuestController {
 
@@ -9,17 +10,43 @@ export class GuestController {
     /**
      * @method POST
      * */
-    async guestLogin(payload: IGuestRequest.IGuestLogin) {
+    async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
+            let queryArg: IAerospike.Query = {
+                equal: {
+                    bin: "sessionId",
+                    value: headers.deviceid
+                },
+                set: 'user',
+                background: false,
+            }
+            let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+            let user: IUserRequest.IUserData
+            if (checkUser && checkUser.length > 0) {
+                user = checkUser[0]
+            } else {
+                let userCreate = {
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    isGuest: 1,
+                }
+                let sessionCreate: IUserRequest.ISessionUpdate = {
+                    otp: 0,
+                    otpExpAt: 0,
+                    otpVerified: 1,
+                    isLogin: 1
+                }
+                user = await ENTITY.UserE.createUser(headers, userCreate, sessionCreate)
+            }
+
             let tokens = await ENTITY.UserE.getTokens(
-                payload.deviceid,
-                payload.devicetype,
-                [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH]
+                headers.deviceid,
+                headers.devicetype,
+                [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
+                user.id
             )
-            const cartId = await cryptData(payload.deviceid)
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: { cartId } }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid) }
         } catch (err) {
-            consolelog("guestLogin", err, false)
+            consolelog(process.cwd(),"guestLogin", err, false)
             return Promise.reject(err)
         }
     }

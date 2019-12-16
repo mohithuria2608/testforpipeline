@@ -17,6 +17,10 @@ export let sendError = function (error) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
         }
+        else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE) {
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.type
+        }
         else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
             customError.type = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.type
@@ -151,7 +155,7 @@ export let formatUserData = function (userObj: Object) {
 
         return userObj
     } catch (error) {
-        consolelog('formatUserData', error, false)
+        consolelog(process.cwd(),'formatUserData', error, false)
         return Promise.reject(error)
     }
 }
@@ -165,7 +169,7 @@ export const getBucket = (id) => {
     id = id.toString()
     let bucket = id.replace(/\D/g, "")               //regex to replace alphabets from stringified object id
     bucket = bucket.substr(0, 3)
-    consolelog('bucket', bucket, true)
+    consolelog(process.cwd(),'bucket', bucket, true)
     return bucket
 }
 
@@ -181,27 +185,17 @@ export let arrayToObject = function (array: any) {
 
 }
 
-export let consolelog = function (identifier: string, value: any, isSuccess: boolean, logFunction?: string) {
+export let consolelog = function (cwd: string, identifier: string, value: any, isSuccess: boolean, logFunction?: string) {
     try {
+        const service = cwd.split('/')[cwd.split('/').length - 1]
         if (!logFunction)
             logFunction = 'info'
-        if (isArray(value)) {
-            value.forEach((obj, i) => {
-                if (isSuccess) {
-                    logger[logFunction](`${identifier}--------------${i}--------------${obj}`);
-                } else {
-                    logger.error(`${identifier}--------------${i}--------------${obj}`);
-                }
-            })
-            return
+        if (isSuccess) {
+            logger[logFunction](`${service}--------------${identifier}--------------${value}`);
         } else {
-            if (isSuccess) {
-                logger[logFunction](`${identifier}--------------${value}`);
-            } else {
-                logger.error(`${identifier}--------------${value}`);
-            }
-            return
+            logger.error(`${service}--------------${identifier}--------------${value}`);
         }
+        return
     } catch (error) {
         return
     }

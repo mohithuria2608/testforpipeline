@@ -1,11 +1,11 @@
-import { Aerospike } from "../databases/aerospike";
+import * as Constant from '../constant'
 import { consolelog } from '../utils'
+import { authService } from '../grpc/client'
 
 export class BaseEntity {
-    public DAOManager = Aerospike;
-    protected modelName: ModelNames;
-    constructor(modelName?) {
-        this.modelName = modelName
+    protected set: SetNames;
+    constructor(set?) {
+        this.set = set
     }
 
 }

@@ -16,17 +16,6 @@ export let DATABASE = {
         ADMIN: "ADMIN",
     },
 
-    DB_CHANGE_TYPE: {
-        INSERT: "insert",
-        DELETE: "delete",
-        REPLACE: "replace",
-        UPDATE: "update",
-        DROP: "drop",
-        RENAME: "rename",
-        DROP_DATABASE: "dropDatabase",
-        INVALIDATE: "invalidate",
-    },
-
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,
@@ -95,7 +84,6 @@ export enum KAFKA_TOPIC {
 
 export enum MIDDLEWARE {
     API_AUTH = "api_auth",
-    REFRESH_AUTH = "refresh_auth",
     ACTIVITY_LOG = "activity_log"
 }
 
@@ -415,9 +403,36 @@ export let STATUS_MSG = {
                 details: `${type} : ${message}`
             }
         }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
+        }
     }
 };
 
+export let CMS = {
+    AUTH_CRED: {
+        "username": "shashi.bhushan@appinventiv.com",
+        "password": "shashi@123"
+    },
+    GLOBAL_VAR: {
+        AUTH_TOKEN: 'cms-auth-token',
+        AUTH_API_HIT: 'cms-auth-hit-time'
+    },
+    END_POINTS: {
+        AUTH: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/integration/customer/token",
+        },
+        CREATE_CUSTOMER: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/customers/",
+        }
+    },
+
+}
 export let SERVER = {
     ENV: {
         DEV: "development",
@@ -465,5 +480,6 @@ export let SERVER = {
     },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    CMS_AUTH_EXP: (10 * 60 * 1000),
     DISPLAY_COLOR: true
 }

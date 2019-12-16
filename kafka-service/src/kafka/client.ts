@@ -10,7 +10,7 @@ class KafkaClientClass {
         this.kafkaClient = new kafka.KafkaClient(config.get("kafka.url"))
 
         this.kafkaClient.on('error', (err) => {
-            consolelog('Kafka client error in connection', err, false)
+            consolelog(process.cwd(),'Kafka client error in connection', err, false)
         });
     }
 

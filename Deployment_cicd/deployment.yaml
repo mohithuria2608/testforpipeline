@@ -38,7 +38,6 @@ spec:
     targetPort: 4000
 
 ---
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -212,3 +211,218 @@ spec:
   - protocol: TCP
     port: 50054
     targetPort: 50054
+    
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: deeplink-service
+  labels:
+    app: deeplink-service
+spec:
+  selector:
+    matchLabels:
+      app: deeplink-service
+  template:
+    metadata:
+      labels:
+        app: deeplink-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: deeplink-service
+        image: {{Deeplink_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4005
+          name: api
+        - containerPort: 50056
+          name: grpc-deeplink
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deeplink-service
+spec:
+  selector:
+    app: deeplink-service
+  ports:
+  - protocol: TCP
+    port: 4005
+    targetPort: 4005
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-deeplink
+spec:
+  type: LoadBalancer
+  selector:
+    app: deeplink-service
+  ports:
+  - protocol: TCP
+    port: 50056
+    targetPort: 50056
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: kafka-service
+  labels:
+    app: kafka-service
+spec:
+  selector:
+    matchLabels:
+      app: kafka-service
+  template:
+    metadata:
+      labels:
+        app: kafka-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: kafka-service
+        image: {{Kafka_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4006
+          name: api
+        - containerPort: 50057
+          name: grpc-kafka
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-service
+spec:
+  selector:
+    app: kafka-service
+  ports:
+  - protocol: TCP
+    port: 4006
+    targetPort: 4006
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-kafka
+spec:
+  type: LoadBalancer
+  selector:
+    app: kafka-service
+  ports:
+  - protocol: TCP
+    port: 50057
+    targetPort: 50057
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: sync-service
+  labels:
+    app: sync-service
+spec:
+  selector:
+    matchLabels:
+      app: sync-service
+  template:
+    metadata:
+      labels:
+        app: sync-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: sync-service
+        image: {{Sync_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4004
+          name: api
+        - containerPort: 50055
+          name: grpc-sync
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sync-service
+spec:
+  selector:
+    app: sync-service
+  ports:
+  - protocol: TCP
+    port: 4004
+    targetPort: 4004
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-sync
+spec:
+  type: LoadBalancer
+  selector:
+    app: sync-service
+  ports:
+  - protocol: TCP
+    port: 50055
+    targetPort: 50055
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: location-service
+  labels:
+    app: location-service
+spec:
+  selector:
+    matchLabels:
+      app: location-service
+  template:
+    metadata:
+      labels:
+        app: location-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: location-service
+        image: {{Location_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4007
+          name: api
+        - containerPort: 50058
+          name: grpc-location
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: location-service
+spec:
+  selector:
+    app: location-service
+  ports:
+  - protocol: TCP
+    port: 4007
+    targetPort: 4007
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-location
+spec:
+  type: LoadBalancer
+  selector:
+    app: location-service
+  ports:
+  - protocol: TCP
+    port: 50058
+    targetPort: 50058

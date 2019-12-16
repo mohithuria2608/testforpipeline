@@ -1,0 +1,13 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+
+service UserService {
+    rpc UpdateCmsId (IUpdateUserInfo) returns (ISuccess) {}
+}
+
+message IUpdateUserInfo {
+    required string aerospikeId = 1;
+    required string id = 2;
+}
+
+message ISuccess { }

@@ -28,30 +28,16 @@ log
 
 
 #proto directories in each service
-auth-service/proto
-users-service/proto
-menu-service/proto
-order-service/proto
-deeplink-service/proto
-sync-service/proto
-kafka-service/proto
+*-service/proto
 
 #config directories in each service
-auth-service/config
-auth-service/config
-users-service/config
-menu-service/config
-order-service/config
-deeplink-service/config
-sync-service/config
-kafka-service/config
+*-service/config
 
 #model directories in each service
-auth-service/model
-auth-service/model
-users-service/model
-menu-service/model
-order-service/model
-deeplink-service/model
-sync-service/model
-kafka-service/model
+*-service/model
+
+#lua directories in each service
+*-service/lua
+
+#constant directories in each service
+*-service/constant

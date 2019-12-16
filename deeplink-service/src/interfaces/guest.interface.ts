@@ -1,5 +1,5 @@
 declare namespace IGuestRequest {
 
-    interface IGuestLogin extends ICommonRequest.IHeaders {
+    interface IGuestLogin {
     }
 }

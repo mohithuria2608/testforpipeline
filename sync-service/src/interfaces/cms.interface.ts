@@ -1,6 +1,6 @@
 declare namespace ICmsRequest {
 
-    interface ICmsAuth extends ICommonRequest.IHeaders {
+    interface ICmsAuth {
         username: string,
         password: string
     }

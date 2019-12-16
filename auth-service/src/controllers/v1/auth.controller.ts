@@ -6,22 +6,22 @@ export class AuthController {
 
     constructor() { }
 
-    async createToken(payload: IAuthServiceRequest.ICreateTokenData) {
+    async createToken(payload: IAuthGrpcRequest.ICreateTokenData) {
         try {
             let token: string = await tokenManager.setToken(payload)
             return { token }
         } catch (err) {
-            consolelog("createToken", JSON.stringify(err), false)
+            consolelog(process.cwd(),"AuthController : createToken", JSON.stringify(err), false)
             return Promise.reject(err)
         }
     }
 
-    async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj) {
+    async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj) {
         try {
             let tokenData: ICommonRequest.AuthorizationObj = await tokenManager.verifyToken(payload.token)
             return tokenData
         } catch (err) {
-            consolelog("verifyToken", err, false)
+            consolelog(process.cwd(),"AuthController : verifyToken", JSON.stringify(err), false)
             return Promise.reject(err)
         }
     }

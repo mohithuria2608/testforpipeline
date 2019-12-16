@@ -16,17 +16,6 @@ export let DATABASE = {
         ADMIN: "ADMIN",
     },
 
-    DB_CHANGE_TYPE: {
-        INSERT: "insert",
-        DELETE: "delete",
-        REPLACE: "replace",
-        UPDATE: "update",
-        DROP: "drop",
-        RENAME: "rename",
-        DROP_DATABASE: "dropDatabase",
-        INVALIDATE: "invalidate",
-    },
-
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,
@@ -420,6 +409,12 @@ export let STATUS_MSG = {
                 code: parseInt(code),
                 details: `${type} : ${message}`
             }
+        }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
         }
     }
 };

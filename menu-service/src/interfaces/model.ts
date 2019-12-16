@@ -1,3 +1,3 @@
-declare type ModelNames =
-    'User'
+declare type SetNames =
+    'menu'
 

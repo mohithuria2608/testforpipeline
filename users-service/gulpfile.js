@@ -7,12 +7,16 @@ const tslint = require("gulp-tslint");
 const runSequence = require('run-sequence');
 const spawn = require('child_process').spawn;
 
+const NODE_ENV = process.NODE_ENV ? process.NODE_ENV : "default"
 const outputFolder = "dist";
 const logFolder = "log";
 const protoFolder = "proto";
+const configFolder = "config";
+const luaFolder = "lua";
+const constantFolder = "constant";
 
 gulp.task("clean", function () {
-	return del([outputFolder, logFolder, protoFolder]);
+	return del([outputFolder, logFolder, protoFolder, configFolder, luaFolder, constantFolder]);
 });
 
 
@@ -42,8 +46,20 @@ gulp.task("copyProto", function () {
 	return gulp.src(['../proto/**/*']).pipe(gulp.dest("./proto"));
 });
 
+gulp.task("copyModel", function () {
+	return gulp.src(['../model/**/*']).pipe(gulp.dest("./model"));
+});
+
 gulp.task("copyConfig", function () {
 	return gulp.src(['../config/**/*']).pipe(gulp.dest("./config"));
+});
+
+gulp.task("copyLua", function () {
+	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
+});
+
+gulp.task("copyConstant", function () {
+	return gulp.src(['../constant/**/*']).pipe(gulp.dest("./constant"));
 });
 
 gulp.task('server', function () {
@@ -52,10 +68,10 @@ gulp.task('server', function () {
 			name: 'user',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('user pm2 started');
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
 			pm2.streamLogs('user', 0);
 		});
 	});
@@ -70,4 +86,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig",  "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "copyConstant", "server"));

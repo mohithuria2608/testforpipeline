@@ -14,8 +14,7 @@ declare namespace ICommonRequest {
         deviceid: string,
         devicetype: string,
         tokenType: string,
-        id?: string,
-        userData?: any,
+        id: string,
         authCred?: IAuthCred
     }
 

@@ -10,7 +10,12 @@ const spawn = require('child_process').spawn;
 const outputFolder = "dist";
 const logFolder = "log";
 const protoFolder = "proto";
+const configFolder = "config";
+const luaFolder = "lua";
 
+gulp.task("clean", function () {
+	return del([outputFolder, logFolder, protoFolder, configFolder, luaFolder]);
+});
 gulp.task("clean", function () {
 	return del([outputFolder, logFolder, protoFolder]);
 });
@@ -50,16 +55,20 @@ gulp.task("copyConfig", function () {
 	return gulp.src(['../config/**/*']).pipe(gulp.dest("./config"));
 });
 
+gulp.task("copyLua", function () {
+	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
+});
+
 gulp.task('server', function () {
 	pm2.connect(true, function () {
 		pm2.start({
 			name: 'menu',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
-			console.log('menu pm2 started');
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
 			pm2.streamLogs('menu', 0);
 		});
 	});
@@ -74,4 +83,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "server"));
+gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "server"));

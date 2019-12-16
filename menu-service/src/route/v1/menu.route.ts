@@ -4,22 +4,14 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { menuController } from '../../controllers';
-import * as JOI from './common.route.validator';
+import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
-        .get('/',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
-            validate({
-                headers: JOI.JOI_HEADERS,
-            }),
+        .post('/',
             async (ctx) => {
                 try {
-                    let payload: IMenuRequest.IMenuFetch = { ...ctx.request.header };
-                    let res = await menuController.fetchMenu(payload);
+                    let res = await menuController.postMenu();
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
@@ -28,18 +20,22 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .get('/suggestion',
-            // ...getMiddleware([
-            //     Constant.MIDDLEWARE.AUTH,
-            //     Constant.MIDDLEWARE.ACTIVITY_LOG
-            // ]),
+        .get('/',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
             validate({
                 headers: JOI.JOI_HEADERS,
+                query: {
+                    menuId: Joi.number(),
+                }
             }),
             async (ctx) => {
                 try {
-                    let payload: IMenuRequest.IMenuFetch = { ...ctx.request.header };
-                    let res = await menuController.fetchSuggestion(payload);
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IMenuRequest.IFetchMenu = ctx.request.query;
+                    let res = await menuController.fetchMenu(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

@@ -8,6 +8,10 @@ template=`cat "./Deployment_cicd/deployment.yaml" | sed "s@{{Users_image}}@$User
 template=`echo "$template" | sed "s@{{Auth_image}}@$Auth_image@g"`
 template=`echo "$template" | sed "s@{{Menu_image}}@$Menu_image@g"`
 template=`echo "$template" | sed "s@{{Order_image}}@$Order_image@g"`
+template=`echo "$template" | sed "s@{{Deeplink_image}}@$Deeplink_image@g"`
+template=`echo "$template" | sed "s@{{Kafka_image}}@$Kafka_image@g"`
+template=`echo "$template" | sed "s@{{Sync_image}}@$Sync_image@g"`
+template=`echo "$template" | sed "s@{{Location_image}}@$Location_image@g"`
 
 # apply the yml with the substituted value
 echo "$template" | kubectl apply -f -

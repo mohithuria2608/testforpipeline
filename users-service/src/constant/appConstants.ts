@@ -1,4 +1,76 @@
 import * as config from 'config'
+// import { Constant } from '../app'
+// export const Common = Constant
+
+export let UDF = {
+    USER: {
+        check_phone_exist: "check_phone_exist",
+        check_social_key: "check_social_key"
+    }
+}
+export enum KAFKA_TOPIC {
+    CREATE_TOKEN = "create_token"
+}
+
+export enum MIDDLEWARE {
+    API_AUTH = "api_auth",
+    AUTH = "auth",
+    ACTIVITY_LOG = "activity_log"
+}
+
+
+
+export let SERVER = {
+    ENV: {
+        DEV: "development",
+        QA: "testing",
+        STAG: "staging",
+        PROD: "production"
+    },
+    APP_INFO: {
+        APP_NAME: "App",
+        FB_LINK: "",
+        TWITTER_LINK: "",
+        INSTA_LINK: "",
+        APP_ADDRESS: ""
+    },
+    DEFAULT_USER_NAME: 'App User',
+    APP_URL: config.get("server.user.url"),
+    LINKS: {
+        TERMS_COND: '',
+        PRIVACY: config.get("server.user.url") + "/privacy_policy/",
+    },
+    OTP_TEXT: (otp) => {
+        return `Your App code is ${otp}. Welcome to the community!`
+    },
+    TEMPLATE_PATH: process.cwd() + '/views/',
+    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
+    INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
+    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
+    BY_PASS_OTP: 1212,
+    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
+    LISTNG_LIMIT: 10,
+    BULK_LIMIT: 2000,
+    THUMB_DIMENSION: {
+        DEFAULT: {
+            WIDTH: 10,
+            HEIGHT: 10,
+        },
+        PROFILE_PIC: {
+            WIDTH: 200,
+            HEIGHT: 200,
+        },
+        GIF: {
+            WIDTH: 100,
+            HEIGHT: 100,
+        },
+    },
+    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    DISPLAY_COLOR: true
+}
+
+
 
 export let DATABASE = {
     LANGUAGE: {
@@ -10,21 +82,15 @@ export let DATABASE = {
         UAE: 'UAE',
     },
 
+    CCODE: {
+        UAE: '+971',
+
+    },
+
     ENTITY: {
         APP: "APP",
         USER: "USER",
         ADMIN: "ADMIN",
-    },
-
-    DB_CHANGE_TYPE: {
-        INSERT: "insert",
-        DELETE: "delete",
-        REPLACE: "replace",
-        UPDATE: "update",
-        DROP: "drop",
-        RENAME: "rename",
-        DROP_DATABASE: "dropDatabase",
-        INVALIDATE: "invalidate",
     },
 
     STATUS: {
@@ -43,6 +109,7 @@ export let DATABASE = {
     },
 
     TYPE: {
+
         TOKEN: {
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
@@ -53,6 +120,11 @@ export let DATABASE = {
             IOS: 'IOS',
             ANDROID: 'ANDROID',
             WEB: 'WEB'
+        },
+
+        SOCIAL_PLATFORM: {
+            GOOGLE: "GOOGLE",
+            FB: "FB"
         },
 
         VERSION_UPDATE: {
@@ -88,28 +160,73 @@ export let DATABASE = {
         PROFILE_STEP: {
             INIT: 0,
             FIRST: 1,
+        },
+
+        TAG: {
+            HOME: "HOME",
+            OFFICE: "OFFICE",
+            HOTEl: "HOTEl",
+            OTHER: "OTHER"
         }
     }
 };
 
-export let UDF = {
-    USER: {
-        check_user_exist: "check_user_exist"
-    }
-}
-export enum KAFKA_TOPIC {
-    CREATE_TOKEN = "create_token"
-}
-
-export enum MIDDLEWARE {
-    API_AUTH = "api_auth",
-    REFRESH_AUTH = "refresh_auth",
-    ACTIVITY_LOG = "activity_log"
-}
-
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            SERVICE_UNAVAILABLE: {
+                statusCode: 400,
+                type: 'SERVICE_UNAVAILABLE',
+                message: "Sorry, we don't, deliver at this location"
+            },
+
+            PROFILE_SETUP_ALLREADY_COMPLETE: {
+                statusCode: 400,
+                type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
+                message: 'Profile setup is already complete'
+            },
+
+            OTP_SESSION_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_SESSION_EXPIRED',
+                message: 'Otp session has expired'
+            },
+
+            OTP_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_EXPIRED',
+                message: 'Otp entered has expired'
+            },
+
+            INVALID_OTP: {
+                statusCode: 400,
+                type: 'INVALID_OTP',
+                message: 'Invalid otp entered'
+            },
+
+            PHONE_NO_REQ: {
+                statusCode: 400,
+                message: 'Phone number is required',
+                type: 'PHONE_NO_REQ'
+            },
+
+            EMAIL_REQ: {
+                statusCode: 400,
+                message: 'Email is required',
+                type: 'EMAIL_REQ'
+            },
+
+            NAME_REQ: {
+                statusCode: 400,
+                message: 'Name is required',
+                type: 'NAME_REQ'
+            },
+
+            SOCIAL_KEY_REQ: {
+                statusCode: 400,
+                message: 'Social key is required',
+                type: 'SOCIAL_KEY_REQ'
+            },
 
             CANNOT_PERFORM_UPDATE_OPERATION: {
                 statusCode: 400,
@@ -151,12 +268,6 @@ export let STATUS_MSG = {
                 statusCode: 400,
                 type: 'INVALID_EMAIL_TOKEN',
                 message: "Wrong email token entered"
-            },
-
-            INVALID_OTP: {
-                statusCode: 400,
-                type: 'INVALID_OTP',
-                message: "Invalid OTP"
             },
 
             APP_VERSION_ERROR: {
@@ -229,24 +340,6 @@ export let STATUS_MSG = {
             }
         },
         E403: {
-            OTP_SESSION_EXPIRED: {
-                statusCode: 403,
-                type: 'OTP_SESSION_EXPIRED',
-                message: 'Otp session has expired'
-            },
-
-            OTP_EXPIRED: {
-                statusCode: 403,
-                type: 'OTP_EXPIRED',
-                message: 'Otp entered has expired'
-            },
-
-            INVALID_OTP: {
-                statusCode: 403,
-                type: 'INVALID_OTP',
-                message: 'Invalid otp entered'
-            },
-
             INVALID_LOGIN: {
                 statusCode: 403,
                 type: 'INVALID_LOGIN',
@@ -300,7 +393,6 @@ export let STATUS_MSG = {
     },
     SUCCESS: {
         S200: {
-
             OTP_SENT: {
                 statusCode: 200,
                 type: 'OTP_SENT',
@@ -353,6 +445,11 @@ export let STATUS_MSG = {
                 statusCode: 200,
                 message: 'Blocked Successfully',
                 type: 'BLOCKED'
+            },
+            SOCIAL_LOGIN: {
+                statusCode: 200,
+                message: 'Logged In Successfully',
+                type: 'SOCIAL_LOGIN'
             },
 
             LOGIN: {
@@ -440,54 +537,23 @@ export let STATUS_MSG = {
                 details: `${type} : ${message}`
             }
         }
+    },
+    FRONTEND_ERROR: {
+        VALIDATION: {
+            INVALID_PHONE_NO: "Invalid phone number",
+            INVALID_EMAIL: "Please enter email address in a valid format",
+            INVALID_OTP: "Invalid otp",
+            INAVLID_NAME: "Please enter a valid name",
+            EMPTY_PHONE_NO: "Empty phone number",
+            EMPTY_EMAIL: "Empty email",
+            EMPTY_OTP: "Empty otp",
+            EMPTY_NAME: "Empty name",
+        }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
+        }
     }
 };
-
-export let SERVER = {
-    ENV: {
-        DEV: "development",
-        QA: "testing",
-        STAG: "staging",
-        PROD: "production"
-    },
-    APP_INFO: {
-        APP_NAME: "App",
-        FB_LINK: "",
-        TWITTER_LINK: "",
-        INSTA_LINK: "",
-        APP_ADDRESS: ""
-    },
-    DEFAULT_USER_NAME: 'App User',
-    APP_URL: config.get("server.user.url"),
-    LINKS: {
-        TERMS_COND: '',
-        PRIVACY: config.get("server.user.url") + "/privacy_policy/",
-    },
-    OTP_TEXT: (otp) => {
-        return `Your App code is ${otp}. Welcome to the community!`
-    },
-    TEMPLATE_PATH: process.cwd() + '/views/',
-    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
-    BY_PASS_OTP: 1212,
-    BY_PASS_OTP_2: 1313,
-    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
-    LISTNG_LIMIT: 10,
-    BULK_LIMIT: 2000,
-    THUMB_DIMENSION: {
-        DEFAULT: {
-            WIDTH: 10,
-            HEIGHT: 10,
-        },
-        PROFILE_PIC: {
-            WIDTH: 200,
-            HEIGHT: 200,
-        },
-        GIF: {
-            WIDTH: 100,
-            HEIGHT: 100,
-        },
-    },
-    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    DISPLAY_COLOR: true
-}

@@ -13,7 +13,7 @@ export class SyncMenuEntity extends BaseEntity {
         try {
             return {}
         } catch (err) {
-            consolelog("syncMenu", err, false)
+            consolelog(process.cwd(),"syncMenu", err, false)
             return Promise.reject(err)
         }
     }

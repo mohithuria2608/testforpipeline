@@ -1,3 +1,3 @@
-declare type ModelNames =
+declare type SetNames =
     'user'
 

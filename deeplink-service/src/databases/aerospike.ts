@@ -4,177 +4,402 @@
  * @created 2019-11-04 16:58:03
 */
 
+import * as config from "config"
+import * as Constant from '../constant'
 const aerospike = require('aerospike');
+const path = require('path');
+import * as ENTITY from '../entity'
+import { consolelog } from "../utils";
 
 class AerospikeClass {
 
-    private client: any;
-    private dbName: string;
-
-    constructor(dbName: string) {
-        this.dbName = dbName;
+    public client: any;
+    public namespace: string;
+    public cdt = aerospike.cdt;
+    public maps = aerospike.maps;
+    public lists = aerospike.lists;
+    public GeoJSON = aerospike.GeoJSON;
+    constructor(namespace: string) {
+        this.namespace = namespace;
     }
 
     /** initializes client instance */
     async init() {
-        if (!this.client) {
+        return new Promise(async (resolve, reject) => {
+            if (!this.client) {
+                try {
+                    const defaultPolicy = {
+                        totalTimeout: 1000
+                    }
+                    let aerospikeConfig = {
+                        //@todo : check for pem file for auth
+                        hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
+                        username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
+                        password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
+                        modlua: {
+                            userPath: path.normalize(path.join(__dirname, '../..', 'lua'))
+                        },
+                        policies: {
+                            apply: defaultPolicy,
+                            batch: defaultPolicy,
+                            info: defaultPolicy,
+                            operate: defaultPolicy,
+                            query: defaultPolicy,
+                            read: defaultPolicy,
+                            remove: defaultPolicy,
+                            scan: defaultPolicy,
+                            write: defaultPolicy,
+                        },
+                    }
+                    this.client = await aerospike.connect(aerospikeConfig);
+                    if (this.client) {
+                        consolelog(process.cwd(), "Aerospike Client Connected", "", true)
+                        resolve({})
+                    }
+                } catch (err) {
+                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", err, false)
+                    reject(err)
+                }
+            } else reject(Error('Client already initialized'))
+        })
+    }
+
+    async bootstrapIndex(sindex: IAerospike.CreateIndex[]) {
+        const self = this
+        return new Promise((resolve, reject) => {
             try {
-                this.client = await aerospike.connect({
-                    hosts: 'localhost:3000'
-                });
                 if (this.client) {
-                    console.log("> Aerospike Client Connected");
+                    sindex.forEach(ind => {
+                        self.indexCreate(ind)
+                    })
+                    resolve({})
                 }
-            } catch (err) { console.log("ERROR IN AEROSPIKE -> ", err); }
-        } else throw Error('Client already initialized');
+                else reject('Client not initialized');
+            } catch (error) {
+                consolelog(process.cwd(), "bootstrap index error ", error, false)
+                reject(error)
+            }
+        })
     }
 
-    /** registers user defined functions on aerospike client */
-    async registerUFD(scriptPath: string) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                this.client.udfRegister(scriptPath, function (err) {
-                    if (err) reject(err);
-                    else console.log("UFD registered successfully");
-                })
-            } else reject('Client not initialized');
-        });
+    private buildMeta(argv: IAerospike.Put) {
+        const meta = {}
+        if (argv.ttl) {
+            meta['ttl'] = argv.ttl
+        }
+        return meta
     }
 
-    /**
-     * insert into database
-     * @param keyData - key object data
-     * @param payload - payload data
-     */
-    async insert(key: any, payload: any, options?: any) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                let metaOption: any = {}, policy = {};
-                if (options.ttl) metaOption.ttl = options.ttl;
-                if (options.replacePolicy) {
-                    policy = new aerospike.WritePolicy({ exists: aerospike.policy.exists.CREATE_OR_REPLACE });
-                }
-                this.client.put(key, payload, metaOption, policy, function (err) {
-                    if (err) { console.log("INSERT ERROR -> ", err); reject(err); }
-                    else resolve(true);
-                });
-            } else reject('Client not initialized');
-        });
+    private buildPolicy(argv: IAerospike.Put) {
+        const policy = {}
+        if (argv.create) {
+            policy['exists'] = aerospike.policy.exists.CREATE
+        }
+        if (argv.replace) {
+            policy['exists'] = aerospike.policy.exists.REPLACE
+        }
+        if (argv.update) {
+            policy['exists'] = aerospike.policy.exists.UPDATE
+        }
+        return policy
     }
 
-    /**
-     * reads from the database
-     * @param keyData - key object data
-     */
-    async read(key: any) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                this.client.get(key, function (err, data) {
-                    if (err) { console.log("READ ERROR -> ", err); reject(err); }
-                    else resolve(data);
-                });
-            } else reject('Client not initialized');
-        });
+    private selectBins(query, argv: IAerospike.Query) {
+        if (argv.bins) {
+            query.select(argv.bins)
+        }
+        return query
     }
 
-    /**
-     * scans a namespace
-     * @param keyData - key object data
-     */
-    async scan(set: string) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                let scan = this.client.scan(this.dbName, set, { concurrent: true, nobins: false }),
-                    stream = scan.foreach(),
-                    tempData: any = [];
-                stream.on('data', function (record) { tempData.push(record); });
-                stream.on('error', function (error) { reject(error); });
-                stream.on('end', function () {
-                    let records: any = [];
-                    for (let item of tempData) {
-                        records.push(item.bins);
+    private applyFilter(query, argv: IAerospike.Query) {
+        if (argv.equal) {
+            const filter = argv.equal
+            const bin = filter.bin
+            const value = filter.value
+            query.where(aerospike.filter.equal(bin, value))
+        } else if (argv.range) {
+            const filter = argv.range
+            const bin = filter.bin
+            const start = filter.start
+            const end = filter.end
+            query.where(aerospike.filter.range(bin, start, end))
+        } else if (argv.geoWithinRadius) {
+            const filter = argv.geoWithinRadius
+            const bin = filter.bin
+            const lng = filter.lng
+            const lat = filter.lat
+            const radius = filter.radius
+            query.where(aerospike.filter.geoWithinRadius(bin, lng, lat, radius))
+        } else if (argv.geoWithin) {
+            const filter = argv.geoWithin
+            const bin = filter.bin
+            const point = this.GeoJSON.Point(filter.lng, filter.lat)
+            query.where(aerospike.filter.geoWithinGeoJSONRegion(bin, point))
+        }
+        return query
+    }
+
+    async  indexCreate(argv: IAerospike.CreateIndex) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const options = {
+                        ns: this.namespace,
+                        set: argv.set,
+                        bin: argv.bin,
+                        index: argv.index
                     }
-                    resolve(records);
-                });
-            } else reject('Client not initialized');
-        });
-    }
 
-    /**
-     * deletes record from database
-     * @param key - key data
-     */
-    async remove(key: any) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                this.client.remove(key, function (err) {
-                    if (err) { console.log("DELETE ERROR -> ", err); reject(err); }
-                    else resolve(true);
-                });
-
-            } else reject('Client not initialized');
-        });
-    }
-
-
-    /**
-     * truncates a set
-     */
-    async truncate(set: string) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                this.client.truncate(this.dbName, set, function (err) {
-                    if (err) { console.log("TRUNCATE ERROR -> ", err); reject(err); }
-                    else resolve(true);
-                });
-            } else reject('Client not initialized');
-        });
-    }
-
-    /**
-     * creates an index
-     */
-    async createIndex(set, bin, index) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                this.client.createIntegerIndex({ ns: this.dbName, set, bin, index }, function (err, job) {
-                    if (err) { console.log("INDEX ERROR -> ", err); reject(err); }
-                    else {
-                        // wait for index creation to complete
-                        let pollInterval = 100;
-                        job.waitUntilDone(pollInterval, (error) => {
-                            if (error) { console.log("INDEX ERROR -> ", error); reject(error); }
-                            console.log('Secondary index %s on %s was created successfully', index, bin);
-                            resolve();
-                        });
+                    let type = argv.type.toUpperCase()
+                    switch (type) {
+                        case 'NUMERIC':
+                            options['datatype'] = aerospike.indexDataType.NUMERIC
+                            break
+                        case 'STRING':
+                            type = 'STRING'
+                            options['datatype'] = aerospike.indexDataType.STRING
+                            break
+                        case 'GEO2DSPHERE':
+                            type = 'GEO2DSPHERE'
+                            options['datatype'] = aerospike.indexDataType.GEO2DSPHERE
+                            break
+                        default:
+                            throw new Error(`Unsupported index type: ${argv.type}`)
                     }
-                });
-            } else reject('Client not initialized');
+
+                    await this.client.createIndex(options)
+                    consolelog(process.cwd(), `Creating ${type} index "${options.index}" on bin "${options.bin}"`, "", false)
+                    resolve({})
+                } else reject('Client not initialized');
+            } catch (error) {
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DUPLICATE_INDEX)
+                    resolve({})
+                reject(error)
+            }
+        })
+
+    }
+
+    async  indexRemove(argv) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    await this.client.indexRemove(this.namespace, argv.index)
+                    consolelog(process.cwd(), `Removing index "${argv.index}"`, "", false)
+                    resolve()
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async put(argv: IAerospike.Put): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    const bins = argv.bins
+                    const meta = this.buildMeta(argv)
+                    const policy = this.buildPolicy(argv)
+                    let res = await this.client.put(key, bins, meta, policy)
+                    resolve(res)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async remove(argv: IAerospike.Remove) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    await this.client.remove(key)
+                    consolelog(process.cwd(), 'Removed record:', key, false)
+                    resolve()
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async append(argv: IAerospike.Append): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    const bins = argv.bins
+                    const meta = this.buildMeta(argv)
+                    const policy = this.buildPolicy(argv)
+                    consolelog(process.cwd(), 'append record:', { key, bins, meta, policy }, false)
+                    let res = await this.client.append(key, bins)
+                    resolve(res)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async  get(argv: IAerospike.Get): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let record
+                    if (argv.bins) {
+                        record = await this.client.select(key, argv.bins)
+                    } else {
+                        record = await this.client.get(key)
+                    }
+                    consolelog(process.cwd(), 'get record:', { record }, false)
+                    resolve((record && record.bins) ? record.bins : record)
+                } else reject('Client not initialized');
+            } catch (error) {
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DATA_NOT_FOUND)
+                    resolve({})
+                reject(error)
+            }
+        })
+    }
+
+    async scan(set: string): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false })
+                    resolve(await this.queryForeach(scan))
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
         });
     }
 
-    /**
-     * removes an index
-     */
-    async removeIndex(indexName: string) {
-        return new Promise((resolve, reject) => {
-            if (this.client) {
-                this.client.indexRemove(this.dbName, indexName, function (err, job) {
-                    if (err) { console.log("INDEX Remove ERROR -> ", err); reject(err); }
-                    else resolve();
-                });
-            } else reject('Client not initialized');
-        });
+    async  query(argv: IAerospike.Query): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const query = this.client.query(this.namespace, argv.set)
+                    this.selectBins(query, argv)
+                    this.applyFilter(query, argv)
+
+                    let res
+                    if (argv.udf && argv.background) {
+                        res = await this.queryBackground(query, argv.udf)
+                    } else if (argv.udf) {
+                        res = await this.queryApply(query, argv.udf)
+                    } else {
+                        res = await this.queryForeach(query)
+                    }
+                    resolve(res)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
 
-    /**
-     * generates a new key
-     * @param setName - name of database set
-     * @param keyName - the primary key name
-     */
-    generateKey(setName: string, keyName: any) {
-        return new aerospike.Key(this.dbName, setName, keyName);
+    async  listOperations(argv: IAerospike.ListOperation): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let operations = [
+                        this.lists.append(argv.bin, argv.bins)
+                    ]
+                    let res = await this.client.operate(key, operations)
+                    resolve(res)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    private async queryForeach(query) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    let stream = query.foreach(),
+                        tempData: any = [];
+                    stream.on('data', function (record) { tempData.push(record); });
+                    stream.on('error', function (error) { reject(error); });
+                    stream.on('end', function () {
+                        let records: any = [];
+                        for (let item of tempData) {
+                            records.push(item.bins);
+                        }
+                        resolve(records);
+                    });
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+
+    private async  queryBackground(query, udf) {
+        const job = await query.background(udf.module, udf.func, udf.args)
+        consolelog(process.cwd(), 'Running query in background - Job ID:', job.jobID, false)
+        return job
+    }
+
+    private async  queryApply(query, udf: IAerospike.Udf) {
+        const result = await query.apply(udf.module, udf.func, udf.args)
+        consolelog(process.cwd(), 'Query result:', result, false)
+        return result
+    }
+
+    async  udfRegister(argv) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const module = argv.module
+                    const job = await this.client.udfRegister(module)
+                    await job.waitUntilDone()
+                    consolelog(process.cwd(), 'UDF module registered successfully', "", false)
+                    resolve(job)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async  udfRemove(argv) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const module = path.basename(argv.module)
+                    const job = await this.client.udfRemove(module)
+                    await job.waitUntilDone()
+                    consolelog(process.cwd(), 'UDF module removed successfully', "", false)
+                    resolve(job)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async operationsOnMap(argv: IAerospike.MapOperation, operations) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let result = await this.client.operate(key, operations)
+                    consolelog(process.cwd(), 'Map updated successfully', "", false)
+                    resolve(result)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
 }
 
-export const Aerospike = new AerospikeClass('myapp');
+export const Aerospike = new AerospikeClass('americana');

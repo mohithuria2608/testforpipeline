@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+service LocationService {
+    rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
+}
+
+message IValidateCoordinateReq {
+    required float lat = 1;
+    required float lng = 2;
+}
+
+message IValidateCoordinateRes {
+    repeated IStore store = 1;
+}
+
+message IStore {
+    required string id = 1;
+    required int32 countryId = 2;
+    required int32 provinceId = 3;
+    required int32 areaId = 4;
+    required int32 streetId = 5;
+    required int32 districtId = 6;
+    required int32 mapId = 7;
+    required int32 menuId = 8;
+    required string name_en = 9;
+    required string name_ar = 10;
+    required string phone1 = 11;
+    required string phone2 = 12;
+    required IService services = 13;
+    required int32 active = 14;
+    required string address_en = 15;
+    required string address_ar = 16;
+    required string startTime = 17;
+    required string endTime = 18;
+    required IGeoFence geoFence = 19;
+    required ILocation location = 20;
+}
+
+message IService {
+    required int32 din = 1;
+    required int32 del = 2;
+    required int32 tak = 3;
+} 
+
+message ILocation {
+    required string description = 1;
+    required float latitude = 2;
+    required float longitude = 3;
+} 
+
+message IGeoFence { } 

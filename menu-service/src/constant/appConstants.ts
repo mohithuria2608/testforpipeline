@@ -16,17 +16,6 @@ export let DATABASE = {
         ADMIN: "ADMIN",
     },
 
-    DB_CHANGE_TYPE: {
-        INSERT: "insert",
-        DELETE: "delete",
-        REPLACE: "replace",
-        UPDATE: "update",
-        DROP: "drop",
-        RENAME: "rename",
-        DROP_DATABASE: "dropDatabase",
-        INVALIDATE: "invalidate",
-    },
-
     STATUS: {
         APP_VERSION: {
             INACTIVE: 0,
@@ -100,6 +89,11 @@ export enum MIDDLEWARE {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
+            SERVICE_UNAVAILABLE: {
+                statusCode: 400,
+                message: 'Service unavailable for selected location',
+                type: 'SERVICE_UNAVAILABLE'
+            },
 
             CANNOT_PERFORM_UPDATE_OPERATION: {
                 statusCode: 400,
@@ -250,10 +244,10 @@ export let STATUS_MSG = {
                 message: 'Result not found'
             },
 
-            USER_NOT_FOUND: {
+            MENU_NOT_FOUND: {
                 statusCode: 404,
-                message: 'User not found',
-                type: 'USER_NOT_FOUND'
+                message: 'Menu not found',
+                type: 'MENU_NOT_FOUND'
             },
         },
 
@@ -369,6 +363,15 @@ export let STATUS_MSG = {
             }
         },
         S304: {
+
+            MENU_EXISTS: (data) => {
+                return {
+                    statusCode: 304,
+                    message: 'Menu exists',
+                    type: 'MENU_EXISTS',
+                    data: data
+                }
+            },
             REQUEST_EXISTS: {
                 statusCode: 304,
                 message: 'Friend request already Exists',
@@ -407,6 +410,12 @@ export let STATUS_MSG = {
                 code: parseInt(code),
                 details: `${type} : ${message}`
             }
+        }
+    },
+    AEROSPIKE_ERROR: {
+        TYPE: {
+            DUPLICATE_INDEX: 200,
+            DATA_NOT_FOUND: 2,
         }
     }
 };
