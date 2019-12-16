@@ -18,7 +18,26 @@ export enum MIDDLEWARE {
     ACTIVITY_LOG = "activity_log"
 }
 
-
+export let CMS = {
+    AUTH_CRED: {
+        "username": "shashi.bhushan@appinventiv.com",
+        "password": "shashi@123"
+    },
+    GLOBAL_VAR: {
+        AUTH_TOKEN: 'cms-auth-token',
+        AUTH_API_HIT: 'cms-auth-hit-time'
+    },
+    END_POINTS: {
+        AUTH: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/integration/customer/token",
+        },
+        CREATE_CUSTOMER: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/customers/",
+        }
+    }
+}
 
 export let SERVER = {
     ENV: {

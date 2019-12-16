@@ -33,7 +33,7 @@ class AerospikeClass {
                     }
                     let aerospikeConfig = {
                         //@todo : check for pem file for auth
-                        hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
+                        hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {

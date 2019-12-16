@@ -80,7 +80,7 @@
         "url": "localhost:9093"
     },
     "aerospike": {
-        "hosts": "localhost:3000,localhost:3001",
+        "hosts": "localhost:3000",
         "username": "",
         "password": ""
     },
