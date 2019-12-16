@@ -49,7 +49,7 @@ export class AddressEntity extends BaseEntity {
     * */
     async getById(payload: IUserRequest.IId) {
         try {
-            consolelog(process.cwd(),"getById", payload.id, true)
+            consolelog(process.cwd(), "getById", payload.id, true)
             let getArg: IAerospike.Get = {
                 set: this.set,
                 key: payload.id
@@ -58,9 +58,9 @@ export class AddressEntity extends BaseEntity {
             if (user && user.id) {
                 return user
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.SUCCESS.S204.USER_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(),"getById", error, false)
+            consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -119,7 +119,7 @@ export class AddressEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return await this.getById({ id: address.id })
         } catch (err) {
-            consolelog(process.cwd(),"addAddress", err, false)
+            consolelog(process.cwd(), "addAddress", err, false)
             return Promise.reject(err)
         }
     }
@@ -144,7 +144,7 @@ export class AddressEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return await this.getById({ id: addressUpdate.addressId })
         } catch (err) {
-            consolelog(process.cwd(),"updateAddress", err, false)
+            consolelog(process.cwd(), "updateAddress", err, false)
             return Promise.reject(err)
         }
     }

@@ -84,6 +84,12 @@
         "username": "",
         "password": ""
     },
+    "cms":{
+        "auth": {
+            "username": "shashi.bhushan@appinventiv.com",
+            "password": "shashi@123"
+        }
+    },
     "directory": {
         "static": {
             "proto": {

@@ -13,7 +13,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),//@todo : Country specific regex
@@ -37,7 +37,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
@@ -63,7 +63,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     socialKey: Joi.string().required(),
                     medium: Joi.string().valid(Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB, Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE).required(),

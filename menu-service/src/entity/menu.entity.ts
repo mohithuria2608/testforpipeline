@@ -42,7 +42,7 @@ export class MenuClass extends BaseEntity {
             if (menu && menu.id) {
                 return menu
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.MENU_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.SUCCESS.S204.MENU_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(),"getById", error, false)
             return Promise.reject(error)

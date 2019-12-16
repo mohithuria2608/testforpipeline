@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { addressController } from '../../controllers';
-import { JOI_HEADERS } from './common.joi.validator';
+import { COMMON_HEADERS } from './common.joi.validator';
 
 export default (router: Router) => {
     router
@@ -14,7 +14,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI_HEADERS,
+                headers: COMMON_HEADERS,
                 body: {
                     lat: Joi.number().min(0).max(90).required(),
                     lng: Joi.number().min(-180).max(180).required(),
@@ -48,7 +48,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI_HEADERS,
+                headers: COMMON_HEADERS,
                 body: {
                     addressId: Joi.string().required(),
                     bldgName: Joi.string(),
@@ -76,7 +76,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI_HEADERS
+                headers: COMMON_HEADERS
             }),
             async (ctx) => {
                 try {

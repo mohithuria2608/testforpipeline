@@ -4,9 +4,7 @@ import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
-import { isArray } from 'util';
 import { logger } from '../lib'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let sendError = function (error) {
     let customError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
@@ -18,8 +16,8 @@ export let sendError = function (error) {
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
         }
         else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE) {
-            customError.statusCode = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.statusCode
-            customError.type = Constant.STATUS_MSG.ERROR.E404.DATA_NOT_FOUND.type
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.statusCode
+            customError.type = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.type
         }
         else if (error.code == Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED.statusCode
@@ -59,9 +57,9 @@ export let sendError = function (error) {
                 customError.statusCode = Constant.STATUS_MSG.ERROR.E400.APP_ERROR.statusCode
                 customError.type = Constant.STATUS_MSG.ERROR.E400.APP_ERROR.type
             } else if (error.name === 'ValidationError') {
-                customError.message += Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.message + error.message
-                customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
-                customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+                customError.message += Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
+                customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
             } else if (error.name === 'CastError') {
                 customError.message += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + Constant.STATUS_MSG.ERROR.E400.INVALID_ID.message + error.value
                 customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode

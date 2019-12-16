@@ -21,7 +21,7 @@ export class AddressController {
             if (store && store.length) {
                 return await ENTITY.AddressE.addAddress(headers.deviceid, auth.userData, payload, store[0])
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SERVICE_UNAVAILABLE)
+                return Constant.STATUS_MSG.SUCCESS.S204.SERVICE_UNAVAILABLE
 
         } catch (err) {
             consolelog(process.cwd(), "registerAddress", err, false)

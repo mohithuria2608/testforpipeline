@@ -14,7 +14,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     curMenuId: Joi.number(),
                     menuUpdatedAt: Joi.number(),

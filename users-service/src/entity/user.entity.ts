@@ -47,6 +47,7 @@ export class UserEntity extends BaseEntity {
 
     public sessionSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
+        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         appversion: Joi.string().trim().required(),
@@ -90,7 +91,7 @@ export class UserEntity extends BaseEntity {
             if (user && user.id) {
                 return user
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.SUCCESS.S204.USER_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)

@@ -13,7 +13,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
             }),
             async (ctx) => {
                 try {

@@ -3,25 +3,21 @@ export const UDF = {
         check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key"
     }
-}
+};
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
     NEW_MENU = "new_menu",
     NEW_USER = "new_user"
-}
+};
 
 export enum MIDDLEWARE {
     API_AUTH = "api_auth",
     AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
-}
+};
 
 export let CMS = {
-    AUTH_CRED: {
-        "username": "shashi.bhushan@appinventiv.com",
-        "password": "shashi@123"
-    },
     GLOBAL_VAR: {
         AUTH_TOKEN: 'cms-auth-token',
         AUTH_API_HIT: 'cms-auth-hit-time'
@@ -36,7 +32,7 @@ export let CMS = {
             URL: "http://40.123.205.1/rest/default/V1/customers/",
         }
     }
-}
+};
 
 export let SERVER = {
     ENV: {
@@ -53,30 +49,10 @@ export let SERVER = {
         APP_ADDRESS: ""
     },
     DEFAULT_USER_NAME: 'App User',
-    OTP_TEXT: (otp) => {
-        return `Your App code is ${otp}. Welcome to the community!`
-    },
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
-    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
     BY_PASS_OTP: 1212,
     OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
-    LISTNG_LIMIT: 10,
-    BULK_LIMIT: 2000,
-    THUMB_DIMENSION: {
-        DEFAULT: {
-            WIDTH: 10,
-            HEIGHT: 10,
-        },
-        PROFILE_PIC: {
-            WIDTH: 200,
-            HEIGHT: 200,
-        },
-        GIF: {
-            WIDTH: 100,
-            HEIGHT: 100,
-        },
-    },
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     CMS_AUTH_EXP: (10 * 60 * 1000),
@@ -85,12 +61,12 @@ export let SERVER = {
     ANDROID_PACKAGE_NAME: "com.android.kfc",
     IOS_SCHEME_HOST: "americanaKFCUAE://",
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
-}
+};
 
 export let DATABASE = {
-    LANGUAGE: {
-        EN: 'En',
-        AR: 'Ar'
+    BRAND: {
+        KFC: 'KFC',
+        PH: 'PH'
     },
 
     COUNTRY: {
@@ -99,32 +75,14 @@ export let DATABASE = {
 
     CCODE: {
         UAE: '+971',
-
     },
 
-    ENTITY: {
-        APP: "APP",
-        USER: "USER",
-        ADMIN: "ADMIN",
-    },
-
-    STATUS: {
-        APP_VERSION: {
-            INACTIVE: 0,
-            ACTIVE: 1,
-            DELETED: 2
-        }
-    },
-
-    ACTION: {
-        DEEPLINK: {
-            APP: "APP",
-            RESET_PASSWORD: "RESET_PASSWORD"
-        }
+    LANGUAGE: {
+        EN: 'En',
+        AR: 'Ar'
     },
 
     TYPE: {
-
         TOKEN: {
             CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
@@ -147,26 +105,6 @@ export let DATABASE = {
             FORCE: "FORCE",
             SKIP: "SKIP",
             NORMAL: "NORMAL"
-        },
-
-        MIME: {
-            DEFAULT: "default",
-            IMAGE: "image",
-            VIDEO: "video",
-            AUDIO: "audio",
-            GIF: "gif",
-            PDF: "pdf",
-            DOC: "doc",
-            DOCX: "docx",
-            XLSX: "xlsx",
-            XLS: "xls",
-            CSV: "csv",
-            TXT: "txt",
-            PPTX: "pptx"
-        },
-
-        REDIS_HASH_TYPES: {
-            SESSION: "session"
         },
 
         ACTIVITY_LOG: {
@@ -197,12 +135,6 @@ export let DATABASE = {
 export let STATUS_MSG = {
     ERROR: {
         E400: {
-            SERVICE_UNAVAILABLE: {
-                statusCode: 400,
-                type: 'SERVICE_UNAVAILABLE',
-                message: "Sorry, we don't, deliver at this location"
-            },
-
             PROFILE_SETUP_ALLREADY_COMPLETE: {
                 statusCode: 400,
                 type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
@@ -227,107 +159,15 @@ export let STATUS_MSG = {
                 message: 'Invalid otp entered'
             },
 
-            PHONE_NO_REQ: {
-                statusCode: 400,
-                message: 'Phone number is required',
-                type: 'PHONE_NO_REQ'
-            },
-
-            EMAIL_REQ: {
-                statusCode: 400,
-                message: 'Email is required',
-                type: 'EMAIL_REQ'
-            },
-
-            NAME_REQ: {
-                statusCode: 400,
-                message: 'Name is required',
-                type: 'NAME_REQ'
-            },
-
-            SOCIAL_KEY_REQ: {
-                statusCode: 400,
-                message: 'Social key is required',
-                type: 'SOCIAL_KEY_REQ'
-            },
-
-            CANNOT_PERFORM_UPDATE_OPERATION: {
-                statusCode: 400,
-                message: 'Cannot perform update operation',
-                type: 'CANNOT_PERFORM_UPDATE_OPERATION'
-            },
-
-            USER_NOT_REGISTERED: {
-                statusCode: 400,
-                type: 'USER_NOT_REGISTERED',
-                message: 'User does not exist, please sign up'
-            },
-
             USER_ALREADY_EXIST: {
                 statusCode: 400,
                 type: 'USER_ALREADY_EXIST',
                 message: 'User already exist, please login'
             },
 
-            EMAIL_ALREADY_EXIST: {
-                statusCode: 400,
-                type: 'EMAIL_ALREADY_EXIST',
-                message: 'Email already exist'
-            },
-
-            EMAIL_NOT_REGISTERED: {
-                statusCode: 400,
-                type: 'EMAIL_NOT_REGISTERED',
-                message: 'Email NOT Registered.'
-            },
-
-            EMAIL_NOT_VERIFIED: {
-                statusCode: 400,
-                type: 'EMAIL_NOT_VERIFIED',
-                message: 'Email Not Verified.'
-            },
-
-            INVALID_EMAIL_TOKEN: {
-                statusCode: 400,
-                type: 'INVALID_EMAIL_TOKEN',
-                message: "Wrong email token entered"
-            },
-
-            APP_VERSION_ERROR: {
-                statusCode: 400,
-                message: 'One of the latest version or updated version value must be present',
-                type: 'APP_VERSION_ERROR'
-            },
-
-            VALIDATION_ERROR: {
-                statusCode: 400,
-                message: 'Validation Error',
-                type: 'VALIDATION_ERROR'
-            },
-
-            CUSTOM_VALIDATION_ERROR: (customErrorMessage) => {
-                return {
-                    statusCode: 400,
-                    message: 'Validation Error : ' + customErrorMessage,
-                    type: 'VALIDATION_ERROR'
-                }
-            },
-            JOI_VALIDATION_ERROR: (customErrorMessage) => {
-                return {
-                    statusCode: 400,
-                    message: customErrorMessage,
-                    type: 'VALIDATION_ERROR'
-                }
-            },
             INVALID_ID: {
                 statusCode: 400,
                 message: 'Invalid Id Provided ',
-                type: 'INVALID_ID'
-            },
-
-            INVALID_USER_ID: {
-                statusCode: 400,
-                message: 'Invalid User Id Provided ',
                 type: 'INVALID_ID'
             },
 
@@ -362,43 +202,19 @@ export let STATUS_MSG = {
                 message: 'Access token has expired.'
             }
         },
-        E403: {
-            INVALID_LOGIN: {
-                statusCode: 403,
-                type: 'INVALID_LOGIN',
-                message: 'Invalid login credentials'
-            },
-
-            INVALID_LINK: {
-                statusCode: 403,
-                message: 'Link is no more valid',
-                type: 'INVALID_LINK'
-            },
-
-            RESET_PASSWORD_EXPIRED: {
-                statusCode: 403,
-                message: 'Your reset password token is expired!',
-                type: 'TOKEN_EXPIRED'
-            },
-        },
         E404: {
-            DATA_NOT_FOUND: {
+            RESOURCE_NOT_FOUND: {
                 statusCode: 404,
-                type: 'DATA_NOT_FOUND',
-                message: 'Result not found'
-            },
-
-            USER_NOT_FOUND: {
-                statusCode: 404,
-                message: 'User not found',
-                type: 'USER_NOT_FOUND'
-            },
-
-            MENU_NOT_FOUND: {
-                statusCode: 404,
-                message: 'Menu not found',
-                type: 'MENU_NOT_FOUND'
-            },
+                type: 'RESOURCE_NOT_FOUND',
+                message: 'Resource not found'
+            }
+        },
+        E422: {
+            VALIDATION_ERROR: {
+                statusCode: 400,
+                message: 'Validation Error : Unprocessable Entity',
+                type: 'VALIDATION_ERROR'
+            }
         },
         E500: {
             IMP_ERROR: {
@@ -512,44 +328,42 @@ export let STATUS_MSG = {
                 type: 'CREATED'
             },
         },
-        S202: {
+        S204: {
+            USER_NOT_FOUND: {
+                statusCode: 204,
+                message: 'User not found',
+                type: 'USER_NOT_FOUND'
+            },
+
+            MENU_NOT_FOUND: {
+                statusCode: 204,
+                message: 'Menu not found',
+                type: 'MENU_NOT_FOUND'
+            },
+            SERVICE_UNAVAILABLE: {
+                statusCode: 204,
+                type: 'SERVICE_UNAVAILABLE',
+                message: "Sorry, we don't, deliver at this location"
+            }
+        },
+        S205: {
             MENU_CHANGED: {
-                statusCode: 202,
+                statusCode: 205,
                 message: 'Menu has been changed. Please refresh your menu.',
                 type: 'MENU_CHANGED'
             },
 
             ITEM_CHANGED: {
-                statusCode: 202,
+                statusCode: 205,
                 message: 'Item info has been changed. Please refresh your menu.',
                 type: 'ITEM_CHANGED'
             }
         },
-        S209: {
-            FORGET_PASSWORD_EMAIL: {
-                statusCode: 209,
-                message: 'Reset password link sent to email',
-                type: 'FORGET_PASSWORD_EMAIL'
-            },
-        },
-        S210: {
-            FORGET_PASSWORD_PHONE_NUMBER: {
-                statusCode: 210,
-                message: 'Reset otp sent to registered phone number',
-                type: 'FORGET_PASSWORD_PHONE_NUMBER'
-            }
-        },
         S304: {
-            REQUEST_EXISTS: {
+            NOT_MODIFIED: {
                 statusCode: 304,
-                message: 'Friend request already Exists',
-                type: 'REQUEST_EXISTS'
-            },
-
-            NO_SUCH_REQUEST: {
-                statusCode: 304,
-                message: 'No such request exists',
-                type: 'NO_SUCH_REQUEST'
+                message: 'Request not modified',
+                type: 'NOT_MODIFIED'
             }
         }
     },

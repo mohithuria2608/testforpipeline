@@ -84,6 +84,12 @@
         "username": "aerospikeusr",
         "password": "GM2nGDQkN5yMdPZs"
     },
+    "cms":{
+        "auth": {
+            "username": "shashi.bhushan@appinventiv.com",
+            "password": "shashi@123"
+        }
+    },
     "directory": {
         "static": {
             "proto": {

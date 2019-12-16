@@ -25,12 +25,12 @@ export class CartController {
             if (payload.lat && payload.lng) {
                 //fetch menu according to lat, lng
                 if ((defaultMenu.menuId != payload.curMenuId) || (defaultMenu.updatedAt > payload.menuUpdatedAt)) {
-                    return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.MENU_CHANGED, {})
+                    return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.MENU_CHANGED, {})
                 } else {
                     let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
                     if (internalKeyCheck) {
                         let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
-                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, res)
+                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.ITEM_CHANGED, res)
                     } else {
                         let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
                         return res
@@ -38,12 +38,12 @@ export class CartController {
                 }
             } else {
                 if ((defaultMenu.menuId != payload.curMenuId) || (defaultMenu.updatedAt > payload.menuUpdatedAt)) {
-                    return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.MENU_CHANGED, {})
+                    return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.MENU_CHANGED, {})
                 } else {
                     let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
                     if (internalKeyCheck) {
                         let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
-                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S202.ITEM_CHANGED, res)
+                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.ITEM_CHANGED, res)
                     } else {
                         let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
                         return res

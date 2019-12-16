@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 
@@ -45,7 +46,10 @@ export class BaseCMS {
             const method = Constant.CMS.END_POINTS.AUTH.METHOD;
             const url = Constant.CMS.END_POINTS.AUTH.URL
             const headers = {};
-            const form = Constant.CMS.AUTH_CRED;
+            const form = {
+                "username": config.get("cms.auth.username"),
+                "password": config.get("cms.auth.password")
+            }
             let cmsRes = await this.request(method, url, headers, form)
             global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();
             consolelog(process.cwd(), 'cmsRes', cmsRes, false)

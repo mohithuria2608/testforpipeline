@@ -75,9 +75,9 @@ export let sendError = function (error) {
                 customError.statusCode = Constant.STATUS_MSG.ERROR.E400.APP_ERROR.statusCode
                 customError.type = Constant.STATUS_MSG.ERROR.E400.APP_ERROR.type
             } else if (error.name === 'ValidationError') {
-                customError.message += Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.message + error.message
-                customError.statusCode = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.statusCode
-                customError.type = Constant.STATUS_MSG.ERROR.E400.VALIDATION_ERROR.type
+                customError.message += Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
+                customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
             } else if (error.name === 'CastError') {
                 customError.message += Constant.STATUS_MSG.ERROR.E400.DB_ERROR.message + Constant.STATUS_MSG.ERROR.E400.INVALID_ID.message + error.value
                 customError.statusCode = Constant.STATUS_MSG.ERROR.E400.DB_ERROR.statusCode
