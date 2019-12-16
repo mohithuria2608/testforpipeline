@@ -18,13 +18,13 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
-    updateCmsId: async (call: IUserGrpcRequest.IUpdateUserInfoReq, callback) => {
+    createUserOnCms: async (call: IUserCMSRequest.ICreateUserDataOnCmsReq, callback) => {
         try {
-            consolelog(process.cwd(),"updateCmsId", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.UserE.updateCmsId(call.request)
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.createUserOnCms(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(),"getUserById", error, false)
+            consolelog(process.cwd(), "createUserOnCms", error, false)
             callback(grpcSendError(error))
         }
     }
@@ -32,6 +32,6 @@ server.addService(userProto.UserService.service, {
 
 server.bind(config.get("grpc.user.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog(process.cwd(),"GRPC server running at", config.get("grpc.user.server"), true)
+consolelog(process.cwd(), "GRPC server running at", config.get("grpc.user.server"), true)
 server.start();
 

@@ -5,8 +5,6 @@ import { bootstrap, consolelog } from './utils'
 import middleware from './middlewares'
 import route from './route'
 
-
-
 const app = new Koa()
 
 
@@ -18,7 +16,7 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
-
+    
     await bootstrap(server)
 
   } catch (err) {

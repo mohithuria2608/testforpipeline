@@ -4,7 +4,7 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog, cryptData } from '../utils'
 import { Aerospike } from '../databases/aerospike'
-
+import * as CMS from "../cms"
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     protected set: SetNames;
@@ -92,7 +92,7 @@ export class UserEntity extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(),"getById", error, false)
+            consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -216,7 +216,7 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: dataToSave.id })
             return user
         } catch (err) {
-            consolelog(process.cwd(),"createUser", err, false)
+            consolelog(process.cwd(), "createUser", err, false)
             return Promise.reject(err)
         }
     }
@@ -256,7 +256,7 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: userData.id })
             return user
         } catch (err) {
-            consolelog(process.cwd(),"createSession", err, false)
+            consolelog(process.cwd(), "createSession", err, false)
             return Promise.reject(err)
         }
     }
@@ -294,15 +294,27 @@ export class UserEntity extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
         } catch (error) {
-            consolelog(process.cwd(),"getTokens", error, false)
+            consolelog(process.cwd(), "getTokens", error, false)
             return Promise.reject(error)
         }
     }
 
-    async updateCmsId(payload: IUserGrpcRequest.IUpdateUserInfo) {
+    async createUserOnCms(payload: IUserCMSRequest.ICreateUserDataOnCms) {
         try {
+            const payloadForCms = {
+                customer: {
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    email: payload.email,
+                    store_id: payload.storeId,
+                    website_id: payload.websiteId,
+                    addresses: []
+                },
+                password: payload.password
+            }
+            let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
             let putArg: IAerospike.Put = {
-                bins: { cmsRefId: parseInt(payload.id.toString()) },
+                bins: { cmsRefId: parseInt(res.id.toString()) },
                 set: this.set,
                 key: payload.aerospikeId,
                 update: true,
@@ -310,7 +322,7 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"updateCmsId", error, false)
+            consolelog(process.cwd(), "updateCmsId", error, false)
             return Promise.reject(error)
         }
     }

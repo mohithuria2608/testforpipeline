@@ -28,7 +28,7 @@ export class AddressController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SERVICE_UNAVAILABLE)
 
         } catch (err) {
-            consolelog(process.cwd(),"registerAddress", err, false)
+            consolelog(process.cwd(), "registerAddress", err, false)
             return Promise.reject(err)
         }
     }
@@ -46,7 +46,7 @@ export class AddressController {
         try {
             return await ENTITY.AddressE.updateAddress(payload)
         } catch (err) {
-            consolelog(process.cwd(),"updateAddressById", err, false)
+            consolelog(process.cwd(), "updateAddressById", err, false)
             return Promise.reject(err)
         }
     }
@@ -59,7 +59,7 @@ export class AddressController {
         try {
             return []
         } catch (err) {
-            consolelog(process.cwd(),"fetchAddress", err, false)
+            consolelog(process.cwd(), "fetchAddress", err, false)
             return Promise.reject(err)
         }
     }
