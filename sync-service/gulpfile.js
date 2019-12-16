@@ -33,6 +33,10 @@ gulp.task("clean", function () {
 // 		.pipe(tslint.report())
 // });
 
+gulp.task("copyConstant", function () {
+	return gulp.src(['../constant/**/*']).pipe(gulp.dest("./src/constant"));
+});
+
 gulp.task("compile", function () {
 	return tsProject.src()
 		.pipe(tsProject())
@@ -78,4 +82,4 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));
+gulp.task('default', gulp.series("clean", "copyConstant",  "compile", "copyContent", "copyProto", "copyConfig", "copyLua", "server"));

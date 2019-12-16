@@ -20,19 +20,19 @@ export class UserService {
     private userClient = new this.loadUser(config.get("grpc.user.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(),'GRPC connection established user-service', config.get("grpc.user.client"), true)
+        consolelog(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
-    async updateCmsId(payload: IUserGrpcRequest.IUpdateUserInfo) {
+    async createUserOnCms(payload: IUserGrpcRequest.ICreateUserDataOnCms): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await userServiceValidator.updateCmsIdValidator(payload)
-                this.userClient.updateCmsId(payload, (err, res) => {
+                await userServiceValidator.createUserOnCmsValidator(payload)
+                this.userClient.createUserOnCms(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(),"successfully created user on cms", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully created user on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(),"Error in creating user on cms", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in creating user on cms", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

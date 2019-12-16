@@ -1,4 +1,91 @@
-import * as config from 'config'
+export const UDF = {
+    USER: {
+        check_phone_exist: "check_phone_exist",
+        check_social_key: "check_social_key"
+    }
+}
+
+export enum KAFKA_TOPIC {
+    FAIL_Q = "fail_q",
+    NEW_MENU = "new_menu",
+    NEW_USER = "new_user"
+}
+
+export enum MIDDLEWARE {
+    API_AUTH = "api_auth",
+    AUTH = "auth",
+    ACTIVITY_LOG = "activity_log"
+}
+
+export let CMS = {
+    AUTH_CRED: {
+        "username": "shashi.bhushan@appinventiv.com",
+        "password": "shashi@123"
+    },
+    GLOBAL_VAR: {
+        AUTH_TOKEN: 'cms-auth-token',
+        AUTH_API_HIT: 'cms-auth-hit-time'
+    },
+    END_POINTS: {
+        AUTH: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/integration/customer/token",
+        },
+        CREATE_CUSTOMER: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/customers/",
+        }
+    }
+}
+
+export let SERVER = {
+    ENV: {
+        DEV: "development",
+        QA: "testing",
+        STAG: "staging",
+        PROD: "production"
+    },
+    APP_INFO: {
+        APP_NAME: "App",
+        FB_LINK: "",
+        TWITTER_LINK: "",
+        INSTA_LINK: "",
+        APP_ADDRESS: ""
+    },
+    DEFAULT_USER_NAME: 'App User',
+    OTP_TEXT: (otp) => {
+        return `Your App code is ${otp}. Welcome to the community!`
+    },
+    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
+    INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
+    INITIAL_ADDRESS_TTL: 7 * 24 * 60 * 60,//seconds
+    BY_PASS_OTP: 1212,
+    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
+    LISTNG_LIMIT: 10,
+    BULK_LIMIT: 2000,
+    THUMB_DIMENSION: {
+        DEFAULT: {
+            WIDTH: 10,
+            HEIGHT: 10,
+        },
+        PROFILE_PIC: {
+            WIDTH: 200,
+            HEIGHT: 200,
+        },
+        GIF: {
+            WIDTH: 100,
+            HEIGHT: 100,
+        },
+    },
+    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+    CMS_AUTH_EXP: (10 * 60 * 1000),
+    DISPLAY_COLOR: true,
+    ANDROID_SCHEME_HOST: "https://",
+    ANDROID_PACKAGE_NAME: "com.android.kfc",
+    IOS_SCHEME_HOST: "americanaKFCUAE://",
+    DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
+}
 
 export let DATABASE = {
     LANGUAGE: {
@@ -8,6 +95,11 @@ export let DATABASE = {
 
     COUNTRY: {
         UAE: 'UAE',
+    },
+
+    CCODE: {
+        UAE: '+971',
+
     },
 
     ENTITY: {
@@ -32,15 +124,23 @@ export let DATABASE = {
     },
 
     TYPE: {
+
         TOKEN: {
+            CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
+            REFRESH_AUTH: "REFRESH_AUTH"
         },
 
         DEVICE: {
             IOS: 'IOS',
             ANDROID: 'ANDROID',
             WEB: 'WEB'
+        },
+
+        SOCIAL_PLATFORM: {
+            GOOGLE: "GOOGLE",
+            FB: "FB"
         },
 
         VERSION_UPDATE: {
@@ -71,28 +171,84 @@ export let DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST"
+        },
+
+        PROFILE_STEP: {
+            INIT: 0,
+            FIRST: 1,
+        },
+
+        TAG: {
+            HOME: "HOME",
+            OFFICE: "OFFICE",
+            HOTEl: "HOTEl",
+            OTHER: "OTHER"
+        },
+
+        DEEPLINK_REDIRECTION: {
+            HOME: "HOME",
+            CATEGORY: "CATEGORY",
+            ITEM_DETAIL: "ITEM_DETAIL",
+            ADD_TO_CART: "ADD_TO_CART",
         }
     }
 };
-
-
-export enum KAFKA_TOPIC {
-    CREATE_TOKEN = "create_token"
-}
-
-export enum MIDDLEWARE {
-    API_AUTH = "api_auth",
-    AUTH = "auth",
-    ACTIVITY_LOG = "activity_log"
-}
 
 export let STATUS_MSG = {
     ERROR: {
         E400: {
             SERVICE_UNAVAILABLE: {
                 statusCode: 400,
-                message: 'Service unavailable for selected location',
-                type: 'SERVICE_UNAVAILABLE'
+                type: 'SERVICE_UNAVAILABLE',
+                message: "Sorry, we don't, deliver at this location"
+            },
+
+            PROFILE_SETUP_ALLREADY_COMPLETE: {
+                statusCode: 400,
+                type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
+                message: 'Profile setup is already complete'
+            },
+
+            OTP_SESSION_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_SESSION_EXPIRED',
+                message: 'Otp session has expired'
+            },
+
+            OTP_EXPIRED: {
+                statusCode: 400,
+                type: 'OTP_EXPIRED',
+                message: 'Otp entered has expired'
+            },
+
+            INVALID_OTP: {
+                statusCode: 400,
+                type: 'INVALID_OTP',
+                message: 'Invalid otp entered'
+            },
+
+            PHONE_NO_REQ: {
+                statusCode: 400,
+                message: 'Phone number is required',
+                type: 'PHONE_NO_REQ'
+            },
+
+            EMAIL_REQ: {
+                statusCode: 400,
+                message: 'Email is required',
+                type: 'EMAIL_REQ'
+            },
+
+            NAME_REQ: {
+                statusCode: 400,
+                message: 'Name is required',
+                type: 'NAME_REQ'
+            },
+
+            SOCIAL_KEY_REQ: {
+                statusCode: 400,
+                message: 'Social key is required',
+                type: 'SOCIAL_KEY_REQ'
             },
 
             CANNOT_PERFORM_UPDATE_OPERATION: {
@@ -137,12 +293,6 @@ export let STATUS_MSG = {
                 message: "Wrong email token entered"
             },
 
-            INVALID_OTP: {
-                statusCode: 400,
-                type: 'INVALID_OTP',
-                message: "Invalid OTP"
-            },
-
             APP_VERSION_ERROR: {
                 statusCode: 400,
                 message: 'One of the latest version or updated version value must be present',
@@ -162,7 +312,13 @@ export let STATUS_MSG = {
                     type: 'VALIDATION_ERROR'
                 }
             },
-
+            JOI_VALIDATION_ERROR: (customErrorMessage) => {
+                return {
+                    statusCode: 400,
+                    message: customErrorMessage,
+                    type: 'VALIDATION_ERROR'
+                }
+            },
             INVALID_ID: {
                 statusCode: 400,
                 message: 'Invalid Id Provided ',
@@ -194,18 +350,6 @@ export let STATUS_MSG = {
             }
         },
         E401: {
-            RESET_PASSWORD_EXPIRED: {
-                statusCode: 401,
-                message: 'Your reset password token is expired!',
-                type: 'TOKEN_EXPIRED'
-            },
-
-            INVALID_LINK: {
-                statusCode: 401,
-                message: 'Link is no more valid',
-                type: 'INVALID_LINK'
-            },
-
             UNAUTHORIZED: {
                 statusCode: 401,
                 message: 'You are not authorized to perform this action',
@@ -219,23 +363,23 @@ export let STATUS_MSG = {
             }
         },
         E403: {
-            INVALID_PASSWORD: {
-                statusCode: 403,
-                message: 'Incorrect Password',
-                type: 'INVALID_USER_PASS'
-            },
-
-            INVALID_OLD_PASSWORD: {
-                statusCode: 403,
-                message: 'Please enter the valid old password',
-                type: 'INVALID_OLD_PASSWORD'
-            },
-
             INVALID_LOGIN: {
                 statusCode: 403,
                 type: 'INVALID_LOGIN',
                 message: 'Invalid login credentials'
-            }
+            },
+
+            INVALID_LINK: {
+                statusCode: 403,
+                message: 'Link is no more valid',
+                type: 'INVALID_LINK'
+            },
+
+            RESET_PASSWORD_EXPIRED: {
+                statusCode: 403,
+                message: 'Your reset password token is expired!',
+                type: 'TOKEN_EXPIRED'
+            },
         },
         E404: {
             DATA_NOT_FOUND: {
@@ -244,19 +388,29 @@ export let STATUS_MSG = {
                 message: 'Result not found'
             },
 
+            USER_NOT_FOUND: {
+                statusCode: 404,
+                message: 'User not found',
+                type: 'USER_NOT_FOUND'
+            },
+
             MENU_NOT_FOUND: {
                 statusCode: 404,
                 message: 'Menu not found',
                 type: 'MENU_NOT_FOUND'
             },
         },
-
         E500: {
             IMP_ERROR: {
                 statusCode: 500,
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
+            INVALID_TOKEN_TYPE: {
+                statusCode: 500,
+                message: 'Invalid token type provided',
+                type: 'INVALID_TOKEN_TYPE'
+            }
         },
         E501: {
             TOKENIZATION_ERROR: {
@@ -268,6 +422,11 @@ export let STATUS_MSG = {
     },
     SUCCESS: {
         S200: {
+            OTP_SENT: {
+                statusCode: 200,
+                type: 'OTP_SENT',
+                message: 'Otp sent successfully'
+            },
 
             OTP_VERIFIED: {
                 statusCode: 200,
@@ -316,6 +475,11 @@ export let STATUS_MSG = {
                 message: 'Blocked Successfully',
                 type: 'BLOCKED'
             },
+            SOCIAL_LOGIN: {
+                statusCode: 200,
+                message: 'Logged In Successfully',
+                type: 'SOCIAL_LOGIN'
+            },
 
             LOGIN: {
                 statusCode: 200,
@@ -348,6 +512,19 @@ export let STATUS_MSG = {
                 type: 'CREATED'
             },
         },
+        S202: {
+            MENU_CHANGED: {
+                statusCode: 202,
+                message: 'Menu has been changed. Please refresh your menu.',
+                type: 'MENU_CHANGED'
+            },
+
+            ITEM_CHANGED: {
+                statusCode: 202,
+                message: 'Item info has been changed. Please refresh your menu.',
+                type: 'ITEM_CHANGED'
+            }
+        },
         S209: {
             FORGET_PASSWORD_EMAIL: {
                 statusCode: 209,
@@ -363,15 +540,6 @@ export let STATUS_MSG = {
             }
         },
         S304: {
-
-            MENU_EXISTS: (data) => {
-                return {
-                    statusCode: 304,
-                    message: 'Menu exists',
-                    type: 'MENU_EXISTS',
-                    data: data
-                }
-            },
             REQUEST_EXISTS: {
                 statusCode: 304,
                 message: 'Friend request already Exists',
@@ -412,6 +580,18 @@ export let STATUS_MSG = {
             }
         }
     },
+    FRONTEND_ERROR: {
+        VALIDATION: {
+            INVALID_PHONE_NO: "Invalid phone number",
+            INVALID_EMAIL: "Please enter email address in a valid format",
+            INVALID_OTP: "Invalid otp",
+            INAVLID_NAME: "Please enter a valid name",
+            EMPTY_PHONE_NO: "Empty phone number",
+            EMPTY_EMAIL: "Empty email",
+            EMPTY_OTP: "Empty otp",
+            EMPTY_NAME: "Empty name",
+        }
+    },
     AEROSPIKE_ERROR: {
         TYPE: {
             DUPLICATE_INDEX: 200,
@@ -419,48 +599,3 @@ export let STATUS_MSG = {
         }
     }
 };
-
-export let SERVER = {
-    ENV: {
-        DEV: "development",
-        QA: "testing",
-        STAG: "staging",
-        PROD: "production"
-    },
-    APP_INFO: {
-        APP_NAME: "App",
-        FB_LINK: "",
-        TWITTER_LINK: "",
-        INSTA_LINK: "",
-        APP_ADDRESS: ""
-    },
-    DEFAULT_USER_NAME: 'App User',
-    APP_URL: config.get("server.menu.url"),
-    LINKS: {
-        TERMS_COND: '',
-        PRIVACY: config.get("server.menu.url") + "/privacy_policy/",
-    },
-    OTP_TEXT: (otp) => {
-        return `Your App code is ${otp}. Welcome to the community!`
-    },
-    TEMPLATE_PATH: process.cwd() + '/views/',
-    BY_PASS_OTP: 1212,
-    LISTNG_LIMIT: 10,
-    BULK_LIMIT: 2000,
-    THUMB_DIMENSION: {
-        DEFAULT: {
-            WIDTH: 10,
-            HEIGHT: 10,
-        },
-        PROFILE_PIC: {
-            WIDTH: 200,
-            HEIGHT: 200,
-        },
-        GIF: {
-            WIDTH: 100,
-            HEIGHT: 100,
-        },
-    },
-    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    DISPLAY_COLOR: true
-}

@@ -29,6 +29,10 @@
             "url": "http://localhost",
             "port": 4006
         },
+        "location": {
+            "url": "http://localhost",
+            "port": 4007
+        },
         "upload": {
             "url": "http://localhost",
             "port": 4010
@@ -62,10 +66,23 @@
         "kafka": {
             "server": "localhost:50057",
             "client": "127.0.0.1:50057"
+        },
+        "location": {
+            "server": "localhost:50058",
+            "client": "127.0.0.1:50058"
+        },
+        "upload": {
+            "server": "localhost:50060",
+            "client": "127.0.0.1:50060"
         }
     },
     "kafka": {
         "url": "localhost:9093"
+    },
+    "aerospike": {
+        "hosts": "40.123.212.40:3000",
+        "username": "aerospikeusr",
+        "password": "GM2nGDQkN5yMdPZs"
     },
     "directory": {
         "static": {
@@ -74,6 +91,10 @@
                     "server": "/../../../proto/auth.proto",
                     "client": "/../../../../proto/auth.proto"
                 },
+                "user": {
+                    "server": "/../../../proto/user.proto",
+                    "client": "/../../../../proto/user.proto"
+                },
                 "menu": {
                     "server": "/../../../proto/menu.proto",
                     "client": "/../../../../proto/menu.proto"
@@ -81,6 +102,18 @@
                 "kafka": {
                     "server": "/../../../proto/kafka.proto",
                     "client": "/../../../../proto/kafka.proto"
+                },
+                "location": {
+                    "server": "/../../../proto/location.proto",
+                    "client": "/../../../../proto/location.proto"
+                },
+                "sync": {
+                    "server": "/../../../proto/sync.proto",
+                    "client": "/../../../../proto/sync.proto"
+                },
+                "upload": {
+                    "server": "/../../../proto/upload.proto",
+                    "client": "/../../../../proto/upload.proto"
                 }
             }
         }

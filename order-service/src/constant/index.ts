@@ -1,3 +1,0 @@
-'Constant';
-
-export * from './appConstants';

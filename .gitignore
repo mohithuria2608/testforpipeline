@@ -40,4 +40,4 @@ log
 *-service/lua
 
 #constant directories in each service
-*-service/constant
+*-service/src/constant

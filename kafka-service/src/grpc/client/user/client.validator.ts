@@ -7,12 +7,18 @@ import * as Constant from '../../../constant'
 export class UserServiceValidator {
     constructor() {
     }
-    async updateCmsIdValidator(data: IUserGrpcRequest.IUpdateUserInfo) {
+
+    async createUserOnCmsValidator(data: IUserGrpcRequest.ICreateUserDataOnCms) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
                     aerospikeId: Joi.string().required(),
-                    id: Joi.number().required()
+                    lastname: Joi.string().required(),
+                    firstname: Joi.string().required(),
+                    email: Joi.string().required(),
+                    storeId: Joi.number().required().valid(1, 3).description('UAE'),
+                    websiteId: Joi.number().required().valid(1, 3).description('UAE'),
+                    password: Joi.string().required()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

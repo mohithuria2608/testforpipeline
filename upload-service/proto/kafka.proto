@@ -1,15 +1,17 @@
 syntax = "proto3";
 
 service KafkaService {
-    rpc ProduceMessage (IProduceMessage) returns (IProduceMessageRes) {}
+    rpc SyncUser (ISyncUserReq) returns (ISyncUserRes) {}
 }
 
-message IProduceMessage {
-    required IIProduceMessageData data = 1;
+message ISyncUserReq {
+    required string aerospikeId = 1;
+    required string lastname = 2;
+    required string firstname = 3;
+    required string email = 4;
+    required int32 storeId = 5;
+    required int32 websiteId = 6;
+    required string password = 7;
 }
 
-message IIProduceMessageData {
-    required string menuId = 1;
-}
-
-message IProduceMessageRes { }
+message ISyncUserRes {}

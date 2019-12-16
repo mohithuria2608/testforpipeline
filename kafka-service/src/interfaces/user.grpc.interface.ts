@@ -1,11 +1,10 @@
 declare namespace IUserGrpcRequest {
 
     export interface ICreateUserReq {
-        request: ICreateUserData
+        request: ICreateUserDataOnCms
     }
 
-
-    export interface ICreateUserData {
+    export interface ICreateUserDataOnCms {
         aerospikeId: string,
         lastname: string
         firstname: string
@@ -14,10 +13,4 @@ declare namespace IUserGrpcRequest {
         websiteId: number,
         password: string
     }
-
-    interface IUpdateUserInfo {
-        aerospikeId: string
-        id: number,
-    }
-
 }

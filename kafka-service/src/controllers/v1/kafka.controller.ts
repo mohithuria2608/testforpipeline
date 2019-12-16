@@ -35,7 +35,7 @@ export class KafkaController {
      * @param {number} websiteId :any
      * @param {number} password :any
      * */
-    async syncUser(payload: IUserGrpcRequest.ICreateUserData) {
+    async syncUser(payload: IUserGrpcRequest.ICreateUserDataOnCms) {
         try {
             consolelog(process.cwd(),"produce user in KAFKA service", payload, true)
             kafkaProducerE.sendMessage({
