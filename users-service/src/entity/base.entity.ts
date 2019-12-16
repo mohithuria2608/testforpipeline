@@ -44,12 +44,4 @@ export class BaseEntity {
             return Promise.reject(error)
         }
     }
-    // async getAreaByStoreId(storeId: number) {
-    //     try {
-    //         return await locationService.getAreaByStoreId({ storeId })
-    //     } catch (error) {
-    //         consolelog(process.cwd(),"getAreaByStoreId", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
 }

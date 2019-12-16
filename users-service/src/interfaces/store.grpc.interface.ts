@@ -1,8 +1,6 @@
 declare namespace IStoreGrpcRequest {
 
-    interface IValidateCoordinateData {
-        lat: number,
-        lng: number,
+    interface IValidateCoordinateData extends ICommonRequest.ICordinatesOpt {
     }
 
     interface IStore {

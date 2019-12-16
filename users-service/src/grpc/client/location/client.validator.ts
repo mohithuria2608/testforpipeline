@@ -23,22 +23,6 @@ export class LocationServiceValidator {
             }
         })
     }
-
-    async getAreaByStoreIdValidator(data: IAreaGrpcRequest.IGetAreaByStoreIdData) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    storeId: Joi.number().required()
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(`Invalid Info- ${error.message}`)
-                resolve({})
-            } catch (error) {
-                reject(error.message)
-            }
-        })
-    }
 }
 
 

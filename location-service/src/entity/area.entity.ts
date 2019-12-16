@@ -51,24 +51,6 @@ export class AreaEntity extends BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    // async getAreaByStoreId(data: IAreaGrpcRequest.IGetAreaByStoreIdData) {
-    //     try {
-    //         let queryArg: IAerospike.Query = {
-    //             equal: {
-    //                 bin: "storeId",
-    //                 value: data.storeId
-    //             },
-    //             set: this.set,
-    //             background: false,
-    //         }
-    //         let area: IAreaRequest.IArea = await Aerospike.query(queryArg)
-    //         return area[0]
-    //     } catch (error) {
-    //         consolelog(process.cwd(),"getAreaByStoreId", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
 }
 
 export const AreaE = new AreaEntity()

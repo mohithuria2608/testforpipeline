@@ -22,4 +22,9 @@ declare namespace ICommonRequest {
         page?: number,
         // skip?: number
     }
+
+    export interface ICordinatesOpt {
+        lat?: number,
+        lng?: number
+    }
 }

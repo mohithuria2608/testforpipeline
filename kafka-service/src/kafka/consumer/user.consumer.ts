@@ -1,7 +1,7 @@
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import {  userService } from "../../grpc/client"
+import { userService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
 class UserConsumer extends BaseConsumer {
@@ -13,14 +13,14 @@ class UserConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                consolelog(process.cwd(), "consumer new_user", message, true)
+                consolelog(process.cwd(), "consumer new_user", JSON.stringify(message), true)
                 this.sendUserToCMSGrpc(message);
             })
     }
 
     private async sendUserToCMSGrpc(message: IUserGrpcRequest.ICreateUserDataOnCms) {
         try {
-            let res = await userService.createUserOnCms(message) 
+            let res = await userService.createUserOnCms(message)
             return res
         } catch (err) {
             consolelog(process.cwd(), `sendUserToCMSGrpc`, err, false);

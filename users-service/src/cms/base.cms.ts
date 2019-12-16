@@ -48,6 +48,8 @@ export class BaseCMS {
             const form = Constant.CMS.AUTH_CRED;
             let cmsRes = await this.request(method, url, headers, form)
             global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();
+            consolelog(process.cwd(), 'cmsRes', cmsRes, false)
+
             return cmsRes
         } catch (error) {
             consolelog(process.cwd(), 'auth', error, false)

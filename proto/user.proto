@@ -15,7 +15,4 @@ message ICreateUserOnCmsReq {
     required string password = 7;
 }
 
-message ICreateUserOnCmsRes {
-    required string aerospikeId = 1;
-    required string id = 2;
-}
+message ICreateUserOnCmsRes { }
