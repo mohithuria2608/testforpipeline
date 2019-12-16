@@ -4,6 +4,8 @@ dist
 /coverage
 /.nyc_output
 package-lock.json
+imports
+exports
 
 # local env files
 .env.local

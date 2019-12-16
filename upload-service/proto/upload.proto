@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service UploadService {
+    rpc ProduceMessage (IProduceMessage) returns (IProduceMessageRes) {}
+}
+
+message IProduceMessage {
+    required IIProduceMessageData data = 1;
+}
+
+message IIProduceMessageData {
+    required string menuId = 1;
+}
+
+message IProduceMessageRes { }

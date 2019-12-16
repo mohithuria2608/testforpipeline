@@ -1,5 +1,5 @@
 {
-    "environment": "local",
+    "environment": "staging",
     "server": {
         "auth": {
             "url": "http://localhost",
@@ -24,48 +24,32 @@
         "deeplink": {
             "url": "http://localhost",
             "port": 4005
-        },
-        "kafka": {
-            "url": "http://localhost",
-            "port": 4006
-        },
-        "upload": {
-            "url": "http://localhost",
-            "port": 4010
         }
     },
     "grpc": {
         "auth": {
-            "server": "localhost:50051",
-            "client": "127.0.0.1:50051"
+            "server": "0.0.0.0:50051",
+            "client": "20.46.144.91:50051"
         },
         "user": {
-            "server": "localhost:50052",
-            "client": "127.0.0.1:50052"
+            "server": "0.0.0.0:50052",
+            "client": "20.46.147.85:50052"
         },
         "menu": {
-            "server": "localhost:50053",
-            "client": "127.0.0.1:50053"
+            "server": "0.0.0.0:50053",
+            "client": "20.46.147.86:50053"
         },
         "order": {
-            "server": "localhost:50054",
-            "client": "127.0.0.1:50054"
+            "server": "0.0.0.0:50054",
+            "client": "20.46.147.215:50054"
         },
         "sync": {
-            "server": "localhost:50055",
-            "client": "127.0.0.1:50055"
+            "server": "0.0.0.0:50055",
+            "client": "20.46.147.215:50055"
         },
         "deeplink": {
             "server": "localhost:50056",
             "client": "127.0.0.1:50056"
-        },
-        "kafka": {
-            "server": "localhost:50057",
-            "client": "127.0.0.1:50057"
-        },
-        "upload": {
-            "server": "localhost:50060",
-            "client": "127.0.0.1:50060"
         }
     },
     "kafka": {
@@ -85,10 +69,6 @@
                 "kafka": {
                     "server": "/../../../proto/kafka.proto",
                     "client": "/../../../../proto/kafka.proto"
-                },
-                "upload": {
-                    "server": "/../../../proto/upload.proto",
-                    "client": "/../../../../proto/upload.proto"
                 }
             }
         }

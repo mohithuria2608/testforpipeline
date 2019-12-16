@@ -1,6 +1,6 @@
-import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
-import * as fs from 'fs'
+import * as fs from 'fs';
+import { consolelog, getRequest } from '../../utils';
+import * as Constant from '../../constant';
 
 export class MenuController {
     constructor() { }
@@ -15,6 +15,19 @@ export class MenuController {
             return menu
         } catch (err) {
             consolelog("fetchMenu", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method GET
+    * */
+    async fetchSuggestion(payload: IMenuRequest.ISuggestionFetch) {
+        try {
+            let products = await getRequest('http://40.123.207.192/rest/V1/products?searchCriteria[filterGroups][0][filters][0][field]=category_id&%20searchCriteria[filterGroups][0][filters][0][value]=6');
+            return JSON.parse(products);
+        } catch (err) {
+            consolelog("fetchSuggestion", err, false)
             return Promise.reject(err)
         }
     }
