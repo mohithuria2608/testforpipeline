@@ -137,67 +137,71 @@ export let STATUS_MSG = {
         E400: {
             PROFILE_SETUP_ALLREADY_COMPLETE: {
                 statusCode: 400,
+                httpCode: 400,
                 type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
                 message: 'Profile setup is already complete'
             },
 
             OTP_SESSION_EXPIRED: {
                 statusCode: 400,
+                httpCode: 400,
                 type: 'OTP_SESSION_EXPIRED',
                 message: 'Otp session has expired'
             },
 
             OTP_EXPIRED: {
                 statusCode: 400,
+                httpCode: 400,
                 type: 'OTP_EXPIRED',
                 message: 'Otp entered has expired'
             },
 
             INVALID_OTP: {
                 statusCode: 400,
+                httpCode: 400,
                 type: 'INVALID_OTP',
-                message: 'Invalid otp entered'
+                message: 'Invalid otp'
             },
 
             USER_ALREADY_EXIST: {
                 statusCode: 400,
+                httpCode: 400,
                 type: 'USER_ALREADY_EXIST',
                 message: 'User already exist, please login'
             },
 
             INVALID_ID: {
                 statusCode: 400,
+                httpCode: 400,
                 message: 'Invalid Id Provided ',
                 type: 'INVALID_ID'
             },
 
             APP_ERROR: {
                 statusCode: 400,
+                httpCode: 400,
                 message: 'Application Error',
                 type: 'APP_ERROR'
             },
 
-            DB_ERROR: {
-                statusCode: 400,
-                message: 'DB Error : ',
-                type: 'DB_ERROR'
-            },
-
             DEFAULT: {
                 statusCode: 400,
-                message: 'Error',
+                httpCode: 400,
+                message: 'Bad Request',
                 type: 'DEFAULT'
             }
         },
         E401: {
             UNAUTHORIZED: {
                 statusCode: 401,
+                httpCode: 401,
                 message: 'You are not authorized to perform this action',
                 type: 'UNAUTHORIZED'
             },
 
             ACCESS_TOKEN_EXPIRED: {
                 statusCode: 401,
+                httpCode: 401,
                 type: 'ACCESS_TOKEN_EXPIRED',
                 message: 'Access token has expired.'
             }
@@ -205,25 +209,36 @@ export let STATUS_MSG = {
         E404: {
             RESOURCE_NOT_FOUND: {
                 statusCode: 404,
+                httpCode: 404,
                 type: 'RESOURCE_NOT_FOUND',
                 message: 'Resource not found'
             }
         },
         E422: {
             VALIDATION_ERROR: {
-                statusCode: 400,
-                message: 'Validation Error : Unprocessable Entity',
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Validation Error :',
                 type: 'VALIDATION_ERROR'
             }
         },
         E500: {
+            DB_ERROR: {
+                statusCode: 500,
+                httpCode: 500,
+                message: 'DB Error : ',
+                type: 'DB_ERROR'
+            },
+
             IMP_ERROR: {
                 statusCode: 500,
+                httpCode: 500,
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
             INVALID_TOKEN_TYPE: {
                 statusCode: 500,
+                httpCode: 500,
                 message: 'Invalid token type provided',
                 type: 'INVALID_TOKEN_TYPE'
             }
@@ -231,6 +246,7 @@ export let STATUS_MSG = {
         E501: {
             TOKENIZATION_ERROR: {
                 statusCode: 501,
+                httpCode: 501,
                 message: 'Failure in creating token',
                 type: 'TOKENIZATION_ERROR'
             }
@@ -240,83 +256,97 @@ export let STATUS_MSG = {
         S200: {
             OTP_SENT: {
                 statusCode: 200,
+                httpCode: 200,
                 type: 'OTP_SENT',
                 message: 'Otp sent successfully'
             },
 
             OTP_VERIFIED: {
                 statusCode: 200,
+                httpCode: 200,
                 type: 'OTP_VERIFIED',
                 message: 'Otp verified'
             },
 
             RESET_SUCCESS: {
                 statusCode: 200,
+                httpCode: 200,
                 type: 'RESET_SUCCESS',
                 message: 'Password has been successfully reset'
             },
 
             PHONE_VERIFIED: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Phone number successfully verified',
                 type: 'PHONE_VERIFIED'
             },
 
             FORGET_PASSWORD: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Forget password successfully',
                 type: 'FORGET_PASSWORD'
             },
 
             UPLOAD: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'File uploaded successfully',
                 type: 'UPLOAD'
             },
 
             UPDATED: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Updated Successfully',
                 type: 'UPDATED'
             },
 
             DELETED: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Deleted Successfully',
                 type: 'DELETED'
             },
 
             BLOCKED: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Blocked Successfully',
                 type: 'BLOCKED'
             },
             SOCIAL_LOGIN: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Logged In Successfully',
                 type: 'SOCIAL_LOGIN'
             },
 
             LOGIN: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Logged In Successfully',
                 type: 'LOGIN'
             },
 
             LOGOUT: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Logged Out Successfully',
                 type: 'LOGOUT'
             },
 
             DEFAULT: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Success',
                 type: 'DEFAULT',
             },
 
             ACCOUNT_DELETED: {
                 statusCode: 200,
+                httpCode: 200,
                 message: 'Account has been deleted',
                 type: 'ACCOUNT_DELETED'
             }
@@ -324,6 +354,7 @@ export let STATUS_MSG = {
         S201: {
             CREATED: {
                 statusCode: 201,
+                httpCode: 201,
                 message: 'Created Successfully',
                 type: 'CREATED'
             },
@@ -331,17 +362,21 @@ export let STATUS_MSG = {
         S204: {
             USER_NOT_FOUND: {
                 statusCode: 204,
+                httpCode: 204,
                 message: 'User not found',
                 type: 'USER_NOT_FOUND'
             },
 
             MENU_NOT_FOUND: {
                 statusCode: 204,
+                httpCode: 204,
                 message: 'Menu not found',
                 type: 'MENU_NOT_FOUND'
             },
+
             SERVICE_UNAVAILABLE: {
                 statusCode: 204,
+                httpCode: 204,
                 type: 'SERVICE_UNAVAILABLE',
                 message: "Sorry, we don't, deliver at this location"
             }
@@ -349,12 +384,14 @@ export let STATUS_MSG = {
         S205: {
             MENU_CHANGED: {
                 statusCode: 205,
+                httpCode: 205,
                 message: 'Menu has been changed. Please refresh your menu.',
                 type: 'MENU_CHANGED'
             },
 
             ITEM_CHANGED: {
                 statusCode: 205,
+                httpCode: 205,
                 message: 'Item info has been changed. Please refresh your menu.',
                 type: 'ITEM_CHANGED'
             }
@@ -362,6 +399,7 @@ export let STATUS_MSG = {
         S304: {
             NOT_MODIFIED: {
                 statusCode: 304,
+                httpCode: 304,
                 message: 'Request not modified',
                 type: 'NOT_MODIFIED'
             }

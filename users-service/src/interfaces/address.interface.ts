@@ -52,6 +52,5 @@ declare namespace IAddressRequest {
     }
 
     interface IFetchAddress {
-
     }
 }

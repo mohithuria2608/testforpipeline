@@ -9,7 +9,7 @@ export default (opts?): Middleware => {
       consolelog(process.cwd(), "In error handler", err, false)
 
       let errReturn = sendError(err)
-      ctx.status = errReturn.statusCode;
+      ctx.status = errReturn.httpCode;
       ctx.body = errReturn.payload;
     }
   }

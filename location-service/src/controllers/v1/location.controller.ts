@@ -17,7 +17,7 @@ export class LocationController {
             if (store && store.length > 0)
                 return { menuId: store[0].menuId }
             else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SERVICE_UNAVAILABLE)
+                return Promise.reject(Constant.STATUS_MSG.SUCCESS.S204.SERVICE_UNAVAILABLE)
         } catch (err) {
             consolelog(process.cwd(), "validateLocation", err, false)
             return Promise.reject(err)

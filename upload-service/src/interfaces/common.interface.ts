@@ -22,4 +22,11 @@ declare namespace ICommonRequest {
         page?: number,
         // skip?: number
     }
+
+    export interface IError {
+        statusCode: number,
+        httpCode: number,
+        type: string,
+        message: string
+    }
 }

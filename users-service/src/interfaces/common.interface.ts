@@ -27,4 +27,11 @@ declare namespace ICommonRequest {
         lat?: number,
         lng?: number
     }
+
+    export interface IError {
+        statusCode: number,
+        httpCode: number,
+        type: string,
+        message: string
+    }
 }

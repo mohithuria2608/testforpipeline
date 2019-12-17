@@ -22,4 +22,11 @@ declare namespace ICommonRequest {
         username: string,
         password: string
     }
+
+    export interface IError {
+        statusCode: number,
+        httpCode: number,
+        type: string,
+        message: string
+    }
 }
