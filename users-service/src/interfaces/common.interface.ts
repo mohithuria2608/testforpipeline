@@ -2,6 +2,7 @@ declare namespace ICommonRequest {
 
     export interface IHeaders {
         language: string,
+        brand: string,
         country: string,
         appversion: string,
         devicemodel: string,

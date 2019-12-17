@@ -11,7 +11,7 @@ export const COMMON_HEADERS = {
         Constant.DATABASE.LANGUAGE.AR,
         Constant.DATABASE.LANGUAGE.EN
     ).required(),
-    brand:Joi.string().valid(
+    brand: Joi.string().valid(
         Constant.DATABASE.BRAND.KFC,
         Constant.DATABASE.BRAND.PH
     ),
@@ -19,7 +19,7 @@ export const COMMON_HEADERS = {
         Constant.DATABASE.COUNTRY.UAE
     ).required(),
     appversion: Joi.string().required(),
-    devicemodel: Joi.string().required(), 
+    devicemodel: Joi.string().required(),
     devicetype: Joi.string().valid(
         Constant.DATABASE.TYPE.DEVICE.ANDROID,
         Constant.DATABASE.TYPE.DEVICE.IOS
