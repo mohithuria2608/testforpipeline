@@ -6,6 +6,7 @@ metadata:
     app: auth-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: auth-service
@@ -62,6 +63,7 @@ metadata:
     app: user-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: user-service
@@ -116,6 +118,7 @@ metadata:
     app: menu-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: menu-service
@@ -171,6 +174,7 @@ metadata:
     app: order-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: order-service
@@ -225,6 +229,7 @@ metadata:
     app: deeplink-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: deeplink-service
@@ -280,6 +285,7 @@ metadata:
     app: kafka-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: kafka-service
@@ -335,6 +341,7 @@ metadata:
     app: sync-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: sync-service
@@ -389,6 +396,7 @@ metadata:
     app: location-service
 spec:
   replicas: 2
+  revisionHistoryLimit: 4
   selector:
     matchLabels:
       app: location-service
