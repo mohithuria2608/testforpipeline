@@ -33,7 +33,7 @@ class AerospikeClass {
                     }
                     let aerospikeConfig = {
                         //@todo : check for pem file for auth
-                        hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
+                        hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {
@@ -263,7 +263,6 @@ class AerospikeClass {
                     } else {
                         record = await this.client.get(key)
                     }
-                    consolelog(process.cwd(), 'get record:', { record }, false)
                     resolve((record && record.bins) ? record.bins : record)
                 } else reject('Client not initialized');
             } catch (error) {
@@ -341,6 +340,7 @@ class AerospikeClass {
                         for (let item of tempData) {
                             records.push(item.bins);
                         }
+                        consolelog(process.cwd(), 'records of query:', JSON.stringify(records), true)
                         resolve(records);
                     });
                 } else reject('Client not initialized');

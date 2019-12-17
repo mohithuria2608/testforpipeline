@@ -259,7 +259,6 @@ class AerospikeClass {
                     } else {
                         record = await this.client.get(key)
                     }
-                    consolelog(process.cwd(), 'get record:', { record }, false)
                     resolve((record && record.bins) ? record.bins : record)
                 } else reject('Client not initialized');
             } catch (error) {

@@ -90,7 +90,7 @@ export class UserEntity extends BaseEntity {
             if (user && user.id) {
                 return user
             } else
-                return Promise.reject(Constant.STATUS_MSG.SUCCESS.S204.USER_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)

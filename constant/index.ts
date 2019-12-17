@@ -214,6 +214,35 @@ export let STATUS_MSG = {
                 message: 'Resource not found'
             }
         },
+        E409: {
+            USER_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'User not found',
+                type: 'USER_NOT_FOUND'
+            },
+
+            MENU_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Menu not found',
+                type: 'MENU_NOT_FOUND'
+            },
+
+            SERVICE_UNAVAILABLE: {
+                statusCode: 409,
+                httpCode: 409,
+                type: 'SERVICE_UNAVAILABLE',
+                message: "Sorry, we don't, deliver at this location"
+            },
+
+            DATA_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'data not found',
+                type: 'DATA_NOT_FOUND'
+            },
+        },
         E422: {
             VALIDATION_ERROR: {
                 statusCode: 422,
@@ -360,25 +389,11 @@ export let STATUS_MSG = {
             },
         },
         S204: {
-            USER_NOT_FOUND: {
-                statusCode: 204,
-                httpCode: 204,
-                message: 'User not found',
-                type: 'USER_NOT_FOUND'
-            },
-
-            MENU_NOT_FOUND: {
-                statusCode: 204,
-                httpCode: 204,
-                message: 'Menu not found',
-                type: 'MENU_NOT_FOUND'
-            },
-
-            SERVICE_UNAVAILABLE: {
-                statusCode: 204,
-                httpCode: 204,
-                type: 'SERVICE_UNAVAILABLE',
-                message: "Sorry, we don't, deliver at this location"
+            NOT_MODIFIED: {
+                statusCode: 304,
+                httpCode: 304,
+                message: 'Request not modified',
+                type: 'NOT_MODIFIED'
             }
         },
         S205: {
@@ -394,14 +409,6 @@ export let STATUS_MSG = {
                 httpCode: 205,
                 message: 'Item info has been changed. Please refresh your menu.',
                 type: 'ITEM_CHANGED'
-            }
-        },
-        S304: {
-            NOT_MODIFIED: {
-                statusCode: 304,
-                httpCode: 304,
-                message: 'Request not modified',
-                type: 'NOT_MODIFIED'
             }
         }
     },

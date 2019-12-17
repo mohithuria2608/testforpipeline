@@ -33,7 +33,7 @@ declare namespace IAerospike {
         bins?: string
     }
     interface Query {
-        bins?: string,
+        bins?: string[],
         equal?: Equal,
         range?: Range,
         geoWithinRadius?: GeoWIthinRadius,

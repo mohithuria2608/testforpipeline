@@ -17,6 +17,10 @@ export let grpcSendError = function (error) {
         grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED
         grpcErrType = "UNAUTHENTICATED"
     }
+    else if (error.statusCode == 409) {
+        grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.NOT_FOUND
+        grpcErrType = "NOT_FOUND"
+    }
     else if (error.statusCode == 422) {
         grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.INVALID_ARGUMENT
         grpcErrType = "INVALID_ARGUMENT"
@@ -55,7 +59,10 @@ export let sendError = function (error) {
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.NOT_FOUND: {
-                consolelog(process.cwd(), "Unhandled grpc error type NOT_FOUND", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E409.DATA_NOT_FOUND.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E409.DATA_NOT_FOUND.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E409.DATA_NOT_FOUND.type
+                // consolelog(process.cwd(), "Unhandled grpc error type NOT_FOUND", JSON.stringify(error), true)
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.ALREADY_EXISTS: {

@@ -41,7 +41,7 @@ export default (router: Router) => {
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
-                    otp: Joi.number().required().error(new Error('Enter a valid OTP of 4 digits.')),
+                    otp: Joi.number().required(),
                 }
             }),
             async (ctx) => {

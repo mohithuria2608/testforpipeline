@@ -22,7 +22,7 @@ export class AddressController {
             if (store && store.length) {
                 return await ENTITY.AddressE.addAddress(headers.deviceid, auth.userData, payload, store[0])
             } else
-                return Constant.STATUS_MSG.SUCCESS.S204.SERVICE_UNAVAILABLE
+                return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
         } catch (err) {
             consolelog(process.cwd(), "registerAddress", err, false)
@@ -55,7 +55,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let queryArg: IAerospike.Query = {
-                bins: "id, bldgName, description, flatNum, tag",
+                bins: ["id", "bldgName", "description", "flatNum", "tag"],
                 equal: {
                     bin: "userId",
                     value: auth.userData.id
