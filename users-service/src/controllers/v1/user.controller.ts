@@ -23,7 +23,7 @@ export class UserController {
                     bin: "phnNo",
                     value: payload.phnNo
                 },
-                set: 'user',
+                set: ENTITY.UserE.set,
                 background: false,
             }
             let checkUser: IUserRequest.IUserData = await Aerospike.query(queryArg)
@@ -55,7 +55,7 @@ export class UserController {
             }
             return {}
         } catch (err) {
-            consolelog(process.cwd(),"loginSendOtp", err, false)
+            consolelog(process.cwd(), "loginSendOtp", err, false)
             return Promise.reject(err)
         }
     }
@@ -78,7 +78,7 @@ export class UserController {
                     bin: "phnNo",
                     value: payload.phnNo
                 },
-                set: 'user',
+                set: ENTITY.UserE.set,
                 background: false,
             }
             let userFromDb: IUserRequest.IUserData = await Aerospike.query(queryArg)
@@ -116,7 +116,7 @@ export class UserController {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
         } catch (err) {
-            consolelog(process.cwd(),"authVerifyOtp", err, false)
+            consolelog(process.cwd(), "authVerifyOtp", err, false)
             return Promise.reject(err)
         }
     }
@@ -134,7 +134,7 @@ export class UserController {
                     func: Constant.UDF.USER.check_social_key,
                     args: [payload.medium, payload.socialKey],
                 },
-                set: 'user',
+                set: ENTITY.UserE.set,
                 background: false,
             }
             let userObj: IUserRequest.IUserData = await Aerospike.query(queryArg)
@@ -187,7 +187,7 @@ export class UserController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userObj, headers.deviceid) }
         } catch (err) {
-            consolelog(process.cwd(),"socialAuthValidate", err, false)
+            consolelog(process.cwd(), "socialAuthValidate", err, false)
             return Promise.reject(err)
         }
     }
@@ -216,7 +216,7 @@ export class UserController {
                         bin: "phnNo",
                         value: payload.phnNo
                     },
-                    set: 'user',
+                    set: ENTITY.UserE.set,
                     background: false,
                 }
                 let checkPhoneExist: IUserRequest.IUserData = await Aerospike.query(queryArg)
@@ -300,7 +300,7 @@ export class UserController {
                 return formatUserData(user, headers.deviceid)
             }
         } catch (error) {
-            consolelog(process.cwd(),"profileUpdate", error, false)
+            consolelog(process.cwd(), "profileUpdate", error, false)
             return Promise.reject(error)
         }
     }

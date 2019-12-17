@@ -3,7 +3,7 @@ import { consolelog } from '../utils'
 import { authService } from '../grpc/client'
 
 export class BaseEntity {
-    protected set: SetNames;
+    public set: SetNames;
     constructor(set?) {
         this.set = set
     }

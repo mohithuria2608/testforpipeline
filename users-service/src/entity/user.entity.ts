@@ -7,7 +7,6 @@ import { Aerospike } from '../databases/aerospike'
 import * as CMS from "../cms"
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
-    protected set: SetNames;
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,

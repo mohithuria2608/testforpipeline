@@ -56,6 +56,8 @@ class AerospikeClass {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.UserE.sindex)
+                        if (ENTITY.AddressE.sindex && ENTITY.AddressE.sindex.length > 0)
+                            this.bootstrapIndex(ENTITY.AddressE.sindex)
                         resolve({})
                     }
                 } catch (err) {

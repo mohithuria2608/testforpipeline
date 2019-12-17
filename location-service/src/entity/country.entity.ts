@@ -5,7 +5,6 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class CountryEntity extends BaseEntity {
-    protected set: SetNames;
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,

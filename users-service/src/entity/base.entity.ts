@@ -3,7 +3,7 @@ import { consolelog } from '../utils'
 import { authService, locationService, kafkaService } from '../grpc/client'
 
 export class BaseEntity {
-    protected set: SetNames;
+    public set: SetNames;
     constructor(set?) {
         this.set = set
     }
@@ -12,7 +12,7 @@ export class BaseEntity {
         try {
             return authService.createToken(dataToSend)
         } catch (error) {
-            consolelog(process.cwd(),"createToken", error, false)
+            consolelog(process.cwd(), "createToken", error, false)
             return Promise.reject(error)
         }
     }
@@ -21,7 +21,7 @@ export class BaseEntity {
         try {
             return await locationService.validateCoordinate({ lat, lng })
         } catch (error) {
-            consolelog(process.cwd(),"validateCoordinate", error, false)
+            consolelog(process.cwd(), "validateCoordinate", error, false)
             return Promise.reject(error)
         }
     }
@@ -40,7 +40,7 @@ export class BaseEntity {
             kafkaService.syncUser(data)
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"syncUser", error, false)
+            consolelog(process.cwd(), "syncUser", error, false)
             return Promise.reject(error)
         }
     }

@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../databases/aerospike'
 
 export class AddressController {
     constructor() { }
@@ -53,7 +54,17 @@ export class AddressController {
     * */
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return []
+            let queryArg: IAerospike.Query = {
+                bins: "id, bldgName, description, flatNum, tag",
+                equal: {
+                    bin: "userId",
+                    value: auth.userData.id
+                },
+                set: ENTITY.AddressE.set,
+                background: false,
+            }
+            let addres: IAddressRequest.IAddress[] = await Aerospike.query(queryArg)
+            return addres
         } catch (err) {
             consolelog(process.cwd(), "fetchAddress", err, false)
             return Promise.reject(err)

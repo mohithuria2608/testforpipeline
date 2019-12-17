@@ -8,7 +8,6 @@ import * as config from "config"
 import * as Constant from '../constant'
 const aerospike = require('aerospike');
 const path = require('path');
-import * as ENTITY from '../entity'
 import { consolelog } from "../utils";
 
 class AerospikeClass {

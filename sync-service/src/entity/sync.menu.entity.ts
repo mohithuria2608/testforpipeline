@@ -6,7 +6,7 @@ import { consolelog } from '../utils'
 
 export class SyncMenuEntity extends BaseEntity {
     constructor() {
-        super('Menu')
+        super('menu')
     }
 
     async syncMenu() {

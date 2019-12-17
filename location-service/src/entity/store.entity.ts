@@ -7,7 +7,6 @@ import { Aerospike } from '../databases/aerospike'
 const aerospike = require('aerospike');
 
 export class StoreEntity extends BaseEntity {
-    protected set: SetNames;
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,

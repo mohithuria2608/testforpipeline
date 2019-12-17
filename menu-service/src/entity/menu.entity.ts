@@ -6,7 +6,6 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class MenuClass extends BaseEntity {
-    protected set: SetNames;
     public sindex: IAerospike.CreateIndex[] = []
     constructor() {
         super('menu')
