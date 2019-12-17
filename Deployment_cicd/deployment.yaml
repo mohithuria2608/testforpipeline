@@ -5,6 +5,7 @@ metadata:
   labels:
     app: auth-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: auth-service
@@ -60,6 +61,7 @@ metadata:
   labels:
     app: user-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: user-service
@@ -113,6 +115,7 @@ metadata:
   labels:
     app: menu-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: menu-service
@@ -167,6 +170,7 @@ metadata:
   labels:
     app: order-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: order-service
@@ -220,6 +224,7 @@ metadata:
   labels:
     app: deeplink-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: deeplink-service
@@ -274,6 +279,7 @@ metadata:
   labels:
     app: kafka-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: kafka-service
@@ -328,6 +334,7 @@ metadata:
   labels:
     app: sync-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: sync-service
@@ -381,6 +388,7 @@ metadata:
   labels:
     app: location-service
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: location-service
