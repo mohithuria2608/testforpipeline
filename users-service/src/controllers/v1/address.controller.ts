@@ -56,6 +56,12 @@ export class AddressController {
         try {
             let queryArg: IAerospike.Query = {
                 bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive"],
+                udf: {
+                    module: 'address',
+                    func: Constant.UDF.ADDRESS.get_address,
+                    args: [Constant.DATABASE.TYPE.STATUS.ACTIVE],
+                    forEach: true
+                },
                 equal: {
                     bin: "userId",
                     value: auth.userData.id
@@ -77,7 +83,7 @@ export class AddressController {
     * */
     async deleteAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IDeleteAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId, isActive: 0 }, false)
+            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId, isActive: Constant.DATABASE.TYPE.STATUS.INACTIVE }, false)
         } catch (err) {
             consolelog(process.cwd(), "deleteAddressById", err, false)
             return Promise.reject(err)

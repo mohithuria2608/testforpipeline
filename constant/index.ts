@@ -2,6 +2,9 @@ export const UDF = {
     USER: {
         check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key"
+    },
+    ADDRESS: {
+        get_address: "get_address"
     }
 };
 
@@ -119,7 +122,7 @@ export let DATABASE = {
         TAG: {
             HOME: "HOME",
             OFFICE: "OFFICE",
-            HOTEl: "HOTEl",
+            HOTEL: "HOTEL",
             OTHER: "OTHER"
         },
 
@@ -128,6 +131,11 @@ export let DATABASE = {
             CATEGORY: "CATEGORY",
             ITEM_DETAIL: "ITEM_DETAIL",
             ADD_TO_CART: "ADD_TO_CART",
+        },
+
+        STATUS: {
+            INACTIVE: 0,
+            ACTIVE: 1
         }
     }
 };

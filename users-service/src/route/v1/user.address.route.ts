@@ -24,7 +24,7 @@ export default (router: Router) => {
                     tag: Joi.string().valid(
                         Constant.DATABASE.TYPE.TAG.HOME,
                         Constant.DATABASE.TYPE.TAG.OFFICE,
-                        Constant.DATABASE.TYPE.TAG.HOTEl,
+                        Constant.DATABASE.TYPE.TAG.HOTEL,
                         Constant.DATABASE.TYPE.TAG.OTHER).required(),
                 }
             }),

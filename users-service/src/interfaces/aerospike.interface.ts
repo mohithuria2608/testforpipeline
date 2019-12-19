@@ -32,6 +32,13 @@ declare namespace IAerospike {
         key: any,
         bins?: string[]
     }
+
+    interface Scan {
+        set: string,
+        bins?: string[],
+        nobins?: boolean,
+        concurrent?: boolean,
+    }
     interface Query {
         bins?: string[],
         equal?: Equal,
@@ -68,6 +75,7 @@ declare namespace IAerospike {
     }
 
     interface Udf {
+        forEach: boolean,
         module: any,
         func: any,
         args: any,

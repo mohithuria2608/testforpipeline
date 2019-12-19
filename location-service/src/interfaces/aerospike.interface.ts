@@ -30,7 +30,7 @@ declare namespace IAerospike {
     interface Get {
         set: string,
         key: any,
-        bins?: string
+        bins?: string[]
     }
 
     interface Scan {
@@ -39,9 +39,8 @@ declare namespace IAerospike {
         nobins?: boolean,
         concurrent?: boolean,
     }
-
     interface Query {
-        bins?: string,
+        bins?: string[],
         equal?: Equal,
         range?: Range,
         geoWithinRadius?: GeoWIthinRadius,
@@ -76,6 +75,7 @@ declare namespace IAerospike {
     }
 
     interface Udf {
+        forEach: boolean,
         module: any,
         func: any,
         args: any,
