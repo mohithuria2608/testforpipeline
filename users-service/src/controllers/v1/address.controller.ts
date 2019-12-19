@@ -41,7 +41,7 @@ export class AddressController {
     * */
     async updateAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IUpdateAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.AddressE.updateAddress(payload)
+            return await ENTITY.AddressE.updateAddress(payload, true)
         } catch (err) {
             consolelog(process.cwd(), "updateAddressById", err, false)
             return Promise.reject(err)
@@ -55,7 +55,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let queryArg: IAerospike.Query = {
-                bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag"],
+                bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive"],
                 equal: {
                     bin: "userId",
                     value: auth.userData.id
@@ -67,6 +67,19 @@ export class AddressController {
             return addres
         } catch (err) {
             consolelog(process.cwd(), "fetchAddress", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method DELETE
+    * @description Delete address by id
+    * */
+    async deleteAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IDeleteAddress, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId, isActive: 0 }, false)
+        } catch (err) {
+            consolelog(process.cwd(), "deleteAddressById", err, false)
             return Promise.reject(err)
         }
     }

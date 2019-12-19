@@ -9,8 +9,8 @@ COPY constant/ /usr/src/app/src/constant/
 RUN apt-get update
 RUN npm cache clean --force
 RUN npm install -g typescript
-RUN npm install
+#RUN npm install
 EXPOSE 4006
 EXPOSE 50057
 RUN tsc
-CMD node dist/app.js
+CMD npm run stg

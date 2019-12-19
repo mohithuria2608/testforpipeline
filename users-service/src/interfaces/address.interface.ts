@@ -48,9 +48,16 @@ declare namespace IAddressRequest {
         bldgName?: string,
         description?: string,
         flatNum?: string,
-        tag?: string
+        tag?: string,
+        isActive?: number
     }
 
     interface IFetchAddress {
     }
+
+    interface IDeleteAddress {
+        addressId: string
+    }
 }
+
+

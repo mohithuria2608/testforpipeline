@@ -30,7 +30,7 @@ declare namespace IAerospike {
     interface Get {
         set: string,
         key: any,
-        bins?: string
+        bins?: string[]
     }
     interface Query {
         bins?: string[],
