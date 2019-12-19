@@ -32,6 +32,14 @@ declare namespace IAerospike {
         key: any,
         bins?: string
     }
+
+    interface Scan {
+        set: string,
+        bins?: string[],
+        nobins?: boolean,
+        concurrent?: boolean,
+    }
+
     interface Query {
         bins?: string,
         equal?: Equal,

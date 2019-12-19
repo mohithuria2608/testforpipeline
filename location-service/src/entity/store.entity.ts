@@ -70,6 +70,7 @@ export class StoreEntity extends BaseEntity {
         try {
             let GeoJSON = aerospike.GeoJSON;
             data['geoFence'] = new GeoJSON(data['geoFence'])
+            consolelog(process.cwd(), "id", data.id, true)
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
@@ -79,7 +80,7 @@ export class StoreEntity extends BaseEntity {
 
             await Aerospike.put(putArg)
         } catch (error) {
-            consolelog(process.cwd(),"postStore", error, false)
+            consolelog(process.cwd(), "postStore", error, false)
             return Promise.reject(error)
         }
     }
@@ -103,7 +104,7 @@ export class StoreEntity extends BaseEntity {
             let res = await Aerospike.query(geoWithinArg)
             return res
         } catch (error) {
-            consolelog(process.cwd(),"validateCoords", error, false)
+            consolelog(process.cwd(), "validateCoords", error, false)
             return Promise.reject(error)
         }
     }

@@ -6,6 +6,7 @@
   "scripts": {
     "local": "NODE_ENV=default gulp",
     "dev": "NODE_ENV=development gulp",
+    "stg": "NODE_ENV=staging node dist/app.js",
     "test-mocha": "node_modules/.bin/ts-mocha ./test/*.ts",
     "test-jest": "node_modules/.bin/jest",
     "test-jasmine": "ts-node node_modules/jasmine/bin/jasmine ./test/*.ts",

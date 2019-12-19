@@ -22,6 +22,8 @@ export class AddressEntity extends BaseEntity {
 
     public addressSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
+        lat: Joi.number().required(),
+        lng: Joi.number().required(),
         areaId: Joi.number().required(),
         bldgName: Joi.string(),
         bldgNameUn: Joi.string(),
@@ -81,6 +83,8 @@ export class AddressEntity extends BaseEntity {
             let id = this.uuidv1();
             let address = {
                 id: id,
+                lat: addressData.lat,
+                lng: addressData.lng,
                 bldgName: addressData.bldgName,
                 description: addressData.description,
                 flatNum: addressData.flatNum,

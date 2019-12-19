@@ -273,11 +273,16 @@ class AerospikeClass {
         })
     }
 
-    async scan(set: string): Promise<any> {
+    async scan(argv: IAerospike.Scan): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
+                const options = {
+                    concurrent:(argv.concurrent != undefined) ? argv.nobins : true ,
+                    nobins: (argv.nobins != undefined) ? argv.nobins : false,
+                    select: argv.bins
+                }
                 if (this.client) {
-                    let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false })
+                    let scan = this.client.scan(this.namespace, argv.set, options, { concurrent: true, nobins: false })
                     resolve(await this.queryForeach(scan))
                 } else reject('Client not initialized');
             } catch (error) {

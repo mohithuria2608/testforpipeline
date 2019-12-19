@@ -55,7 +55,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let queryArg: IAerospike.Query = {
-                bins: ["id", "bldgName", "description", "flatNum", "tag"],
+                bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag"],
                 equal: {
                     bin: "userId",
                     value: auth.userData.id
