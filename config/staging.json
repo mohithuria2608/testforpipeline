@@ -61,7 +61,7 @@
         },
         "deeplink": {
             "server": "localhost:50056",
-            "client": "127.0.0.1:50056"
+            "client": "20.46.147.215:50056"
         },
         "kafka": {
             "server": "localhost:50057",
