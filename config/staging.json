@@ -65,15 +65,15 @@
         },
         "kafka": {
             "server": "localhost:50057",
-            "client": "127.0.0.1:50057"
+            "client": "20.46.147.215:50057"
         },
         "location": {
             "server": "localhost:50058",
-            "client": "127.0.0.1:50058"
+            "client": "20.46.147.215:50058"
         },
         "upload": {
             "server": "localhost:50060",
-            "client": "127.0.0.1:50060"
+            "client": "20.46.147.215:50060"
         }
     },
     "kafka": {
