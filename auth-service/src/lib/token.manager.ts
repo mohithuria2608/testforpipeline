@@ -15,8 +15,8 @@ export class TokenManager {
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {
-                        expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
-                        tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
+                        // expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+                        // tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                         break;
                     } else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)

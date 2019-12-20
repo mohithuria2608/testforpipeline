@@ -139,6 +139,10 @@ export class AddressEntity extends BaseEntity {
     async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, returnRes: boolean) {
         try {
             let bins = {};
+            if (addressUpdate.lat)
+                bins['lat'] = addressUpdate.lat
+            if (addressUpdate.lng)
+                bins['lng'] = addressUpdate.lng
             if (addressUpdate.bldgName)
                 bins['bldgName'] = addressUpdate.bldgName
             if (addressUpdate.description)

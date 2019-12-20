@@ -6,7 +6,7 @@ export default (opts?): Middleware => {
     try {
       await next();
     } catch (err) {
-      consolelog(process.cwd(), "In error handler", err, false)
+      consolelog(process.cwd(), "In error handler", JSON.stringify(err), false)
 
       let errReturn = sendError(err)
       ctx.status = errReturn.httpCode;

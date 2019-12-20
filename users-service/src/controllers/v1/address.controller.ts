@@ -41,6 +41,13 @@ export class AddressController {
     * */
     async updateAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IUpdateAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
+            if (payload.lat && payload.lng) {
+                let store: IStoreGrpcRequest.IStore[] = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.length) {
+
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+            }
             return await ENTITY.AddressE.updateAddress(payload, true)
         } catch (err) {
             consolelog(process.cwd(), "updateAddressById", err, false)

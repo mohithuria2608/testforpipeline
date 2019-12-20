@@ -45,6 +45,8 @@ declare namespace IAddressRequest {
 
     interface IUpdateAddress {
         addressId: string
+        lat?: number,
+        lng?: number,
         bldgName?: string,
         description?: string,
         flatNum?: string,

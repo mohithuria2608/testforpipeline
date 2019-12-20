@@ -35,7 +35,7 @@ export default (router: Router) => {
         .post('/register-ufd',
             async (ctx) => {
                 try {
-                    Aerospike.udfRegister({ module: __dirname + '/../../../lua/address.lua' })
+                    Aerospike.udfRegister({ module: __dirname + '/../../../lua/user.lua' })
                     ctx.body = {}
                 }
                 catch (error) {

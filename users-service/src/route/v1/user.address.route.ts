@@ -51,6 +51,8 @@ export default (router: Router) => {
                 headers: COMMON_HEADERS,
                 body: {
                     addressId: Joi.string().required(),
+                    lat: Joi.number().min(0).max(90),
+                    lng: Joi.number().min(-180).max(180),
                     bldgName: Joi.string(),
                     description: Joi.string(),
                     flatNum: Joi.string(),
