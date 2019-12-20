@@ -60,19 +60,19 @@
             "client": "20.46.147.215:50055"
         },
         "deeplink": {
-            "server": "localhost:50056",
+            "server": "0.0.0.0:50056",
             "client": "20.46.147.215:50056"
         },
         "kafka": {
-            "server": "localhost:50057",
+            "server": "0.0.0.0:50057",
             "client": "20.46.147.215:50057"
         },
         "location": {
-            "server": "localhost:50058",
+            "server": "0.0.0.0:50058",
             "client": "20.46.147.215:50058"
         },
         "upload": {
-            "server": "localhost:50060",
+            "server": "0.0.0.0:50060",
             "client": "20.46.147.215:50060"
         }
     },
