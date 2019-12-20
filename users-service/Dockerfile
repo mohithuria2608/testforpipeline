@@ -10,7 +10,7 @@ RUN apt-get update
 RUN apt-get install libssl1.1
 RUN npm cache clean --force
 RUN npm install -g typescript
-# RUN npm install
+RUN npm install
 EXPOSE 4001
 EXPOSE 50052
 RUN tsc
