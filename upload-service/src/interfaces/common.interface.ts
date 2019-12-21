@@ -1,6 +1,6 @@
 declare namespace ICommonRequest {
 
-    export interface IHeaders {
+    interface IHeaders {
         language: string,
         country: string,
         brand: string,
@@ -11,7 +11,7 @@ declare namespace ICommonRequest {
         deviceid: string
     }
 
-    export interface AuthorizationObj {
+    interface AuthorizationObj {
         deviceid: string,
         devicetype: string,
         tokenType: string,
@@ -19,12 +19,12 @@ declare namespace ICommonRequest {
         userData?: any,
     }
 
-    export interface IPagination {
+    interface IPagination {
         page?: number,
         // skip?: number
     }
 
-    export interface IError {
+    interface IError {
         statusCode: number,
         httpCode: number,
         type: string,

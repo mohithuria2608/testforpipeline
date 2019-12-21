@@ -23,7 +23,26 @@ export class UserService {
         consolelog(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
-    async createUserOnCms(payload: IUserGrpcRequest.ICreateUserDataOnCms): Promise<{}> {
+    async createUserOnSdm(payload: IUserGrpcRequest.ISyncToSDMUserData): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await userServiceValidator.createUserOnSdmValidator(payload)
+                this.userClient.createUserOnSdm(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(), "successfully created user on sdm", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating user on sdm", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async createUserOnCms(payload: IUserGrpcRequest.ISyncToCMSUserData): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
                 await userServiceValidator.createUserOnCmsValidator(payload)

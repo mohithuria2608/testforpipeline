@@ -1,10 +1,17 @@
 declare namespace IUserGrpcRequest {
 
-    export interface ICreateUserReq {
-        request: ICreateUserDataOnCms
+    interface ISyncToSdmUserDataReq {
+        request: ISyncToSDMUserData
     }
 
-    export interface ICreateUserDataOnCms {
+    interface ISyncToSDMUserData {
+        
+    }
+    
+    interface ISyncToCmsUserDataReq {
+        request: ISyncToCMSUserData
+    }
+    interface ISyncToCMSUserData {
         aerospikeId: string,
         lastname: string
         firstname: string
@@ -13,4 +20,6 @@ declare namespace IUserGrpcRequest {
         websiteId: number,
         password: string
     }
+
+    
 }

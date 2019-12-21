@@ -12,7 +12,7 @@ export class KafkaController {
      * */
     async produceToFailureTopic(payload: any) {
         try {
-            consolelog(process.cwd(),"produce data in failed KAFKA q", payload, true)
+            consolelog(process.cwd(), "produce data in failed KAFKA q", payload, true)
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
                 topic: Constant.KAFKA_TOPIC.FAIL_Q,
@@ -20,32 +20,51 @@ export class KafkaController {
             });
             return {}
         } catch (err) {
-            consolelog(process.cwd(),"produceToFailureTopic", err, false)
+            consolelog(process.cwd(), "produceToFailureTopic", err, false)
             return Promise.reject(err)
         }
     }
 
     /**
      * @method GRPC
-     * @param {string} aerospikeId :any
-     * @param {string} lastname :any
-     * @param {string} firstname :any
-     * @param {string} email :any
-     * @param {number} storeId :any
-     * @param {number} websiteId :any
-     * @param {number} password :any
+     * @param {object} sdm
      * */
-    async syncUser(payload: IUserGrpcRequest.ICreateUserDataOnCms) {
+    async syncToSdmUser(payload: IUserGrpcRequest.ISyncToSDMUserData) {
         try {
-            consolelog(process.cwd(),"produce user in KAFKA service", payload, true)
+            consolelog(process.cwd(), "produce user to sync in sdm in KAFKA service", payload, true)
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
-                topic: Constant.KAFKA_TOPIC.NEW_USER,
+                topic: Constant.KAFKA_TOPIC.SDM_USER,
                 partition: 0,
             });
             return {}
         } catch (err) {
-            consolelog(process.cwd(),"syncUser", err, false)
+            consolelog(process.cwd(), "syncToSdmUser", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * @param {string} aerospikeId
+     * @param {string} lastname
+     * @param {string} firstname
+     * @param {string} email
+     * @param {number} storeId
+     * @param {number} websiteId
+     * @param {string} password
+     * */
+    async syncToCmsUser(payload: IUserGrpcRequest.ISyncToCMSUserData) {
+        try {
+            consolelog(process.cwd(), "produce user to sync in cms in KAFKA service", payload, true)
+            kafkaProducerE.sendMessage({
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.CMS_USER,
+                partition: 0,
+            });
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "syncToCmsUser", err, false)
             return Promise.reject(err)
         }
     }

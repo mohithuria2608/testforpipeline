@@ -11,7 +11,8 @@ export const UDF = {
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
     NEW_MENU = "new_menu",
-    NEW_USER = "new_user"
+    SDM_USER = "sdm_user",
+    CMS_USER = "cms_user"
 };
 
 export enum MIDDLEWARE {

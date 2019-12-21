@@ -8,7 +8,23 @@ export class UserServiceValidator {
     constructor() {
     }
 
-    async createUserOnCmsValidator(data: IUserGrpcRequest.ICreateUserDataOnCms) {
+    async createUserOnSdmValidator(data: IUserGrpcRequest.ISyncToSDMUserData) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                   
+                })
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(`Invalid Info- ${error.message}`)
+                resolve({})
+            } catch (error) {
+                reject(error.message)
+            }
+        })
+    }
+
+    async createUserOnCmsValidator(data: IUserGrpcRequest.ISyncToCMSUserData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

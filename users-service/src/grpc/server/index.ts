@@ -18,7 +18,17 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
-    createUserOnCms: async (call: IUserCMSRequest.ICreateUserDataOnCmsReq, callback) => {
+    createUserOnSdm: async (call: IUserGrpcRequest.ICreateUserDataOnSdmReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.createUserOnSdm(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            callback(grpcSendError(error))
+        }
+    },
+    createUserOnCms: async (call: IUserGrpcRequest.ICreateUserDataOnCmsReq, callback) => {
         try {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.UserE.createUserOnCms(call.request)

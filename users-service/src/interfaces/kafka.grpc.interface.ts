@@ -1,6 +1,5 @@
 declare namespace IKafkaGrpcRequest {
-
-    interface ISyncUserData {
+    interface ISyncToCMSUserData {
         aerospikeId: string,
         lastname: string
         firstname: string
@@ -8,5 +7,9 @@ declare namespace IKafkaGrpcRequest {
         storeId: number
         websiteId: number,
         password: string
+    }
+
+    interface ISyncToSDMUserData {
+        
     }
 }

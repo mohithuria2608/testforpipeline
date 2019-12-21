@@ -5,6 +5,8 @@ import * as Constant from '../constant'
 import { consolelog, cryptData } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 import * as CMS from "../cms"
+import * as SDM from '../sdm';
+
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
     public sindex: IAerospike.CreateIndex[] = [
@@ -34,8 +36,14 @@ export class UserEntity extends BaseEntity {
         // },
         {
             set: this.set,
-            bin: 'cmsRefId',
-            index: 'idx_' + this.set + '_' + 'cmsRefId',
+            bin: 'cmsUserRef',
+            index: 'idx_' + this.set + '_' + 'cmsUserRef',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'sdmUserRef',
+            index: 'idx_' + this.set + '_' + 'sdmUserRef',
             type: "NUMERIC"
         }
     ]
@@ -60,7 +68,8 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        cmsRefId: Joi.number().required().description("sk"),
+        sdmUserRef: Joi.number().required().description("sk"),
+        cmsUserRef: Joi.number().required().description("sk"),
         isGuest: Joi.number().valid(0, 1),
         // sessionId: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
@@ -108,7 +117,8 @@ export class UserEntity extends BaseEntity {
         const id = this.uuidv1();
         const user = isCreate ? {
             id: id,
-            cmsRefId: 0,
+            sdmUserRef: 0,
+            cmsUserRef: 0,
             isGuest: 0,
             sessionId: "",
             name: "",
@@ -328,7 +338,26 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async createUserOnCms(payload: IUserCMSRequest.ICreateUserDataOnCms) {
+    async createUserOnSdm(payload: IUserGrpcRequest.ICreateUserDataOnSdm) {
+        try {
+            const payloadForSdm = {
+            }
+            let res = await SDM.UserSDME.createCustomer(payloadForSdm)
+            let putArg: IAerospike.Put = {
+                bins: { sdmUserRef: parseInt(res.id.toString()) },
+                set: this.set,
+                key: "1",// payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createUserOnCms(payload: IUserGrpcRequest.ICreateUserDataOnCms) {
         try {
             const payloadForCms = {
                 customer: {
@@ -343,7 +372,7 @@ export class UserEntity extends BaseEntity {
             }
             let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
             let putArg: IAerospike.Put = {
-                bins: { cmsRefId: parseInt(res.id.toString()) },
+                bins: { cmsUserRef: parseInt(res.id.toString()) },
                 set: this.set,
                 key: payload.aerospikeId,
                 update: true,

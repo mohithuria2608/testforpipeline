@@ -2,8 +2,13 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 service UserService {
+    rpc CreateUserOnSdm (ICreateUserOnSdmReq) returns (ICreateUserOnSdmRes) {}
     rpc CreateUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
 }
+
+message ICreateUserOnSdmReq { }
+
+message ICreateUserOnSdmRes { }
 
 message ICreateUserOnCmsReq {
     required string aerospikeId = 1;

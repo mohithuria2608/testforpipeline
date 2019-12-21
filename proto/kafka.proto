@@ -1,10 +1,15 @@
 syntax = "proto3";
 
 service KafkaService {
-    rpc SyncUser (ISyncUserReq) returns (ISyncUserRes) {}
+    rpc SyncToSdmUser (ISyncToSdmUserDataReq) returns (ISyncToSdmUserDataRes) {}
+    rpc SyncToCmsUser (ISyncToCmsUserDataReq) returns (ISyncToCmsUserDataRes) {}
 }
 
-message ISyncUserReq {
+message ISyncToSdmUserDataReq { }
+
+message ISyncToSdmUserDataRes {}
+
+message ISyncToCmsUserDataReq {
     required string aerospikeId = 1;
     required string lastname = 2;
     required string firstname = 3;
@@ -14,4 +19,4 @@ message ISyncUserReq {
     required string password = 7;
 }
 
-message ISyncUserRes {}
+message ISyncToCmsUserDataRes {}

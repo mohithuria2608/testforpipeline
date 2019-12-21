@@ -13,7 +13,8 @@ declare namespace IUserRequest {
     }
     interface IUserData {
         id: string,
-        cmsRefId: number,
+        sdmUserRef: number,
+        cmsUserRef: number,
         isGuest: number,
         // sessionId: string,
         name: string,

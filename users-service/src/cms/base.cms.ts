@@ -1,13 +1,13 @@
 import * as config from "config"
+import * as rp from 'request-promise';
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 
 export class BaseCMS {
-    private rp = require('request-promise');
     constructor() {
     }
 
-    async request(method, url, headers, form) {
+    async request(method: string, url: string, headers: object, form: object) {
         return new Promise(async (resolve, reject) => {
             try {
                 let options = {
@@ -21,7 +21,7 @@ export class BaseCMS {
                     options['qs'] = form
                 consolelog(process.cwd(), "In request manager options", options, true)
 
-                this.rp(options)
+                rp(options)
                     .then(function (body) {
                         consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
                         resolve(body)

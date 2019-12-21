@@ -13,10 +13,23 @@ export class UserSDMEntity extends BaseSDM {
 
     /**
     * @method SDK
+    * */
+    async createCustomer(payload: IUserSDMRequest.ICreateUser) {
+        try {
+
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), 'createCostomer', error, false)
+            return (error)
+        }
+    }
+
+    /**
+    * @method SDK
     * @param {string} customerUserName : customer email
     * @param {string} customerPassword : customer password
     * */
-    async getCustomerByUserNameAndPswd(customerUserName, customerPassword) {
+    async getCustomerByUserNameAndPswd(payload: IUserSDMRequest.IGetCustomerByUserNameAndPswd) {
         try {
             const data = {
                 name: "GetCustomer",
@@ -25,8 +38,8 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: 3,
                     requestID: 1,
                     language: "En",
-                    customerUserName: customerUserName,
-                    customerPassword: customerPassword,
+                    customerUserName: payload.customerUserName,
+                    customerPassword: payload.customerPassword,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -41,7 +54,7 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {string} email : customer email
     * */
-    async getCustomerByEmail(email) {
+    async getCustomerByEmail(payload: IUserSDMRequest.IGetCustomerByEmail) {
         try {
             const data = {
                 name: "GetCustomerByEmail",
@@ -50,7 +63,7 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: 3,
                     requestID: 1,
                     language: "En",
-                    email: email,
+                    email: payload.email,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -65,7 +78,7 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {string} email : customer email
     * */
-    async getCustomersByEmail(email): Promise<number[]> {
+    async getCustomersByEmail(payload: IUserSDMRequest.IGetCustomerByEmail): Promise<number[]> {
         try {
             const data = {
                 name: "GetCustomersByEmail",
@@ -74,7 +87,7 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: 3,
                     requestID: 1,
                     language: "En",
-                    email: email,
+                    email: payload.email,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -89,7 +102,7 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {number} customerID : sdm customer id
     * */
-    async getCustomerById(customerID) {
+    async getCustomerById(payload: IUserSDMRequest.IGetCustomerByCustomerId) {
         try {
             const data = {
                 name: "GetCustomerByID",
@@ -98,7 +111,7 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: 3,
                     requestID: 1,
                     language: "En",
-                    customerID: customerID,
+                    customerID: payload.customerID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -113,7 +126,7 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {number} mobileNo : customer PHONELOOKUP
     * */
-    async getCustomerByMobile(mobileNo) {
+    async getCustomerByMobile(payload: IUserSDMRequest.IGetCustomerByMobileNo) {
         try {
             const data = {
                 name: "GetCustomerByMobile",
@@ -122,7 +135,7 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: 3,
                     requestID: 1,
                     language: "En",
-                    mobileNo: mobileNo,
+                    mobileNo: payload.mobileNo,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -137,7 +150,7 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {number} phoneNo : customer PHONELOOKUP
     * */
-    async getCustomersByPhone(phoneNo): Promise<number[]> {
+    async getCustomersByPhone(payload: IUserSDMRequest.IGetCustomerByPhoneNo): Promise<number[]> {
         try {
             const data = {
                 name: "GetCustomersByPhone",
@@ -146,7 +159,7 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: 3,
                     requestID: 1,
                     language: "En",
-                    phoneNo: phoneNo,
+                    phoneNo: payload.phoneNo,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -162,15 +175,15 @@ export class UserSDMEntity extends BaseSDM {
     * @param {number} phoneNo : customer PHONELOOKUP
     * @param {number} email : customer email
     * */
-    async getSdmRefId(phoneNo: number, email: string) {
+    async getsdmUserRef(payload: IUserSDMRequest.IGetCustomerSdmUserRef) {
         try {
-            let sdmRefIdByPhoneNo = await this.getCustomersByPhone(phoneNo)
-            let sdmRefIdByEmail = await this.getCustomersByEmail(email)
-            let intersectionSdmRefId = _.intersection(sdmRefIdByPhoneNo, sdmRefIdByEmail)
-            consolelog(process.cwd(), "getSdmRefId", JSON.stringify(intersectionSdmRefId), false)
-            return intersectionSdmRefId
+            let sdmUserRefByPhoneNo = await this.getCustomersByPhone({ phoneNo: payload.phoneNo })
+            let sdmUserRefByEmail = await this.getCustomersByEmail({ email: payload.email })
+            let intersectionsdmUserRef = _.intersection(sdmUserRefByPhoneNo, sdmUserRefByEmail)
+            consolelog(process.cwd(), "getsdmUserRef", JSON.stringify(intersectionsdmUserRef), false)
+            return intersectionsdmUserRef
         } catch (error) {
-            consolelog(process.cwd(), "getSdmRefId", error, true)
+            consolelog(process.cwd(), "getsdmUserRef", error, true)
             return Promise.reject(error)
         }
     }

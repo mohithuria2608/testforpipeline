@@ -9,7 +9,7 @@ export class UserCMSEntity extends BaseCMS {
         super()
     }
 
-    async createCostomer(headersObj, formObj) {
+    async createCostomer(headersObj: IUserCMSRequest.IHeader, formObj: IUserCMSRequest.ICreateUser) {
         try {
             consolelog(process.cwd(), "headersObj", headersObj, false)
 
