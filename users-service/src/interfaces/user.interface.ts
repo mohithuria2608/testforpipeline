@@ -15,7 +15,7 @@ declare namespace IUserRequest {
         id: string,
         cmsRefId: number,
         isGuest: number,
-        sessionId: string,
+        // sessionId: string,
         name: string,
         cCode: string,
         phnNo: string,

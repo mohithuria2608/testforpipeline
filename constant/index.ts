@@ -101,7 +101,8 @@ export let DATABASE = {
 
         SOCIAL_PLATFORM: {
             GOOGLE: "GOOGLE",
-            FB: "FB"
+            FB: "FB",
+            APPLE: "APPLE"
         },
 
         VERSION_UPDATE: {

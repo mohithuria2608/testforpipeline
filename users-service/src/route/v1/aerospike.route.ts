@@ -45,6 +45,7 @@ export default (router: Router) => {
 
         .post('/test',
             async (ctx) => {
+                ctx.body = {}
                 try {
                     const aerospike = require('aerospike');
                     let GeoJSON = aerospike.GeoJSON;

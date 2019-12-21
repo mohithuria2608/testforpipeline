@@ -3,7 +3,6 @@ declare namespace IUserRequest {
     interface IUserData {
         id: string,
         isGuest: number,
-        sessionId: string,
         name: string,
         cCode: string,
         phnNo: string,

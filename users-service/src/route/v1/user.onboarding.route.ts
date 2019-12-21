@@ -66,7 +66,11 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     socialKey: Joi.string().required(),
-                    medium: Joi.string().valid(Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB, Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE).required(),
+                    medium: Joi.string().valid(
+                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
+                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
+                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
+                    ).required(),
                     name: Joi.string(),
                     email: Joi.string().email().lowercase().allow(null).allow("")
                 }

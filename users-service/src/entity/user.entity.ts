@@ -26,12 +26,12 @@ export class UserEntity extends BaseEntity {
             index: 'idx_' + this.set + '_' + 'socialKey',
             type: "STRING"
         },
-        {
-            set: this.set,
-            bin: 'sessionId',
-            index: 'idx_' + this.set + '_' + 'sessionId',
-            type: "STRING"
-        },
+        // {
+        //     set: this.set,
+        //     bin: 'sessionId',
+        //     index: 'idx_' + this.set + '_' + 'sessionId',
+        //     type: "STRING"
+        // },
         {
             set: this.set,
             bin: 'cmsRefId',
@@ -62,14 +62,21 @@ export class UserEntity extends BaseEntity {
         id: Joi.string().trim().required().description("pk"),
         cmsRefId: Joi.number().required().description("sk"),
         isGuest: Joi.number().valid(0, 1),
-        sessionId: Joi.string().trim().required().description("sk"),
+        // sessionId: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
-        profileStep: Joi.number().valid(Constant.DATABASE.TYPE.PROFILE_STEP.INIT, Constant.DATABASE.TYPE.PROFILE_STEP.FIRST).required(),
+        profileStep: Joi.number().valid(
+            Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+            Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+        ).required(),
         socialKey: Joi.string().trim().required().description("sk"),
-        medium: Joi.string().trim().required(),
+        medium: Joi.string().trim().valid(
+            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
+            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
+            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
+        ).required(),
         removeUserId: Joi.string(),
         password: Joi.string(),
         session: Joi.any(),
@@ -121,7 +128,7 @@ export class UserEntity extends BaseEntity {
         if (userInfo.isGuest != undefined) {
             if (userInfo.isGuest == 1) {
                 user['isGuest'] = userInfo.isGuest
-                user['sessionId'] = headers.deviceid
+                // user['sessionId'] = headers.deviceid
             }
         }
         if (userInfo.name != undefined)
