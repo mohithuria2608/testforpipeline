@@ -123,4 +123,9 @@ declare namespace IUserRequest {
         email?: string,
         name?: string
     }
+
+    interface IEditProfile {
+        email?: string,
+        name?: string
+    }
 }

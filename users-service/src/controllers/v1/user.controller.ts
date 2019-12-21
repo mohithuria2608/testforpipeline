@@ -200,7 +200,7 @@ export class UserController {
     }
 
     /**
-    * @method POST
+    * @method PATCH
     * @param {string} cCode : country code with +, eg: +976
     * @param {string} phnNo : phone number max length 9 digits
     * @param {string} email : email
@@ -288,6 +288,22 @@ export class UserController {
             }
         } catch (error) {
             consolelog(process.cwd(), "profileUpdate", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method PATCH
+    * @param {string=} email : email
+    * @param {string=} name : name
+    * */
+    async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            let user = await ENTITY.UserE.updateUser(auth.userData, payload)
+            // ENTITY.UserE.syncUser(user)
+            return formatUserData(user, headers.deviceid)
+        } catch (error) {
+            consolelog(process.cwd(), "editProfile", error, false)
             return Promise.reject(error)
         }
     }

@@ -261,6 +261,28 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    async updateUser(userData: IUserRequest.IUserData, payload: IUserRequest.IEditProfile, ) {
+        try {
+            let userUpdate = {}
+            if (payload.email)
+                userUpdate['email'] = payload.email
+            if (payload.name)
+                userUpdate['name'] = payload.name
+            let putArg: IAerospike.Put = {
+                bins: userUpdate,
+                set: this.set,
+                key: userData.id,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            let user = await this.getById({ id: userData.id })
+            return user
+        } catch (error) {
+            consolelog(process.cwd(), "updateUser", error, false)
+            return Promise.reject(error)
+        }
+    }
+
     async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string) {
         try {
             if (tokentype && tokentype.length > 0) {
