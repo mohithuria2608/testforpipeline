@@ -26,7 +26,6 @@ log
 *.sln
 *.sw*
 
-
 #proto directories in each service
 *-service/proto
 
