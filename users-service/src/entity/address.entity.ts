@@ -34,7 +34,7 @@ export class AddressEntity extends BaseEntity {
         userId: Joi.number().required(),
         description: Joi.string(),
         districtId: Joi.number().required(),
-        flatNum: Joi.number(),
+        flatNum: Joi.string(),
         floor: Joi.string(),
         language: Joi.string(),
         phoneAreaCode: Joi.string(),

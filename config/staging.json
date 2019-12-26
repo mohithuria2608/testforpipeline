@@ -136,6 +136,9 @@
             }
         }
     },
+    "blobBaseUrl": {
+        "product": "https://bloobstorage.blob.core.windows.net/americana/products/"
+    },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj"
 }

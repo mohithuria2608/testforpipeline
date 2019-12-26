@@ -20,7 +20,7 @@ export default (router: Router) => {
                     lng: Joi.number().min(-180).max(180).required(),
                     bldgName: Joi.string().required(),
                     description: Joi.string().required(),
-                    flatNum: Joi.number().required(),
+                    flatNum: Joi.string().required(),
                     tag: Joi.string().valid(
                         Constant.DATABASE.TYPE.TAG.HOME,
                         Constant.DATABASE.TYPE.TAG.OFFICE,

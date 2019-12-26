@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 
@@ -13,6 +14,8 @@ export class MiscController {
         try {
             return {
                 otpDigits: 4,
+                blobBaseUrl: config.get("blobBaseUrl"),
+                locationVicinity: 100,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
@@ -25,7 +28,7 @@ export class MiscController {
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
         } catch (err) {
-            consolelog(process.cwd(),"configuration", err, false)
+            consolelog(process.cwd(), "configuration", err, false)
             return Promise.reject(err)
         }
     }
