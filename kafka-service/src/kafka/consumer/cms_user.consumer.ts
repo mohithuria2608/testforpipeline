@@ -24,7 +24,10 @@ class CmsUserConsumer extends BaseConsumer {
             return res
         } catch (err) {
             consolelog(process.cwd(), "sendUserToCMSGrpc", err, false);
-            kafkaController.produceToFailureTopic(message)
+            if (message.count != 0)
+                kafkaController.syncToCmsUser(message)
+            else
+                kafkaController.produceToFailureTopic(message)
             return {}
         }
     }

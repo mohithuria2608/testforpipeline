@@ -66,14 +66,14 @@ gulp.task("copyLua", function () {
 gulp.task('server', function () {
 	pm2.connect(true, function () {
 		pm2.start({
-			name: 'user',
+			name: 'notification',
 			script: 'dist/app.js',
 			env: {
 				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
 			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
-			pm2.streamLogs('user', 0);
+			pm2.streamLogs('notification', 0);
 		});
 	});
 });
@@ -88,5 +88,3 @@ gulp.task('server', function () {
   * @todo add "lint" after "clean"
   */
 gulp.task('default', gulp.series("clean", "copyConstant", "copyConstant", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "server"));
-
-

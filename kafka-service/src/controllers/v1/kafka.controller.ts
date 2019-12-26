@@ -32,6 +32,8 @@ export class KafkaController {
     async syncToSdmUser(payload: IUserGrpcRequest.ISyncToSDMUserData) {
         try {
             consolelog(process.cwd(), "produce user to sync in sdm in KAFKA service", payload, true)
+            if (!payload.hasOwnProperty('count'))
+                payload['count'] = Constant.KAFKA.SDM.USER.MAX_RETRY.CREATE
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
                 topic: Constant.KAFKA_TOPIC.SDM_USER,
@@ -57,6 +59,8 @@ export class KafkaController {
     async syncToCmsUser(payload: IUserGrpcRequest.ISyncToCMSUserData) {
         try {
             consolelog(process.cwd(), "produce user to sync in cms in KAFKA service", payload, true)
+            if (!payload.hasOwnProperty('count'))
+                payload['count'] = Constant.KAFKA.CMS.USER.MAX_RETRY.CREATE
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
                 topic: Constant.KAFKA_TOPIC.CMS_USER,

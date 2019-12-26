@@ -46,7 +46,7 @@ export class BaseSDM {
                 // params['licenseCode'] = 'AmericanaWeb'
                 // params['conceptID'] = 3
                 // params['requestID'] = 1
-                consolelog(process.cwd(), "params", JSON.stringify(params), true)
+                consolelog(process.cwd(), "params", params, true)
                 BaseSDM.client[name](params, function (err, result) {
                     if (err) { reject(err); }
                     else {

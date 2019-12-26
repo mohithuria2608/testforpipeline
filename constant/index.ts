@@ -21,7 +21,7 @@ export enum MIDDLEWARE {
     ACTIVITY_LOG = "activity_log"
 };
 
-export let CMS = {
+export const CMS = {
     GLOBAL_VAR: {
         AUTH_TOKEN: 'cms-auth-token',
         AUTH_API_HIT: 'cms-auth-hit-time'
@@ -38,7 +38,26 @@ export let CMS = {
     }
 };
 
-export let SERVER = {
+export const KAFKA = {
+    SDM: {
+        USER: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            },
+        },
+    },
+    CMS: {
+        USER: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            },
+        }
+    }
+};
+
+export const SERVER = {
     ENV: {
         DEV: "development",
         QA: "testing",
@@ -67,7 +86,7 @@ export let SERVER = {
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
 };
 
-export let DATABASE = {
+export const DATABASE = {
     BRAND: {
         KFC: 'KFC',
         PH: 'PH'
@@ -142,7 +161,7 @@ export let DATABASE = {
     }
 };
 
-export let STATUS_MSG = {
+export const STATUS_MSG = {
     ERROR: {
         E400: {
             PROFILE_SETUP_ALLREADY_COMPLETE: {

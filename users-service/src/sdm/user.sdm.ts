@@ -16,7 +16,7 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomer(payload: IUserSDMRequest.ICreateUser) {
         try {
-
+            
             return {}
         } catch (error) {
             consolelog(process.cwd(), 'createCostomer', error, false)

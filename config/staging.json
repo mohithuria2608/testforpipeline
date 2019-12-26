@@ -33,6 +33,10 @@
             "url": "http://localhost",
             "port": 4007
         },
+        "notification": {
+            "url": "http://localhost",
+            "port": 4008
+        },
         "upload": {
             "url": "http://localhost",
             "port": 4010
@@ -71,6 +75,10 @@
             "server": "0.0.0.0:50058",
             "client": "20.46.151.30:50058"
         },
+        "notification": {
+            "server": "0.0.0.0:50059",
+            "client": "127.0.0.1:50059"
+        },
         "upload": {
             "server": "0.0.0.0:50060",
             "client": "20.46.147.215:50060"
@@ -84,7 +92,7 @@
         "username": "aerospikeusr",
         "password": "GM2nGDQkN5yMdPZs"
     },
-    "cms":{
+    "cms": {
         "auth": {
             "username": "shashi.bhushan@appinventiv.com",
             "password": "shashi@123"
@@ -116,6 +124,10 @@
                 "sync": {
                     "server": "/../../../proto/sync.proto",
                     "client": "/../../../../proto/sync.proto"
+                },
+                "notification": {
+                    "server": "/../../../proto/notification.proto",
+                    "client": "/../../../../proto/notification.proto"
                 },
                 "upload": {
                     "server": "/../../../proto/upload.proto",

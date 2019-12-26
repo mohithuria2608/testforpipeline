@@ -24,7 +24,10 @@ class SdmUserConsumer extends BaseConsumer {
             return res
         } catch (err) {
             consolelog(process.cwd(), "sendUserToSDMGrpc", err, false);
-            kafkaController.produceToFailureTopic(message)
+            if (message.count != 0)
+                kafkaController.syncToSdmUser(message)
+            else
+                kafkaController.produceToFailureTopic(message)
             return {}
         }
     }
