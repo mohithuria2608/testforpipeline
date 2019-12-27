@@ -49,3 +49,7 @@ spec:
         backend:
           serviceName: location-service
           servicePort: 4007
+      - path: /upload-service/(.*)
+        backend:
+          serviceName: upload-service
+          servicePort: 4010
