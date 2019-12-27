@@ -45,11 +45,11 @@ spec:
         backend:
           serviceName: sync-service
           servicePort: 4004
-      - path: /location-service/(.*)
-        backend:
-          serviceName: location-service
-          servicePort: 4007
       - path: /upload-service/(.*)
         backend:
           serviceName: upload-service
           servicePort: 4010
+      - path: /location-service/(.*)
+        backend:
+          serviceName: location-service
+          servicePort: 4007
