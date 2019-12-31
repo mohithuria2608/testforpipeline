@@ -33,7 +33,9 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    ctx.body = "<html>  <head>  </head> <body> Privacy Policy copyright@KFC</body> </html>"
+                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {
+                        "html": "<html>  <head>  </head> <body> Privacy Policy copyright@KFC</body> </html>"
+                    })
                     // let res = await miscController.privacyPolicy(headers);
                     // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     // ctx.status = sendResponse.statusCode;
@@ -50,7 +52,9 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    ctx.body = "<html>  <head>  </head> <body> Terms and Condition copyright@KFC</body> </html>"
+                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {
+                        "html": "<html>  <head>  </head> <body> Terms and Condition copyright@KFC</body> </html>"
+                    })
                     // let res = await miscController.privacyPolicy(headers);
                     // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     // ctx.status = sendResponse.statusCode;

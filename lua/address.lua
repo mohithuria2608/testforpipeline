@@ -19,3 +19,33 @@ function get_address(stream, isActive)
   return stream:filter(isActive_filter):map(rec_to_map)
 end
 
+function orderby(stream, isActive, bin1)
+   local function isActive_filter(rec)
+      local val = rec['isActive']
+      if val == isActive then
+         return true
+      else
+         return false
+      end
+   end
+
+   local function mapper(rec)
+      local element = map()
+      element[bin1] = rec[bin1];
+      return element
+   end
+
+   local function accumulate(currentList, nextElement)
+      local bin1 = nextElement[bin1]
+      if currentList[bin1] == nil then
+         currentList[bin1] = list()
+      end
+    return currentList
+   end
+
+   local function reducer(this, that)
+     return map.merge(this,that)
+   end
+   
+   return stream:filter(isActive_filter):map(mapper):aggregate(map{}, accumulate):reduce(reducer)
+ end
