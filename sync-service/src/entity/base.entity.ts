@@ -8,4 +8,12 @@ export class BaseEntity {
         this.set = set
     }
 
+    async createToken(dataToSend: IAuthGrpcRequest.ICreateTokenData) {
+        try {
+            return authService.createToken(dataToSend)
+        } catch (error) {
+            consolelog(process.cwd(), "createToken", error, false)
+            return Promise.reject(error)
+        }
+    }
 }

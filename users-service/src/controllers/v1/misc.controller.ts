@@ -22,7 +22,8 @@ export class MiscController {
                         language: Constant.DATABASE.LANGUAGE.AR,
                         defaultCCode: '+971',
                         phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
-                        phnLength: 9
+                        phnLength: 9,
+                        customerCare: "666666666"
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
@@ -69,6 +70,19 @@ export class MiscController {
             ]
         } catch (err) {
             consolelog(process.cwd(), "faq", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method GET
+    * @description : Get Privacy Policy
+    * */
+    async privacyPolicy(headers: ICommonRequest.IHeaders) {
+        try {
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "privacyPolicy", err, false)
             return Promise.reject(err)
         }
     }

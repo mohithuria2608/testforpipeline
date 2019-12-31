@@ -4,19 +4,19 @@ import * as Constant from '../constant'
 import { authService } from '../grpc/client'
 import { consolelog } from '../utils'
 
-export class SyncMenuEntity extends BaseEntity {
+export class UserEntity extends BaseEntity {
     constructor() {
-        super('menu')
+        super('user')
     }
 
-    async syncMenu() {
+    async syncUser(payload: ICMSUserRequest.ICmsUser) {
         try {
             return {}
         } catch (err) {
-            consolelog(process.cwd(),"syncMenu", err, false)
+            consolelog(process.cwd(), "syncUser", err, false)
             return Promise.reject(err)
         }
     }
 }
 
-export const SyncMenuE = new SyncMenuEntity()
+export const UserE = new UserEntity()

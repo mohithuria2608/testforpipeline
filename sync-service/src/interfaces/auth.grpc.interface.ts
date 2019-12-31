@@ -1,4 +1,4 @@
-declare namespace IAuthServiceRequest {
+declare namespace IAuthGrpcRequest {
 
     interface ICreateTokenData {
         deviceid: string,

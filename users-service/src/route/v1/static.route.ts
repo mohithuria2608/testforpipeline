@@ -26,4 +26,38 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/privacy-policy',
+            validate({
+                headers: JOI.COMMON_HEADERS,
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    ctx.body = "<html>  <head>  </head> <body> Privacy Policy copyright@KFC</body> </html>"
+                    // let res = await miscController.privacyPolicy(headers);
+                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    // ctx.status = sendResponse.statusCode;
+                    // ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/terms-condition',
+            validate({
+                headers: JOI.COMMON_HEADERS,
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    ctx.body = "<html>  <head>  </head> <body> Terms and Condition copyright@KFC</body> </html>"
+                    // let res = await miscController.privacyPolicy(headers);
+                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    // ctx.status = sendResponse.statusCode;
+                    // ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 }

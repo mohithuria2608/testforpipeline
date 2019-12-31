@@ -8,6 +8,8 @@ export class CmsController {
 
     /**
      * @method POST
+     * @param {string} username
+     * @param {string} password
      * */
     async auth(headers: ICommonRequest.IHeaders, payload: ICmsRequest.ICmsAuth) {
         try {
@@ -15,11 +17,12 @@ export class CmsController {
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.CMS_AUTH],
+                undefined,
                 { username: payload.username, password: payload.password }
             )
             return { accessToken: tokens.accessToken }
         } catch (err) {
-            consolelog(process.cwd(),"auth", err, false)
+            consolelog(process.cwd(), "auth", err, false)
             return Promise.reject(err)
         }
     }
