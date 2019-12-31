@@ -294,6 +294,7 @@ export const STATUS_MSG = {
                 message: 'Implementation Error',
                 type: 'IMP_ERROR'
             },
+
             INVALID_TOKEN_TYPE: {
                 statusCode: 500,
                 httpCode: 500,

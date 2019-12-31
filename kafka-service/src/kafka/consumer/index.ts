@@ -4,6 +4,6 @@ import { cms_userConsumerE } from './cms_user.consumer';
 
 export function initConsumers() {
     // failConsumerE.handleMessage();
-    sdm_userConsumerE.handleMessage();
+    // sdm_userConsumerE.handleMessage();
     cms_userConsumerE.handleMessage();
 }

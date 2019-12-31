@@ -15,17 +15,20 @@ class SdmUserConsumer extends BaseConsumer {
             (message: IUserGrpcRequest.ISyncToSDMUserData) => {
                 consolelog(process.cwd(), "consumer sdm_user", JSON.stringify(message), true)
                 this.sendUserToSDMGrpc(message);
+                return null
             })
     }
 
     private async sendUserToSDMGrpc(message: IUserGrpcRequest.ISyncToSDMUserData) {
         try {
-            let res = await userService.createUserOnSdm(message)
+            let res = await userService.syncUserOnSdm(message)
             return res
         } catch (err) {
             consolelog(process.cwd(), "sendUserToSDMGrpc", err, false);
-            if (message.count != 0)
+            if (message.count != 0) {
+                message.count = message.count - 1
                 kafkaController.syncToSdmUser(message)
+            }
             else
                 kafkaController.produceToFailureTopic(message)
             return {}

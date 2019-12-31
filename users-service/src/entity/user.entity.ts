@@ -338,7 +338,7 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async createUserOnSdm(payload: IUserGrpcRequest.ICreateUserDataOnSdm) {
+    async syncUserOnSdm(payload: IUserGrpcRequest.ISyncUserDataOnSdm) {
         try {
             const payloadForSdm = {
             }
@@ -352,12 +352,12 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            consolelog(process.cwd(), "syncUserOnSdm", error, false)
             return Promise.reject(error)
         }
     }
 
-    async createUserOnCms(payload: IUserGrpcRequest.ICreateUserDataOnCms) {
+    async syncUserOnCms(payload: IUserGrpcRequest.ISyncUserDataOnCms) {
         try {
             const payloadForCms = {
                 customer: {
@@ -371,6 +371,9 @@ export class UserEntity extends BaseEntity {
                 password: payload.password
             }
             let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
+
+            consolelog(process.cwd(), "resresresresresres", res, false)
+
             let putArg: IAerospike.Put = {
                 bins: { cmsUserRef: parseInt(res.id.toString()) },
                 set: this.set,

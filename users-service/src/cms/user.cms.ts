@@ -9,7 +9,7 @@ export class UserCMSEntity extends BaseCMS {
         super()
     }
 
-    async createCostomer(headersObj: IUserCMSRequest.IHeader, formObj: IUserCMSRequest.ICreateUser) {
+    async createCostomer(headersObj: IUserCMSRequest.IHeader, formObj: IUserCMSRequest.ICreateUser): Promise<any> {
         try {
             consolelog(process.cwd(), "headersObj", headersObj, false)
 
@@ -38,7 +38,7 @@ export class UserCMSEntity extends BaseCMS {
             return cmsRes
         } catch (error) {
             consolelog(process.cwd(), 'createCostomer', error, false)
-            return (error)
+            return Promise.reject(error)
         }
     }
 

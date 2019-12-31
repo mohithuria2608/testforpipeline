@@ -10,13 +10,23 @@ message ISyncToSdmUserDataReq { }
 message ISyncToSdmUserDataRes {}
 
 message ISyncToCmsUserDataReq {
-    required string aerospikeId = 1;
-    required string lastname = 2;
-    required string firstname = 3;
-    required string email = 4;
-    required int32 storeId = 5;
-    required int32 websiteId = 6;
-    required string password = 7;
+    required IAction action = 1;
+    required string aerospikeId = 2;
+    required string lastname = 3;
+    required string firstname = 4;
+    required string email = 5;
+    required int32 storeId = 6;
+    required int32 websiteId = 7;
+    required string password = 8;
+    required int32 count = 9;
+}
+
+message IAction {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool name = 3;
+    optional bool email = 4;
+    optional bool phone = 5;
 }
 
 message ISyncToCmsUserDataRes {}

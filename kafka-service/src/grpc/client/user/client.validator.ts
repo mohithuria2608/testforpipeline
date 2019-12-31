@@ -8,11 +8,11 @@ export class UserServiceValidator {
     constructor() {
     }
 
-    async createUserOnSdmValidator(data: IUserGrpcRequest.ISyncToSDMUserData) {
+    async syncUserOnSdmValidator(data: IUserGrpcRequest.ISyncToSDMUserData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                   
+
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -24,10 +24,18 @@ export class UserServiceValidator {
         })
     }
 
-    async createUserOnCmsValidator(data: IUserGrpcRequest.ISyncToCMSUserData) {
+    async syncOnCmsValidator(data: IUserGrpcRequest.ISyncToCMSUserData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
+                    action: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        name: Joi.boolean(),
+                        email: Joi.boolean(),
+                        phone: Joi.boolean(),
+                    }),
+                    count: Joi.number().required(),
                     aerospikeId: Joi.string().required(),
                     lastname: Joi.string().required(),
                     firstname: Joi.string().required(),

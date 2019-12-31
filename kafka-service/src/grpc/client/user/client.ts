@@ -23,16 +23,16 @@ export class UserService {
         consolelog(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
-    async createUserOnSdm(payload: IUserGrpcRequest.ISyncToSDMUserData): Promise<{}> {
+    async syncUserOnSdm(payload: IUserGrpcRequest.ISyncToSDMUserData): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await userServiceValidator.createUserOnSdmValidator(payload)
-                this.userClient.createUserOnSdm(payload, (err, res) => {
+                await userServiceValidator.syncUserOnSdmValidator(payload)
+                this.userClient.syncUserOnSdm(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(), "successfully created user on sdm", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully synced user on sdm", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in creating user on sdm", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in syncing user on sdm", JSON.stringify(err), false)
                         reject(err)
                     }
                 })
@@ -42,16 +42,16 @@ export class UserService {
         })
     }
 
-    async createUserOnCms(payload: IUserGrpcRequest.ISyncToCMSUserData): Promise<{}> {
+    async syncUserOnCms(payload: IUserGrpcRequest.ISyncToCMSUserData): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await userServiceValidator.createUserOnCmsValidator(payload)
-                this.userClient.createUserOnCms(payload, (err, res) => {
+                await userServiceValidator.syncOnCmsValidator(payload)
+                this.userClient.syncUserOnCms(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(), "successfully created user on cms", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully synced user on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in creating user on cms", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in syncing user on cms", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

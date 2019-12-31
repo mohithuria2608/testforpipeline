@@ -14,18 +14,21 @@ class CmsUserConsumer extends BaseConsumer {
         this.onMessage<any>().subscribe(
             (message: IUserGrpcRequest.ISyncToCMSUserData) => {
                 consolelog(process.cwd(), "consumer cms_user", JSON.stringify(message), true)
-                this.sendUserToCMSGrpc(message);
+                this.syncUserToCMSGrpc(message);
+                return null
             })
     }
 
-    private async sendUserToCMSGrpc(message: IUserGrpcRequest.ISyncToCMSUserData) {
+    private async syncUserToCMSGrpc(message: IUserGrpcRequest.ISyncToCMSUserData) {
         try {
-            let res = await userService.createUserOnCms(message)
+            let res = await userService.syncUserOnCms(message)
             return res
         } catch (err) {
             consolelog(process.cwd(), "sendUserToCMSGrpc", err, false);
-            if (message.count != 0)
+            if (message.count != 0) {
+                message.count = message.count - 1
                 kafkaController.syncToCmsUser(message)
+            }
             else
                 kafkaController.produceToFailureTopic(message)
             return {}

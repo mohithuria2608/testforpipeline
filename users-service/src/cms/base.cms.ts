@@ -9,35 +9,30 @@ export class BaseCMS {
 
     async request(method: string, url: string, headers: object, form: object) {
         return new Promise(async (resolve, reject) => {
-            try {
-                let options = {
-                    method: method,
-                    url: url,
-                    headers: headers,
-                    body: form,
-                    json: true
-                }
-                if (method == "GET")
-                    options['qs'] = form
-                consolelog(process.cwd(), "In request manager options", options, true)
-
-                rp(options)
-                    .then(function (body) {
-                        consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
-                        resolve(body)
-                    })
-                    .catch(function (err) {
-                        consolelog(process.cwd(), "In request manager err", err, true)
-
-                        if (err.statusCode && err.error && err.message) {
-                            reject(err)
-                        } else
-                            reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
-                    })
-            } catch (error) {
-                consolelog(process.cwd(), 'RequestManager', error, false)
-                reject(error)
+            let options = {
+                method: method,
+                url: url,
+                headers: headers,
+                body: form,
+                json: true
             }
+            if (method == "GET")
+                options['qs'] = form
+            consolelog(process.cwd(), "In request manager options", JSON.stringify(options), true)
+
+            rp(options)
+                .then(function (body) {
+                    consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
+                    resolve(body)
+                })
+                .catch(function (err) {
+                    consolelog(process.cwd(), "In request manager err", err.message, true)
+                    if (err.statusCode || err.error || err.message) {
+                        reject(err.message)
+                    }
+                    else
+                        reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                })
         })
     }
 

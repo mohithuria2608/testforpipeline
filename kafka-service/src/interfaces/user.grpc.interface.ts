@@ -12,6 +12,7 @@ declare namespace IUserGrpcRequest {
         request: ISyncToCMSUserData
     }
     interface ISyncToCMSUserData {
+        action: ICommonRequest.IChange
         count?: number
         aerospikeId: string,
         lastname: string
@@ -21,6 +22,4 @@ declare namespace IUserGrpcRequest {
         websiteId: number,
         password: string
     }
-
-
 }

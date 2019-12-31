@@ -47,6 +47,7 @@ export class AddressEntity extends BaseEntity {
         streetId: Joi.number(),
         useMap: Joi.number(),
         createdAt: Joi.number().required(),
+        updatedAt: Joi.number().required(),
         isActive: Joi.number().valid(0, 1),
         createdBy: Joi.string(),
         updatedBy: Joi.string()
@@ -121,6 +122,8 @@ export class AddressEntity extends BaseEntity {
                 useMap: 1,
                 createdBy: 'APP',
                 updatedBy: 'APP',
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
             };
             let putArg: IAerospike.Put = {
                 bins: address,
@@ -129,7 +132,7 @@ export class AddressEntity extends BaseEntity {
                 create: true,
             }
             await Aerospike.put(putArg)
-            return await this.getById({ id: address.id }, ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive"])
+            return await this.getById({ id: address.id }, ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive", "updatedAt"])
         } catch (err) {
             consolelog(process.cwd(), "addAddress", err, false)
             return Promise.reject(err)
@@ -153,6 +156,8 @@ export class AddressEntity extends BaseEntity {
                 bins['tag'] = addressUpdate.tag
             if (addressUpdate.isActive != undefined)
                 bins['isActive'] = addressUpdate.isActive
+
+            bins['updatedAt'] = new Date().getTime()
             let putArg: IAerospike.Put = {
                 bins: bins,
                 set: this.set,
@@ -161,7 +166,7 @@ export class AddressEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
             if (returnRes)
-                return await this.getById({ id: addressUpdate.addressId }, ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive"])
+                return await this.getById({ id: addressUpdate.addressId }, ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive", "updatedAt"])
             else
                 return {}
         } catch (err) {

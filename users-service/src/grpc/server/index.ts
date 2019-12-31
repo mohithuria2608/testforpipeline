@@ -18,23 +18,23 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
-    createUserOnSdm: async (call: IUserGrpcRequest.ICreateUserDataOnSdmReq, callback) => {
+    syncUserOnSdm: async (call: IUserGrpcRequest.ISyncUserDataOnSdmReq, callback) => {
         try {
-            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.UserE.createUserOnSdm(call.request)
+            consolelog(process.cwd(), "syncUserOnSdm", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.syncUserOnSdm(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            consolelog(process.cwd(), "syncUserOnSdm", error, false)
             callback(grpcSendError(error))
         }
     },
-    createUserOnCms: async (call: IUserGrpcRequest.ICreateUserDataOnCmsReq, callback) => {
+    syncUserOnCms: async (call: IUserGrpcRequest.ISyncUserDataOnCmsReq, callback) => {
         try {
-            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.UserE.createUserOnCms(call.request)
+            consolelog(process.cwd(), "syncUserOnCms", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.syncUserOnCms(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnCms", error, false)
+            consolelog(process.cwd(), "syncUserOnCms", error, false)
             callback(grpcSendError(error))
         }
     }

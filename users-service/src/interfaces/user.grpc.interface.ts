@@ -1,17 +1,18 @@
 declare namespace IUserGrpcRequest {
 
-    interface ICreateUserDataOnSdmReq {
-        request: ICreateUserDataOnSdm
+    interface ISyncUserDataOnSdmReq {
+        request: ISyncUserDataOnSdm
     }
 
-    interface ICreateUserDataOnSdm {
+    interface ISyncUserDataOnSdm {
     }
 
-    interface ICreateUserDataOnCmsReq {
-        request: ICreateUserDataOnCms
+    interface ISyncUserDataOnCmsReq {
+        request: ISyncUserDataOnCms
     }
 
-    interface ICreateUserDataOnCms {
+    interface ISyncUserDataOnCms {
+        action: ICommonRequest.IChange,
         aerospikeId: string,
         lastname: string
         firstname: string

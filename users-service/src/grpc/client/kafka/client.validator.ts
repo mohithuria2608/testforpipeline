@@ -12,7 +12,7 @@ export class KafkaServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                   
+
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -28,6 +28,13 @@ export class KafkaServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
+                    action: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        name: Joi.boolean(),
+                        email: Joi.boolean(),
+                        phone: Joi.boolean(),
+                    }),
                     aerospikeId: Joi.string().required(),
                     lastname: Joi.string().required(),
                     firstname: Joi.string().required(),

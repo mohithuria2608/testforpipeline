@@ -247,7 +247,8 @@ export class UserController {
                         createdAt: new Date().getTime(),
                     }
                     let user = await ENTITY.UserE.createSession(headers, checkPhoneExist[0], userUpdate, sessionUpdate)
-                    ENTITY.UserE.syncUser(user)
+                    let userChange = { create: true }
+                    ENTITY.UserE.syncUser(user, userChange)
                     return formatUserData(user, headers.deviceid)
                 } else {
                     let userUpdate = {
@@ -267,7 +268,8 @@ export class UserController {
                         createdAt: new Date().getTime(),
                     }
                     let user = await ENTITY.UserE.createSession(headers, auth.userData, userUpdate, sessionUpdate)
-                    ENTITY.UserE.syncUser(user)
+                    let userChange = { create: true }
+                    ENTITY.UserE.syncUser(user, userChange)
                     return formatUserData(user, headers.deviceid)
                 }
             } else {
@@ -283,7 +285,8 @@ export class UserController {
                     otpExpAt: auth.userData.phnVerified ? 0 : (new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME),
                 }
                 let user = await ENTITY.UserE.createSession(headers, auth.userData, userUpdate, sessionUpdate)
-                ENTITY.UserE.syncUser(user)
+                let userChange = { create: true }
+                ENTITY.UserE.syncUser(user, userChange)
                 return formatUserData(user, headers.deviceid)
             }
         } catch (error) {

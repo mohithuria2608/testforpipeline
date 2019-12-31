@@ -32,6 +32,46 @@ export class MiscController {
             return Promise.reject(err)
         }
     }
+
+    /**
+    * @method GET
+    * @description : Get List of FAQs
+    * */
+    async faq(headers: ICommonRequest.IHeaders) {
+        try {
+            return [
+                {
+                    category: "A",
+                    questionair: [
+                        {
+                            ques: "ques1",
+                            ans: "ans1"
+                        },
+                        {
+                            ques: "ques2",
+                            ans: "ans2"
+                        }
+                    ]
+                },
+                {
+                    category: "B",
+                    questionair: [
+                        {
+                            ques: "ques3",
+                            ans: "ans3"
+                        },
+                        {
+                            ques: "ques4",
+                            ans: "ans4"
+                        },
+                    ]
+                }
+            ]
+        } catch (err) {
+            consolelog(process.cwd(), "faq", err, false)
+            return Promise.reject(err)
+        }
+    }
 }
 
 export const miscController = new MiscController();

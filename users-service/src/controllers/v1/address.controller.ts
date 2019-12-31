@@ -62,7 +62,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let queryArg: IAerospike.Query = {
-                bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive"],
+                bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive", "updatedAt"],
                 udf: {
                     module: 'address',
                     func: Constant.UDF.ADDRESS.get_address,

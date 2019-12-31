@@ -1,5 +1,6 @@
 declare namespace IKafkaGrpcRequest {
     interface ISyncToCMSUserData {
+        action: ICommonRequest.IChange,
         aerospikeId: string,
         lastname: string
         firstname: string
@@ -10,6 +11,8 @@ declare namespace IKafkaGrpcRequest {
     }
 
     interface ISyncToSDMUserData {
-        
+
     }
+
+
 }

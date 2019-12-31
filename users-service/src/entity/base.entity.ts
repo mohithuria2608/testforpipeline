@@ -26,10 +26,10 @@ export class BaseEntity {
         }
     }
 
-    async syncUser(user: IUserRequest.IUserData) {
+    async syncUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
         try {
-            this.syncToSdmUser(user)
-            this.syncToCmsUser(user)
+            // this.syncToSdmUser(user, change)
+            this.syncToCmsUser(user, change)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncUser", error, false)
@@ -37,9 +37,10 @@ export class BaseEntity {
         }
     }
 
-    private async syncToSdmUser(user: IUserRequest.IUserData) {
+    private async syncToSdmUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
         try {
             let sdmdata: IKafkaGrpcRequest.ISyncToSDMUserData = {
+                action: change,
                 aerospikeId: user.id,
                 lastname: user.cCode + user.phnNo,
                 firstname: user.name,
@@ -56,9 +57,10 @@ export class BaseEntity {
         }
     }
 
-    private async syncToCmsUser(user: IUserRequest.IUserData) {
+    private async syncToCmsUser(user: IUserRequest.IUserData, userChange: ICommonRequest.IChange) {
         try {
             let cmsdata: IKafkaGrpcRequest.ISyncToCMSUserData = {
+                action: userChange,
                 aerospikeId: user.id,
                 lastname: user.cCode + user.phnNo,
                 firstname: user.name,
