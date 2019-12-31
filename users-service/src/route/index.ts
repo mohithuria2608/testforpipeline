@@ -14,7 +14,7 @@ import userAddress from './v1/user.address.route'
 const version1 = "/v1"
 
 const children = [
-  { routes: staticRoutes, prefix: '' },
+  { routes: staticRoutes, prefix: version1 + '' },
   { routes: miscRoutes, prefix: version1 + '/config' },
   { routes: aerospikeRoutes, prefix: version1 + '/aerospike' },
   { routes: guest, prefix: version1 + '/guest' },
