@@ -34,7 +34,7 @@ export default (router: Router) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {
-                        "html": "<html>  <head>  </head> <body> Privacy Policy copyright@KFC</body> </html>"
+                        "html": String.raw`<html>  <head>  </head> <body> Privacy Policy copyright@KFC</body> </html>`
                     })
                     // let res = await miscController.privacyPolicy(headers);
                     // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
