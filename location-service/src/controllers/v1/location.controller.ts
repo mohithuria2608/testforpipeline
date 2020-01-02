@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../databases/aerospike'
 
 export class LocationController {
 
@@ -17,7 +18,7 @@ export class LocationController {
             if (store && store.length > 0)
                 return { menuId: store[0].menuId }
             else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.SERVICE_UNAVAILABLE)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
         } catch (err) {
             consolelog(process.cwd(), "validateLocation", err, false)
             return Promise.reject(err)
@@ -55,8 +56,10 @@ export class LocationController {
                                 if (store && store.length > 0) {
                                     for (const s of store) {
                                         delete s.geoFence
-                                        s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
                                         if (s.areaId == a.areaId) {
+                                            c['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
+                                            a['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
+                                            s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
                                             storeCollection.push(s)
                                         }
                                     }

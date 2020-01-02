@@ -35,7 +35,11 @@ export default (router: Router) => {
         .post('/register-ufd',
             async (ctx) => {
                 try {
-                    Aerospike.udfRegister({ module: __dirname + '/../../../lua/user.lua' })
+                    let payload = { ...ctx.request.body };
+                    if (payload.module == "user")
+                        Aerospike.udfRegister({ module: __dirname + '/../../../lua/user.lua' })
+                    else if (payload.module == "address")
+                        Aerospike.udfRegister({ module: __dirname + '/../../../lua/address.lua' })
                     ctx.body = {}
                 }
                 catch (error) {
@@ -45,6 +49,7 @@ export default (router: Router) => {
 
         .post('/test',
             async (ctx) => {
+                ctx.body = {}
                 try {
                     const aerospike = require('aerospike');
                     let GeoJSON = aerospike.GeoJSON;
@@ -540,8 +545,11 @@ export default (router: Router) => {
                             lng: 25.2196954
                         }
                     })
+                    // AGGREGATE address.get_address() ON americana.address WHERE location='MA'
                     // SELECT * FROM americana.store WHERE geoFence CONTAINS GeoJSON('{"type":"Point", "coordinates": [77.3651218, 28.5911163]}')
                     // await Aerospike.operationsOnMap({ set: 'user', key: '155e0680-19b5-11ea-bf45-d91ad9310ae6' }, [])
+
+                    // AGGREGATE address.orderby(1,"createdAt") ON americana.address WHERE userId='2ad59710-2bb4-11ea-9373-cd68a8a900ff'
 
                     ctx.body = {}
                 }

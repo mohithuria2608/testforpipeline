@@ -7,10 +7,34 @@ import * as Constant from '../../../constant'
 export class KafkaServiceValidator {
     constructor() {
     }
-    async syncUserValidator(data: IKafkaGrpcRequest.ISyncUserData) {
+
+    async syncToSdmUserValidator(data: IKafkaGrpcRequest.ISyncToSDMUserData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
+
+                })
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(`Invalid Info- ${error.message}`)
+                resolve({})
+            } catch (error) {
+                reject(error.message)
+            }
+        })
+    }
+
+    async syncToCmsUserValidator(data: IKafkaGrpcRequest.ISyncToCMSUserData) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                    action: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        name: Joi.boolean(),
+                        email: Joi.boolean(),
+                        phone: Joi.boolean(),
+                    }),
                     aerospikeId: Joi.string().required(),
                     lastname: Joi.string().required(),
                     firstname: Joi.string().required(),

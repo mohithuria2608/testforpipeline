@@ -1,7 +1,8 @@
 declare namespace ICommonRequest {
 
-    export interface IHeaders {
+    interface IHeaders {
         language: string,
+        brand: string,
         country: string,
         appversion: string,
         devicemodel: string,
@@ -10,7 +11,7 @@ declare namespace ICommonRequest {
         deviceid: string
     }
 
-    export interface AuthorizationObj {
+    interface AuthorizationObj {
         deviceid: string,
         devicetype: string,
         tokenType: string,
@@ -18,8 +19,28 @@ declare namespace ICommonRequest {
         userData: IUserRequest.IUserData,
     }
 
-    export interface IPagination {
+    interface IPagination {
         page?: number,
         // skip?: number
+    }
+
+    interface ICordinatesOpt {
+        lat?: number,
+        lng?: number
+    }
+
+    interface IError {
+        statusCode: number,
+        httpCode: number,
+        type: string,
+        message: string
+    }
+
+    interface IChange {
+        create?: boolean,
+        update?: boolean,
+        name?: boolean,
+        email?: boolean,
+        phone?: boolean
     }
 }

@@ -8,6 +8,7 @@ import * as Constant from '../constant'
 
 import handleErrors from './error'
 import apiAuth from './apiAuth'
+import auth from './auth'
 import activityLog from './activityLog'
 
 export default function middleware() {
@@ -27,6 +28,8 @@ export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[]
   let temp: IMiddleware[] = []
   if (middlewares.indexOf(Constant.MIDDLEWARE.API_AUTH) != -1)
     temp.push(apiAuth())
+  if (middlewares.indexOf(Constant.MIDDLEWARE.AUTH) != -1)
+    temp.push(auth())
   if (middlewares.indexOf(Constant.MIDDLEWARE.ACTIVITY_LOG) != -1)
     temp.push(activityLog())
   return temp

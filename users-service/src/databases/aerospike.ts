@@ -33,7 +33,7 @@ class AerospikeClass {
                     }
                     let aerospikeConfig = {
                         //@todo : check for pem file for auth
-                        hosts: 'localhost:3000,localhost:3001',//config.get("aerospike.hosts"),
+                        hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
                         modlua: {
@@ -56,6 +56,8 @@ class AerospikeClass {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.UserE.sindex)
+                        if (ENTITY.AddressE.sindex && ENTITY.AddressE.sindex.length > 0)
+                            this.bootstrapIndex(ENTITY.AddressE.sindex)
                         resolve({})
                     }
                 } catch (err) {
@@ -257,7 +259,6 @@ class AerospikeClass {
                     } else {
                         record = await this.client.get(key)
                     }
-                    consolelog(process.cwd(), 'get record:', { record }, false)
                     resolve((record && record.bins) ? record.bins : record)
                 } else reject('Client not initialized');
             } catch (error) {
@@ -268,11 +269,16 @@ class AerospikeClass {
         })
     }
 
-    async scan(set: string): Promise<any> {
+    async scan(argv: IAerospike.Scan): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
+                const options = {
+                    concurrent: (argv.concurrent != undefined) ? argv.nobins : true,
+                    nobins: (argv.nobins != undefined) ? argv.nobins : false,
+                    select: argv.bins
+                }
                 if (this.client) {
-                    let scan = this.client.scan(this.namespace, set, { concurrent: true, nobins: false })
+                    let scan = this.client.scan(this.namespace, argv.set, options, { concurrent: true, nobins: false })
                     resolve(await this.queryForeach(scan))
                 } else reject('Client not initialized');
             } catch (error) {
@@ -280,6 +286,7 @@ class AerospikeClass {
             }
         });
     }
+
 
     async  query(argv: IAerospike.Query): Promise<any> {
         return new Promise(async (resolve, reject) => {
@@ -297,23 +304,6 @@ class AerospikeClass {
                     } else {
                         res = await this.queryForeach(query)
                     }
-                    resolve(res)
-                } else reject('Client not initialized');
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    async  listOperations(argv: IAerospike.ListOperation): Promise<any> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                if (this.client) {
-                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
-                    let operations = [
-                        this.lists.append(argv.bin, argv.bins)
-                    ]
-                    let res = await this.client.operate(key, operations)
                     resolve(res)
                 } else reject('Client not initialized');
             } catch (error) {
@@ -351,9 +341,16 @@ class AerospikeClass {
     }
 
     private async  queryApply(query, udf: IAerospike.Udf) {
-        const result = await query.apply(udf.module, udf.func, udf.args)
-        consolelog(process.cwd(), 'Query result:', result, false)
-        return result
+        if (udf.forEach) {
+            await query.setUdf(udf.module, udf.func, udf.args)
+            const result = await this.queryForeach(query)
+            consolelog(process.cwd(), 'Query result:', JSON.stringify(result), false)
+            return result
+        } else {
+            const result = await query.apply(udf.module, udf.func, udf.args)
+            consolelog(process.cwd(), 'Query result:', JSON.stringify(result), false)
+            return result
+        }
     }
 
     async  udfRegister(argv) {
@@ -396,6 +393,23 @@ class AerospikeClass {
                     let result = await this.client.operate(key, operations)
                     consolelog(process.cwd(), 'Map updated successfully', "", false)
                     resolve(result)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async  listOperations(argv: IAerospike.ListOperation): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let operations = [
+                        this.lists.append(argv.bin, argv.bins)
+                    ]
+                    let res = await this.client.operate(key, operations)
+                    resolve(res)
                 } else reject('Client not initialized');
             } catch (error) {
                 reject(error)

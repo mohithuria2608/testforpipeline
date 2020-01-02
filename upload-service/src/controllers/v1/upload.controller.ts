@@ -21,7 +21,7 @@ export class UploadController {
             await deleteFile(image.path);
             return true;
         } catch (err) {
-            consolelog("uploadImage", err, false)
+            consolelog(process.cwd(),"uploadImage", err, false)
             return Promise.reject(err);
         }
     }
@@ -37,7 +37,7 @@ export class UploadController {
             let menu = JSON.parse(rawdata);
             return menu
         } catch (err) {
-            consolelog("grpcFetchMenu", err, false)
+            consolelog(process.cwd(),"grpcFetchMenu", err, false)
             return Promise.reject(err)
         }
     }

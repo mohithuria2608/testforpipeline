@@ -7,7 +7,7 @@ import * as Constant from '../../../constant'
 export class AuthServiceValidator {
     constructor() {
     }
-    async  createTokenValidator(data: IAuthServiceRequest.ICreateTokenData) {
+    async  createTokenValidator(data: IAuthGrpcRequest.ICreateTokenData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
@@ -34,7 +34,7 @@ export class AuthServiceValidator {
         })
     }
 
-    async verifyTokenValidator(data: IAuthServiceRequest.IVerifyTokenObj) {
+    async verifyTokenValidator(data: IAuthGrpcRequest.IVerifyTokenObj) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

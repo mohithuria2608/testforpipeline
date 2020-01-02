@@ -13,9 +13,10 @@ declare namespace IUserRequest {
     }
     interface IUserData {
         id: string,
-        cmsRefId: number,
+        sdmUserRef: number,
+        cmsUserRef: number,
         isGuest: number,
-        sessionId: string,
+        // sessionId: string,
         name: string,
         cCode: string,
         phnNo: string,
@@ -100,6 +101,7 @@ declare namespace IUserRequest {
         cartId?: string,
         createdAt?: number,
     }
+    
     interface IRefreshToken {
     }
 
@@ -120,6 +122,11 @@ declare namespace IUserRequest {
         medium?: string,
         cCode?: string,
         phnNo?: string,
+        email?: string,
+        name?: string
+    }
+
+    interface IEditProfile {
         email?: string,
         name?: string
     }

@@ -23,5 +23,5 @@ server.addService(uploadProto.UploadService.service, {
 
 server.bind(config.get("grpc.upload.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog("Grpc upload Server running at", config.get("grpc.upload.server"), true)
+consolelog(process.cwd(),"Grpc upload Server running at", config.get("grpc.upload.server"), true)
 server.start();

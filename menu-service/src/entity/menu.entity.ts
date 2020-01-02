@@ -6,7 +6,6 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
 export class MenuClass extends BaseEntity {
-    protected set: SetNames;
     public sindex: IAerospike.CreateIndex[] = []
     constructor() {
         super('menu')
@@ -42,7 +41,7 @@ export class MenuClass extends BaseEntity {
             if (menu && menu.id) {
                 return menu
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.MENU_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.MENU_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(),"getById", error, false)
             return Promise.reject(error)

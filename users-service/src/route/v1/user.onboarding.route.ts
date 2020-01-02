@@ -13,7 +13,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),//@todo : Country specific regex
@@ -37,11 +37,11 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
-                    otp: Joi.number().required().error(new Error('Enter a valid OTP of 4 digits.')),
+                    otp: Joi.number().required(),
                 }
             }),
             async (ctx) => {
@@ -63,10 +63,14 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 body: {
                     socialKey: Joi.string().required(),
-                    medium: Joi.string().valid(Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB, Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE).required(),
+                    medium: Joi.string().valid(
+                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
+                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
+                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
+                    ).required(),
                     name: Joi.string(),
                     email: Joi.string().email().lowercase().allow(null).allow("")
                 }

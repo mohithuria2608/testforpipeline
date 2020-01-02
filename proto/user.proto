@@ -2,12 +2,32 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 service UserService {
-    rpc UpdateCmsId (IUpdateUserInfo) returns (ISuccess) {}
+    rpc SyncUserOnSdm (ICreateUserOnSdmReq) returns (ICreateUserOnSdmRes) {}
+    rpc SyncUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
 }
 
-message IUpdateUserInfo {
-    required string aerospikeId = 1;
-    required string id = 2;
+message ICreateUserOnSdmReq { }
+
+message ICreateUserOnSdmRes { }
+
+message ICreateUserOnCmsReq {
+    required IAction action = 1;
+    required string aerospikeId = 2;
+    required string lastname = 3;
+    required string firstname = 4;
+    required string email = 5;
+    required int32 storeId = 6;
+    required int32 websiteId = 7;
+    required string password = 8;
+    required int32 count = 9;
 }
 
-message ISuccess { }
+message IAction {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool name = 3;
+    optional bool email = 4;
+    optional bool phone = 5;
+}
+
+message ICreateUserOnCmsRes { }

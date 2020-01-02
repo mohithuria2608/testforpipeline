@@ -24,7 +24,7 @@ export class DeeplinkController {
             option['title'] = Constant.SERVER.APP_INFO.APP_NAME
             option['description'] = ''
             option['image'] = ''
-            let content = await templateLib.compileFile(Constant.SERVER.TEMPLATE_PATH + 'deeplink.html', option)
+            let content = await templateLib.compileFile(process.cwd() + '/views/deeplink.html', option)
             return (content)
         } catch (error) {
             return Promise.reject(error)
@@ -76,7 +76,7 @@ export class DeeplinkController {
 
             return res
         } catch (error) {
-            consolelog(process.cwd(),"deepLinkMapper", error, false)
+            consolelog(process.cwd(), "deepLinkMapper", error, false)
             return Promise.reject(error)
         }
     }

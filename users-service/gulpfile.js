@@ -32,6 +32,10 @@ gulp.task("clean", function () {
 // 		.pipe(tslint.report())
 // });
 
+gulp.task("copyConstant", function () {
+	return gulp.src(['../constant/**/*']).pipe(gulp.dest("./src/constant"));
+});
+
 gulp.task("compile", function () {
 	return tsProject.src()
 		.pipe(tsProject())
@@ -58,9 +62,6 @@ gulp.task("copyLua", function () {
 	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
 });
 
-gulp.task("copyConstant", function () {
-	return gulp.src(['../constant/**/*']).pipe(gulp.dest("./constant"));
-});
 
 gulp.task('server', function () {
 	pm2.connect(true, function () {
@@ -86,4 +87,6 @@ gulp.task('server', function () {
 /**
   * @todo add "lint" after "clean"
   */
-gulp.task('default', gulp.series("clean", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "copyConstant", "server"));
+gulp.task('default', gulp.series("clean", "copyConstant", "copyConstant", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "server"));
+
+

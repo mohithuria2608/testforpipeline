@@ -13,7 +13,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 query: {
                     lat: Joi.number().min(0).max(90).required(),
                     lng: Joi.number().min(-180).max(180).required(),
@@ -37,7 +37,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 query: {
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),

@@ -4,7 +4,7 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { cmsController } from '../../controllers';
-import * as JOI from './common.joi.validator'
+import { JOI_CMS_HEADERS } from './common.joi.validator'
 
 export default (router: Router) => {
     router
@@ -13,7 +13,7 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI.JOI_CMS_HEADERS,
+                headers: JOI_CMS_HEADERS,
                 body: {
                     username: Joi.string().required(),
                     password: Joi.string().required(),

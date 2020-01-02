@@ -7,8 +7,14 @@ import { Aerospike } from '../databases/aerospike'
 
 export class AddressEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
-    protected set: SetNames;
-    public sindex: IAerospike.CreateIndex[] = []
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'userId',
+            index: 'idx_' + this.set + '_' + 'userId',
+            type: "STRING"
+        },
+    ]
     constructor() {
         super('address')
     }
@@ -16,6 +22,8 @@ export class AddressEntity extends BaseEntity {
 
     public addressSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
+        lat: Joi.number().required(),
+        lng: Joi.number().required(),
         areaId: Joi.number().required(),
         bldgName: Joi.string(),
         bldgNameUn: Joi.string(),
@@ -26,7 +34,7 @@ export class AddressEntity extends BaseEntity {
         userId: Joi.number().required(),
         description: Joi.string(),
         districtId: Joi.number().required(),
-        flatNum: Joi.number(),
+        flatNum: Joi.string(),
         floor: Joi.string(),
         language: Joi.string(),
         phoneAreaCode: Joi.string(),
@@ -39,6 +47,8 @@ export class AddressEntity extends BaseEntity {
         streetId: Joi.number(),
         useMap: Joi.number(),
         createdAt: Joi.number().required(),
+        updatedAt: Joi.number().required(),
+        isActive: Joi.number().valid(0, 1),
         createdBy: Joi.string(),
         updatedBy: Joi.string()
     })
@@ -47,20 +57,21 @@ export class AddressEntity extends BaseEntity {
     * @method INTERNAL
     * @param {string} id : user id
     * */
-    async getById(payload: IUserRequest.IId) {
+    async getById(payload: IUserRequest.IId, bins: string[]) {
         try {
-            consolelog(process.cwd(),"getById", payload.id, true)
+            consolelog(process.cwd(), "getById", payload.id, true)
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: payload.id
+                key: payload.id,
+                bins: bins
             }
             let user: IUserRequest.IUserData = await Aerospike.get(getArg)
             if (user && user.id) {
                 return user
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(),"getById", error, false)
+            consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -75,6 +86,8 @@ export class AddressEntity extends BaseEntity {
             let id = this.uuidv1();
             let address = {
                 id: id,
+                lat: addressData.lat,
+                lng: addressData.lng,
                 bldgName: addressData.bldgName,
                 description: addressData.description,
                 flatNum: addressData.flatNum,
@@ -109,6 +122,8 @@ export class AddressEntity extends BaseEntity {
                 useMap: 1,
                 createdBy: 'APP',
                 updatedBy: 'APP',
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
             };
             let putArg: IAerospike.Put = {
                 bins: address,
@@ -117,16 +132,20 @@ export class AddressEntity extends BaseEntity {
                 create: true,
             }
             await Aerospike.put(putArg)
-            return await this.getById({ id: address.id })
+            return await this.getById({ id: address.id }, ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive", "updatedAt"])
         } catch (err) {
-            consolelog(process.cwd(),"addAddress", err, false)
+            consolelog(process.cwd(), "addAddress", err, false)
             return Promise.reject(err)
         }
     }
 
-    async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress): Promise<IUserRequest.IUserData> {
+    async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, returnRes: boolean) {
         try {
             let bins = {};
+            if (addressUpdate.lat)
+                bins['lat'] = addressUpdate.lat
+            if (addressUpdate.lng)
+                bins['lng'] = addressUpdate.lng
             if (addressUpdate.bldgName)
                 bins['bldgName'] = addressUpdate.bldgName
             if (addressUpdate.description)
@@ -135,6 +154,10 @@ export class AddressEntity extends BaseEntity {
                 bins['flatNum'] = addressUpdate.flatNum
             if (addressUpdate.tag)
                 bins['tag'] = addressUpdate.tag
+            if (addressUpdate.isActive != undefined)
+                bins['isActive'] = addressUpdate.isActive
+
+            bins['updatedAt'] = new Date().getTime()
             let putArg: IAerospike.Put = {
                 bins: bins,
                 set: this.set,
@@ -142,9 +165,12 @@ export class AddressEntity extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            return await this.getById({ id: addressUpdate.addressId })
+            if (returnRes)
+                return await this.getById({ id: addressUpdate.addressId }, ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive", "updatedAt"])
+            else
+                return {}
         } catch (err) {
-            consolelog(process.cwd(),"updateAddress", err, false)
+            consolelog(process.cwd(), "updateAddress", err, false)
             return Promise.reject(err)
         }
     }

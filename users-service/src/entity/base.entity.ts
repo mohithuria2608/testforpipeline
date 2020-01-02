@@ -3,7 +3,7 @@ import { consolelog } from '../utils'
 import { authService, locationService, kafkaService } from '../grpc/client'
 
 export class BaseEntity {
-    protected set: SetNames;
+    public set: SetNames;
     constructor(set?) {
         this.set = set
     }
@@ -12,7 +12,7 @@ export class BaseEntity {
         try {
             return authService.createToken(dataToSend)
         } catch (error) {
-            consolelog(process.cwd(),"createToken", error, false)
+            consolelog(process.cwd(), "createToken", error, false)
             return Promise.reject(error)
         }
     }
@@ -21,35 +21,59 @@ export class BaseEntity {
         try {
             return await locationService.validateCoordinate({ lat, lng })
         } catch (error) {
-            consolelog(process.cwd(),"validateCoordinate", error, false)
+            consolelog(process.cwd(), "validateCoordinate", error, false)
             return Promise.reject(error)
         }
     }
 
-    async syncUser(user: IUserRequest.IUserData) {
+    async syncUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
         try {
-            let data: IKafkaGrpcRequest.ISyncUserData = {
+            // this.syncToSdmUser(user, change)
+            this.syncToCmsUser(user, change)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncUser", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    private async syncToSdmUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
+        try {
+            let sdmdata: IKafkaGrpcRequest.ISyncToSDMUserData = {
+                action: change,
                 aerospikeId: user.id,
                 lastname: user.cCode + user.phnNo,
                 firstname: user.name,
                 email: user.email,
                 storeId: 1,
                 websiteId: 1,
-                password: user.password,
+                password: user.password
             }
-            kafkaService.syncUser(data)
+            kafkaService.syncToSdmUser(sdmdata)
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"syncUser", error, false)
+            consolelog(process.cwd(), "syncToSdmUser", error, false)
             return Promise.reject(error)
         }
     }
-    // async getAreaByStoreId(storeId: number) {
-    //     try {
-    //         return await locationService.getAreaByStoreId({ storeId })
-    //     } catch (error) {
-    //         consolelog(process.cwd(),"getAreaByStoreId", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+
+    private async syncToCmsUser(user: IUserRequest.IUserData, userChange: ICommonRequest.IChange) {
+        try {
+            let cmsdata: IKafkaGrpcRequest.ISyncToCMSUserData = {
+                action: userChange,
+                aerospikeId: user.id,
+                lastname: user.cCode + user.phnNo,
+                firstname: user.name,
+                email: user.email,
+                storeId: 1,
+                websiteId: 1,
+                password: user.password
+            }
+            kafkaService.syncToCmsUser(cmsdata)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncToCmsUser", error, false)
+            return Promise.reject(error)
+        }
+    }
 }

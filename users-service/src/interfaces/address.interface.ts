@@ -45,13 +45,21 @@ declare namespace IAddressRequest {
 
     interface IUpdateAddress {
         addressId: string
+        lat?: number,
+        lng?: number,
         bldgName?: string,
         description?: string,
         flatNum?: string,
-        tag?: string
+        tag?: string,
+        isActive?: number
     }
 
     interface IFetchAddress {
+    }
 
+    interface IDeleteAddress {
+        addressId: string
     }
 }
+
+

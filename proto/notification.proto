@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+service NotificationService {
+    rpc SyncToSdmUser (ISyncToSdmUserDataReq) returns (ISyncToSdmUserDataRes) {}
+}
+
+message ISyncToSdmUserDataReq { }
+
+message ISyncToSdmUserDataRes {}

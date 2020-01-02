@@ -20,19 +20,38 @@ export class KafkaService {
     private kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(),'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
+        consolelog(process.cwd(), 'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
     }
 
-    async syncUser(payload: IKafkaGrpcRequest.ISyncUserData): Promise<{}> {
+    async syncToSdmUser(payload: IKafkaGrpcRequest.ISyncToSDMUserData): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await kafkaServiceValidator.syncUserValidator(payload)
-                this.kafkaClient.syncUser(payload, (err, res) => {
+                await kafkaServiceValidator.syncToSdmUserValidator(payload)
+                this.kafkaClient.syncToSdmUser(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(),"successfully produced user on kafka for syncing", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully produced user on kafka for syncing to SDM", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(),"Error in producing user on kafka  for syncing", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in producing user on kafka  for syncing to SDM", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async syncToCmsUser(payload: IKafkaGrpcRequest.ISyncToCMSUserData): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await kafkaServiceValidator.syncToCmsUserValidator(payload)
+                this.kafkaClient.syncToCmsUser(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(), "successfully produced user on kafka for syncing to CMS", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in producing user on kafka  for syncing to CMS", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

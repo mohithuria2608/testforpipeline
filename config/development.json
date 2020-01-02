@@ -33,6 +33,10 @@
             "url": "http://localhost",
             "port": 4007
         },
+        "notification": {
+            "url": "http://localhost",
+            "port": 4008
+        },
         "upload": {
             "url": "http://localhost",
             "port": 4010
@@ -71,6 +75,10 @@
             "server": "localhost:50058",
             "client": "127.0.0.1:50058"
         },
+        "notification": {
+            "server": "localhost:50059",
+            "client": "127.0.0.1:50059"
+        },
         "upload": {
             "server": "localhost:50060",
             "client": "127.0.0.1:50060"
@@ -83,6 +91,12 @@
         "hosts": "40.123.212.40:3000",
         "username": "aerospikeusr",
         "password": "GM2nGDQkN5yMdPZs"
+    },
+    "cms":{
+        "auth": {
+            "username": "shashi.bhushan@appinventiv.com",
+            "password": "shashi@123"
+        }
     },
     "directory": {
         "static": {
@@ -111,12 +125,19 @@
                     "server": "/../../../proto/sync.proto",
                     "client": "/../../../../proto/sync.proto"
                 },
+                "notification": {
+                    "server": "/../../../proto/notification.proto",
+                    "client": "/../../../../proto/notification.proto"
+                },
                 "upload": {
                     "server": "/../../../proto/upload.proto",
                     "client": "/../../../../proto/upload.proto"
                 }
             }
         }
+    },
+    "blobBaseUrl": {
+        "product": "https://bloobstorage.blob.core.windows.net/americana/products/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj"

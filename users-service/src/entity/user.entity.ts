@@ -4,10 +4,11 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog, cryptData } from '../utils'
 import { Aerospike } from '../databases/aerospike'
+import * as CMS from "../cms"
+import * as SDM from '../sdm';
 
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
-    protected set: SetNames;
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
@@ -27,16 +28,22 @@ export class UserEntity extends BaseEntity {
             index: 'idx_' + this.set + '_' + 'socialKey',
             type: "STRING"
         },
+        // {
+        //     set: this.set,
+        //     bin: 'sessionId',
+        //     index: 'idx_' + this.set + '_' + 'sessionId',
+        //     type: "STRING"
+        // },
         {
             set: this.set,
-            bin: 'sessionId',
-            index: 'idx_' + this.set + '_' + 'sessionId',
-            type: "STRING"
+            bin: 'cmsUserRef',
+            index: 'idx_' + this.set + '_' + 'cmsUserRef',
+            type: "NUMERIC"
         },
         {
             set: this.set,
-            bin: 'cmsRefId',
-            index: 'idx_' + this.set + '_' + 'cmsRefId',
+            bin: 'sdmUserRef',
+            index: 'idx_' + this.set + '_' + 'sdmUserRef',
             type: "NUMERIC"
         }
     ]
@@ -47,6 +54,7 @@ export class UserEntity extends BaseEntity {
 
     public sessionSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
+        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         appversion: Joi.string().trim().required(),
@@ -60,16 +68,24 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        cmsRefId: Joi.number().required().description("sk"),
+        sdmUserRef: Joi.number().required().description("sk"),
+        cmsUserRef: Joi.number().required().description("sk"),
         isGuest: Joi.number().valid(0, 1),
-        sessionId: Joi.string().trim().required().description("sk"),
+        // sessionId: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
-        profileStep: Joi.number().valid(Constant.DATABASE.TYPE.PROFILE_STEP.INIT, Constant.DATABASE.TYPE.PROFILE_STEP.FIRST).required(),
+        profileStep: Joi.number().valid(
+            Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+            Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+        ).required(),
         socialKey: Joi.string().trim().required().description("sk"),
-        medium: Joi.string().trim().required(),
+        medium: Joi.string().trim().valid(
+            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
+            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
+            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
+        ).required(),
         removeUserId: Joi.string(),
         password: Joi.string(),
         session: Joi.any(),
@@ -90,9 +106,9 @@ export class UserEntity extends BaseEntity {
             if (user && user.id) {
                 return user
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E404.USER_NOT_FOUND)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(),"getById", error, false)
+            consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)
         }
     }
@@ -101,7 +117,8 @@ export class UserEntity extends BaseEntity {
         const id = this.uuidv1();
         const user = isCreate ? {
             id: id,
-            cmsRefId: 0,
+            sdmUserRef: 0,
+            cmsUserRef: 0,
             isGuest: 0,
             sessionId: "",
             name: "",
@@ -121,7 +138,7 @@ export class UserEntity extends BaseEntity {
         if (userInfo.isGuest != undefined) {
             if (userInfo.isGuest == 1) {
                 user['isGuest'] = userInfo.isGuest
-                user['sessionId'] = headers.deviceid
+                // user['sessionId'] = headers.deviceid
             }
         }
         if (userInfo.name != undefined)
@@ -216,7 +233,7 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: dataToSave.id })
             return user
         } catch (err) {
-            consolelog(process.cwd(),"createUser", err, false)
+            consolelog(process.cwd(), "createUser", err, false)
             return Promise.reject(err)
         }
     }
@@ -256,8 +273,30 @@ export class UserEntity extends BaseEntity {
             let user = await this.getById({ id: userData.id })
             return user
         } catch (err) {
-            consolelog(process.cwd(),"createSession", err, false)
+            consolelog(process.cwd(), "createSession", err, false)
             return Promise.reject(err)
+        }
+    }
+
+    async updateUser(userData: IUserRequest.IUserData, payload: IUserRequest.IEditProfile, ) {
+        try {
+            let userUpdate = {}
+            if (payload.email)
+                userUpdate['email'] = payload.email
+            if (payload.name)
+                userUpdate['name'] = payload.name
+            let putArg: IAerospike.Put = {
+                bins: userUpdate,
+                set: this.set,
+                key: userData.id,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            let user = await this.getById({ id: userData.id })
+            return user
+        } catch (error) {
+            consolelog(process.cwd(), "updateUser", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -294,15 +333,49 @@ export class UserEntity extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
         } catch (error) {
-            consolelog(process.cwd(),"getTokens", error, false)
+            consolelog(process.cwd(), "getTokens", error, false)
             return Promise.reject(error)
         }
     }
 
-    async updateCmsId(payload: IUserGrpcRequest.IUpdateUserInfo) {
+    async syncUserOnSdm(payload: IUserGrpcRequest.ISyncUserDataOnSdm) {
         try {
+            const payloadForSdm = {
+            }
+            let res = await SDM.UserSDME.createCustomer(payloadForSdm)
             let putArg: IAerospike.Put = {
-                bins: { cmsRefId: parseInt(payload.id.toString()) },
+                bins: { sdmUserRef: parseInt(res.id.toString()) },
+                set: this.set,
+                key: "1",// payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "syncUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async syncUserOnCms(payload: IUserGrpcRequest.ISyncUserDataOnCms) {
+        try {
+            const payloadForCms = {
+                customer: {
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    email: payload.email,
+                    store_id: payload.storeId,
+                    website_id: payload.websiteId,
+                    addresses: []
+                },
+                password: payload.password
+            }
+            let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
+
+            consolelog(process.cwd(), "resresresresresres", res, false)
+
+            let putArg: IAerospike.Put = {
+                bins: { cmsUserRef: parseInt(res.id.toString()) },
                 set: this.set,
                 key: payload.aerospikeId,
                 update: true,
@@ -310,7 +383,7 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"updateCmsId", error, false)
+            consolelog(process.cwd(), "updateCmsId", error, false)
             return Promise.reject(error)
         }
     }

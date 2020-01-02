@@ -18,13 +18,23 @@ const kafkaProto = grpc.loadPackageDefinition(packageDefinition);
 export const server = new grpc.Server()
 
 server.addService(kafkaProto.KafkaService.service, {
-    syncUser: async (call: IUserGrpcRequest.ICreateUserReq, callback) => {
+    syncToSdmUser: async (call: IUserGrpcRequest.ISyncToSdmUserDataReq, callback) => {
         try {
-            consolelog(process.cwd(),"syncUser ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.syncUser(call.request)
+            consolelog(process.cwd(), "syncToSdmUser ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.syncToSdmUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(),"syncUser", error, false)
+            consolelog(process.cwd(), "syncToSdmUser", error, false)
+            callback(grpcSendError(error))
+        }
+    },
+    syncToCmsUser: async (call: IUserGrpcRequest.ISyncToCmsUserDataReq, callback) => {
+        try {
+            consolelog(process.cwd(), "syncToCmsUser ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.syncToCmsUser(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "syncToCmsUser", error, false)
             callback(grpcSendError(error))
         }
     },
@@ -32,5 +42,5 @@ server.addService(kafkaProto.KafkaService.service, {
 
 server.bind(config.get("grpc.kafka.server"), grpc.ServerCredentials.createInsecure())
 
-consolelog(process.cwd(),"GRPC server running at", config.get("grpc.kafka.server"), true)
+consolelog(process.cwd(), "GRPC server running at", config.get("grpc.kafka.server"), true)
 server.start();

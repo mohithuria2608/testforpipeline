@@ -1,11 +1,19 @@
 declare namespace IUserGrpcRequest {
 
-    export interface ICreateUserReq {
-        request: ICreateUserData
+    interface ISyncToSdmUserDataReq {
+        request: ISyncToSDMUserData
     }
 
+    interface ISyncToSDMUserData {
+        count?: number
+    }
 
-    export interface ICreateUserData {
+    interface ISyncToCmsUserDataReq {
+        request: ISyncToCMSUserData
+    }
+    interface ISyncToCMSUserData {
+        action: ICommonRequest.IChange
+        count?: number
         aerospikeId: string,
         lastname: string
         firstname: string
@@ -14,10 +22,4 @@ declare namespace IUserGrpcRequest {
         websiteId: number,
         password: string
     }
-
-    interface IUpdateUserInfo {
-        aerospikeId: string
-        id: number,
-    }
-
 }

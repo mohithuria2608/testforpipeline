@@ -21,11 +21,15 @@ export class BaseEntity {
         return chunked_arr;
     }
 
-    async scanAerospike() {
+    async scanAerospike(bins?: string[]) {
         try {
-            return await Aerospike.scan(this.set)
+            const argv: IAerospike.Scan = {
+                set: this.set,
+                bins: bins
+            }
+            return await Aerospike.scan(argv)
         } catch (error) {
-            consolelog(process.cwd(),"scanAerospike", error, false)
+            consolelog(process.cwd(), "scanAerospike", error, false)
             return Promise.reject(error)
         }
     }
