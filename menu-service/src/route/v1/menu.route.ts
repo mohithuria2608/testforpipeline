@@ -5,6 +5,9 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { menuController } from '../../controllers';
 import * as JOI from './common.joi.validator';
+import * as ENTITY from '../../entity'
+import * as fs from 'fs'
+
 
 export default (router: Router) => {
     router
@@ -39,6 +42,28 @@ export default (router: Router) => {
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+
+        .get('/fs',
+            async (ctx) => {
+                try {
+                    let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
+                    let menu = JSON.parse(rawdata);
+                    ctx.body = menu
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/as',
+            async (ctx) => {
+                try {
+
+                    ctx.body = await ENTITY.MenuE.getMenuById(5)
                 }
                 catch (error) {
                     throw error

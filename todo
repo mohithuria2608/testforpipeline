@@ -3,3 +3,15 @@
 - timezone  in country list
 - timezone-offset in headers
 - 
+
+
+# Benchmarks
+- menu json time
+- cart validate time
+- order place time
+- order status (from payment authorization to update status of order on sdm)
+
+
+# Manoj tasks
+- use filesystem and read the menu 
+- use aerospike to fetch menu
