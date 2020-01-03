@@ -51,12 +51,12 @@ export default (router: Router) => {
                 headers: COMMON_HEADERS,
                 body: {
                     addressId: Joi.string().required(),
-                    lat: Joi.number().min(0).max(90),
-                    lng: Joi.number().min(-180).max(180),
-                    bldgName: Joi.string(),
-                    description: Joi.string(),
-                    flatNum: Joi.string(),
-                    tag: Joi.string(),
+                    lat: Joi.number().min(0).max(90).required(),
+                    lng: Joi.number().min(-180).max(180).required(),
+                    bldgName: Joi.string().required(),
+                    description: Joi.string().required(),
+                    flatNum: Joi.string().required(),
+                    tag: Joi.string().required(),
                 }
             }),
             async (ctx) => {

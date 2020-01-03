@@ -48,6 +48,27 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/upsell',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IMenuRequest.IFetchUpsell = ctx.request.query;
+                    let res = await menuController.fetchUpsell(headers, payload);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 
         .get('/fs',
             async (ctx) => {

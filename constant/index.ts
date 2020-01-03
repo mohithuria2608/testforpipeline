@@ -264,7 +264,12 @@ export const STATUS_MSG = {
                 type: 'SERVICE_UNAVAILABLE',
                 message: "Sorry, we don't, deliver at this location"
             },
-
+            ADDRESS_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                type: 'ADDRESS_NOT_FOUND',
+                message: "Address not found"
+            },
             DATA_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
