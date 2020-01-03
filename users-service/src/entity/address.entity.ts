@@ -7,51 +7,46 @@ import { Aerospike } from '../databases/aerospike'
 
 export class AddressEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
-    public sindex: IAerospike.CreateIndex[] = [
-        {
-            set: this.set,
-            bin: 'userId',
-            index: 'idx_' + this.set + '_' + 'userId',
-            type: "STRING"
-        },
-    ]
     constructor() {
         super('address')
     }
 
 
     public addressSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
-        lat: Joi.number().required(),
-        lng: Joi.number().required(),
-        areaId: Joi.number().required(),
-        bldgName: Joi.string(),
-        bldgNameUn: Joi.string(),
-        bldgNum: Joi.string(),
-        cityId: Joi.number().required(),
-        classId: Joi.number(),
-        countryId: Joi.number().required(),
-        userId: Joi.number().required(),
-        description: Joi.string(),
-        districtId: Joi.number().required(),
-        flatNum: Joi.string(),
-        floor: Joi.string(),
-        language: Joi.string(),
-        phoneAreaCode: Joi.string(),
-        phoneLookup: Joi.string(),
-        phoneNumber: Joi.string().required(),
-        phoneType: Joi.number(),
-        postalCode: Joi.string().required(),
-        provinceCode: Joi.number().required(),
-        sketch: Joi.string(),
-        streetId: Joi.number(),
-        useMap: Joi.number(),
-        createdAt: Joi.number().required(),
-        updatedAt: Joi.number().required(),
-        isActive: Joi.number().valid(0, 1),
-        createdBy: Joi.string(),
-        updatedBy: Joi.string()
+        address: Joi.object().keys({
+            id: Joi.string().trim().required().description("pk"),
+            lat: Joi.number().required(),
+            lng: Joi.number().required(),
+            areaId: Joi.number().required(),
+            bldgName: Joi.string(),
+            bldgNameUn: Joi.string(),
+            bldgNum: Joi.string(),
+            cityId: Joi.number().required(),
+            classId: Joi.number(),
+            countryId: Joi.number().required(),
+            userId: Joi.number().required(),
+            description: Joi.string(),
+            districtId: Joi.number().required(),
+            flatNum: Joi.string(),
+            floor: Joi.string(),
+            language: Joi.string(),
+            phoneAreaCode: Joi.string(),
+            phoneLookup: Joi.string(),
+            phoneNumber: Joi.string().required(),
+            phoneType: Joi.number(),
+            postalCode: Joi.string().required(),
+            provinceCode: Joi.number().required(),
+            sketch: Joi.string(),
+            streetId: Joi.number(),
+            useMap: Joi.number(),
+            createdAt: Joi.number().required(),
+            updatedAt: Joi.number().required(),
+            isActive: Joi.number().valid(0, 1),
+            createdBy: Joi.string(),
+            updatedBy: Joi.string()
+        })
     })
+
 
     /**
     * @method INTERNAL
