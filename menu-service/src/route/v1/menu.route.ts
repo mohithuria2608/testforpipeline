@@ -7,6 +7,7 @@ import { menuController } from '../../controllers';
 import * as JOI from './common.joi.validator';
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+const protobuf = require("protobufjs");
 
 
 export default (router: Router) => {
@@ -62,8 +63,10 @@ export default (router: Router) => {
         .get('/as',
             async (ctx) => {
                 try {
-
-                    ctx.body = await ENTITY.MenuE.getMenuById(5)
+                    var myMessage = protobuf.Writer.create()
+                        .string(JSON.stringify(await ENTITY.MenuE.getMenuById(5)))
+                        .finish();
+                    ctx.body = myMessage
                 }
                 catch (error) {
                     throw error

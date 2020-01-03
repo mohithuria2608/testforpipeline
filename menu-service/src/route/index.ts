@@ -10,7 +10,6 @@ const version1 = "/v1"
 const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: menu, prefix: version1 + '/menu' },
-
 ]
 
 export default function routes() {
