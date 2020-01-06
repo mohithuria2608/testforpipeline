@@ -8,7 +8,7 @@ import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
-        .post('/validate',
+        .post('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
@@ -16,81 +16,173 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
+                    cartId: Joi.string().required(),
                     curMenuId: Joi.number(),
                     menuUpdatedAt: Joi.number(),
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),
-                    items: Joi.any()
-                    // .array().items(
-                    //     Joi.object().keys({
-                    //         quantity: Joi.number(),
-                    //         catId: Joi.number(),
-                    //         sequence: Joi.number(),
-                    //         steps: Joi.array().items(
-                    //             Joi.object().keys({
-                    //                 sequence: Joi.number(),
-                    //                 title_en: Joi.string().allow(""),
-                    //                 title_ar: Joi.string().allow(""),
-                    //                 subtitle_ar: Joi.string().allow(""),
-                    //                 subtitle_en: Joi.string().allow(""),
-                    //                 displayType: Joi.string().valid("radio", "checkbox", "stepper"),
-                    //                 maximum: Joi.number(),
-                    //                 minimum: Joi.number(),
-                    //                 ingredient: Joi.number().valid(0, 1),
-                    //                 itemStyle: Joi.number().valid(0, 1, 2),
-                    //                 options: Joi.array().items(
-                    //                     Joi.object().keys({
-                    //                         sequence: Joi.number(),
-                    //                         name_ar: Joi.string().allow(""),
-                    //                         name_en: Joi.string().allow(""),
-                    //                         price: Joi.number(),
-                    //                         promoId: Joi.number(),
-                    //                         id: Joi.number(),
-                    //                         selected: Joi.number(),
-                    //                         default: Joi.number(),
-                    //                         displayType: Joi.string().valid("radio", "checkbox", "stepper"),
-                    //                         subOptions: Joi.array().items(
-                    //                             Joi.object().keys({
-                    //                                 price: Joi.number(),
-                    //                                 selected: Joi.number(),
-                    //                                 name_en: Joi.string()
-                    //                             })),
-
-                    //                         //@ignore
-                    //                         hasChild: Joi.boolean(),
-                    //                         isSelected: Joi.boolean(),
-                    //                         defaultValue: Joi.number(),
-                    //                         parentId: Joi.number()
-                    //                     })),
-                    //             })),
-                    //         price: Joi.number(),
-                    //         promoId: Joi.number(),
-                    //         description_en: Joi.string().allow(""),
-                    //         description_ar: Joi.string().allow(""),
-                    //         itemType: Joi.string().valid("bundle", "standalone"),
-                    //         title_en: Joi.string().allow(""),
-                    //         title_ar: Joi.string().allow(""),
-                    //         id: Joi.number(),
-                    //         image: Joi.object().keys({
-                    //             dimension: Joi.string().allow(""),
-                    //             uploadBy: Joi.string(),
-                    //             url: Joi.string(),
-                    //             type: Joi.string().valid("image/jpg")
-                    //         }),
-
-                    //         //@ignore
-                    //         groupData: Joi.any(),
-                    //         virtualGroupId: Joi.any(),
-                    //         isAvailable: Joi.boolean(),
-                    //         isPriceChange: Joi.boolean(),
-                    //     }))
+                    items: Joi.array().items(
+                        Joi.object().keys({
+                            qty: Joi.number().required(),
+                            id: Joi.number().required(),
+                            position: Joi.number().required(),
+                            name: Joi.string().required(),
+                            description: Joi.string().required(),
+                            inSide: Joi.string().required(),
+                            finalPrice: Joi.number().required(),
+                            specialPrice: Joi.number().required(),
+                            typeId: Joi.string().valid("simple", "configurable", "bundle", "bundle_group").required(),
+                            selectedItem: Joi.number().required(),
+                            metaKeyword: Joi.array().items(Joi.string()),
+                            products: Joi.array().items(
+                                Joi.object().keys({
+                                    id: Joi.number().required(),
+                                    position: Joi.number().required(),
+                                    name: Joi.string().required(),
+                                    description: Joi.string().required(),
+                                    inSide: Joi.string().required(),
+                                    finalPrice: Joi.number().required(),
+                                    specialPrice: Joi.number().required(),
+                                    typeId: Joi.string().valid("bundle").required(),
+                                    metaKeyword: Joi.array().items(Joi.string()),
+                                    bundleProductOptions: Joi.array().items(
+                                        Joi.object().keys({
+                                            position: Joi.number().required(),
+                                            isDependent: Joi.number().required(),
+                                            maximumQty: Joi.number().required(),
+                                            minimumQty: Joi.number().required(),
+                                            title: Joi.string().required(),
+                                            ingredient: null,
+                                            type: Joi.string().valid("radio").required(),
+                                            productLinks: Joi.array().items(
+                                                Joi.object().keys({
+                                                    position: Joi.number().required(),
+                                                    price: Joi.number().required(),
+                                                    id: Joi.number().required(),
+                                                    name: Joi.string().required(),
+                                                    selectionQty: Joi.number().required(),
+                                                    subOptions: Joi.array().items(
+                                                        Joi.object().keys({
+                                                            price: Joi.number().required(),
+                                                            selected: Joi.number().required(),
+                                                            name: Joi.string().required()
+                                                        })),
+                                                    selected: Joi.number().required(),
+                                                    default: Joi.string().required(),
+                                                    dependentSteps: Joi.array()
+                                                }))
+                                        })),
+                                    selectedItem: Joi.number().required(),
+                                    configurableProductOptions: null,
+                                    products: null,
+                                    sku: Joi.string().required(),
+                                    imageSmall: Joi.string().required(),
+                                    imageThumbnail: Joi.string().required(),
+                                    image: Joi.string().required(),
+                                    taxClassId: Joi.string().required(),
+                                    virtualGroup: Joi.number().required(),
+                                    visibility: Joi.number().required(),
+                                    associative: Joi.string().required(),
+                                })),
+                            variants: Joi.array().items(
+                                Joi.object().keys({
+                                    id: Joi.number().required(),
+                                    title: Joi.string().required(),
+                                    subtitle: Joi.string().required(),
+                                    selIndex: Joi.number().required(),
+                                    options: Joi.array().items(
+                                        Joi.object().keys({
+                                            id: Joi.number().required(),
+                                            position: Joi.number().required(),
+                                            title: Joi.string().required(),
+                                            isSelected: Joi.number().required()
+                                        }))
+                                })),
+                            bundleProductOptions: Joi.array().items(
+                                Joi.object().keys({
+                                    position: Joi.number().required(),
+                                    isDependent: Joi.number().required(),
+                                    maximumQty: Joi.number().required(),
+                                    minimumQty: Joi.number().required(),
+                                    title: Joi.string().required(),
+                                    ingredient: null,
+                                    type: Joi.string().valid("radio", "checkbox").required(),
+                                    productLinks: Joi.array().items(
+                                        Joi.object().keys({
+                                            position: Joi.number().required(),
+                                            price: Joi.number().required(),
+                                            id: Joi.number().required(),
+                                            name: Joi.string().required(),
+                                            selectionQty: Joi.number().required(),
+                                            subOptions: Joi.array().items(
+                                                Joi.object().keys({
+                                                    price: Joi.number().required(),
+                                                    selected: Joi.number().required(),
+                                                    name: Joi.string().required()
+                                                })),
+                                            selected: Joi.number().required(),
+                                            default: Joi.string().required(),
+                                            dependentSteps: Joi.array()
+                                        }))
+                                })),
+                            configurableProductOptions: Joi.array().items(
+                                Joi.object().keys({
+                                    id: Joi.number().required(),
+                                    position: Joi.number().required(),
+                                    title: Joi.string().required(),
+                                    subtitle: Joi.string().required(),
+                                    selIndex: Joi.number().required(),
+                                    options: Joi.array().items(
+                                        Joi.object().keys({
+                                            isSelected: Joi.number().required(),
+                                            position: Joi.number().required(),
+                                            title: Joi.string().required(),
+                                            id: Joi.number().required()
+                                        }))
+                                })),
+                            sku: Joi.string().required(),
+                            imageSmall: Joi.string().required(),
+                            imageThumbnail: Joi.string().required(),
+                            image: Joi.string().required(),
+                            taxClassId: Joi.string().required(),
+                            virtualGroup: Joi.number().required(),
+                            visibility: Joi.number().required(),
+                            associative: Joi.string().required(),
+                        }))
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ICartRequest.IValidateCart = ctx.request.body;
-                    let res = await cartController.validateCart(headers, payload);
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await cartController.postCart(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
+                    cartId: Joi.string().required(),
+                    cartUpdatedAt: Joi.number().required(),
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: ICartRequest.IGetCart = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await cartController.getCart(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

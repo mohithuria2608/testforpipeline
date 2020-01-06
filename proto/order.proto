@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+service OrderService {
+    rpc CreateDefaultCart (ICreateDefaultCartReq) returns (ICreateDefaultCartRes) {}
+    rpc UpdateCartTtl (IUpdateDefaultCartTTLReq) returns (IUpdateDefaultCartTTLRes) {}
+}
+
+message ICreateDefaultCartReq {
+    required string cartId = 1;
+    required string userId = 2;
+}
+
+message ICreateDefaultCartRes { }
+
+message IUpdateDefaultCartTTLReq {
+    required string cartId = 1;
+}
+
+message IUpdateDefaultCartTTLRes { }

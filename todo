@@ -15,3 +15,9 @@
 # Manoj tasks
 - use filesystem and read the menu 
 - use aerospike to fetch menu
+
+
+#sub-option id in missing in menu json
+# when does namespace gets clear on aerospike
+
+#check services with load balancer

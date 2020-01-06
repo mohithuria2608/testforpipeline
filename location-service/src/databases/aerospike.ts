@@ -17,6 +17,7 @@ class AerospikeClass {
     public namespace: string;
     public cdt = aerospike.cdt;
     public maps = aerospike.maps;
+    public operations = aerospike.operations;
     public lists = aerospike.lists;
     public GeoJSON = aerospike.GeoJSON;
     constructor(namespace: string) {

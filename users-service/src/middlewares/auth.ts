@@ -8,7 +8,7 @@ import * as ENTITY from '../entity'
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
-            consolelog(process.cwd(),'authorization', ctx.header.authorization, true)
+            consolelog(process.cwd(), 'authorization', ctx.header.authorization, true)
             let settings = {
                 tokenType: "Bearer"
             }
@@ -29,6 +29,8 @@ export default (opts?): Middleware => {
             else {
                 let user: IUserRequest.IUserData = await ENTITY.UserE.getById({ id: tokenData.id })
                 if (!user && !user.id) {
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                } else if (user && (!user.session || !user.session[tokenData.deviceid])) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 } else
                     tokenData['userData'] = user

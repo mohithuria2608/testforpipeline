@@ -16,7 +16,6 @@ export enum KAFKA_TOPIC {
 };
 
 export enum MIDDLEWARE {
-    API_AUTH = "api_auth",
     AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
 };
@@ -74,6 +73,7 @@ export const SERVER = {
     DEFAULT_USER_NAME: 'App User',
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
+    DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
     BY_PASS_OTP: 1212,
     OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
@@ -157,6 +157,12 @@ export const DATABASE = {
         STATUS: {
             INACTIVE: 0,
             ACTIVE: 1
+        }
+    },
+
+    STATUS: {
+        ORDER: {
+            CART: "CART"
         }
     }
 };
@@ -264,12 +270,21 @@ export const STATUS_MSG = {
                 type: 'SERVICE_UNAVAILABLE',
                 message: "Sorry, we don't, deliver at this location"
             },
+
             ADDRESS_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
                 type: 'ADDRESS_NOT_FOUND',
                 message: "Address not found"
             },
+
+            CART_NOT_FOUND:{
+                statusCode: 409,
+                httpCode: 409,
+                type: 'CART_NOT_FOUND',
+                message: "Cart not found"
+            },
+
             DATA_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
@@ -423,14 +438,6 @@ export const STATUS_MSG = {
                 type: 'CREATED'
             },
         },
-        S204: {
-            NOT_MODIFIED: {
-                statusCode: 304,
-                httpCode: 304,
-                message: 'Request not modified',
-                type: 'NOT_MODIFIED'
-            }
-        },
         S205: {
             MENU_CHANGED: {
                 statusCode: 205,
@@ -439,11 +446,11 @@ export const STATUS_MSG = {
                 type: 'MENU_CHANGED'
             },
 
-            ITEM_CHANGED: {
+            DATA_CHANGED: {
                 statusCode: 205,
                 httpCode: 205,
-                message: 'Item info has been changed. Please refresh your menu.',
-                type: 'ITEM_CHANGED'
+                message: 'Existing data has been changed. Please refresh your data.',
+                type: 'DATA_CHANGED'
             }
         }
     },
