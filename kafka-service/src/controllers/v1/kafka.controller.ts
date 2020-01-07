@@ -72,6 +72,50 @@ export class KafkaController {
             return Promise.reject(err)
         }
     }
+
+    /**
+     * @method GRPC
+     * @param {string} data
+     * */
+    async syncToCmsMenu(payload: IMenuGrpcRequest.ISyncToCMSMenuData) {
+        try {
+            consolelog(process.cwd(), "produce menu to sync in cms in KAFKA service", payload, true)
+            if (!payload.hasOwnProperty('count'))
+                payload['count'] = Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE
+            payload.type = Constant.KAFKA.CMS.MENU.TYPE.SYNC;
+            kafkaProducerE.sendMessage({
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.CMS_MENU,
+                partition: 0,
+            });
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "syncToCmsMenu", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * @param {string} data
+     * */
+    async updateMenuFromCMS(payload: IMenuGrpcRequest.IUpdateMenuFromCMS) {
+        try {
+            consolelog(process.cwd(), "fetch menu to sync in Aerospike in KAFKA service", payload, true)
+            if (!payload.hasOwnProperty('count'))
+                payload['count'] = Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE
+            payload.type = Constant.KAFKA.CMS.MENU.TYPE.UPDATE;
+            kafkaProducerE.sendMessage({
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.CMS_MENU,
+                partition: 0,
+            });
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "updateMenuFromCMS", err, false)
+            return Promise.reject(err)
+        }
+    }
 }
 
 export const kafkaController = new KafkaController();

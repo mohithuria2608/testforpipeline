@@ -2,6 +2,28 @@ syntax = "proto3";
 
 service MenuService {
     rpc FetchMenu (IFetchMenu) returns (IMenu) {}
+    rpc syncMenuOnCms (ISyncMenuOnCmsReq) returns (ISyncMenuOnCmsRes) {}
+    rpc updateMenu (IUpdateMenuReq) returns (IUpdateMenuRes) {}
+}
+
+message ISyncMenuOnCmsReq {
+    required IAction action = 1;
+    required string data = 2;
+}
+message ISyncMenuOnCmsRes {}
+
+message IUpdateMenuReq {
+    required IAction action = 1;
+    required string data = 2;
+}
+message IUpdateMenuRes {}
+
+message IAction {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool name = 3;
+    optional bool email = 4;
+    optional bool phone = 5;
 }
 
 message IFetchMenu {

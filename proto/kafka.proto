@@ -3,6 +3,8 @@ syntax = "proto3";
 service KafkaService {
     rpc SyncToSdmUser (ISyncToSdmUserDataReq) returns (ISyncToSdmUserDataRes) {}
     rpc SyncToCmsUser (ISyncToCmsUserDataReq) returns (ISyncToCmsUserDataRes) {}
+    rpc syncToCmsMenu (ISyncToCmsMenuDataReq) returns (ISyncToCmsMenuDataRes) {}
+    rpc updateMenuFromCMS (IUpdateMenuDataReq) returns (IUpdateMenuDataRes) {}
 }
 
 message ISyncToSdmUserDataReq { }
@@ -20,6 +22,18 @@ message ISyncToCmsUserDataReq {
     required string password = 8;
     required int32 count = 9;
 }
+
+message ISyncToCmsMenuDataReq {
+    required IAction action = 1;
+    required string data = 2;
+}
+message ISyncToCmsMenuDataRes {}
+
+message IUpdateMenuDataReq {
+    required IAction action = 1;
+    required string data = 2;
+}
+message IUpdateMenuDataRes {}
 
 message IAction {
     optional bool create = 1;

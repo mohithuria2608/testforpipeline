@@ -4,6 +4,27 @@ declare namespace IMenuGrpcRequest {
         request: IFetchMenuData
     }
 
+    interface ICMSMenuSyncReq {
+        request: ICMSMenuSync
+    }
+
+    interface ICMSMenuSync {
+        action: ICommonRequest.IChange,
+        count?: Number
+        data: string
+    }
+
+    interface IUpdateMenuReq {
+        request: IUpdateMenu
+    }
+
+    interface IUpdateMenu {
+        action: ICommonRequest.IChange,
+        count?: Number
+        type?: string
+        data: string
+    }
+
     interface IFetchMenuData {
         country: string,
         isDefault: boolean,

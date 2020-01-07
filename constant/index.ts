@@ -12,7 +12,8 @@ export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
     NEW_MENU = "new_menu",
     SDM_USER = "sdm_user",
-    CMS_USER = "cms_user"
+    CMS_USER = "cms_user",
+    CMS_MENU = "cms_menu"
 };
 
 export enum MIDDLEWARE {
@@ -46,6 +47,12 @@ export const KAFKA = {
                 UPDATE: 5,
             },
         },
+        MENU: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            },
+        }
     },
     CMS: {
         USER: {
@@ -53,6 +60,16 @@ export const KAFKA = {
                 CREATE: 5,
                 UPDATE: 5,
             },
+        },
+        MENU: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            },
+            TYPE: {
+                SYNC: 'sync',
+                UPDATE: 'update'
+            }
         }
     }
 };

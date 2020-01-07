@@ -2,7 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 
-export class CmsMenuController {
+export class SdmMenuController {
 
     constructor() { }
 
@@ -10,10 +10,10 @@ export class CmsMenuController {
      * @method POST
      * @param {any} data
      * */
-    async postMenu(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
+    async buildMenu(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            ENTITY.MenuE.fetchMenuFromCMS(payload)
-            return {}
+            ENTITY.MenuE.fetchMenuFromSDM(payload)
+            return {};
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
             return Promise.reject(err)
@@ -21,4 +21,4 @@ export class CmsMenuController {
     }
 }
 
-export const cmsMenuController = new CmsMenuController();
+export const sdmMenuController = new SdmMenuController();

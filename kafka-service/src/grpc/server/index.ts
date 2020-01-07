@@ -38,6 +38,26 @@ server.addService(kafkaProto.KafkaService.service, {
             callback(grpcSendError(error))
         }
     },
+    syncToCmsMenu: async (call: IMenuGrpcRequest.ISyncToCmsMenuDataReq, callback) => {
+        try {
+            consolelog(process.cwd(), "syncToCmsMenu ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.syncToCmsMenu(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "syncToCmsMenu", error, false)
+            callback(grpcSendError(error))
+        }
+    },
+    updateMenuFromCMS: async (call: IMenuGrpcRequest.IUpdateMenuFromCMSReq, callback) => {
+        try {
+            consolelog(process.cwd(), "updateMenuFromCMS ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.updateMenuFromCMS(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "updateMenuFromCMS", error, false)
+            callback(grpcSendError(error))
+        }
+    }
 })
 
 server.bind(config.get("grpc.kafka.server"), grpc.ServerCredentials.createInsecure())
