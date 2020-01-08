@@ -229,7 +229,6 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid)
     try {
         userObj['country'] = userObj['session'][deviceid].country
         userObj['language'] = userObj['session'][deviceid].language
-        userObj['cartId'] = userObj['session'][deviceid].cartId
 
         delete userObj['session']
         delete userObj['removeUserId']

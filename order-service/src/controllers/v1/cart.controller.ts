@@ -16,42 +16,46 @@ export class CartController {
      * @param {number=} lng :longitude
      * @param {Array} items :array of products
      * */
-    async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart) {
+    async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
-            const defaultMenu: IMenuGrpcRequest.IFetchMenuRes = await menuService.fetchMenu({
-                country: headers.country,
-                isDefault: true
-            })
+            let invalidMenu = false
             if (payload.lat && payload.lng) {
-                //fetch menu according to lat, lng
-                if ((defaultMenu.menuId != payload.curMenuId) || (defaultMenu.updatedAt > payload.menuUpdatedAt)) {
-                    return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.MENU_CHANGED, {})
-                } else {
-                    let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
-                    if (internalKeyCheck) {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
-                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.ITEM_CHANGED, res)
-                    } else {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
-                        return res
-                    }
-                }
+                let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.length > 0) {
+                    if (store[0].menuId != payload.curMenuId)
+                        invalidMenu = true
+                } else
+                    invalidMenu = true
             } else {
+                const defaultMenu: IMenuGrpcRequest.IFetchMenuRes = await menuService.fetchMenu({
+                    country: headers.country,
+                    isDefault: true
+                })
                 if ((defaultMenu.menuId != payload.curMenuId) || (defaultMenu.updatedAt > payload.menuUpdatedAt)) {
-                    return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.MENU_CHANGED, {})
-                } else {
-                    let internalKeyCheck = await ENTITY.OrderE.mapInternalKeys(payload, defaultMenu)
-                    if (internalKeyCheck) {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
-                        return sendSuccess(Constant.STATUS_MSG.SUCCESS.S205.ITEM_CHANGED, res)
-                    } else {
-                        let res = await ENTITY.OrderE.createCheckoutRes(payload.items)
-                        return res
-                    }
+                    invalidMenu = true
                 }
             }
+
+            // let cmsValidatedCart = await ENTITY.OrderE.createCartOnCMS(payload, auth.userData)
+            let saveCart = await ENTITY.OrderE.updateCart(payload)
+            let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu)
+            return res
         } catch (err) {
-            consolelog(process.cwd(),"validateCart", err, false)
+            consolelog(process.cwd(), "postCart", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+     * @method GET
+     * @param {string} cartId :current cart id
+     * @param {number} cartUpdatedAt :cart last updated at
+     * */
+    async getCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IGetCart, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            return await ENTITY.OrderE.getById({ id: payload.cartId })
+        } catch (err) {
+            consolelog(process.cwd(), "getCart", err, false)
             return Promise.reject(err)
         }
     }

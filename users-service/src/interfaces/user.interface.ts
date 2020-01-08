@@ -16,7 +16,6 @@ declare namespace IUserRequest {
         sdmUserRef: number,
         cmsUserRef: number,
         isGuest: number,
-        // sessionId: string,
         name: string,
         cCode: string,
         phnNo: string,
@@ -31,6 +30,7 @@ declare namespace IUserRequest {
             [deviceid: string]: ISession
         },
         removeUserId?: string,
+        cartId: string,
         password: string,
     }
     interface ISession {
@@ -45,7 +45,6 @@ declare namespace IUserRequest {
         osversion: string,
         deviceid: string,
         isLogin: number,
-        cartId: string,
         createdAt: number,
     }
 
@@ -67,7 +66,8 @@ declare namespace IUserRequest {
         session?: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string
+        removeUserId?: string,
+        cartId?: string,
     }
 
     interface ISession {
@@ -82,7 +82,6 @@ declare namespace IUserRequest {
         osversion: string,
         deviceid: string,
         isLogin: number,
-        cartId: string,
         createdAt: number,
     }
 
@@ -98,10 +97,9 @@ declare namespace IUserRequest {
         osversion?: string,
         deviceid?: string,
         isLogin?: number,
-        cartId?: string,
         createdAt?: number,
     }
-    
+
     interface IRefreshToken {
     }
 

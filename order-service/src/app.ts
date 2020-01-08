@@ -1,5 +1,6 @@
 import * as config from "config"
 import * as Koa from 'koa'
+require('./grpc/server')
 import { bootstrap } from './utils'
 import middleware from './middlewares'
 import route from './route'

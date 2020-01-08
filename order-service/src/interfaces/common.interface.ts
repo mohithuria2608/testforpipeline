@@ -16,6 +16,7 @@ declare namespace ICommonRequest {
         devicetype: string,
         tokenType: string,
         id?: string,
+        userData: IUserRequest.IUserData,
     }
 
     interface IPagination {
@@ -33,6 +34,9 @@ declare namespace ICommonRequest {
         lng?: number
     }
 
+    interface IId {
+        id: string
+    }
     interface IError {
         statusCode: number,
         httpCode: number,

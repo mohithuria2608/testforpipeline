@@ -28,6 +28,7 @@ function orderby(stream, isActive, bin1)
          return false
       end
    end
+   local sorted_table = table.sort(objects, function(a,b) return a.Name < b.Name end)
 
    local function mapper(rec)
       local element = map()
@@ -47,5 +48,5 @@ function orderby(stream, isActive, bin1)
      return map.merge(this,that)
    end
    
-   return stream:filter(isActive_filter):map(mapper):aggregate(map{}, accumulate):reduce(reducer)
+   return sorted_table stream:table.sort(filter(isActive_filter), function(a,b) return a[bin1] < b[bin1] end)
  end
