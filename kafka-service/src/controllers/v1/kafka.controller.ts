@@ -97,14 +97,14 @@ export class KafkaController {
 
     /**
      * @method GRPC
-     * @param {string} data
+     * @param {string} data 
      * */
     async updateMenuFromCMS(payload: IMenuGrpcRequest.IUpdateMenuFromCMS) {
         try {
             consolelog(process.cwd(), "fetch menu to sync in Aerospike in KAFKA service", payload, true)
             if (!payload.hasOwnProperty('count'))
                 payload['count'] = Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE
-            payload.type = Constant.KAFKA.CMS.MENU.TYPE.UPDATE;
+            payload.type = Constant.KAFKA.CMS.MENU.TYPE.UPSELL;
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
                 topic: Constant.KAFKA_TOPIC.CMS_MENU,
@@ -113,6 +113,28 @@ export class KafkaController {
             return {}
         } catch (err) {
             consolelog(process.cwd(), "updateMenuFromCMS", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * @param {string} data
+     * */
+    async syncUpsellProducts(payload: IMenuGrpcRequest.IUsellProductsSync) {
+        try {
+            consolelog(process.cwd(), "upsell products sync into areospike", payload, true)
+            if (!payload.hasOwnProperty('count'))
+                payload['count'] = Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE
+            payload.type = Constant.KAFKA.CMS.MENU.TYPE.UPSELL;
+            kafkaProducerE.sendMessage({
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.CMS_MENU,
+                partition: 0,
+            });
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "syncUpsellProducts", err, false)
             return Promise.reject(err)
         }
     }

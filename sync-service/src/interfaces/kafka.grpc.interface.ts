@@ -9,6 +9,11 @@ declare namespace IKafkaGrpcRequest {
         data: string
     }
 
+    interface ISyncUpsellProducts {
+        action: ICommonRequest.IChange,
+        data: string
+    }
+
     interface ISyncToSDMUserData {
 
     }

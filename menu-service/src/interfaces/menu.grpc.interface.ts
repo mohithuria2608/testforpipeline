@@ -25,6 +25,17 @@ declare namespace IMenuGrpcRequest {
         data: string
     }
 
+    interface IUpsellProductsSyncReq {
+        request: IUpsellProductsSync
+    }
+
+    interface IUpsellProductsSync {
+        action: ICommonRequest.IChange,
+        count?: Number
+        type?: string
+        data: string
+    }
+
     interface IFetchMenuData {
         country: string,
         isDefault: boolean,

@@ -5,6 +5,7 @@ service KafkaService {
     rpc SyncToCmsUser (ISyncToCmsUserDataReq) returns (ISyncToCmsUserDataRes) {}
     rpc syncToCmsMenu (ISyncToCmsMenuDataReq) returns (ISyncToCmsMenuDataRes) {}
     rpc updateMenuFromCMS (IUpdateMenuDataReq) returns (IUpdateMenuDataRes) {}
+    rpc syncUpsellProducts (IUpsellProductSyncReq) returns (IUpsellProductSyncRes) {}
 }
 
 message ISyncToSdmUserDataReq { }
@@ -34,6 +35,12 @@ message IUpdateMenuDataReq {
     required string data = 2;
 }
 message IUpdateMenuDataRes {}
+
+message IUpsellProductSyncReq {
+    required IAction action = 1;
+    required string data = 2;
+}
+message IUpsellProductSyncRes {}
 
 message IAction {
     optional bool create = 1;

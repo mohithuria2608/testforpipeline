@@ -61,6 +61,26 @@ export class MenuService {
             }
         })
     }
+
+    /** Updates the upsell products list in aerospike */
+    async upsellProductsSync(payload: IMenuGrpcRequest.IUsellProductsSync): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await menuServiceValidator.upsellProductsSyncValidator(payload)
+                this.menuClient.upsellProductsSync(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(), "successfully synced upsell products on aerospike", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in syncing upsell products on aerospike", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const menuService = new MenuService();

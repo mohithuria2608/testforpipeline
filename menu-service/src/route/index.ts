@@ -4,12 +4,14 @@ import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
 import menu from './v1/menu.route'
+import upsell from './v1/upsell.route'
 
 const version1 = "/v1"
 
 const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: menu, prefix: version1 + '/menu' },
+  { routes: upsell, prefix: version1 + '/upsell' },
 
 ]
 

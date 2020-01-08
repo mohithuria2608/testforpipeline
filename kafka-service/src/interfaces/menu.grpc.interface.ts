@@ -21,4 +21,15 @@ declare namespace IMenuGrpcRequest {
         count?: number
         type?: string
     }
+
+    interface IUsellProductsSyncReq {
+        request: IUsellProductsSync
+    }
+
+    interface IUsellProductsSync {
+        action: ICommonRequest.IChange
+        data: string
+        count?: number
+        type?: string
+    }
 }

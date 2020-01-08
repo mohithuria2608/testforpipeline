@@ -47,6 +47,16 @@ server.addService(menuProto.MenuService.service, {
             consolelog(process.cwd(), "updateMenu", error, false)
             callback(grpcSendError(error))
         }
+    },
+    upsellProductsSync: async (call: IMenuGrpcRequest.IUpsellProductsSyncReq, callback) => {
+        try {
+            consolelog(process.cwd(), "upsellProductsSync", JSON.stringify(call.request), true)
+            let res = await ENTITY.UpsellE.upsellProductsSync(call.request);
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "upsellProductsSync", error, false)
+            callback(grpcSendError(error))
+        }
     }
 })
 

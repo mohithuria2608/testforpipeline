@@ -4,6 +4,8 @@ service MenuService {
     rpc FetchMenu (IFetchMenu) returns (IMenu) {}
     rpc syncMenuOnCms (ISyncMenuOnCmsReq) returns (ISyncMenuOnCmsRes) {}
     rpc updateMenu (IUpdateMenuReq) returns (IUpdateMenuRes) {}
+    rpc upsellProductsSync (IUpsellMenuSyncReq) returns (IUpsellMenuSyncRes) {}
+
 }
 
 message ISyncMenuOnCmsReq {
@@ -17,6 +19,12 @@ message IUpdateMenuReq {
     required string data = 2;
 }
 message IUpdateMenuRes {}
+
+message IUpsellMenuSyncReq {
+    required IAction action = 1;
+    required string data = 2;
+}
+message IUpsellMenuSyncRes {}
 
 message IAction {
     optional bool create = 1;

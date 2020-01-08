@@ -14,10 +14,14 @@ class CmsMenuConsumer extends BaseConsumer {
         this.onMessage<any>().subscribe(
             (message: IMenuGrpcRequest.ISyncToCMSMenuData) => {
                 consolelog(process.cwd(), "consumer cms_menu", JSON.stringify(message), true)
-                if (message.type === Constant.KAFKA.CMS.MENU.TYPE.SYNC) {
-                    this.syncMenuToCMSGrpc(message);
-                } else this.updateMenuFromCMSGrpc(message);
-                return null
+
+                switch (message.type) {
+                    case Constant.KAFKA.CMS.MENU.TYPE.SYNC: this.syncMenuToCMSGrpc(message); break;
+                    case Constant.KAFKA.CMS.MENU.TYPE.UPDATE: this.updateMenuFromCMSGrpc(message); break;
+                    case Constant.KAFKA.CMS.MENU.TYPE.UPSELL: this.upsellProductsSyncGrpc(message); break;
+                }
+
+                return null;
             })
     }
 
@@ -46,6 +50,22 @@ class CmsMenuConsumer extends BaseConsumer {
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.updateMenuFromCMS(message)
+            }
+            else
+                kafkaController.produceToFailureTopic(message)
+            return {}
+        }
+    }
+
+    private async upsellProductsSyncGrpc(message: IMenuGrpcRequest.IUsellProductsSync) {
+        try {
+            let res = await menuService.upsellProductsSync(message)
+            return res
+        } catch (err) {
+            consolelog(process.cwd(), "upsellProductsSyncGrpc", err, false);
+            if (message.count != 0) {
+                message.count = message.count - 1
+                kafkaController.syncUpsellProducts(message)
             }
             else
                 kafkaController.produceToFailureTopic(message)

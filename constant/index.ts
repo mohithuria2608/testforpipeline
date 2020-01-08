@@ -13,7 +13,7 @@ export enum KAFKA_TOPIC {
     NEW_MENU = "new_menu",
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
-    CMS_MENU = "cms_menu"
+    CMS_MENU = "cms_menu",
 };
 
 export enum MIDDLEWARE {
@@ -68,7 +68,8 @@ export const KAFKA = {
             },
             TYPE: {
                 SYNC: 'sync',
-                UPDATE: 'update'
+                UPDATE: 'update',
+                UPSELL: 'upsell'
             }
         }
     }

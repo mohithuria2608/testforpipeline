@@ -35,6 +35,18 @@ export class MenuEntity extends BaseEntity {
             return Promise.reject(err)
         }
     }
+
+    /**
+     * syncs upsell products from cms into aerospike
+     */
+    async syncUpsellProducts(payload: ICMSMenuRequest.ICmsMenu) {
+        try {
+            kafkaService.syncUpsellProducts({ action: { create: true }, data: JSON.stringify(payload) });
+        } catch (err) {
+            consolelog(process.cwd(), "fetchMenuFromCMS", err, false)
+            return Promise.reject(err)
+        }
+    }
 }
 
 export const MenuE = new MenuEntity()

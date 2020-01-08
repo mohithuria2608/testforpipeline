@@ -62,6 +62,26 @@ export class KafkaService {
             }
         })
     }
+
+    /** syncs upsell products from cms to aerospike */
+    async syncUpsellProducts(payload: IKafkaGrpcRequest.ISyncUpsellProducts): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await kafkaServiceValidator.syncUpsellProductsValidator(payload)
+                this.kafkaClient.syncUpsellProducts(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(), "successfully produced upsell products on kafka for syncing to aerospike", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in producing upsell products on kafka for syncing to aerospike", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                });
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const kafkaService = new KafkaService();
