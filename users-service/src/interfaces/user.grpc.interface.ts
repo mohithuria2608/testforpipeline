@@ -21,4 +21,21 @@ declare namespace IUserGrpcRequest {
         websiteId: number,
         password: string
     }
+
+    interface IFetchAddressByIdReq {
+        request: IFetchAddressById
+    }
+    interface IFetchAddressById {
+        userId: string,
+        addressId: string,
+    }
+
+    interface IFetchAddressByIdRes {
+        id: string
+        sdmAddressRef: number
+        cmsAddressRef: number
+        areaId: number
+        storeId: number
+    }
+
 }

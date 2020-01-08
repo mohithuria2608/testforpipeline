@@ -55,6 +55,8 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
+                        if (ENTITY.OrderE.sindex && ENTITY.OrderE.sindex.length > 0)
+                            this.bootstrapIndex(ENTITY.OrderE.sindex)
                         resolve({})
                     }
                 } catch (err) {

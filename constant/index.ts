@@ -170,6 +170,13 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            INVALID_ADDRESS: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'INVALID_ADDRESS',
+                message: 'Invalid address provided'
+            },
+
             PROFILE_SETUP_ALLREADY_COMPLETE: {
                 statusCode: 400,
                 httpCode: 400,
@@ -278,7 +285,7 @@ export const STATUS_MSG = {
                 message: "Address not found"
             },
 
-            CART_NOT_FOUND:{
+            CART_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
                 type: 'CART_NOT_FOUND',

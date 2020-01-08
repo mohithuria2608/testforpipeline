@@ -8,17 +8,40 @@ import { Aerospike } from '../databases/aerospike'
 
 
 export class OrderClass extends BaseEntity {
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'userId',
+            index: 'idx_' + this.set + '_' + 'userId',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'orderId',
+            index: 'idx_' + this.set + '_' + 'orderId',
+            type: "STRING"
+        }
+    ]
+
     constructor() {
         super('order')
     }
 
     public orderSchema = Joi.object().keys({
         cartId: Joi.string().required().description("pk"),
-        sdmOrderRef: Joi.number().required().description("sk"),
-        cmsOrderRef: Joi.number().required().description("sk"),
-        userId: Joi.string().required(),
+        userId: Joi.string().required().description("sk"),
+        orderId: Joi.string().required().description("sk"),
+        sdmOrderRef: Joi.number().required(),
+        cmsOrderRef: Joi.number().required(),
         status: Joi.string().valid(Constant.DATABASE.STATUS.ORDER.CART).required(),
         updatedAt: Joi.number().required(),
+        addres: Joi.object().keys({
+            id: Joi.string(),
+            sdmAddressRef: Joi.number(),
+            cmsAddressRef: Joi.number(),
+            areaId: Joi.number(),
+            storeId: Joi.number(),
+        }),
         items: Joi.array().items(
             Joi.object().keys({
                 id: Joi.number().required().description("pk"),
@@ -145,7 +168,9 @@ export class OrderClass extends BaseEntity {
                 virtualGroup: Joi.number().required(),
                 visibility: Joi.number().required(),
                 associative: Joi.string().required(),
-            }))
+            })),
+        subTotal: Joi.number(),
+        total: Joi.number(),
     })
 
     /**

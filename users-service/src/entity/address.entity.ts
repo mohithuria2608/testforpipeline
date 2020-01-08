@@ -15,6 +15,8 @@ export class AddressEntity extends BaseEntity {
     public addressSchema = Joi.object().keys({
         address: Joi.object().keys({
             id: Joi.string().trim().required().description("pk"),
+            sdmAddressRef: Joi.number(),
+            cmsAddressRef: Joi.number(),
             lat: Joi.number().required(),
             lng: Joi.number().required(),
             areaId: Joi.number().required(),
@@ -70,6 +72,36 @@ export class AddressEntity extends BaseEntity {
                 return []
         } catch (error) {
             consolelog(process.cwd(), "getById", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method GRPC
+    * @param {string} userId : user id
+    * @param {string} addressd : user id
+    * */
+    async getByAddressId(payload: IUserGrpcRequest.IFetchAddressById) {
+        try {
+            consolelog(process.cwd(), "getByAddressId", [payload.userId, payload.addressId], true)
+            let listGetArg: IAerospike.ListOperation = {
+                order: true,
+                set: 'address',
+                key: payload.userId,
+                bin: "address",
+                getByIndexRange: true,
+                index: 0
+            }
+            let listaddress = await Aerospike.listOperations(listGetArg)
+            if (listaddress && listaddress.bins && listaddress.bins['address'] && listaddress.bins['address'].length > 0) {
+                let addressById = listaddress.filter(obj => {
+                    return obj.id == payload.addressId
+                })
+                return (addressById && addressById.length > 0) ? addressById[0] : {}
+            } else
+                return []
+        } catch (error) {
+            consolelog(process.cwd(), "getByAddressId", error, false)
             return Promise.reject(error)
         }
     }

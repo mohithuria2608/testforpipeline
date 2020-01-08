@@ -8,7 +8,7 @@ import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
-        .get('/',
+        .post('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
@@ -16,14 +16,39 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    cartId: Joi.number().required(),
+                    addressId: Joi.string().required(),
+                    cartId: Joi.string().required(),
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IOrderRequest.IPostOrder = ctx.request.body;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await orderController.postOrder(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
                     page: Joi.number().min(0).required()
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IOrderRequest.IOrderHistory = ctx.request.body;
+                    let payload: IOrderRequest.IOrderHistory = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.orderHistory(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)

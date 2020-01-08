@@ -37,6 +37,16 @@ server.addService(userProto.UserService.service, {
             consolelog(process.cwd(), "syncUserOnCms", error, false)
             callback(grpcSendError(error))
         }
+    },
+    fetchAddressById: async (call: IUserGrpcRequest.IFetchAddressByIdReq, callback) => {
+        try {
+            consolelog(process.cwd(), "fetchAddressById", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.AddressE.getByAddressId(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchAddressById", error, false)
+            callback(grpcSendError(error))
+        }
     }
 })
 

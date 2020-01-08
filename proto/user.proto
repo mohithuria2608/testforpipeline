@@ -4,6 +4,7 @@ import "google/protobuf/any.proto";
 service UserService {
     rpc SyncUserOnSdm (ICreateUserOnSdmReq) returns (ICreateUserOnSdmRes) {}
     rpc SyncUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
+    rpc FetchAddressById (IFetchAddressByIdReq) returns (IFetchAddressByIdRes) {}
 }
 
 message ICreateUserOnSdmReq { }
@@ -31,3 +32,16 @@ message IAction {
 }
 
 message ICreateUserOnCmsRes { }
+
+message IFetchAddressByIdReq {
+    required string userId = 1;
+    required string addressId = 2;
+}
+
+message IFetchAddressByIdRes { 
+    required string id = 1;
+    required int32 sdmAddressRef = 2;
+    required int32 cmsAddressRef = 3;
+    required int32 areaId = 4;
+    required int32 storeId = 5;
+}
