@@ -1,0 +1,1 @@
+export { PromotionE } from './promotion.entity'

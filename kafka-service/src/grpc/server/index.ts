@@ -68,6 +68,16 @@ server.addService(kafkaProto.KafkaService.service, {
             callback(grpcSendError(error))
         }
     },
+    createPromotion: async (call: IPromotionGrpcRequest.ICreatePromotionReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createPromotion ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.createPromotion(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createPromotion", error, false)
+            callback(grpcSendError(error))
+        }
+    },
 })
 
 server.bind(config.get("grpc.kafka.server"), grpc.ServerCredentials.createInsecure())

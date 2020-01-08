@@ -5,6 +5,7 @@ import { Context } from 'koa'
 import staticRoutes from './v1/static.route'
 import cmsRoutes from './v1/cms.route'
 import cmsMenuRoutes from './v1/cms.menu.route'
+import cmsPromotionRoutes from './v1/cms.promotion.route'
 import cmsUserRoutes from './v1/cms.user.route'
 import sdmMenuRoutes from './v1/sdm.menu.route';
 
@@ -14,6 +15,7 @@ const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: cmsRoutes, prefix: version1 + '/cms' },
   { routes: cmsMenuRoutes, prefix: version1 + '/menu' },
+  { routes: cmsPromotionRoutes, prefix: version1 + '/promotion' },
   { routes: sdmMenuRoutes, prefix: version1 + '/sdm/menu' },
   { routes: cmsUserRoutes, prefix: version1 + '/user' },
 ]

@@ -138,6 +138,27 @@ export class KafkaController {
             return Promise.reject(err)
         }
     }
+
+    /**
+     * @method GRPC
+     * @param {string} data
+     * */
+    async createPromotion(payload: IPromotionGrpcRequest.ICreatePromotion) {
+        try {
+            consolelog(process.cwd(), "create promotions on aerospike", payload, true)
+            if (!payload.hasOwnProperty('count'))
+                payload['count'] = Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE
+            kafkaProducerE.sendMessage({
+                messages: JSON.stringify(payload),
+                topic: Constant.KAFKA_TOPIC.CMS_PROMOTION,
+                partition: 0,
+            });
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "syncUpsellProducts", err, false)
+            return Promise.reject(err)
+        }
+    }
 }
 
 export const kafkaController = new KafkaController();

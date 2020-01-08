@@ -14,6 +14,11 @@ declare namespace IKafkaGrpcRequest {
         data: string
     }
 
+    interface ICreatePromotion {
+        action: ICommonRequest.IChange,
+        data: string
+    }
+
     interface ISyncToSDMUserData {
 
     }

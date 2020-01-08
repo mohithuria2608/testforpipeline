@@ -14,6 +14,7 @@ export enum KAFKA_TOPIC {
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
     CMS_MENU = "cms_menu",
+    CMS_PROMOTION = 'cms_promotion'
 };
 
 export enum MIDDLEWARE {

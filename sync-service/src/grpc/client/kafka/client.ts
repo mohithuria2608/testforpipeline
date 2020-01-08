@@ -82,6 +82,26 @@ export class KafkaService {
             }
         })
     }
+
+    /** creates new promotion on aerospike from CMS */
+    async createPromotion(payload: IKafkaGrpcRequest.ICreatePromotion): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await kafkaServiceValidator.createPromotionValidator(payload)
+                this.kafkaClient.createPromotion(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(), "successfully created promotion on kafka", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating promotion on kafkaIs", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                });
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const kafkaService = new KafkaService();

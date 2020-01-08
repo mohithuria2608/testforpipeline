@@ -57,6 +57,7 @@ class KafkaProducer {
                 Constant.KAFKA_TOPIC.NEW_MENU,
                 Constant.KAFKA_TOPIC.SDM_USER,
                 Constant.KAFKA_TOPIC.CMS_USER,
+                Constant.KAFKA_TOPIC.CMS_PROMOTION,
             ], (err, data) => {
                 if (err) {
                     consolelog(process.cwd(), 'Err in creating topics', err, false);
