@@ -97,6 +97,12 @@ declare namespace IAerospike {
         bin?: string,
         set: string,
         ttl?: number,
+        index?: number,
+        append?: boolean,
+        remByIndex?: boolean,
+        get?: boolean,
+        getByIndexRange?: boolean,
+        order: boolean
     }
 
     interface MapOperation {

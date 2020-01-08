@@ -31,4 +31,25 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .post('/logout',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let authObj = ctx.state.user
+                    let res = await miscUserController.logout(headers, authObj);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGOUT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 }

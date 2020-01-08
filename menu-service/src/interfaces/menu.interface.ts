@@ -5,4 +5,8 @@ declare namespace IMenuRequest {
         // country: string,
         // isDefault: boolean,
     }
+
+    interface IFetchUpsell {
+        
+    }
 }

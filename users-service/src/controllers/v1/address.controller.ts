@@ -1,7 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../databases/aerospike'
 
 export class AddressController {
     constructor() { }
@@ -48,7 +47,7 @@ export class AddressController {
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             }
-            return await ENTITY.AddressE.updateAddress(payload, true)
+            return await ENTITY.AddressE.updateAddress(payload, true, auth.userData)
         } catch (err) {
             consolelog(process.cwd(), "updateAddressById", err, false)
             return Promise.reject(err)
@@ -61,22 +60,8 @@ export class AddressController {
     * */
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let queryArg: IAerospike.Query = {
-                bins: ["id", "lat", "lng", "bldgName", "description", "flatNum", "tag", "isActive", "updatedAt"],
-                udf: {
-                    module: 'address',
-                    func: Constant.UDF.ADDRESS.get_address,
-                    args: [Constant.DATABASE.TYPE.STATUS.ACTIVE],
-                    forEach: true
-                },
-                equal: {
-                    bin: "userId",
-                    value: auth.userData.id
-                },
-                set: ENTITY.AddressE.set,
-                background: false,
-            }
-            let addres: IAddressRequest.IAddress[] = await Aerospike.query(queryArg)
+            let addres: IAddressRequest.IAddress[] = await ENTITY.AddressE.getById({ id: auth.userData.id }, [])
+            addres = addres.filter(obj => { return (obj.isActive == Constant.DATABASE.TYPE.STATUS.ACTIVE) })
             return addres
         } catch (err) {
             consolelog(process.cwd(), "fetchAddress", err, false)
@@ -90,7 +75,7 @@ export class AddressController {
     * */
     async deleteAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IDeleteAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId, isActive: Constant.DATABASE.TYPE.STATUS.INACTIVE }, false)
+            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId, isActive: Constant.DATABASE.TYPE.STATUS.INACTIVE }, false, auth.userData)
         } catch (err) {
             consolelog(process.cwd(), "deleteAddressById", err, false)
             return Promise.reject(err)

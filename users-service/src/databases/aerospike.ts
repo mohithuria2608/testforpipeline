@@ -17,6 +17,7 @@ class AerospikeClass {
     public namespace: string;
     public cdt = aerospike.cdt;
     public maps = aerospike.maps;
+    public operations = aerospike.operations;
     public lists = aerospike.lists;
     public GeoJSON = aerospike.GeoJSON;
     constructor(namespace: string) {
@@ -56,8 +57,6 @@ class AerospikeClass {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.UserE.sindex)
-                        if (ENTITY.AddressE.sindex && ENTITY.AddressE.sindex.length > 0)
-                            this.bootstrapIndex(ENTITY.AddressE.sindex)
                         resolve({})
                     }
                 } catch (err) {
@@ -405,13 +404,30 @@ class AerospikeClass {
             try {
                 if (this.client) {
                     const key = new aerospike.Key(this.namespace, argv.set, argv.key)
-                    let operations = [
-                        this.lists.append(argv.bin, argv.bins)
-                    ]
+                    let operations = []
+                    if (argv.order == true)
+                        this.lists.order.ORDERED
+                    else
+                        this.lists.order.UNORDERED
+                    if (argv.append)
+                        operations.push(this.lists.append(argv.bin, argv.bins))
+                    if (argv.remByIndex) {
+                        operations.push(this.lists.removeByIndex(argv.bin, argv.index)
+                            .andReturn(this.lists.returnType.VALUE))
+                    }
+                    if (argv.get) {
+                        operations.push(this.lists.get(argv.bin))
+                    }
+                    if (argv.getByIndexRange) {
+                        operations.push(this.lists.getByIndexRange(argv.bin, argv.index)
+                            .andReturn(this.lists.returnType.VALUE))
+                    }
                     let res = await this.client.operate(key, operations)
                     resolve(res)
                 } else reject('Client not initialized');
             } catch (error) {
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DATA_NOT_FOUND)
+                    resolve({})
                 reject(error)
             }
         })

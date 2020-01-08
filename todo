@@ -3,3 +3,24 @@
 - timezone  in country list
 - timezone-offset in headers
 - 
+
+
+# Benchmarks
+- menu json time
+- cart validate time
+- order place time
+- order status (from payment authorization to update status of order on sdm)
+
+
+# Manoj tasks
+- use filesystem and read the menu 
+- use aerospike to fetch menu
+
+
+#sub-option id in missing in menu json
+# when does namespace gets clear on aerospike
+
+#check services with load balancer
+
+#checkout flow will be moved on for only users who are registered on sdm
+

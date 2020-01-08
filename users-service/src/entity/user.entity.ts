@@ -28,12 +28,6 @@ export class UserEntity extends BaseEntity {
             index: 'idx_' + this.set + '_' + 'socialKey',
             type: "STRING"
         },
-        // {
-        //     set: this.set,
-        //     bin: 'sessionId',
-        //     index: 'idx_' + this.set + '_' + 'sessionId',
-        //     type: "STRING"
-        // },
         {
             set: this.set,
             bin: 'cmsUserRef',
@@ -71,7 +65,6 @@ export class UserEntity extends BaseEntity {
         sdmUserRef: Joi.number().required().description("sk"),
         cmsUserRef: Joi.number().required().description("sk"),
         isGuest: Joi.number().valid(0, 1),
-        // sessionId: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
@@ -120,7 +113,6 @@ export class UserEntity extends BaseEntity {
             sdmUserRef: 0,
             cmsUserRef: 0,
             isGuest: 0,
-            sessionId: "",
             name: "",
             cCode: "",
             phnNo: "",
@@ -133,12 +125,12 @@ export class UserEntity extends BaseEntity {
             createdAt: 0,
             session: {},
             removeUserId: "",
+            cartId: await cryptData(headers.deviceid),
             password: 'Password1'//await cryptData(id)
         } : {}
         if (userInfo.isGuest != undefined) {
             if (userInfo.isGuest == 1) {
                 user['isGuest'] = userInfo.isGuest
-                // user['sessionId'] = headers.deviceid
             }
         }
         if (userInfo.name != undefined)
@@ -182,7 +174,6 @@ export class UserEntity extends BaseEntity {
             devicetype: headers.devicetype,
             osversion: headers.osversion,
             createdAt: new Date().getTime(),
-            cartId: await cryptData(headers.deviceid)
         } : {}
         if (sessionInfo.otp != undefined)
             session['otp'] = sessionInfo.otp
@@ -230,6 +221,7 @@ export class UserEntity extends BaseEntity {
                 create: true,
             }
             await Aerospike.put(putArg)
+            this.createDefaultCart(dataToSave.cartId, dataToSave.id)
             let user = await this.getById({ id: dataToSave.id })
             return user
         } catch (err) {
@@ -249,7 +241,7 @@ export class UserEntity extends BaseEntity {
                 ...await this.buildUser(headers, userUpdate, false),
                 session: {}
             }
-            if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
+            if (userData.session && userData.session.hasOwnProperty(headers.deviceid) && userData.session[headers.deviceid]) {
                 const Context = Aerospike.cdt.Context
                 const context = new Context().addMapKey(headers.deviceid)
                 let op = [
@@ -274,6 +266,27 @@ export class UserEntity extends BaseEntity {
             return user
         } catch (err) {
             consolelog(process.cwd(), "createSession", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
+        try {
+            if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
+                let dataToUpdate = { session: {} }
+                dataToUpdate.session[headers.deviceid] = null
+                let putArg: IAerospike.Put = {
+                    bins: dataToUpdate,
+                    set: this.set,
+                    key: userData.id,
+                    update: true,
+                }
+                await Aerospike.put(putArg)
+                return {}
+            } else
+                return {}
+        } catch (err) {
+            consolelog(process.cwd(), "removeSession", err, false)
             return Promise.reject(err)
         }
     }

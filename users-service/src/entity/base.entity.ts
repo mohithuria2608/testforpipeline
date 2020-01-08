@@ -1,6 +1,6 @@
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { authService, locationService, kafkaService } from '../grpc/client'
+import { authService, locationService, kafkaService, orderService } from '../grpc/client'
 
 export class BaseEntity {
     public set: SetNames;
@@ -26,8 +26,27 @@ export class BaseEntity {
         }
     }
 
+    async createDefaultCart(cartId: string, userId: string) {
+        try {
+            return await orderService.createDefaultCart({ cartId, userId })
+        } catch (error) {
+            consolelog(process.cwd(), "createDefaultCart", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async updateCartTTL(cartId: string, userId: string) {
+        try {
+            return await orderService.updateCartTTL({ cartId })
+        } catch (error) {
+            consolelog(process.cwd(), "updateCartTTL", error, false)
+            return Promise.reject(error)
+        }
+    }
+
     async syncUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
         try {
+            orderService.updateCartTTL({ cartId: user.cartId })
             // this.syncToSdmUser(user, change)
             this.syncToCmsUser(user, change)
             return {}

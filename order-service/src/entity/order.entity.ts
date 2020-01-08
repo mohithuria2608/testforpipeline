@@ -1,199 +1,302 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import * as fs from 'fs'
 import { consolelog, sendSuccess } from '../utils'
+import * as CMS from "../cms"
+import { Aerospike } from '../databases/aerospike'
 
 
 export class OrderClass extends BaseEntity {
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'userId',
+            index: 'idx_' + this.set + '_' + 'userId',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'orderId',
+            index: 'idx_' + this.set + '_' + 'orderId',
+            type: "STRING"
+        }
+    ]
+
     constructor() {
         super('order')
     }
-    async mapInternalKeys(payload: ICartRequest.IValidateCart, defaultMenu: IMenuGrpcRequest.IFetchMenuRes) {
+
+    public orderSchema = Joi.object().keys({
+        cartId: Joi.string().required().description("pk"),
+        userId: Joi.string().required().description("sk"),
+        orderId: Joi.string().required().description("sk"),
+        sdmOrderRef: Joi.number().required(),
+        cmsOrderRef: Joi.number().required(),
+        status: Joi.string().valid(Constant.DATABASE.STATUS.ORDER.CART).required(),
+        updatedAt: Joi.number().required(),
+        addres: Joi.object().keys({
+            id: Joi.string(),
+            sdmAddressRef: Joi.number(),
+            cmsAddressRef: Joi.number(),
+            areaId: Joi.number(),
+            storeId: Joi.number(),
+        }),
+        items: Joi.array().items(
+            Joi.object().keys({
+                id: Joi.number().required().description("pk"),
+                position: Joi.number().required(),
+                name: Joi.string().required(),
+                description: Joi.string().required(),
+                inSide: Joi.string().required(),
+                finalPrice: Joi.number().required(),
+                specialPrice: Joi.number().required(),
+                typeId: Joi.string().valid("simple", "configurable", "bundle", "bundle_group").required(),
+                selectedItem: Joi.number().required(),
+                metaKeyword: Joi.array().items(Joi.string()),
+                products: Joi.array().items(
+                    Joi.object().keys({
+                        id: Joi.number().required(),
+                        position: Joi.number().required(),
+                        name: Joi.string().required(),
+                        description: Joi.string().required(),
+                        inSide: Joi.string().required(),
+                        finalPrice: Joi.number().required(),
+                        specialPrice: Joi.number().required(),
+                        typeId: Joi.string().valid("bundle").required(),
+                        metaKeyword: Joi.array().items(Joi.string()),
+                        bundleProductOptions: Joi.array().items(
+                            Joi.object().keys({
+                                position: Joi.number().required(),
+                                isDependent: Joi.number().required(),
+                                maximumQty: Joi.number().required(),
+                                minimumQty: Joi.number().required(),
+                                title: Joi.string().required(),
+                                ingredient: null,
+                                type: Joi.string().valid("radio").required(),
+                                productLinks: Joi.array().items(
+                                    Joi.object().keys({
+                                        position: Joi.number().required(),
+                                        price: Joi.number().required(),
+                                        id: Joi.number().required(),
+                                        name: Joi.string().required(),
+                                        selectionQty: Joi.number().required(),
+                                        subOptions: Joi.array().items(
+                                            Joi.object().keys({
+                                                price: Joi.number().required(),
+                                                selected: Joi.number().required(),
+                                                name: Joi.string().required()
+                                            })),
+                                        selected: Joi.number().required(),
+                                        default: Joi.string().required(),
+                                        dependentSteps: Joi.array()
+                                    }))
+                            })),
+                        selectedItem: Joi.number().required(),
+                        configurableProductOptions: null,
+                        products: null,
+                        sku: Joi.string().required(),
+                        imageSmall: Joi.string().required(),
+                        imageThumbnail: Joi.string().required(),
+                        image: Joi.string().required(),
+                        taxClassId: Joi.string().required(),
+                        virtualGroup: Joi.number().required(),
+                        visibility: Joi.number().required(),
+                        associative: Joi.string().required(),
+                    })),
+                variants: Joi.array().items(
+                    Joi.object().keys({
+                        id: Joi.number().required(),
+                        title: Joi.string().required(),
+                        subtitle: Joi.string().required(),
+                        selIndex: Joi.number().required(),
+                        options: Joi.array().items(
+                            Joi.object().keys({
+                                id: Joi.number().required(),
+                                position: Joi.number().required(),
+                                title: Joi.string().required(),
+                                isSelected: Joi.number().required()
+                            }))
+                    })),
+                bundleProductOptions: Joi.array().items(
+                    Joi.object().keys({
+                        position: Joi.number().required(),
+                        isDependent: Joi.number().required(),
+                        maximumQty: Joi.number().required(),
+                        minimumQty: Joi.number().required(),
+                        title: Joi.string().required(),
+                        ingredient: null,
+                        type: Joi.string().valid("radio", "checkbox").required(),
+                        productLinks: Joi.array().items(
+                            Joi.object().keys({
+                                position: Joi.number().required(),
+                                price: Joi.number().required(),
+                                id: Joi.number().required(),
+                                name: Joi.string().required(),
+                                selectionQty: Joi.number().required(),
+                                subOptions: Joi.array().items(
+                                    Joi.object().keys({
+                                        price: Joi.number().required(),
+                                        selected: Joi.number().required(),
+                                        name: Joi.string().required()
+                                    })),
+                                selected: Joi.number().required(),
+                                default: Joi.string().required(),
+                                dependentSteps: Joi.array()
+                            }))
+                    })),
+                configurableProductOptions: Joi.array().items(
+                    Joi.object().keys({
+                        id: Joi.number().required(),
+                        position: Joi.number().required(),
+                        title: Joi.string().required(),
+                        subtitle: Joi.string().required(),
+                        selIndex: Joi.number().required(),
+                        options: Joi.array().items(
+                            Joi.object().keys({
+                                isSelected: Joi.number().required(),
+                                position: Joi.number().required(),
+                                title: Joi.string().required(),
+                                id: Joi.number().required()
+                            }))
+                    })),
+                sku: Joi.string().required(),
+                imageSmall: Joi.string().required(),
+                imageThumbnail: Joi.string().required(),
+                image: Joi.string().required(),
+                taxClassId: Joi.string().required(),
+                virtualGroup: Joi.number().required(),
+                visibility: Joi.number().required(),
+                associative: Joi.string().required(),
+            })),
+        subTotal: Joi.number(),
+        total: Joi.number(),
+    })
+
+    /**
+    * @method INTERNAL
+    * @param {string} id : user id
+    * */
+    async getById(payload: ICommonRequest.IId) {
         try {
-            let change = false
-            payload.items.map((item, j) => {
-                item['isAvailable'] = true
-                item['isPriceChange'] = false
-                let defaultCategoryIndex = -1
-                defaultMenu.categories.map((cat, i) => {
-                    if (cat.id == item.catId) {
-                        defaultCategoryIndex = i
-                    }
-                })
-                if (defaultCategoryIndex >= 0) {
-
-                    let productIndex = -1
-                    let validStepStore = {}
-                    let validOptionIdStore = {}
-                    let validOptionPriceStore = {}
-                    defaultMenu.categories[defaultCategoryIndex].products.map((product, j) => {
-                        if (product.id == item.id) {
-                            if (product.price != item.price) {
-                                validOptionPriceStore[item.id] = -1
-                            }
-                            productIndex = j
-                        }
-                    })
-                    if (productIndex >= 0) {
-                        if (item.steps && item.steps.length > 0) {
-                            item.steps.map((curStep, k) => {
-                                defaultMenu.categories[defaultCategoryIndex].products[productIndex].steps.map((defaultStep, l) => {
-                                    if (curStep.title_en == defaultStep.title_en) {
-                                        validStepStore[curStep.title_en] = validStepStore[curStep.title_en] ? validStepStore[curStep.title_en] + 1 : 1
-                                        curStep.options.map(async (curOpt, m) => {
-                                            defaultStep.options.map((defOpt, n) => {
-                                                if (curOpt.id == defOpt.id) {
-                                                    validOptionIdStore[curOpt.id] = validOptionIdStore[curOpt.id] ? validOptionIdStore[curOpt.id] + 1 : 1;
-                                                    if (curOpt.price != defOpt.price) {
-                                                        validOptionPriceStore[curOpt.id] = -1
-                                                    }
-                                                } else {
-                                                    if (n == curStep.options.length - 1 && !validOptionIdStore.hasOwnProperty(curOpt.id)) {
-                                                        validOptionIdStore[curOpt.id] = -1
-                                                        validOptionPriceStore[curOpt.id] = -1
-                                                    }
-                                                }
-                                            })
-                                        })
-                                    } else {
-                                        if (k == item.steps.length - 1 && !validStepStore.hasOwnProperty(curStep.title_en))
-                                            validStepStore[curStep.title_en] = -1
-                                    }
-                                })
-                            })
-                            consolelog(process.cwd(),"validStepStore", validStepStore, true)
-                            consolelog(process.cwd(),"validOptionIdStore", validOptionIdStore, true)
-                            consolelog(process.cwd(),"validOptionPriceStore", validOptionPriceStore, true)
-
-                            let isValidStep = true;
-                            let validOptionId = true;
-                            let validOptionPrice = true;
-                            Object.keys(validStepStore).filter(elem => {
-                                if (validStepStore[elem] == -1)
-                                    isValidStep = false
-                            })
-                            Object.keys(validOptionIdStore).filter(elem => {
-                                if (validOptionIdStore[elem] == -1)
-                                    validOptionId = false
-                            })
-                            Object.keys(validOptionPriceStore).filter(elem => {
-                                if (validOptionPriceStore[elem] == -1)
-                                    validOptionPrice = false
-                            })
-                            if (!isValidStep || !validOptionId) {
-                                change = true
-                                item['isAvailable'] = false
-                            }
-                            else
-                                item['isAvailable'] = true
-
-                            if (!validOptionPrice) {
-                                change = true
-                                item['isPriceChange'] = true
-                            } else
-                                item['isPriceChange'] = false
-
-                        } else {
-                            item['isAvailable'] = true
-                            if (item.price != defaultMenu.categories[defaultCategoryIndex].products[productIndex].price)
-                                item['isPriceChange'] = false
-                        }
-                    } else {
-                        change = true
-                        item['isAvailable'] = false
-                        item['isPriceChange'] = false
-                    }
-                } else {
-                    change = true
-                    item['isAvailable'] = false
-                    item['isPriceChange'] = false
-                }
-                return
-            })
-            return change
+            let getArg: IAerospike.Get = {
+                set: this.set,
+                key: payload.id
+            }
+            let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
+            if (cart && cart.id) {
+                return cart
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(),"mapInternalKeys", error, false)
+            consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)
         }
     }
 
-    async createCheckoutRes(items: IMenuGrpcRequest.IProduct[]) {
+    async createDefaultCart(payload: IOrderGrpcRequest.ICreateDefaultCart) {
         try {
-            let amount = []
+            let dataToSave: ICartRequest.ICartData = {
+                id: payload.cartId,
+                sdmOrderRef: 0,
+                cmsOrderRef: 0,
+                userId: payload.userId,
+                status: Constant.DATABASE.STATUS.ORDER.CART,
+                updatedAt: new Date().getTime(),
+                items: []
+            }
+            let putArg: IAerospike.Put = {
+                bins: dataToSave,
+                set: this.set,
+                key: payload.cartId,
+                ttl: Constant.SERVER.DEFAULT_CART_TTL,
+                create: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "createDefaultCart", error, false)
+            return Promise.reject(error)
+        }
+    }
 
-            let subTotal = 0;
-            let delivery = {
-                rate: 6.5,
-                type: "add"
+    async updateCartTTL(payload: IOrderGrpcRequest.IUpdateDefaultCartTTL) {
+        try {
+            let op = [
+                Aerospike.operations.touch(0)
+            ]
+            await Aerospike.operationsOnMap({ set: this.set, key: payload.cartId }, op)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateCartTTL", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+        try {
+
+            let cart = []
+            let req = {
+                cms_user_id: userData.cmsUserRef,
+                website_id: 1,
+                cart_items: cart
             }
-            items.map((elem, i) => {
-                let qty = elem.quantity
-                if (elem.price)
-                    subTotal = (subTotal + elem.price) * qty
-                if (elem.steps && elem.steps.length > 0) {
-                    if (elem.steps && elem.steps.length > 0) {
-                        elem.steps.map(stepObj => {
-                            if (stepObj && stepObj.options && stepObj.options.length > 0) {
-                                stepObj.options.map(optionObj => {
-                                    if (optionObj.selected == 1) {
-                                        if (optionObj.price)
-                                            subTotal = subTotal + (optionObj.price * qty)
-                                    }
-                                })
-                            }
-                        })
-                    }
-                }
-            })
-            let subTotalObj = {
-                type: 'subTotal',
-                longName: 'Sub Total',
-                shortName: 'Sub Total',
-                rate: subTotal,
-                action: "display"
+            let cmsCart = await CMS.CartCMSE.createCart({}, req)
+            return cmsCart
+        } catch (error) {
+            consolelog(process.cwd(), "createCartOnCMS", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async updateCart(
+        // cmsCart: ICartCMSRequest.ICreateCartRes, 
+        payload: ICartRequest.IValidateCart) {
+        try {
+            let asCart = payload.items
+            let dataToSave = {
+                id: payload.cartId,
+                sdmOrderRef: 0,
+                cmsOrderRef: 0,
+                status: Constant.DATABASE.STATUS.ORDER.CART,
+                updatedAt: new Date().getTime(),
+                items: asCart
             }
-            let taxRawdata = fs.readFileSync(__dirname + '/../../model/tax.json', 'utf-8');
-            let tax = JSON.parse(taxRawdata);
-            if (tax && typeof tax == 'object' && tax.length > 0) {
-                tax.map(obj => {
-                    if (obj.inclusive == true) {
-                        let taxAmount = Math.round(subTotal / (1 + obj.rate) * 100) / 100
-                        subTotalObj.rate = subTotalObj.rate - taxAmount
-                        amount.push({
-                            longName: obj.longName,
-                            shortName: obj.shortName,
-                            rate: taxAmount,
-                            // inclusive: obj.inclusive,
-                            type: "tax",
-                            action: "add"
-                        })
-                    }
-                    return
-                })
+            let putArg: IAerospike.Put = {
+                bins: dataToSave,
+                set: this.set,
+                key: payload.cartId,
+                update: true,
             }
-            amount.push(subTotalObj)
-            amount.push({
-                longName: 'Delivery Charge',
-                shortName: 'Delivery Charge',
-                rate: 6.5,
-                type: "delivery",
-                action: "add"
-            })
-            let grandTotal = subTotal + delivery.rate
-            amount.push({
-                longName: 'Grand Total',
-                shortName: 'Grand Total',
-                rate: grandTotal,
-                type: "total",
-                action: "display"
-            })
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateCart", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createCartRes(
+        // cmsCart: ICartCMSRequest.ICreateCartRes, 
+        payload: ICartRequest.IValidateCart,
+        invalidMenu: boolean) {
+        try {
             return {
-                items: items,
-                amount: amount
+                id: payload.cartId,
+                updatedAt: new Date().getTime(),
+                items: invalidMenu ? [] : payload.items.splice(0, 1),
+                notAvailable: payload.items,
+                subTotal: 30.23,
+                taxApplied: [],
+                couponApplied: [],
+                shippingMethods: [],
+                paymentMethods: [],
+                is_price_changed: false,
+                status: Constant.DATABASE.STATUS.ORDER.CART,
             }
         } catch (error) {
-            consolelog(process.cwd(),"createCheckoutRes", error, false)
+            consolelog(process.cwd(), "createCartRes", error, false)
             return Promise.reject(error)
         }
     }

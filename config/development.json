@@ -121,6 +121,10 @@
                     "server": "/../../../proto/location.proto",
                     "client": "/../../../../proto/location.proto"
                 },
+                "order": {
+                    "server": "/../../../proto/order.proto",
+                    "client": "/../../../../proto/order.proto"
+                },
                 "sync": {
                     "server": "/../../../proto/sync.proto",
                     "client": "/../../../../proto/sync.proto"

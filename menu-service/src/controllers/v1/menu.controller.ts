@@ -37,6 +37,15 @@ export class MenuController {
             return Promise.reject(err)
         }
     }
+
+    async fetchUpsell(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchUpsell) {
+        try {
+            return []
+        } catch (err) {
+            consolelog(process.cwd(), "fetchUpsell", err, false)
+            return Promise.reject(err)
+        }
+    }
 }
 
 export const menuController = new MenuController();

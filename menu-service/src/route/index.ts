@@ -12,7 +12,6 @@ const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: menu, prefix: version1 + '/menu' },
   { routes: upsell, prefix: version1 + '/upsell' },
-
 ]
 
 export default function routes() {

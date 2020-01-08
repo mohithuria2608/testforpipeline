@@ -18,7 +18,17 @@ export class MiscUserController {
             let user = await ENTITY.UserE.getById({ id: authObj.id })
             return { accessToken: tokens.accessToken, response: formatUserData(user, headers.deviceid) }
         } catch (err) {
-            consolelog(process.cwd(),"refreshToken", err, false)
+            consolelog(process.cwd(), "refreshToken", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    async logout(headers: ICommonRequest.IHeaders, authObj: ICommonRequest.AuthorizationObj) {
+        try {
+            await ENTITY.UserE.removeSession(headers, authObj.userData)
+            return {}
+        } catch (err) {
+            consolelog(process.cwd(), "logout", err, false)
             return Promise.reject(err)
         }
     }
