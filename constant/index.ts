@@ -185,7 +185,8 @@ export const DATABASE = {
 
     STATUS: {
         ORDER: {
-            CART: "CART"
+            CART: "CART",
+            PENDING: "PENDING",
         }
     }
 };

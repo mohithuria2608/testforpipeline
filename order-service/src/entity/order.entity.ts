@@ -34,7 +34,10 @@ export class OrderClass extends BaseEntity {
         orderId: Joi.string().required().description("sk, UAE-1"),
         sdmOrderRef: Joi.number().required(),
         cmsOrderRef: Joi.number().required(),
-        status: Joi.string().valid(Constant.DATABASE.STATUS.ORDER.CART).required(),
+        status: Joi.string().valid(
+            Constant.DATABASE.STATUS.ORDER.CART,
+            Constant.DATABASE.STATUS.ORDER.PENDING,
+        ).required(),
         updatedAt: Joi.number().required(),
         addres: Joi.object().keys({
             id: Joi.string(),

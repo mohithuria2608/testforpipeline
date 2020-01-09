@@ -34,7 +34,8 @@ export class OrderController {
                         description: getAddress.description,
                         flatNum: getAddress.flatNum,
                         addressType: getAddress.addressType
-                    }
+                    },
+                    status: Constant.DATABASE.STATUS.ORDER.PENDING
                 },
                 set: ENTITY.OrderE.set,
                 key: payload.cartId,
