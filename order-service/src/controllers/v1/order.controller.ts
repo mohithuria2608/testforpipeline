@@ -61,8 +61,11 @@ export class OrderController {
                 set: ENTITY.OrderE.set,
                 background: false,
             }
-            let getOrderHistory: IOrderRequest.IOrderData = await Aerospike.query(queryArg)
-            return { current: getOrderHistory, history: getOrderHistory }
+            let getOrderHistory: IOrderRequest.IOrderData[] = await Aerospike.query(queryArg)
+            if (getOrderHistory && getOrderHistory.length > 0) {
+                getOrderHistory.map(obj => { return obj['isPreviousOrder'] = 1 })
+            }
+            return getOrderHistory
         } catch (err) {
             consolelog(process.cwd(), "orderHistory", err, false)
             return Promise.reject(err)
