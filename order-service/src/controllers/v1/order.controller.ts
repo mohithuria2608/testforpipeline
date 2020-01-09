@@ -16,6 +16,7 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            auth.userData = await userService.fetchUserById({ id: auth.id })
             let getAddress: IUserGrpcRequest.IFetchAddressByIdRes = await userService.fetchAddressById({ userId: auth.userData.id, addressId: payload.addressId })
             if (!getAddress.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
@@ -28,6 +29,11 @@ export class OrderController {
                         cmsAddressRef: getAddress.cmsAddressRef,
                         areaId: getAddress.areaId,
                         storeId: getAddress.storeId,
+                        tag: getAddress.tag,
+                        bldgName: getAddress.bldgName,
+                        description: getAddress.description,
+                        flatNum: getAddress.flatNum,
+                        addressType: getAddress.addressType
                     }
                 },
                 set: ENTITY.OrderE.set,
@@ -46,6 +52,7 @@ export class OrderController {
      * */
     async orderHistory(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderHistory, auth: ICommonRequest.AuthorizationObj) {
         try {
+            auth.userData = await userService.fetchUserById({ id: auth.id })
             let queryArg: IAerospike.Query = {
                 equal: {
                     bin: "userId",
@@ -55,7 +62,7 @@ export class OrderController {
                 background: false,
             }
             let getOrderHistory: IOrderRequest.IOrderData = await Aerospike.query(queryArg)
-            return getOrderHistory
+            return { current: getOrderHistory, history: getOrderHistory }
         } catch (err) {
             consolelog(process.cwd(), "orderHistory", err, false)
             return Promise.reject(err)

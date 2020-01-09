@@ -1,5 +1,12 @@
 declare namespace IUserGrpcRequest {
 
+    interface IFetchUserByIdReq {
+        request: IFetchUserById
+    }
+
+    interface IFetchUserById {
+        id: string
+    }
     interface ISyncUserDataOnSdmReq {
         request: ISyncUserDataOnSdm
     }

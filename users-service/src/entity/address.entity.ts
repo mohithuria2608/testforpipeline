@@ -13,7 +13,7 @@ export class AddressEntity extends BaseEntity {
 
 
     public addressSchema = Joi.object().keys({
-        address: Joi.object().keys({
+        address: Joi.array().items(Joi.object().keys({
             id: Joi.string().trim().required().description("pk"),
             sdmAddressRef: Joi.number(),
             cmsAddressRef: Joi.number(),
@@ -45,13 +45,22 @@ export class AddressEntity extends BaseEntity {
             updatedAt: Joi.number().required(),
             isActive: Joi.number().valid(0, 1),
             createdBy: Joi.string(),
-            updatedBy: Joi.string()
-        })
+            updatedBy: Joi.string(),
+            tag: Joi.string().valid(
+                Constant.DATABASE.TYPE.TAG.HOME,
+                Constant.DATABASE.TYPE.TAG.OFFICE,
+                Constant.DATABASE.TYPE.TAG.HOTEL,
+                Constant.DATABASE.TYPE.TAG.OTHER),
+            addressType: Joi.string().valid(
+                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
+                Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
+        }))
+
     })
 
 
     /**
-    * @method INTERNAL
+    * @method INTERNAL/GRPC 
     * @param {string} id : user id
     * */
     async getById(payload: IUserRequest.IId, bins: string[]) {
@@ -83,23 +92,14 @@ export class AddressEntity extends BaseEntity {
     * */
     async getByAddressId(payload: IUserGrpcRequest.IFetchAddressById) {
         try {
-            consolelog(process.cwd(), "getByAddressId", [payload.userId, payload.addressId], true)
-            let listGetArg: IAerospike.ListOperation = {
-                order: true,
-                set: 'address',
-                key: payload.userId,
-                bin: "address",
-                getByIndexRange: true,
-                index: 0
-            }
-            let listaddress = await Aerospike.listOperations(listGetArg)
-            if (listaddress && listaddress.bins && listaddress.bins['address'] && listaddress.bins['address'].length > 0) {
+            let listaddress: IAddressRequest.IAddress[] = await this.getById({ id: payload.userId }, [])
+            if (listaddress.length > 0) {
                 let addressById = listaddress.filter(obj => {
                     return obj.id == payload.addressId
                 })
                 return (addressById && addressById.length > 0) ? addressById[0] : {}
             } else
-                return []
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "getByAddressId", error, false)
             return Promise.reject(error)
