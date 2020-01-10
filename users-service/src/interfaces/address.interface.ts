@@ -1,39 +1,26 @@
 declare namespace IAddressRequest {
 
+    interface IAddressModel {
+        delivery: [IAddress]
+        pickup: [IAddress]
+    }
+
     interface IAddress {
         id: string,
-        bldgName: string,
-        description: string,
-        flatNum: string,
-        tag: string,
-
-        phoneAreaCode: string,
-        phoneLookup: string,
-        phoneNumber: string,
-        userId: string,
-
-        language: string,
-
-        areaId: number,
-        cityId: number,
-        countryId: number,
-        districtId: number,
-        provinceCode: number,
-        streetId: number,
-
-        classId: number,
-        bldgNameUn: string,
-        bldgNum: string,
-        floor: string,
-        phoneType: string,
-        postalCode: string,
-        sketch: string,
-        useMap: number,
-        createdBy: string,
-        updatedBy: string,
-
-        isActive: number
+        description?: string,
+        lat?: number,
+        lng?: number,
+        bldgName?: string,
+        flatNum?: string,
+        tag?: string,
+        addressType: string,
+        createdAt: number,
+        updatedAt: number,
+        sdmAddressRef: number,
+        cmsAddressRef: number,
+        sdmStoreRef: number,
     }
+    
     interface IRegisterAddress {
         lat: number,
         lng: number,
@@ -51,15 +38,22 @@ declare namespace IAddressRequest {
         description?: string,
         flatNum?: string,
         tag?: string,
-        isActive?: number
     }
 
     interface IFetchAddress {
+        userId: string,
+        addressId?: string,
+        bin: string
     }
 
     interface IDeleteAddress {
         addressId: string
     }
+
+    // interface IFetchAddressById {
+    //     id: string,
+    //     bin: string
+    // }
 }
 
 

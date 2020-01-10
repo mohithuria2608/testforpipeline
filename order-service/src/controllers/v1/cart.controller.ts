@@ -18,7 +18,7 @@ export class CartController {
      * */
     async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
-            auth.userData = await userService.fetchUserById({ id: auth.id })
+            auth.userData = await userService.fetchUser({ userId: auth.id })
             let invalidMenu = false
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)

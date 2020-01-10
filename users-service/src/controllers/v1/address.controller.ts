@@ -19,7 +19,7 @@ export class AddressController {
         try {
             let store: IStoreGrpcRequest.IStore[] = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
             if (store && store.length) {
-                return await ENTITY.AddressE.addAddress(headers.deviceid, auth.userData, payload, store[0])
+                return await ENTITY.AddressE.addAddress(auth.userData, "delivery", payload, store[0])
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
@@ -47,7 +47,7 @@ export class AddressController {
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             }
-            return await ENTITY.AddressE.updateAddress(payload, true, auth.userData)
+            return await ENTITY.AddressE.updateAddress(payload, "delivery", auth.userData, false)
         } catch (err) {
             consolelog(process.cwd(), "updateAddressById", err, false)
             return Promise.reject(err)
@@ -60,8 +60,7 @@ export class AddressController {
     * */
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let addres: IAddressRequest.IAddress[] = await ENTITY.AddressE.getById({ id: auth.userData.id }, [])
-            addres = addres.filter(obj => { return (obj.isActive == Constant.DATABASE.TYPE.STATUS.ACTIVE) })
+            let addres: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: auth.userData.id, bin: "delivery" })
             return addres
         } catch (err) {
             consolelog(process.cwd(), "fetchAddress", err, false)
@@ -75,7 +74,7 @@ export class AddressController {
     * */
     async deleteAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IDeleteAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId, isActive: Constant.DATABASE.TYPE.STATUS.INACTIVE }, false, auth.userData)
+            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId }, "delivery", auth.userData, true)
         } catch (err) {
             consolelog(process.cwd(), "deleteAddressById", err, false)
             return Promise.reject(err)

@@ -1,12 +1,9 @@
 declare namespace IUserGrpcRequest {
 
-    interface IFetchUserByIdReq {
-        request: IFetchUserById
+    interface IFetchUserReq {
+        request: IUserRequest.IFetchUser
     }
 
-    interface IFetchUserById {
-        id: string
-    }
     interface ISyncUserDataOnSdmReq {
         request: ISyncUserDataOnSdm
     }
@@ -30,19 +27,23 @@ declare namespace IUserGrpcRequest {
     }
 
     interface IFetchAddressByIdReq {
-        request: IFetchAddressById
-    }
-    interface IFetchAddressById {
-        userId: string,
-        addressId: string,
+        request: IAddressRequest.IFetchAddress
     }
 
     interface IFetchAddressByIdRes {
         id: string
-        sdmAddressRef: number
-        cmsAddressRef: number
-        areaId: number
-        storeId: number
+        sdmAddressRef: number,
+        cmsAddressRef: number,
+        countryId: number,
+        areaId: number,
+        storeId: number,
+        tag: string,
+        bldgName: string,
+        description: string,
+        flatNum: string,
+        addressType: string,
+        lat: number,
+        lng: number,
     }
 
 }

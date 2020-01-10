@@ -2,14 +2,14 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 service UserService {
-    rpc FetchUserById (IFetchUserByIdReq) returns (IUserData) {}
+    rpc FetchUser (IFetchUserReq) returns (IUserData) {}
     rpc SyncUserOnSdm (ICreateUserOnSdmReq) returns (ICreateUserOnSdmRes) {}
     rpc SyncUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
     rpc FetchAddressById (IFetchAddressByIdReq) returns (IFetchAddressByIdRes) {}
 }
 
-message IFetchUserByIdReq {
-    required string id = 1;
+message IFetchUserReq {
+    required string userId = 1;
 }
 
 message IUserData {
