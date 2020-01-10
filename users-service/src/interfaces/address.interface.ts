@@ -49,11 +49,6 @@ declare namespace IAddressRequest {
     interface IDeleteAddress {
         addressId: string
     }
-
-    // interface IFetchAddressById {
-    //     id: string,
-    //     bin: string
-    // }
 }
 
 

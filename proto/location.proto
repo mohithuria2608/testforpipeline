@@ -1,7 +1,16 @@
 syntax = "proto3";
 
 service LocationService {
+    rpc FetchStore (IFetchStoreReq) returns (IFetchStoreRes) {}
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
+}
+
+message IFetchStoreReq {
+    required int32 storeId = 1;
+}
+
+message IFetchStoreRes {
+    required IStore store = 1;
 }
 
 message IValidateCoordinateReq {
@@ -34,6 +43,7 @@ message IStore {
     required string endTime = 18;
     required IGeoFence geoFence = 19;
     required ILocation location = 20;
+    required int32 storeId = 21;
 }
 
 message IService {

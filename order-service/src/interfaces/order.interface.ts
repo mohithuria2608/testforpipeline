@@ -1,6 +1,6 @@
 declare namespace IOrderRequest {
 
-    interface IOrderData {
+    interface IOrderModel {
         cartId: string,
         cmsCartRef: number,
         sdmOrderRef: number,
@@ -11,13 +11,14 @@ declare namespace IOrderRequest {
         createdAt: number,
         updatedAt: number,
         items: any,
-        addres: IAddress,
+        address: IAddress,
         store: IStore,
         subTotal: number,
         total: number,
         tax: ITax[]
         shipping: IShipping[],
-        coupon: ICoupon[]
+        coupon: ICoupon[],
+        isPreviousOrder: boolean,
     }
 
     interface IAddress {
@@ -36,15 +37,10 @@ declare namespace IOrderRequest {
     }
 
     interface IStore {
-        storeId: number,
-        countryId: number,
-        location: {
-            description: string,
-            latitude: number,
-            longitude: number
-        },
-        address_en: string,
-        address_ar: string
+        sdmStoreRef: number,
+        lat: number,
+        lng: number,
+        address: string
     }
 
     interface ITax {

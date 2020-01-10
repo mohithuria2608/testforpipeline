@@ -48,13 +48,13 @@ server.addService(userProto.UserService.service, {
             callback(grpcSendError(error))
         }
     },
-    fetchAddressById: async (call: IUserGrpcRequest.IFetchAddressByIdReq, callback) => {
+    fetchAddress: async (call: IUserGrpcRequest.IFetchAddressReq, callback) => {
         try {
-            consolelog(process.cwd(), "fetchAddressById", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "fetchAddress", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.AddressE.getAddress(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchAddressById", error, false)
+            consolelog(process.cwd(), "fetchAddress", error, false)
             callback(grpcSendError(error))
         }
     }

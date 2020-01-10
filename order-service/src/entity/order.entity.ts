@@ -48,8 +48,6 @@ export class OrderClass extends BaseEntity {
             addressId: Joi.string(),
             sdmAddressRef: Joi.number(),
             cmsAddressRef: Joi.number(),
-            areaId: Joi.number(),
-            storeId: Joi.number(),
             bldgName: Joi.string(),
             description: Joi.string(),
             flatNum: Joi.string(),
@@ -65,24 +63,10 @@ export class OrderClass extends BaseEntity {
             lng: Joi.number().required(),
         }),
         store: Joi.object().keys({
-            id: Joi.string(),
-            sdmAddressRef: Joi.number(),
-            cmsAddressRef: Joi.number(),
-            areaId: Joi.number(),
-            storeId: Joi.number(),
-            bldgName: Joi.string(),
-            description: Joi.string(),
-            flatNum: Joi.string(),
-            tag: Joi.string().valid(
-                Constant.DATABASE.TYPE.TAG.HOME,
-                Constant.DATABASE.TYPE.TAG.OFFICE,
-                Constant.DATABASE.TYPE.TAG.HOTEL,
-                Constant.DATABASE.TYPE.TAG.OTHER),
-            addressType: Joi.string().valid(
-                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
-            lat: Joi.number().required(),
-            lng: Joi.number().required(),
+            sdmStoreRef: Joi.number(),
+            lat: Joi.number(),
+            lng: Joi.number(),
+            address: Joi.string(),
         }),
         items: Joi.array().items(
             Joi.object().keys({

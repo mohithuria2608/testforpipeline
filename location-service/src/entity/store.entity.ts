@@ -85,6 +85,30 @@ export class StoreEntity extends BaseEntity {
         }
     }
 
+    /**
+    * @method INTERNAL/GRPC
+    * @param {string} storeId : sdm store id
+    * */
+    async fetchStore(payload: IStoreRequest.IFetchStore) {
+        try {
+            let queryArg: IAerospike.Query = {
+                equal: {
+                    bin: "storeId",
+                    value: payload.storeId
+                },
+                set: this.set,
+                background: false,
+            }
+            let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
+            if (store && store.length > 0) {
+                return store[0]
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchStore", error, false)
+            return Promise.reject(error)
+        }
+    }
 
     /**
      * @method GRPC

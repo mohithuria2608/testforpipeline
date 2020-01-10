@@ -1,23 +1,24 @@
 declare namespace IUserGrpcRequest {
 
-    interface IFetchAddressById {
+    interface IFetchAddress {
         userId: string,
         addressId: string,
+        bin: string
     }
 
-    interface IFetchAddressByIdRes {
-        id: string
-        sdmAddressRef: number
-        cmsAddressRef: number
-        countryId: number,
-        areaId: number
-        storeId: number,
-        bldgName: string,
-        description: string,
-        flatNum: string,
-        tag: string,
+    interface IFetchAddressRes {
+        id: string,
+        description?: string,
+        lat?: number,
+        lng?: number,
+        bldgName?: string,
+        flatNum?: string,
+        tag?: string,
         addressType: string,
-        lat: string,
-        lng: string,
+        createdAt: number,
+        updatedAt: number,
+        sdmAddressRef: number,
+        cmsAddressRef: number,
+        sdmStoreRef: number,
     }
 }

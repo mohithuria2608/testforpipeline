@@ -11,7 +11,7 @@ export class UserServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    id: Joi.string().required()
+                    userId: Joi.string().required()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -23,12 +23,13 @@ export class UserServiceValidator {
         })
     }
 
-    async  fetchAddressById(data: IUserGrpcRequest.IFetchAddressById) {
+    async  fetchAddress(data: IUserGrpcRequest.IFetchAddress) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
                     userId: Joi.string().required(),
-                    addressId: Joi.string().required()
+                    addressId: Joi.string().required(),
+                    bin: Joi.string().valid("delivery", "pickup").required(),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

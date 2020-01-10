@@ -100,7 +100,6 @@ declare namespace IAerospike {
         index?: number,
         append?: boolean,
         remByIndex?: boolean,
-        get?: boolean,
         getByIndexRange?: boolean,
         order: boolean
     }

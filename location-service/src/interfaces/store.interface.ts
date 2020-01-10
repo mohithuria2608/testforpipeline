@@ -32,5 +32,9 @@ declare namespace IStoreRequest {
         endTime: string
     }
 
+    interface IFetchStore {
+        storeId: number
+    }
+
     interface IValidateCoordinates extends ICommonRequest.ICordinatesOpt { }
 }

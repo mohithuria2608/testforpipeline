@@ -1,8 +1,9 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { userService } from '../../grpc/client'
+import { userService, locationService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import { stringify } from 'querystring'
 
 export class OrderController {
 
@@ -16,10 +17,13 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             auth.userData = await userService.fetchUser({ userId: auth.id })
-            let getAddress: IUserGrpcRequest.IFetchAddressByIdRes = await userService.fetchAddressById({ userId: auth.userData.id, addressId: payload.addressId })
+            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.userData.id, addressId: payload.addressId, bin: "delivery" })
             if (!getAddress.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
+            let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
+            if (!getStore.hasOwnProperty("id"))
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
             let putArg: IAerospike.Put = {
                 bins: {
                     createdAt: new Date().getTime(),
@@ -27,32 +31,19 @@ export class OrderController {
                         addressId: getAddress.id,
                         sdmAddressRef: getAddress.sdmAddressRef,
                         cmsAddressRef: getAddress.cmsAddressRef,
-                        areaId: getAddress.areaId,
-                        storeId: getAddress.storeId,
                         tag: getAddress.tag,
                         bldgName: getAddress.bldgName,
                         description: getAddress.description,
                         flatNum: getAddress.flatNum,
                         addressType: getAddress.addressType,
                         lat: getAddress.lat,
-                        lng: getAddress.lng,
+                        lng: getAddress.lng
                     },
                     store: {
-                        storeId: getAddress.storeId,
-                        countryId: getAddress.countryId
-                        // location:getAddress.location
-                        // addressId: getAddress.id,
-                        // sdmAddressRef: getAddress.sdmAddressRef,
-                        // cmsAddressRef: getAddress.cmsAddressRef,
-                        // areaId: getAddress.areaId,
-                        // storeId: getAddress.storeId,
-                        // tag: getAddress.tag,
-                        // bldgName: getAddress.bldgName,
-                        // description: getAddress.description,
-                        // flatNum: getAddress.flatNum,
-                        // addressType: getAddress.addressType,
-                        // lat: getAddress.lat,
-                        // lng: getAddress.lng,
+                        sdmStoreRef: getStore.storeId,
+                        lat: getStore.location.latitude,
+                        lng: getStore.location.longitude,
+                        address: getStore.address_en
                     },
                     status: Constant.DATABASE.STATUS.ORDER.PENDING
                 },
@@ -83,11 +74,11 @@ export class OrderController {
                 set: ENTITY.OrderE.set,
                 background: false,
             }
-            let getOrderHistory: IOrderRequest.IOrderData[] = await Aerospike.query(queryArg)
+            let getOrderHistory: IOrderRequest.IOrderModel[] = await Aerospike.query(queryArg)
             if (getOrderHistory && getOrderHistory.length > 0) {
                 getOrderHistory.map(obj => { return obj['isPreviousOrder'] = true })
             }
-            let testlist = [
+            getOrderHistory = [
                 {
                     "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
                     "cmsCartRef": 0,
@@ -96,6 +87,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -161,6 +153,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -171,6 +169,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -236,6 +235,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -246,6 +251,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -311,6 +317,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -321,6 +333,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -386,6 +399,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -396,6 +415,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -461,6 +481,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -471,6 +497,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -536,6 +563,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -546,6 +579,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -611,6 +645,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -621,6 +661,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -686,6 +727,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -696,6 +743,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -761,6 +809,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -771,6 +825,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -836,6 +891,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -846,6 +907,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -911,6 +973,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -921,6 +989,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -986,6 +1055,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -996,6 +1071,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -1061,6 +1137,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -1071,6 +1153,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -1136,6 +1219,12 @@ export class OrderController {
                         "lat": 50.322,
                         "lng": 20.322
                     },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
+                    },
                     "isPreviousOrder": false
                 },
                 {
@@ -1146,6 +1235,7 @@ export class OrderController {
                     "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                     "orderId": "UAE-1",
                     "status": "PENDING",
+                    "createdAt": 1578558475844,
                     "updatedAt": 1578558475844,
                     "items": [
                         {
@@ -1210,15 +1300,23 @@ export class OrderController {
                         "addressType": "DELIVERY",
                         "lat": 50.322,
                         "lng": 20.322
+                    },
+                    "store": {
+                        sdmStoreRef: 28,
+                        lat: 50.322,
+                        lng: 20.322,
+                        address: "store is open address"
                     },
                     "isPreviousOrder": false
                 }
             ]
 
-            let returnList = testlist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
+            let nextPage = (getOrderHistory[((parseInt(payload.page.toString()) * 10) + 1)] !== undefined) ? parseInt(parseInt(payload.page.toString()).toString()) + 1 : -1
+            getOrderHistory = getOrderHistory.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
+
             return {
-                "list": returnList,
-                "nextPage": testlist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(parseInt(payload.page.toString()).toString()) + 1 : -1,
+                list: getOrderHistory,
+                nextPage: nextPage,
                 currentPage: parseInt(payload.page.toString())
             }
         } catch (err) {

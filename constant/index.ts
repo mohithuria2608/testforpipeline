@@ -195,6 +195,13 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            INVALID_STORE: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'INVALID_STORE',
+                message: 'Invalid store'
+            },
+
             INVALID_ADDRESS: {
                 statusCode: 400,
                 httpCode: 400,
@@ -317,10 +324,17 @@ export const STATUS_MSG = {
                 message: "Cart not found"
             },
 
+            STORE_NOT_FOUND:{
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Store not found',
+                type: 'STORE_NOT_FOUND'
+            },
+
             DATA_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
-                message: 'data not found',
+                message: 'Data not found',
                 type: 'DATA_NOT_FOUND'
             },
         },

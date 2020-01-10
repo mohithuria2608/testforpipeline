@@ -26,11 +26,11 @@ declare namespace IUserGrpcRequest {
         password: string
     }
 
-    interface IFetchAddressByIdReq {
+    interface IFetchAddressReq {
         request: IAddressRequest.IFetchAddress
     }
 
-    interface IFetchAddressByIdRes {
+    interface IFetchAddressRes {
         id: string
         sdmAddressRef: number,
         cmsAddressRef: number,

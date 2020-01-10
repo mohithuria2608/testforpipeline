@@ -38,10 +38,10 @@ export class UserService {
         })
     }
 
-    async fetchAddressById(payload: IUserGrpcRequest.IFetchAddressById): Promise<IUserGrpcRequest.IFetchAddressByIdRes> {
+    async fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
         return new Promise(async (resolve, reject) => {
-            await userServiceValidator.fetchAddressById(payload)
-            this.userClient.fetchAddressById({ userId: payload.userId, addressId: payload.addressId }, (err, res) => {
+            await userServiceValidator.fetchAddress(payload)
+            this.userClient.fetchAddress({ userId: payload.userId, addressId: payload.addressId, bin: payload.bin }, (err, res) => {
                 if (!err) {
                     consolelog(process.cwd(), "successfully fetched Address by id", JSON.stringify(res), false)
                     resolve(res)

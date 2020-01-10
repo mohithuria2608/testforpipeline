@@ -421,9 +421,6 @@ class AerospikeClass {
                         operations.push(this.lists.removeByIndex(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
                     }
-                    if (argv.get) {
-                        operations.push(this.lists.get(argv.bin))
-                    }
                     if (argv.getByIndexRange) {
                         operations.push(this.lists.getByIndexRange(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
