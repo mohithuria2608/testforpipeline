@@ -68,7 +68,81 @@ export class OrderController {
                 getOrderHistory.map(obj => { return obj['isPreviousOrder'] = true })
             }
             let page = -1;
-            return { list: getOrderHistory, nextPage: page, currentPage: payload.page }
+            return {
+                "list": [
+                    {
+                        "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
+                        "cmsCartRef": 0,
+                        "sdmOrderRef": 0,
+                        "cmsOrderRef": 0,
+                        "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
+                        "orderId": "UAE-1",
+                        "status": "CART",
+                        "updatedAt": 1578558475844,
+                        "items": [
+                            {
+                                "metaKeyword": [
+                                    "Cheesecake"
+                                ],
+                                "taxClassId": "2",
+                                "position": 0,
+                                "name": "Cheesecake",
+                                "imageSmall": "null",
+                                "selectedItem": 0,
+                                "specialPrice": 9.5,
+                                "bundleProductOptions": [
+
+                                ],
+                                "visibility": 4,
+                                "finalPrice": 9.5,
+                                "virtualGroup": 0,
+                                "typeId": "simple",
+                                "qty": 2,
+                                "image": "null",
+                                "description": "adff",
+                                "sku": "710001",
+                                "id": 58,
+                                "inSide": "0",
+                                "configurableProductOptions": [
+
+                                ],
+                                "products": [
+
+                                ],
+                                "imageThumbnail": "null",
+                                "associative": "0"
+                            }
+                        ],
+                        "subTotal": 0,
+                        "total": 0,
+                        "tax": [
+                            {
+                                "name": "VAT",
+                                "value": 0.26
+                            }
+                        ],
+                        "shipping": [
+                            {
+                                "name": "VAT",
+                                "code": "FREE",
+                                "value": 7.5
+                            }
+                        ],
+                        "coupon": [
+
+                        ],
+                        "address": {
+                            "areaId": 520,
+                            "id": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
+                            "storeId": 0,
+                            "sdmAddressRef": 0,
+                            "cmsAddressRef": 0
+                        }
+                    }
+                ],
+                "nextPage": -1,
+                currentPage: payload.page
+            }
         } catch (err) {
             consolelog(process.cwd(), "orderHistory", err, false)
             return Promise.reject(err)
