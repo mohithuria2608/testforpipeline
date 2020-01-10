@@ -23,7 +23,7 @@ export class OrderController {
             let putArg: IAerospike.Put = {
                 bins: {
                     address: {
-                        id: getAddress.id,
+                        addressId: getAddress.id,
                         sdmAddressRef: getAddress.sdmAddressRef,
                         cmsAddressRef: getAddress.cmsAddressRef,
                         areaId: getAddress.areaId,
@@ -77,7 +77,7 @@ export class OrderController {
                         "cmsOrderRef": 0,
                         "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
                         "orderId": "UAE-1",
-                        "status": "CART",
+                        "status": "PENDING",
                         "updatedAt": 1578558475844,
                         "items": [
                             {
@@ -113,8 +113,8 @@ export class OrderController {
                                 "associative": "0"
                             }
                         ],
-                        "subTotal": 0,
-                        "total": 0,
+                        "subTotal": 30.25,
+                        "total": 30.25,
                         "tax": [
                             {
                                 "name": "VAT",
@@ -123,21 +123,26 @@ export class OrderController {
                         ],
                         "shipping": [
                             {
-                                "name": "VAT",
-                                "code": "FREE",
+                                "name": "FLAT DELIVERY",
+                                "code": "FLAT",
                                 "value": 7.5
                             }
                         ],
-                        "coupon": [
-
-                        ],
+                        "coupon": [],
                         "address": {
                             "areaId": 520,
                             "id": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
                             "storeId": 0,
                             "sdmAddressRef": 0,
-                            "cmsAddressRef": 0
-                        }
+                            "cmsAddressRef": 0,
+                            "addressId": "adf",
+                            "tag": "HOME",
+                            "bldgName": "Peru",
+                            "description": "Peru society, street 2",
+                            "flatNum": "35",
+                            "addressType": "DELIVERY",
+                        },
+                        "isPreviousOrder": false
                     }
                 ],
                 "nextPage": -1,
