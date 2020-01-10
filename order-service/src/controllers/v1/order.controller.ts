@@ -1,9 +1,8 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { userService } from '../../grpc/client'
-import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../databases/aerospike'
+import { Aerospike } from '../../aerospike'
 
 export class OrderController {
 
@@ -48,8 +47,10 @@ export class OrderController {
             return Promise.reject(err)
         }
     }
+
     /**
      * @method GET
+     * @param {number} page
      * */
     async orderHistory(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderHistory, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -64,10 +65,10 @@ export class OrderController {
             }
             let getOrderHistory: IOrderRequest.IOrderData[] = await Aerospike.query(queryArg)
             if (getOrderHistory && getOrderHistory.length > 0) {
-                getOrderHistory.map(obj => { return obj['isPreviousOrder'] = 1 })
+                getOrderHistory.map(obj => { return obj['isPreviousOrder'] = true })
             }
             let page = -1;
-            return { list: getOrderHistory, nextPage: page }
+            return { list: getOrderHistory, nextPage: page, currentPage: payload.page }
         } catch (err) {
             consolelog(process.cwd(), "orderHistory", err, false)
             return Promise.reject(err)

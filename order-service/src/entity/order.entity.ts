@@ -1,10 +1,12 @@
 'use strict';
 import * as Joi from '@hapi/joi';
+import * as mongoose from "mongoose";
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
+import * as Services from '../mongo/dao';
 import { consolelog, sendSuccess } from '../utils'
 import * as CMS from "../cms"
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 
 export class OrderClass extends BaseEntity {
@@ -22,9 +24,12 @@ export class OrderClass extends BaseEntity {
             type: "STRING"
         }
     ]
-
+    public ObjectId = mongoose.Types.ObjectId;
+    public DAOManager = new Services.DAOManager();
+    protected modelName: SetNames;
     constructor() {
         super('order')
+        this.modelName = 'order'
     }
 
     public orderSchema = Joi.object().keys({
