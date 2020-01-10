@@ -1,5 +1,6 @@
 declare namespace IPromotionRequest {
 
-    interface IFetchPromotion {
+    interface IFetchPromotion extends ICommonRequest.IPagination {
+
     }
 }

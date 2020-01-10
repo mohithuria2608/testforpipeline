@@ -30,9 +30,13 @@ export class PromotionController {
     * */
     async getPromotionsList(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IFetchPromotion) {
         try {
-            return await ENTITY.PromotionE.getPromotions();
+            return {
+                list: await ENTITY.PromotionE.getPromotions(),
+                currentPage: payload.page,
+                nextPage: -1
+            };
         } catch (err) {
-            consolelog(process.cwd(), "fetchMenu", err, false)
+            consolelog(process.cwd(), "getPromotionsList", err, false)
             return Promise.reject(err)
         }
     }
