@@ -7,7 +7,6 @@ import * as serve from 'koa-static';
 import * as Constant from '../constant'
 
 import handleErrors from './error'
-import apiAuth from './apiAuth'
 import auth from './auth'
 import activityLog from './activityLog'
 

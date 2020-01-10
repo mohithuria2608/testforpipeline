@@ -1,16 +1,5 @@
 declare namespace IUserRequest {
 
-    interface IId {
-        id: string
-    }
-    interface IPhone {
-        cCode: string,
-        phnNo: string
-    }
-
-    interface IEmail {
-        email: string
-    }
     interface IUserData {
         id: string,
         sdmUserRef: number,
@@ -47,6 +36,14 @@ declare namespace IUserRequest {
         isLogin: number,
         createdAt: number,
     }
+    interface IPhone {
+        cCode: string,
+        phnNo: string
+    }
+
+    interface IEmail {
+        email: string
+    }
 
     interface IUserUpdate {
         isGuest?: number
@@ -61,28 +58,13 @@ declare namespace IUserRequest {
         medium?: string,
         createdAt?: number,
         address?: {
-            [deviceid: string]: IAddressRequest.IAddress
+            [deviceid: string]: IAddressRequest.IAddressModel
         },
         session?: {
             [deviceid: string]: ISession
         },
         removeUserId?: string,
         cartId?: string,
-    }
-
-    interface ISession {
-        otp: number,
-        otpExpAt: number,
-        otpVerified: number,
-        language: string,
-        country: string,
-        appversion: string,
-        devicemodel: string,
-        devicetype: string,
-        osversion: string,
-        deviceid: string,
-        isLogin: number,
-        createdAt: number,
     }
 
     interface ISessionUpdate {
@@ -127,5 +109,9 @@ declare namespace IUserRequest {
     interface IEditProfile {
         email?: string,
         name?: string
+    }
+
+    interface IFetchUser {
+        userId: string
     }
 }

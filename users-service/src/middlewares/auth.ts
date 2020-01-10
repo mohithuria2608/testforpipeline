@@ -27,7 +27,7 @@ export default (opts?): Middleware => {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
             }
             else {
-                let user: IUserRequest.IUserData = await ENTITY.UserE.getById({ id: tokenData.id })
+                let user: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: tokenData.id })
                 if (!user && !user.id) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 } else if (user && (!user.session || !user.session[tokenData.deviceid])) {

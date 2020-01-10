@@ -36,4 +36,8 @@ declare namespace IUserRequest {
         cartId: string,
         createdAt: number,
     }
+
+    interface IFetchUser {
+        userId: string,
+    }
 }

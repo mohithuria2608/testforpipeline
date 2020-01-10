@@ -1,2 +1,2 @@
 declare type SetNames =
-    'user'
+    'order'

@@ -18,13 +18,13 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
-    fetchUserById: async (call: IUserGrpcRequest.IFetchUserByIdReq, callback) => {
+    fetchUser: async (call: IUserGrpcRequest.IFetchUserReq, callback) => {
         try {
-            consolelog(process.cwd(), "fetchUserById", JSON.stringify(call.request), true)
-            let res: IUserRequest.IUserData = await ENTITY.UserE.getById(call.request)
+            consolelog(process.cwd(), "fetchUser", JSON.stringify(call.request), true)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.getUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchAddressById", error, false)
+            consolelog(process.cwd(), "fetchUser", error, false)
             callback(grpcSendError(error))
         }
     },
@@ -51,7 +51,7 @@ server.addService(userProto.UserService.service, {
     fetchAddressById: async (call: IUserGrpcRequest.IFetchAddressByIdReq, callback) => {
         try {
             consolelog(process.cwd(), "fetchAddressById", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.AddressE.getByAddressId(call.request)
+            let res: {} = await ENTITY.AddressE.getAddress(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchAddressById", error, false)

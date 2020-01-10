@@ -8,6 +8,7 @@ declare namespace ICartRequest {
         userId: string,
         orderId: string,
         status: string,
+        createdAt: number,
         updatedAt: number,
         items: any,
         addres: IAddress,

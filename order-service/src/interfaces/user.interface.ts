@@ -1,5 +1,5 @@
 declare namespace IUserRequest {
-    
+
     interface IUserData {
         id: string,
         sdmUserRef: number,
@@ -35,5 +35,9 @@ declare namespace IUserRequest {
         isLogin: number,
         cartId: string,
         createdAt: number,
+    }
+
+    interface IFetchUser {
+        userId: string,
     }
 }

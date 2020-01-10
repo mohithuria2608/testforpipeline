@@ -42,7 +42,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    page: Joi.number().min(0).required()
+                    page: Joi.number().min(1).required()
                 }
             }),
             async (ctx) => {
@@ -51,6 +51,31 @@ export default (router: Router) => {
                     let payload: IOrderRequest.IOrderHistory = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.orderHistory(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/track',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
+                    orderId: Joi.string().required()
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IOrderRequest.ITrackOrder = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await orderController.trackOrder(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
