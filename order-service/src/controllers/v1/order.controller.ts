@@ -66,7 +66,8 @@ export class OrderController {
             if (getOrderHistory && getOrderHistory.length > 0) {
                 getOrderHistory.map(obj => { return obj['isPreviousOrder'] = 1 })
             }
-            return getOrderHistory
+            let page = -1;
+            return { list: getOrderHistory, nextPage: page }
         } catch (err) {
             consolelog(process.cwd(), "orderHistory", err, false)
             return Promise.reject(err)
