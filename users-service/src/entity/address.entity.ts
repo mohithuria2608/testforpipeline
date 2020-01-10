@@ -11,97 +11,77 @@ export class AddressEntity extends BaseEntity {
         super('address')
     }
 
+    public subSddressSchema = Joi.object().keys({
+        /**
+         * @usage : FE
+         */
+        id: Joi.string().trim().required().description("pk"),
+        description: Joi.string(),
+        lat: Joi.number().required(),
+        lng: Joi.number().required(),
+        bldgName: Joi.string(),
+        flatNum: Joi.string(),
+        tag: Joi.string().valid(
+            Constant.DATABASE.TYPE.TAG.HOME,
+            Constant.DATABASE.TYPE.TAG.OFFICE,
+            Constant.DATABASE.TYPE.TAG.HOTEL,
+            Constant.DATABASE.TYPE.TAG.OTHER),
+        addressType: Joi.string().valid(
+            Constant.DATABASE.TYPE.ADDRESS.PICKUP,
+            Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
+        createdAt: Joi.number().required(),
+        updatedAt: Joi.number().required(),
+        /**
+         * @usage : Reference
+         */
+        sdmAddressRef: Joi.number(),
+        cmsAddressRef: Joi.number(),
+        sdmStoreRef: Joi.number().required(),
+    })
 
+    /**
+     * @KEY : userId is used as key for this set
+     */
     public addressSchema = Joi.object().keys({
-        address: Joi.array().items(Joi.object().keys({
-            id: Joi.string().trim().required().description("pk"),
-            sdmAddressRef: Joi.number(),
-            cmsAddressRef: Joi.number(),
-            lat: Joi.number().required(),
-            lng: Joi.number().required(),
-            areaId: Joi.number().required(),
-            bldgName: Joi.string(),
-            bldgNameUn: Joi.string(),
-            bldgNum: Joi.string(),
-            cityId: Joi.number().required(),
-            classId: Joi.number(),
-            countryId: Joi.number().required(),
-            userId: Joi.number().required(),
-            description: Joi.string(),
-            districtId: Joi.number().required(),
-            flatNum: Joi.string(),
-            floor: Joi.string(),
-            language: Joi.string(),
-            phoneAreaCode: Joi.string(),
-            phoneLookup: Joi.string(),
-            phoneNumber: Joi.string().required(),
-            phoneType: Joi.number(),
-            postalCode: Joi.string().required(),
-            provinceCode: Joi.number().required(),
-            sketch: Joi.string(),
-            streetId: Joi.number(),
-            useMap: Joi.number(),
-            createdAt: Joi.number().required(),
-            updatedAt: Joi.number().required(),
-            isActive: Joi.number().valid(0, 1),
-            createdBy: Joi.string(),
-            updatedBy: Joi.string(),
-            tag: Joi.string().valid(
-                Constant.DATABASE.TYPE.TAG.HOME,
-                Constant.DATABASE.TYPE.TAG.OFFICE,
-                Constant.DATABASE.TYPE.TAG.HOTEL,
-                Constant.DATABASE.TYPE.TAG.OTHER),
-            addressType: Joi.string().valid(
-                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
-        }))
-
+        delivery: Joi.array().items(this.subSddressSchema),
+        pickup: Joi.array().items(this.subSddressSchema)
     })
 
 
     /**
-    * @method INTERNAL/GRPC 
-    * @param {string} id : user id
+    * @method GRPC
+    * @param {string} userId : user id
+    * @param {string} bin : delivery or pickup
+    * @param {string=} addressd : address id
     * */
-    async getById(payload: IUserRequest.IId, bins: string[]) {
+    async getAddress(payload: IAddressRequest.IFetchAddress) {
         try {
-            consolelog(process.cwd(), "getById", payload.id, true)
             let listGetArg: IAerospike.ListOperation = {
                 order: true,
-                set: 'address',
-                key: payload.id,
-                bin: "address",
+                set: this.set,
+                key: payload.userId,
+                bin: payload.bin,
                 getByIndexRange: true,
                 index: 0
             }
             let listaddress = await Aerospike.listOperations(listGetArg)
-            if (listaddress && listaddress.bins && listaddress.bins['address'] && listaddress.bins['address'].length > 0) {
-                return listaddress.bins['address']
+            if (listaddress && listaddress.bins && listaddress.bins[payload.bin] && listaddress.bins[payload.bin].length > 0) {
+                listaddress = listaddress.bins[payload.bin]
             } else
-                return []
-        } catch (error) {
-            consolelog(process.cwd(), "getById", error, false)
-            return Promise.reject(error)
-        }
-    }
+                listaddress = []
+            if (payload.addressId) {
+                if (listaddress.length > 0) {
+                    let addressById = listaddress.filter(obj => {
+                        return obj.id == payload.addressId
+                    })
+                    return (addressById && addressById.length > 0) ? addressById[0] : {}
+                } else
+                    return {}
+            } else
+                return listaddress
 
-    /**
-    * @method GRPC
-    * @param {string} userId : user id
-    * @param {string} addressd : user id
-    * */
-    async getByAddressId(payload: IUserGrpcRequest.IFetchAddressById) {
-        try {
-            let listaddress: IAddressRequest.IAddress[] = await this.getById({ id: payload.userId }, [])
-            if (listaddress.length > 0) {
-                let addressById = listaddress.filter(obj => {
-                    return obj.id == payload.addressId
-                })
-                return (addressById && addressById.length > 0) ? addressById[0] : {}
-            } else
-                return {}
         } catch (error) {
-            consolelog(process.cwd(), "getByAddressId", error, false)
+            consolelog(process.cwd(), "getAddress", error, false)
             return Promise.reject(error)
         }
     }
@@ -109,15 +89,10 @@ export class AddressEntity extends BaseEntity {
     /**
     * @method INTERNAL
     * */
-    async addAddress(
-        deviceid: string,
-        userData: IUserRequest.IUserData,
-        addressData: IAddressRequest.IRegisterAddress,
-        store: IStoreGrpcRequest.IStore
-    ): Promise<IUserRequest.IUserData> {
+    async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore): Promise<IUserRequest.IUserData> {
         try {
             let id = this.uuidv1();
-            let address = {
+            let deliveryAddress = {
                 id: id,
                 lat: addressData.lat,
                 lng: addressData.lng,
@@ -125,73 +100,46 @@ export class AddressEntity extends BaseEntity {
                 description: addressData.description,
                 flatNum: addressData.flatNum,
                 tag: addressData.tag,
-
-                //@description = from userData
-                phoneAreaCode: userData.cCode,
-                phoneLookup: userData.phnNo,
-                phoneNumber: userData.phnNo,
-                userId: userData.id,
-                isActive: 1,
-
-                //@description = from session
-                language: "En",// userData.session[deviceid].language,
-
-                //@description = from store
-                areaId: store.areaId,
-                cityId: 19,
-                countryId: store.countryId,
-                districtId: store.districtId,
-                provinceCode: store.provinceId,
-                streetId: store.streetId,
-
-                //@description = default values
-                classId: -1,
-                bldgNameUn: addressData.bldgName,
-                bldgNum: addressData.bldgName,
-                floor: addressData.bldgName,
-                phoneType: 'Mobile',
-                postalCode: addressData.bldgName,
-                sketch: addressData.bldgName,
-                useMap: 1,
-                createdBy: 'APP',
-                updatedBy: 'APP',
+                addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
+                sdmAddressRef: 0,
+                cmsAddressRef: 0,
+                sdmStoreRef: store.storeId
             };
             let listAppendArg: IAerospike.ListOperation = {
                 order: true,
-                bins: address,
+                bins: deliveryAddress,
                 set: this.set,
                 key: userData.id,
-                bin: "address",
+                bin: bin,
                 append: true
             }
             await Aerospike.listOperations(listAppendArg)
-            let listaddress = await this.getById({ id: userData.id }, [])
-            consolelog(process.cwd(), "listaddress.length", listaddress.length, false)
+            let listDeliveryAddress = await this.getAddress({ userId: userData.id, bin: bin })
 
-            if (listaddress && listaddress.length > 6) {
+            if (listDeliveryAddress && listDeliveryAddress.length > 6) {
                 let listRemoveByIndexArg: IAerospike.ListOperation = {
                     order: true,
                     set: this.set,
                     key: userData.id,
-                    bin: "address",
+                    bin: bin,
                     remByIndex: true,
                     index: 0
                 }
                 await Aerospike.listOperations(listRemoveByIndexArg)
-                listaddress = listaddress.slice(1)
+                listDeliveryAddress = listDeliveryAddress.slice(1)
             }
-            return listaddress
+            return listDeliveryAddress
         } catch (err) {
             consolelog(process.cwd(), "addAddress", err, false)
             return Promise.reject(err)
         }
     }
 
-    async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, returnRes: boolean, userData: IUserRequest.IUserData) {
+    async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
-            let listaddress = await this.getById({ id: userData.id }, [])
+            let listaddress = await this.getAddress({ userId: userData.id, bin: bin })
             let index = listaddress.findIndex(x => x.id === addressUpdate.addressId);
             if (index < 0) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
@@ -200,11 +148,13 @@ export class AddressEntity extends BaseEntity {
                 order: true,
                 set: this.set,
                 key: userData.id,
-                bin: "address",
+                bin: bin,
                 remByIndex: true,
                 index: index
             }
             await Aerospike.listOperations(listRemoveByIndexArg)
+            if (isDelete)
+                return {}
             let bins = listaddress[index];
             if (addressUpdate.lat)
                 bins['lat'] = addressUpdate.lat
@@ -218,8 +168,6 @@ export class AddressEntity extends BaseEntity {
                 bins['flatNum'] = addressUpdate.flatNum
             if (addressUpdate.tag)
                 bins['tag'] = addressUpdate.tag
-            if (addressUpdate.isActive != undefined)
-                bins['isActive'] = addressUpdate.isActive
 
             bins['updatedAt'] = new Date().getTime()
             let listAppendArg: IAerospike.ListOperation = {
@@ -227,7 +175,7 @@ export class AddressEntity extends BaseEntity {
                 bins: bins,
                 set: this.set,
                 key: userData.id,
-                bin: "address",
+                bin: bin,
                 append: true
             }
             await Aerospike.listOperations(listAppendArg)

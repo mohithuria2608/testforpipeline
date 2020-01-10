@@ -45,6 +45,26 @@ export class OrderClass extends BaseEntity {
         ).required(),
         updatedAt: Joi.number().required(),
         addres: Joi.object().keys({
+            addressId: Joi.string(),
+            sdmAddressRef: Joi.number(),
+            cmsAddressRef: Joi.number(),
+            areaId: Joi.number(),
+            storeId: Joi.number(),
+            bldgName: Joi.string(),
+            description: Joi.string(),
+            flatNum: Joi.string(),
+            tag: Joi.string().valid(
+                Constant.DATABASE.TYPE.TAG.HOME,
+                Constant.DATABASE.TYPE.TAG.OFFICE,
+                Constant.DATABASE.TYPE.TAG.HOTEL,
+                Constant.DATABASE.TYPE.TAG.OTHER),
+            addressType: Joi.string().valid(
+                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
+                Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
+            lat: Joi.number().required(),
+            lng: Joi.number().required(),
+        }),
+        store: Joi.object().keys({
             id: Joi.string(),
             sdmAddressRef: Joi.number(),
             cmsAddressRef: Joi.number(),
@@ -61,6 +81,8 @@ export class OrderClass extends BaseEntity {
             addressType: Joi.string().valid(
                 Constant.DATABASE.TYPE.ADDRESS.PICKUP,
                 Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
+            lat: Joi.number().required(),
+            lng: Joi.number().required(),
         }),
         items: Joi.array().items(
             Joi.object().keys({
@@ -235,6 +257,7 @@ export class OrderClass extends BaseEntity {
                 userId: payload.userId,
                 orderId: "UAE-1",
                 status: Constant.DATABASE.STATUS.ORDER.CART,
+                createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],
                 addres: null,

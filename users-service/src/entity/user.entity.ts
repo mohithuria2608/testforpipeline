@@ -86,14 +86,14 @@ export class UserEntity extends BaseEntity {
     });
 
     /**
-    * @method GRPC
-    * @param {string} id : user id
+    * @method INTERNAL/GRPC
+    * @param {string} userId : user id
     * */
-    async getById(payload: IUserRequest.IId) {
+    async getUser(payload: IUserRequest.IFetchUser) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: payload.id
+                key: payload.userId
             }
             let user: IUserRequest.IUserData = await Aerospike.get(getArg)
             if (user && user.id) {
@@ -101,7 +101,7 @@ export class UserEntity extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getById", error, false)
+            consolelog(process.cwd(), "getUser", error, false)
             return Promise.reject(error)
         }
     }
@@ -160,6 +160,9 @@ export class UserEntity extends BaseEntity {
         return user
     }
 
+    /**
+     * @todo : add updated time in session token
+     */
     public async buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
         let session = isCreate ? {
             otp: 0,
@@ -222,7 +225,7 @@ export class UserEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
             this.createDefaultCart(dataToSave.cartId, dataToSave.id)
-            let user = await this.getById({ id: dataToSave.id })
+            let user = await this.getUser({ userId: dataToSave.id })
             return user
         } catch (err) {
             consolelog(process.cwd(), "createUser", err, false)
@@ -262,7 +265,7 @@ export class UserEntity extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            let user = await this.getById({ id: userData.id })
+            let user = await this.getUser({ userId: userData.id })
             return user
         } catch (err) {
             consolelog(process.cwd(), "createSession", err, false)
@@ -305,7 +308,7 @@ export class UserEntity extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            let user = await this.getById({ id: userData.id })
+            let user = await this.getUser({ userId: userData.id })
             return user
         } catch (error) {
             consolelog(process.cwd(), "updateUser", error, false)

@@ -59,4 +59,29 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/track',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
+                    orderId: Joi.string().required()
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IOrderRequest.ITrackOrder = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await orderController.trackOrder(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 }

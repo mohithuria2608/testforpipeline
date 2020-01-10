@@ -8,9 +8,11 @@ declare namespace IOrderRequest {
         userId: string,
         orderId: string,
         status: string,
+        createdAt: number,
         updatedAt: number,
         items: any,
         addres: IAddress,
+        store: IStore,
         subTotal: number,
         total: number,
         tax: ITax[]
@@ -24,6 +26,25 @@ declare namespace IOrderRequest {
         cmsAddressRef: number,
         areaId: number,
         storeId: number,
+        tag: string,
+        bldgName: string,
+        description: string,
+        flatNum: string,
+        addressType: string,
+        lat: number,
+        lng: number,
+    }
+
+    interface IStore {
+        storeId: number,
+        countryId: number,
+        location: {
+            description: string,
+            latitude: number,
+            longitude: number
+        },
+        address_en: string,
+        address_ar: string
     }
 
     interface ITax {
@@ -46,5 +67,9 @@ declare namespace IOrderRequest {
     }
 
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
+    }
+
+    interface ITrackOrder {
+        orderId: string,
     }
 }

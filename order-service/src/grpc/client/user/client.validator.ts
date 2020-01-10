@@ -7,7 +7,7 @@ export class UserServiceValidator {
     constructor() {
     }
 
-    async fetchUserById(data: IUserGrpcRequest.IFetchUserById) {
+    async fetchUser(data: IUserRequest.IFetchUser) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

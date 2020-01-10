@@ -7,6 +7,7 @@ export interface IOrder extends Document {
     cmsOrderRef: number,
     userId: string,
     status: string,
+    createdAt: number,
     updatedAt: number,
     address: {
         id: string,
@@ -31,6 +32,7 @@ const orderSchema = new Schema({
             Constant.DATABASE.STATUS.ORDER.PENDING,
         ]
     },
+    createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true },
     addres: {
         id: { type: String },

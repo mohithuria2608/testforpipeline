@@ -1,8 +1,5 @@
 declare namespace IUserGrpcRequest {
 
-    interface IFetchUserById {
-        id: string,
-    }
     interface IFetchAddressById {
         userId: string,
         addressId: string,
@@ -12,6 +9,7 @@ declare namespace IUserGrpcRequest {
         id: string
         sdmAddressRef: number
         cmsAddressRef: number
+        countryId: number,
         areaId: number
         storeId: number,
         bldgName: string,
@@ -19,5 +17,7 @@ declare namespace IUserGrpcRequest {
         flatNum: string,
         tag: string,
         addressType: string,
+        lat: string,
+        lng: string,
     }
 }
