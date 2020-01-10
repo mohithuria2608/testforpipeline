@@ -10,7 +10,7 @@ pipeline {
         Kafka_image="americana.azurecr.io/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}"
         Sync_image="americana.azurecr.io/sync"+ ":Sync-service_${env.BUILD_NUMBER}"
         Location_image="americana.azurecr.io/location"+ ":Location-service_${env.BUILD_NUMBER}"
-
+        Upload_image="americana.azurecr.io/upload"+ ":Upload-service_${env.BUILD_NUMBER}"
         
     }
     agent any
@@ -51,6 +51,7 @@ pipeline {
                     KafkaImage=docker.build(registry + "/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/kafka-service/Dockerfile .")
                     SyncImage=docker.build(registry + "/sync"+ ":Sync-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/sync-service/Dockerfile .")
                     LocationImage=docker.build(registry + "/location"+ ":Location-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/location-service/Dockerfile .")
+                    UploadImage=docker.build(registry + "/upload"+ ":Upload-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/upload-service/Dockerfile .")
 
                 }
             }
@@ -67,6 +68,7 @@ pipeline {
                         KafkaImage.push()
                         SyncImage.push()
                         LocationImage.push()
+                        UploadImage.push()
                     }
                 }
             }

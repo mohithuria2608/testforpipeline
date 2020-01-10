@@ -12,6 +12,8 @@ template=`echo "$template" | sed "s@{{Deeplink_image}}@$Deeplink_image@g"`
 template=`echo "$template" | sed "s@{{Kafka_image}}@$Kafka_image@g"`
 template=`echo "$template" | sed "s@{{Sync_image}}@$Sync_image@g"`
 template=`echo "$template" | sed "s@{{Location_image}}@$Location_image@g"`
+template=`echo "$template" | sed "s@{{Upload_image}}@$Upload_image@g"`
+
 
 # apply the yml with the substituted value
 echo "$template" | kubectl apply -f -
