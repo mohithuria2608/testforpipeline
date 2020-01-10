@@ -2,16 +2,24 @@
 'use strict';
 import * as Joi from '@hapi/joi';
 import { consolelog } from "../../../utils"
+import * as Constant from '../../../constant'
 
-export class UserServiceValidator {
+export class AuthServiceValidator {
     constructor() {
     }
-
-    async fetchUserById(data: IUserGrpcRequest.IFetchUserById) {
+    async  createTokenValidator(data: IAuthGrpcRequest.ICreateTokenData) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    id: Joi.string().required()
+                    deviceid: Joi.string().required(),
+                    tokenType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH,
+                    ).required(),
+                    devicetype: Joi.string().valid(
+                        Constant.DATABASE.TYPE.DEVICE.ANDROID,
+                        Constant.DATABASE.TYPE.DEVICE.IOS
+                    ).required(),
+                    id: Joi.string().optional(),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -23,13 +31,12 @@ export class UserServiceValidator {
         })
     }
 
-    async  fetchAddressById(data: IUserGrpcRequest.IFetchAddressById) {
+    async verifyTokenValidator(data: IAuthGrpcRequest.IVerifyTokenObj) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    userId: Joi.string().required(),
-                    addressId: Joi.string().required()
-                });
+                    token: Joi.string().required()
+                })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
                     reject(`Invalid Info- ${error.message}`)
@@ -42,6 +49,6 @@ export class UserServiceValidator {
 }
 
 
-export const userServiceValidator = new UserServiceValidator()
+export const authServiceValidator = new AuthServiceValidator()
 
 

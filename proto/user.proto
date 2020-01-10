@@ -2,9 +2,31 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 service UserService {
+    rpc FetchUserById (IFetchUserByIdReq) returns (IUserData) {}
     rpc SyncUserOnSdm (ICreateUserOnSdmReq) returns (ICreateUserOnSdmRes) {}
     rpc SyncUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
     rpc FetchAddressById (IFetchAddressByIdReq) returns (IFetchAddressByIdRes) {}
+}
+
+message IFetchUserByIdReq {
+    required string id = 1;
+}
+
+message IUserData {
+    required string id = 1;
+    required int32 sdmUserRef = 2;
+    required int32 cmsUserRef = 3;
+    required bool isGuest = 4;
+    required string name = 5;
+    required string cCode = 6;
+    required string phnNo = 7;
+    required bool phnVerified = 8;
+    required string email = 9;
+    required bool emailVerified = 10;
+    required int32 profileStep = 11;
+    required string socialKey = 12;
+    required string medium = 13;
+    required int32 createdAt = 14;
 }
 
 message ICreateUserOnSdmReq { }
@@ -44,4 +66,9 @@ message IFetchAddressByIdRes {
     required int32 cmsAddressRef = 3;
     required int32 areaId = 4;
     required int32 storeId = 5;
+    required int32 tag = 6;
+    required string bldgName = 7;
+    required string description = 8;
+    required string flatNum = 9;
+    required string addressType = 10;
 }

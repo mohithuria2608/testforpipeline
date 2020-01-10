@@ -37,6 +37,10 @@
             "url": "http://localhost",
             "port": 4008
         },
+        "payment": {
+            "url": "http://localhost",
+            "port": 4009
+        },
         "upload": {
             "url": "http://localhost",
             "port": 4010
@@ -83,13 +87,17 @@
             "server": "localhost:50059",
             "client": "127.0.0.1:50059"
         },
-        "upload": {
+        "payment": {
             "server": "localhost:50060",
             "client": "127.0.0.1:50060"
         },
-        "promotion": {
+        "upload": {
             "server": "localhost:50061",
             "client": "127.0.0.1:50061"
+        },
+        "promotion": {
+            "server": "localhost:50062",
+            "client": "127.0.0.1:50062"
         }
     },
     "kafka": {
@@ -140,6 +148,10 @@
                 "notification": {
                     "server": "/../../../proto/notification.proto",
                     "client": "/../../../../proto/notification.proto"
+                },
+                "payment": {
+                    "server": "/../../../proto/payment.proto",
+                    "client": "/../../../../proto/payment.proto"
                 },
                 "upload": {
                     "server": "/../../../proto/upload.proto",

@@ -166,6 +166,11 @@ export const DATABASE = {
             OTHER: "OTHER"
         },
 
+        ADDRESS: {
+            PICKUP: "PICKUP",
+            DELIVERY: "DELIVERY"
+        },
+
         DEEPLINK_REDIRECTION: {
             HOME: "HOME",
             CATEGORY: "CATEGORY",
@@ -181,7 +186,8 @@ export const DATABASE = {
 
     STATUS: {
         ORDER: {
-            CART: "CART"
+            CART: "CART",
+            PENDING: "PENDING",
         }
     }
 };

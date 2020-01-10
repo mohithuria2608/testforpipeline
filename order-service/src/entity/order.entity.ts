@@ -29,11 +29,15 @@ export class OrderClass extends BaseEntity {
 
     public orderSchema = Joi.object().keys({
         cartId: Joi.string().required().description("pk"),
+        cmsCartRef: Joi.number().required(),
         userId: Joi.string().required().description("sk"),
-        orderId: Joi.string().required().description("sk"),
+        orderId: Joi.string().required().description("sk, UAE-1"),
         sdmOrderRef: Joi.number().required(),
         cmsOrderRef: Joi.number().required(),
-        status: Joi.string().valid(Constant.DATABASE.STATUS.ORDER.CART).required(),
+        status: Joi.string().valid(
+            Constant.DATABASE.STATUS.ORDER.CART,
+            Constant.DATABASE.STATUS.ORDER.PENDING,
+        ).required(),
         updatedAt: Joi.number().required(),
         addres: Joi.object().keys({
             id: Joi.string(),
@@ -41,6 +45,17 @@ export class OrderClass extends BaseEntity {
             cmsAddressRef: Joi.number(),
             areaId: Joi.number(),
             storeId: Joi.number(),
+            bldgName: Joi.string(),
+            description: Joi.string(),
+            flatNum: Joi.string(),
+            tag: Joi.string().valid(
+                Constant.DATABASE.TYPE.TAG.HOME,
+                Constant.DATABASE.TYPE.TAG.OFFICE,
+                Constant.DATABASE.TYPE.TAG.HOTEL,
+                Constant.DATABASE.TYPE.TAG.OTHER),
+            addressType: Joi.string().valid(
+                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
+                Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
         }),
         items: Joi.array().items(
             Joi.object().keys({
@@ -171,6 +186,17 @@ export class OrderClass extends BaseEntity {
             })),
         subTotal: Joi.number(),
         total: Joi.number(),
+        tax: Joi.array().items(
+            Joi.object().keys({
+                name: Joi.string().required(),
+                value: Joi.string().required(),
+            })),
+        shipping: Joi.array().items(
+            Joi.object().keys({
+                name: Joi.string().required(),
+                code: Joi.string().required(),
+                value: Joi.string().required(),
+            })),
     })
 
     /**
@@ -184,7 +210,7 @@ export class OrderClass extends BaseEntity {
                 key: payload.id
             }
             let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
-            if (cart && cart.id) {
+            if (cart && cart.cartId) {
                 return cart
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
@@ -197,13 +223,21 @@ export class OrderClass extends BaseEntity {
     async createDefaultCart(payload: IOrderGrpcRequest.ICreateDefaultCart) {
         try {
             let dataToSave: ICartRequest.ICartData = {
-                id: payload.cartId,
+                cartId: payload.cartId,
+                cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
                 userId: payload.userId,
+                orderId: "UAE-1",
                 status: Constant.DATABASE.STATUS.ORDER.CART,
                 updatedAt: new Date().getTime(),
-                items: []
+                items: [],
+                addres: null,
+                subTotal: 0,
+                total: 0,
+                tax: [],
+                shipping: [],
+                coupon: []
             }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
@@ -255,16 +289,27 @@ export class OrderClass extends BaseEntity {
         payload: ICartRequest.IValidateCart) {
         try {
             let asCart = payload.items
-            let dataToSave = {
-                id: payload.cartId,
+            let dataToUpdate: ICartRequest.IUpdateCartData = {
+                cartId: payload.cartId,
+                cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
-                status: Constant.DATABASE.STATUS.ORDER.CART,
                 updatedAt: new Date().getTime(),
-                items: asCart
+                items: asCart,
+                subTotal: 0,
+                total: 0,
+                tax: [{
+                    name: "VAT",
+                    value: 0.26
+                }],
+                shipping: [{
+                    name: "VAT",
+                    code: "FREE",
+                    value: 7.5
+                }],
             }
             let putArg: IAerospike.Put = {
-                bins: dataToSave,
+                bins: dataToUpdate,
                 set: this.set,
                 key: payload.cartId,
                 update: true,
@@ -280,19 +325,30 @@ export class OrderClass extends BaseEntity {
     async createCartRes(
         // cmsCart: ICartCMSRequest.ICreateCartRes, 
         payload: ICartRequest.IValidateCart,
-        invalidMenu: boolean) {
+        invalidMenu: boolean, userData: IUserRequest.IUserData) {
         try {
             return {
-                id: payload.cartId,
+                cartId: payload.cartId,
+                userId: userData.id,
+                orderId: "UAE-1",
                 updatedAt: new Date().getTime(),
                 items: invalidMenu ? [] : payload.items.splice(0, 1),
                 notAvailable: payload.items,
+                addres: null,
                 subTotal: 30.23,
-                taxApplied: [],
-                couponApplied: [],
-                shippingMethods: [],
+                total: 30.23,
+                tax: [{
+                    name: "VAT",
+                    value: 0.26
+                }],
+                shipping: [{
+                    name: "VAT",
+                    code: "FREE",
+                    value: 7.5
+                }],
+                coupon: [],
                 paymentMethods: [],
-                is_price_changed: false,
+                isPriceChanged: false,
                 status: Constant.DATABASE.STATUS.ORDER.CART,
             }
         } catch (error) {
