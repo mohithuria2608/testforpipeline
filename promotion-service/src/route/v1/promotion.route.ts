@@ -27,6 +27,7 @@ export default (router: Router) => {
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
+                query: { page: Joi.number().min(1).required() }
             }),
             async (ctx) => {
                 try {

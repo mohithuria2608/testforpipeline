@@ -155,7 +155,7 @@ export class KafkaController {
             });
             return {}
         } catch (err) {
-            consolelog(process.cwd(), "syncUpsellProducts", err, false)
+            consolelog(process.cwd(), "createPromotion", err, false)
             return Promise.reject(err)
         }
     }

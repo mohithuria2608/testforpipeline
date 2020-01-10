@@ -30,10 +30,10 @@ export class PromotionService {
                 await promotionServiceValidator.createPromotionValidator(payload)
                 this.promotionClient.createPromotion(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(), "successfully synced upsell products on aerospike", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully created promotion", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing upsell products on aerospike", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in creating promotion on aerospike", JSON.stringify(err), false)
                         reject(err)
                     }
                 })
