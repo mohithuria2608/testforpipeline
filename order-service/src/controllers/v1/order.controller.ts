@@ -87,7 +87,6 @@ export class OrderController {
             if (getOrderHistory && getOrderHistory.length > 0) {
                 getOrderHistory.map(obj => { return obj['isPreviousOrder'] = true })
             }
-            let page = -1;
             let testlist = [
                 {
                     "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
@@ -1216,11 +1215,11 @@ export class OrderController {
                 }
             ]
 
-            let returnList = testlist.slice(((payload.page - 1) * 10), (payload.page * 10))
+            let returnList = testlist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {
                 "list": returnList,
-                "nextPage": testlist[((payload.page * 10) + 1)] ? payload.page + 1 : -1,
-                currentPage: payload.page
+                "nextPage": testlist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(parseInt(payload.page.toString()).toString()) + 1 : -1,
+                currentPage: parseInt(payload.page.toString())
             }
         } catch (err) {
             consolelog(process.cwd(), "orderHistory", err, false)
