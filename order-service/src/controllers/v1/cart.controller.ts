@@ -1,6 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { menuService } from '../../grpc/client'
+import { menuService, userService } from '../../grpc/client'
 import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
 
@@ -18,6 +18,7 @@ export class CartController {
      * */
     async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
+            auth.userData = await userService.fetchUserById({ id: auth.id })
             let invalidMenu = false
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
@@ -38,7 +39,7 @@ export class CartController {
 
             // let cmsValidatedCart = await ENTITY.OrderE.createCartOnCMS(payload, auth.userData)
             let saveCart = await ENTITY.OrderE.updateCart(payload)
-            let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu)
+            let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu, auth.userData)
             return res
         } catch (err) {
             consolelog(process.cwd(), "postCart", err, false)

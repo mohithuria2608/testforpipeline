@@ -1,0 +1,1 @@
+export { TransactionE } from './transaction.entity'

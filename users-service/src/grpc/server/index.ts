@@ -18,6 +18,16 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
+    fetchUserById: async (call: IUserGrpcRequest.IFetchUserByIdReq, callback) => {
+        try {
+            consolelog(process.cwd(), "fetchUserById", JSON.stringify(call.request), true)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.getById(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchAddressById", error, false)
+            callback(grpcSendError(error))
+        }
+    },
     syncUserOnSdm: async (call: IUserGrpcRequest.ISyncUserDataOnSdmReq, callback) => {
         try {
             consolelog(process.cwd(), "syncUserOnSdm", JSON.stringify(call.request), true)

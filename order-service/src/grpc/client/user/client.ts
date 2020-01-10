@@ -23,6 +23,21 @@ export class UserService {
         consolelog(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
+    async fetchUserById(payload: IUserGrpcRequest.IFetchUserById): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            await userServiceValidator.fetchUserById(payload)
+            this.userClient.fetchUserById({ id: payload.id }, (err, res) => {
+                if (!err) {
+                    consolelog(process.cwd(), "successfully fetched user by id", JSON.stringify(res), false)
+                    resolve(res)
+                } else {
+                    consolelog(process.cwd(), "Error in fetching user by id", JSON.stringify(err), false)
+                    reject(sendError(err))
+                }
+            })
+        })
+    }
+
     async fetchAddressById(payload: IUserGrpcRequest.IFetchAddressById): Promise<IUserGrpcRequest.IFetchAddressByIdRes> {
         return new Promise(async (resolve, reject) => {
             await userServiceValidator.fetchAddressById(payload)
