@@ -4,28 +4,6 @@ declare namespace IUserGrpcRequest {
         request: IUserRequest.IFetchUser
     }
 
-    interface ISyncUserDataOnSdmReq {
-        request: ISyncUserDataOnSdm
-    }
-
-    interface ISyncUserDataOnSdm {
-    }
-
-    interface ISyncUserDataOnCmsReq {
-        request: ISyncUserDataOnCms
-    }
-
-    interface ISyncUserDataOnCms {
-        action: ICommonRequest.IChange,
-        aerospikeId: string,
-        lastname: string
-        firstname: string
-        email: string
-        storeId: number
-        websiteId: number,
-        password: string
-    }
-
     interface IFetchAddressReq {
         request: IAddressRequest.IFetchAddress
     }

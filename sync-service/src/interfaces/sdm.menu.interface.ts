@@ -1,7 +1,3 @@
-declare namespace ISDMMenuRequest {
-
-    interface ISdmMenu {
-
-    }
-
+declare namespace ISdmMenuRequest {
+    interface ISdmMenu { }
 }

@@ -1,7 +1,3 @@
-declare namespace ICMSUserRequest {
-
-    interface ICmsUser {
-
-    }
-
+declare namespace ICmsUserRequest {
+    interface ICmsUser {}
 }

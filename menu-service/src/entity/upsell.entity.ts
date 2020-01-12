@@ -49,14 +49,14 @@ export class UpsellClass extends BaseEntity {
         }
     }
 
-    /**
-     * @method GRPC
-     * @param {string} data :data of the menu
-     */
-    async upsellProductsSync(payload: IMenuGrpcRequest.IUpsellProductsSync) {
-        let parsedPayload = JSON.parse(payload.data);
-        return this.post(parsedPayload.data);
-    }
+    // /**
+    //  * @method GRPC
+    //  * @param {string} data :data of the menu
+    //  */
+    // async upsellProductsSync(payload: IMenuGrpcRequest.IUpsellProductsSync) {
+    //     let parsedPayload = JSON.parse(payload.data);
+    //     return this.post(parsedPayload.data);
+    // }
 }
 
 export const UpsellE = new UpsellClass()

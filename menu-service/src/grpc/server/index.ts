@@ -28,36 +28,16 @@ server.addService(menuProto.MenuService.service, {
             callback(grpcSendError(error))
         }
     },
-    syncMenuOnCms: async (call: IMenuGrpcRequest.ICMSMenuSyncReq, callback) => {
+    sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "syncMenuOnCms", JSON.stringify(call.request), true)
-            let res = await ENTITY.MenuE.syncMenuWithCMS(call.request)
+            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
+            let res = await ENTITY.MenuE.syncFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "syncMenuOnCms", error, false)
+            consolelog(process.cwd(), "sync", error, false)
             callback(grpcSendError(error))
         }
     },
-    updateMenu: async (call: IMenuGrpcRequest.IUpdateMenuReq, callback) => {
-        try {
-            consolelog(process.cwd(), "updateMenu", JSON.stringify(call.request), true)
-            let res = await ENTITY.MenuE.updateMenuFromCMS(call.request);
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "updateMenu", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    upsellProductsSync: async (call: IMenuGrpcRequest.IUpsellProductsSyncReq, callback) => {
-        try {
-            consolelog(process.cwd(), "upsellProductsSync", JSON.stringify(call.request), true)
-            let res = await ENTITY.UpsellE.upsellProductsSync(call.request);
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "upsellProductsSync", error, false)
-            callback(grpcSendError(error))
-        }
-    }
 })
 
 server.bind(config.get("grpc.menu.server"), grpc.ServerCredentials.createInsecure())

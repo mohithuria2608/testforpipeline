@@ -10,9 +10,16 @@ export class CmsUserController {
      * @method POST
      * @param {any} data
      * */
-    async postUser(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
+    async postUser(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            ENTITY.UserE.syncUser(payload)
+            let change = {
+                set: ENTITY.UserE.set,
+                as: {
+                    create: true,
+                    argv: JSON.stringify(payload)
+                }
+            }
+            ENTITY.UserE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postUser", err, false)

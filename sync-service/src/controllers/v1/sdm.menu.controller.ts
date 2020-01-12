@@ -10,10 +10,10 @@ export class SdmMenuController {
      * @method POST
      * @param {any} data
      * */
-    async buildMenu(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
+    async partialProcessMenuFromSDM(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
             ENTITY.MenuE.fetchMenuFromSDM(payload)
-            return {};
+            return {}
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
             return Promise.reject(err)

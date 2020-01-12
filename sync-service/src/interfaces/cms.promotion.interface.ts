@@ -1,7 +1,3 @@
-declare namespace ICMSPromotionRequest {
-
-    interface ICmsPromotion {
-
-    }
-
+declare namespace ICmsPromotionRequest {
+    interface ICmsPromotion {}
 }

@@ -12,68 +12,28 @@ class CmsMenuConsumer extends BaseConsumer {
 
     handleMessage() {
         this.onMessage<any>().subscribe(
-            (message: IMenuGrpcRequest.ISyncToCMSMenuData) => {
+            (message: IKafkaRequest.IKafkaBody) => {
                 consolelog(process.cwd(), "consumer cms_menu", JSON.stringify(message), true)
-
-                switch (message.type) {
-                    case Constant.KAFKA.CMS.MENU.TYPE.SYNC: this.syncMenuToCMSGrpc(message); break;
-                    case Constant.KAFKA.CMS.MENU.TYPE.UPDATE: this.updateMenuFromCMSGrpc(message); break;
-                    case Constant.KAFKA.CMS.MENU.TYPE.UPSELL: this.upsellProductsSyncGrpc(message); break;
-                }
-
+                this.syncMenu(message);
                 return null;
             })
     }
 
-    private async syncMenuToCMSGrpc(message: IMenuGrpcRequest.ISyncToCMSMenuData) {
+    private async syncMenu(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await menuService.syncMenuOnCms(message)
+            let res = await menuService.sync(message)
             return res
         } catch (err) {
-            consolelog(process.cwd(), "syncMenuToCMSGrpc", err, false);
+            consolelog(process.cwd(), "syncMenu", err, false);
             if (message.count != 0) {
                 message.count = message.count - 1
-                kafkaController.syncToCmsMenu(message)
+                kafkaController.kafkaSync(message)
             }
             else
                 kafkaController.produceToFailureTopic(message)
             return {}
         }
     }
-
-    private async updateMenuFromCMSGrpc(message: IMenuGrpcRequest.ISyncToCMSMenuData) {
-        try {
-            let res = await menuService.updateMenu(message)
-            return res
-        } catch (err) {
-            consolelog(process.cwd(), "updateMenuFromCMSGrpc", err, false);
-            if (message.count != 0) {
-                message.count = message.count - 1
-                kafkaController.updateMenuFromCMS(message)
-            }
-            else
-                kafkaController.produceToFailureTopic(message)
-            return {}
-        }
-    }
-
-    private async upsellProductsSyncGrpc(message: IMenuGrpcRequest.IUsellProductsSync) {
-        try {
-            let res = await menuService.upsellProductsSync(message)
-            return res
-        } catch (err) {
-            consolelog(process.cwd(), "upsellProductsSyncGrpc", err, false);
-            if (message.count != 0) {
-                message.count = message.count - 1
-                kafkaController.syncUpsellProducts(message)
-            }
-            else
-                kafkaController.produceToFailureTopic(message)
-            return {}
-        }
-    }
-
-
 }
 
 

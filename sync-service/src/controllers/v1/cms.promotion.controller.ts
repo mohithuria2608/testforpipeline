@@ -11,27 +11,19 @@ export class CmsPromotionController {
      * @param {any} payload
      * @description creates and saves a new promotion from CMS to aerospike
      */
-    async postPromotion(headers: ICommonRequest.IHeaders, payload: ICMSPromotionRequest.ICmsPromotion, auth: ICommonRequest.AuthorizationObj) {
+    async postPromotion(headers: ICommonRequest.IHeaders, payload: ICmsPromotionRequest.ICmsPromotion, auth: ICommonRequest.AuthorizationObj) {
         try {
-            ENTITY.PromotionE.createPromotion(payload)
+            let change = {
+                set: ENTITY.PromotionE.set,
+                as: {
+                    create: true,
+                    argv: JSON.stringify(payload)
+                }
+            }
+            ENTITY.PromotionE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postPromotion", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    /**
-     * @method POST
-     * @description syncs upsell products
-     * @param {any} data
-    */
-    async syncUpsellProducts(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
-        try {
-            ENTITY.MenuE.syncUpsellProducts(payload)
-            return {}
-        } catch (err) {
-            consolelog(process.cwd(), "syncUpsellProducts", err, false)
             return Promise.reject(err)
         }
     }

@@ -4,16 +4,16 @@ import { consolelog } from "../../utils"
 import { userService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-class SdmUserConsumer extends BaseConsumer {
+class AsUserConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_USER, 'client');
+        super(Constant.KAFKA_TOPIC.CMS_USER, 'client');
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer sdm_user", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_user", JSON.stringify(message), true)
                 this.syncUser(message);
                 return null
             })
@@ -37,4 +37,4 @@ class SdmUserConsumer extends BaseConsumer {
 }
 
 
-export const sdm_userConsumerE = new SdmUserConsumer();
+export const as_userConsumerE = new AsUserConsumer();

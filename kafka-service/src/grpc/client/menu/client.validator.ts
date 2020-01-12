@@ -8,20 +8,28 @@ export class MenuServiceValidator {
     constructor() {
     }
 
-    async syncOnCmsValidator(data: IMenuGrpcRequest.ISyncToCMSMenuData) {
+    async syncValidator(data: IKafkaRequest.IKafkaBody) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    action: Joi.object().keys({
+                    set: Joi.string().required(),
+                    type: Joi.string().required(),
+                    as: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
+                        argv: Joi.string()
                     }),
-                    type: Joi.string(),
-                    count: Joi.number().required(),
-                    data: Joi.string().required()
+                    cms: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
+                    sdm: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
+                    count: Joi.number().required()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -32,57 +40,6 @@ export class MenuServiceValidator {
             }
         })
     }
-
-    async updateMenuValidator(data: IMenuGrpcRequest.IUpdateMenuFromCMS) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    action: Joi.object().keys({
-                        create: Joi.boolean(),
-                        update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
-                    }),
-                    type: Joi.string(),
-                    count: Joi.number().required(),
-                    data: Joi.string().required()
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(`Invalid Info- ${error.message}`)
-                resolve({})
-            } catch (error) {
-                reject(error.message)
-            }
-        })
-    }
-
-    async upsellProductsSyncValidator(data: IMenuGrpcRequest.IUsellProductsSync) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    action: Joi.object().keys({
-                        create: Joi.boolean(),
-                        update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
-                    }),
-                    type: Joi.string(),
-                    count: Joi.number().required(),
-                    data: Joi.string().required()
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(`Invalid Info- ${error.message}`)
-                resolve({})
-            } catch (error) {
-                reject(error.message)
-            }
-        })
-    }
-
 }
 
 

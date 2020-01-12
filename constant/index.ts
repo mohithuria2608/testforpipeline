@@ -1,3 +1,11 @@
+
+export enum SET_NAME {
+    USER = "user",
+    MENU = "menu",
+    UPSELL = "upsell",
+    PROMOTION = "promotion"
+};
+
 export const UDF = {
     USER: {
         check_phone_exist: "check_phone_exist",
@@ -8,13 +16,20 @@ export const UDF = {
     }
 };
 
+
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
-    NEW_MENU = "new_menu",
+    
+    SDM_MENU = "sdm_menu",
+    CMS_MENU = "cms_menu",
+    AS_MENU = "as_menu",
+    AS_UPSELL = "as_upsell",
+
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
-    CMS_MENU = "cms_menu",
-    CMS_PROMOTION = 'cms_promotion'
+    AS_USER = "as_user",
+
+    AS_PROMOTION = 'as_promotion'
 };
 
 export enum MIDDLEWARE {
@@ -45,13 +60,25 @@ export const KAFKA = {
             MAX_RETRY: {
                 CREATE: 5,
                 UPDATE: 5,
-            },
+            }
         },
         MENU: {
             MAX_RETRY: {
                 CREATE: 5,
                 UPDATE: 5,
-            },
+            }
+        },
+        PROMOTION: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
+        },
+        UPSELL: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
         }
     },
     CMS: {
@@ -59,17 +86,50 @@ export const KAFKA = {
             MAX_RETRY: {
                 CREATE: 5,
                 UPDATE: 5,
-            },
+            }
         },
         MENU: {
             MAX_RETRY: {
                 CREATE: 5,
                 UPDATE: 5,
-            },
-            TYPE: {
-                SYNC: 'sync',
-                UPDATE: 'update',
-                UPSELL: 'upsell'
+            }
+        },
+        PROMOTION: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
+        },
+        UPSELL: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
+        }
+    },
+    AS: {
+        USER: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
+        },
+        MENU: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
+        },
+        PROMOTION: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
+            }
+        },
+        UPSELL: {
+            MAX_RETRY: {
+                CREATE: 5,
+                UPDATE: 5,
             }
         }
     }
@@ -324,7 +384,7 @@ export const STATUS_MSG = {
                 message: "Cart not found"
             },
 
-            STORE_NOT_FOUND:{
+            STORE_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
                 message: 'Store not found',

@@ -23,80 +23,19 @@ export class KafkaService {
         consolelog(process.cwd(), 'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
     }
 
-    // @todo-abhishek 
-    async syncToCmsMenu(payload: IKafkaGrpcRequest.ISyncToSDMMenuData): Promise<{}> {
+    async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await kafkaServiceValidator.syncToCmsMenuValidator(payload)
-                this.kafkaClient.syncToCmsMenu(payload, (err, res) => {
+                await kafkaServiceValidator.kafkaValidator(payload)
+                this.kafkaClient.kafkaSync(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(), "successfully produced menu on kafka for syncing to CMS", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully produced menu data on kafka for syncing", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in producing menu on kafka for syncing to CMS", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in producing menu data on kafka  for syncing", JSON.stringify(err), false)
                         reject(err)
                     }
-                });
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    // @todo-abhishek 
-    async updateMenuFromCMS(payload: IKafkaGrpcRequest.IUpdateMenuFromCMS): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await kafkaServiceValidator.updateMenuFromCMSValidator(payload)
-                this.kafkaClient.updateMenuFromCMS(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully produced menu on kafka for syncing to CMS", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in producing menu on kafka for syncing to CMS", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                });
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    /** syncs upsell products from cms to aerospike */
-    async syncUpsellProducts(payload: IKafkaGrpcRequest.ISyncUpsellProducts): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await kafkaServiceValidator.syncUpsellProductsValidator(payload)
-                this.kafkaClient.syncUpsellProducts(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully produced upsell products on kafka for syncing to aerospike", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in producing upsell products on kafka for syncing to aerospike", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                });
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    /** creates new promotion on aerospike from CMS */
-    async createPromotion(payload: IKafkaGrpcRequest.ICreatePromotion): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await kafkaServiceValidator.createPromotionValidator(payload)
-                this.kafkaClient.createPromotion(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully created promotion on kafka", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in creating promotion on kafkaIs", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                });
+                })
             } catch (error) {
                 reject(error)
             }

@@ -1,6 +1,9 @@
-import * as Constant from '../constant'
-import { consolelog } from '../utils'
-import { authService, locationService, kafkaService, orderService } from '../grpc/client'
+import * as Constant from '../constant';
+import { consolelog } from '../utils';
+import { authService, locationService, orderService, kafkaService } from '../grpc/client';
+import * as CMS from "../cms";
+import * as SDM from '../sdm';
+import { Aerospike } from '../databases/aerospike'
 
 export class BaseEntity {
     public set: SetNames;
@@ -44,54 +47,73 @@ export class BaseEntity {
         }
     }
 
-    async syncUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
+    async syncToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            orderService.updateCartTTL({ cartId: user.cartId })
-            // this.syncToSdmUser(user, change)
-            this.syncToCmsUser(user, change)
+            kafkaService.kafkaSync(payload)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncUser", error, false)
+            consolelog(process.cwd(), "syncToKafka", error, false)
             return Promise.reject(error)
         }
     }
 
-    private async syncToSdmUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
+    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let sdmdata: IKafkaGrpcRequest.ISyncToSDMUserData = {
-                action: change,
-                aerospikeId: user.id,
-                lastname: user.cCode + user.phnNo,
-                firstname: user.name,
-                email: user.email,
-                storeId: 1,
-                websiteId: 1,
-                password: user.password
-            }
-            kafkaService.syncToSdmUser(sdmdata)
+            this.createUserOnSdm(payload)
+            this.createUserOnCms(payload)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncToSdmUser", error, false)
+            consolelog(process.cwd(), "syncFromKafka", error, false)
             return Promise.reject(error)
         }
     }
 
-    private async syncToCmsUser(user: IUserRequest.IUserData, userChange: ICommonRequest.IChange) {
+    async createUserOnSdm(payload) {
         try {
-            let cmsdata: IKafkaGrpcRequest.ISyncToCMSUserData = {
-                action: userChange,
-                aerospikeId: user.id,
-                lastname: user.cCode + user.phnNo,
-                firstname: user.name,
-                email: user.email,
-                storeId: 1,
-                websiteId: 1,
-                password: user.password
+            const payloadForSdm = {
             }
-            kafkaService.syncToCmsUser(cmsdata)
+            let res = await SDM.UserSDME.createCustomer(payloadForSdm)
+            let putArg: IAerospike.Put = {
+                bins: { sdmUserRef: parseInt(res.id.toString()) },
+                set: this.set,
+                key: "1",// payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createUserOnCms(payload) {
+        try {
+            const payloadForCms = {
+                customer: {
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    email: payload.email,
+                    store_id: payload.storeId,
+                    website_id: payload.websiteId,
+                    addresses: []
+                },
+                password: payload.password
+            }
+            let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
+
+            consolelog(process.cwd(), "resresresresresres", res, false)
+
+            let putArg: IAerospike.Put = {
+                bins: { cmsUserRef: parseInt(res.id.toString()) },
+                set: this.set,
+                key: payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncToCmsUser", error, false)
+            consolelog(process.cwd(), "createUserOnCms", error, false)
             return Promise.reject(error)
         }
     }

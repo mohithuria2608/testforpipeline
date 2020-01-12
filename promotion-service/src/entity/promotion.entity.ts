@@ -55,14 +55,14 @@ export class PromotionClass extends BaseEntity {
         }
     }
 
-    /**
-     * @method GRPC
-     * @param {string} data :data of the promotion
-     */
-    async createPromotion(payload: IPromotionGrpcRequest.ICreatePromotion) {
-        let parsedPayload = JSON.parse(payload.data);
-        return this.post(parsedPayload.data);
-    }
+    // /**
+    //  * @method GRPC
+    //  * @param {string} data :data of the promotion
+    //  */
+    // async createPromotion(payload: IPromotionGrpcRequest.ICreatePromotion) {
+    //     let parsedPayload = JSON.parse(payload.data);
+    //     return this.post(parsedPayload.data);
+    // }
 }
 
 export const PromotionE = new PromotionClass()

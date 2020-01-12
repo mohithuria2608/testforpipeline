@@ -46,7 +46,9 @@ declare namespace IUserRequest {
     }
 
     interface IUserUpdate {
-        isGuest?: number
+        sdmUserRef?: number,
+        cmsUserRef?: number,
+        isGuest?: number,
         name?: string,
         cCode?: string,
         phnNo?: string,
@@ -57,14 +59,12 @@ declare namespace IUserRequest {
         socialKey?: string,
         medium?: string,
         createdAt?: number,
-        address?: {
-            [deviceid: string]: IAddressRequest.IAddressModel
-        },
         session?: {
             [deviceid: string]: ISession
         },
         removeUserId?: string,
         cartId?: string,
+        password?: string,
     }
 
     interface ISessionUpdate {
@@ -114,4 +114,21 @@ declare namespace IUserRequest {
     interface IFetchUser {
         userId: string
     }
+
+    interface ICheckUserExistenceOnLegacy {
+        checkCms: boolean,
+        checkSdm: boolean,
+        checkEmail: boolean,
+        checkPhone: boolean,
+        checkCombination: boolean,
+        email: string,
+        cCode: string,
+        phnNo: string,
+        isGuest: boolean
+    }
+
+    interface ICreateUserOnLegacy {
+
+    }
+
 }

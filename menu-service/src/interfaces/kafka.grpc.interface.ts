@@ -1,4 +1,5 @@
 declare namespace IKafkaGrpcRequest {
+    
     interface IKafkaReq {
         request: IKafkaBody
     }

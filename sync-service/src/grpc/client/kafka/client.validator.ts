@@ -8,87 +8,27 @@ export class KafkaServiceValidator {
     constructor() {
     }
 
-    async syncToCmsMenuValidator(data: IKafkaGrpcRequest.ISyncToSDMMenuData) {
+    async kafkaValidator(data: IKafkaGrpcRequest.IKafkaBody) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    data: Joi.string().required(),
-                    action: Joi.object().keys({
+                    set: Joi.string().required(),
+                    as: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
+                        argv: Joi.string()
                     }),
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(`Invalid Info- ${error.message}`)
-                resolve({})
-            } catch (error) {
-                reject(error.message)
-            }
-        })
-    }
-
-    async updateMenuFromCMSValidator(data: IKafkaGrpcRequest.IUpdateMenuFromCMS) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    data: Joi.string().required(),
-                    action: Joi.object().keys({
+                    cms: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
+                        argv: Joi.string()
                     }),
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(`Invalid Info- ${error.message}`)
-                resolve({})
-            } catch (error) {
-                reject(error.message)
-            }
-        })
-    }
-
-    async syncUpsellProductsValidator(data: IKafkaGrpcRequest.IUpdateMenuFromCMS) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    data: Joi.string().required(),
-                    action: Joi.object().keys({
+                    sdm: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
+                        argv: Joi.string()
                     }),
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(`Invalid Info- ${error.message}`)
-                resolve({})
-            } catch (error) {
-                reject(error.message)
-            }
-        })
-    }
-
-    async createPromotionValidator(data: IKafkaGrpcRequest.ICreatePromotion) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    data: Joi.string().required(),
-                    action: Joi.object().keys({
-                        create: Joi.boolean(),
-                        update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
-                    }),
+                    count: Joi.number()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

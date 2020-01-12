@@ -1,3 +1,6 @@
 declare type SetNames =
-    'user'
+    'user' |
+    'menu' |
+    'upsell' |
+    'promotion'
 

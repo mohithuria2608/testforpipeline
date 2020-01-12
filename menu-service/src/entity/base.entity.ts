@@ -25,4 +25,14 @@ export class BaseEntity {
         startTime: Joi.any(),
         endTime: Joi.any(),
     });
+
+    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncFromKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
 }

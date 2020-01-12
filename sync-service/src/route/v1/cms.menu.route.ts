@@ -22,7 +22,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ICMSMenuRequest.ICmsMenu = ctx.request.body;
+                    let payload: ICmsMenuRequest.ICmsMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cmsMenuController.postMenu(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
@@ -47,9 +47,9 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ICMSMenuRequest.ICmsMenu = ctx.request.body;
+                    let payload: ICmsMenuRequest.ICmsMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await cmsMenuController.syncUpsellProducts(headers, payload, auth);
+                    let res = await cmsMenuController.postUpsell(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

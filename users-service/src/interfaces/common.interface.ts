@@ -35,12 +35,4 @@ declare namespace ICommonRequest {
         type: string,
         message: string
     }
-
-    interface IChange {
-        create?: boolean,
-        update?: boolean,
-        name?: boolean,
-        email?: boolean,
-        phone?: boolean
-    }
 }

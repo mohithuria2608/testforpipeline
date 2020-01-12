@@ -18,13 +18,11 @@ const notificationProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(notificationProto.NotificationService.service, {
-    syncUserOnSdm: async (call, callback) => {
+    Func1: async (call, callback) => {
         try {
-            // consolelog(process.cwd(), "syncUserOnSdm", JSON.stringify(call.request), true)
-            // let res: {} = await ENTITY.UserE.syncUserOnSdm(call.request)
-            // callback(null, res)
+            
         } catch (error) {
-            consolelog(process.cwd(), "syncUserOnSdm", error, false)
+            consolelog(process.cwd(), "Func1", error, false)
             callback(grpcSendError(error))
         }
     },

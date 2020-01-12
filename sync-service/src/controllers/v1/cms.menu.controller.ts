@@ -10,9 +10,16 @@ export class CmsMenuController {
      * @method POST
      * @param {any} data
      */
-    async postMenu(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
+    async postMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            ENTITY.MenuE.fetchMenuFromCMS(payload)
+            let change = {
+                set: ENTITY.MenuE.set,
+                as: {
+                    create: true,
+                    argv: JSON.stringify(payload)
+                }
+            }
+            ENTITY.MenuE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
@@ -25,9 +32,16 @@ export class CmsMenuController {
      * @description syncs upsell products
      * @param {any} data
     */
-    async syncUpsellProducts(headers: ICommonRequest.IHeaders, payload: ICMSMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
+    async postUpsell(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            ENTITY.MenuE.syncUpsellProducts(payload)
+            let change = {
+                set: ENTITY.UpsellE.set,
+                as: {
+                    create: true,
+                    argv: JSON.stringify(payload)
+                }
+            }
+            ENTITY.UpsellE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "syncUpsellProducts", err, false)

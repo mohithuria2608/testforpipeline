@@ -1,7 +1,3 @@
-declare namespace ICMSMenuRequest {
-
-    interface ICmsMenu {
-
-    }
-
+declare namespace ICmsMenuRequest {
+    interface ICmsMenu { }
 }

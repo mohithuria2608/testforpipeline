@@ -8,20 +8,28 @@ export class PromotionServiceValidator {
     constructor() {
     }
 
-    async createPromotionValidator(data: IPromotionGrpcRequest.ICreatePromotion) {
+    async syncValidator(data: IKafkaRequest.IKafkaBody) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    action: Joi.object().keys({
+                    set: Joi.string().required(),
+                    type: Joi.string().required(),
+                    as: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
-                        name: Joi.boolean(),
-                        email: Joi.boolean(),
-                        phone: Joi.boolean(),
+                        argv: Joi.string()
                     }),
-                    type: Joi.string(),
-                    count: Joi.number().required(),
-                    data: Joi.string().required()
+                    cms: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
+                    sdm: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
+                    count: Joi.number().required()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -32,7 +40,6 @@ export class PromotionServiceValidator {
             }
         })
     }
-
 }
 
 
