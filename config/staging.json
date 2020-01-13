@@ -168,5 +168,13 @@
         "product": "https://bloobstorage.blob.core.windows.net/americana/products/"
     },
     "cryptoSecret": "d6F3Efeq",
-    "jwtSecret": "cgfhfj"
+    "jwtSecret": "cgfhfj",
+    "sms": {
+        "host": "smpp.rmlconnect.net",
+        "port": "2345",
+        "userName": "Adigital",
+        "password": "vSqKeZdc",
+        "endPoint": "/bulksms/bulksms",
+        "source": ""
+    }
 }
