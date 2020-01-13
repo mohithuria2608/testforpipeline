@@ -54,10 +54,14 @@ class KafkaProducer {
         this.producer.on('ready', () => {
             this.producer.createTopics([
                 Constant.KAFKA_TOPIC.FAIL_Q,
-                Constant.KAFKA_TOPIC.NEW_MENU,
+                Constant.KAFKA_TOPIC.SDM_MENU,
+                Constant.KAFKA_TOPIC.CMS_MENU,
+                Constant.KAFKA_TOPIC.AS_MENU,
+                Constant.KAFKA_TOPIC.AS_UPSELL,
                 Constant.KAFKA_TOPIC.SDM_USER,
                 Constant.KAFKA_TOPIC.CMS_USER,
-                Constant.KAFKA_TOPIC.CMS_PROMOTION,
+                Constant.KAFKA_TOPIC.AS_USER,
+                Constant.KAFKA_TOPIC.AS_PROMOTION,
             ], (err, data) => {
                 if (err) {
                     consolelog(process.cwd(), 'Err in creating topics', err, false);

@@ -15,7 +15,8 @@ declare namespace ICommonRequest {
         deviceid: string,
         devicetype: string,
         tokenType: string,
-        id?: string,
+        id: string,
+        isGuest: number
     }
 
     interface IPagination {
@@ -38,13 +39,5 @@ declare namespace ICommonRequest {
         httpCode: number,
         type: string,
         message: string
-    }
-
-    interface IChange {
-        create?: boolean,
-        update?: boolean,
-        name?: boolean,
-        email?: boolean,
-        phone?: boolean
     }
 }

@@ -23,56 +23,16 @@ export class MenuService {
         consolelog(process.cwd(), 'GRPC connection established menu-service', config.get("grpc.menu.client"), true)
     }
 
-    async syncMenuOnCms(payload: IMenuGrpcRequest.ISyncToCMSMenuData): Promise<{}> {
+    async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await menuServiceValidator.syncOnCmsValidator(payload)
-                this.menuClient.syncMenuOnCms(payload, (err, res) => {
+                await menuServiceValidator.syncValidator(payload)
+                this.menuClient.sync(payload, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully synced menu on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in syncing menu on cms", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    /** Updates the fetched output JSON from CMS to Aerospike  */
-    async updateMenu(payload: IMenuGrpcRequest.ISyncToCMSMenuData): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await menuServiceValidator.updateMenuValidator(payload)
-                this.menuClient.updateMenu(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully synced menu on aerospike", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in syncing menu on aerospike", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    /** Updates the upsell products list in aerospike */
-    async upsellProductsSync(payload: IMenuGrpcRequest.IUsellProductsSync): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await menuServiceValidator.upsellProductsSyncValidator(payload)
-                this.menuClient.upsellProductsSync(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully synced upsell products on aerospike", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in syncing upsell products on aerospike", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

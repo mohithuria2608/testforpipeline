@@ -2,10 +2,39 @@ syntax = "proto3";
 import "google/protobuf/any.proto";
 
 service UserService {
+    rpc Sync (IKafkaReq) returns (IKafkaRes) {}
     rpc FetchUser (IFetchUserReq) returns (IUserData) {}
-    rpc SyncUserOnSdm (ICreateUserOnSdmReq) returns (ICreateUserOnSdmRes) {}
-    rpc SyncUserOnCms (ICreateUserOnCmsReq) returns (ICreateUserOnCmsRes) {}
     rpc FetchAddress (IFetchAddressReq) returns (IFetchAddressRes) {}
+}
+
+message IKafkaReq {
+    required string set = 1;
+    required IAerospike as = 2;
+    required ICms cms = 3;
+    required ISdm sdm = 4;
+    required int32 count = 5;
+}
+
+message IAerospike {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message ICms {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message ISdm {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message IKafkaRes {
+    required string data = 1;
 }
 
 message IFetchUserReq {
@@ -28,32 +57,6 @@ message IUserData {
     required string medium = 13;
     required int32 createdAt = 14;
 }
-
-message ICreateUserOnSdmReq { }
-
-message ICreateUserOnSdmRes { }
-
-message ICreateUserOnCmsReq {
-    required IAction action = 1;
-    required string aerospikeId = 2;
-    required string lastname = 3;
-    required string firstname = 4;
-    required string email = 5;
-    required int32 storeId = 6;
-    required int32 websiteId = 7;
-    required string password = 8;
-    required int32 count = 9;
-}
-
-message IAction {
-    optional bool create = 1;
-    optional bool update = 2;
-    optional bool name = 3;
-    optional bool email = 4;
-    optional bool phone = 5;
-}
-
-message ICreateUserOnCmsRes { }
 
 message IFetchAddressReq {
     required string userId = 1;

@@ -33,9 +33,21 @@
             "url": "http://localhost",
             "port": 4007
         },
-        "upload": {
+        "notification": {
+            "url": "http://localhost",
+            "port": 4008
+        },
+        "payment": {
+            "url": "http://localhost",
+            "port": 4009
+        },
+        "promotion": {
             "url": "http://localhost",
             "port": 4010
+        },
+        "upload": {
+            "url": "http://localhost",
+            "port": 4011
         }
     },
     "grpc": {
@@ -53,27 +65,39 @@
         },
         "order": {
             "server": "0.0.0.0:50054",
-            "client": "20.46.147.215:50054"
+            "client": "20.46.147.64:50054"
         },
         "sync": {
             "server": "0.0.0.0:50055",
-            "client": "20.46.147.215:50055"
+            "client": "20.46.151.29:50055"
         },
         "deeplink": {
-            "server": "localhost:50056",
-            "client": "127.0.0.1:50056"
+            "server": "0.0.0.0:50056",
+            "client": "20.46.151.27:50056"
         },
         "kafka": {
-            "server": "localhost:50057",
-            "client": "127.0.0.1:50057"
+            "server": "0.0.0.0:50057",
+            "client": "20.46.151.28:50057"
         },
         "location": {
-            "server": "localhost:50058",
-            "client": "127.0.0.1:50058"
+            "server": "0.0.0.0:50058",
+            "client": "20.46.151.30:50058"
+        },
+        "notification": {
+            "server": "0.0.0.0:50059",
+            "client": "127.0.0.1:50059"
+        },
+        "payment": {
+            "server": "0.0.0.0:50060",
+            "client": "20.46.147.215:50060"
+        },
+        "promotion": {
+            "server": "localhost:50061",
+            "client": "127.0.0.1:50061"
         },
         "upload": {
-            "server": "localhost:50060",
-            "client": "127.0.0.1:50060"
+            "server": "0.0.0.0:50062",
+            "client": "20.46.147.215:50062"
         }
     },
     "kafka": {
@@ -84,7 +108,7 @@
         "username": "aerospikeusr",
         "password": "GM2nGDQkN5yMdPZs"
     },
-    "cms":{
+    "cms": {
         "auth": {
             "username": "shashi.bhushan@appinventiv.com",
             "password": "shashi@123"
@@ -113,16 +137,35 @@
                     "server": "/../../../proto/location.proto",
                     "client": "/../../../../proto/location.proto"
                 },
+                "order": {
+                    "server": "/../../../proto/order.proto",
+                    "client": "/../../../../proto/order.proto"
+                },
                 "sync": {
                     "server": "/../../../proto/sync.proto",
                     "client": "/../../../../proto/sync.proto"
                 },
+                "notification": {
+                    "server": "/../../../proto/notification.proto",
+                    "client": "/../../../../proto/notification.proto"
+                },
+                "payment": {
+                    "server": "/../../../proto/payment.proto",
+                    "client": "/../../../../proto/payment.proto"
+                },
                 "upload": {
                     "server": "/../../../proto/upload.proto",
                     "client": "/../../../../proto/upload.proto"
+                },
+                "promotion": {
+                    "server": "/../../../proto/promotion.proto",
+                    "client": "/../../../../proto/promotion.proto"
                 }
             }
         }
+    },
+    "blobBaseUrl": {
+        "product": "https://bloobstorage.blob.core.windows.net/americana/products/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj"

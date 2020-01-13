@@ -231,7 +231,7 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid)
         userObj['language'] = userObj['session'][deviceid].language
 
         delete userObj['session']
-        delete userObj['removeUserId']
+        delete userObj['mergeUserId']
         delete userObj['password']
         delete userObj['sdmUserRef']
         delete userObj['cmsUserRef']

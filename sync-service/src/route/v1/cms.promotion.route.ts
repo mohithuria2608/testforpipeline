@@ -22,7 +22,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ICMSMenuRequest.ICmsMenu = ctx.request.body;
+                    let payload: ICmsPromotionRequest.ICmsPromotion = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cmsPromotionController.postPromotion(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)

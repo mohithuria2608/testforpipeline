@@ -18,11 +18,12 @@ declare namespace IUserRequest {
         session: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string,
+        mergeUserId?: string,
         cartId: string,
         password: string,
     }
     interface ISession {
+        isGuest: number,
         otp: number,
         otpExpAt: number,
         otpVerified: number,
@@ -35,6 +36,7 @@ declare namespace IUserRequest {
         deviceid: string,
         isLogin: number,
         createdAt: number,
+        updatedAt: number,
     }
     interface IPhone {
         cCode: string,
@@ -46,7 +48,9 @@ declare namespace IUserRequest {
     }
 
     interface IUserUpdate {
-        isGuest?: number
+        sdmUserRef?: number,
+        cmsUserRef?: number,
+        isGuest?: number,
         name?: string,
         cCode?: string,
         phnNo?: string,
@@ -57,17 +61,16 @@ declare namespace IUserRequest {
         socialKey?: string,
         medium?: string,
         createdAt?: number,
-        address?: {
-            [deviceid: string]: IAddressRequest.IAddressModel
-        },
         session?: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string,
+        mergeUserId?: string,
         cartId?: string,
+        password?: string,
     }
 
     interface ISessionUpdate {
+        isGuest?: number,
         otp?: number,
         otpExpAt?: number,
         otpVerified?: number,
@@ -80,6 +83,7 @@ declare namespace IUserRequest {
         deviceid?: string,
         isLogin?: number,
         createdAt?: number,
+        updatedAt?: number,
     }
 
     interface IRefreshToken {
@@ -89,7 +93,8 @@ declare namespace IUserRequest {
     }
 
     interface IAuthVerifyOtp extends IPhone {
-        otp: number
+        otp: number,
+        isGuest: number
     }
     interface IAuthSocial extends IEmail {
         socialKey: string,
@@ -114,4 +119,13 @@ declare namespace IUserRequest {
     interface IFetchUser {
         userId: string
     }
+
+    interface ICheckUserOnCms {
+
+    }
+
+    interface ICheckUserOnSdm {
+
+    }
+
 }

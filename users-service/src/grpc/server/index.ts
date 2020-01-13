@@ -28,23 +28,13 @@ server.addService(userProto.UserService.service, {
             callback(grpcSendError(error))
         }
     },
-    syncUserOnSdm: async (call: IUserGrpcRequest.ISyncUserDataOnSdmReq, callback) => {
+    sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "syncUserOnSdm", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.UserE.syncUserOnSdm(call.request)
+            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.syncFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "syncUserOnSdm", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    syncUserOnCms: async (call: IUserGrpcRequest.ISyncUserDataOnCmsReq, callback) => {
-        try {
-            consolelog(process.cwd(), "syncUserOnCms", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.UserE.syncUserOnCms(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "syncUserOnCms", error, false)
+            consolelog(process.cwd(), "sync", error, false)
             callback(grpcSendError(error))
         }
     },

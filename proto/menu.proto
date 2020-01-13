@@ -1,37 +1,38 @@
 syntax = "proto3";
 
 service MenuService {
+    rpc Sync (IKafkaReq) returns (IKafkaRes) {}
     rpc FetchMenu (IFetchMenu) returns (IMenu) {}
-    rpc syncMenuOnCms (ISyncMenuOnCmsReq) returns (ISyncMenuOnCmsRes) {}
-    rpc updateMenu (IUpdateMenuReq) returns (IUpdateMenuRes) {}
-    rpc upsellProductsSync (IUpsellMenuSyncReq) returns (IUpsellMenuSyncRes) {}
-
 }
 
-message ISyncMenuOnCmsReq {
-    required IAction action = 1;
-    required string data = 2;
+message IKafkaReq {
+    required string set = 1;
+    required IAerospike as = 2;
+    required ICms cms = 3;
+    required ISdm sdm = 4;
+    required int32 count = 5;
 }
-message ISyncMenuOnCmsRes {}
 
-message IUpdateMenuReq {
-    required IAction action = 1;
-    required string data = 2;
+message IAerospike {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
 }
-message IUpdateMenuRes {}
 
-message IUpsellMenuSyncReq {
-    required IAction action = 1;
-    required string data = 2;
+message ICms {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
 }
-message IUpsellMenuSyncRes {}
 
-message IAction {
-    optional bool create = 1;
-    optional bool update = 2;
-    optional bool name = 3;
-    optional bool email = 4;
-    optional bool phone = 5;
+message ISdm {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message IKafkaRes {
+    required string data = 1;
 }
 
 message IFetchMenu {

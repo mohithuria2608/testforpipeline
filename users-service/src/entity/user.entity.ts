@@ -3,9 +3,10 @@ import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog, cryptData } from '../utils'
-import { Aerospike } from '../databases/aerospike'
-import * as CMS from "../cms"
+import * as CMS from "../cms";
 import * as SDM from '../sdm';
+import { Aerospike } from '../databases/aerospike'
+
 
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
@@ -57,14 +58,16 @@ export class UserEntity extends BaseEntity {
         osversion: Joi.string().trim().required(),
         deviceid: Joi.string().trim().required(),
         isLogin: Joi.number().required(),
+        isGuest: Joi.number().valid(0, 1).required(),
         createdAt: Joi.number().required(),
+        updatedAt: Joi.number().required(),
     });
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
         sdmUserRef: Joi.number().required().description("sk"),
         cmsUserRef: Joi.number().required().description("sk"),
-        isGuest: Joi.number().valid(0, 1),
+        isGuest: Joi.number().valid(0, 1).required(),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
@@ -79,9 +82,10 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        removeUserId: Joi.string(),
+        mergeUserId: Joi.string(),
         password: Joi.string(),
         session: Joi.any(),
+        cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
     });
 
@@ -124,14 +128,13 @@ export class UserEntity extends BaseEntity {
             medium: "",
             createdAt: 0,
             session: {},
-            removeUserId: "",
+            mergeUserId: "",
             cartId: await cryptData(headers.deviceid),
             password: 'Password1'//await cryptData(id)
         } : {}
         if (userInfo.isGuest != undefined) {
-            if (userInfo.isGuest == 1) {
+            if (userInfo.isGuest == 1)
                 user['isGuest'] = userInfo.isGuest
-            }
         }
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
@@ -155,8 +158,8 @@ export class UserEntity extends BaseEntity {
             user['createdAt'] = userInfo.createdAt
         else
             user['createdAt'] = new Date().getTime()
-        if (userInfo.removeUserId != undefined)
-            user['removeUserId'] = userInfo.removeUserId
+        if (userInfo.mergeUserId != undefined)
+            user['mergeUserId'] = userInfo.mergeUserId
         return user
     }
 
@@ -169,6 +172,7 @@ export class UserEntity extends BaseEntity {
             otpExpAt: 0,
             otpVerified: 0,
             isLogin: 0,
+            isGuest: 0,
             deviceid: headers.deviceid,
             language: headers.language,
             country: headers.country,
@@ -177,7 +181,12 @@ export class UserEntity extends BaseEntity {
             devicetype: headers.devicetype,
             osversion: headers.osversion,
             createdAt: new Date().getTime(),
+            updatedAt: new Date().getTime(),
         } : {}
+        if (sessionInfo.isGuest != undefined) {
+            if (sessionInfo.isGuest == 1)
+                session['isGuest'] = sessionInfo.isGuest
+        }
         if (sessionInfo.otp != undefined)
             session['otp'] = sessionInfo.otp
         if (sessionInfo.otpExpAt != undefined)
@@ -316,7 +325,7 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
@@ -324,7 +333,8 @@ export class UserEntity extends BaseEntity {
                     let dataToSend = {
                         deviceid: deviceid,
                         devicetype: devicetype,
-                        tokenType: elem
+                        tokenType: elem,
+                        isGuest: isGuest
                     }
                     if (id)
                         dataToSend['id'] = id
@@ -354,7 +364,20 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async syncUserOnSdm(payload: IUserGrpcRequest.ISyncUserDataOnSdm) {
+    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            if (payload.cms.create || payload.cms.update)
+                this.createUserOnCms(payload)
+            if (payload.sdm.create || payload.sdm.update)
+                this.createUserOnSdm(payload)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncFromKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createUserOnSdm(payload) {
         try {
             const payloadForSdm = {
             }
@@ -365,15 +388,15 @@ export class UserEntity extends BaseEntity {
                 key: "1",// payload.aerospikeId,
                 update: true,
             }
-            await Aerospike.put(putArg)
+            // await Aerospike.put(putArg)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "syncUserOnSdm", error, false)
+            consolelog(process.cwd(), "createUserOnSdm", error, false)
             return Promise.reject(error)
         }
     }
 
-    async syncUserOnCms(payload: IUserGrpcRequest.ISyncUserDataOnCms) {
+    async createUserOnCms(payload) {
         try {
             const payloadForCms = {
                 customer: {
@@ -396,13 +419,32 @@ export class UserEntity extends BaseEntity {
                 key: payload.aerospikeId,
                 update: true,
             }
-            await Aerospike.put(putArg)
+            // await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "updateCmsId", error, false)
+            consolelog(process.cwd(), "createUserOnCms", error, false)
             return Promise.reject(error)
         }
     }
+
+    async checkUserOnCms(payload: IUserRequest.ICheckUserOnCms): Promise<any> {
+        try {
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "checkUserOnCms", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async checkUserOnSdm(payload: IUserRequest.ICheckUserOnSdm): Promise<any> {
+        try {
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "checkUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
+
 
 }
 

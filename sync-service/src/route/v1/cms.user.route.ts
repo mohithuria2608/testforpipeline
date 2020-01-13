@@ -22,7 +22,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ICMSUserRequest.ICmsUser = ctx.request.body;
+                    let payload: ICmsUserRequest.ICmsUser = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cmsUserController.postUser(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)

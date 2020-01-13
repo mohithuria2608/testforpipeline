@@ -1,6 +1,6 @@
-import * as Constant from '../constant'
-import { consolelog } from '../utils'
-import { authService, locationService, kafkaService, orderService } from '../grpc/client'
+import * as Constant from '../constant';
+import { consolelog } from '../utils';
+import { authService, locationService, orderService, kafkaService } from '../grpc/client';
 
 export class BaseEntity {
     public set: SetNames;
@@ -44,54 +44,12 @@ export class BaseEntity {
         }
     }
 
-    async syncUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
+    async syncToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            orderService.updateCartTTL({ cartId: user.cartId })
-            // this.syncToSdmUser(user, change)
-            this.syncToCmsUser(user, change)
+            kafkaService.kafkaSync(payload)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncUser", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    private async syncToSdmUser(user: IUserRequest.IUserData, change: ICommonRequest.IChange) {
-        try {
-            let sdmdata: IKafkaGrpcRequest.ISyncToSDMUserData = {
-                action: change,
-                aerospikeId: user.id,
-                lastname: user.cCode + user.phnNo,
-                firstname: user.name,
-                email: user.email,
-                storeId: 1,
-                websiteId: 1,
-                password: user.password
-            }
-            kafkaService.syncToSdmUser(sdmdata)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncToSdmUser", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    private async syncToCmsUser(user: IUserRequest.IUserData, userChange: ICommonRequest.IChange) {
-        try {
-            let cmsdata: IKafkaGrpcRequest.ISyncToCMSUserData = {
-                action: userChange,
-                aerospikeId: user.id,
-                lastname: user.cCode + user.phnNo,
-                firstname: user.name,
-                email: user.email,
-                storeId: 1,
-                websiteId: 1,
-                password: user.password
-            }
-            kafkaService.syncToCmsUser(cmsdata)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncToCmsUser", error, false)
+            consolelog(process.cwd(), "syncToKafka", error, false)
             return Promise.reject(error)
         }
     }

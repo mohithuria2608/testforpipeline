@@ -22,9 +22,9 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ISDMMenuRequest.ISdmMenu = ctx.request.body;
+                    let payload: ISdmMenuRequest.ISdmMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await sdmMenuController.buildMenu(headers, payload, auth);
+                    let res = await sdmMenuController.partialProcessMenuFromSDM(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

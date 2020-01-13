@@ -15,7 +15,8 @@ declare namespace ICommonRequest {
         deviceid: string,
         devicetype: string,
         tokenType: string,
-        id?: string,
+        id: string,
+        isGuest: number
     }
 
     interface IPagination {
@@ -35,11 +36,32 @@ declare namespace ICommonRequest {
         message: string
     }
 
-    interface IChange {
+    interface IKafkaReq {
+        request: IKafkaBody
+    }
+    interface IKafkaBody {
+        set: string,
+        as: IChangeAerospike
+        cms: IChangeCMS
+        sdm: IChangeSDM
+        count?: number,
+    }
+
+    interface IChangeAerospike {
         create?: boolean,
         update?: boolean,
-        name?: boolean,
-        email?: boolean,
-        phone?: boolean
+        argv: string
+    }
+
+    interface IChangeCMS {
+        create?: boolean,
+        update?: boolean,
+        argv: string
+    }
+
+    interface IChangeSDM {
+        create?: boolean,
+        update?: boolean,
+        argv: string
     }
 }

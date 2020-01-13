@@ -1,17 +1,35 @@
 syntax = "proto3";
 
 service KafkaService {
-    rpc SyncUser (ISyncUserReq) returns (ISyncUserRes) {}
+    rpc KafkaSync (IKafkaReq) returns (IKafkaRes) {}
 }
 
-message ISyncUserReq {
-    required string aerospikeId = 1;
-    required string lastname = 2;
-    required string firstname = 3;
-    required string email = 4;
-    required int32 storeId = 5;
-    required int32 websiteId = 6;
-    required string password = 7;
+message IKafkaReq {
+    required string set = 1;
+    required IAerospike as = 2;
+    required ICms cms = 3;
+    required ISdm sdm = 4;
+    required int32 count = 5;
 }
 
-message ISyncUserRes {}
+message IAerospike {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message ICms {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message ISdm {
+    required bool create = 1;
+    required bool update = 2;
+    required string argv = 3;
+}
+
+message IKafkaRes {
+    required string data = 1;
+}

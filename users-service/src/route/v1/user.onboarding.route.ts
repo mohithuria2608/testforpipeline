@@ -42,6 +42,7 @@ export default (router: Router) => {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
                     otp: Joi.number().required(),
+                    isGuest: Joi.boolean().valid(0, 1).required()
                 }
             }),
             async (ctx) => {

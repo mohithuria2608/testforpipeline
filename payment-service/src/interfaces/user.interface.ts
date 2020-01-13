@@ -18,7 +18,7 @@ declare namespace IUserRequest {
         session: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string,
+        mergeUserId?: string,
         password: string,
     }
     interface ISession {

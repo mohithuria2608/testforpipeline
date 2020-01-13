@@ -4,6 +4,7 @@ declare namespace IAuthGrpcRequest {
         deviceid: string,
         devicetype: string,
         tokenType: string,
+        isGuest: number,
         id?: string,
     }
 

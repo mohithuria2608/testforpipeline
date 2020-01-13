@@ -38,8 +38,8 @@ export default (router: Router) => {
                     let payload = { ...ctx.request.body };
                     if (payload.module == "user")
                         Aerospike.udfRegister({ module: __dirname + '/../../../lua/user.lua' })
-                    else if (payload.module == "address")
-                        Aerospike.udfRegister({ module: __dirname + '/../../../lua/address.lua' })
+                    // else if (payload.module == "address")
+                    //     Aerospike.udfRegister({ module: __dirname + '/../../../lua/address.lua' })
                     ctx.body = {}
                 }
                 catch (error) {

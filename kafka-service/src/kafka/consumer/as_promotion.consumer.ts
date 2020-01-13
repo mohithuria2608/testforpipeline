@@ -4,31 +4,31 @@ import { consolelog } from "../../utils"
 import { promotionService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-class CmsPromotionConsumer extends BaseConsumer {
+class AsPromotionConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.CMS_PROMOTION, 'client');
+        super(Constant.KAFKA_TOPIC.AS_PROMOTION, 'client');
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
-            (message: IPromotionGrpcRequest.ICreatePromotion) => {
-                consolelog(process.cwd(), "consumer cms_promotion", JSON.stringify(message), true)
-                this.createPromotion(message);
+            (message: IKafkaRequest.IKafkaBody) => {
+                consolelog(process.cwd(), "consumer as_promotion", JSON.stringify(message), true)
+                this.syncPromotion(message);
                 return null;
             })
     }
 
     /** consumes the message and creates promotion on the promotion service */
-    private async createPromotion(message: IPromotionGrpcRequest.ICreatePromotion) {
+    private async syncPromotion(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await promotionService.createPromotion(message)
+            let res = await promotionService.sync(message)
             return res
         } catch (err) {
-            consolelog(process.cwd(), "createPromotion", err, false);
+            consolelog(process.cwd(), "syncPromotion", err, false);
             if (message.count != 0) {
                 message.count = message.count - 1
-                kafkaController.createPromotion(message)
+                kafkaController.kafkaSync(message)
             }
             else
                 kafkaController.produceToFailureTopic(message)
@@ -40,4 +40,4 @@ class CmsPromotionConsumer extends BaseConsumer {
 }
 
 
-export const cms_promotionConsumerE = new CmsPromotionConsumer();
+export const as_promotionConsumerE = new AsPromotionConsumer();

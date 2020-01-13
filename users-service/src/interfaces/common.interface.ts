@@ -16,6 +16,7 @@ declare namespace ICommonRequest {
         devicetype: string,
         tokenType: string,
         id: string,
+        isGuest: number
         userData: IUserRequest.IUserData,
     }
 
@@ -34,13 +35,5 @@ declare namespace ICommonRequest {
         httpCode: number,
         type: string,
         message: string
-    }
-
-    interface IChange {
-        create?: boolean,
-        update?: boolean,
-        name?: boolean,
-        email?: boolean,
-        phone?: boolean
     }
 }

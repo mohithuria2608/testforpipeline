@@ -53,7 +53,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 4,
@@ -72,7 +72,7 @@ export class PromotionController {
                 posId: 111,
                 maxDiscountAmt: 100,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 2,
@@ -91,7 +91,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 5,
@@ -110,7 +110,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 6,
@@ -129,7 +129,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -148,7 +148,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -167,7 +167,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -186,7 +186,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -205,7 +205,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -224,7 +224,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -243,7 +243,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -262,7 +262,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -281,7 +281,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -300,7 +300,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -319,7 +319,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -338,7 +338,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -357,7 +357,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -376,7 +376,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -395,7 +395,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -414,7 +414,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             },
             {
                 couponId: 7,
@@ -433,7 +433,7 @@ export class PromotionController {
                 posId: 0,
                 maxDiscountAmt: 0,
                 isVisible: 0,
-                temsAndConds: ''
+                termsAndConds: "<html>  <head>  </head> <body> promotion-service@kfc2019</body> </html>"
             }];
 
             let returnList = testlist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))

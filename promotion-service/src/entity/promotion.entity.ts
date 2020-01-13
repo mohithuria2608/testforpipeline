@@ -1,7 +1,7 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { authService } from '../grpc/client'
 import { consolelog } from '../utils'
 import { Aerospike } from '../databases/aerospike'
 
@@ -11,30 +11,14 @@ export class PromotionClass extends BaseEntity {
         super('promotion')
     }
 
-    async post(data) {
-        try {
-            data = this.filterPromotionData(data);
-            let putArg: IAerospike.Put = {
-                bins: data,
-                set: this.set,
-                key: data.couponId,
-                replace: true,
-            }
-            await Aerospike.put(putArg)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "post promotion", error, false)
-            return Promise.reject(error)
-        }
-    }
 
-    /** updates promotion data */
-    filterPromotionData(promotionPayload) {
-        promotionPayload.dateFrom = new Date(promotionPayload.dateFrom).toISOString();
-        promotionPayload.dateTo = new Date(promotionPayload.dateTo).toISOString();
-        return promotionPayload;
-    }
+    public promotionSchema = Joi.object().keys({
+        id: Joi.string().trim().required().description("pk"),
+    });
 
+   
+
+    
     /**
      * @method GRPC
      */
@@ -53,15 +37,6 @@ export class PromotionClass extends BaseEntity {
             consolelog(process.cwd(), "getById", error, false)
             return Promise.reject(error)
         }
-    }
-
-    /**
-     * @method GRPC
-     * @param {string} data :data of the promotion
-     */
-    async createPromotion(payload: IPromotionGrpcRequest.ICreatePromotion) {
-        let parsedPayload = JSON.parse(payload.data);
-        return this.post(parsedPayload.data);
     }
 }
 

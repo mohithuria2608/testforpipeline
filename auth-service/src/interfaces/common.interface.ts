@@ -16,7 +16,8 @@ declare namespace ICommonRequest {
         devicetype: string,
         tokenType: string,
         id: string,
-        authCred?: IAuthCred
+        isGuest: number
+        authCred?: IAuthCred,
     }
 
     interface IAuthCred {

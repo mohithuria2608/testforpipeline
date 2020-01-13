@@ -23,35 +23,16 @@ export class KafkaService {
         consolelog(process.cwd(), 'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
     }
 
-    async syncToSdmUser(payload: IKafkaGrpcRequest.ISyncToSDMUserData): Promise<{}> {
+    async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await kafkaServiceValidator.syncToSdmUserValidator(payload)
-                this.kafkaClient.syncToSdmUser(payload, (err, res) => {
+                await kafkaServiceValidator.kafkaValidator(payload)
+                this.kafkaClient.kafkaSync(payload, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully produced user on kafka for syncing to SDM", JSON.stringify(res), false)
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in producing user on kafka  for syncing to SDM", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    async syncToCmsUser(payload: IKafkaGrpcRequest.ISyncToCMSUserData): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await kafkaServiceValidator.syncToCmsUserValidator(payload)
-                this.kafkaClient.syncToCmsUser(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully produced user on kafka for syncing to CMS", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in producing user on kafka  for syncing to CMS", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

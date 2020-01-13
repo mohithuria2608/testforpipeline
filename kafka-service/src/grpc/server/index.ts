@@ -18,63 +18,13 @@ const kafkaProto = grpc.loadPackageDefinition(packageDefinition);
 export const server = new grpc.Server()
 
 server.addService(kafkaProto.KafkaService.service, {
-    syncToSdmUser: async (call: IUserGrpcRequest.ISyncToSdmUserDataReq, callback) => {
+    kafkaSync: async (call: IKafkaRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "syncToSdmUser ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.syncToSdmUser(call.request)
+            consolelog(process.cwd(), "kafkaSync ", JSON.stringify(call.request), true)
+            let res: {} = await kafkaController.kafkaSync(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "syncToSdmUser", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    syncToCmsUser: async (call: IUserGrpcRequest.ISyncToCmsUserDataReq, callback) => {
-        try {
-            consolelog(process.cwd(), "syncToCmsUser ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.syncToCmsUser(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "syncToCmsUser", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    syncToCmsMenu: async (call: IMenuGrpcRequest.ISyncToCmsMenuDataReq, callback) => {
-        try {
-            consolelog(process.cwd(), "syncToCmsMenu ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.syncToCmsMenu(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "syncToCmsMenu", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    updateMenuFromCMS: async (call: IMenuGrpcRequest.IUpdateMenuFromCMSReq, callback) => {
-        try {
-            consolelog(process.cwd(), "updateMenuFromCMS ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.updateMenuFromCMS(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "updateMenuFromCMS", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    syncUpsellProducts: async (call: IMenuGrpcRequest.IUsellProductsSyncReq, callback) => {
-        try {
-            consolelog(process.cwd(), "syncUpsellProducts ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.updateMenuFromCMS(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "syncUpsellProducts", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    createPromotion: async (call: IPromotionGrpcRequest.ICreatePromotionReq, callback) => {
-        try {
-            consolelog(process.cwd(), "createPromotion ", JSON.stringify(call.request), true)
-            let res: {} = await kafkaController.createPromotion(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "createPromotion", error, false)
+            consolelog(process.cwd(), "kafkaSync", error, false)
             callback(grpcSendError(error))
         }
     },

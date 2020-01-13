@@ -23,17 +23,16 @@ export class PromotionService {
         consolelog(process.cwd(), 'GRPC connection established promotion-service', config.get("grpc.promotion.client"), true)
     }
 
-    /** Updates the upsell products list in aerospike */
-    async createPromotion(payload: IPromotionGrpcRequest.ICreatePromotion): Promise<{}> {
+    async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                await promotionServiceValidator.createPromotionValidator(payload)
-                this.promotionClient.createPromotion(payload, (err, res) => {
+                await promotionServiceValidator.syncValidator(payload)
+                this.promotionClient.sync(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(), "successfully created promotion", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully synced promotion on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in creating promotion on aerospike", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in syncing promotion on cms", JSON.stringify(err), false)
                         reject(err)
                     }
                 })

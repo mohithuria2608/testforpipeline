@@ -32,3 +32,19 @@ Please help us with following detail
 
 5. Order status confirmation -- 
 6. Driver name and number
+
+
+## priority
+1. activity logs
+2. module integration make it same as rest (i.e, grpc and kafka structure similar)
+3. mongo check in containers
+4. bootstraping service 
+5. cart flow with vishal
+6. sms integration testing
+7. validate cart cms integration
+8. post order cms integration
+9. mongo create history
+10. fetch order status via kafka
+11. validate coupon on hit of validate cart
+12. aerospike call with thier team
+13. 

@@ -1,30 +1,30 @@
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import { userService } from "../../grpc/client"
+import { userService, menuService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-class SdmUserConsumer extends BaseConsumer {
+class SdmMenuConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_USER, 'client');
+        super(Constant.KAFKA_TOPIC.SDM_MENU, 'client');
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer sdm_user", JSON.stringify(message), true)
-                this.syncUser(message);
-                return null
+                consolelog(process.cwd(), "consumer sdm_menu", JSON.stringify(message), true)
+                this.syncMenu(message);
+                return null;
             })
     }
 
-    private async syncUser(message: IKafkaRequest.IKafkaBody) {
+    private async syncMenu(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await userService.sync(message)
+            let res = await menuService.sync(message)
             return res
         } catch (err) {
-            consolelog(process.cwd(), "syncUser", err, false);
+            consolelog(process.cwd(), "syncMenu", err, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
@@ -37,4 +37,4 @@ class SdmUserConsumer extends BaseConsumer {
 }
 
 
-export const sdm_userConsumerE = new SdmUserConsumer();
+export const sdm_menuConsumerE = new SdmMenuConsumer();
