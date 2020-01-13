@@ -13,6 +13,9 @@ template=`echo "$template" | sed "s@{{Kafka_image}}@$Kafka_image@g"`
 template=`echo "$template" | sed "s@{{Sync_image}}@$Sync_image@g"`
 template=`echo "$template" | sed "s@{{Location_image}}@$Location_image@g"`
 template=`echo "$template" | sed "s@{{Upload_image}}@$Upload_image@g"`
+template=`echo "$template" | sed "s@{{Payment_image}}@$Payment_image@g"`
+template=`echo "$template" | sed "s@{{Promotion_image}}@$Promotion_image@g"`
+template=`echo "$template" | sed "s@{{Notification_image}}@$Notification_image@g"`
 
 
 # apply the yml with the substituted value
