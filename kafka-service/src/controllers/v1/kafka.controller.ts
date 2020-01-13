@@ -115,13 +115,7 @@ export class KafkaController {
                     break;
                 }
             }
-
-
-            if (!payload.hasOwnProperty('count'))
-                payload['count'] = Constant.KAFKA.CMS.USER.MAX_RETRY.CREATE
-
-
-
+            return
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)
             return Promise.reject(error)

@@ -17,7 +17,7 @@ export class CmsPromotionController {
                 set: ENTITY.PromotionE.set,
                 as: {
                     create: true,
-                    argv: JSON.stringify(payload)
+                    argv: JSON.stringify(payload.data)
                 }
             }
             ENTITY.PromotionE.syncToKafka(change)
