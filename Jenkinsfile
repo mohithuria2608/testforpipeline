@@ -12,7 +12,9 @@ pipeline {
         Location_image="americana.azurecr.io/location"+ ":Location-service_${env.BUILD_NUMBER}"
         Upload_image="americana.azurecr.io/upload"+ ":Upload-service_${env.BUILD_NUMBER}"
         Promotion_image="americana.azurecr.io/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}"
-        
+        Payment_image="americana.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
+        Notification_image="americana.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
+
     }
     agent any
 
