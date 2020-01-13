@@ -15,7 +15,9 @@ declare namespace ICommonRequest {
         deviceid: string,
         devicetype: string,
         tokenType: string,
-        id?: string,
+        id: string,
+        isGuest: number
+        userData: IUserRequest.IUserData,
     }
 
     interface IPagination {

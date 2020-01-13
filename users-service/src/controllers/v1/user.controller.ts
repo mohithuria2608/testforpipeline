@@ -46,11 +46,13 @@ export class UserController {
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
                     phnVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    isGuest: 0,
                 }
                 let sessionCreate: IUserRequest.ISessionUpdate = {
                     otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
+                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    isGuest: 0,
                 }
                 let userInCms = await ENTITY.UserE.checkUserOnCms({})
                 if (userInCms && userInCms.id) {
@@ -84,6 +86,7 @@ export class UserController {
     * @param {string} phnNo : phone number max length 9 digits
     * @param {string} cCode : country code with +, eg: +976
     * @param {number} otp : 4 digit otp
+    * @param {boolean} isGuest : which screen the user is coming from
     * */
     async loginVerifyOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp) {
         try {
@@ -103,14 +106,29 @@ export class UserController {
             }
             let userFromDb: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             if (userFromDb && userFromDb.length > 0) {
-                if (userFromDb[0] && userFromDb[0].session && userFromDb[0].session[headers.deviceid] && userFromDb[0].session[headers.deviceid].otp == 0 && userFromDb[0].session[headers.deviceid].otpExpAt == 0)
+                let userToCheckOtp = [{ ...userFromDb[0] }]
+                let userToKeep = [{ ...userFromDb[0] }]
+                if (payload.isGuest && userFromDb.length == 2) {
+                    userToCheckOtp = userFromDb.filter(obj => { return obj.mergeUserId != "" })
+                    userToKeep = userFromDb.filter(obj => { return obj.mergeUserId == "" })
+                }
+                if (userToCheckOtp[0] &&
+                    userToCheckOtp[0].session &&
+                    userToCheckOtp[0].session[headers.deviceid] &&
+                    userToCheckOtp[0].session[headers.deviceid].otp == 0 && userToCheckOtp[0].session[headers.deviceid].otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
 
-                if (userFromDb[0] && userFromDb[0].session && userFromDb[0].session[headers.deviceid] && userFromDb[0].session[headers.deviceid].otp == payload.otp) {
-                    if (userFromDb[0].session[headers.deviceid].otpExpAt > new Date().getTime()) {
+                if (userToCheckOtp[0] && userToCheckOtp[0].session && userToCheckOtp[0].session[headers.deviceid] &&
+                    userToCheckOtp[0].session[headers.deviceid].otp == payload.otp) {
+                    if (userToCheckOtp[0].session[headers.deviceid].otpExpAt > new Date().getTime()) {
                         let userUpdate: IUserRequest.IUserUpdate = {
                             phnVerified: 1,
-                            removeUserId: "",
+                            mergeUserId: "",
+                        }
+                        if (payload.isGuest) {
+                            userUpdate['email'] = userToCheckOtp[0].email
+                            userUpdate['email'] = userToCheckOtp[0].name
+                            userUpdate['cartId'] = userToCheckOtp[0].cartId
                         }
                         let sessionUpdate: IUserRequest.ISessionUpdate = {
                             otp: 0,
@@ -119,14 +137,20 @@ export class UserController {
                             isLogin: 1,
                             // createdAt: new Date().getTime()
                         }
-                        let user: IUserRequest.IUserData = await ENTITY.UserE.createSession(headers, userFromDb[0], userUpdate, sessionUpdate)
-                        if (userFromDb[0].removeUserId && userFromDb[0].removeUserId != "")
-                            await Aerospike.remove({ set: "user", key: userFromDb[0].removeUserId })
+                        let user: IUserRequest.IUserData = await ENTITY.UserE.createSession(headers, userToKeep[0], userUpdate, sessionUpdate)
+                        if (userToCheckOtp[0].mergeUserId && userToCheckOtp[0].mergeUserId != "") {
+                            let removeUserId = userToCheckOtp[0].mergeUserId
+                            if (payload.isGuest && (userToCheckOtp[0].id != userToKeep[0].id))
+                                removeUserId = userToCheckOtp[0].id
+                            await Aerospike.remove({ set: "user", key: removeUserId })
+                        }
+
                         let tokens = await ENTITY.UserE.getTokens(
                             headers.deviceid,
                             headers.devicetype,
                             [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
-                            user.id
+                            user.id,
+                            0
                         )
                         return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid) }
                     } else
@@ -162,7 +186,7 @@ export class UserController {
             let user
             if (userObj && userObj.length > 0) {
                 if (userObj.length == 2)
-                    userObj = userObj.filter(obj => { return obj.removeUserId == "" })
+                    userObj = userObj.filter(obj => { return obj.mergeUserId == "" })
                 consolelog(process.cwd(), "checkpoint", JSON.stringify(userObj), false)
                 let userUpdate: IUserRequest.IUserUpdate = {
                     socialKey: payload.socialKey,
@@ -192,14 +216,16 @@ export class UserController {
                     name: payload.name,
                     createdAt: new Date().getTime(),
                     phnVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    isGuest: 0,
                 }
                 let sessionUpdate: IUserRequest.ISessionUpdate = {
                     otp: 0,
                     otpExpAt: 0,
                     otpVerified: 1,
                     isLogin: 1,
-                    createdAt: new Date().getTime()
+                    createdAt: new Date().getTime(),
+                    isGuest: 0,
                 }
                 user = await ENTITY.UserE.createUser(headers, userCreate, sessionUpdate)
             }
@@ -208,7 +234,8 @@ export class UserController {
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
-                user.id
+                user.id,
+                0
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid) }
         } catch (err) {
@@ -248,7 +275,7 @@ export class UserController {
                 let checkPhoneExist: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 if (checkPhoneExist && checkPhoneExist.length > 0) {
                     let userUpdate = {
-                        removeUserId: auth.userData.id,
+                        mergeUserId: auth.userData.id,
                         name: payload.name,
                         email: payload.email,
                         emailVerified: 1,

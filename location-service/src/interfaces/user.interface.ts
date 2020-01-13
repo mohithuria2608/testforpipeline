@@ -1,5 +1,5 @@
 declare namespace IUserRequest {
-    
+
     interface IUserData {
         id: string,
         isGuest: number,
@@ -16,10 +16,11 @@ declare namespace IUserRequest {
         session: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string
+        mergeUserId?: string
     }
 
     interface ISession {
+        isGuest: number,
         otp: number,
         otpExpAt: number,
         otpVerified: number,

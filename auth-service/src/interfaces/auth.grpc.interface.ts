@@ -9,7 +9,8 @@ declare namespace IAuthGrpcRequest {
         devicetype: string,
         tokenType: string,
         id?: string,
-        authCred?: IAuthCred
+        authCred?: IAuthCred,
+        isGuest: number,
     }
 
     interface IAuthCred {

@@ -16,6 +16,7 @@ declare namespace ICommonRequest {
         devicetype: string,
         tokenType: string,
         id: string,
+        isGuest: number
         userData: IUserRequest.IUserData,
     }
 

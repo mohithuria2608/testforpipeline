@@ -18,11 +18,12 @@ declare namespace IUserRequest {
         session: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string,
+        mergeUserId?: string,
         cartId: string,
         password: string,
     }
     interface ISession {
+        isGuest: number,
         otp: number,
         otpExpAt: number,
         otpVerified: number,
@@ -35,6 +36,7 @@ declare namespace IUserRequest {
         deviceid: string,
         isLogin: number,
         createdAt: number,
+        updatedAt: number,
     }
     interface IPhone {
         cCode: string,
@@ -62,12 +64,13 @@ declare namespace IUserRequest {
         session?: {
             [deviceid: string]: ISession
         },
-        removeUserId?: string,
+        mergeUserId?: string,
         cartId?: string,
         password?: string,
     }
 
     interface ISessionUpdate {
+        isGuest?: number,
         otp?: number,
         otpExpAt?: number,
         otpVerified?: number,
@@ -80,6 +83,7 @@ declare namespace IUserRequest {
         deviceid?: string,
         isLogin?: number,
         createdAt?: number,
+        updatedAt?: number,
     }
 
     interface IRefreshToken {
@@ -89,7 +93,8 @@ declare namespace IUserRequest {
     }
 
     interface IAuthVerifyOtp extends IPhone {
-        otp: number
+        otp: number,
+        isGuest: number
     }
     interface IAuthSocial extends IEmail {
         socialKey: string,
@@ -116,7 +121,7 @@ declare namespace IUserRequest {
     }
 
     interface ICheckUserOnCms {
-        
+
     }
 
     interface ICheckUserOnSdm {
