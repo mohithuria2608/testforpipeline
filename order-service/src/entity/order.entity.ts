@@ -7,6 +7,7 @@ import * as Services from '../mongo/dao';
 import { consolelog, sendSuccess } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
+import { kafkaService } from '../grpc/client';
 
 
 export class OrderClass extends BaseEntity {
@@ -40,8 +41,8 @@ export class OrderClass extends BaseEntity {
         sdmOrderRef: Joi.number().required(),
         cmsOrderRef: Joi.number().required(),
         status: Joi.string().valid(
-            Constant.DATABASE.STATUS.ORDER.CART,
-            Constant.DATABASE.STATUS.ORDER.PENDING,
+            Constant.DATABASE.STATUS.ORDER.CART.AS,
+            Constant.DATABASE.STATUS.ORDER.PENDING.AS,
         ).required(),
         updatedAt: Joi.number().required(),
         addres: Joi.object().keys({
@@ -212,13 +213,13 @@ export class OrderClass extends BaseEntity {
 
     /**
     * @method INTERNAL
-    * @param {string} id : user id
+    * @param {string} cartId : cart id
     * */
-    async getById(payload: ICommonRequest.IId) {
+    async getCartOrder(payload: ICartRequest.ICartId) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: payload.id
+                key: payload.cartId
             }
             let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
             if (cart && cart.cartId) {
@@ -240,7 +241,7 @@ export class OrderClass extends BaseEntity {
                 cmsOrderRef: 0,
                 userId: payload.userId,
                 orderId: "UAE-1",
-                status: Constant.DATABASE.STATUS.ORDER.CART,
+                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],
@@ -361,10 +362,56 @@ export class OrderClass extends BaseEntity {
                 coupon: [],
                 paymentMethods: [],
                 isPriceChanged: false,
-                status: Constant.DATABASE.STATUS.ORDER.CART,
+                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
             }
         } catch (error) {
             consolelog(process.cwd(), "createCartRes", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method GRPC
+    * @param {string} orderId : order id
+    * @param {string} status : order status
+    * @param {string} sdmOrderRef : sdm order id
+    * @param {string} timeInterval : set timeout interval
+    * */
+    async getSdmOrder(payload: IOrderGrpcRequest.IGetSdmOrder) {
+        try {
+            setTimeout(async () => {
+                //@todo :get order status from sdm 
+                let dataToUpdate: ICartRequest.IUpdateCartData = {
+                    status: payload.status,
+                    updatedAt: new Date().getTime()
+                }
+                let putArg: IAerospike.Put = {
+                    bins: dataToUpdate,
+                    set: this.set,
+                    key: payload.cartId,
+                    update: true,
+                }
+                await Aerospike.put(putArg)
+                if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
+                    payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
+                    payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
+                    let orderData = await this.getCartOrder({ cartId: payload.cartId })
+                    this.DAOManager.saveData(this.set, orderData)
+                } else {
+                    let orderChange = {
+                        set: this.set,
+                        sdm: {
+                            get: true,
+                            argv: JSON.stringify(payload)
+                        }
+                    }
+                    kafkaService.kafkaSync(orderChange)
+                }
+            }, payload.timeInterval)
+
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "getSdmOrder", error, false)
             return Promise.reject(error)
         }
     }

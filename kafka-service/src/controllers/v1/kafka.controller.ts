@@ -40,7 +40,7 @@ export class KafkaController {
                     }
                     if (payload.as.create || payload.as.update) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.KAFKA.AS.USER.MAX_RETRY.UPDATE
@@ -72,7 +72,7 @@ export class KafkaController {
                     }
                     if (payload.as.create || payload.as.update) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.KAFKA.AS.MENU.MAX_RETRY.UPDATE
@@ -88,7 +88,7 @@ export class KafkaController {
                     let partition = 0
                     if (payload.as.create || payload.as.update) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
@@ -104,11 +104,25 @@ export class KafkaController {
                     let partition = 0
                     if (payload.as.create || payload.as.update) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_PROMOTION
+                    }
+
+                    kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    break;
+                }
+                case Constant.SET_NAME.ORDER: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.sdm.get) {
+                        messages = { ...payload }
+                        delete messages.as
+                        delete messages.cms
+                        topic = Constant.KAFKA_TOPIC.SDM_GET_ORDER
                     }
 
                     kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });

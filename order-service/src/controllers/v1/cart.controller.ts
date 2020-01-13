@@ -54,7 +54,7 @@ export class CartController {
      * */
     async getCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IGetCart, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.OrderE.getById({ id: payload.cartId })
+            return await ENTITY.OrderE.getCartOrder({ cartId: payload.cartId })
         } catch (err) {
             consolelog(process.cwd(), "getCart", err, false)
             return Promise.reject(err)

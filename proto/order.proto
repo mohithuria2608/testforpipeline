@@ -3,6 +3,7 @@ syntax = "proto3";
 service OrderService {
     rpc CreateDefaultCart (ICreateDefaultCartReq) returns (ICreateDefaultCartRes) {}
     rpc UpdateCartTtl (IUpdateDefaultCartTTLReq) returns (IUpdateDefaultCartTTLRes) {}
+    rpc GetSdmOrder (IGetSdmOrderReq) returns (IGetSdmOrderRes) {}
 }
 
 message ICreateDefaultCartReq {
@@ -17,3 +18,12 @@ message IUpdateDefaultCartTTLReq {
 }
 
 message IUpdateDefaultCartTTLRes { }
+
+message IGetSdmOrderReq {
+    required string cartId = 1;
+    required int32 sdmOrderRef = 2;
+    optional string status = 3;
+    required int32 timeInterval = 4;
+}
+
+message IGetSdmOrderRes { }

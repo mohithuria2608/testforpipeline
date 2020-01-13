@@ -37,6 +37,16 @@ server.addService(orderProto.OrderService.service, {
             consolelog(process.cwd(), "updateCartTTL", error, false)
             callback(grpcSendError(error))
         }
+    },
+    getSdmOrder: async (call: IOrderGrpcRequest.IGetSdmOrderReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getSdmOrder", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.OrderE.getSdmOrder(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getSdmOrder", error, false)
+            callback(grpcSendError(error))
+        }
     }
 })
 

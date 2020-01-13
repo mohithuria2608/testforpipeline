@@ -3,7 +3,8 @@ export enum SET_NAME {
     USER = "user",
     MENU = "menu",
     UPSELL = "upsell",
-    PROMOTION = "promotion"
+    PROMOTION = "promotion",
+    ORDER = "order"
 };
 
 export const UDF = {
@@ -19,7 +20,7 @@ export const UDF = {
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
-    
+
     SDM_MENU = "sdm_menu",
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
@@ -29,7 +30,9 @@ export enum KAFKA_TOPIC {
     CMS_USER = "cms_user",
     AS_USER = "as_user",
 
-    AS_PROMOTION = 'as_promotion'
+    AS_PROMOTION = 'as_promotion',
+
+    SDM_GET_ORDER = 'sdm_get_order'
 };
 
 export enum MIDDLEWARE {
@@ -78,6 +81,11 @@ export const KAFKA = {
             MAX_RETRY: {
                 CREATE: 5,
                 UPDATE: 5,
+            }
+        },
+        ORDER: {
+            INTERVAL: {
+                GET_STATUS: 10
             }
         }
     },
@@ -246,8 +254,31 @@ export const DATABASE = {
 
     STATUS: {
         ORDER: {
-            CART: "CART",
-            PENDING: "PENDING",
+            CART: {
+                AS: "CART",
+                CMS: "",
+                SDM: ""
+            },
+            PENDING: {
+                AS: "PENDING",
+                CMS: "",
+                SDM: ""
+            },
+            CLOSED: {
+                AS: "",
+                CMS: "",
+                SDM: "CLOSED"
+            },
+            CANCELED: {
+                AS: "",
+                CMS: "",
+                SDM: "CANCELED"
+            },
+            FAILURE: {
+                AS: "",
+                CMS: "",
+                SDM: "FAILURE"
+            },
         }
     }
 };

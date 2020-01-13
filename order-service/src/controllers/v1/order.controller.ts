@@ -1,9 +1,8 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { userService, locationService } from '../../grpc/client'
+import { userService, locationService, kafkaService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
-import { stringify } from 'querystring'
 
 export class OrderController {
 
@@ -45,13 +44,14 @@ export class OrderController {
                         lng: getStore.location.longitude,
                         address: getStore.address_en
                     },
-                    status: Constant.DATABASE.STATUS.ORDER.PENDING
+                    status: Constant.DATABASE.STATUS.ORDER.PENDING.AS
                 },
                 set: ENTITY.OrderE.set,
                 key: payload.cartId,
                 update: true,
             }
             await Aerospike.put(putArg)
+            ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.AS })
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postOrder", err, false)

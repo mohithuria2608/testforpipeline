@@ -67,4 +67,8 @@ declare namespace ICartRequest {
         cartId: string,
         cartUpdatedAt: number
     }
+
+    interface ICartId {
+        cartId: string
+    }
 }

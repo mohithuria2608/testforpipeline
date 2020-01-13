@@ -28,8 +28,8 @@ const orderSchema = new Schema({
     cmsOrderRef: { type: Number, required: true },
     status: {
         type: String, required: true, enum: [
-            Constant.DATABASE.STATUS.ORDER.CART,
-            Constant.DATABASE.STATUS.ORDER.PENDING,
+            Constant.DATABASE.STATUS.ORDER.CART.AS,
+            Constant.DATABASE.STATUS.ORDER.PENDING.AS,
         ]
     },
     createdAt: { type: Number, required: true },

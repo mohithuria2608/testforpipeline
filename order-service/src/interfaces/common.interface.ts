@@ -35,9 +35,6 @@ declare namespace ICommonRequest {
         lng?: number
     }
 
-    interface IId {
-        id: string
-    }
     interface IError {
         statusCode: number,
         httpCode: number,
