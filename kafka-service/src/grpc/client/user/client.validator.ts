@@ -13,7 +13,6 @@ export class UserServiceValidator {
             try {
                 let dataToValidate = Joi.object().keys({
                     set: Joi.string().required(),
-                    type: Joi.string().required(),
                     as: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),

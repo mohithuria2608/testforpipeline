@@ -115,19 +115,11 @@ declare namespace IUserRequest {
         userId: string
     }
 
-    interface ICheckUserExistenceOnLegacy {
-        checkCms: boolean,
-        checkSdm: boolean,
-        checkEmail: boolean,
-        checkPhone: boolean,
-        checkCombination: boolean,
-        email: string,
-        cCode: string,
-        phnNo: string,
-        isGuest: boolean
+    interface ICheckUserOnCms {
+        
     }
 
-    interface ICreateUserOnLegacy {
+    interface ICheckUserOnSdm {
 
     }
 

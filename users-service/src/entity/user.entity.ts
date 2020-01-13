@@ -3,7 +3,10 @@ import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog, cryptData } from '../utils'
+import * as CMS from "../cms";
+import * as SDM from '../sdm';
 import { Aerospike } from '../databases/aerospike'
+
 
 export class UserEntity extends BaseEntity {
     private uuidv1 = require('uuid/v1');
@@ -352,17 +355,88 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            if (payload.cms.create || payload.cms.update)
+                this.createUserOnCms(payload)
+            if (payload.sdm.create || payload.sdm.update)
+                this.createUserOnSdm(payload)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncFromKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
 
-    // async checkUserExistenceOnLegacy(payload: IUserRequest.ICheckUserExistenceOnLegacy) {
-    //     try {
-    //         kafkaService.checkUserExistenceOnLegacy()
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "checkUserExistenceOnLegacy", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+    async createUserOnSdm(payload) {
+        try {
+            const payloadForSdm = {
+            }
+            let res = await SDM.UserSDME.createCustomer(payloadForSdm)
+            let putArg: IAerospike.Put = {
+                bins: { sdmUserRef: parseInt(res.id.toString()) },
+                set: this.set,
+                key: "1",// payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
 
-    
+    async createUserOnCms(payload) {
+        try {
+            const payloadForCms = {
+                customer: {
+                    firstname: payload.firstname,
+                    lastname: payload.lastname,
+                    email: payload.email,
+                    store_id: payload.storeId,
+                    website_id: payload.websiteId,
+                    addresses: []
+                },
+                password: payload.password
+            }
+            let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
+
+            consolelog(process.cwd(), "resresresresresres", res, false)
+
+            let putArg: IAerospike.Put = {
+                bins: { cmsUserRef: parseInt(res.id.toString()) },
+                set: this.set,
+                key: payload.aerospikeId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnCms", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async checkUserOnCms(payload: IUserRequest.ICheckUserOnCms): Promise<any> {
+        try {
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "checkUserOnCms", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async checkUserOnSdm(payload: IUserRequest.ICheckUserOnSdm): Promise<any> {
+        try {
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "checkUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+
 }
 
 export const UserE = new UserEntity()

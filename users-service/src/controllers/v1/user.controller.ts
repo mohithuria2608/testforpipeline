@@ -52,6 +52,24 @@ export class UserController {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
                 }
+                let userInCms = await ENTITY.UserE.checkUserOnCms({})
+                if (userInCms && userInCms.id) {
+                    userCreate['cmsUserRef'] = userInCms.id
+                    if (userInCms['sdmUserRef'])
+                        userCreate['sdmUserRef'] = userInCms.id
+                    userCreate['name'] = userInCms.name
+                    userCreate['email'] = userInCms.email
+                    userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                } else {
+                    let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
+                    if (userInSdm && userInSdm.id) {
+                        userCreate['sdmUserRef'] = userInSdm.id
+                        userCreate['name'] = userInCms.name
+                        userCreate['email'] = userInCms.email
+                        userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    }
+                }
+
                 await ENTITY.UserE.createUser(headers, userCreate, sessionCreate)
             }
             return {}
