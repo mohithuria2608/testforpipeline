@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service PromotionService {
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
+    rpc GetPromotion (IGetPromotionReq) returns (IGetPromotionRes) {}
 }
 
 message IKafkaReq {
@@ -32,4 +33,29 @@ message ISdm {
 
 message IKafkaRes {
     required string data = 1;
+}
+
+message IGetPromotionReq {
+    optional int32 cmsCouponRef = 1;
+    optional string couponCode = 2;
+}
+
+message IGetPromotionRes {
+    required int32 cmsCouponRef = 1;
+    required string couponCode = 2;
+    required string promotionType = 3;
+    required string discountAmount = 4;
+    required string maximumQtyDiscountIsAppliedTo = 5;
+    required string usesPerCoupon = 6;
+    required string usesPerCustomer = 7;
+    required string timesUsed = 8;
+    required string dateFrom = 9;
+    required string dateTo = 10;
+    required string ruleName = 11;
+    required string shortDescription = 12;
+    required string activeFlag = 13;
+    required string posId = 14;
+    required string maxDiscountAmount = 15;
+    required string isVisible = 16;
+    required string termsAndConditions = 17;
 }

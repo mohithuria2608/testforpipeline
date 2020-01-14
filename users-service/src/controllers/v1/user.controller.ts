@@ -1,7 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../databases/aerospike'
+import { Aerospike } from '../../aerospike'
 
 export class UserController {
     constructor() { }

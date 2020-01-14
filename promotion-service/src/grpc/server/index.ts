@@ -28,7 +28,17 @@ server.addService(promotionProto.PromotionService.service, {
             consolelog(process.cwd(), "sync", error, false)
             callback(grpcSendError(error))
         }
-    }
+    },
+    getPromotion: async (call: IPromotionGrpcRequest.IGetPromotionReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getPromotion", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.PromotionE.getPromotions(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getPromotion", error, false)
+            callback(grpcSendError(error))
+        }
+    },
 })
 
 server.bind(config.get("grpc.promotion.server"), grpc.ServerCredentials.createInsecure())

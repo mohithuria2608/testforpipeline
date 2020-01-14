@@ -1,4 +1,4 @@
-import { Aerospike } from "../databases/aerospike";
+import { Aerospike } from "../aerospike";
 
 export let bootstrap = async function (server) {
 

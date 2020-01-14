@@ -3,7 +3,7 @@ import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog, sendSuccess } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 
 export class TransactionClass extends BaseEntity {

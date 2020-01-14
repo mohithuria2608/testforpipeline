@@ -3,7 +3,7 @@ import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 const aerospike = require('aerospike');
 
 export class StoreEntity extends BaseEntity {

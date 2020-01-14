@@ -21,6 +21,7 @@ export default (router: Router) => {
                     menuUpdatedAt: Joi.number(),
                     lat: Joi.number().min(0).max(90),
                     lng: Joi.number().min(-180).max(180),
+                    couponCode: Joi.string(),
                     items: Joi.array().items(
                         Joi.object().keys({
                             qty: Joi.number().required(),

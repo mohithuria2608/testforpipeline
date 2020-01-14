@@ -5,7 +5,7 @@ import * as Constant from '../constant'
 import { consolelog, cryptData } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 
 export class UserEntity extends BaseEntity {

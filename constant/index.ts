@@ -1,6 +1,7 @@
 
 export enum SET_NAME {
     USER = "user",
+    ADDRESS = "address",
     MENU = "menu",
     UPSELL = "upsell",
     PROMOTION = "promotion",
@@ -420,6 +421,13 @@ export const STATUS_MSG = {
                 httpCode: 409,
                 message: 'Store not found',
                 type: 'STORE_NOT_FOUND'
+            },
+
+            PROMO_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Promotion not found',
+                type: 'PROMO_NOT_FOUND'
             },
 
             DATA_NOT_FOUND: {

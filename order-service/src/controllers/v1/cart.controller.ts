@@ -1,6 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { menuService, userService } from '../../grpc/client'
+import { menuService, userService, promotionService } from '../../grpc/client'
 import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
 
@@ -36,7 +36,8 @@ export class CartController {
                     invalidMenu = true
                 }
             }
-
+            if (payload.couponCode)
+                await promotionService.getPromotion({ couponCode: payload.couponCode })
             // let cmsValidatedCart = await ENTITY.OrderE.createCartOnCMS(payload, auth.userData)
             let saveCart = await ENTITY.OrderE.updateCart(payload)
             let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu, auth.userData)

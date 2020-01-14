@@ -60,6 +60,7 @@ declare namespace ICartRequest {
         cartId: string,
         curMenuId: number,
         menuUpdatedAt: number,
+        couponCode?: string,
         items: IMenuGrpcRequest.IProduct[]
     }
 

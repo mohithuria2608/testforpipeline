@@ -2,7 +2,7 @@
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 export class AreaEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
