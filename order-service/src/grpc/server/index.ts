@@ -38,16 +38,6 @@ server.addService(orderProto.OrderService.service, {
             callback(grpcSendError(error))
         }
     },
-    getSdmOrder: async (call: IOrderGrpcRequest.IGetSdmOrderReq, callback) => {
-        try {
-            consolelog(process.cwd(), "getSdmOrder", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.OrderE.getSdmOrder(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "getSdmOrder", error, false)
-            callback(grpcSendError(error))
-        }
-    },
     getCart: async (call: IOrderGrpcRequest.IGetCartReq, callback) => {
         try {
             consolelog(process.cwd(), "getCart", JSON.stringify(call.request), true)
@@ -61,10 +51,20 @@ server.addService(orderProto.OrderService.service, {
     updateCart: async (call: IOrderGrpcRequest.IUpdateOrderReq, callback) => {
         try {
             consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.OrderE.updateCart(call.request.curItems, call.request.cmsCart)
+            let res: {} = await ENTITY.OrderE.updateCart(JSON.parse(call.request.curItems), JSON.parse(call.request.cmsCart))
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
+            callback(grpcSendError(error))
+        }
+    },
+    getSdmOrder: async (call: IOrderGrpcRequest.IGetSdmOrderReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getSdmOrder", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.OrderE.getSdmOrder(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getSdmOrder", error, false)
             callback(grpcSendError(error))
         }
     },

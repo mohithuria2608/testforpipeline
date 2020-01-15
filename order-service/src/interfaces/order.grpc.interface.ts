@@ -38,8 +38,8 @@ declare namespace IOrderGrpcRequest {
         request: IUpdateOrder
     }
     interface IUpdateOrder {
-        curItems: IMenuGrpcRequest.IProduct[],
-        cmsCart: ICartCMSRequest.ICreateCartCmsRes
+        curItems: string,// IMenuGrpcRequest.IProduct[],
+        cmsCart: string,//ICartCMSRequest.ICreateCartCmsRes
     }
 
     interface ICMSCartItems {
@@ -58,6 +58,6 @@ declare namespace IOrderGrpcRequest {
     }
 
     interface IGetCartReq {
-        request:  ICartRequest.ICartId
+        request: ICartRequest.ICartId
     }
 }

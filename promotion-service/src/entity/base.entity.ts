@@ -59,7 +59,7 @@ export class BaseEntity {
     */
     async updateCart(curItems: IMenuGrpcRequest.IProduct[], cmsCart: IOrderGrpcRequest.ICmsCartRes) {
         try {
-            return await orderService.updateCart({ curItems: curItems, cmsCart: cmsCart })
+            return await orderService.updateCart({ curItems: JSON.stringify(curItems), cmsCart: JSON.stringify(cmsCart) })
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)

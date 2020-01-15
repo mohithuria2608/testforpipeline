@@ -47,8 +47,8 @@ declare namespace IOrderGrpcRequest {
     }
 
     interface IUpdateOrder {
-        curItems: IMenuGrpcRequest.IProduct[],
-        cmsCart: ICmsCartRes
+        curItems: string,// IMenuGrpcRequest.IProduct[],
+        cmsCart: string,//ICmsCartRes
     }
 
     interface ICmsCartRes {
