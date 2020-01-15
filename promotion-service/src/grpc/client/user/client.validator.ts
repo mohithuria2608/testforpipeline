@@ -2,18 +2,17 @@
 'use strict';
 import * as Joi from '@hapi/joi';
 import { consolelog } from "../../../utils"
-import * as Constant from '../../../constant'
 
-export class PromotionServiceValidator {
+export class UserServiceValidator {
     constructor() {
     }
 
-    async validateCouponValidator(data: IPromotionGrpcRequest.IValidatePromotion) {
+    async fetchUser(data: IUserRequest.IFetchUser) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    couponCode: Joi.string().required(),
-                })
+                    userId: Joi.string().required()
+                });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
                     reject(`Invalid Info- ${error.message}`)
@@ -26,6 +25,6 @@ export class PromotionServiceValidator {
 }
 
 
-export const promotionServiceValidator = new PromotionServiceValidator()
+export const userServiceValidator = new UserServiceValidator()
 
 

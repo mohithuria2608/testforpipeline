@@ -1,8 +1,10 @@
 declare namespace IPromotionGrpcRequest {
 
-    interface IGetPromotionReq {
-        request: IPromotionRequest.IGetPromotion
+    interface IValidatePromotionReq {
+        request: IPromotionRequest.IValidatePromotion
     }
 
-
+    interface IValidatePromotionRes {
+        isValid: boolean
+    }
 }

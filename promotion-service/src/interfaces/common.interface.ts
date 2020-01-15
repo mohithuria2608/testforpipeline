@@ -16,7 +16,8 @@ declare namespace ICommonRequest {
         devicetype: string,
         tokenType: string,
         id: string,
-        isGuest: number
+        isGuest: number,
+        userData?: IUserRequest.IUserData
     }
 
     interface IPagination {
@@ -66,5 +67,14 @@ declare namespace ICommonRequest {
         update?: boolean,
         get?: boolean,
         argv: string
+    }
+
+    interface IReqPromiseOptions {
+        method: string,
+        url: string,
+        body?: true
+        form?: boolean,
+        qs?: boolean,
+        formData?: boolean
     }
 }

@@ -9,9 +9,17 @@ export class CartCMSEntity extends BaseCMS {
         super()
     }
 
-    async createCart(headersObj: ICartCMSRequest.IHeader, formObj: ICartCMSRequest.ICreateCart): Promise<ICartCMSRequest.ICreateCartRes> {
+    async createCart(formObj: ICartCMSRequest.ICreateCart): Promise<ICartCMSRequest.ICreateCartCmsRes> {
         try {
-            
+            const headers = {};
+            const form = formObj;
+            const options: ICommonRequest.IReqPromiseOptions = {
+                method: Constant.CMS.END_POINTS.CREATE_CART.METHOD,
+                url: Constant.CMS.END_POINTS.CREATE_CART.URL,
+                body: true
+            }
+            let cmsRes = await this.request(options, headers, form)
+            return cmsRes[0]
         } catch (error) {
             consolelog(process.cwd(), 'createCart', error, false)
             return Promise.reject(error)

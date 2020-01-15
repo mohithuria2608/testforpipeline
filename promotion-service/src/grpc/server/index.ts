@@ -29,13 +29,13 @@ server.addService(promotionProto.PromotionService.service, {
             callback(grpcSendError(error))
         }
     },
-    getPromotion: async (call: IPromotionGrpcRequest.IGetPromotionReq, callback) => {
+    validatePromotion: async (call: IPromotionGrpcRequest.IValidatePromotionReq, callback) => {
         try {
-            consolelog(process.cwd(), "getPromotion", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.PromotionE.getPromotions(call.request)
+            consolelog(process.cwd(), "validatePromotion", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.PromotionE.validatePromotion(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "getPromotion", error, false)
+            consolelog(process.cwd(), "validatePromotion", error, false)
             callback(grpcSendError(error))
         }
     },

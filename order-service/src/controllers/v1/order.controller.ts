@@ -1,6 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { userService, locationService, kafkaService } from '../../grpc/client'
+import { userService, locationService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 

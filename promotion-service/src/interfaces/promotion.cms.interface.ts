@@ -1,20 +1,8 @@
+declare namespace IPromotionCmsRequest {
 
-declare namespace ICartCMSRequest {
-
-    interface IHeader { }
-
-    interface ICreateCart {
-        cms_user_id: number,
-        website_id: number,
-        cart_items: ICMSCartItems[],
-        category_id: number
-    }
-
-    interface ICMSCartItems {
-        product_id: number,
-        price: number,
-        qty: number,
-        type_id: string
+    interface IApplyCoupon {
+        cartId: string,
+        couponCode: string
     }
 
     interface ICreateCartCmsRes {
@@ -27,6 +15,13 @@ declare namespace ICartCMSRequest {
         not_available: number[],
         is_price_changed: boolean
         success: boolean,
+    }
+
+    interface ICMSCartItems {
+        product_id: number,
+        price: number,
+        qty: number,
+        type_id: string
     }
 
     interface ITax {

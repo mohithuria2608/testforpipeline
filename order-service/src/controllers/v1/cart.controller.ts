@@ -36,11 +36,13 @@ export class CartController {
                     invalidMenu = true
                 }
             }
-            if (payload.couponCode)
-                await promotionService.getPromotion({ couponCode: payload.couponCode })
-            // let cmsValidatedCart = await ENTITY.OrderE.createCartOnCMS(payload, auth.userData)
-            let saveCart = await ENTITY.OrderE.updateCart(payload)
-            let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu, auth.userData)
+            if (payload.couponCode) {
+                let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                if (!validPromo.isValid)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
+            }
+            let cmsValidatedCart = await ENTITY.OrderE.createCartOnCMS(payload, auth.userData)
+            let res = await ENTITY.OrderE.updateCart(cmsValidatedCart)
             return res
         } catch (err) {
             consolelog(process.cwd(), "postCart", err, false)

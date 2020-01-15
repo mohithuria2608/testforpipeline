@@ -70,6 +70,7 @@ declare namespace ICartRequest {
     }
 
     interface ICartId {
-        cartId: string
+        cartId?: string,
+        cmsCartRef?: number
     }
 }

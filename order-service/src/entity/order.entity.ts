@@ -23,6 +23,12 @@ export class OrderClass extends BaseEntity {
             bin: 'orderId',
             index: 'idx_' + this.set + '_' + 'orderId',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'cmsCartRef',
+            index: 'idx_' + this.set + '_' + 'cmsCartRef',
+            type: "NUMERIC"
         }
     ]
     public ObjectId = mongoose.Types.ObjectId;
@@ -38,8 +44,8 @@ export class OrderClass extends BaseEntity {
         cmsCartRef: Joi.number().required(),
         userId: Joi.string().required().description("sk"),
         orderId: Joi.string().required().description("sk, UAE-1"),
-        sdmOrderRef: Joi.number().required(),
-        cmsOrderRef: Joi.number().required(),
+        sdmOrderRef: Joi.number().required().description("sk"),
+        cmsOrderRef: Joi.number().required().description("sk"),
         status: Joi.string().valid(
             Constant.DATABASE.STATUS.ORDER.CART.AS,
             Constant.DATABASE.STATUS.ORDER.PENDING.AS,
@@ -214,17 +220,37 @@ export class OrderClass extends BaseEntity {
     /**
     * @method INTERNAL
     * @param {string} cartId : cart id
+    * @param {string} cmsCartRef : cms cart id
     * */
     async getCartOrder(payload: ICartRequest.ICartId) {
         try {
-            let getArg: IAerospike.Get = {
-                set: this.set,
-                key: payload.cartId
+            if (payload.cartId) {
+                let getArg: IAerospike.Get = {
+                    set: this.set,
+                    key: payload.cartId
+                }
+                let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
+                if (cart && cart.cartId) {
+                    return cart
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }
-            let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
-            if (cart && cart.cartId) {
-                return cart
-            } else
+            else if (payload.cmsCartRef) {
+                let queryArg = {
+                    equal: {
+                        bin: "cmsCartRef",
+                        value: payload.cmsCartRef
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
+                if (cart && cart.length > 0) {
+                    return cart[0]
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            }
+            else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(), "getById", error, false)
@@ -282,14 +308,14 @@ export class OrderClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
-
             let cart = []
-            let req = {
-                cms_user_id: userData.cmsUserRef,
+            let req: ICartCMSRequest.ICreateCart = {
+                cms_user_id: 10,//userData.cmsUserRef,
                 website_id: 1,
-                cart_items: cart
+                category_id: 20,
+                cart_items: [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart
             }
-            let cmsCart = await CMS.CartCMSE.createCart({}, req)
+            let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", error, false)
@@ -297,75 +323,88 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async updateCart(
-        // cmsCart: ICartCMSRequest.ICreateCartRes, 
-        payload: ICartRequest.IValidateCart) {
+    async updateCart(cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
         try {
-            let asCart = payload.items
-            let dataToUpdate: ICartRequest.IUpdateCartData = {
-                cartId: payload.cartId,
-                cmsCartRef: 0,
-                sdmOrderRef: 0,
-                cmsOrderRef: 0,
-                updatedAt: new Date().getTime(),
-                items: asCart,
-                subTotal: 0,
-                total: 0,
-                tax: [{
-                    name: "VAT",
-                    value: 0.26
-                }],
-                shipping: [{
-                    name: "VAT",
-                    code: "FREE",
-                    value: 7.5
-                }],
+            let prevCart = await this.getCartOrder({ cmsCartRef: cmsCart.cms_cart_id })
+            let updateCartData = []
+            // [
+            //     {
+            //       "cart_items": [
+            //         {
+            //           "product_id": "1",
+            //           "qty": 1,
+            //           "price": 20.185,
+            //           "type_id": "simple"
+            //         }
+            //       ],
+            //       "cms_cart_id": "65",
+            //       "currency_code": "AED",
+            //       "subtotal": 20.19,
+            //       "grandtotal": 20.19,
+            //       "tax": [
+
+            //       ],
+            //       "not_available": [
+
+            //       ],
+            //       "is_price_changed": true,
+            //       "coupon_code": "",
+            //       "success": true
+            //     }
+            //   ]","timestamp":"2020-01-14T10: 23: 10.196Z"}
+
+            // let dataToUpdate: ICartRequest.IUpdateCartData = {
+            //     cartId: payload.cartId,
+            //     cmsCartRef: 0,
+            //     sdmOrderRef: 0,
+            //     cmsOrderRef: 0,
+            //     updatedAt: new Date().getTime(),
+            //     items: asCart,
+            //     subTotal: 0,
+            //     total: 0,
+            //     tax: [{
+            //         name: "VAT",
+            //         value: 0.26
+            //     }],
+            //     shipping: [{
+            //         name: "VAT",
+            //         code: "FREE",
+            //         value: 7.5
+            //     }],
+            // }
+            // let putArg: IAerospike.Put = {
+            //     bins: dataToUpdate,
+            //     set: this.set,
+            //     key: payload.cartId,
+            //     update: true,
+            // }
+            // await Aerospike.put(putArg)
+            return {
+                // cartId: payload.cartId,
+                // userId: userData.id,
+                // orderId: "UAE-1",
+                // updatedAt: new Date().getTime(),
+                // items: invalidMenu ? [] : payload.items.splice(0, 1),
+                // notAvailable: payload.items,
+                // addres: null,
+                // subTotal: 30.23,
+                // total: 30.23,
+                // tax: [{
+                //     name: "VAT",
+                //     value: 0.26
+                // }],
+                // shipping: [{
+                //     name: "VAT",
+                //     code: "FREE",
+                //     value: 7.5
+                // }],
+                // coupon: [],
+                // paymentMethods: [],
+                // isPriceChanged: false,
+                // status: Constant.DATABASE.STATUS.ORDER.CART.AS,
             }
-            let putArg: IAerospike.Put = {
-                bins: dataToUpdate,
-                set: this.set,
-                key: payload.cartId,
-                update: true,
-            }
-            await Aerospike.put(putArg)
-            return {}
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    async createCartRes(
-        // cmsCart: ICartCMSRequest.ICreateCartRes, 
-        payload: ICartRequest.IValidateCart,
-        invalidMenu: boolean, userData: IUserRequest.IUserData) {
-        try {
-            return {
-                cartId: payload.cartId,
-                userId: userData.id,
-                orderId: "UAE-1",
-                updatedAt: new Date().getTime(),
-                items: invalidMenu ? [] : payload.items.splice(0, 1),
-                notAvailable: payload.items,
-                addres: null,
-                subTotal: 30.23,
-                total: 30.23,
-                tax: [{
-                    name: "VAT",
-                    value: 0.26
-                }],
-                shipping: [{
-                    name: "VAT",
-                    code: "FREE",
-                    value: 7.5
-                }],
-                coupon: [],
-                paymentMethods: [],
-                isPriceChanged: false,
-                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
-            }
-        } catch (error) {
-            consolelog(process.cwd(), "createCartRes", error, false)
             return Promise.reject(error)
         }
     }

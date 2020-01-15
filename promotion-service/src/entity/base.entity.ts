@@ -1,6 +1,7 @@
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
+import { orderService } from '../grpc/client';
 
 export class BaseEntity {
     public set: SetNames;
@@ -44,11 +45,24 @@ export class BaseEntity {
     async syncFromKafka(payload: ICommonRequest.IKafkaBody) {
         try {
             if (payload.as.create) {
-                
+
             }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncFromKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method GRPC
+    */
+    async updateCart(cmsCart: IOrderGrpcRequest.IUpdateOrder) {
+        try {
+
+            return await orderService.updateCart(cmsCart)
+        } catch (error) {
+            consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)
         }
     }

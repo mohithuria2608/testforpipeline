@@ -41,4 +41,13 @@ declare namespace ICommonRequest {
         type: string,
         message: string
     }
+
+    interface IReqPromiseOptions {
+        method: string,
+        url: string,
+        body?: true
+        form?: boolean,
+        qs?: boolean,
+        formData?: boolean
+    }
 }

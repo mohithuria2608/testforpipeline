@@ -23,11 +23,11 @@ export class PromotionService {
         consolelog(process.cwd(), 'GRPC connection established promotion-service', config.get("grpc.promotion.client"), true)
     }
 
-    async getPromotion(payload: IPromotionGrpcRequest.IGetPromotion): Promise<any> {
+    async validatePromotion(payload: IPromotionGrpcRequest.IValidatePromotion): Promise<IPromotionGrpcRequest.IValidatePromotionRes> {
         return new Promise(async (resolve, reject) => {
             try {
                 await promotionServiceValidator.validateCouponValidator(payload)
-                this.promotionClient.getPromotion(payload, (err, res) => {
+                this.promotionClient.validatePromotion(payload, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully validated promotion on as", JSON.stringify(res), false)
                         resolve(res)

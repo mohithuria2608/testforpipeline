@@ -47,14 +47,18 @@ export const CMS = {
         AUTH_API_HIT: 'cms-auth-hit-time'
     },
     END_POINTS: {
-        AUTH: {
-            METHOD: "POST",
-            URL: "http://40.123.205.1/rest/default/V1/integration/customer/token",
+        GENERAL_CONFIG: {
+            METHOD: "GET",
+            URL: "http://40.123.205.1/rest/V1/americanaconfig/"
         },
-        CREATE_CUSTOMER: {
+        CREATE_CART: {
             METHOD: "POST",
-            URL: "http://40.123.205.1/rest/default/V1/customers/",
-        }
+            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+        },
+        APPLY_COUPON: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+        },
     }
 };
 
@@ -287,6 +291,20 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            INVALID_PROMO: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'INVALID_PROMO',
+                message: 'Invalid Promotion'
+            },
+
+            PROMO_EXPIRED: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'PROMO_EXPIRED',
+                message: 'Promo expired'
+            },
+
             INVALID_STORE: {
                 statusCode: 400,
                 httpCode: 400,

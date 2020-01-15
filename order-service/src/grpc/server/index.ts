@@ -47,7 +47,17 @@ server.addService(orderProto.OrderService.service, {
             consolelog(process.cwd(), "getSdmOrder", error, false)
             callback(grpcSendError(error))
         }
-    }
+    },
+    updateCart: async (call: IOrderGrpcRequest.IUpdateOrderReq, callback) => {
+        try {
+            consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.OrderE.updateCart(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "updateCart", error, false)
+            callback(grpcSendError(error))
+        }
+    },
 })
 
 server.bind(config.get("grpc.order.server"), grpc.ServerCredentials.createInsecure())
