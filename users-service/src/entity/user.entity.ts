@@ -110,6 +110,12 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Build user object
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.IUserUpdate} userInfo 
+     * @param {boolean} isCreate 
+     */
     private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
         const id = this.uuidv1();
         const user = isCreate ? {
@@ -164,7 +170,10 @@ export class UserEntity extends BaseEntity {
     }
 
     /**
-     * @todo : add updated time in session token
+     * @description Build session object
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.ISessionUpdate} sessionInfo 
+     * @param {boolean} isCreate 
      */
     public async buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
         let session = isCreate ? {
@@ -215,11 +224,13 @@ export class UserEntity extends BaseEntity {
         return session
     }
 
-    async createUser(
-        headers: ICommonRequest.IHeaders,
-        userInfo: IUserRequest.IUserUpdate,
-        sessionCreate: IUserRequest.ISessionUpdate,
-    ): Promise<IUserRequest.IUserData> {
+    /**
+     * @description Create user in aerospike
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.IUserUpdate} userInfo 
+     * @param {IUserRequest.ISessionUpdate} sessionCreate 
+     */
+    async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, sessionCreate: IUserRequest.ISessionUpdate): Promise<IUserRequest.IUserData> {
         try {
             let dataToSave = {
                 ...await this.buildUser(headers, userInfo, true)
@@ -242,6 +253,13 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Create session from aerospike
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.IUserData} userData 
+     * @param {IUserRequest.IUserUpdate} userUpdate 
+     * @param {IUserRequest.ISessionUpdate} sessionUpdate 
+     */
     async createSession(
         headers: ICommonRequest.IHeaders,
         userData: IUserRequest.IUserData,
@@ -282,6 +300,11 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Remove session from aerospike
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.IUserData} userData 
+     */
     async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
         try {
             if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
@@ -303,7 +326,12 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async updateUser(userData: IUserRequest.IUserData, payload: IUserRequest.IEditProfile, ) {
+    /**
+     * @description Update user on aerospike
+     * @param {IUserRequest.IUserData} userData 
+     * @param {IUserRequest.IEditProfile} payload 
+     */
+    async updateUser(userData: IUserRequest.IUserData, payload: IUserRequest.IEditProfile) {
         try {
             let userUpdate = {}
             if (payload.email)
@@ -325,6 +353,14 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Get access and refresh token from auth service 
+     * @param {string} deviceid 
+     * @param {string} devicetype 
+     * @param {string[]} tokentype 
+     * @param {string} id 
+     * @param {number} isGuest 
+     */
     async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number) {
         try {
             if (tokentype && tokentype.length > 0) {
@@ -364,6 +400,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description sync user to cms and sdm coming from KAFKA
+     * @param {IKafkaGrpcRequest.IKafkaBody} payload 
+     */
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             if (payload.cms.create || payload.cms.update)
@@ -377,6 +417,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Create user on SDM
+     * @param payload 
+     */
     async createUserOnSdm(payload) {
         try {
             const payloadForSdm = {
@@ -396,6 +440,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Create user on CMS
+     * @param payload 
+     */
     async createUserOnCms(payload) {
         try {
             const payloadForCms = {
@@ -427,6 +475,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Get user info from CMS
+     * @param payload 
+     */
     async checkUserOnCms(payload: IUserRequest.ICheckUserOnCms): Promise<any> {
         try {
             return {}
@@ -436,6 +488,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Get user info from SDM
+     * @param payload 
+     */
     async checkUserOnSdm(payload: IUserRequest.ICheckUserOnSdm): Promise<any> {
         try {
             return {}

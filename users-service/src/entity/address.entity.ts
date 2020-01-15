@@ -87,8 +87,9 @@ export class AddressEntity extends BaseEntity {
     }
 
     /**
-    * @method INTERNAL
-    * */
+     * @description Add address on aerospike
+     * @method INTERNAL
+     * */
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore): Promise<IUserRequest.IUserData> {
         try {
             let id = this.uuidv1();
@@ -137,6 +138,13 @@ export class AddressEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Update address on aerospike
+     * @param addressUpdate 
+     * @param bin 
+     * @param userData 
+     * @param isDelete 
+     */
     async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
             let listaddress = await this.getAddress({ userId: userData.id, bin: bin })

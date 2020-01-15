@@ -174,7 +174,7 @@
         "port": "2345",
         "userName": "Adigital",
         "password": "vSqKeZdc",
-        "endPoint": "/bulksms/bulksms",
+        "endPoint": "bulksms/bulksms",
         "source": ""
     }
 }
