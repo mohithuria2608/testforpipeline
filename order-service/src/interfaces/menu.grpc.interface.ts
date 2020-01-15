@@ -1,6 +1,7 @@
 declare namespace IMenuGrpcRequest {
 
     interface IFetchMenuData {
+        menuId?: number,
         country: string,
         isDefault: boolean,
     }
@@ -72,7 +73,7 @@ declare namespace IMenuGrpcRequest {
         dimension: string,
         url: string,
         type: string,
-        uploadBy:string
+        uploadBy: string
     }
 
     interface IOption {

@@ -24,7 +24,7 @@ export class CmsMenuController {
                 change['as']['update'] = true
                 delete change['as']['create']
             }
-            ENTITY.MenuE.syncMenuToKafka(change)
+            ENTITY.MenuE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
@@ -51,7 +51,7 @@ export class CmsMenuController {
                 change['as']['update'] = true
                 delete change['as']['create']
             }
-            ENTITY.UpsellE.syncUpsellToKafka(change)
+            ENTITY.UpsellE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "syncUpsellProducts", err, false)

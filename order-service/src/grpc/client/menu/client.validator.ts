@@ -10,6 +10,7 @@ export class MenuServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
+                    menuId: Joi.number(),
                     country: Joi.string().required(),
                     isDefault: Joi.boolean().valid(true, false)
                 });

@@ -24,7 +24,17 @@ server.addService(syncProto.SyncService.service, {
             let res = await ENTITY.ConfigE.syncConfigFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "syncConfig", error, false)
+            callback(grpcSendError(error))
+        }
+    },
+    getConfig: async (call: IConfigGrpcRequest.IGetConfigReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getConfig", JSON.stringify(call.request), true)
+            let res = await ENTITY.ConfigE.getConfig(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getConfig", error, false)
             callback(grpcSendError(error))
         }
     },

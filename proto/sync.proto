@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service SyncService {
     rpc SyncConfig (IKafkaReq) returns (IKafkaRes) {}
+    rpc GetConfig (IGetConfigReq) returns (IGetConfigRes) {}
 }
 
 message IKafkaReq {
@@ -33,3 +34,10 @@ message ISdm {
 message IKafkaRes {
     required string data = 1;
 }
+
+message IGetConfigReq {
+    optional string type = 1;
+    optional string configId = 2;
+}
+
+message IGetConfigRes { }

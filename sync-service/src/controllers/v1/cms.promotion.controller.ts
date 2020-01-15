@@ -24,7 +24,7 @@ export class CmsPromotionController {
                 change['as']['update'] = true
                 delete change['as']['create']
             }
-            ENTITY.PromotionE.syncPromoToKafka(change)
+            ENTITY.PromotionE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postPromotion", err, false)

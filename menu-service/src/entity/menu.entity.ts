@@ -180,11 +180,11 @@ export class MenuClass extends BaseEntity {
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getMenuById(id: number) {
+    async getMenu(payload: IMenuRequest.IFetchMenu) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: id
+                key: payload.menuId
             }
             let menu = await Aerospike.get(getArg)
             if (menu && menu.id) {
@@ -192,7 +192,7 @@ export class MenuClass extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.MENU_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getById", error, false)
+            consolelog(process.cwd(), "getMenu", error, false)
             return Promise.reject(error)
         }
     }
@@ -205,7 +205,7 @@ export class MenuClass extends BaseEntity {
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
             let menuId = 5;
-            return await this.getMenuById(menuId)
+            return await this.getMenu({ menuId: menuId })
         } catch (err) {
             consolelog(process.cwd(), "grpcFetchMenu", err, false)
             return Promise.reject(err)

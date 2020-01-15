@@ -23,7 +23,7 @@ export class CmsUserController {
                 change['as']['update'] = true
                 delete change['as']['create']
             }
-            ENTITY.UserE.syncUserToKafka(change)
+            ENTITY.UserE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postUser", err, false)

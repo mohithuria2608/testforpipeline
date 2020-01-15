@@ -28,7 +28,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    menuId: Joi.number(),
+                    menuId: Joi.number().required(),
                 }
             }),
             async (ctx) => {

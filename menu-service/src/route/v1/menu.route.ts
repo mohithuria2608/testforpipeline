@@ -63,7 +63,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     var myMessage = protobuf.Writer.create()
-                        .string(JSON.stringify(await ENTITY.MenuE.getMenuById(5)))
+                        .string(JSON.stringify(await ENTITY.MenuE.getMenu({ menuId: 5 })))
                         .finish();
                     ctx.body = myMessage
                 }

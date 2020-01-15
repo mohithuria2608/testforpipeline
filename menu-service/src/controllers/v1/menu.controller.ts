@@ -31,10 +31,31 @@ export class MenuController {
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
-            return await ENTITY.MenuE.getMenuById(menuId)
+            return await ENTITY.MenuE.getMenu({ menuId: menuId })
         } catch (err) {
             consolelog(process.cwd(), "fetchMenu", err, false)
             return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method GRPC
+    * */
+    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            let data = JSON.parse(payload.as.argv)
+            /**
+             * @param {any} data
+             * @param {string} type  enum[menu, upsell]
+             * @param {string} action enum[update , create]
+             */
+            if (data.action == "update") {
+
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncMenuFromKafka", error, false)
+            return Promise.reject(error)
         }
     }
 }

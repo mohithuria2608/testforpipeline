@@ -24,7 +24,8 @@ export class CmsConfigController {
                 change['as']['update'] = true
                 delete change['as']['create']
             }
-            ENTITY.ConfigE.syncConfigFromKafka(change)
+
+            ENTITY.ConfigE.syncToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postConfig", err, false)

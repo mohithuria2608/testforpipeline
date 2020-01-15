@@ -14,17 +14,17 @@ class AsUpsellConsumer extends BaseConsumer {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
                 consolelog(process.cwd(), "consumer as_upsell", JSON.stringify(message), true)
-                this.syncMenu(message);
+                this.syncUpsell(message);
                 return null;
             })
     }
 
-    private async syncMenu(message: IKafkaRequest.IKafkaBody) {
+    private async syncUpsell(message: IKafkaRequest.IKafkaBody) {
         try {
             let res = await menuService.sync(message)
             return res
         } catch (err) {
-            consolelog(process.cwd(), "syncMenu", err, false);
+            consolelog(process.cwd(), "sync", err, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)

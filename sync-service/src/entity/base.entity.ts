@@ -1,6 +1,6 @@
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { authService } from '../grpc/client'
+import { authService, kafkaService } from '../grpc/client'
 
 export class BaseEntity {
     public set: SetNames;
@@ -17,13 +17,13 @@ export class BaseEntity {
         }
     }
 
-    // async syncToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-    //     try {
-    //         kafkaService.kafkaSync(payload)
-    //         return {}
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "syncToKafka", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+    async syncToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            kafkaService.kafkaSync(payload)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncToKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
