@@ -12,12 +12,17 @@ export class CmsMenuController {
      */
     async postMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
+            payload['type'] = "menu"
             let change = {
                 set: ENTITY.MenuE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
                 }
+            }
+            if (payload.action == "update") {
+                change['as']['update'] = true
+                delete change['as']['create']
             }
             ENTITY.MenuE.syncMenuToKafka(change)
             return {}
@@ -34,12 +39,17 @@ export class CmsMenuController {
     */
     async postUpsell(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
+            payload['type'] = "upsell"
             let change = {
                 set: ENTITY.UpsellE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
                 }
+            }
+            if (payload.action == "update") {
+                change['as']['update'] = true
+                delete change['as']['create']
             }
             ENTITY.UpsellE.syncUpsellToKafka(change)
             return {}

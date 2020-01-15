@@ -1,3 +1,6 @@
 declare namespace ICmsMenuRequest {
-    interface ICmsMenu { }
+    interface ICmsMenu { 
+        action: string,
+        data: string,
+    }
 }

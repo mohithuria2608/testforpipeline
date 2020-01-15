@@ -71,12 +71,13 @@ export class ConfigEntity extends BaseEntity {
         try {
             if (payload.as.create) {
                 let data = JSON.parse(payload.as.argv)
-                let getConfig = await this.getConfig({ type: data.type })
-                if (getConfig && getConfig.id) {
+                if (data.action == "update") {
+                    let getConfig = await this.getConfig({ type: data.type })
                     let dataToUpdate = {
                         type: data.type,
                         ...data.data
                     }
+                    delete data['action']
                     let putArg: IAerospike.Put = {
                         bins: dataToUpdate,
                         set: this.set,
@@ -89,6 +90,7 @@ export class ConfigEntity extends BaseEntity {
                         type: data.type,
                         ...data.data
                     }
+                    delete data['action']
                     let putArg: IAerospike.Put = {
                         bins: dataToSave,
                         set: this.set,

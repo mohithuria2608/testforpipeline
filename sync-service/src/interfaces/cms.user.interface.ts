@@ -1,3 +1,6 @@
 declare namespace ICmsUserRequest {
-    interface ICmsUser {}
+    interface ICmsUser {
+        action: string,
+        data: any,
+    }
 }

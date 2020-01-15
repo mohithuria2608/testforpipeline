@@ -16,7 +16,7 @@ export default (router: Router) => {
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
-                    type: Joi.string().required().valid("update", "create"),
+                    action: Joi.string().required().valid("update", "create"),
                     data: Joi.any()
                 }
             }),

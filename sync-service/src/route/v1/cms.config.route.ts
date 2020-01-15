@@ -17,6 +17,7 @@ export default (router: Router) => {
                 // headers: JOI_CMS_HEADERS,
                 body: {
                     type: Joi.string().required().valid("general", "payment"),
+                    action: Joi.string().required().valid("update", "create"),
                     data: Joi.any().required()
                 }
             }),

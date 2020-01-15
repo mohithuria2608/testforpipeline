@@ -7,7 +7,7 @@ import { storeController } from '../../controllers';
 
 export default (router: Router) => {
     router
-        .post('/',
+        .post('/bootstrap',
             async (ctx) => {
                 try {
                     let res = await storeController.post();

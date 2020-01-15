@@ -15,7 +15,7 @@ export class MenuController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {
-                ENTITY.MenuE.post(iterator)
+                ENTITY.MenuE.postMenu(iterator)
             }
             return {}
         } catch (err) {
@@ -34,15 +34,6 @@ export class MenuController {
             return await ENTITY.MenuE.getMenuById(menuId)
         } catch (err) {
             consolelog(process.cwd(), "fetchMenu", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    async fetchUpsell(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchUpsell) {
-        try {
-            return []
-        } catch (err) {
-            consolelog(process.cwd(), "fetchUpsell", err, false)
             return Promise.reject(err)
         }
     }

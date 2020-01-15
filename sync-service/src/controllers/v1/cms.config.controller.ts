@@ -20,6 +20,10 @@ export class CmsConfigController {
                     argv: JSON.stringify(payload.data)
                 }
             }
+            if (payload.action == "update") {
+                change['as']['update'] = true
+                delete change['as']['create']
+            }
             ENTITY.ConfigE.syncConfigFromKafka(change)
             return {}
         } catch (err) {

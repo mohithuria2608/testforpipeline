@@ -20,7 +20,7 @@ export class CmsPromotionController {
                     argv: JSON.stringify(payload.data)
                 }
             }
-            if (payload.type == "update") {
+            if (payload.action == "update") {
                 change['as']['update'] = true
                 delete change['as']['create']
             }

@@ -157,7 +157,10 @@ export class MenuClass extends BaseEntity {
         categories: Joi.array().items(this.categorySchema)
     })
 
-    async post(data) {
+    /**
+    * @method INTERNAL
+    * */
+    async postMenu(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
@@ -208,24 +211,6 @@ export class MenuClass extends BaseEntity {
             return Promise.reject(err)
         }
     }
-
-    // /**
-    //  * @method GRPC
-    //  * @param {string} data :data of the menu
-    //  */
-    // async syncMenuWithCMS(payload: IMenuGrpcRequest.ICMSMenuSync) {
-    //     // call the CMS api request here
-    //     return
-    // }
-
-    // /**
-    //  * @method GRPC
-    //  * @param {string} data :data of the menu
-    //  */
-    // async updateMenuFromCMS(payload: IMenuGrpcRequest.IUpdateMenu) {
-    //     let parsedPayload = JSON.parse(payload.data);
-    //     return this.post(parsedPayload.data);
-    // }
 }
 
 export const MenuE = new MenuClass()

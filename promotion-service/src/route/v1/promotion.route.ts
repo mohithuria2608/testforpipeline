@@ -8,7 +8,7 @@ import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
-        .post('/',
+        .post('/bootstrap',
             async (ctx) => {
                 try {
                     let res = await promotionController.postPromotion();

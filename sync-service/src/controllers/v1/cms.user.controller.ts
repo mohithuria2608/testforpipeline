@@ -19,6 +19,10 @@ export class CmsUserController {
                     argv: JSON.stringify(payload)
                 }
             }
+            if (payload.action == "update") {
+                change['as']['update'] = true
+                delete change['as']['create']
+            }
             ENTITY.UserE.syncUserToKafka(change)
             return {}
         } catch (err) {

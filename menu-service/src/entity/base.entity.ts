@@ -8,12 +8,24 @@ export class BaseEntity {
         this.set = set
     }
 
+    /**
+    * @method GRPC
+    * */
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            
+            let data = JSON.parse(payload.as.argv)
+            /**
+             * @data
+             * @param {string} type  enum[menu, upsell]
+             * @param {string} action enum[update , create]
+             * @param {any} data
+             */
+            if (data.action == "update") {
+
+            }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncMenuFromKafka", error, false)
             return Promise.reject(error)
         }
     }
