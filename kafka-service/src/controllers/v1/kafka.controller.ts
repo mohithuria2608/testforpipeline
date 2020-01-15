@@ -128,6 +128,20 @@ export class KafkaController {
                     kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     break;
                 }
+                case Constant.SET_NAME.CONFIG: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as.create) {
+                        messages = { ...payload }
+                        delete messages.sdm
+                        delete messages.cms
+                        topic = Constant.KAFKA_TOPIC.AS_CONFIG
+                    }
+
+                    kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    break;
+                }
             }
             return
         } catch (error) {

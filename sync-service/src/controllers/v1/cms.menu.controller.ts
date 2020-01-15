@@ -19,7 +19,7 @@ export class CmsMenuController {
                     argv: JSON.stringify(payload)
                 }
             }
-            ENTITY.MenuE.syncToKafka(change)
+            ENTITY.MenuE.syncMenuToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
@@ -41,7 +41,7 @@ export class CmsMenuController {
                     argv: JSON.stringify(payload)
                 }
             }
-            ENTITY.UpsellE.syncToKafka(change)
+            ENTITY.UpsellE.syncUpsellToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "syncUpsellProducts", err, false)

@@ -11,7 +11,7 @@ export class CmsPromotionController {
      * @param {any} payload
      * @description creates and saves a new promotion from CMS to aerospike
      */
-    async postPromotion(headers: ICommonRequest.IHeaders, payload: ICmsPromotionRequest.ICmsPromotion, auth: ICommonRequest.AuthorizationObj) {
+    async postPromotion(headers: ICommonRequest.IHeaders, payload: ICmsPromotionRequest.ICmsPromotion) {
         try {
             let change = {
                 set: ENTITY.PromotionE.set,
@@ -20,7 +20,11 @@ export class CmsPromotionController {
                     argv: JSON.stringify(payload.data)
                 }
             }
-            ENTITY.PromotionE.syncToKafka(change)
+            if (payload.type == "update") {
+                change['as']['update'] = true
+                delete change['as']['create']
+            }
+            ENTITY.PromotionE.syncPromoToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postPromotion", err, false)

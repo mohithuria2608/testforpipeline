@@ -5,7 +5,8 @@ export enum SET_NAME {
     MENU = "menu",
     UPSELL = "upsell",
     PROMOTION = "promotion",
-    ORDER = "order"
+    ORDER = "order",
+    CONFIG = "config"
 };
 
 export const UDF = {
@@ -33,7 +34,9 @@ export enum KAFKA_TOPIC {
 
     AS_PROMOTION = 'as_promotion',
 
-    SDM_GET_ORDER = 'sdm_get_order'
+    SDM_GET_ORDER = 'sdm_get_order',
+
+    AS_CONFIG = 'as_config'
 };
 
 export enum MIDDLEWARE {
@@ -399,6 +402,13 @@ export const STATUS_MSG = {
             }
         },
         E409: {
+            CONFIG_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Config not found',
+                type: 'CONFIG_NOT_FOUND'
+            },
+
             USER_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,

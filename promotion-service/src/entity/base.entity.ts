@@ -42,7 +42,7 @@ export class BaseEntity {
     /**
     * @method GRPC
     */
-    async syncFromKafka(payload: ICommonRequest.IKafkaBody) {
+    async syncFromKafka(payload: IPromotionGrpcRequest.IKafkaBody) {
         try {
             if (payload.as.create) {
 

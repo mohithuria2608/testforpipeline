@@ -19,7 +19,7 @@ export class CmsUserController {
                     argv: JSON.stringify(payload)
                 }
             }
-            ENTITY.UserE.syncToKafka(change)
+            ENTITY.UserE.syncUserToKafka(change)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postUser", err, false)

@@ -3,7 +3,7 @@ import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
-import { cmsPromotionController } from '../../controllers';
+import { cmsConfigController } from '../../controllers';
 import { JOI_CMS_HEADERS } from './common.joi.validator'
 
 export default (router: Router) => {
@@ -16,15 +16,15 @@ export default (router: Router) => {
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
-                    type: Joi.string().required().valid("update", "create"),
-                    data: Joi.any()
+                    type: Joi.string().required().valid("general", "payment"),
+                    data: Joi.any().required()
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ICmsPromotionRequest.ICmsPromotion = ctx.request.body;
-                    let res = await cmsPromotionController.postPromotion(headers, payload);
+                    let payload: ICmsConfigRequest.ICmsConfig = ctx.request.body;
+                    let res = await cmsConfigController.postConfig(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

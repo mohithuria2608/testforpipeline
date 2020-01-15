@@ -19,7 +19,7 @@ const promotionProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(promotionProto.PromotionService.service, {
-    sync: async (call: ICommonRequest.IKafkaReq, callback) => {
+    sync: async (call: IPromotionGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.PromotionE.syncFromKafka(call.request)

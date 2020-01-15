@@ -21,6 +21,16 @@ export class MenuEntity extends BaseEntity {
             return Promise.reject(err)
         }
     }
+
+    async syncMenuToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            kafkaService.kafkaSync(payload)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncMenuToKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const MenuE = new MenuEntity()

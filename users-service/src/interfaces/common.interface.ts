@@ -22,7 +22,6 @@ declare namespace ICommonRequest {
 
     interface IPagination {
         page?: number,
-        // skip?: number
     }
 
     interface ICordinatesOpt {
