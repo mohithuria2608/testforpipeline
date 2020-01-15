@@ -48,10 +48,20 @@ server.addService(orderProto.OrderService.service, {
             callback(grpcSendError(error))
         }
     },
+    getCart: async (call: IOrderGrpcRequest.IGetCartReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getCart", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.OrderE.getCartOrder(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getCart", error, false)
+            callback(grpcSendError(error))
+        }
+    },
     updateCart: async (call: IOrderGrpcRequest.IUpdateOrderReq, callback) => {
         try {
             consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.OrderE.updateCart(call.request)
+            let res: {} = await ENTITY.OrderE.updateCart(call.request.curItems, call.request.cmsCart)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)

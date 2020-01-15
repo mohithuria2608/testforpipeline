@@ -60,7 +60,7 @@ export class AddressController {
     * */
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let addres: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: auth.userData.id, bin: "delivery" })
+            let address: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: auth.userData.id, bin: "delivery" })
             return addres
         } catch (err) {
             consolelog(process.cwd(), "fetchAddress", err, false)

@@ -57,10 +57,9 @@ export class BaseEntity {
     /**
     * @method GRPC
     */
-    async updateCart(cmsCart: IOrderGrpcRequest.IUpdateOrder) {
+    async updateCart(curItems: IMenuGrpcRequest.IProduct[], cmsCart: IOrderGrpcRequest.ICmsCartRes) {
         try {
-
-            return await orderService.updateCart(cmsCart)
+            return await orderService.updateCart({ curItems: curItems, cmsCart: cmsCart })
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)

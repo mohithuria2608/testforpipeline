@@ -34,7 +34,7 @@ const orderSchema = new Schema({
     },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true },
-    addres: {
+    address: {
         id: { type: String },
         sdmAddressRef: { type: Number },
         cmsAddressRef: { type: Number },

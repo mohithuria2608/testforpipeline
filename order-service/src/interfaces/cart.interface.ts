@@ -11,7 +11,7 @@ declare namespace ICartRequest {
         createdAt: number,
         updatedAt: number,
         items: any,
-        addres: IAddress,
+        address: IAddress,
         subTotal: number,
         total: number,
         tax: ITax[]

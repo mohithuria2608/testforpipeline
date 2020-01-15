@@ -51,7 +51,7 @@ export class OrderClass extends BaseEntity {
             Constant.DATABASE.STATUS.ORDER.PENDING.AS,
         ).required(),
         updatedAt: Joi.number().required(),
-        addres: Joi.object().keys({
+        address: Joi.object().keys({
             addressId: Joi.string(),
             sdmAddressRef: Joi.number(),
             cmsAddressRef: Joi.number(),
@@ -271,7 +271,7 @@ export class OrderClass extends BaseEntity {
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],
-                addres: null,
+                address: null,
                 subTotal: 0,
                 total: 0,
                 tax: [],
@@ -323,86 +323,47 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async updateCart(cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
+    async updateCart(curItems: IMenuGrpcRequest.IProduct[], cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
         try {
             let prevCart = await this.getCartOrder({ cmsCartRef: cmsCart.cms_cart_id })
-            let updateCartData = []
-            // [
-            //     {
-            //       "cart_items": [
-            //         {
-            //           "product_id": "1",
-            //           "qty": 1,
-            //           "price": 20.185,
-            //           "type_id": "simple"
-            //         }
-            //       ],
-            //       "cms_cart_id": "65",
-            //       "currency_code": "AED",
-            //       "subtotal": 20.19,
-            //       "grandtotal": 20.19,
-            //       "tax": [
+            let dataToUpdate: ICartRequest.IUpdateCartData
+            dataToUpdate['cmsCartRef'] = cmsCart.cms_cart_id
+            dataToUpdate['updatedAt'] = new Date().getTime()
+            dataToUpdate['subTotal'] = cmsCart.subtotal
+            dataToUpdate['total'] = cmsCart.grandtotal
+            dataToUpdate['shipping'] = cmsCart.shipping
+            dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed
 
-            //       ],
-            //       "not_available": [
+            let updateCartItems = []
+            dataToUpdate['items'] = updateCartItems
 
-            //       ],
-            //       "is_price_changed": true,
-            //       "coupon_code": "",
-            //       "success": true
-            //     }
-            //   ]","timestamp":"2020-01-14T10: 23: 10.196Z"}
+            let updateTax = []
+            dataToUpdate['tax'] = updateTax
 
-            // let dataToUpdate: ICartRequest.IUpdateCartData = {
-            //     cartId: payload.cartId,
-            //     cmsCartRef: 0,
-            //     sdmOrderRef: 0,
-            //     cmsOrderRef: 0,
-            //     updatedAt: new Date().getTime(),
-            //     items: asCart,
-            //     subTotal: 0,
-            //     total: 0,
-            //     tax: [{
-            //         name: "VAT",
-            //         value: 0.26
-            //     }],
-            //     shipping: [{
-            //         name: "VAT",
-            //         code: "FREE",
-            //         value: 7.5
-            //     }],
-            // }
-            // let putArg: IAerospike.Put = {
-            //     bins: dataToUpdate,
-            //     set: this.set,
-            //     key: payload.cartId,
-            //     update: true,
-            // }
-            // await Aerospike.put(putArg)
-            return {
-                // cartId: payload.cartId,
-                // userId: userData.id,
-                // orderId: "UAE-1",
-                // updatedAt: new Date().getTime(),
-                // items: invalidMenu ? [] : payload.items.splice(0, 1),
-                // notAvailable: payload.items,
-                // addres: null,
-                // subTotal: 30.23,
-                // total: 30.23,
-                // tax: [{
-                //     name: "VAT",
-                //     value: 0.26
-                // }],
-                // shipping: [{
-                //     name: "VAT",
-                //     code: "FREE",
-                //     value: 7.5
-                // }],
-                // coupon: [],
-                // paymentMethods: [],
-                // isPriceChanged: false,
-                // status: Constant.DATABASE.STATUS.ORDER.CART.AS,
+            let notAvailable = []
+            if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
+                curItems.map(obj => {
+                    cmsCart.cart_items.map(elem => {
+                        if (obj.id == elem.product_id) {
+                            updateCartItems.push(obj)
+                        } else {
+                            notAvailable.push(obj)
+                        }
+                    })
+                })
+            } else {
+                notAvailable = cmsCart.cart_items
             }
+            let putArg: IAerospike.Put = {
+                bins: dataToUpdate,
+                set: this.set,
+                key: prevCart.cartId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            let newCart = await this.getCartOrder({ cmsCartRef: cmsCart.cms_cart_id })
+            newCart['notAvailable'] = notAvailable
+            return newCart
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)

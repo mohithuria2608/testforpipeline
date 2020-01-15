@@ -23,6 +23,25 @@ export class OrderService {
         consolelog(process.cwd(), 'GRPC connection established order-service', config.get("grpc.order.client"), true)
     }
 
+    async getCart(payload: IOrderGrpcRequest.IGetOrder): Promise<IOrderGrpcRequest.IGetOrderRes> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await orderServiceValidator.getCartValidator(payload)
+                this.orderClient.getCart(payload, (err, res) => {
+                    if (!err) {
+                        consolelog(process.cwd(), "successfully updated cart", JSON.stringify(res), false)
+                        resolve(res.store)
+                    } else {
+                        consolelog(process.cwd(), "Error in updating cart", JSON.stringify(err), false)
+                        reject(err)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
     async updateCart(payload: IOrderGrpcRequest.IUpdateOrder): Promise<IOrderGrpcRequest.IUpdateOrderRes> {
         return new Promise(async (resolve, reject) => {
             try {

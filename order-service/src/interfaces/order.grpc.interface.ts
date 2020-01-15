@@ -38,15 +38,8 @@ declare namespace IOrderGrpcRequest {
         request: IUpdateOrder
     }
     interface IUpdateOrder {
-        cms_cart_id: number,
-        currency_code: string,
-        cart_items: ICMSCartItems[],
-        subtotal: number,
-        grandtotal: number,
-        tax: ITax
-        not_available: number[],
-        is_price_changed: boolean
-        success: boolean,
+        curItems: IMenuGrpcRequest.IProduct[],
+        cmsCart: ICartCMSRequest.ICreateCartCmsRes
     }
 
     interface ICMSCartItems {
@@ -62,5 +55,9 @@ declare namespace IOrderGrpcRequest {
     }
 
     interface IUpdateOrderRes {
+    }
+
+    interface IGetCartReq {
+        request:  ICartRequest.ICartId
     }
 }
