@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import { kafkaService } from '../../grpc/client'
 
 export class CmsConfigController {
 
@@ -60,7 +61,7 @@ export class CmsConfigController {
      */
     async postConfig(headers: ICommonRequest.IHeaders, payload: ICmsConfigRequest.ICmsConfig) {
         try {
-            let change = {
+            let configChange = {
                 set: ENTITY.ConfigE.set,
                 as: {
                     create: true,
@@ -68,11 +69,10 @@ export class CmsConfigController {
                 }
             }
             if (payload.action == "update") {
-                change['as']['update'] = true
-                delete change['as']['create']
+                configChange['as']['update'] = true
+                delete configChange['as']['create']
             }
-
-            ENTITY.ConfigE.syncToKafka(change)
+            kafkaService.kafkaSync(configChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postConfig", err, false)

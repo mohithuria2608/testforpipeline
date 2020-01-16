@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client'
 
 export class CmsMenuController {
 
@@ -13,7 +14,7 @@ export class CmsMenuController {
     async postMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
             payload['type'] = "menu"
-            let change = {
+            let menuChange = {
                 set: ENTITY.MenuE.set,
                 as: {
                     create: true,
@@ -21,10 +22,10 @@ export class CmsMenuController {
                 }
             }
             if (payload.action == "update") {
-                change['as']['update'] = true
-                delete change['as']['create']
+                menuChange['as']['update'] = true
+                delete menuChange['as']['create']
             }
-            ENTITY.MenuE.syncToKafka(change)
+            kafkaService.kafkaSync(menuChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
@@ -40,7 +41,7 @@ export class CmsMenuController {
     async postUpsell(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
             payload['type'] = "upsell"
-            let change = {
+            let upsellChange = {
                 set: ENTITY.UpsellE.set,
                 as: {
                     create: true,
@@ -48,10 +49,10 @@ export class CmsMenuController {
                 }
             }
             if (payload.action == "update") {
-                change['as']['update'] = true
-                delete change['as']['create']
+                upsellChange['as']['update'] = true
+                delete upsellChange['as']['create']
             }
-            ENTITY.UpsellE.syncToKafka(change)
+            kafkaService.kafkaSync(upsellChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "syncUpsellProducts", err, false)

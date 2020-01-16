@@ -345,6 +345,7 @@ export class CartClass extends BaseEntity {
                     })
                 }
                 else if (obj['typeId'] == 'bundle') {
+                    return Promise.reject("Not handled bundle products")
                     let bundle_option = {};
                     let selection_configurable_option = {};
                     let bundle_super_attribute = {};
@@ -379,6 +380,7 @@ export class CartClass extends BaseEntity {
                     })
                 }
                 else if (obj['typeId'] == 'bundle_group') {
+                    return Promise.reject("Not handled bundle group products")
                     cart.push({
                         product_id: obj.id,
                         qty: obj.qty,
@@ -386,7 +388,7 @@ export class CartClass extends BaseEntity {
                         type_id: "bundle"
                     })
                 } else {
-
+                    return Promise.reject("Unhandled  products")
                 }
             })
             let req: ICartCMSRequest.ICreateCartCms = {
@@ -420,19 +422,18 @@ export class CartClass extends BaseEntity {
             let updateTax = []
             dataToUpdate['tax'] = updateTax
 
-            let notAvailable = []
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 curItems.map(obj => {
                     cmsCart.cart_items.map(elem => {
                         if (obj.id == elem.product_id) {
                             updateCartItems.push(obj)
                         } else {
-                            notAvailable.push(obj)
+                            dataToUpdate['notAvailable'].push(obj)
                         }
                     })
                 })
             } else {
-                notAvailable = cmsCart.cart_items
+                dataToUpdate['notAvailable'] = cmsCart.cart_items
             }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
@@ -442,7 +443,6 @@ export class CartClass extends BaseEntity {
             }
             await Aerospike.put(putArg)
             let newCart = await this.getCart({ cartId: cartId })
-            newCart['notAvailable'] = notAvailable
             return newCart
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)

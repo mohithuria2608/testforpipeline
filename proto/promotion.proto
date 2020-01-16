@@ -36,9 +36,9 @@ message IKafkaRes {
 }
 
 message IValidatePromotionReq {
-    optional int32 couponCode = 1;
+    required int32 couponCode = 1;
 }
 
 message IValidatePromotionRes {
     required bool isValid = 1;
-    }
+}

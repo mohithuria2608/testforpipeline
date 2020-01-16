@@ -1,6 +1,6 @@
 import * as Constant from '../constant';
 import { consolelog } from '../utils';
-import { authService, locationService, orderService, kafkaService } from '../grpc/client';
+import { authService, locationService, orderService } from '../grpc/client';
 
 export class BaseEntity {
     public set: SetNames;
@@ -52,19 +52,6 @@ export class BaseEntity {
             return await orderService.updateCartTTL({ cartId })
         } catch (error) {
             consolelog(process.cwd(), "updateCartTTL", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @description Sync data to kafka q via Kafka service
-     */
-    async syncToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-        try {
-            kafkaService.kafkaSync(payload)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncToKafka", error, false)
             return Promise.reject(error)
         }
     }

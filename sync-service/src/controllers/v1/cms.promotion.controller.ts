@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client'
 
 export class CmsPromotionController {
 
@@ -13,7 +14,7 @@ export class CmsPromotionController {
      */
     async postPromotion(headers: ICommonRequest.IHeaders, payload: ICmsPromotionRequest.ICmsPromotion) {
         try {
-            let change = {
+            let promoChange = {
                 set: ENTITY.PromotionE.set,
                 as: {
                     create: true,
@@ -21,10 +22,10 @@ export class CmsPromotionController {
                 }
             }
             if (payload.action == "update") {
-                change['as']['update'] = true
-                delete change['as']['create']
+                promoChange['as']['update'] = true
+                delete promoChange['as']['create']
             }
-            ENTITY.PromotionE.syncToKafka(change)
+            kafkaService.kafkaSync(promoChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postPromotion", err, false)

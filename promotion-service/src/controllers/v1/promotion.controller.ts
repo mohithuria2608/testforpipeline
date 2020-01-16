@@ -37,7 +37,7 @@ export class PromotionController {
     async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
         try {
             let promo = await ENTITY.PromotionE.getPromotions({ couponCode: payload.couponCode })
-            if (new Date(promo[0].dateFrom).toISOString()) {
+            if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
                 return { isValid: true }
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)

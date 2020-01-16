@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import { kafkaService } from '../../grpc/client';
 
 export class UserController {
     constructor() { }
@@ -332,7 +333,7 @@ export class UserController {
                             argv: JSON.stringify(user)
                         }
                     }
-                    ENTITY.UserE.syncToKafka(userChange)
+                    kafkaService.kafkaSync(userChange)
                     return formatUserData(user, headers.deviceid)
                 } else {
                     let userUpdate = {
@@ -363,7 +364,7 @@ export class UserController {
                             argv: JSON.stringify(user)
                         }
                     }
-                    ENTITY.UserE.syncToKafka(userChange)
+                    kafkaService.kafkaSync(userChange)
                     return formatUserData(user, headers.deviceid)
                 }
             } else {
@@ -390,7 +391,7 @@ export class UserController {
                         argv: JSON.stringify(user)
                     }
                 }
-                ENTITY.UserE.syncToKafka(userChange)
+                kafkaService.kafkaSync(userChange)
                 return formatUserData(user, headers.deviceid)
             }
         } catch (error) {
