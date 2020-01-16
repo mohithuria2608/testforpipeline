@@ -51,7 +51,7 @@ server.addService(orderProto.OrderService.service, {
     updateCart: async (call: IOrderGrpcRequest.IUpdateOrderReq, callback) => {
         try {
             consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.CartE.updateCart(JSON.parse(call.request.curItems), JSON.parse(call.request.cmsCart))
+            let res: {} = await ENTITY.CartE.updateCart(call.request.cartId, JSON.parse(call.request.curItems), JSON.parse(call.request.cmsCart))
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)

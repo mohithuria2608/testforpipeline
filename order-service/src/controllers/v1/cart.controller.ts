@@ -42,7 +42,7 @@ export class CartController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             }
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, auth.userData)
-            let res = await ENTITY.CartE.updateCart(payload.items, cmsValidatedCart)
+            let res = await ENTITY.CartE.updateCart(payload.cartId, payload.items, cmsValidatedCart)
             return res
         } catch (err) {
             consolelog(process.cwd(), "postCart", err, false)

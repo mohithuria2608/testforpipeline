@@ -333,9 +333,9 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(curItems: IMenuGrpcRequest.IProduct[], cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
+    async updateCart(cartId: string, curItems: IMenuGrpcRequest.IProduct[], cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
         try {
-            let prevCart = await this.getCart({ cmsCartRef: cmsCart.cms_cart_id })
+            let prevCart = await this.getCart({ cartId: cartId })
             let dataToUpdate: ICartRequest.IUpdateCartData
             dataToUpdate['cmsCartRef'] = cmsCart.cms_cart_id
             dataToUpdate['updatedAt'] = new Date().getTime()

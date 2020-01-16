@@ -59,7 +59,7 @@ export class PromotionController {
             let cmsValidatedPromo = await ENTITY.PromotionE.validatePromoOnCms(payload)
             // [{\"cart_items\":[{\"product_id\":\"1\",\"qty\":1,\"price\":20.185,\"type_id\":\"simple\"}],\"cms_cart_id\":\"65\",\"currency_code\":\"AED\",\"subtotal\":20.19,\"grandtotal\":20.19,\"tax\":[],\"not_available\":[],\"is_price_changed\":true,\"coupon_code\":\"\",\"success\":true}]","timestamp":"2020-01-14T10:23:10.196Z"}
             let getCart = await orderService.getCart({ cartId: payload.cartId })
-            let res = await ENTITY.PromotionE.updateCart(getCart.items, cmsValidatedPromo)
+            let res = await ENTITY.PromotionE.updateCart(payload.cartId, getCart.items, cmsValidatedPromo)
             // let saveCart = await ENTITY.OrderE.updateCart(payload)
             // let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu, auth.userData)
             return res

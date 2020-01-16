@@ -28,6 +28,7 @@ export class OrderServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
+                    cartId: Joi.string().required(),
                     curItems: Joi.any(),
                     cmsCart: Joi.any(),
                 })
