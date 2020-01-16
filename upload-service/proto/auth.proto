@@ -12,7 +12,7 @@ message ICreateToken {
     required string tokenType = 3;
     optional string id = 4;
     optional IAuthCred authCred = 5;
-    required bool isGuest = 6;
+    required int32 isGuest = 6;
 }
 
 message IAuthCred {
@@ -33,5 +33,5 @@ message IAuthorizationObj {
     required string deviceid = 2;
     required string devicetype = 3;
     optional string id = 4;
-    required bool isGuest = 5;
+    required int32 isGuest = 5;
 }

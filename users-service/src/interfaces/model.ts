@@ -1,3 +1,5 @@
 declare type SetNames =
-    'user'
+    'user' |
+    'address' |
+    'logger'
 

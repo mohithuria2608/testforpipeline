@@ -1,0 +1,1 @@
+export { LoggerE } from './logger.entity'

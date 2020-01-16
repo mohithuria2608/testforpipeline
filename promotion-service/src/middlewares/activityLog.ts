@@ -1,7 +1,6 @@
 import { Middleware, Context } from 'koa'
 import * as Constant from '../constant';
 import { consolelog } from '../utils';
-// import * as ENTITY from '../entity'
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
@@ -31,7 +30,6 @@ export default (opts?): Middleware => {
                 createdAt: new Date().getTime(),
             }
             consolelog(process.cwd(),"activity log", dataToSave, true, 'entryLog')
-            // ENTITY.ActivitylogClassC.createOneEntity(dataToSave)
         })
 
         await next()

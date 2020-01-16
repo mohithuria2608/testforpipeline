@@ -48,6 +48,10 @@
         "upload": {
             "url": "http://localhost",
             "port": 4011
+        },
+        "log": {
+            "url": "http://localhost",
+            "port": 4012
         }
     },
     "grpc": {
@@ -98,6 +102,10 @@
         "upload": {
             "server": "localhost:50062",
             "client": "127.0.0.1:50062"
+        },
+        "log": {
+            "server": "localhost:50063",
+            "client": "127.0.0.1:50063"
         }
     },
     "kafka": {
@@ -160,6 +168,10 @@
                 "promotion": {
                     "server": "/../../../proto/promotion.proto",
                     "client": "/../../../../proto/promotion.proto"
+                },
+                "log": {
+                    "server": "/../../../proto/log.proto",
+                    "client": "/../../../../proto/log.proto"
                 }
             }
         }
