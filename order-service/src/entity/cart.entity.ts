@@ -245,7 +245,7 @@ export class CartClass extends BaseEntity {
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getById", error, false)
+            consolelog(process.cwd(), "getCart", error, false)
             return Promise.reject(error)
         }
     }
@@ -336,13 +336,13 @@ export class CartClass extends BaseEntity {
     async updateCart(cartId: string, curItems: IMenuGrpcRequest.IProduct[], cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
         try {
             let prevCart = await this.getCart({ cartId: cartId })
-            let dataToUpdate: ICartRequest.IUpdateCartData
-            dataToUpdate['cmsCartRef'] = cmsCart.cms_cart_id
+            let dataToUpdate: ICartRequest.IUpdateCartData = {}
+            dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['subTotal'] = cmsCart.subtotal
             dataToUpdate['total'] = cmsCart.grandtotal
-            dataToUpdate['shipping'] = cmsCart.shipping
-            dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed
+            dataToUpdate['shipping'] = []// cmsCart.shipping
+            dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
 
             let updateCartItems = []
             dataToUpdate['items'] = updateCartItems
@@ -371,7 +371,7 @@ export class CartClass extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            let newCart = await this.getCart({ cmsCartRef: cmsCart.cms_cart_id })
+            let newCart = await this.getCart({ cartId: cartId })
             newCart['notAvailable'] = notAvailable
             return newCart
         } catch (error) {
