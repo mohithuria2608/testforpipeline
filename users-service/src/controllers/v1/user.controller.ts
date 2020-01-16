@@ -142,7 +142,7 @@ export class UserController {
                             let removeUserId = userToCheckOtp[0].mergeUserId
                             if (payload.isGuest && (userToCheckOtp[0].id != userToKeep[0].id))
                                 removeUserId = userToCheckOtp[0].id
-                            await Aerospike.remove({ set: "user", key: removeUserId })
+                            await Aerospike.remove({ set: ENTITY.UserE.set, key: removeUserId })
                         }
 
                         let tokens = await ENTITY.UserE.getTokens(
@@ -377,7 +377,7 @@ export class UserController {
     * */
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let user = await ENTITY.UserE.updateUser(auth.userData, payload)
+            let user = await ENTITY.UserE.updateUser(auth.id, payload)
             // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers.deviceid)
         } catch (error) {

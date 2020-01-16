@@ -41,15 +41,22 @@ export class BaseEntity {
 
     /**
     * @method GRPC
+    * @param {string} data  actuall array of menu or upsell
     */
-    async syncFromKafka(payload: IPromotionGrpcRequest.IKafkaBody) {
+    async syncPromoFromKafka(payload: IPromotionGrpcRequest.IKafkaBody) {
         try {
-            if (payload.as.create) {
+            let data = JSON.parse(payload.as.argv)
+            if (payload.as.create || payload.as.update || payload.as.get) {
+                if (payload.as.create) {
 
+                }
+                if (payload.as.update) {
+
+                }
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncPromoFromKafka", error, false)
             return Promise.reject(error)
         }
     }

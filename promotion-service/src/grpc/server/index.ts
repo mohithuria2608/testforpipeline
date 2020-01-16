@@ -22,7 +22,7 @@ server.addService(promotionProto.PromotionService.service, {
     sync: async (call: IPromotionGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.PromotionE.syncFromKafka(call.request)
+            let res: {} = await ENTITY.PromotionE.syncPromoFromKafka(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)

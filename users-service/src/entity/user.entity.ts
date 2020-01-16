@@ -135,7 +135,7 @@ export class UserEntity extends BaseEntity {
             createdAt: 0,
             session: {},
             mergeUserId: "",
-            cartId: await cryptData(headers.deviceid),
+            cartId: await cryptData(headers.deviceid + new Date().getTime()),
             password: 'Password1'//await cryptData(id)
         } : {}
         if (userInfo.isGuest != undefined) {
@@ -331,21 +331,23 @@ export class UserEntity extends BaseEntity {
      * @param {IUserRequest.IUserData} userData 
      * @param {IUserRequest.IEditProfile} payload 
      */
-    async updateUser(userData: IUserRequest.IUserData, payload: IUserRequest.IEditProfile) {
+    async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
         try {
             let userUpdate = {}
             if (payload.email)
                 userUpdate['email'] = payload.email
             if (payload.name)
                 userUpdate['name'] = payload.name
+            if (payload.cartId)
+                userUpdate['cartId'] = payload.cartId
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,
-                key: userData.id,
+                key: userId,
                 update: true,
             }
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userData.id })
+            let user = await this.getUser({ userId: userId })
             return user
         } catch (error) {
             consolelog(process.cwd(), "updateUser", error, false)
@@ -404,12 +406,24 @@ export class UserEntity extends BaseEntity {
      * @description sync user to cms and sdm coming from KAFKA
      * @param {IKafkaGrpcRequest.IKafkaBody} payload 
      */
-    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+    async syncUserFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            if (payload.cms.create || payload.cms.update)
-                this.createUserOnCms(payload)
-            if (payload.sdm.create || payload.sdm.update)
-                this.createUserOnSdm(payload)
+            let data = JSON.parse(payload.as.argv)
+            if (payload.as.create || payload.as.update || payload.as.get) {
+                if (payload.as.create) {
+
+                }
+                if (payload.as.update)
+                    this.updateUser(data.userId, { cartId: data.cartId })
+            }
+            if (payload.cms.create || payload.cms.update || payload.cms.get) {
+                if (payload.cms.create)
+                    this.createUserOnCms(payload)
+            }
+            if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
+                if (payload.sdm.create)
+                    this.createUserOnSdm(payload)
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncFromKafka", error, false)

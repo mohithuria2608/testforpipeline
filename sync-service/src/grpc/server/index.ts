@@ -18,26 +18,16 @@ const syncProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(syncProto.SyncService.service, {
-    syncConfig: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
+    sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "syncConfig", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
             let res = await ENTITY.ConfigE.syncConfigFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "syncConfig", error, false)
+            consolelog(process.cwd(), "sync", error, false)
             callback(grpcSendError(error))
         }
-    },
-    getConfig: async (call: IConfigGrpcRequest.IGetConfigReq, callback) => {
-        try {
-            consolelog(process.cwd(), "getConfig", JSON.stringify(call.request), true)
-            let res = await ENTITY.ConfigE.getConfig(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "getConfig", error, false)
-            callback(grpcSendError(error))
-        }
-    },
+    }
 })
 
 server.bind(config.get("grpc.sync.server"), grpc.ServerCredentials.createInsecure())

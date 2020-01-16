@@ -40,21 +40,35 @@ export class MenuController {
 
     /**
     * @method GRPC
+    * @param {string} type  enum[menu, upsell]
+    * @param {string} data  actuall array of menu or upsell
     * */
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
-            /**
-             * @param {any} data
-             * @param {string} type  enum[menu, upsell]
-             * @param {string} action enum[update , create]
-             */
-            if (data.action == "update") {
+            if (data.type == "menu") {
+                if (payload.as.create || payload.as.update || payload.as.get) {
+                    if (payload.as.create) {
 
+                    }
+                    if (payload.as.update) {
+
+                    }
+                }
+            }
+            if (data.type == "upsell") {
+                if (payload.as.create || payload.as.update || payload.as.get) {
+                    if (payload.as.create) {
+
+                    }
+                    if (payload.as.update) {
+
+                    }
+                }
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncMenuFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", error, false)
             return Promise.reject(error)
         }
     }

@@ -67,6 +67,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
+                    cCode: Joi.string().required(),
+                    phnNo: Joi.string().required(),
                     orderId: Joi.string().required()
                 }
             }),

@@ -13,19 +13,22 @@ class SdmOrderStatusConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer SDM_GET_ORDER", JSON.stringify(message), true)
-                this.getSdmOrder(message);
+                consolelog(process.cwd(), "consumer sdm_order", JSON.stringify(message), true)
+                this.sdmOrder(message);
                 return null;
             })
     }
 
-    private async getSdmOrder(message: IKafkaRequest.IKafkaBody) {
+    private async sdmOrder(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.sdm.get)
-                await orderService.getSdmOrder(JSON.parse(message.sdm.argv))
+            await orderService.sync(message)
+            // if (message.sdm.create)
+            //     await orderService.createSdmOrder(JSON.parse(message.sdm.argv))
+            // if (message.sdm.get)
+            //     await orderService.getSdmOrder(JSON.parse(message.sdm.argv))
             return {}
         } catch (err) {
-            consolelog(process.cwd(), "getSdmOrder", err, false);
+            consolelog(process.cwd(), "sdmOrder", err, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)

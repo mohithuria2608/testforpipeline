@@ -22,7 +22,7 @@ export class KafkaController {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.cms.create || payload.cms.update) {
+                    if (payload.cms.create || payload.cms.update || payload.cms.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.sdm
@@ -31,7 +31,7 @@ export class KafkaController {
                         topic = Constant.KAFKA_TOPIC.CMS_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.sdm.create || payload.sdm.update) {
+                    if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.cms
@@ -40,7 +40,7 @@ export class KafkaController {
                         topic = Constant.KAFKA_TOPIC.SDM_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
                         delete messages.sdm
                         delete messages.cms
@@ -49,14 +49,13 @@ export class KafkaController {
                         topic = Constant.KAFKA_TOPIC.AS_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
                     break;
                 }
                 case Constant.SET_NAME.MENU: {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.cms.create || payload.cms.update) {
+                    if (payload.cms.create || payload.cms.update || payload.cms.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.sdm
@@ -65,7 +64,7 @@ export class KafkaController {
                         topic = Constant.KAFKA_TOPIC.CMS_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.sdm.create || payload.sdm.update) {
+                    if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.cms
@@ -74,7 +73,7 @@ export class KafkaController {
                         topic = Constant.KAFKA_TOPIC.SDM_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
                         delete messages.sdm
                         delete messages.cms
@@ -89,7 +88,7 @@ export class KafkaController {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
                         delete messages.sdm
                         delete messages.cms
@@ -98,14 +97,13 @@ export class KafkaController {
                         topic = Constant.KAFKA_TOPIC.AS_UPSELL
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
                     break;
                 }
                 case Constant.SET_NAME.PROMOTION: {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
                         delete messages.sdm
                         delete messages.cms
@@ -120,21 +118,20 @@ export class KafkaController {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.sdm.get) {
+                    if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.cms
-                        topic = Constant.KAFKA_TOPIC.SDM_GET_ORDER
+                        topic = Constant.KAFKA_TOPIC.SDM_ORDER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
                     break;
                 }
                 case Constant.SET_NAME.CONFIG: {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.as.create) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
                         delete messages.sdm
                         delete messages.cms
@@ -168,6 +165,7 @@ export class KafkaController {
             consolelog(process.cwd(), "produceToFailureTopic", err, false)
             return Promise.reject(err)
         }
+
     }
 }
 

@@ -1,6 +1,6 @@
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
-import { userService, locationService } from '../../grpc/client'
+import { consolelog, cryptData } from '../../utils'
+import { userService, locationService, kafkaService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 
@@ -23,36 +23,26 @@ export class OrderController {
             let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
             if (!getStore.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
-            let putArg: IAerospike.Put = {
-                bins: {
-                    createdAt: new Date().getTime(),
-                    address: {
-                        addressId: getAddress.id,
-                        sdmAddressRef: getAddress.sdmAddressRef,
-                        cmsAddressRef: getAddress.cmsAddressRef,
-                        tag: getAddress.tag,
-                        bldgName: getAddress.bldgName,
-                        description: getAddress.description,
-                        flatNum: getAddress.flatNum,
-                        addressType: getAddress.addressType,
-                        lat: getAddress.lat,
-                        lng: getAddress.lng
-                    },
-                    store: {
-                        sdmStoreRef: getStore.storeId,
-                        lat: getStore.location.latitude,
-                        lng: getStore.location.longitude,
-                        address: getStore.address_en
-                    },
-                    status: Constant.DATABASE.STATUS.ORDER.PENDING.AS
-                },
-                set: ENTITY.OrderE.set,
-                key: payload.cartId,
-                update: true,
+
+            let cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+
+            ENTITY.OrderE.syncOrder(cartData)
+            
+            await ENTITY.OrderE.createOneEntityMdb(cartData)
+            let newCartId = await cryptData(headers.deviceid + new Date().getTime())
+            await ENTITY.CartE.assignNewCart(newCartId, auth.id)
+            let asUserChange = {
+                set: Constant.SET_NAME.USER,
+                as: {
+                    update: true,
+                    argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
+                }
             }
-            await Aerospike.put(putArg)
-            ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.AS })
-            return {}
+            await kafkaService.kafkaSync(asUserChange)
+            Aerospike.remove({ set: ENTITY.OrderE.set, key: payload.cartId })
+
+            ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO })
+            return { cartId: newCartId }
         } catch (err) {
             consolelog(process.cwd(), "postOrder", err, false)
             return Promise.reject(err)
@@ -1327,10 +1317,13 @@ export class OrderController {
 
     /**
      * @method GET
+     * @param {string} cCode
+     * @param {string} phnNo
      * @param {number} orderId
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+
             return {
                 "orderId": "UAE-1",
                 "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",

@@ -66,6 +66,8 @@ declare namespace IOrderRequest {
     }
 
     interface ITrackOrder {
+        cCode: string,
+        phnNo: string,
         orderId: string,
     }
 }

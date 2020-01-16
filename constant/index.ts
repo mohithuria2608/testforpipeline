@@ -34,7 +34,7 @@ export enum KAFKA_TOPIC {
 
     AS_PROMOTION = 'as_promotion',
 
-    SDM_GET_ORDER = 'sdm_get_order',
+    SDM_ORDER = 'sdm_order',
 
     AS_CONFIG = 'as_config'
 };
@@ -264,26 +264,25 @@ export const DATABASE = {
         ORDER: {
             CART: {
                 AS: "CART",
-                CMS: "",
-                SDM: ""
+                CMS: ""
             },
             PENDING: {
-                AS: "PENDING",
+                MONGO: "PENDING",
                 CMS: "",
                 SDM: ""
             },
             CLOSED: {
-                AS: "",
+                MONGO: "",
                 CMS: "",
                 SDM: "CLOSED"
             },
             CANCELED: {
-                AS: "",
+                MONGO: "",
                 CMS: "",
                 SDM: "CANCELED"
             },
             FAILURE: {
-                AS: "",
+                MONGO: "",
                 CMS: "",
                 SDM: "FAILURE"
             },

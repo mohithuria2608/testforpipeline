@@ -21,7 +21,7 @@ class AsMenuConsumer extends BaseConsumer {
 
     private async syncConfig(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await syncService.syncConfig(message)
+            let res = await syncService.sync(message)
             return res
         } catch (err) {
             consolelog(process.cwd(), "syncConfig", err, false);

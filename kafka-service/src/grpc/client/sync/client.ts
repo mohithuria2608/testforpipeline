@@ -23,11 +23,11 @@ export class SyncService {
         consolelog(process.cwd(), 'GRPC connection established sync-service', config.get("grpc.sync.client"), true)
     }
 
-    async syncConfig(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
+    async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
                 await syncServiceValidator.syncValidator(payload)
-                this.syncClient.syncConfig(payload, (err, res) => {
+                this.syncClient.sync(payload, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully synced sync on cms", JSON.stringify(res), false)
                         resolve(res)

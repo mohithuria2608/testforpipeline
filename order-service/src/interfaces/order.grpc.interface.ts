@@ -21,6 +21,13 @@ declare namespace IOrderGrpcRequest {
 
     interface IUpdateDefaultCartTTLRes { }
 
+    interface ICreateSdmOrderReq {
+        request: ICreateSdmOrder
+    }
+    interface ICreateSdmOrder {
+
+    }
+
     interface IGetSdmOrderReq {
         request: IGetSdmOrder
     }

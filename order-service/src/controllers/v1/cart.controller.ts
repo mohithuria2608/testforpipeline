@@ -41,8 +41,8 @@ export class CartController {
                 if (!validPromo.isValid)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             }
-            let cmsValidatedCart = await ENTITY.OrderE.createCartOnCMS(payload, auth.userData)
-            let res = await ENTITY.OrderE.updateCart(payload.items, cmsValidatedCart)
+            let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, auth.userData)
+            let res = await ENTITY.CartE.updateCart(payload.items, cmsValidatedCart)
             return res
         } catch (err) {
             consolelog(process.cwd(), "postCart", err, false)
@@ -57,7 +57,7 @@ export class CartController {
      * */
     async getCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IGetCart, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.OrderE.getCartOrder({ cartId: payload.cartId })
+            return await ENTITY.CartE.getCart({ cartId: payload.cartId })
         } catch (err) {
             consolelog(process.cwd(), "getCart", err, false)
             return Promise.reject(err)

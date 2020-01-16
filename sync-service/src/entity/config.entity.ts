@@ -69,28 +69,13 @@ export class ConfigEntity extends BaseEntity {
     */
     async syncConfigFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            if (payload.as.create) {
-                let data = JSON.parse(payload.as.argv)
-                if (data.action == "update") {
-                    let getConfig = await this.getConfig({ type: data.type })
-                    let dataToUpdate = {
-                        type: data.type,
-                        ...data.data
-                    }
-                    delete data['action']
-                    let putArg: IAerospike.Put = {
-                        bins: dataToUpdate,
-                        set: this.set,
-                        key: getConfig.id,
-                        update: true,
-                    }
-                    await Aerospike.put(putArg)
-                } else {
+            let data = JSON.parse(payload.as.argv)
+            if (payload.as.create || payload.as.update || payload.as.get) {
+                if (payload.as.create) {
                     let dataToSave = {
                         type: data.type,
                         ...data.data
                     }
-                    delete data['action']
                     let putArg: IAerospike.Put = {
                         bins: dataToSave,
                         set: this.set,
@@ -99,6 +84,23 @@ export class ConfigEntity extends BaseEntity {
                         create: true,
                     }
                     await Aerospike.put(putArg)
+                }
+                if (payload.as.update) {
+                    let configData = await this.getConfig({ type: data.type })
+                    let dataToUpdate = {
+                        type: data.type,
+                        ...data.data
+                    }
+                    let putArg: IAerospike.Put = {
+                        bins: dataToUpdate,
+                        set: this.set,
+                        key: configData.id,
+                        update: true,
+                    }
+                    await Aerospike.put(putArg)
+                }
+                if (payload.as.get) {
+                    await this.getConfig(data)
                 }
             }
             return {}
