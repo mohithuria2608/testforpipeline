@@ -40,6 +40,21 @@ export class MenuController {
 
     /**
     * @method GRPC
+    * @param {string} country :current country of user
+    * @param {boolean} isDefault :want to fetch default menu or not
+    * */
+    async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
+        try {
+            let menuId = 5;
+            return await ENTITY.MenuE.getMenu({ menuId: menuId })
+        } catch (err) {
+            consolelog(process.cwd(), "grpcFetchMenu", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+    * @method GRPC
     * @param {string} type  enum[menu, upsell]
     * @param {string} data  actuall array of menu or upsell
     * */

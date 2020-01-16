@@ -1,6 +1,5 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import * as ENTITY from '../../entity'
 import { menuController } from '../../controllers';
 
 const grpc = require('grpc')
@@ -22,7 +21,7 @@ server.addService(menuProto.MenuService.service, {
     fetchMenu: async (call: IMenuGrpcRequest.IFetchMenu, callback) => {
         try {
             consolelog(process.cwd(), "grpcFetchMenu", JSON.stringify(call.request), true)
-            let res: IMenuGrpcRequest.IFetchMenuRes = await ENTITY.MenuE.grpcFetchMenu(call.request)
+            let res: IMenuGrpcRequest.IFetchMenuRes = await menuController.grpcFetchMenu(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchMenu-server", error, false)

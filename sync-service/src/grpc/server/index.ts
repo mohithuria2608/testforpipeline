@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import * as ENTITY from '../../entity'
+import { cmsConfigController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -21,7 +21,7 @@ server.addService(syncProto.SyncService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res = await ENTITY.ConfigE.syncConfigFromKafka(call.request)
+            let res = await cmsConfigController.syncConfigFromKafka(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)

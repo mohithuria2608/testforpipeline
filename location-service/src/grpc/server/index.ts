@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import * as ENTITY from '../../entity'
+import { storeController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -21,7 +21,7 @@ server.addService(locationProto.LocationService.service, {
     fetchStore: async (call: IStoreGrpcRequest.IFetchStoreReq, callback) => {
         try {
             consolelog(process.cwd(), "grpc fetchStore", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore = await ENTITY.StoreE.fetchStore(call.request)
+            let res: IStoreRequest.IStore = await storeController.fetchStore(call.request)
             res.geoFence = {}
             callback(null, { store: res })
         } catch (error) {
@@ -33,7 +33,7 @@ server.addService(locationProto.LocationService.service, {
     validateCoordinate: async (call: IStoreGrpcRequest.IValidateCoordinate, callback) => {
         try {
             consolelog(process.cwd(), "grpc validateCoordinate", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await ENTITY.StoreE.validateCoords(call.request)
+            let res: IStoreRequest.IStore[] = await storeController.validateCoords(call.request)
             res.map(item => item.geoFence = {})
             callback(null, { store: res })
         } catch (error) {

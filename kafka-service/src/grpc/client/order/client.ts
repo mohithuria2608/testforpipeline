@@ -41,49 +41,6 @@ export class OrderService {
             }
         })
     }
-
-    // async createSdmOrder(payload: IOrderGrpcRequest.ICreateSdmOrder): Promise<IOrderGrpcRequest.IGetSdmOrderRes> {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             await orderServiceValidator.createSdmOrderValidator(payload)
-    //             this.orderClient.getSdmOrder({}, (err, res) => {
-    //                 if (!err) {
-    //                     consolelog(process.cwd(), "successfully created order on sdm", JSON.stringify(res), false)
-    //                     resolve(res.store)
-    //                 } else {
-    //                     consolelog(process.cwd(), "Error in  creating order on sdm", JSON.stringify(err), false)
-    //                     reject(err)
-    //                 }
-    //             })
-    //         } catch (error) {
-    //             reject(error)
-    //         }
-    //     })
-    // }
-
-    // async getSdmOrder(payload: IOrderGrpcRequest.IGetSdmOrder): Promise<IOrderGrpcRequest.IGetSdmOrderRes> {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             await orderServiceValidator.getSdmOrderValidator(payload)
-    //             this.orderClient.getSdmOrder({
-    //                 cartId: payload.cartId,
-    //                 sdmOrderRef: payload.sdmOrderRef,
-    //                 status: payload.status,
-    //                 timeInterval: payload.timeInterval,
-    //             }, (err, res) => {
-    //                 if (!err) {
-    //                     consolelog(process.cwd(), "successfully fetched order status", JSON.stringify(res), false)
-    //                     resolve(res.store)
-    //                 } else {
-    //                     consolelog(process.cwd(), "Error in fetching order status", JSON.stringify(err), false)
-    //                     reject(err)
-    //                 }
-    //             })
-    //         } catch (error) {
-    //             reject(error)
-    //         }
-    //     })
-    // }
 }
 
 export const orderService = new OrderService();

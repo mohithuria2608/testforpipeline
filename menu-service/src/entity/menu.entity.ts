@@ -196,21 +196,6 @@ export class MenuClass extends BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    /**
-    * @method GRPC
-    * @param {string} country :current country of user
-    * @param {boolean} isDefault :want to fetch default menu or not
-    * */
-    async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
-        try {
-            let menuId = 5;
-            return await this.getMenu({ menuId: menuId })
-        } catch (err) {
-            consolelog(process.cwd(), "grpcFetchMenu", err, false)
-            return Promise.reject(err)
-        }
-    }
 }
 
 export const MenuE = new MenuClass()

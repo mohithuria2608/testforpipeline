@@ -312,14 +312,84 @@ export class CartClass extends BaseEntity {
         try {
             let cart = []
             payload.items.map(obj => {
-                cart.push({
-                    product_id: obj.id,
-                    qty: obj.qty,
-                    price: obj.finalPrice,
-                    type_id: obj['typeId']
-                })
+                if (obj['typeId'] == 'simple') {
+                    cart.push({
+                        product_id: obj.id,
+                        qty: obj.qty,
+                        price: obj.finalPrice,
+                        type_id: obj['typeId']
+                    })
+                }
+                else if (obj['typeId'] == 'configurable') {
+                    let super_attribute = {};
+                    let price = null;
+                    obj['configurableProductOptions'].map(co => {
+                        let value = null
+                        co['options'].map(o => {
+                            if (o['isSelected'] == 1) {
+                                value = o['id']
+                            }
+                        })
+                        super_attribute[co['id']] = value
+                    })
+                    obj['products'].map(p => {
+                        if (p['sku'] == obj['selectedItem'])
+                            price = p['finalPrice']
+                    })
+                    cart.push({
+                        product_id: obj.id,
+                        qty: obj.qty,
+                        price: price,
+                        type_id: obj['typeId'],
+                        super_attribute: super_attribute
+                    })
+                }
+                else if (obj['typeId'] == 'bundle') {
+                    let bundle_option = {};
+                    let selection_configurable_option = {};
+                    let bundle_super_attribute = {};
+                    obj['bundleProductOptions'].map(bpo => {
+                        let bundleOptValue = null
+                        if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                            bpo['productLinks'].map(pl => {
+                                if (pl['selected'] == 1) {
+                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                        let bundleOptSubValue = {}
+                                        pl['subOptions'].map(so => {
+                                            if (so['selected'] == 1)
+                                                bundleOptSubValue[pl['id']] = so['id']  //@TODO : have to change
+                                        })
+                                        bundleOptValue = bundleOptSubValue
+                                    } else {
+                                        bundleOptValue = pl['position']
+                                    }
+                                }
+                            })
+                        }
+                        bundle_option[bpo['id']] = bundleOptValue
+                    })
+                    cart.push({
+                        product_id: obj.id,
+                        qty: obj.qty,
+                        price: obj.finalPrice,
+                        type_id: obj['typeId'],
+                        bundle_option: bundle_option,
+                        selection_configurable_option: selection_configurable_option,
+                        bundle_super_attribute: bundle_super_attribute,
+                    })
+                }
+                else if (obj['typeId'] == 'bundle_group') {
+                    cart.push({
+                        product_id: obj.id,
+                        qty: obj.qty,
+                        price: obj.finalPrice,
+                        type_id: "bundle"
+                    })
+                } else {
+
+                }
             })
-            let req: ICartCMSRequest.ICreateCart = {
+            let req: ICartCMSRequest.ICreateCartCms = {
                 cms_user_id: 10,//userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,

@@ -403,35 +403,6 @@ export class UserEntity extends BaseEntity {
     }
 
     /**
-     * @description sync user to cms and sdm coming from KAFKA
-     * @param {IKafkaGrpcRequest.IKafkaBody} payload 
-     */
-    async syncUserFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-        try {
-            let data = JSON.parse(payload.as.argv)
-            if (payload.as.create || payload.as.update || payload.as.get) {
-                if (payload.as.create) {
-
-                }
-                if (payload.as.update)
-                    this.updateUser(data.userId, { cartId: data.cartId })
-            }
-            if (payload.cms.create || payload.cms.update || payload.cms.get) {
-                if (payload.cms.create)
-                    this.createUserOnCms(payload)
-            }
-            if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
-                if (payload.sdm.create)
-                    this.createUserOnSdm(payload)
-            }
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
      * @description Create user on SDM
      * @param payload 
      */

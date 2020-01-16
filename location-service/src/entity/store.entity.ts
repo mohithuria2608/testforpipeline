@@ -84,54 +84,6 @@ export class StoreEntity extends BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    /**
-    * @method INTERNAL/GRPC
-    * @param {string} storeId : sdm store id
-    * */
-    async fetchStore(payload: IStoreRequest.IFetchStore) {
-        try {
-            let queryArg: IAerospike.Query = {
-                equal: {
-                    bin: "storeId",
-                    value: payload.storeId
-                },
-                set: this.set,
-                background: false,
-            }
-            let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
-            if (store && store.length > 0) {
-                return store[0]
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
-        } catch (error) {
-            consolelog(process.cwd(), "fetchStore", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @method GRPC
-     * @param {number=} lat : latitude
-     * @param {number=} lng : longitude
-     * */
-    async validateCoords(payload: IStoreRequest.IValidateCoordinates): Promise<IStoreRequest.IStore[]> {
-        try {
-            let geoWithinArg: IAerospike.Query = {
-                set: this.set,
-                geoWithin: {
-                    bin: 'geoFence',
-                    lat: parseFloat(payload.lat.toString()),
-                    lng: parseFloat(payload.lng.toString()),
-                }
-            }
-            let res = await Aerospike.query(geoWithinArg)
-            return res
-        } catch (error) {
-            consolelog(process.cwd(), "validateCoords", error, false)
-            return Promise.reject(error)
-        }
-    }
 }
 
 export const StoreE = new StoreEntity()

@@ -7,6 +7,35 @@ export class UserController {
     constructor() { }
 
     /**
+     * @description sync user to cms and sdm coming from KAFKA
+     * @param {IKafkaGrpcRequest.IKafkaBody} payload 
+     */
+    async syncUserFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            let data = JSON.parse(payload.as.argv)
+            if (payload.as.create || payload.as.update || payload.as.get) {
+                if (payload.as.create) {
+
+                }
+                if (payload.as.update)
+                    ENTITY.UserE.updateUser(data.userId, { cartId: data.cartId })
+            }
+            if (payload.cms.create || payload.cms.update || payload.cms.get) {
+                if (payload.cms.create)
+                    ENTITY.UserE.createUserOnCms(data)
+            }
+            if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
+                if (payload.sdm.create)
+                    ENTITY.UserE.createUserOnSdm(data)
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncFromKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
     * @method POST
     * @param {string} phnNo : phone number max length 9 digits
     * @param {string} cCode : country code with +, eg: +976

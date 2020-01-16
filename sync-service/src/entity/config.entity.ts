@@ -63,53 +63,6 @@ export class ConfigEntity extends BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    /**
-    * @method GRPC
-    */
-    async syncConfigFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-        try {
-            let data = JSON.parse(payload.as.argv)
-            if (payload.as.create || payload.as.update || payload.as.get) {
-                if (payload.as.create) {
-                    let dataToSave = {
-                        type: data.type,
-                        ...data.data
-                    }
-                    let putArg: IAerospike.Put = {
-                        bins: dataToSave,
-                        set: this.set,
-                        key: dataToSave.id,
-                        ttl: 0,
-                        create: true,
-                    }
-                    await Aerospike.put(putArg)
-                }
-                if (payload.as.update) {
-                    let configData = await this.getConfig({ type: data.type })
-                    let dataToUpdate = {
-                        type: data.type,
-                        ...data.data
-                    }
-                    let putArg: IAerospike.Put = {
-                        bins: dataToUpdate,
-                        set: this.set,
-                        key: configData.id,
-                        update: true,
-                    }
-                    await Aerospike.put(putArg)
-                }
-                if (payload.as.get) {
-                    await this.getConfig(data)
-                }
-            }
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncConfigFromKafka", error, false)
-            return Promise.reject(error)
-        }
-    }
-
 }
 
 export const ConfigE = new ConfigEntity()

@@ -3,7 +3,7 @@ declare namespace ICartCMSRequest {
 
     interface IHeader { }
 
-    interface ICreateCart {
+    interface ICreateCartCms {
         cms_user_id: number,
         website_id: number,
         cart_items: ICMSCartItems[],
@@ -14,7 +14,10 @@ declare namespace ICartCMSRequest {
         product_id: number,
         price: number,
         qty: number,
-        type_id: string
+        type_id: string,
+        bundle_option?: any,
+        selection_configurable_option?: any,
+        bundle_super_attribute?: any,
     }
 
     interface ICreateCartCmsRes {

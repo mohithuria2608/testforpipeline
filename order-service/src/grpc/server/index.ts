@@ -1,6 +1,7 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity'
+import { orderController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -48,7 +49,7 @@ server.addService(orderProto.OrderService.service, {
             callback(grpcSendError(error))
         }
     },
-    updateCart: async (call: IOrderGrpcRequest.IUpdateOrderReq, callback) => {
+    updateCart: async (call: IOrderGrpcRequest.IUpdateCartReq, callback) => {
         try {
             consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.CartE.updateCart(call.request.cartId, JSON.parse(call.request.curItems), JSON.parse(call.request.cmsCart))
@@ -61,30 +62,10 @@ server.addService(orderProto.OrderService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.OrderE.syncOrderFromKafka(call.request)
+            let res: {} = await orderController.syncOrderFromKafka(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    createSdmOrder: async (call: IOrderGrpcRequest.ICreateSdmOrderReq, callback) => {
-        try {
-            consolelog(process.cwd(), "createSdmOrder", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.OrderE.createSdmOrder(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "createSdmOrder", error, false)
-            callback(grpcSendError(error))
-        }
-    },
-    getSdmOrder: async (call: IOrderGrpcRequest.IGetSdmOrderReq, callback) => {
-        try {
-            consolelog(process.cwd(), "getSdmOrder", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.OrderE.getSdmOrder(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "getSdmOrder", error, false)
             callback(grpcSendError(error))
         }
     }

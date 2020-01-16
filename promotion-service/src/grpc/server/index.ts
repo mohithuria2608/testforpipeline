@@ -1,6 +1,7 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity'
+import { promotionController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -22,7 +23,7 @@ server.addService(promotionProto.PromotionService.service, {
     sync: async (call: IPromotionGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.PromotionE.syncPromoFromKafka(call.request)
+            let res: {} = await promotionController.syncPromoFromKafka(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)
@@ -32,7 +33,7 @@ server.addService(promotionProto.PromotionService.service, {
     validatePromotion: async (call: IPromotionGrpcRequest.IValidatePromotionReq, callback) => {
         try {
             consolelog(process.cwd(), "validatePromotion", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.PromotionE.validatePromotion(call.request)
+            let res: {} = await promotionController.validatePromotion(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "validatePromotion", error, false)

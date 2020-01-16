@@ -47,6 +47,36 @@ export class PromotionClass extends BaseEntity {
     });
 
     /**
+     * @method INTERNAL
+     */
+    async post(data: IPromotionRequest.IPromoData) {
+        try {
+            data = this.filterPromotionData(data);
+            let putArg: IAerospike.Put = {
+                bins: data,
+                set: this.set,
+                key: data.cmsCouponRef,
+                create: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "post promotion", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method INTERNAL
+     * @description :  updates promotion data
+     */
+    filterPromotionData(promotionPayload) {
+        promotionPayload.dateFrom = new Date(promotionPayload.dateFrom).toISOString();
+        promotionPayload.dateTo = new Date(promotionPayload.dateTo).toISOString();
+        return promotionPayload;
+    }
+
+    /**
      * @method GRPC/INTERNAL
      * @param {number=} cmsCouponRef
      * @param {string=} couponCode
@@ -93,24 +123,6 @@ export class PromotionClass extends BaseEntity {
         }
     }
 
-
-    /**
-     * @method INTERNAL
-     * @param {string=} cartId
-     * @param {string=} couponCode
-     */
-    async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
-        try {
-            let promo = await this.getPromotions({ couponCode: payload.couponCode })
-            if (new Date(promo[0].dateFrom).toISOString()) {
-                return { isValid: true }
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)
-        } catch (error) {
-            consolelog(process.cwd(), "validatePromotion", error, false)
-            return Promise.reject(error)
-        }
-    }
 
     /**
      * @method INTERNAL

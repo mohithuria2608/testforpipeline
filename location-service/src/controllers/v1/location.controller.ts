@@ -1,8 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../aerospike'
-
+import { storeController } from './store.controller'
 export class LocationController {
 
     constructor() { }
@@ -14,7 +13,7 @@ export class LocationController {
      * */
     async validateLocation(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IValidateLocation) {
         try {
-            let store: IStoreRequest.IStore[] = await ENTITY.StoreE.validateCoords(payload)
+            let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
             if (store && store.length > 0)
                 return { menuId: store[0].menuId }
             else
@@ -33,7 +32,7 @@ export class LocationController {
         try {
             let preSelectedStore: IStoreRequest.IStore
             if (payload.lat && payload.lng) {
-                let temp = await ENTITY.StoreE.validateCoords(payload)
+                let temp = await storeController.validateCoords(payload)
                 if (temp && temp.length > 0)
                     preSelectedStore = temp[0]
             }

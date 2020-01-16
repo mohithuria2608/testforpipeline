@@ -3,7 +3,7 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
 export class BaseEntity {
-    protected set: SetNames;
+    public set: SetNames;
     constructor(set?) {
         this.set = set
     }

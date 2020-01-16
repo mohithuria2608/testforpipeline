@@ -8,6 +8,46 @@ export class PromotionController {
     constructor() { }
 
     /**
+    * @method GRPC
+    * @param {string} data  actuall array of menu or upsell
+    */
+    async syncPromoFromKafka(payload: IPromotionGrpcRequest.IKafkaBody) {
+        try {
+            let data = JSON.parse(payload.as.argv)
+            if (payload.as.create || payload.as.update || payload.as.get) {
+                if (payload.as.create) {
+
+                }
+                if (payload.as.update) {
+
+                }
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncPromoFromKafka", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method INTERNAL
+    * @param {string=} cartId
+    * @param {string=} couponCode
+    */
+    async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
+        try {
+            let promo = await ENTITY.PromotionE.getPromotions({ couponCode: payload.couponCode })
+            if (new Date(promo[0].dateFrom).toISOString()) {
+                return { isValid: true }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)
+        } catch (error) {
+            consolelog(process.cwd(), "validatePromotion", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
      * @method POST
      * @description : Post bulk promotion data
      * */
@@ -53,7 +93,7 @@ export class PromotionController {
     async applyPromotion(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IApplyPromotion, auth: ICommonRequest.AuthorizationObj) {
         try {
             // auth.userData = await userService.fetchUser({ userId: auth.id })
-            let validPromo = await ENTITY.PromotionE.validatePromotion({ couponCode: payload.couponCode })
+            let validPromo = await this.validatePromotion({ couponCode: payload.couponCode })
             if (!validPromo.isValid)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             let cmsValidatedPromo = await ENTITY.PromotionE.validatePromoOnCms(payload)

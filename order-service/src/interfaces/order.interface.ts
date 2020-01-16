@@ -70,4 +70,16 @@ declare namespace IOrderRequest {
         phnNo: string,
         orderId: string,
     }
+
+
+    interface ICreateSdmOrder {
+
+    }
+
+    interface IGetSdmOrder {
+        cartId: string,
+        sdmOrderRef: number,
+        status?: string,
+        timeInterval: number
+    }
 }
