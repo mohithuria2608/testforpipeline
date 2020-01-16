@@ -44,11 +44,12 @@ declare namespace IMenuGrpcRequest {
     }
 
     interface IProduct {
-        quantity?: number
+        qty?: number
         catId?: number,
         sequence: number,
         steps: IStep[],
         price: number,
+        finalPrice: number,
         promoId: number,
         description_en: string,
         itemType: string,

@@ -311,11 +311,19 @@ export class CartClass extends BaseEntity {
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
             let cart = []
+            payload.items.map(obj => {
+                cart.push({
+                    product_id: obj.id,
+                    qty: obj.qty,
+                    price: obj.finalPrice,
+                    type_id: obj['typeId']
+                })
+            })
             let req: ICartCMSRequest.ICreateCart = {
                 cms_user_id: 10,//userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart
+                cart_items: cart// [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart
             }
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
