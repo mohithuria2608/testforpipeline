@@ -44,6 +44,7 @@ export class CartController {
             }
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, auth.userData)
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
+            res['invalidMenu'] = invalidMenu
             return res
         } catch (err) {
             consolelog(process.cwd(), "postCart", err, false)
