@@ -9,7 +9,7 @@ export class PromotionCMSEntity extends BaseCMS {
         super()
     }
 
-    async applyCoupon(payload: IPromotionCmsRequest.IApplyCoupon): Promise<IPromotionCmsRequest.ICreateCartCmsRes> {
+    async applyCoupon(payload: IPromotionCmsRequest.IApplyCoupon): Promise<IPromotionCmsRequest.ICmsCartRes> {
         try {
             const headers = {};
             const form = payload;

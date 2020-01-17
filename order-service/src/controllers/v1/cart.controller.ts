@@ -14,6 +14,7 @@ export class CartController {
      * @param {number} menuUpdatedAt :current menu id
      * @param {number=} lat :latitude
      * @param {number=} lng :longitude
+     * @param {string=} couponCode :couponCode
      * @param {Array} items :array of products
      * */
     async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
@@ -42,7 +43,7 @@ export class CartController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             }
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, auth.userData)
-            let res = await ENTITY.CartE.updateCart(payload.cartId, payload.items, cmsValidatedCart)
+            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
             return res
         } catch (err) {
             consolelog(process.cwd(), "postCart", err, false)

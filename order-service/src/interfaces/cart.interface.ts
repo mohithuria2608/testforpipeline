@@ -14,6 +14,8 @@ declare namespace ICartRequest {
         address: IAddress,
         subTotal: number,
         total: number,
+        discountAmt: number,
+        couponCode: string,
         tax: ITax[]
         shipping: IShipping[],
         coupon: ICoupon[]
@@ -52,6 +54,8 @@ declare namespace ICartRequest {
         addres?: IAddress,
         subTotal?: number,
         total?: number,
+        discountAmt?: number,
+        couponCode?: string,
         tax?: ITax[]
         shipping?: IShipping[],
         coupon?: ICoupon[]

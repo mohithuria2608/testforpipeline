@@ -9,7 +9,7 @@ export class CartCMSEntity extends BaseCMS {
         super()
     }
 
-    async createCart(formObj: ICartCMSRequest.ICreateCartCms): Promise<ICartCMSRequest.ICreateCartCmsRes> {
+    async createCart(formObj: ICartCMSRequest.ICreateCartCms): Promise<ICartCMSRequest.ICmsCartRes> {
         try {
             const headers = {};
             const form = formObj;

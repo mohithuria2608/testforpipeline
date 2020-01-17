@@ -7,7 +7,8 @@ declare namespace ICartCMSRequest {
         cms_user_id: number,
         website_id: number,
         cart_items: ICMSCartItems[],
-        category_id: number
+        category_id: number,
+        coupon_code?: string
     }
 
     interface ICMSCartItems {
@@ -21,16 +22,17 @@ declare namespace ICartCMSRequest {
         bundle_super_attribute?: any,
     }
 
-    interface ICreateCartCmsRes {
+    interface ICmsCartRes {
         cms_cart_id: number,
         currency_code: string,
         cart_items: ICMSCartItems[],
         subtotal: number,
         grandtotal: number,
-        tax: ITax[]
-        shipping: any
+        tax: ITax
         not_available: number[],
-        is_price_changed: boolean
+        is_price_changed: boolean,
+        coupon_code: string,
+        discount_amount: number,
         success: boolean,
     }
 

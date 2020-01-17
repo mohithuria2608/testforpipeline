@@ -42,8 +42,8 @@ server.addService(orderProto.OrderService.service, {
     getCart: async (call: IOrderGrpcRequest.IGetCartReq, callback) => {
         try {
             consolelog(process.cwd(), "getCart", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.CartE.getCart(call.request)
-            callback(null, res)
+            let res = await ENTITY.CartE.getCart(call.request)
+            callback(null, { cart: JSON.stringify(res) })
         } catch (error) {
             consolelog(process.cwd(), "getCart", error, false)
             callback(grpcSendError(error))
@@ -52,8 +52,8 @@ server.addService(orderProto.OrderService.service, {
     updateCart: async (call: IOrderGrpcRequest.IUpdateCartReq, callback) => {
         try {
             consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.CartE.updateCart(call.request.cartId, JSON.parse(call.request.curItems), JSON.parse(call.request.cmsCart))
-            callback(null, res)
+            let res = await ENTITY.CartE.updateCart(call.request.cartId, JSON.parse(call.request.cmsCart))
+            callback(null, { cart: JSON.stringify(res) })
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             callback(grpcSendError(error))

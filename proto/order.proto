@@ -25,14 +25,18 @@ message IGetCartReq {
     required string cartId = 1;
 }
 
-message IGetCartRes { }
+message IGetCartRes {
+    required string cart = 1;
+}
 
 message IUpdateCartReq {
-    required string curItems = 1;
+    required string cartId = 1;
     required string cmsCart = 2;
 }
 
-message IUpdateCartRes { }
+message IUpdateCartRes { 
+    required string cart = 1;
+}
 
 message IKafkaReq {
     required string set = 1;

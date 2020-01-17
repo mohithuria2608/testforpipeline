@@ -1,11 +1,11 @@
 declare namespace IPromotionCmsRequest {
 
     interface IApplyCoupon {
-        cartId: string,
-        couponCode: string
+        cart_id: number,
+        coupon_code: string
     }
 
-    interface ICreateCartCmsRes {
+    interface ICmsCartRes {
         cms_cart_id: number,
         currency_code: string,
         cart_items: ICMSCartItems[],
@@ -13,7 +13,9 @@ declare namespace IPromotionCmsRequest {
         grandtotal: number,
         tax: ITax
         not_available: number[],
-        is_price_changed: boolean
+        is_price_changed: boolean,
+        coupon_code: string,
+        discount_amount: number,
         success: boolean,
     }
 

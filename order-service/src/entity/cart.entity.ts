@@ -196,6 +196,8 @@ export class CartClass extends BaseEntity {
             })),
         subTotal: Joi.number(),
         total: Joi.number(),
+        discountAmt: Joi.number(),
+        couponCode: Joi.string(),
         tax: Joi.array().items(
             Joi.object().keys({
                 name: Joi.string().required(),
@@ -266,6 +268,8 @@ export class CartClass extends BaseEntity {
                 address: null,
                 subTotal: 0,
                 total: 0,
+                discountAmt: 0,
+                couponCode: "",
                 tax: [],
                 shipping: [],
                 coupon: []
@@ -392,11 +396,15 @@ export class CartClass extends BaseEntity {
                 }
             })
             let req: ICartCMSRequest.ICreateCartCms = {
-                cms_user_id: 10,//userData.cmsUserRef,
+                cms_user_id: 10, //userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart// [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart
+                cart_items: cart, // [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart,
             }
+            if (payload.couponCode)
+                req['coupon_code'] = payload.couponCode
+            else
+                req['coupon_code'] = ""
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
         } catch (error) {
@@ -405,16 +413,22 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, curItems: IMenuGrpcRequest.IProduct[], cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
+    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: IMenuGrpcRequest.IProduct[]) {
         try {
             let prevCart = await this.getCart({ cartId: cartId })
+            if (curItems == undefined)
+                curItems = prevCart.items
             let dataToUpdate: ICartRequest.IUpdateCartData = {}
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['subTotal'] = cmsCart.subtotal
             dataToUpdate['total'] = cmsCart.grandtotal
-            dataToUpdate['shipping'] = []// cmsCart.shipping
+            dataToUpdate['shipping'] = [] // cmsCart.shipping
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
+            if (cmsCart.coupon_code) {
+                dataToUpdate['discountAmt'] = cmsCart.discount_amount ? cmsCart.discount_amount : 0
+                dataToUpdate['couponCode'] = cmsCart.coupon_code ? cmsCart.coupon_code : ""
+            }
 
             let updateCartItems = []
             dataToUpdate['items'] = updateCartItems

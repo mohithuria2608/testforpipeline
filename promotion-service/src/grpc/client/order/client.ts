@@ -29,10 +29,10 @@ export class OrderService {
                 await orderServiceValidator.getCartValidator(payload)
                 this.orderClient.getCart(payload, (err, res) => {
                     if (!err) {
-                        consolelog(process.cwd(), "successfully updated cart", JSON.stringify(res), false)
-                        resolve(res.store)
+                        consolelog(process.cwd(), "successfully received cart", JSON.stringify(res.cart), false)
+                        resolve(res.cart)
                     } else {
-                        consolelog(process.cwd(), "Error in updating cart", JSON.stringify(err), false)
+                        consolelog(process.cwd(), "Error in receiveing cart", JSON.stringify(err), false)
                         reject(err)
                     }
                 })
@@ -49,7 +49,7 @@ export class OrderService {
                 this.orderClient.updateCart(payload, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully updated cart", JSON.stringify(res), false)
-                        resolve(res.store)
+                        resolve(JSON.parse(res.cart))
                     } else {
                         consolelog(process.cwd(), "Error in updating cart", JSON.stringify(err), false)
                         reject(err)

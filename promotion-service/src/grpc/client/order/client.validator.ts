@@ -29,8 +29,7 @@ export class OrderServiceValidator {
             try {
                 let dataToValidate = Joi.object().keys({
                     cartId: Joi.string().required(),
-                    curItems: Joi.any(),
-                    cmsCart: Joi.any(),
+                    cmsCart: Joi.string().required(),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

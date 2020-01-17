@@ -11,9 +11,9 @@ export class BaseEntity {
     /**
     * @method GRPC
     */
-    async updateCart(cartId: string, curItems: IMenuGrpcRequest.IProduct[], cmsCart: IOrderGrpcRequest.ICmsCartRes) {
+    async updateCart(cartId: string, cmsCart: IPromotionCmsRequest.ICmsCartRes) {
         try {
-            return await orderService.updateCart({ cartId: cartId, curItems: JSON.stringify(curItems), cmsCart: JSON.stringify(cmsCart) })
+            return await orderService.updateCart({ cartId: cartId, cmsCart: JSON.stringify(cmsCart) })
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)

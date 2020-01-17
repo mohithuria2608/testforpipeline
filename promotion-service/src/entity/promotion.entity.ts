@@ -4,7 +4,6 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
-import * as CMS from "../cms";
 
 export class PromotionClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -119,22 +118,6 @@ export class PromotionClass extends BaseEntity {
             }
         } catch (error) {
             consolelog(process.cwd(), "getPromotions", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-
-    /**
-     * @method INTERNAL
-     * @param {string=} cartId
-     * @param {string=} couponCode
-     */
-    async validatePromoOnCms(payload: IPromotionRequest.IApplyPromotion) {
-        try {
-            let res = await CMS.PromotionCMSE.applyCoupon({ cartId: payload.cartId, couponCode: payload.couponCode })
-            return res[0]
-        } catch (error) {
-            consolelog(process.cwd(), "validatePromoOnCms", error, false)
             return Promise.reject(error)
         }
     }
