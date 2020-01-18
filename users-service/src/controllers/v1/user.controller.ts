@@ -409,25 +409,27 @@ export class UserController {
     * */
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
-            // if (payload.cCode && payload.phnNo) {
-            //     let queryArg: IAerospike.Query = {
-            //         udf: {
-            //             module: 'user',
-            //             func: Constant.UDF.USER.check_phone_exist,
-            //             args: [payload.cCode],
-            //             forEach: true
-            //         },
-            //         equal: {
-            //             bin: "phnNo",
-            //             value: payload.phnNo
-            //         },
-            //         set: ENTITY.UserE.set,
-            //         background: false,
-            //     }
-            //     let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-            //     if(user && )
-            // }
-            let user = await ENTITY.UserE.updateUser(auth.id, payload)
+            if (payload.cCode && payload.phnNo) {
+                let queryArg: IAerospike.Query = {
+                    udf: {
+                        module: 'user',
+                        func: Constant.UDF.USER.check_phone_exist,
+                        args: [payload.cCode],
+                        forEach: true
+                    },
+                    equal: {
+                        bin: "phnNo",
+                        value: payload.phnNo
+                    },
+                    set: ENTITY.UserE.set,
+                    background: false,
+                }
+                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                if (checkUser && checkUser.length > 0) {
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PHONE_NO_IN_USE)
+                }
+            }
+            let user = await ENTITY.UserE.updateUser(auth.id, payload, headers)
             // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers.deviceid)
         } catch (error) {

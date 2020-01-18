@@ -364,6 +364,13 @@ export const STATUS_MSG = {
                 message: 'Invalid otp'
             },
 
+            PHONE_NO_IN_USE: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'PHONE_NO_IN_USE',
+                message: 'Phone number allready in use.'
+            },
+
             USER_ALREADY_EXIST: {
                 statusCode: 400,
                 httpCode: 400,

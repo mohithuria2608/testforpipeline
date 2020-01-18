@@ -331,7 +331,7 @@ export class UserEntity extends BaseEntity {
      * @param {IUserRequest.IUserData} userData 
      * @param {IUserRequest.IEditProfile} payload 
      */
-    async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
+    async updateUser(userId: string, payload: IUserRequest.IUserUpdate, headers?: ICommonRequest.IHeaders) {
         try {
             let userUpdate = {}
             if (payload.email)
@@ -340,6 +340,28 @@ export class UserEntity extends BaseEntity {
                 userUpdate['name'] = payload.name
             if (payload.cartId)
                 userUpdate['cartId'] = payload.cartId
+            if (payload.cCode && payload.phnNo) {
+                userUpdate['cCode'] = payload.cCode
+                userUpdate['phnNo'] = payload.phnNo
+                userUpdate['phnVerified'] = 1
+                let otp = Constant.SERVER.BY_PASS_OTP
+                let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
+                let sessionUpdate: IUserRequest.ISessionUpdate = {
+                    otp: otp,
+                    otpExpAt: otpExpAt,
+                    otpVerified: 0,
+                    isLogin: 0,
+                    createdAt: new Date().getTime()
+                }
+                const Context = Aerospike.cdt.Context
+                const context = new Context().addMapKey(headers.deviceid)
+                let op = [
+                    Aerospike.maps.putItems('session', { ...await this.buildSession(headers, sessionUpdate, false) }, {
+                        writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
+                    }).withContext(context)
+                ]
+                await Aerospike.operationsOnMap({ set: this.set, key: userId }, op)
+            }
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,
