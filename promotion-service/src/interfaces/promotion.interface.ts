@@ -31,4 +31,8 @@ declare namespace IPromotionRequest {
         cartId: string,
         couponCode: string
     }
+
+    interface IRemovePromotion {
+        cartId: string,
+    }
 }

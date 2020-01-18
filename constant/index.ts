@@ -62,6 +62,10 @@ export const CMS = {
             METHOD: "POST",
             URL: "http://40.123.205.1/rest/default/V1/promotions/applycoupon"
         },
+        REMOVE_COUPON: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/default/V1/promotions/removecoupon"
+        },
     }
 };
 

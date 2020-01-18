@@ -30,4 +30,9 @@ declare namespace IPromotionCmsRequest {
         tax_name: string,
         amount: number,
     }
+
+    interface IRemoveCoupon {
+        cart_id: number,
+        coupon_code: string
+    }
 }

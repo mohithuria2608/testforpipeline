@@ -434,10 +434,9 @@ export class CartClass extends BaseEntity {
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
-            if (cmsCart.coupon_code) {
-                dataToUpdate['discountAmt'] = cmsCart.discount_amount ? cmsCart.discount_amount : 0
-                dataToUpdate['couponCode'] = cmsCart.coupon_code ? cmsCart.coupon_code : ""
-            }
+            dataToUpdate['discountAmt'] = cmsCart.discount_amount ? cmsCart.discount_amount : 0
+            dataToUpdate['couponCode'] = cmsCart.coupon_code ? cmsCart.coupon_code : ""
+
             let updateTax = []
             dataToUpdate['tax'] = updateTax
 

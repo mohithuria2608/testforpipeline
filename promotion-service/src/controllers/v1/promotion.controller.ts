@@ -70,10 +70,30 @@ export class PromotionController {
     }
 
     /**
-   * @method POST
-   * @description validate promotion    
-   * @param {string=} couponCode
-   * */
+    * @method POST
+    * @description validate promotion    
+    * @param {string=} couponCode
+    * */
+    async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
+        try {
+            let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
+            return { isValid: true }
+            if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
+                return { isValid: true }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)
+        } catch (error) {
+            consolelog(process.cwd(), "validatePromotion", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method INTERNAL
+    * @description Apply promotion    
+    * @param {string=} cartId
+    * @param {string=} couponCode
+    */
     async applyPromotion(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IApplyPromotion, auth: ICommonRequest.AuthorizationObj) {
         try {
             let validPromo = await this.validatePromotion({ couponCode: payload.couponCode })
@@ -92,21 +112,19 @@ export class PromotionController {
     }
 
     /**
-    * @method INTERNAL
+    * @method POST
+    * @description remove promotion     
     * @param {string=} cartId
-    * @param {string=} couponCode
-    */
-    async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
+    * */
+    async removePromotion(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IRemovePromotion, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
-            return { isValid: true }
-            if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
-                return { isValid: true }
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)
-        } catch (error) {
-            consolelog(process.cwd(), "validatePromotion", error, false)
-            return Promise.reject(error)
+            let getCartData = await orderService.getCart({ cartId: payload.cartId })
+            let removePromo = await CMS.PromotionCMSE.removeCoupon({ cart_id: getCartData.cmsCartRef, coupon_code: "" })
+            let res = await ENTITY.PromotionE.updateCart(payload.cartId, removePromo)
+            return res
+        } catch (err) {
+            consolelog(process.cwd(), "removePromotion", err, false)
+            return Promise.reject(err)
         }
     }
 }
