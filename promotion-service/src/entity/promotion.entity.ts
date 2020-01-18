@@ -46,9 +46,9 @@ export class PromotionClass extends BaseEntity {
     });
 
     /**
-     * @method INTERNAL
+     * @method Bootstrap
      */
-    async post(data: IPromotionRequest.IPromoData) {
+    async bootstrapPromo(data: IPromotionRequest.IPromoData) {
         try {
             data = this.filterPromotionData(data);
             let putArg: IAerospike.Put = {
@@ -60,8 +60,7 @@ export class PromotionClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "post promotion", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 
@@ -81,7 +80,7 @@ export class PromotionClass extends BaseEntity {
      * @param {string=} couponCode
      * @param {number=} page
      */
-    async getPromotions(payload: IPromotionRequest.IGetPromotion): Promise<IPromotionRequest.IPromoData[]> {
+    async getPromotion(payload: IPromotionRequest.IGetPromotion): Promise<IPromotionRequest.IPromoData[]> {
         try {
             if (payload.couponCode || payload.cmsCouponRef) {
                 let queryArg: IAerospike.Query

@@ -38,8 +38,9 @@ export class PromotionController {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/promotion.json', 'utf-8');
             let promo = JSON.parse(rawdata);
+
             for (const iterator of promo) {
-                ENTITY.PromotionE.post(iterator)
+                ENTITY.PromotionE.bootstrapPromo(iterator)
             }
             return {}
         } catch (err) {
@@ -55,7 +56,7 @@ export class PromotionController {
     * */
     async getPromotionsList(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IGetPromotion) {
         try {
-            let testlist = await ENTITY.PromotionE.getPromotions({})
+            let testlist = await ENTITY.PromotionE.getPromotion({})
             let returnList = testlist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {
                 list: returnList,
@@ -97,7 +98,7 @@ export class PromotionController {
     */
     async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
         try {
-            let promo = await ENTITY.PromotionE.getPromotions({ couponCode: payload.couponCode })
+            let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
             return { isValid: true }
             if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
                 return { isValid: true }

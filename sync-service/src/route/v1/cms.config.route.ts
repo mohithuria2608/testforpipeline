@@ -18,7 +18,7 @@ export default (router: Router) => {
                 body: {
                     type: Joi.string().required().valid("general", "payment"),
                     action: Joi.string().required().valid("update", "create"),
-                    data: Joi.any().required()
+                    data:  Joi.any().required()
                 }
             }),
             async (ctx) => {

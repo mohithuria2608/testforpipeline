@@ -41,9 +41,9 @@ export class UpsellClass extends BaseEntity {
         super('upsell')
     }
     /**
-    * @method INTERNAL
-    * */
-    async postUpsell(data) {
+     * @method BOOTSTRAP
+     * */
+    async bootstrapUpsell(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
@@ -54,8 +54,7 @@ export class UpsellClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "post upsell", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 

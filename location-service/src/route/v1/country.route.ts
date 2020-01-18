@@ -7,16 +7,4 @@ import { countryController } from '../../controllers';
 
 export default (router: Router) => {
     router
-        .post('/bootstrap',
-            async (ctx) => {
-                try {
-                    let res = await countryController.post();
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
-                }
-                catch (error) {
-                    throw error
-                }
-            })
 }

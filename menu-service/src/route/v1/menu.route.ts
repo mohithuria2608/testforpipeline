@@ -12,18 +12,6 @@ const protobuf = require("protobufjs");
 
 export default (router: Router) => {
     router
-        .post('/bootstrap',
-            async (ctx) => {
-                try {
-                    let res = await menuController.postMenu();
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
-                }
-                catch (error) {
-                    throw error
-                }
-            })
         .get('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,

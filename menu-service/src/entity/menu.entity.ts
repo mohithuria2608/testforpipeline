@@ -158,8 +158,8 @@ export class MenuClass extends BaseEntity {
     })
 
     /**
-    * @method INTERNAL
-    * */
+     * @method BOOTSTRAP
+     * */
     async postMenu(data) {
         try {
             let putArg: IAerospike.Put = {
@@ -171,8 +171,7 @@ export class MenuClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "post menu", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 

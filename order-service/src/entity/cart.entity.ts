@@ -327,19 +327,26 @@ export class CartClass extends BaseEntity {
                 else if (obj['typeId'] == 'configurable') {
                     let super_attribute = {};
                     let price = null;
-                    obj['configurableProductOptions'].map(co => {
-                        let value = null
-                        co['options'].map(o => {
-                            if (o['isSelected'] == 1) {
-                                value = o['id']
+                    if (obj['products'] && obj['products'].length > 0) {
+                        obj['products'].map(p => {
+                            if (parseInt(p['sku']) == obj['selectedItem']) {
+                                price = p['finalPrice']
+                                if (obj['configurableProductOptions'] && obj['configurableProductOptions'].length > 0) {
+                                    obj['configurableProductOptions'].map(co => {
+                                        let value = null
+                                        if (co['options'] && co['options'].length > 0) {
+                                            co['options'].map(o => {
+                                                if (o['isSelected'] == 1) {
+                                                    value = o['id']
+                                                }
+                                            })
+                                            super_attribute[co['id']] = value
+                                        }
+                                    })
+                                }
                             }
                         })
-                        super_attribute[co['id']] = value
-                    })
-                    obj['products'].map(p => {
-                        if (p['sku'] == obj['selectedItem'])
-                            price = p['finalPrice']
-                    })
+                    }
                     cart.push({
                         product_id: obj.id,
                         qty: obj.qty,
