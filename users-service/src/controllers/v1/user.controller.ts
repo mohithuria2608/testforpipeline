@@ -404,9 +404,29 @@ export class UserController {
     * @method PATCH
     * @param {string=} email : email
     * @param {string=} name : name
+    * @param {string=} cCode : country code
+    * @param {string=} phnNo : phone number
     * */
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
+            // if (payload.cCode && payload.phnNo) {
+            //     let queryArg: IAerospike.Query = {
+            //         udf: {
+            //             module: 'user',
+            //             func: Constant.UDF.USER.check_phone_exist,
+            //             args: [payload.cCode],
+            //             forEach: true
+            //         },
+            //         equal: {
+            //             bin: "phnNo",
+            //             value: payload.phnNo
+            //         },
+            //         set: ENTITY.UserE.set,
+            //         background: false,
+            //     }
+            //     let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+            //     if(user && )
+            // }
             let user = await ENTITY.UserE.updateUser(auth.id, payload)
             // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers.deviceid)

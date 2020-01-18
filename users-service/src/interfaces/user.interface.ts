@@ -113,7 +113,9 @@ declare namespace IUserRequest {
 
     interface IEditProfile {
         email?: string,
-        name?: string
+        name?: string,
+        cCode?: string,
+        phnNo?: string,
     }
 
     interface IFetchUser {
