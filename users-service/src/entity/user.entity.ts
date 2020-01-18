@@ -70,6 +70,10 @@ export class UserEntity extends BaseEntity {
         isGuest: Joi.number().valid(0, 1).required(),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
+        changePhnNo: Joi.object().keys({
+            cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+            phnNo: Joi.string().trim().required().description("sk"),
+        }),
         phnVerified: Joi.number().valid(0, 1).required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
         profileStep: Joi.number().valid(
@@ -343,7 +347,7 @@ export class UserEntity extends BaseEntity {
             if (payload.cCode && payload.phnNo) {
                 userUpdate['cCode'] = payload.cCode
                 userUpdate['phnNo'] = payload.phnNo
-                userUpdate['phnVerified'] = 1
+                userUpdate['phnVerified'] = 0
                 let otp = Constant.SERVER.BY_PASS_OTP
                 let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
                 let sessionUpdate: IUserRequest.ISessionUpdate = {

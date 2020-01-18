@@ -47,7 +47,7 @@ export class CartController {
             res['invalidMenu'] = invalidMenu
             return res
         } catch (err) {
-            consolelog(process.cwd(), "postCart", err, false)
+            consolelog(process.cwd(), "postCart", JSON.stringify(err), false)
             return Promise.reject(err)
         }
     }

@@ -2200,7 +2200,7 @@ export class CartClass extends BaseEntity {
             let newCart = await this.getCart({ cartId: cartId })
             return newCart
         } catch (error) {
-            consolelog(process.cwd(), "updateCart", error, false)
+            consolelog(process.cwd(), "updateCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
