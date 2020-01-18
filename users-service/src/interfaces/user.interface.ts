@@ -15,29 +15,29 @@ declare namespace IUserRequest {
         socialKey: string,
         medium: string,
         createdAt: number,
-        session: {
-            [deviceid: string]: ISession
-        },
-        mergeUserId?: string,
+        // session: {
+        //     [deviceid: string]: ISession
+        // },
+        keepUserId?: string,
         cartId: string,
         password: string,
     }
-    interface ISession {
-        isGuest: number,
-        otp: number,
-        otpExpAt: number,
-        otpVerified: number,
-        language: string,
-        country: string,
-        appversion: string,
-        devicemodel: string,
-        devicetype: string,
-        osversion: string,
-        deviceid: string,
-        isLogin: number,
-        createdAt: number,
-        updatedAt: number,
-    }
+    // interface ISession {
+    //     isGuest: number,
+    //     otp: number,
+    //     otpExpAt: number,
+    //     otpVerified: number,
+    //     language: string,
+    //     country: string,
+    //     appversion: string,
+    //     devicemodel: string,
+    //     devicetype: string,
+    //     osversion: string,
+    //     deviceid: string,
+    //     isLogin: number,
+    //     createdAt: number,
+    //     updatedAt: number,
+    // }
     interface IPhone {
         cCode: string,
         phnNo: string
@@ -61,30 +61,30 @@ declare namespace IUserRequest {
         socialKey?: string,
         medium?: string,
         createdAt?: number,
-        session?: {
-            [deviceid: string]: ISession
-        },
-        mergeUserId?: string,
+        // session?: {
+        //     [deviceid: string]: ISession
+        // },
+        keepUserId?: string,
         cartId?: string,
         password?: string,
     }
 
-    interface ISessionUpdate {
-        isGuest?: number,
-        otp?: number,
-        otpExpAt?: number,
-        otpVerified?: number,
-        language?: string,
-        country?: string,
-        appversion?: string,
-        devicemodel?: string,
-        devicetype?: string,
-        osversion?: string,
-        deviceid?: string,
-        isLogin?: number,
-        createdAt?: number,
-        updatedAt?: number,
-    }
+    // interface ISessionUpdate {
+    //     isGuest?: number,
+    //     otp?: number,
+    //     otpExpAt?: number,
+    //     otpVerified?: number,
+    //     language?: string,
+    //     country?: string,
+    //     appversion?: string,
+    //     devicemodel?: string,
+    //     devicetype?: string,
+    //     osversion?: string,
+    //     deviceid?: string,
+    //     isLogin?: number,
+    //     createdAt?: number,
+    //     updatedAt?: number,
+    // }
 
     interface IRefreshToken {
     }
@@ -94,7 +94,7 @@ declare namespace IUserRequest {
 
     interface IAuthVerifyOtp extends IPhone {
         otp: number,
-        isGuest: number
+        isGuest: number,
     }
     interface IAuthSocial extends IEmail {
         socialKey: string,

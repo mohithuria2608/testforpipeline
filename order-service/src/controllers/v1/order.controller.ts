@@ -163,7 +163,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -243,7 +243,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -323,7 +323,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -403,7 +403,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -483,7 +483,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -563,7 +563,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -643,7 +643,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -723,7 +723,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -803,7 +803,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -883,7 +883,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -963,7 +963,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1043,7 +1043,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1123,7 +1123,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1203,7 +1203,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1270,6 +1270,7 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
+                    
                     "subTotal": 30.25,
                     "total": 30.25,
                     "tax": [{
@@ -1283,7 +1284,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    
+
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1304,7 +1305,7 @@ export class OrderController {
                         lng: 20.322,
                         address: "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 }
             ]
 

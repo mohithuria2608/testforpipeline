@@ -225,13 +225,13 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid) {
+export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid: string, country: string, language: string) {
     try {
-        userObj['country'] = userObj['session'][deviceid].country
-        userObj['language'] = userObj['session'][deviceid].language
+        userObj['country'] = country
+        userObj['language'] = language
 
         delete userObj['session']
-        delete userObj['mergeUserId']
+        delete userObj['keepUserId']
         delete userObj['password']
         delete userObj['sdmUserRef']
         delete userObj['cmsUserRef']

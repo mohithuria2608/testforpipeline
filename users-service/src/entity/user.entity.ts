@@ -40,6 +40,12 @@ export class UserEntity extends BaseEntity {
             bin: 'sdmUserRef',
             index: 'idx_' + this.set + '_' + 'sdmUserRef',
             type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'keepUserId',
+            index: 'idx_' + this.set + '_' + 'keepUserId',
+            type: "STRING"
         }
     ]
 
@@ -47,21 +53,24 @@ export class UserEntity extends BaseEntity {
         super('user')
     }
 
-    public sessionSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
-        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
-        language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-        appversion: Joi.string().trim().required(),
-        devicemodel: Joi.string().trim().required(),
-        devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
-        osversion: Joi.string().trim().required(),
-        deviceid: Joi.string().trim().required(),
-        isLogin: Joi.number().required(),
-        isGuest: Joi.number().valid(0, 1).required(),
-        createdAt: Joi.number().required(),
-        updatedAt: Joi.number().required(),
-    });
+    // public sessionSchema = Joi.object().keys({
+    //     id: Joi.string().trim().required().description("pk"),
+    //     otp: Joi.number().required(),
+    //     otpExpAt: Joi.number().required(),
+    //     otpVerified: Joi.number().required(),
+    //     brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
+    //     language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
+    //     country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
+    //     appversion: Joi.string().trim().required(),
+    //     devicemodel: Joi.string().trim().required(),
+    //     devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
+    //     osversion: Joi.string().trim().required(),
+    //     deviceid: Joi.string().trim().required(),
+    //     isLogin: Joi.number().required(),
+    //     isGuest: Joi.number().valid(0, 1).required(),
+    //     createdAt: Joi.number().required(),
+    //     updatedAt: Joi.number().required()
+    // });
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
@@ -86,9 +95,8 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        mergeUserId: Joi.string(),
+        keepUserId: Joi.string().description("sk"),
         password: Joi.string(),
-        session: Joi.any(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
     });
@@ -137,8 +145,7 @@ export class UserEntity extends BaseEntity {
             socialKey: "",
             medium: "",
             createdAt: 0,
-            session: {},
-            mergeUserId: "",
+            keepUserId: "",
             cartId: await cryptData(headers.deviceid + new Date().getTime()),
             password: 'Password1'//await cryptData(id)
         } : {}
@@ -168,78 +175,23 @@ export class UserEntity extends BaseEntity {
             user['createdAt'] = userInfo.createdAt
         else
             user['createdAt'] = new Date().getTime()
-        if (userInfo.mergeUserId != undefined)
-            user['mergeUserId'] = userInfo.mergeUserId
+        if (userInfo.keepUserId != undefined)
+            user['keepUserId'] = userInfo.keepUserId
         return user
     }
 
-    /**
-     * @description Build session object
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.ISessionUpdate} sessionInfo 
-     * @param {boolean} isCreate 
-     */
-    public async buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
-        let session = isCreate ? {
-            otp: 0,
-            otpExpAt: 0,
-            otpVerified: 0,
-            isLogin: 0,
-            isGuest: 0,
-            deviceid: headers.deviceid,
-            language: headers.language,
-            country: headers.country,
-            appversion: headers.appversion,
-            devicemodel: headers.devicemodel,
-            devicetype: headers.devicetype,
-            osversion: headers.osversion,
-            createdAt: new Date().getTime(),
-            updatedAt: new Date().getTime(),
-        } : {}
-        if (sessionInfo.isGuest != undefined) {
-            if (sessionInfo.isGuest == 1)
-                session['isGuest'] = sessionInfo.isGuest
-        }
-        if (sessionInfo.otp != undefined)
-            session['otp'] = sessionInfo.otp
-        if (sessionInfo.otpExpAt != undefined)
-            session['otpExpAt'] = sessionInfo.otpExpAt
-        if (sessionInfo.otpVerified != undefined)
-            session['otpVerified'] = sessionInfo.otpVerified
-        if (sessionInfo.isLogin != undefined)
-            session['isLogin'] = sessionInfo.isLogin
-        if (sessionInfo.createdAt != undefined)
-            session['createdAt'] = sessionInfo.createdAt
 
-        if (headers.deviceid != undefined)
-            session['deviceid'] = headers.deviceid
-        if (headers.language != undefined)
-            session['language'] = headers.language
-        if (headers.country != undefined)
-            session['country'] = headers.country
-        if (headers.appversion != undefined)
-            session['appversion'] = headers.appversion
-        if (headers.devicemodel != undefined)
-            session['devicemodel'] = headers.devicemodel
-        if (headers.devicetype != undefined)
-            session['devicetype'] = headers.devicetype
-        if (headers.osversion != undefined)
-            session['osversion'] = headers.osversion
-        return session
-    }
 
     /**
      * @description Create user in aerospike
      * @param {ICommonRequest.IHeaders} headers 
      * @param {IUserRequest.IUserUpdate} userInfo 
-     * @param {IUserRequest.ISessionUpdate} sessionCreate 
      */
-    async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, sessionCreate: IUserRequest.ISessionUpdate): Promise<IUserRequest.IUserData> {
+    async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate): Promise<IUserRequest.IUserData> {
         try {
             let dataToSave = {
                 ...await this.buildUser(headers, userInfo, true)
             }
-            dataToSave['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionCreate, true) }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
@@ -258,84 +210,11 @@ export class UserEntity extends BaseEntity {
     }
 
     /**
-     * @description Create session from aerospike
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.IUserData} userData 
-     * @param {IUserRequest.IUserUpdate} userUpdate 
-     * @param {IUserRequest.ISessionUpdate} sessionUpdate 
-     */
-    async createSession(
-        headers: ICommonRequest.IHeaders,
-        userData: IUserRequest.IUserData,
-        userUpdate: IUserRequest.IUserUpdate,
-        sessionUpdate: IUserRequest.ISessionUpdate,
-    ): Promise<IUserRequest.IUserData> {
-        try {
-            let dataToUpdate = {
-                ...await this.buildUser(headers, userUpdate, false),
-                session: {}
-            }
-            if (userData.session && userData.session.hasOwnProperty(headers.deviceid) && userData.session[headers.deviceid]) {
-                const Context = Aerospike.cdt.Context
-                const context = new Context().addMapKey(headers.deviceid)
-                let op = [
-                    Aerospike.maps.putItems('session', { ...await this.buildSession(headers, sessionUpdate, false) }, {
-                        writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
-                    }).withContext(context)
-                ]
-                await Aerospike.operationsOnMap({ set: this.set, key: userData.id }, op)
-                delete dataToUpdate['session']
-            } else {
-                dataToUpdate['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionUpdate, true) }
-            }
-
-            let putArg: IAerospike.Put = {
-                bins: dataToUpdate,
-                set: this.set,
-                key: userData.id,
-                update: true,
-            }
-            await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userData.id })
-            return user
-        } catch (err) {
-            consolelog(process.cwd(), "createSession", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    /**
-     * @description Remove session from aerospike
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.IUserData} userData 
-     */
-    async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
-        try {
-            if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
-                let dataToUpdate = { session: {} }
-                dataToUpdate.session[headers.deviceid] = null
-                let putArg: IAerospike.Put = {
-                    bins: dataToUpdate,
-                    set: this.set,
-                    key: userData.id,
-                    update: true,
-                }
-                await Aerospike.put(putArg)
-                return {}
-            } else
-                return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeSession", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    /**
      * @description Update user on aerospike
      * @param {IUserRequest.IUserData} userData 
      * @param {IUserRequest.IEditProfile} payload 
      */
-    async updateUser(userId: string, payload: IUserRequest.IUserUpdate, headers?: ICommonRequest.IHeaders) {
+    async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
         try {
             let userUpdate = {}
             if (payload.email)
@@ -344,28 +223,27 @@ export class UserEntity extends BaseEntity {
                 userUpdate['name'] = payload.name
             if (payload.cartId)
                 userUpdate['cartId'] = payload.cartId
+            if (payload.profileStep)
+                userUpdate['profileStep'] = payload.profileStep
+            if (payload.isGuest != undefined && payload.isGuest == 1)
+                userUpdate['isGuest'] = 1
             if (payload.cCode && payload.phnNo) {
-                userUpdate['cCode'] = payload.cCode
-                userUpdate['phnNo'] = payload.phnNo
-                userUpdate['phnVerified'] = 0
-                let otp = Constant.SERVER.BY_PASS_OTP
-                let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
-                let sessionUpdate: IUserRequest.ISessionUpdate = {
-                    otp: otp,
-                    otpExpAt: otpExpAt,
-                    otpVerified: 0,
-                    isLogin: 0,
-                    createdAt: new Date().getTime()
+                if (payload.isGuest == 1) {
+                    userUpdate['cCode'] = payload.cCode
+                    userUpdate['phnNo'] = payload.phnNo
+                    userUpdate['phnVerified'] = payload.phnVerified
+                } else {
+
                 }
-                const Context = Aerospike.cdt.Context
-                const context = new Context().addMapKey(headers.deviceid)
-                let op = [
-                    Aerospike.maps.putItems('session', { ...await this.buildSession(headers, sessionUpdate, false) }, {
-                        writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
-                    }).withContext(context)
-                ]
-                await Aerospike.operationsOnMap({ set: this.set, key: userId }, op)
             }
+            if (payload.phnVerified)
+                userUpdate['phnVerified'] = payload.phnVerified
+            if (payload.keepUserId)
+                userUpdate['keepUserId'] = payload.keepUserId
+            if (payload.socialKey)
+                userUpdate['socialKey'] = payload.socialKey
+            if (payload.socialKey)
+                userUpdate['medium'] = payload.medium
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,
