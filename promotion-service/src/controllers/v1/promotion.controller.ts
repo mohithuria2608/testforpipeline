@@ -56,11 +56,11 @@ export class PromotionController {
     * */
     async getPromotionsList(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IGetPromotion) {
         try {
-            let testlist = await ENTITY.PromotionE.getPromotion({})
-            let returnList = testlist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
+            let promolist = await ENTITY.PromotionE.getPromotion({})
+            let returnList = promolist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {
                 list: returnList,
-                nextPage: testlist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(payload.page.toString()) + 1 : -1,
+                nextPage: promolist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(payload.page.toString()) + 1 : -1,
                 currentPage: parseInt(payload.page.toString())
             }
         } catch (err) {

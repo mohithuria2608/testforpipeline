@@ -28,7 +28,7 @@ declare namespace ICartCMSRequest {
         cart_items: ICMSCartItems[],
         subtotal: number,
         grandtotal: number,
-        tax: ITax
+        tax: ITax[]
         not_available: number[],
         is_price_changed: boolean,
         coupon_code: string,

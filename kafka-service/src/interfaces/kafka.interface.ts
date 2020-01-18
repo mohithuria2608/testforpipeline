@@ -15,6 +15,7 @@ declare namespace IKafkaRequest {
     interface IChangeAerospike {
         create?: boolean,
         update?: boolean,
+        reset?: boolean,
         get?: boolean,
         argv: string
     }
@@ -22,6 +23,7 @@ declare namespace IKafkaRequest {
     interface IChangeCMS {
         create?: boolean,
         update?: boolean,
+        reset?: boolean,
         get?: boolean,
         argv: string
     }
@@ -29,6 +31,7 @@ declare namespace IKafkaRequest {
     interface IChangeSDM {
         create?: boolean,
         update?: boolean,
+        reset?: boolean,
         get?: boolean,
         argv: string
     }

@@ -14,6 +14,7 @@ declare namespace IPromotionGrpcRequest {
     interface IChangeAerospike {
         create?: boolean,
         update?: boolean,
+        reset?: boolean,
         get?: boolean,
         argv: string
     }
@@ -21,6 +22,7 @@ declare namespace IPromotionGrpcRequest {
     interface IChangeCMS {
         create?: boolean,
         update?: boolean,
+        reset?: boolean,
         get?: boolean,
         argv: string
     }
@@ -28,6 +30,7 @@ declare namespace IPromotionGrpcRequest {
     interface IChangeSDM {
         create?: boolean,
         update?: boolean,
+        reset?: boolean,
         get?: boolean,
         argv: string
     }

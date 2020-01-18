@@ -16,19 +16,25 @@ export class SyncServiceValidator {
                     as: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
+                        reset: Joi.boolean(),
+                        get: Joi.boolean(),
                         argv: Joi.string()
                     }),
                     cms: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
+                        reset: Joi.boolean(),
+                        get: Joi.boolean(),
                         argv: Joi.string()
                     }),
                     sdm: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
+                        reset: Joi.boolean(),
+                        get: Joi.boolean(),
                         argv: Joi.string()
                     }),
-                    count: Joi.number().required()
+                    count: Joi.number()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

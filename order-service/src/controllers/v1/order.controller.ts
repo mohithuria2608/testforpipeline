@@ -152,12 +152,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -165,7 +163,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -234,12 +232,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -247,7 +243,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -316,12 +312,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -329,7 +323,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -398,12 +392,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -411,7 +403,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -480,12 +472,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -493,7 +483,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -562,12 +552,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -575,7 +563,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -644,12 +632,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -657,7 +643,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -726,12 +712,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -739,7 +723,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -808,12 +792,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -821,7 +803,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -890,12 +872,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -903,7 +883,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -972,12 +952,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -985,7 +963,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1054,12 +1032,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -1067,7 +1043,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1136,12 +1112,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -1149,7 +1123,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1218,12 +1192,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -1231,7 +1203,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1300,12 +1272,10 @@ export class OrderController {
                     ],
                     "subTotal": 30.25,
                     "total": 30.25,
-                    "tax": [
-                        {
-                            "name": "VAT",
-                            "value": 0.26
-                        }
-                    ],
+                    "tax": [{
+                        "tax_name": "VAT",
+                        "amount": 0.26
+                    }],
                     "shipping": [
                         {
                             "name": "FLAT DELIVERY",
@@ -1313,7 +1283,7 @@ export class OrderController {
                             "value": 7.5
                         }
                     ],
-                    "coupon": [],
+                    
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",

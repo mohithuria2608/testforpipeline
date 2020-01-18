@@ -430,15 +430,25 @@ export class CartClass extends BaseEntity {
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['subTotal'] = cmsCart.subtotal
             dataToUpdate['total'] = cmsCart.grandtotal
-            dataToUpdate['shipping'] = [] // cmsCart.shipping
+            dataToUpdate['shipping'] = []
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
             dataToUpdate['discountAmt'] = cmsCart.discount_amount ? cmsCart.discount_amount : 0
             dataToUpdate['couponCode'] = cmsCart.coupon_code ? cmsCart.coupon_code : ""
 
-            let updateTax = []
+            let updateTax = [{
+                "tax_name": "VAT",
+                "amount": 0.26
+            }]
             dataToUpdate['tax'] = updateTax
+
+            let updateShipping = [{
+                "name": "FLAT DELIVERY",
+                "code": "FLAT",
+                "value": 7.5
+            }]
+            dataToUpdate['shipping'] = updateShipping
 
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 curItems.map(obj => {

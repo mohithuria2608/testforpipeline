@@ -261,6 +261,17 @@ export const DATABASE = {
         STATUS: {
             INACTIVE: 0,
             ACTIVE: 1
+        },
+
+        SYNC_CONFIG: {
+            PAYMENT: "payment",
+            GENERAL: "general",
+        },
+
+        SYNC_ACTION: {
+            CREATE: "create",
+            UPDATE: "update",
+            RESET: "reset",
         }
     },
 

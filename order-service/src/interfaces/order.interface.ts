@@ -17,7 +17,6 @@ declare namespace IOrderRequest {
         total: number,
         tax: ITax[]
         shipping: IShipping[],
-        coupon: ICoupon[],
         isPreviousOrder: boolean,
     }
 
@@ -44,8 +43,8 @@ declare namespace IOrderRequest {
     }
 
     interface ITax {
-        name: string,
-        value: number,
+        tax_name: string,
+        amount: number,
     }
 
     interface IShipping {
@@ -54,9 +53,6 @@ declare namespace IOrderRequest {
         value: number,
     }
 
-    interface ICoupon {
-
-    }
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         addressId: string,
         cartId: string,

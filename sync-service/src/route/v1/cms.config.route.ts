@@ -16,9 +16,14 @@ export default (router: Router) => {
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
-                    type: Joi.string().required().valid("general", "payment"),
-                    action: Joi.string().required().valid("update", "create"),
-                    data:  Joi.any().required()
+                    type: Joi.string().required().valid(
+                        Constant.DATABASE.TYPE.SYNC_CONFIG.GENERAL,
+                        Constant.DATABASE.TYPE.SYNC_CONFIG.PAYMENT),
+                    action: Joi.string().required().valid(
+                        Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,
+                        Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE,
+                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET),
+                    data: Joi.any().required()
                 }
             }),
             async (ctx) => {

@@ -30,8 +30,8 @@ declare namespace ICartRequest {
     }
 
     interface ITax {
-        name: string,
-        value: number,
+        tax_name: string,
+        amount: number,
     }
 
     interface IShipping {
