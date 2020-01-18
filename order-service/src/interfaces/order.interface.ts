@@ -13,10 +13,7 @@ declare namespace IOrderRequest {
         items: any,
         address: IAddress,
         store: IStore,
-        subTotal: number,
-        total: number,
-        tax: ITax[]
-        shipping: IShipping[],
+        amount: IAmount[],
         isPreviousOrder: boolean,
     }
 
@@ -35,24 +32,20 @@ declare namespace IOrderRequest {
         lng: number,
     }
 
+    interface IAmount {
+        type: string
+        name: string
+        code: string
+        amount: number
+    }
+
     interface IStore {
         sdmStoreRef: number,
         lat: number,
         lng: number,
         address: string
     }
-
-    interface ITax {
-        tax_name: string,
-        amount: number,
-    }
-
-    interface IShipping {
-        name: string,
-        code: string,
-        value: number,
-    }
-
+    
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         addressId: string,
         cartId: string,

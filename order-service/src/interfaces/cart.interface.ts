@@ -12,36 +12,21 @@ declare namespace ICartRequest {
         updatedAt: number,
         items: any,
         address: IAddress,
-        subTotal: number,
-        total: number,
-        discountAmt: number,
-        couponCode: string,
-        tax: ITax[]
-        shipping: IShipping[],
-        coupon: ICoupon[]
+        amount: IAmount[],
     }
 
+    interface IAmount {
+        type: string
+        name: string
+        code: string
+        amount: number
+    }
     interface IAddress {
         addressId: string,
         sdmAddressRef: number,
         cmsAddressRef: number,
         areaId: number,
         storeId: number,
-    }
-
-    interface ITax {
-        tax_name: string,
-        amount: number,
-    }
-
-    interface IShipping {
-        name: string,
-        code: string,
-        value: number,
-    }
-
-    interface ICoupon {
-
     }
     interface IUpdateCartData {
         cartId?: string,
@@ -52,13 +37,7 @@ declare namespace ICartRequest {
         updatedAt?: number,
         items?: any,
         addres?: IAddress,
-        subTotal?: number,
-        total?: number,
-        discountAmt?: number,
-        couponCode?: string,
-        tax?: ITax[]
-        shipping?: IShipping[],
-        coupon?: ICoupon[]
+        amount?: IAmount[]
     }
     interface IValidateCart extends ICommonRequest.ICordinatesOpt {
         cartId: string,

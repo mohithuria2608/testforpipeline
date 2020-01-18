@@ -150,20 +150,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -179,10 +200,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -230,20 +251,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -259,10 +301,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -310,20 +352,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -339,10 +402,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -390,20 +453,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -419,10 +503,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -470,20 +554,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -499,10 +604,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -550,20 +655,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -579,10 +705,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -630,20 +756,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -659,10 +806,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -710,20 +857,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -739,10 +907,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -790,20 +958,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -819,10 +1008,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -870,20 +1059,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -899,10 +1109,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -950,20 +1160,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -979,10 +1210,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -1030,20 +1261,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1059,10 +1311,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -1110,20 +1362,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1139,10 +1412,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -1190,20 +1463,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1219,10 +1513,10 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": false
                 },
@@ -1270,21 +1564,41 @@ export class OrderController {
                             "associative": "0"
                         }
                     ],
-                    
-                    "subTotal": 30.25,
-                    "total": 30.25,
-                    "tax": [{
-                        "tax_name": "VAT",
-                        "amount": 0.26
-                    }],
-                    "shipping": [
+                    "amount": [
                         {
-                            "name": "FLAT DELIVERY",
-                            "code": "FLAT",
-                            "value": 7.5
-                        }
-                    ],
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
 
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
                     "address": {
                         "areaId": 520,
                         "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
@@ -1300,10 +1614,111 @@ export class OrderController {
                         "lng": 20.322
                     },
                     "store": {
-                        sdmStoreRef: 28,
-                        lat: 50.322,
-                        lng: 20.322,
-                        address: "store is open address"
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
+                    },
+                    "isPreviousOrder": false
+                },
+                {
+                    "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
+                    "cmsCartRef": 0,
+                    "sdmOrderRef": 0,
+                    "cmsOrderRef": 0,
+                    "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
+                    "orderId": "UAE-1",
+                    "status": "PENDING",
+                    "createdAt": 1578558475844,
+                    "updatedAt": 1578558475844,
+                    "items": [
+                        {
+                            "metaKeyword": [
+                                "Cheesecake"
+                            ],
+                            "taxClassId": "2",
+                            "position": 0,
+                            "name": "Cheesecake",
+                            "imageSmall": "null",
+                            "selectedItem": 0,
+                            "specialPrice": 9.5,
+                            "bundleProductOptions": [
+
+                            ],
+                            "visibility": 4,
+                            "finalPrice": 9.5,
+                            "virtualGroup": 0,
+                            "typeId": "simple",
+                            "qty": 2,
+                            "image": "null",
+                            "description": "adff",
+                            "sku": "710001",
+                            "id": 58,
+                            "inSide": "0",
+                            "configurableProductOptions": [
+
+                            ],
+                            "products": [
+
+                            ],
+                            "imageThumbnail": "null",
+                            "associative": "0"
+                        }
+                    ],
+                    "amount": [
+                        {
+                            "type": "SUB_TOTAL",
+                            "name": "Sub Total",
+                            "code": "SUB_TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "TOTAL",
+                            "name": "Total",
+                            "code": "TOTAL",
+                            "amount": 30.25,
+
+                        },
+                        {
+                            "type": "SHIPPING",
+                            "name": "Free Delivery",
+                            "code": "FLAT",
+                            "amount": 7.5
+                        },
+                        {
+                            "type": "TAX",
+                            "name": "VAT",
+                            "code": "VAT",
+                            "amount": 0.26,
+
+                        },
+                        {
+                            "type": "DISCOUNT",
+                            "name": "Discount",
+                            "code": "KFC 10",
+                            "amount": 2,
+
+                        }],
+                    "address": {
+                        "areaId": 520,
+                        "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
+                        "storeId": 0,
+                        "sdmAddressRef": 0,
+                        "cmsAddressRef": 0,
+                        "tag": "HOME",
+                        "bldgName": "Peru",
+                        "description": "Peru society, street 2",
+                        "flatNum": "35",
+                        "addressType": "DELIVERY",
+                        "lat": 50.322,
+                        "lng": 20.322
+                    },
+                    "store": {
+                        "sdmStoreRef": 28,
+                        "lat": 50.322,
+                        "lng": 20.322,
+                        "address": "store is open address"
                     },
                     "isPreviousOrder": true
                 }

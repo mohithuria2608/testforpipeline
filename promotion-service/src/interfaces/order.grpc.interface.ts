@@ -16,13 +16,15 @@ declare namespace IOrderGrpcRequest {
         updatedAt: number,
         items: any,
         address: IAddress,
-        subTotal: number,
-        total: number,
-        tax: ITax[]
-        shipping: IShipping[],
-        coupon: ICoupon[]
+        amount: IAmount[]
     }
 
+    interface IAmount {
+        type: string
+        name: string
+        code: string
+        amount: number
+    }
     interface IAddress {
         addressId: string,
         sdmAddressRef: number,

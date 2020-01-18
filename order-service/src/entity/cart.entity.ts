@@ -194,20 +194,12 @@ export class CartClass extends BaseEntity {
                 visibility: Joi.number().required(),
                 associative: Joi.string().required(),
             })),
-        subTotal: Joi.number(),
-        total: Joi.number(),
-        discountAmt: Joi.number(),
-        couponCode: Joi.string(),
-        tax: Joi.array().items(
+        amount: Joi.array().items(
             Joi.object().keys({
-                name: Joi.string().required(),
-                value: Joi.string().required(),
-            })),
-        shipping: Joi.array().items(
-            Joi.object().keys({
+                type: Joi.string().required(),
                 name: Joi.string().required(),
                 code: Joi.string().required(),
-                value: Joi.string().required(),
+                amount: Joi.number().required(),
             })),
     })
 
@@ -266,13 +258,7 @@ export class CartClass extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 items: [],
                 address: null,
-                subTotal: 0,
-                total: 0,
-                discountAmt: 0,
-                couponCode: "",
-                tax: [],
-                shipping: [],
-                coupon: []
+                amount: []
             }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
@@ -428,27 +414,55 @@ export class CartClass extends BaseEntity {
             let dataToUpdate: ICartRequest.IUpdateCartData = {}
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
-            dataToUpdate['subTotal'] = cmsCart.subtotal
-            dataToUpdate['total'] = cmsCart.grandtotal
-            dataToUpdate['shipping'] = []
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
-            dataToUpdate['discountAmt'] = cmsCart.discount_amount ? cmsCart.discount_amount : 0
-            dataToUpdate['couponCode'] = cmsCart.coupon_code ? cmsCart.coupon_code : ""
 
-            let updateTax = [{
-                "tax_name": "VAT",
-                "amount": 0.26
-            }]
-            dataToUpdate['tax'] = updateTax
-
-            let updateShipping = [{
-                "name": "FLAT DELIVERY",
-                "code": "FLAT",
-                "value": 7.5
-            }]
-            dataToUpdate['shipping'] = updateShipping
+            let amount = []
+            amount.push({
+                type: "SUB_TOTAL",
+                name: "Sub Total",
+                code: "SUB_TOTAL",
+                amount: parseInt(cmsCart.subtotal.toString())
+            })
+            amount.push({
+                type: "TOTAL",
+                name: "Total",
+                code: "TOTAL",
+                amount: parseInt(cmsCart.grandtotal.toString())
+            })
+            if (cmsCart.discount_amount && cmsCart.coupon_code && cmsCart.coupon_code != "") {
+                amount.push({
+                    type: "DISCOUNT",
+                    name: "Discount",
+                    code: cmsCart.coupon_code,
+                    amount: parseInt(cmsCart.discount_amount.toString())
+                })
+                dataToUpdate['couponApplied'] = 1
+            } else
+                dataToUpdate['couponApplied'] = 0
+            if (cmsCart.tax && cmsCart.tax.length > 0) {
+                amount.push({
+                    type: "TAX",
+                    name: cmsCart.tax[0].tax_name,
+                    code: cmsCart.tax[0].tax_name,
+                    amount: parseInt(cmsCart.tax[0].amount.toString())
+                })
+            } else {
+                amount.push({
+                    type: "TAX",
+                    name: "VAT",
+                    code: "VAT",
+                    amount: 1.05
+                })
+            }
+            amount.push({
+                type: "SHIPPING",
+                name: "Free Delivery",
+                code: "FLAT",
+                amount: 7.5
+            })
+            dataToUpdate['amount'] = amount
 
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 curItems.map(obj => {
