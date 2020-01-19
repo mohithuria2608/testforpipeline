@@ -39,12 +39,6 @@ export class UserEntity extends BaseEntity {
             bin: 'sdmUserRef',
             index: 'idx_' + this.set + '_' + 'sdmUserRef',
             type: "NUMERIC"
-        },
-        {
-            set: this.set,
-            bin: 'keepUserId',
-            index: 'idx_' + this.set + '_' + 'keepUserId',
-            type: "STRING"
         }
     ]
 
@@ -59,10 +53,6 @@ export class UserEntity extends BaseEntity {
         isGuest: Joi.number().valid(0, 1).required(),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
-        changePhnNo: Joi.object().keys({
-            cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-            phnNo: Joi.string().trim().required().description("sk"),
-        }),
         phnVerified: Joi.number().valid(0, 1).required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
         profileStep: Joi.number().valid(
@@ -75,10 +65,10 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        keepUserId: Joi.string().description("sk"),
         password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
+        changePhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
@@ -119,14 +109,13 @@ export class UserEntity extends BaseEntity {
             phnNo: "",
             phnVerified: 0,
             email: "",
-            emailVerified: 0,
             profileStep: 0,
             socialKey: "",
             medium: "",
             createdAt: 0,
-            keepUserId: "",
             cartId: this.ObjectId().toString(),
-            password: 'Password1' //await cryptData(id)
+            password: 'Password1', //await cryptData(id),
+            changePhnNo: 0
         } : {}
         if (userInfo.isGuest != undefined) {
             if (userInfo.isGuest == 1)
@@ -142,8 +131,6 @@ export class UserEntity extends BaseEntity {
             user['phnVerified'] = userInfo.phnVerified
         if (userInfo.email != undefined)
             user['email'] = userInfo.email
-        if (userInfo.emailVerified != undefined)
-            user['emailVerified'] = userInfo.emailVerified
         if (userInfo.profileStep != undefined)
             user['profileStep'] = userInfo.profileStep
         if (userInfo.socialKey != undefined)
@@ -154,8 +141,6 @@ export class UserEntity extends BaseEntity {
             user['createdAt'] = userInfo.createdAt
         else
             user['createdAt'] = new Date().getTime()
-        if (userInfo.keepUserId != undefined)
-            user['keepUserId'] = userInfo.keepUserId
         return user
     }
 
@@ -204,25 +189,20 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.profileStep)
                 userUpdate['profileStep'] = payload.profileStep
-            if (payload.isGuest != undefined && payload.isGuest == 1)
-                userUpdate['isGuest'] = 1
-            if (payload.cCode && payload.phnNo) {
-                if (payload.isGuest == 1) {
-                    userUpdate['cCode'] = payload.cCode
-                    userUpdate['phnNo'] = payload.phnNo
-                    userUpdate['phnVerified'] = payload.phnVerified
-                } else {
-
-                }
-            }
-            if (payload.phnVerified)
-                userUpdate['phnVerified'] = payload.phnVerified
-            if (payload.keepUserId)
-                userUpdate['keepUserId'] = payload.keepUserId
+            if (payload.isGuest != undefined)
+                userUpdate['isGuest'] = payload.isGuest
+            if (payload.changePhnNo != undefined)
+                userUpdate['changePhnNo'] = payload.changePhnNo
             if (payload.socialKey)
                 userUpdate['socialKey'] = payload.socialKey
             if (payload.socialKey)
                 userUpdate['medium'] = payload.medium
+            if (payload.phnNo)
+                userUpdate['phnNo'] = payload.phnNo
+            if (payload.cCode)
+                userUpdate['cCode'] = payload.cCode
+            if (payload.phnVerified != undefined)
+                userUpdate['phnVerified'] = payload.phnVerified
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,

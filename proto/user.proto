@@ -57,11 +57,11 @@ message IUserData {
     required string phnNo = 7;
     required bool phnVerified = 8;
     required string email = 9;
-    required bool emailVerified = 10;
     required int32 profileStep = 11;
     required string socialKey = 12;
     required string medium = 13;
     required int32 createdAt = 14;
+    required int32 changePhnNo = 15;
 }
 
 message IFetchAddressReq {

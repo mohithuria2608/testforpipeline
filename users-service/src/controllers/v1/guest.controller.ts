@@ -33,7 +33,7 @@ export class GuestController {
                 user.id,
                 1
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid, headers.country, headers.language) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
         } catch (err) {
             consolelog(process.cwd(), "guestLogin", err, false)
             return Promise.reject(err)
@@ -49,6 +49,7 @@ export class GuestController {
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IisGuest, auth: ICommonRequest.AuthorizationObj) {
         try {
+            auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -66,24 +67,22 @@ export class GuestController {
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             let user
             if (checkUser && checkUser.length > 0) {
-                let userUpdate = {
-                    keepUserId: checkUser[0].id,
+                let userchangePayload = {
                     name: payload.name,
                     email: payload.email,
-                    emailVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
-                    phnVerified: 0,
+                    cartId: auth.userData.cartId,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
-                }
-                user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
-                let sessionUpdate: ISessionRequest.ISession = {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
-                    isLogin: 0,
+                    deleteUserId: auth.userData.id
                 }
-                await ENTITY.SessionE.buildSession(headers, sessionUpdate, auth.userData)
+                await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
+                let userUpdate = {
+                    changePhnNo: 1
+                }
+                await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
             } else {
                 let userUpdate: IUserRequest.IUserUpdate = {
                     cCode: payload.cCode,
@@ -92,7 +91,6 @@ export class GuestController {
                     email: payload.email,
                     phnVerified: 0,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
-                    isGuest: 1,
                 }
                 let userInCms = await ENTITY.UserE.checkUserOnCms({})
                 if (userInCms && userInCms.id) {
@@ -111,10 +109,11 @@ export class GuestController {
                         userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     }
                 }
-                user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
+                auth.userData = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
                 let session = {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpVerified: 1,
                     isGuest: 1,
                     createdAt: new Date().getTime(),
                     updatedAt: new Date().getTime(),
@@ -122,7 +121,7 @@ export class GuestController {
                 }
                 await ENTITY.SessionE.buildSession(headers, session, user)
             }
-            return formatUserData(user, headers.deviceid, headers.country, headers.language)
+            return formatUserData(auth.userData, headers)
         } catch (error) {
             consolelog(process.cwd(), "isGuest", error, false)
             return Promise.reject(error)
