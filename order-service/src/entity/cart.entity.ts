@@ -305,7 +305,7 @@ export class CartClass extends BaseEntity {
                 if (obj['typeId'] == 'simple') {
                     cart.push({
                         product_id: obj.id,
-                        qty: obj.qty,
+                        qty: obj.qty ? obj.qty : 1,
                         price: obj.finalPrice,
                         type_id: obj['typeId']
                     })
@@ -335,7 +335,7 @@ export class CartClass extends BaseEntity {
                     }
                     cart.push({
                         product_id: obj.id,
-                        qty: obj.qty,
+                        qty: obj.qty ? obj.qty : 1,
                         price: price,
                         type_id: obj['typeId'],
                         super_attribute: super_attribute
