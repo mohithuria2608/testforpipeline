@@ -44,7 +44,7 @@ declare namespace ICartRequest {
         curMenuId: number,
         menuUpdatedAt: number,
         couponCode?: string,
-        items: IMenuGrpcRequest.IProduct[]
+        items: any
     }
 
     interface IGetCart extends ICommonRequest.ICordinatesOpt {

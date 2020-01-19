@@ -29,7 +29,7 @@ export class CartClass extends BaseEntity {
     ]
 
     constructor() {
-        super('order')
+        super('cart')
     }
 
     public cartSchema = Joi.object().keys({
@@ -406,7 +406,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: IMenuGrpcRequest.IProduct[]) {
+    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
         try {
             let prevCart = await this.getCart({ cartId: cartId })
             if (curItems == undefined)

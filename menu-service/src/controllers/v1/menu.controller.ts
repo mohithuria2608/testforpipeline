@@ -46,7 +46,8 @@ export class MenuController {
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
             let menuId = 5;
-            return await ENTITY.MenuE.getMenu({ menuId: menuId })
+            let menu = await ENTITY.MenuE.getMenu({ menuId: menuId })
+            return { menu: JSON.stringify(menu) }
         } catch (err) {
             consolelog(process.cwd(), "grpcFetchMenu", err, false)
             return Promise.reject(err)

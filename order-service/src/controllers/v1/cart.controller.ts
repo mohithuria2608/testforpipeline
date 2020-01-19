@@ -29,7 +29,7 @@ export class CartController {
                 } else
                     invalidMenu = true
             } else {
-                const defaultMenu: IMenuGrpcRequest.IFetchMenuRes = await menuService.fetchMenu({
+                const defaultMenu = await menuService.fetchMenu({
                     country: headers.country,
                     isDefault: true
                 })
