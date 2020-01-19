@@ -4,10 +4,8 @@ import { BaseEntity } from './base.entity'
 
 export class LoggerClass extends BaseEntity {
 
-    protected modelName: SetNames;
     constructor() {
         super('logger')
-        this.modelName = 'logger'
     }
     
 }

@@ -1,7 +1,7 @@
 import { Schema, Document, model } from 'mongoose'
 import * as Constant from '../constant';
 
-export interface ILogger extends Document {
+export interface Ilogger extends Document {
 
 };
 
@@ -9,4 +9,4 @@ const loggerSchema = new Schema({
 
 });
 
-export let Logger = model<ILogger>('logger', loggerSchema)
+export let logger = model<Ilogger>('logger', loggerSchema)

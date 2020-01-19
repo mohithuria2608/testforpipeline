@@ -1,19 +1,15 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import { consolelog, sendSuccess } from '../utils'
+import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
 import { kafkaService } from '../grpc/client';
 
 
 export class OrderClass extends BaseEntity {
-
-    protected modelName: SetNames;
     constructor() {
         super('order')
-        this.modelName = 'order'
     }
     /**
     * @method INTERNAL
@@ -27,7 +23,7 @@ export class OrderClass extends BaseEntity {
                     argv: JSON.stringify(payload)
                 }
             }
-            kafkaService.kafkaSync(sdmOrderChange)
+            // kafkaService.kafkaSync(sdmOrderChange)
 
             let cmsOrderChange = {
                 set: this.set,
@@ -36,7 +32,8 @@ export class OrderClass extends BaseEntity {
                     argv: JSON.stringify(payload)
                 }
             }
-            kafkaService.kafkaSync(cmsOrderChange)
+            // kafkaService.kafkaSync(cmsOrderChange)
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOrder", error, false)
             return Promise.reject(error)

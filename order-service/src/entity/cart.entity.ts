@@ -418,25 +418,22 @@ export class CartClass extends BaseEntity {
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
 
+            let seq = 0
             let amount = []
             amount.push({
                 type: "SUB_TOTAL",
                 name: "Sub Total",
                 code: "SUB_TOTAL",
-                amount: parseInt(cmsCart.subtotal.toString())
-            })
-            amount.push({
-                type: "TOTAL",
-                name: "Total",
-                code: "TOTAL",
-                amount: parseInt(cmsCart.grandtotal.toString())
+                amount: parseInt(cmsCart.subtotal.toString()),
+                sequence: 1
             })
             if (cmsCart.discount_amount && cmsCart.coupon_code && cmsCart.coupon_code != "") {
                 amount.push({
                     type: "DISCOUNT",
                     name: "Discount",
                     code: cmsCart.coupon_code,
-                    amount: parseInt(cmsCart.discount_amount.toString())
+                    amount: parseInt(cmsCart.discount_amount.toString()),
+                    sequence: 2
                 })
                 dataToUpdate['couponApplied'] = 1
             } else
@@ -446,24 +443,33 @@ export class CartClass extends BaseEntity {
                     type: "TAX",
                     name: cmsCart.tax[0].tax_name,
                     code: cmsCart.tax[0].tax_name,
-                    amount: parseInt(cmsCart.tax[0].amount.toString())
+                    amount: parseInt(cmsCart.tax[0].amount.toString()),
+                    sequence: 3
                 })
             } else {
                 amount.push({
                     type: "TAX",
                     name: "VAT",
                     code: "VAT",
-                    amount: 1.05
+                    amount: 1.05,
+                    sequence: 3
                 })
             }
             amount.push({
                 type: "SHIPPING",
                 name: "Free Delivery",
                 code: "FLAT",
-                amount: 7.5
+                amount: 7.5,
+                sequence: 4
+            })
+            amount.push({
+                type: "TOTAL",
+                name: "Total",
+                code: "TOTAL",
+                amount: parseInt(cmsCart.grandtotal.toString()),
+                sequence: 5
             })
             dataToUpdate['amount'] = amount
-
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 curItems.map(obj => {
                     cmsCart.cart_items.map(elem => {

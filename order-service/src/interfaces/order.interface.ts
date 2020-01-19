@@ -1,6 +1,7 @@
 declare namespace IOrderRequest {
 
     interface IOrderModel {
+        _id: string,
         cartId: string,
         cmsCartRef: number,
         sdmOrderRef: number,
@@ -36,7 +37,8 @@ declare namespace IOrderRequest {
         type: string
         name: string
         code: string
-        amount: number
+        amount: number,
+        sequence: number,
     }
 
     interface IStore {
@@ -45,7 +47,7 @@ declare namespace IOrderRequest {
         lng: number,
         address: string
     }
-    
+
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         addressId: string,
         cartId: string,
