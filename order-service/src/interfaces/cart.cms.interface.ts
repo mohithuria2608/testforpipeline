@@ -1,4 +1,3 @@
-
 declare namespace ICartCMSRequest {
 
     interface IHeader { }

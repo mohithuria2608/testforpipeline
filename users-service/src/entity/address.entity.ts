@@ -6,7 +6,6 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
 export class AddressEntity extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     constructor() {
         super('address')
     }
@@ -92,7 +91,7 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            let id = this.uuidv1();
+            const id = this.ObjectId().toString();
             let deliveryAddress = {
                 id: id,
                 lat: addressData.lat,

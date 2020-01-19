@@ -1,6 +1,6 @@
 declare namespace IOrderRequest {
 
-    interface IOrderModel {
+    interface IOrderData {
         _id: string,
         cartId: string,
         cmsCartRef: number,

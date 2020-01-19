@@ -4,7 +4,6 @@ service OrderService {
     rpc CreateDefaultCart (ICreateDefaultCartReq) returns (ICreateDefaultCartRes) {}
     rpc UpdateCartTtl (IUpdateDefaultCartTTLReq) returns (IUpdateDefaultCartTTLRes) {}
     rpc GetCart (IGetCartReq) returns (IGetCartRes) {}
-    rpc UpdateCart (IUpdateCartReq) returns (IUpdateCartRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
 
@@ -26,15 +25,6 @@ message IGetCartReq {
 }
 
 message IGetCartRes {
-    required string cart = 1;
-}
-
-message IUpdateCartReq {
-    required string cartId = 1;
-    required string cmsCart = 2;
-}
-
-message IUpdateCartRes { 
     required string cart = 1;
 }
 

@@ -2,14 +2,12 @@
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog, cryptData } from '../utils'
+import { consolelog, generateSessionId } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
 
-
 export class SessionEntity extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
@@ -58,7 +56,7 @@ export class SessionEntity extends BaseEntity {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: userId + "_" + deviceid
+                key: generateSessionId(userId, deviceid)
             }
             let prevSession = await Aerospike.get(getArg)
             if (prevSession && prevSession.id) {
@@ -98,7 +96,7 @@ export class SessionEntity extends BaseEntity {
             }
             else {
                 isCreate = true
-                session['id'] = userData.id + "_" + headers.deviceid
+                session['id'] = generateSessionId(userData.id, headers.deviceid)
                 if (payload.otp != undefined)
                     session['otp'] = payload.otp
                 if (payload.otpExpAt != undefined)
@@ -202,7 +200,7 @@ export class SessionEntity extends BaseEntity {
     async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
         try {
             let putArg: IAerospike.Remove = {
-                key: userData.id + "_" + headers.deviceid,
+                key: generateSessionId(userData.id, headers.deviceid),
                 set: this.set
             }
             await Aerospike.remove(putArg)

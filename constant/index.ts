@@ -57,15 +57,7 @@ export const CMS = {
         CREATE_CART: {
             METHOD: "POST",
             URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
-        },
-        APPLY_COUPON: {
-            METHOD: "POST",
-            URL: "http://40.123.205.1/rest/default/V1/promotions/applycoupon"
-        },
-        REMOVE_COUPON: {
-            METHOD: "POST",
-            URL: "http://40.123.205.1/rest/default/V1/promotions/removecoupon"
-        },
+        }
     }
 };
 

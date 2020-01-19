@@ -24,7 +24,7 @@ const orderSchema = new Schema({
     sdmOrderRef: { type: Number, required: true },
     cmsOrderRef: { type: Number, required: true },
     userId: { type: String, required: true, index: true },
-    orderId: { type: String, required: true },
+    orderId: { type: String, required: true, index: true },
     status: { type: String, required: true },
     items: { type: Schema.Types.Mixed, required: true },
     amount: { type: Schema.Types.Mixed, required: true },

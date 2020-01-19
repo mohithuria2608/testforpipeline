@@ -1,18 +1,18 @@
 declare namespace ICartRequest {
 
     interface ICartData {
-        cartId: string,
-        cmsCartRef: number,
-        sdmOrderRef: number,
-        cmsOrderRef: number,
-        userId: string,
-        orderId: string,
-        status: string,
-        createdAt: number,
-        updatedAt: number,
-        items: any,
-        address: IAddress,
-        amount: IAmount[],
+        cartId?: string,
+        cmsCartRef?: number,
+        sdmOrderRef?: number,
+        cmsOrderRef?: number,
+        userId?: string,
+        orderId?: string,
+        status?: string,
+        createdAt?: number,
+        updatedAt?: number,
+        items?: any,
+        address?: IAddress,
+        amount?: IAmount[],
     }
 
     interface IAmount {
@@ -28,17 +28,6 @@ declare namespace ICartRequest {
         areaId: number,
         storeId: number,
     }
-    interface IUpdateCartData {
-        cartId?: string,
-        cmsCartRef?: number,
-        sdmOrderRef?: number,
-        cmsOrderRef?: number,
-        status?: string,
-        updatedAt?: number,
-        items?: any,
-        addres?: IAddress,
-        amount?: IAmount[]
-    }
     interface IValidateCart extends ICommonRequest.ICordinatesOpt {
         cartId: string,
         curMenuId: number,
@@ -48,12 +37,8 @@ declare namespace ICartRequest {
     }
 
     interface IGetCart extends ICommonRequest.ICordinatesOpt {
-        cartId: string,
-        cartUpdatedAt: number
-    }
-
-    interface ICartId {
         cartId?: string,
         cmsCartRef?: number
+        cartUpdatedAt?: number
     }
 }

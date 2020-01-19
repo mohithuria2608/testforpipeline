@@ -208,7 +208,7 @@ export class CartClass extends BaseEntity {
     * @param {string} cartId : cart id
     * @param {string} cmsCartRef : cms cart id
     * */
-    async getCart(payload: ICartRequest.ICartId) {
+    async getCart(payload: ICartRequest.IGetCart): Promise<ICartRequest.ICartData> {
         try {
             if (payload.cartId) {
                 let getArg: IAerospike.Get = {
@@ -411,7 +411,7 @@ export class CartClass extends BaseEntity {
             let prevCart = await this.getCart({ cartId: cartId })
             if (curItems == undefined)
                 curItems = prevCart.items
-            let dataToUpdate: ICartRequest.IUpdateCartData = {}
+            let dataToUpdate: ICartRequest.ICartData = {}
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0

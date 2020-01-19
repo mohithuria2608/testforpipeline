@@ -2,14 +2,13 @@
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog, cryptData } from '../utils'
+import { consolelog } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
 
 
 export class UserEntity extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
@@ -52,25 +51,6 @@ export class UserEntity extends BaseEntity {
     constructor() {
         super('user')
     }
-
-    // public sessionSchema = Joi.object().keys({
-    //     id: Joi.string().trim().required().description("pk"),
-    //     otp: Joi.number().required(),
-    //     otpExpAt: Joi.number().required(),
-    //     otpVerified: Joi.number().required(),
-    //     brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
-    //     language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
-    //     country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-    //     appversion: Joi.string().trim().required(),
-    //     devicemodel: Joi.string().trim().required(),
-    //     devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
-    //     osversion: Joi.string().trim().required(),
-    //     deviceid: Joi.string().trim().required(),
-    //     isLogin: Joi.number().required(),
-    //     isGuest: Joi.number().valid(0, 1).required(),
-    //     createdAt: Joi.number().required(),
-    //     updatedAt: Joi.number().required()
-    // });
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
@@ -129,9 +109,8 @@ export class UserEntity extends BaseEntity {
      * @param {boolean} isCreate 
      */
     private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
-        const id = this.uuidv1();
         const user = isCreate ? {
-            id: id,
+            id: this.ObjectId().toString(),
             sdmUserRef: 0,
             cmsUserRef: 0,
             isGuest: 0,
@@ -146,8 +125,8 @@ export class UserEntity extends BaseEntity {
             medium: "",
             createdAt: 0,
             keepUserId: "",
-            cartId: await cryptData(headers.deviceid + new Date().getTime()),
-            password: 'Password1'//await cryptData(id)
+            cartId: this.ObjectId().toString(),
+            password: 'Password1' //await cryptData(id)
         } : {}
         if (userInfo.isGuest != undefined) {
             if (userInfo.isGuest == 1)

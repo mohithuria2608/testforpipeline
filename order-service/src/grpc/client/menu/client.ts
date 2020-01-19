@@ -23,7 +23,7 @@ export class MenuService {
         consolelog(process.cwd(), 'GRPC connection established menu-service', config.get("grpc.menu.client"), true)
     }
 
-    async fetchMenu(payload: IMenuGrpcRequest.IFetchMenuData): Promise<any> {
+    async fetchMenu(payload: IMenuGrpcRequest.IFetchMenuReq): Promise<any> {
         return new Promise(async (resolve, reject) => {
             await menuServiceValidator.fetchMenu(payload)
             this.menuClient.fetchMenu({ country: payload.country, isDefault: payload.isDefault }, (err, res) => {

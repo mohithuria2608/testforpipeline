@@ -32,28 +32,4 @@ declare namespace IOrderGrpcRequest {
         areaId: number,
         storeId: number,
     }
-
-    interface ITax {
-        name: string,
-        value: number,
-    }
-
-    interface IShipping {
-        name: string,
-        code: string,
-        value: number,
-    }
-
-    interface ICoupon {
-
-    }
-
-    interface IUpdateOrder {
-        cartId: string,
-        cmsCart: string,//ICmsCartRes
-    }
-
-    interface IUpdateOrderRes {
-        cart: string
-    }
 }

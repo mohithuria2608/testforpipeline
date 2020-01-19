@@ -1,6 +1,6 @@
 declare namespace IMenuGrpcRequest {
 
-    interface IFetchMenuData {
+    interface IFetchMenuReq {
         menuId?: number,
         country: string,
         isDefault: boolean,
@@ -8,22 +8,5 @@ declare namespace IMenuGrpcRequest {
 
     interface IFetchMenuRes {
         menu: string,
-    }
-
-    interface IStoreAdd {
-        coords: ICoords,
-        country: number,
-        area: number,
-        service_fence: IServiceFence,
-    }
-
-    interface ICoords {
-        type: string;
-        coordinates: number[];
-    }
-
-    interface IServiceFence {
-        type: string;
-        coordinates: number[];
     }
 }

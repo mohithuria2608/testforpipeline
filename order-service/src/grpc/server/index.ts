@@ -49,16 +49,6 @@ server.addService(orderProto.OrderService.service, {
             callback(grpcSendError(error))
         }
     },
-    updateCart: async (call: IOrderGrpcRequest.IUpdateCartReq, callback) => {
-        try {
-            consolelog(process.cwd(), "updateCart", JSON.stringify(call.request), true)
-            let res = await ENTITY.CartE.updateCart(call.request.cartId, JSON.parse(call.request.cmsCart))
-            callback(null, { cart: JSON.stringify(res) })
-        } catch (error) {
-            consolelog(process.cwd(), "updateCart", error, false)
-            callback(grpcSendError(error))
-        }
-    },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)

@@ -68,7 +68,7 @@ export class OrderController {
             cartData['status'] = Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
             cartData['updatedAt'] = new Date().getTime()
             await ENTITY.OrderE.createOneEntityMdb(cartData)
-            let newCartId = await cryptData(headers.deviceid + new Date().getTime())
+            let newCartId = ENTITY.OrderE.DAOManager.ObjectId().toString()
             await ENTITY.CartE.assignNewCart(newCartId, auth.id)
             // let asUserChange = {
             //     set: Constant.SET_NAME.USER,
@@ -94,7 +94,7 @@ export class OrderController {
      * */
     async orderHistory(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderHistory, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let getOrderHistory: IOrderRequest.IOrderModel[] = await ENTITY.OrderE.getMultipleMdb({ userId: auth.id }, {})
+            let getOrderHistory: IOrderRequest.IOrderData[] = await ENTITY.OrderE.getMultipleMdb({ userId: auth.id }, {})
             if (getOrderHistory && getOrderHistory.length > 0) {
                 getOrderHistory.map(obj => { return obj['isPreviousOrder'] = true })
             } else {
@@ -1788,7 +1788,7 @@ export class OrderController {
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let trackOrder: IOrderRequest.IOrderModel = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId },
+            let trackOrder: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ $or: [{ _id: payload.orderId }, { orderId: payload.orderId }] },
                 {
                     orderId: 1,
                     userId: 1,

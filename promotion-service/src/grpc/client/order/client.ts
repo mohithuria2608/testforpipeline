@@ -41,25 +41,6 @@ export class OrderService {
             }
         })
     }
-
-    async updateCart(payload: IOrderGrpcRequest.IUpdateOrder): Promise<IOrderGrpcRequest.IUpdateOrderRes> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await orderServiceValidator.updateCartValidator(payload)
-                this.orderClient.updateCart(payload, (err, res) => {
-                    if (!err) {
-                        consolelog(process.cwd(), "successfully updated cart", JSON.stringify(res), false)
-                        resolve(JSON.parse(res.cart))
-                    } else {
-                        consolelog(process.cwd(), "Error in updating cart", JSON.stringify(err), false)
-                        reject(err)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
 }
 
 export const orderService = new OrderService();

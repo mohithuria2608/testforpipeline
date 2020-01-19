@@ -64,7 +64,7 @@ export class OrderClass extends BaseEntity {
         try {
             setTimeout(async () => {
                 //@todo :get order status from sdm 
-                let dataToUpdate: ICartRequest.IUpdateCartData = {
+                let dataToUpdate: ICartRequest.ICartData = {
                     status: payload.status,
                     updatedAt: new Date().getTime()
                 }

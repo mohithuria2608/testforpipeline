@@ -3,7 +3,6 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { userService, orderService } from '../../grpc/client';
-import * as CMS from "../../cms";
 
 export class PromotionController {
     constructor() { }
@@ -85,46 +84,6 @@ export class PromotionController {
         } catch (error) {
             consolelog(process.cwd(), "validatePromotion", error, false)
             return Promise.reject(error)
-        }
-    }
-
-    /**
-    * @method INTERNAL
-    * @description Apply promotion    
-    * @param {string=} cartId
-    * @param {string=} couponCode
-    */
-    async applyPromotion(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IApplyPromotion, auth: ICommonRequest.AuthorizationObj) {
-        try {
-            let validPromo = await this.validatePromotion({ couponCode: payload.couponCode })
-            if (!validPromo.isValid)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
-            let getCartData = await orderService.getCart({ cartId: payload.cartId })
-
-            let cmsValidatedPromo = await CMS.PromotionCMSE.applyCoupon({ cart_id: getCartData.cmsCartRef, coupon_code: payload.couponCode })
-            // [{\"cart_items\":[],\"cms_cart_id\":\"65\",\"currency_code\":\"AED\",\"subtotal\":69.74,\"grandtotal\":66.25,\"discount_amt\":3.49,\"tax\":[],\"not_available\":[],\"is_price_changed\":false,\"coupon_code\":\"KFC 10\",\"success\":true}]","timestamp":"2020-01-17T09:18:58.950Z"}
-            let res = await ENTITY.PromotionE.updateCart(payload.cartId, cmsValidatedPromo)
-            return res
-        } catch (err) {
-            consolelog(process.cwd(), "applyPromotion", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    /**
-    * @method POST
-    * @description remove promotion     
-    * @param {string=} cartId
-    * */
-    async removePromotion(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IRemovePromotion, auth: ICommonRequest.AuthorizationObj) {
-        try {
-            let getCartData = await orderService.getCart({ cartId: payload.cartId })
-            let removePromo = await CMS.PromotionCMSE.removeCoupon({ cart_id: getCartData.cmsCartRef, coupon_code: "" })
-            let res = await ENTITY.PromotionE.updateCart(payload.cartId, removePromo)
-            return res
-        } catch (err) {
-            consolelog(process.cwd(), "removePromotion", err, false)
-            return Promise.reject(err)
         }
     }
 }
