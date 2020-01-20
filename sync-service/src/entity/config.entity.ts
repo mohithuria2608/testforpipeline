@@ -62,7 +62,7 @@ export class ConfigEntity extends BaseEntity {
     //   }
 
     public configSchema = Joi.object().keys({
-        id: Joi.string().required().description("pk, storeCode_storeId"),
+        id: Joi.string().required().description("pk"),
         type: Joi.string().required().valid("general", "payment", "shipment").description("sk"),
         storeCode: Joi.string().required(),
         storeId: Joi.number().required(),

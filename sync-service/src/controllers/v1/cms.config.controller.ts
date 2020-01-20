@@ -27,29 +27,21 @@ export class CmsConfigController {
                             if (data.data && data.data.length > 0) {
                                 data.data.map(async config => {
                                     let dataToSave = {
+                                        id: ENTITY.ConfigE.ObjectId,
                                         type: data.type,
                                     }
-                                    // id
-                                    // type
-                                    // storeCode
-                                    // storeId
-                                    // noonPayConfig
-
-                                    // if (config.store_code && config.store_id) {
-
-                                    // }
-                                    // if (config.store_code)
-                                    //     dataToSave['storeCode'] = parseInt(config.store_id)
-                                    // if (config.)
-                                    //     dataToSave['cmsStoreRef'] = config.store_code
-                                    // if (config.store_code)
-                                    //     dataToSave['noonPayConfig'] = config.noon_pay_config
-                                    // if (config.store_code)
-                                    //     dataToSave['codInfo'] = config.cod_info
+                                    if (config.store_code)
+                                        dataToSave['storeCode'] = config.store_code
+                                    if (config.store_id)
+                                        dataToSave['storeId'] = config.store_id
+                                    if (config.noon_pay_config)
+                                        dataToSave['noonPayConfig'] = config.noon_pay_config
+                                    if (config.cod_info)
+                                        dataToSave['codInfo'] = config.cod_info
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
-                                        key: dataToSave['cmsStoreRef'],
+                                        key: dataToSave['id'],
                                         ttl: 0,
                                         create: true,
                                     }
@@ -76,20 +68,21 @@ export class CmsConfigController {
                             if (data.data && data.data.length > 0) {
                                 data.data.map(async config => {
                                     let dataToSave = {
+                                        id: ENTITY.ConfigE.ObjectId,
                                         type: data.type,
                                     }
                                     if (config.store_code)
-                                        dataToSave['cmsStoreRef'] = parseInt(config.store_id)
-                                    if (config.store_code)
                                         dataToSave['storeCode'] = config.store_code
-                                    if (config.store_code)
-                                        dataToSave['noonPayConfig'] = config.noon_pay_config
-                                    if (config.store_code)
-                                        dataToSave['codInfo'] = config.cod_info
+                                    if (config.store_id)
+                                        dataToSave['storeId'] = config.store_id
+                                    if (config.free_shipping)
+                                        dataToSave['freeShipping'] = config.free_shipping
+                                    if (config.flat_rate)
+                                        dataToSave['flatRate'] = config.flat_rate
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
-                                        key: dataToSave['cmsStoreRef'],
+                                        key: dataToSave['id'],
                                         ttl: 0,
                                         create: true,
                                     }
