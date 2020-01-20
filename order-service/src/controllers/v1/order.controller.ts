@@ -112,36 +112,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -216,36 +210,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -305,7 +293,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -320,36 +308,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -409,7 +391,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -424,36 +406,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -513,7 +489,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -528,36 +504,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -617,7 +587,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -632,36 +602,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -721,7 +685,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -736,36 +700,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -825,7 +783,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -840,36 +798,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -929,7 +881,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -944,36 +896,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1033,7 +979,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1048,36 +994,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1137,7 +1077,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1152,36 +1092,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1241,7 +1175,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1256,36 +1190,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1345,7 +1273,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1360,36 +1288,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1449,7 +1371,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1464,36 +1386,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1553,7 +1469,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1568,36 +1484,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1657,7 +1567,7 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
+                    "isPreviousOrder": true
                 },
                 {
                     "_id": "5e2422631f66da1fa13402f1",
@@ -1672,36 +1582,30 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                     "items": [
                         {
-                            "metaKeyword": [
-                                "Cheesecake"
-                            ],
-                            "taxClassId": "2",
-                            "position": 0,
-                            "name": "Cheesecake",
-                            "imageSmall": "null",
-                            "selectedItem": 0,
-                            "specialPrice": 9.5,
-                            "bundleProductOptions": [
-
-                            ],
-                            "visibility": 4,
-                            "finalPrice": 9.5,
-                            "virtualGroup": 0,
+                            "id": 1,
+                            "position": 1,
+                            "name": "Chocolate Chip Cookie",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 5.5,
+                            "specialPrice": 4.5,
                             "typeId": "simple",
-                            "qty": 2,
-                            "image": "null",
-                            "description": "adff",
-                            "sku": "710001",
-                            "id": 58,
-                            "inSide": "0",
-                            "configurableProductOptions": [
-
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Chocolate Chip Cookie"
                             ],
-                            "products": [
-
-                            ],
-                            "imageThumbnail": "null",
-                            "associative": "0"
+                            "bundleProductOptions": [],
+                            "selectedItem": 0,
+                            "configurableProductOptions": [],
+                            "items": [],
+                            "sku": 710003,
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 0,
+                            "visibility": 4,
+                            "associative": 0
                         }
                     ],
                     "amount": [
@@ -1761,8 +1665,8 @@ export class OrderController {
                         "lng": 20.322,
                         "address": "store is open address"
                     },
-                    "isPreviousOrder": false
-                }
+                    "isPreviousOrder": true
+                },
             ]
             // }
 
@@ -1799,14 +1703,14 @@ export class OrderController {
             // if (trackOrder && trackOrder._id) {
             //     return trackOrder
             // } else {
-                return {
-                    "_id": "5e2422631f66da1fa13402f1",
-                    "orderId": "UAE-1",
-                    "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                    "status": "PENDING",
-                    "createdAt": 1578558475844,
-                    "updatedAt": 1578558475844,
-                }
+            return {
+                "_id": "5e2422631f66da1fa13402f1",
+                "orderId": "UAE-1",
+                "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
+                "status": "PENDING",
+                "createdAt": 1578558475844,
+                "updatedAt": 1578558475844,
+            }
             // }
         } catch (err) {
             consolelog(process.cwd(), "trackOrder", err, false)
