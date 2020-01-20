@@ -175,7 +175,6 @@
         "endPoint": "bulksms/bulksms",
         "source": ""
     },
-
     "kafka": {
         "url": "localhost:9093"
     },
@@ -185,10 +184,10 @@
         "password": "GM2nGDQkN5yMdPZs"
     },
     "mongo": {
-        "url": "mongodb://localhost:27017/americana",
-        "hosts": "localhost:3000",
-        "username": "",
-        "password": ""
+        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",
+        "hosts": "54.176.239.44:2798",
+        "username": "americana_dbusr",
+        "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
         "auth": {
