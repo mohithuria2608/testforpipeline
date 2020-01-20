@@ -40,7 +40,8 @@ export class CartController {
             if (payload.couponCode) {
                 let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (!validPromo.isValid)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
+                    delete payload['couponCode']
+                // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             }
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, auth.userData)
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
