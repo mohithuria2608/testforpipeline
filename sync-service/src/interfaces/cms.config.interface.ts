@@ -24,6 +24,20 @@ declare namespace ICmsConfigRequest {
             status: string,
             title: string,
             code: string,
+        },
+        free_shipping: {
+            status: string,
+            title: string,
+            min_order_total: null,
+            price: number,
+            code: string
+        },
+        flat_rate: {
+            status: string,
+            title: string,
+            price: number,
+            code: string
         }
+
     }
 }

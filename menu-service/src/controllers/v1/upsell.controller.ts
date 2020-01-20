@@ -29,7 +29,6 @@ export class UpsellController {
     * */
     async fetchUpsellProducts(headers: ICommonRequest.IHeaders, payload: IUpsellRequest.IFetchUpsell) {
         try {
-
             return await ENTITY.UpsellE.getUpsellProducts(payload)
         } catch (err) {
             consolelog(process.cwd(), "fetchMenu", err, false)

@@ -2,6 +2,7 @@ declare namespace IUserchangeRequest {
 
     interface IUserchange {
         id?: string,
+        isGuest?: number,
         otp?: number,
         otpExpAt?: number,
         otpVerified?: number,

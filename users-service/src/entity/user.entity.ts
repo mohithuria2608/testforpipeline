@@ -69,6 +69,7 @@ export class UserEntity extends BaseEntity {
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
         changePhnNo: Joi.number().valid(0, 1).required(),
+        switchPhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
@@ -103,7 +104,6 @@ export class UserEntity extends BaseEntity {
             id: this.ObjectId().toString(),
             sdmUserRef: 0,
             cmsUserRef: 0,
-            isGuest: 0,
             name: "",
             cCode: "",
             phnNo: "",
@@ -115,12 +115,9 @@ export class UserEntity extends BaseEntity {
             createdAt: 0,
             cartId: this.ObjectId().toString(),
             password: 'Password1', //await cryptData(id),
-            changePhnNo: 0
+            changePhnNo: 0,
+            switchPhnNo: 0,
         } : {}
-        if (userInfo.isGuest != undefined) {
-            if (userInfo.isGuest == 1)
-                user['isGuest'] = userInfo.isGuest
-        }
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
         if (userInfo.cCode != undefined)
@@ -160,7 +157,7 @@ export class UserEntity extends BaseEntity {
                 bins: dataToSave,
                 set: this.set,
                 key: dataToSave.id,
-                ttl: userInfo.isGuest ? Constant.SERVER.INITIAL_GUEST_USER_TTL : Constant.SERVER.INITIAL_USER_TTL,
+                ttl: Constant.SERVER.INITIAL_USER_TTL,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -189,8 +186,6 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.profileStep)
                 userUpdate['profileStep'] = payload.profileStep
-            if (payload.isGuest != undefined)
-                userUpdate['isGuest'] = payload.isGuest
             if (payload.changePhnNo != undefined)
                 userUpdate['changePhnNo'] = payload.changePhnNo
             if (payload.socialKey)

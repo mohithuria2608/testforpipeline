@@ -21,6 +21,7 @@ export class UserchangeEntity extends BaseEntity {
 
     public userchangeSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk, user id"),
+        isGuest: Joi.number().valid(0, 1),
         /**
          * @description : phone number otp verify
          */
@@ -105,6 +106,8 @@ export class UserchangeEntity extends BaseEntity {
             let dataToUpdateUserchange = {
                 id: userData.id
             };
+            if (payload.isGuest != undefined)
+                dataToUpdateUserchange['isGuest'] = payload.isGuest
             if (payload.cCode)
                 dataToUpdateUserchange['cCode'] = payload.cCode
             if (payload.phnNo)

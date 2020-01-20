@@ -3,10 +3,11 @@ declare namespace IGuestRequest {
     interface IGuestLogin {
     }
 
-    interface IisGuest {
+    interface IGuestCheckout {
         cCode: string,
         phnNo: string,
         email: string,
-        name: string
+        name: string,
+        isGuest: number
     }
 }

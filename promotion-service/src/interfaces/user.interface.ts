@@ -4,7 +4,7 @@ declare namespace IUserRequest {
         id: string,
         sdmUserRef: number,
         cmsUserRef: number,
-        isGuest: number,
+        // isGuest: number,
         name: string,
         cCode: string,
         phnNo: string,
@@ -17,6 +17,7 @@ declare namespace IUserRequest {
         cartId: string,
         password: string,
         changePhnNo: number,
+        switchPhnNo: number,
     }
 
     interface IFetchUser {

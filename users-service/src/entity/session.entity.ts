@@ -104,12 +104,8 @@ export class SessionEntity extends BaseEntity {
             }
             session['userId'] = userData.id
 
-            if (payload.isGuest != undefined) {
-                if (payload.isGuest == 1)
-                    session['isGuest'] = 1
-                else
-                    session['isGuest'] = 0
-            }
+            if (payload.isGuest != undefined)
+                session['isGuest'] = payload.isGuest
             if (payload.otpVerified != undefined)
                 session['otpVerified'] = payload.otpVerified
             if (payload.isLogin != undefined)

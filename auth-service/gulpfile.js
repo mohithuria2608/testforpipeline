@@ -65,7 +65,7 @@ gulp.task('server', function () {
 			name: 'auth',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default" ? process.env.NODE_ENV : "default"
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
 			}
 		}, function () {
 			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);

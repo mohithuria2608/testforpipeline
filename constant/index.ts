@@ -258,6 +258,7 @@ export const DATABASE = {
         SYNC_CONFIG: {
             PAYMENT: "payment",
             GENERAL: "general",
+            SHIPMENT: "shipment",
         },
 
         SYNC_ACTION: {
@@ -354,13 +355,6 @@ export const STATUS_MSG = {
                 httpCode: 400,
                 type: 'INVALID_OTP',
                 message: 'Invalid otp'
-            },
-
-            PHONE_NO_IN_USE: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'PHONE_NO_IN_USE',
-                message: 'Phone number allready in use.'
             },
 
             USER_ALREADY_EXIST: {
