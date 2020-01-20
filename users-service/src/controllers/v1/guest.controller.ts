@@ -14,7 +14,6 @@ export class GuestController {
         try {
             let userCreate: IUserRequest.IUserUpdate = {
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-                isGuest: 1,
             }
             let user = await ENTITY.UserE.createUser(headers, userCreate)
             let session = {
@@ -46,8 +45,9 @@ export class GuestController {
     * @param {string} phnNo : phone number max length 9 digits
     * @param {string} email : email
     * @param {string} name : name
+    * @param {string} isGuest : number
     * */
-    async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IisGuest, auth: ICommonRequest.AuthorizationObj) {
+    async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
             auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
             let queryArg: IAerospike.Query = {
@@ -65,7 +65,6 @@ export class GuestController {
                 background: false,
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-            let user
             if (checkUser && checkUser.length > 0) {
                 let userchangePayload = {
                     name: payload.name,
@@ -76,7 +75,8 @@ export class GuestController {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
-                    deleteUserId: auth.userData.id
+                    deleteUserId: auth.userData.id,
+                    isGuest: payload.isGuest
                 }
                 await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
                 let userUpdate = {

@@ -4,7 +4,7 @@ declare namespace IUserRequest {
         id: string,
         sdmUserRef: number,
         cmsUserRef: number,
-        isGuest: number,
+        // isGuest: number,
         name: string,
         cCode: string,
         phnNo: string,
@@ -17,6 +17,7 @@ declare namespace IUserRequest {
         cartId: string,
         password: string,
         changePhnNo: number,
+        switchPhnNo: number,
     }
     interface IPhone {
         cCode: string,
@@ -30,7 +31,7 @@ declare namespace IUserRequest {
     interface IUserUpdate {
         sdmUserRef?: number,
         cmsUserRef?: number,
-        isGuest?: number,
+        // isGuest?: number,
         name?: string,
         cCode?: string,
         phnNo?: string,
@@ -43,6 +44,7 @@ declare namespace IUserRequest {
         cartId?: string,
         password?: string,
         changePhnNo?: number,
+        switchPhnNo?: number
     }
 
     interface IRefreshToken {
@@ -53,7 +55,7 @@ declare namespace IUserRequest {
 
     interface IAuthVerifyOtp extends IPhone {
         otp: number,
-        // isGuest: number,
+        isGuest: number,
     }
     interface IAuthSocial extends IEmail {
         socialKey: string,

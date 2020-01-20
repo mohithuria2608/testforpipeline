@@ -40,13 +40,14 @@ export default (router: Router) => {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
                     email: Joi.string().email().lowercase().required(),
-                    name: Joi.string().required()
+                    name: Joi.string().required(),
+                    isGuest: Joi.number().valid(0, 1).required(),
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IGuestRequest.IisGuest = ctx.request.body;
+                    let payload: IGuestRequest.IGuestCheckout = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await guestController.guestCheckout(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
