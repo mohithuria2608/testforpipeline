@@ -18,7 +18,8 @@ export default (router: Router) => {
                 body: {
                     type: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.SYNC_CONFIG.GENERAL,
-                        Constant.DATABASE.TYPE.SYNC_CONFIG.PAYMENT),
+                        Constant.DATABASE.TYPE.SYNC_CONFIG.PAYMENT,
+                        Constant.DATABASE.TYPE.SYNC_CONFIG.SHIPMENT),
                     action: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,
                         Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE,

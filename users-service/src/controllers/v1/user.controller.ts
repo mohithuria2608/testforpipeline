@@ -250,6 +250,7 @@ export class UserController {
                 user[0].id,
                 0
             )
+            user[0]['isGuest'] = payload.isGuest
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user[0], headers) }
         } catch (err) {
             consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(err), false)

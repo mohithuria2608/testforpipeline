@@ -258,6 +258,7 @@ export const DATABASE = {
         SYNC_CONFIG: {
             PAYMENT: "payment",
             GENERAL: "general",
+            SHIPMENT: "shipment",
         },
 
         SYNC_ACTION: {

@@ -45,11 +45,24 @@ export class ConfigEntity extends BaseEntity {
     //       "status": "1",
     //       "title": "Cash On Delivery",
     //       "code": "cashondelivery"
-    //     }
+    //     },
+    // "free_shipping": {
+    //     "status": "1",
+    //     "title": "Free Shipping",
+    //     "min_order_total": null,
+    //     "price": 0,
+    //     "code": "freeshipping"
+    //   },
+    //   "flat_rate": {
+    //     "status": "1",
+    //     "title": "Flat Rate",
+    //     "price": 5,
+    //     "code": "freeshipping"
+    //   }
     //   }
 
     public configSchema = Joi.object().keys({
-        cmsStoreRef: Joi.string().required().description("pk, group of stores at cms"),
+        cmsStoreRef: Joi.string().required().description("pk, store_id"),
         type: Joi.string().required().valid("general", "payment").description("sk"),
         storeCode: Joi.string().required(),
         noonPayConfig: Joi.object().keys({
@@ -67,6 +80,19 @@ export class ConfigEntity extends BaseEntity {
         codInfo: Joi.object().keys({
             code: Joi.string().required(),
             status: Joi.string().required(),
+        }),
+        free_shipping: Joi.object().keys({
+            status: Joi.string().required(),
+            title: Joi.string().required(),
+            min_order_total: Joi.string().required(),
+            price: Joi.number().required(),
+            code: Joi.string().required(),
+        }),
+        flat_rate: Joi.object().keys({
+            status: Joi.string().required(),
+            title: Joi.string().required(),
+            price: Joi.number().required(),
+            code: Joi.string().required(),
         })
     })
 

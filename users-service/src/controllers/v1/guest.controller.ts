@@ -121,6 +121,7 @@ export class GuestController {
                 }
                 await ENTITY.SessionE.buildSession(headers, session, auth.userData)
             }
+            auth.userData['isGuest'] = payload.isGuest
             return formatUserData(auth.userData, headers)
         } catch (error) {
             consolelog(process.cwd(), "isGuest", error, false)
