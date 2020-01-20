@@ -26,7 +26,7 @@ export * from './joi.validator'
 export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[] {
   let temp: IMiddleware[] = []
   if (middlewares.indexOf(Constant.MIDDLEWARE.AUTH) != -1)
-    temp.push(auth())
+    // temp.push(auth())
   if (middlewares.indexOf(Constant.MIDDLEWARE.ACTIVITY_LOG) != -1)
     temp.push(activityLog())
   return temp

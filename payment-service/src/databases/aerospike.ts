@@ -55,8 +55,8 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
-                        if (ENTITY.TransactionE.sindex && ENTITY.TransactionE.sindex.length > 0)
-                            this.bootstrapIndex(ENTITY.TransactionE.sindex)
+                        // if (ENTITY.PaymentE.sindex && ENTITY.PaymentE.sindex.length > 0)
+                        //     this.bootstrapIndex(ENTITY.PaymentE.sindex)
                         resolve({})
                     }
                 } catch (err) {

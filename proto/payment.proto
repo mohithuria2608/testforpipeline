@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service PaymentService {
     rpc Func1 (IFunc1Req) returns (IFunc1Res) {}
+    rpc getPaymentMethods (IFunc1Req) returns (IFunc1Res) {}
 }
 
 message IFunc1Req { }

@@ -1,1 +1,1 @@
-export { TransactionE } from './transaction.entity'
+export { PaymentE } from './payment.entity'
