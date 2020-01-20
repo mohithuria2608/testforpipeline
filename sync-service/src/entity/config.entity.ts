@@ -62,9 +62,10 @@ export class ConfigEntity extends BaseEntity {
     //   }
 
     public configSchema = Joi.object().keys({
-        cmsStoreRef: Joi.string().required().description("pk, store_id"),
-        type: Joi.string().required().valid("general", "payment").description("sk"),
+        id: Joi.string().required().description("pk, storeCode_storeId"),
+        type: Joi.string().required().valid("general", "payment", "shipment").description("sk"),
         storeCode: Joi.string().required(),
+        storeId: Joi.number().required(),
         noonPayConfig: Joi.object().keys({
             brandCode: Joi.string().required(),
             countryCode: Joi.string().required(),

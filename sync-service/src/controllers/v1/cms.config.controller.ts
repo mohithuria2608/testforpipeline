@@ -29,6 +29,15 @@ export class CmsConfigController {
                                     let dataToSave = {
                                         type: data.type,
                                     }
+                                    // id
+                                    // type
+                                    // storeCode
+                                    // storeId
+                                    // noonPayConfig
+
+                                    // if (config.store_code && config.store_id) {
+
+                                    // }
                                     // if (config.store_code)
                                     //     dataToSave['storeCode'] = parseInt(config.store_id)
                                     // if (config.)
