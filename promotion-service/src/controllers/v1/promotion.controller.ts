@@ -27,24 +27,6 @@ export class PromotionController {
     }
 
     /**
-    * @method INTERNAL
-    * @param {string=} cartId
-    * @param {string=} couponCode
-    */
-    async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
-        try {
-            let promo = await ENTITY.PromotionE.getPromotions({ couponCode: payload.couponCode })
-            if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
-                return { isValid: true }
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)
-        } catch (error) {
-            consolelog(process.cwd(), "validatePromotion", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
      * @method POST
      * @description : Post bulk promotion data
      * */
@@ -52,6 +34,7 @@ export class PromotionController {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/promotion.json', 'utf-8');
             let promo = JSON.parse(rawdata);
+
             for (const iterator of promo) {
                 ENTITY.PromotionE.post(iterator, { create: true })
             }
@@ -69,11 +52,11 @@ export class PromotionController {
     * */
     async getPromotionsList(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IGetPromotion) {
         try {
-            let testlist = await ENTITY.PromotionE.getPromotions({})
-            let returnList = testlist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
+            let promolist = await ENTITY.PromotionE.getPromotion({})
+            let returnList = promolist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {
                 list: returnList,
-                nextPage: testlist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(payload.page.toString()) + 1 : -1,
+                nextPage: promolist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(payload.page.toString()) + 1 : -1,
                 currentPage: parseInt(payload.page.toString())
             }
         } catch (err) {
@@ -83,26 +66,21 @@ export class PromotionController {
     }
 
     /**
-   * @method POST
-   * @description validate promotion    
-   * @param {string=} couponCode
-   * */
-    async applyPromotion(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IApplyPromotion, auth: ICommonRequest.AuthorizationObj) {
+    * @method POST
+    * @description validate promotion    
+    * @param {string=} couponCode
+    * */
+    async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
         try {
-            // auth.userData = await userService.fetchUser({ userId: auth.id })
-            let validPromo = await this.validatePromotion({ couponCode: payload.couponCode })
-            if (!validPromo.isValid)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
-            let cmsValidatedPromo = await ENTITY.PromotionE.validatePromoOnCms(payload)
-            // [{\"cart_items\":[{\"product_id\":\"1\",\"qty\":1,\"price\":20.185,\"type_id\":\"simple\"}],\"cms_cart_id\":\"65\",\"currency_code\":\"AED\",\"subtotal\":20.19,\"grandtotal\":20.19,\"tax\":[],\"not_available\":[],\"is_price_changed\":true,\"coupon_code\":\"\",\"success\":true}]","timestamp":"2020-01-14T10:23:10.196Z"}
-            let getCart = await orderService.getCart({ cartId: payload.cartId })
-            let res = await ENTITY.PromotionE.updateCart(payload.cartId, getCart.items, cmsValidatedPromo)
-            // let saveCart = await ENTITY.OrderE.updateCart(payload)
-            // let res = await ENTITY.OrderE.createCartRes(payload, invalidMenu, auth.userData)
-            return res
-        } catch (err) {
-            consolelog(process.cwd(), "applyPromotion", err, false)
-            return Promise.reject(err)
+            let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
+            return { isValid: true }
+            if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
+                return { isValid: true }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROMO_EXPIRED)
+        } catch (error) {
+            consolelog(process.cwd(), "validatePromotion", error, false)
+            return Promise.reject(error)
         }
     }
 }

@@ -13,21 +13,27 @@ message IKafkaReq {
 }
 
 message IAerospike {
-    required bool create = 1;
-    required bool update = 2;
-    required string argv = 3;
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
 }
 
 message ICms {
-    required bool create = 1;
-    required bool update = 2;
-    required string argv = 3;
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
 }
 
 message ISdm {
-    required bool create = 1;
-    required bool update = 2;
-    required string argv = 3;
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
 }
 
 message IKafkaRes {

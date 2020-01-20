@@ -30,7 +30,7 @@ export class OrderService {
                 this.orderClient.createDefaultCart({ cartId: payload.cartId, userId: payload.userId }, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully created default cart", JSON.stringify(res), false)
-                        resolve(res.store)
+                        resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in creating created default cart", JSON.stringify(err), false)
                         reject(err)
@@ -49,7 +49,7 @@ export class OrderService {
                 this.orderClient.updateCartTtl({ cartId: payload.cartId }, (err, res) => {
                     if (!err) {
                         consolelog(process.cwd(), "successfully updated default cart ttl", JSON.stringify(res), false)
-                        resolve(res.store)
+                        resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in  updating default cart ttl", JSON.stringify(err), false)
                         reject(err)

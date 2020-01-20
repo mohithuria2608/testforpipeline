@@ -27,6 +27,16 @@ server.addService(syncProto.SyncService.service, {
             consolelog(process.cwd(), "sync", error, false)
             callback(grpcSendError(error))
         }
+    },
+    getConfig: async (call: IConfigGrpcRequest.IGetConfigReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getConfig", JSON.stringify(call.request), true)
+            let res = await cmsConfigController.getConfig(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getConfig", error, false)
+            callback(grpcSendError(error))
+        }
     }
 })
 

@@ -1,1 +1,1 @@
-export { Logger, ILogger } from "./logger.model";
+export { logger, Ilogger } from "./logger.model";

@@ -9,19 +9,19 @@ export class StoreController {
     constructor() { }
 
     /**
-     * @method POST
+     * @method BOOTSTRAP
      * @description : Post bulk store data
      * */
-    async post() {
+    async bootstrapStore() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
             let stores = JSON.parse(rawdata);
             for (const store of stores) {
-                await ENTITY.StoreE.postStore(store)
+                await ENTITY.StoreE.bootstrapStore(store)
             }
             return stores
         } catch (err) {
-            consolelog(process.cwd(), "post store", err, false)
+            consolelog(process.cwd(), "bootstrapStore", err, false)
             return Promise.reject(err)
         }
     }

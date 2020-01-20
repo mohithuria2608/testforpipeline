@@ -57,11 +57,7 @@ export const CMS = {
         CREATE_CART: {
             METHOD: "POST",
             URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
-        },
-        APPLY_COUPON: {
-            METHOD: "POST",
-            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
-        },
+        }
     }
 };
 
@@ -257,6 +253,17 @@ export const DATABASE = {
         STATUS: {
             INACTIVE: 0,
             ACTIVE: 1
+        },
+
+        SYNC_CONFIG: {
+            PAYMENT: "payment",
+            GENERAL: "general",
+        },
+
+        SYNC_ACTION: {
+            CREATE: "create",
+            UPDATE: "update",
+            RESET: "reset",
         }
     },
 
@@ -347,6 +354,13 @@ export const STATUS_MSG = {
                 httpCode: 400,
                 type: 'INVALID_OTP',
                 message: 'Invalid otp'
+            },
+
+            PHONE_NO_IN_USE: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'PHONE_NO_IN_USE',
+                message: 'Phone number allready in use.'
             },
 
             USER_ALREADY_EXIST: {

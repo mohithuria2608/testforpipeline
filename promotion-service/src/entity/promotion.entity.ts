@@ -4,7 +4,6 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
-import * as CMS from "../cms";
 
 export class PromotionClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -47,7 +46,7 @@ export class PromotionClass extends BaseEntity {
     });
 
     /**
-     * @method INTERNAL
+     * @method Bootstrap
      */
     async post(data: IPromotionRequest.IPromoData, options: { create?: boolean, update?: boolean, replace?: boolean, createOrReplace?: boolean }) {
         try {
@@ -61,8 +60,7 @@ export class PromotionClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "post promotion", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 
@@ -95,7 +93,7 @@ export class PromotionClass extends BaseEntity {
      * @param {string=} couponCode
      * @param {number=} page
      */
-    async getPromotions(payload: IPromotionRequest.IGetPromotion): Promise<IPromotionRequest.IPromoData[]> {
+    async getPromotion(payload: IPromotionRequest.IGetPromotion): Promise<IPromotionRequest.IPromoData[]> {
         try {
             if (payload.couponCode || payload.cmsCouponRef) {
                 let queryArg: IAerospike.Query
@@ -132,22 +130,6 @@ export class PromotionClass extends BaseEntity {
             }
         } catch (error) {
             consolelog(process.cwd(), "getPromotions", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-
-    /**
-     * @method INTERNAL
-     * @param {string=} cartId
-     * @param {string=} couponCode
-     */
-    async validatePromoOnCms(payload: IPromotionRequest.IApplyPromotion) {
-        try {
-            let res = await CMS.PromotionCMSE.applyCoupon({ cartId: payload.cartId, couponCode: payload.couponCode })
-            return res[0]
-        } catch (error) {
-            consolelog(process.cwd(), "validatePromoOnCms", error, false)
             return Promise.reject(error)
         }
     }

@@ -1,7 +1,7 @@
 declare namespace IConfigRequest {
 
     interface IFetchConfig {
-        configId?: string
+        cmsStoreRef?: string
         type?: string
     }
 }

@@ -12,18 +12,20 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            let userCreate = {
+            let userCreate: IUserRequest.IUserUpdate = {
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 isGuest: 1,
             }
-            let sessionCreate: IUserRequest.ISessionUpdate = {
+            let user = await ENTITY.UserE.createUser(headers, userCreate)
+            let session = {
                 otp: 0,
                 otpExpAt: 0,
                 otpVerified: 1,
                 isLogin: 1,
                 isGuest: 1,
+                // ttl: Constant.SERVER.OTP_EXPIRE_TIME
             }
-            let user: IUserRequest.IUserData = await ENTITY.UserE.createUser(headers, userCreate, sessionCreate)
+            await ENTITY.SessionE.buildSession(headers, session, user)
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
@@ -31,7 +33,7 @@ export class GuestController {
                 user.id,
                 1
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers.deviceid) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
         } catch (err) {
             consolelog(process.cwd(), "guestLogin", err, false)
             return Promise.reject(err)
@@ -47,6 +49,7 @@ export class GuestController {
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IisGuest, auth: ICommonRequest.AuthorizationObj) {
         try {
+            auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -62,60 +65,63 @@ export class GuestController {
                 background: false,
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+            let user
             if (checkUser && checkUser.length > 0) {
-                let userUpdate = {
-                    mergeUserId: checkUser[0].id,
+                let userchangePayload = {
                     name: payload.name,
                     email: payload.email,
-                    emailVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
-                    phnVerified: 0,
+                    cartId: auth.userData.cartId,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
-                }
-                let sessionUpdate: IUserRequest.ISessionUpdate = {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
-                    isLogin: 0,
-                    createdAt: new Date().getTime(),
+                    deleteUserId: auth.userData.id
                 }
-                let user = await ENTITY.UserE.createSession(headers, auth.userData, userUpdate, sessionUpdate)
+                await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
+                let userUpdate = {
+                    changePhnNo: 1
+                }
+                await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
             } else {
-                let userCreate: IUserRequest.IUserUpdate = {
+                let userUpdate: IUserRequest.IUserUpdate = {
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
                     name: payload.name,
                     email: payload.email,
                     phnVerified: 0,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
-                    isGuest: 1,
-                }
-                let sessionCreate: IUserRequest.ISessionUpdate = {
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    isGuest: 1,
                 }
                 let userInCms = await ENTITY.UserE.checkUserOnCms({})
                 if (userInCms && userInCms.id) {
-                    userCreate['cmsUserRef'] = userInCms.id
+                    userUpdate['cmsUserRef'] = userInCms.id
                     if (userInCms['sdmUserRef'])
-                        userCreate['sdmUserRef'] = userInCms.id
-                    userCreate['name'] = userInCms.name
-                    userCreate['email'] = userInCms.email
-                    userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                        userUpdate['sdmUserRef'] = userInCms.id
+                    userUpdate['name'] = userInCms.name
+                    userUpdate['email'] = userInCms.email
+                    userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                 } else {
                     let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
                     if (userInSdm && userInSdm.id) {
-                        userCreate['sdmUserRef'] = userInSdm.id
-                        userCreate['name'] = userInCms.name
-                        userCreate['email'] = userInCms.email
-                        userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                        userUpdate['sdmUserRef'] = userInSdm.id
+                        userUpdate['name'] = userInCms.name
+                        userUpdate['email'] = userInCms.email
+                        userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     }
                 }
-                await ENTITY.UserE.createUser(headers, userCreate, sessionCreate)
+                auth.userData = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
+                let session = {
+                    otp: Constant.SERVER.BY_PASS_OTP,
+                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpVerified: 1,
+                    isGuest: 1,
+                    createdAt: new Date().getTime(),
+                    updatedAt: new Date().getTime(),
+                    // ttl: Constant.SERVER.OTP_EXPIRE_TIME
+                }
+                await ENTITY.SessionE.buildSession(headers, session, user)
             }
-            return {}
+            return formatUserData(auth.userData, headers)
         } catch (error) {
             consolelog(process.cwd(), "isGuest", error, false)
             return Promise.reject(error)

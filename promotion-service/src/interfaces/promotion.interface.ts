@@ -27,8 +27,4 @@ declare namespace IPromotionRequest {
     interface IValidatePromotion {
         couponCode: string
     }
-    interface IApplyPromotion {
-        cartId: string,
-        couponCode: string
-    }
 }

@@ -1,6 +1,6 @@
 'use strict';
-import * as mongoose from "mongoose";
 import * as Models from '../models';
+import * as mongoose from "mongoose";
 import { consolelog } from '../utils'
 
 export class DAOManager {
@@ -18,6 +18,7 @@ export class DAOManager {
             return Promise.reject(error)
         }
     };
+
 
     async insertMany(model: SetNames, data, options) {
         try {

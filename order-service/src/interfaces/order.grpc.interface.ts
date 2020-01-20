@@ -21,17 +21,7 @@ declare namespace IOrderGrpcRequest {
 
     interface IUpdateDefaultCartTTLRes { }
 
-
-    interface IUpdateCartReq {
-        request: IUpdateCart
-    }
-    interface IUpdateCart {
-        cartId: string,
-        curItems: string,// IMenuGrpcRequest.IProduct[],
-        cmsCart: string,//ICartCMSRequest.ICreateCartCmsRes
-    }
-
     interface IGetCartReq {
-        request: ICartRequest.ICartId
+        request: ICartRequest.IGetCart
     }
 }

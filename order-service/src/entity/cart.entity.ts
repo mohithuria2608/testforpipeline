@@ -29,7 +29,7 @@ export class CartClass extends BaseEntity {
     ]
 
     constructor() {
-        super('order')
+        super('cart')
     }
 
     public cartSchema = Joi.object().keys({
@@ -194,18 +194,12 @@ export class CartClass extends BaseEntity {
                 visibility: Joi.number().required(),
                 associative: Joi.string().required(),
             })),
-        subTotal: Joi.number(),
-        total: Joi.number(),
-        tax: Joi.array().items(
+        amount: Joi.array().items(
             Joi.object().keys({
-                name: Joi.string().required(),
-                value: Joi.string().required(),
-            })),
-        shipping: Joi.array().items(
-            Joi.object().keys({
+                type: Joi.string().required(),
                 name: Joi.string().required(),
                 code: Joi.string().required(),
-                value: Joi.string().required(),
+                amount: Joi.number().required(),
             })),
     })
 
@@ -214,7 +208,7 @@ export class CartClass extends BaseEntity {
     * @param {string} cartId : cart id
     * @param {string} cmsCartRef : cms cart id
     * */
-    async getCart(payload: ICartRequest.ICartId) {
+    async getCart(payload: ICartRequest.IGetCart): Promise<ICartRequest.ICartData> {
         try {
             if (payload.cartId) {
                 let getArg: IAerospike.Get = {
@@ -264,11 +258,7 @@ export class CartClass extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 items: [],
                 address: null,
-                subTotal: 0,
-                total: 0,
-                tax: [],
-                shipping: [],
-                coupon: []
+                amount: []
             }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
@@ -315,7 +305,7 @@ export class CartClass extends BaseEntity {
                 if (obj['typeId'] == 'simple') {
                     cart.push({
                         product_id: obj.id,
-                        qty: obj.qty,
+                        qty: obj.qty ? obj.qty : 1,
                         price: obj.finalPrice,
                         type_id: obj['typeId']
                     })
@@ -323,22 +313,29 @@ export class CartClass extends BaseEntity {
                 else if (obj['typeId'] == 'configurable') {
                     let super_attribute = {};
                     let price = null;
-                    obj['configurableProductOptions'].map(co => {
-                        let value = null
-                        co['options'].map(o => {
-                            if (o['isSelected'] == 1) {
-                                value = o['id']
+                    if (obj['products'] && obj['products'].length > 0) {
+                        obj['products'].map(p => {
+                            if (parseInt(p['sku']) == obj['selectedItem']) {
+                                price = p['finalPrice']
+                                if (obj['configurableProductOptions'] && obj['configurableProductOptions'].length > 0) {
+                                    obj['configurableProductOptions'].map(co => {
+                                        let value = null
+                                        if (co['options'] && co['options'].length > 0) {
+                                            co['options'].map(o => {
+                                                if (o['isSelected'] == 1) {
+                                                    value = o['id']
+                                                }
+                                            })
+                                            super_attribute[co['id']] = value
+                                        }
+                                    })
+                                }
                             }
                         })
-                        super_attribute[co['id']] = value
-                    })
-                    obj['products'].map(p => {
-                        if (p['sku'] == obj['selectedItem'])
-                            price = p['finalPrice']
-                    })
+                    }
                     cart.push({
                         product_id: obj.id,
-                        qty: obj.qty,
+                        qty: obj.qty ? obj.qty : 1,
                         price: price,
                         type_id: obj['typeId'],
                         super_attribute: super_attribute
@@ -392,11 +389,15 @@ export class CartClass extends BaseEntity {
                 }
             })
             let req: ICartCMSRequest.ICreateCartCms = {
-                cms_user_id: 10,//userData.cmsUserRef,
+                cms_user_id: 10, //userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart// [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart
+                cart_items: cart, // [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart,
             }
+            if (payload.couponCode)
+                req['coupon_code'] = payload.couponCode
+            else
+                req['coupon_code'] = ""
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
         } catch (error) {
@@ -405,33 +406,1807 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, curItems: IMenuGrpcRequest.IProduct[], cmsCart: ICartCMSRequest.ICreateCartCmsRes) {
+    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
         try {
             let prevCart = await this.getCart({ cartId: cartId })
-            let dataToUpdate: ICartRequest.IUpdateCartData = {}
+            if (curItems == undefined)
+                curItems = prevCart.items
+            let dataToUpdate: ICartRequest.ICartData = {}
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
-            dataToUpdate['subTotal'] = cmsCart.subtotal
-            dataToUpdate['total'] = cmsCart.grandtotal
-            dataToUpdate['shipping'] = []// cmsCart.shipping
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
+            dataToUpdate['notAvailable'] = []
+            dataToUpdate['items'] = []
 
-            let updateCartItems = []
-            dataToUpdate['items'] = updateCartItems
-
-            let updateTax = []
-            dataToUpdate['tax'] = updateTax
-
+            let seq = 0
+            let amount = []
+            amount.push({
+                type: "SUB_TOTAL",
+                name: "Sub Total",
+                code: "SUB_TOTAL",
+                amount: parseInt(cmsCart.subtotal.toString()),
+                sequence: 1
+            })
+            if (cmsCart.discount_amount && cmsCart.coupon_code && cmsCart.coupon_code != "") {
+                amount.push({
+                    type: "DISCOUNT",
+                    name: "Discount",
+                    code: cmsCart.coupon_code,
+                    amount: parseInt(cmsCart.discount_amount.toString()),
+                    sequence: 2
+                })
+                dataToUpdate['couponApplied'] = 1
+            } else
+                dataToUpdate['couponApplied'] = 0
+            if (cmsCart.tax && cmsCart.tax.length > 0) {
+                amount.push({
+                    type: "TAX",
+                    name: cmsCart.tax[0].tax_name,
+                    code: cmsCart.tax[0].tax_name,
+                    amount: parseInt(cmsCart.tax[0].amount.toString()),
+                    sequence: 3
+                })
+            } else {
+                amount.push({
+                    type: "TAX",
+                    name: "VAT",
+                    code: "VAT",
+                    amount: 1.05,
+                    sequence: 3
+                })
+            }
+            amount.push({
+                type: "SHIPPING",
+                name: "Free Delivery",
+                code: "FLAT",
+                amount: 7.5,
+                sequence: 4
+            })
+            amount.push({
+                type: "TOTAL",
+                name: "Total",
+                code: "TOTAL",
+                amount: parseInt(cmsCart.grandtotal.toString()),
+                sequence: 5
+            })
+            dataToUpdate['amount'] = amount
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 curItems.map(obj => {
                     cmsCart.cart_items.map(elem => {
                         if (obj.id == elem.product_id) {
-                            updateCartItems.push(obj)
+                            dataToUpdate['items'].push(obj)
                         } else {
                             dataToUpdate['notAvailable'].push(obj)
                         }
                     })
                 })
+                if (dataToUpdate['notAvailable'].length < 0) {
+                    dataToUpdate['notAvailable'] = [
+                        {
+                            "id": 41,
+                            "position": 4,
+                            "name": "Twister Box",
+                            "description": "Twister, 1 PC chicken, fries, coleslaw and Pepsi",
+                            "inSide": 1,
+                            "finalPrice": 23,
+                            "specialPrice": 22.5,
+                            "typeId": "bundle_group",
+                            "catId": 21,
+                            "selectedItem": "44",
+                            "metaKeyword": [
+                                "Twister Box"
+                            ],
+                            "items": [
+                                {
+                                    "id": 15,
+                                    "position": 1,
+                                    "name": "Twister Box - Medium",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 23,
+                                    "specialPrice": 22.5,
+                                    "typeId": "bundle",
+                                    "catId": 21,
+                                    "metaKeyword": [
+                                        "Twister Box - Medium"
+                                    ],
+                                    "bundleProductOptions": [
+                                        {
+                                            "position": 1,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Chicken",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 15,
+                                                    "id": 13,
+                                                    "name": "Chicken Pc - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 15,
+                                                    "id": 14,
+                                                    "name": "Chicken Pc - Spicy",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 2,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sandwich",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 12,
+                                                    "id": 17,
+                                                    "name": "Twister Sandwich - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": [
+                                                        3
+                                                    ]
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 32,
+                                                    "id": 27,
+                                                    "name": "Twister Sandwich",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": [
+                                                        3,
+                                                        9
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 3,
+                                            "isDependent": 1,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Customize your Condiments",
+                                            "ingredient": 1,
+                                            "type": "checkbox",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 0,
+                                                    "id": 21,
+                                                    "name": "American Cheese",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 18,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 2,
+                                                            "selected": 1,
+                                                            "name": "Regular",
+                                                            "id": 19,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 4,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 20,
+                                                            "sku": "810001"
+                                                        }
+                                                    ],
+                                                    "selected": 1,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 0,
+                                                    "id": 25,
+                                                    "name": "Tomato",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 1,
+                                                            "name": "None",
+                                                            "id": 22,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Regular",
+                                                            "id": 23,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 24,
+                                                            "sku": "811703"
+                                                        }
+                                                    ],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 9,
+                                            "isDependent": 1,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Customize your Condiments new ",
+                                            "ingredient": 1,
+                                            "type": "checkbox",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 0,
+                                                    "id": 21,
+                                                    "name": "American Cheese",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 18,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 2,
+                                                            "selected": 1,
+                                                            "name": "Regular",
+                                                            "id": 19,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 4,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 20,
+                                                            "sku": "810001"
+                                                        }
+                                                    ],
+                                                    "selected": 1,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 0,
+                                                    "id": 25,
+                                                    "name": "Tomato",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 1,
+                                                            "name": "None",
+                                                            "id": 22,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Regular",
+                                                            "id": 23,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 24,
+                                                            "sku": "811703"
+                                                        }
+                                                    ],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 4,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sides",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 8,
+                                                    "id": 8,
+                                                    "name": "Fries Original Medium",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": "1",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 7,
+                                                    "id": 11,
+                                                    "name": "Fries Spicy Medium",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 5,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Beverage",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 8,
+                                                    "id": 4,
+                                                    "name": "Pepsi Medium",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "sku": "44",
+                                    "imageSmall": "/d/u/dummy-product.png",
+                                    "imageThumbnail": "/d/u/dummy-product.png",
+                                    "image": "/d/u/dummy-product.png",
+                                    "sel1Value": 16287,
+                                    "sel2Value": -1,
+                                    "sel3Value": -1,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 16298,
+                                    "visibility": 4,
+                                    "associative": 1
+                                },
+                                {
+                                    "id": 26,
+                                    "position": 2,
+                                    "name": "Twister Box - Large",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 24.5,
+                                    "specialPrice": 24.5,
+                                    "typeId": "bundle",
+                                    "catId": 21,
+                                    "metaKeyword": [
+                                        "Twister Box - Large"
+                                    ],
+                                    "bundleProductOptions": [
+                                        {
+                                            "position": 1,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Chicken",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 15,
+                                                    "id": 13,
+                                                    "name": "Chicken Pc - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": "1",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 15,
+                                                    "id": 14,
+                                                    "name": "Chicken Pc - Spicy",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 2,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sandwich",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 12,
+                                                    "id": 17,
+                                                    "name": "Twister Sandwich - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": [
+                                                        3
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 3,
+                                            "isDependent": 1,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Customize your Condiments",
+                                            "ingredient": 0,
+                                            "type": "checkbox",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 0,
+                                                    "id": 21,
+                                                    "name": "American Cheese",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 18,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 2,
+                                                            "selected": 1,
+                                                            "name": "Regular",
+                                                            "id": 19,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 4,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 20,
+                                                            "sku": "810001"
+                                                        }
+                                                    ],
+                                                    "selected": 1,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 0,
+                                                    "id": 25,
+                                                    "name": "Tomato",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 22,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Regular",
+                                                            "id": 23,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 24,
+                                                            "sku": "811703"
+                                                        }
+                                                    ],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 4,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sides",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 9,
+                                                    "id": 7,
+                                                    "name": "Fries Original Large",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 5,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Beverage",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 9,
+                                                    "id": 3,
+                                                    "name": "Pepsi Large",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "sku": "45",
+                                    "imageSmall": "/d/u/dummy-product.png",
+                                    "imageThumbnail": "/d/u/dummy-product.png",
+                                    "image": "/d/u/dummy-product.png",
+                                    "sel1Value": 16286,
+                                    "sel2Value": -1,
+                                    "sel3Value": -1,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 16298,
+                                    "visibility": 4,
+                                    "associative": 1
+                                }
+                            ],
+                            "configurableProductOptions": [
+                                {
+                                    "id": 144,
+                                    "position": 1,
+                                    "title": "Size",
+                                    "subtitle": "Size",
+                                    "selIndex": 1,
+                                    "options": [
+                                        {
+                                            "isSelected": 1,
+                                            "position": 1,
+                                            "title": "Medium",
+                                            "id": 16287
+                                        },
+                                        {
+                                            "isSelected": 0,
+                                            "position": 2,
+                                            "title": "Large",
+                                            "id": 16286
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 15,
+                            "position": 5,
+                            "name": "Twister Box - Medium",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 23,
+                            "specialPrice": 23,
+                            "typeId": "bundle",
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Twister Box - Medium"
+                            ],
+                            "bundleProductOptions": [
+                                {
+                                    "position": 1,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Chicken",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 15,
+                                            "id": 13,
+                                            "name": "Chicken Pc - Original",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": 1,
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 15,
+                                            "id": 14,
+                                            "name": "Chicken Pc - Spicy",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 0,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 2,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Sandwich",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 12,
+                                            "id": 17,
+                                            "name": "Twister Sandwich - Original",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": 1,
+                                            "dependentSteps": [
+                                                3
+                                            ]
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 32,
+                                            "id": 27,
+                                            "name": "Twister Sandwich",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 0,
+                                            "default": 0,
+                                            "dependentSteps": [
+                                                3,
+                                                9
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 3,
+                                    "isDependent": 1,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Customize your Condiments",
+                                    "ingredient": 1,
+                                    "type": "checkbox",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 0,
+                                            "id": 21,
+                                            "name": "American Cheese",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "None",
+                                                    "id": 18,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 2,
+                                                    "selected": 1,
+                                                    "name": "Regular",
+                                                    "id": 19,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 4,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 20,
+                                                    "sku": "810001"
+                                                }
+                                            ],
+                                            "selected": 1,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 0,
+                                            "id": 25,
+                                            "name": "Tomato",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 1,
+                                                    "name": "None",
+                                                    "id": 22,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Regular",
+                                                    "id": 23,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 24,
+                                                    "sku": "811703"
+                                                }
+                                            ],
+                                            "selected": 0,
+                                            "default": 0,
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 9,
+                                    "isDependent": 1,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Customize your Condiments new ",
+                                    "ingredient": 1,
+                                    "type": "checkbox",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 0,
+                                            "id": 21,
+                                            "name": "American Cheese",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "None",
+                                                    "id": 18,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 2,
+                                                    "selected": 1,
+                                                    "name": "Regular",
+                                                    "id": 19,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 4,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 20,
+                                                    "sku": "810001"
+                                                }
+                                            ],
+                                            "selected": 1,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 0,
+                                            "id": 25,
+                                            "name": "Tomato",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 1,
+                                                    "name": "None",
+                                                    "id": 22,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Regular",
+                                                    "id": 23,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 24,
+                                                    "sku": "811703"
+                                                }
+                                            ],
+                                            "selected": 0,
+                                            "default": 0,
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 4,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Sides",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 8,
+                                            "id": 8,
+                                            "name": "Fries Original Medium",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": "1",
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 7,
+                                            "id": 11,
+                                            "name": "Fries Spicy Medium",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 0,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 5,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Beverage",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 8,
+                                            "id": 4,
+                                            "name": "Pepsi Medium",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": 1,
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                }
+                            ],
+                            "configurableProductOptions": [],
+                            "sku": "44",
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 16298,
+                            "visibility": 4,
+                            "associative": 1
+                        }]
+                } else {
+                    dataToUpdate['items'] = dataToUpdate['items'].concat([
+                        {
+                            "id": 41,
+                            "position": 4,
+                            "name": "Twister Box",
+                            "description": "Twister, 1 PC chicken, fries, coleslaw and Pepsi",
+                            "inSide": 1,
+                            "finalPrice": 23,
+                            "specialPrice": 22.5,
+                            "typeId": "bundle_group",
+                            "catId": 21,
+                            "selectedItem": "44",
+                            "metaKeyword": [
+                                "Twister Box"
+                            ],
+                            "items": [
+                                {
+                                    "id": 15,
+                                    "position": 1,
+                                    "name": "Twister Box - Medium",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 23,
+                                    "specialPrice": 22.5,
+                                    "typeId": "bundle",
+                                    "catId": 21,
+                                    "metaKeyword": [
+                                        "Twister Box - Medium"
+                                    ],
+                                    "bundleProductOptions": [
+                                        {
+                                            "position": 1,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Chicken",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 15,
+                                                    "id": 13,
+                                                    "name": "Chicken Pc - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 15,
+                                                    "id": 14,
+                                                    "name": "Chicken Pc - Spicy",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 2,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sandwich",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 12,
+                                                    "id": 17,
+                                                    "name": "Twister Sandwich - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": [
+                                                        3
+                                                    ]
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 32,
+                                                    "id": 27,
+                                                    "name": "Twister Sandwich",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": [
+                                                        3,
+                                                        9
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 3,
+                                            "isDependent": 1,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Customize your Condiments",
+                                            "ingredient": 1,
+                                            "type": "checkbox",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 0,
+                                                    "id": 21,
+                                                    "name": "American Cheese",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 18,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 2,
+                                                            "selected": 1,
+                                                            "name": "Regular",
+                                                            "id": 19,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 4,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 20,
+                                                            "sku": "810001"
+                                                        }
+                                                    ],
+                                                    "selected": 1,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 0,
+                                                    "id": 25,
+                                                    "name": "Tomato",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 1,
+                                                            "name": "None",
+                                                            "id": 22,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Regular",
+                                                            "id": 23,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 24,
+                                                            "sku": "811703"
+                                                        }
+                                                    ],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 9,
+                                            "isDependent": 1,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Customize your Condiments new ",
+                                            "ingredient": 1,
+                                            "type": "checkbox",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 0,
+                                                    "id": 21,
+                                                    "name": "American Cheese",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 18,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 2,
+                                                            "selected": 1,
+                                                            "name": "Regular",
+                                                            "id": 19,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 4,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 20,
+                                                            "sku": "810001"
+                                                        }
+                                                    ],
+                                                    "selected": 1,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 0,
+                                                    "id": 25,
+                                                    "name": "Tomato",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 1,
+                                                            "name": "None",
+                                                            "id": 22,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Regular",
+                                                            "id": 23,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 24,
+                                                            "sku": "811703"
+                                                        }
+                                                    ],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 4,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sides",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 8,
+                                                    "id": 8,
+                                                    "name": "Fries Original Medium",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": "1",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 7,
+                                                    "id": 11,
+                                                    "name": "Fries Spicy Medium",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 5,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Beverage",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 8,
+                                                    "id": 4,
+                                                    "name": "Pepsi Medium",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "sku": "44",
+                                    "imageSmall": "/d/u/dummy-product.png",
+                                    "imageThumbnail": "/d/u/dummy-product.png",
+                                    "image": "/d/u/dummy-product.png",
+                                    "sel1Value": 16287,
+                                    "sel2Value": -1,
+                                    "sel3Value": -1,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 16298,
+                                    "visibility": 4,
+                                    "associative": 1
+                                },
+                                {
+                                    "id": 26,
+                                    "position": 2,
+                                    "name": "Twister Box - Large",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 24.5,
+                                    "specialPrice": 24.5,
+                                    "typeId": "bundle",
+                                    "catId": 21,
+                                    "metaKeyword": [
+                                        "Twister Box - Large"
+                                    ],
+                                    "bundleProductOptions": [
+                                        {
+                                            "position": 1,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Chicken",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 15,
+                                                    "id": 13,
+                                                    "name": "Chicken Pc - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": "1",
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 15,
+                                                    "id": 14,
+                                                    "name": "Chicken Pc - Spicy",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 0,
+                                                    "default": "0",
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 2,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sandwich",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 12,
+                                                    "id": 17,
+                                                    "name": "Twister Sandwich - Original",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": [
+                                                        3
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 3,
+                                            "isDependent": 1,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Customize your Condiments",
+                                            "ingredient": 0,
+                                            "type": "checkbox",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 0,
+                                                    "id": 21,
+                                                    "name": "American Cheese",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 18,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 2,
+                                                            "selected": 1,
+                                                            "name": "Regular",
+                                                            "id": 19,
+                                                            "sku": "810001"
+                                                        },
+                                                        {
+                                                            "price": 4,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 20,
+                                                            "sku": "810001"
+                                                        }
+                                                    ],
+                                                    "selected": 1,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                },
+                                                {
+                                                    "position": 2,
+                                                    "price": 0,
+                                                    "id": 25,
+                                                    "name": "Tomato",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "None",
+                                                            "id": 22,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Regular",
+                                                            "id": 23,
+                                                            "sku": "811703"
+                                                        },
+                                                        {
+                                                            "price": 0,
+                                                            "selected": 0,
+                                                            "name": "Extra",
+                                                            "id": 24,
+                                                            "sku": "811703"
+                                                        }
+                                                    ],
+                                                    "selected": 0,
+                                                    "default": 0,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 4,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Sides",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 9,
+                                                    "id": 7,
+                                                    "name": "Fries Original Large",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "position": 5,
+                                            "isDependent": 0,
+                                            "maximumQty": 0,
+                                            "minimumQty": 0,
+                                            "title": "Choice of Beverage",
+                                            "ingredient": 0,
+                                            "type": "radio",
+                                            "productLinks": [
+                                                {
+                                                    "position": 1,
+                                                    "price": 9,
+                                                    "id": 3,
+                                                    "name": "Pepsi Large",
+                                                    "selectionQty": 1,
+                                                    "subOptions": [],
+                                                    "selected": 1,
+                                                    "default": 1,
+                                                    "dependentSteps": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "sku": "45",
+                                    "imageSmall": "/d/u/dummy-product.png",
+                                    "imageThumbnail": "/d/u/dummy-product.png",
+                                    "image": "/d/u/dummy-product.png",
+                                    "sel1Value": 16286,
+                                    "sel2Value": -1,
+                                    "sel3Value": -1,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 16298,
+                                    "visibility": 4,
+                                    "associative": 1
+                                }
+                            ],
+                            "configurableProductOptions": [
+                                {
+                                    "id": 144,
+                                    "position": 1,
+                                    "title": "Size",
+                                    "subtitle": "Size",
+                                    "selIndex": 1,
+                                    "options": [
+                                        {
+                                            "isSelected": 1,
+                                            "position": 1,
+                                            "title": "Medium",
+                                            "id": 16287
+                                        },
+                                        {
+                                            "isSelected": 0,
+                                            "position": 2,
+                                            "title": "Large",
+                                            "id": 16286
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 15,
+                            "position": 5,
+                            "name": "Twister Box - Medium",
+                            "description": "",
+                            "inSide": 0,
+                            "finalPrice": 23,
+                            "specialPrice": 23,
+                            "typeId": "bundle",
+                            "catId": 21,
+                            "metaKeyword": [
+                                "Twister Box - Medium"
+                            ],
+                            "bundleProductOptions": [
+                                {
+                                    "position": 1,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Chicken",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 15,
+                                            "id": 13,
+                                            "name": "Chicken Pc - Original",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": 1,
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 15,
+                                            "id": 14,
+                                            "name": "Chicken Pc - Spicy",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 0,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 2,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Sandwich",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 12,
+                                            "id": 17,
+                                            "name": "Twister Sandwich - Original",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": 1,
+                                            "dependentSteps": [
+                                                3
+                                            ]
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 32,
+                                            "id": 27,
+                                            "name": "Twister Sandwich",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 0,
+                                            "default": 0,
+                                            "dependentSteps": [
+                                                3,
+                                                9
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 3,
+                                    "isDependent": 1,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Customize your Condiments",
+                                    "ingredient": 1,
+                                    "type": "checkbox",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 0,
+                                            "id": 21,
+                                            "name": "American Cheese",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "None",
+                                                    "id": 18,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 2,
+                                                    "selected": 1,
+                                                    "name": "Regular",
+                                                    "id": 19,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 4,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 20,
+                                                    "sku": "810001"
+                                                }
+                                            ],
+                                            "selected": 1,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 0,
+                                            "id": 25,
+                                            "name": "Tomato",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 1,
+                                                    "name": "None",
+                                                    "id": 22,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Regular",
+                                                    "id": 23,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 24,
+                                                    "sku": "811703"
+                                                }
+                                            ],
+                                            "selected": 0,
+                                            "default": 0,
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 9,
+                                    "isDependent": 1,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Customize your Condiments new ",
+                                    "ingredient": 1,
+                                    "type": "checkbox",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 0,
+                                            "id": 21,
+                                            "name": "American Cheese",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "None",
+                                                    "id": 18,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 2,
+                                                    "selected": 1,
+                                                    "name": "Regular",
+                                                    "id": 19,
+                                                    "sku": "810001"
+                                                },
+                                                {
+                                                    "price": 4,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 20,
+                                                    "sku": "810001"
+                                                }
+                                            ],
+                                            "selected": 1,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 0,
+                                            "id": 25,
+                                            "name": "Tomato",
+                                            "selectionQty": 1,
+                                            "subOptions": [
+                                                {
+                                                    "price": 0,
+                                                    "selected": 1,
+                                                    "name": "None",
+                                                    "id": 22,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Regular",
+                                                    "id": 23,
+                                                    "sku": "811703"
+                                                },
+                                                {
+                                                    "price": 0,
+                                                    "selected": 0,
+                                                    "name": "Extra",
+                                                    "id": 24,
+                                                    "sku": "811703"
+                                                }
+                                            ],
+                                            "selected": 0,
+                                            "default": 0,
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 4,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Sides",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 8,
+                                            "id": 8,
+                                            "name": "Fries Original Medium",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": "1",
+                                            "dependentSteps": []
+                                        },
+                                        {
+                                            "position": 2,
+                                            "price": 7,
+                                            "id": 11,
+                                            "name": "Fries Spicy Medium",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 0,
+                                            "default": "0",
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "position": 5,
+                                    "isDependent": 0,
+                                    "maximumQty": 0,
+                                    "minimumQty": 0,
+                                    "title": "Choice of Beverage",
+                                    "ingredient": 0,
+                                    "type": "radio",
+                                    "productLinks": [
+                                        {
+                                            "position": 1,
+                                            "price": 8,
+                                            "id": 4,
+                                            "name": "Pepsi Medium",
+                                            "selectionQty": 1,
+                                            "subOptions": [],
+                                            "selected": 1,
+                                            "default": 1,
+                                            "dependentSteps": []
+                                        }
+                                    ]
+                                }
+                            ],
+                            "configurableProductOptions": [],
+                            "sku": "44",
+                            "imageSmall": "/d/u/dummy-product.png",
+                            "imageThumbnail": "/d/u/dummy-product.png",
+                            "image": "/d/u/dummy-product.png",
+                            "taxClassId": 2,
+                            "virtualGroup": 16298,
+                            "visibility": 4,
+                            "associative": 1
+                        }])
+                }
             } else {
                 dataToUpdate['notAvailable'] = cmsCart.cart_items
             }
@@ -445,7 +2220,7 @@ export class CartClass extends BaseEntity {
             let newCart = await this.getCart({ cartId: cartId })
             return newCart
         } catch (error) {
-            consolelog(process.cwd(), "updateCart", error, false)
+            consolelog(process.cwd(), "updateCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

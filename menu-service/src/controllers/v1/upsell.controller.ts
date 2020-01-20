@@ -6,19 +6,19 @@ export class UpsellController {
     constructor() { }
 
     /**
-    * @method POST
+    * @method BOOTSTRAP
     * @description : Post bulk upsell data
     * */
-    async postUpsell() {
+    async bootstrapUpsell() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/upsell.json', 'utf-8');
             let upsell = JSON.parse(rawdata);
             for (const iterator of upsell) {
-                ENTITY.UpsellE.postUpsell(iterator)
+                ENTITY.UpsellE.bootstrapUpsell(iterator)
             }
             return {}
         } catch (err) {
-            consolelog(process.cwd(), "postUpsell", err, false)
+            consolelog(process.cwd(), "bootstrapUpsell", err, false)
             return Promise.reject(err)
         }
     }

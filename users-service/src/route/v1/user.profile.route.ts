@@ -51,7 +51,9 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     email: Joi.string().email().lowercase(),
-                    name: Joi.string()
+                    name: Joi.string(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
+                    phnNo: Joi.string().max(9),
                 }
             }),
             async (ctx) => {

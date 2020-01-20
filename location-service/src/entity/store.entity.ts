@@ -66,11 +66,10 @@ export class StoreEntity extends BaseEntity {
         })
     });
 
-    async postStore(data) {
+    async bootstrapStore(data) {
         try {
             let GeoJSON = aerospike.GeoJSON;
             data['geoFence'] = new GeoJSON(data['geoFence'])
-            consolelog(process.cwd(), "id", data.id, true)
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
@@ -79,9 +78,9 @@ export class StoreEntity extends BaseEntity {
             }
 
             await Aerospike.put(putArg)
+            return {}
         } catch (error) {
-            consolelog(process.cwd(), "postStore", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 }

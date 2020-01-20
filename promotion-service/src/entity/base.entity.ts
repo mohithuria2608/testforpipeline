@@ -7,16 +7,5 @@ export class BaseEntity {
     constructor(set?) {
         this.set = set
     }
-
-    /**
-    * @method GRPC
-    */
-    async updateCart(cartId: string, curItems: IMenuGrpcRequest.IProduct[], cmsCart: IOrderGrpcRequest.ICmsCartRes) {
-        try {
-            return await orderService.updateCart({ cartId: cartId, curItems: JSON.stringify(curItems), cmsCart: JSON.stringify(cmsCart) })
-        } catch (error) {
-            consolelog(process.cwd(), "updateCart", error, false)
-            return Promise.reject(error)
-        }
-    }
+    
 }

@@ -15,7 +15,7 @@ app.use(route());
 
 export const start = (async () => {
   try {
-    const port = config.get("server.user.port")
+    const port = config.get("server.log.port")
     const server = app.listen(port)
 
     event.emit('logger', { name: "ankit" });

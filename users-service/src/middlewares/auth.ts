@@ -30,10 +30,13 @@ export default (opts?): Middleware => {
                 let user: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: tokenData.id })
                 if (!user && !user.id) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-                } else if (user && (!user.session || !user.session[tokenData.deviceid])) {
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-                } else
-                    tokenData['userData'] = user
+                } else {
+                    let session: ISessionRequest.ISession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
+                    if (!session && !session.id) {
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                    }
+                }
+                tokenData['userData'] = user
                 ctx.state.user = tokenData
             }
         } catch (error) {

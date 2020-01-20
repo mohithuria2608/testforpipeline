@@ -13,38 +13,47 @@ export class CmsConfigController {
     */
     async syncConfigFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
-            if (payload.as.create || payload.as.update || payload.as.get) {
-                if (payload.as.create) {
-                    let dataToSave = {
-                        type: data.type,
-                        ...data.data
+            let data: ICmsConfigRequest.ICmsConfig = JSON.parse(payload.as.argv)
+            switch (data.type) {
+                case Constant.DATABASE.TYPE.SYNC_CONFIG.PAYMENT: {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
+                        if (payload.as.create) {
+                            if (data.data && data.data.length > 0) {
+                                data.data.map(async config => {
+                                    let dataToSave = {
+                                        type: data.type,
+                                    }
+                                    if (config.store_code)
+                                        dataToSave['cmsStoreRef'] = parseInt(config.store_id)
+                                    if (config.store_code)
+                                        dataToSave['storeCode'] = config.store_code
+                                    if (config.store_code)
+                                        dataToSave['noonPayConfig'] = config.noon_pay_config
+                                    if (config.store_code)
+                                        dataToSave['codInfo'] = config.cod_info
+                                    let putArg: IAerospike.Put = {
+                                        bins: dataToSave,
+                                        set: ENTITY.ConfigE.set,
+                                        key: dataToSave['cmsStoreRef'],
+                                        ttl: 0,
+                                        create: true,
+                                    }
+                                    await Aerospike.put(putArg)
+                                })
+                            } else {
+                                return Promise.reject("Unhandled error while saving payment configs from cms")
+                            }
+                        }
+                        else if (payload.as.update) {
+
+                        }
+                        else if (payload.as.reset) {
+
+                        }
+                        else if (payload.as.get) {
+                            await ENTITY.ConfigE.getConfig(data)
+                        }
                     }
-                    let putArg: IAerospike.Put = {
-                        bins: dataToSave,
-                        set: ENTITY.ConfigE.set,
-                        key: dataToSave.id,
-                        ttl: 0,
-                        create: true,
-                    }
-                    await Aerospike.put(putArg)
-                }
-                if (payload.as.update) {
-                    let configData = await ENTITY.ConfigE.getConfig({ type: data.type })
-                    let dataToUpdate = {
-                        type: data.type,
-                        ...data.data
-                    }
-                    let putArg: IAerospike.Put = {
-                        bins: dataToUpdate,
-                        set: ENTITY.ConfigE.set,
-                        key: configData.id,
-                        update: true,
-                    }
-                    await Aerospike.put(putArg)
-                }
-                if (payload.as.get) {
-                    await ENTITY.ConfigE.getConfig(data)
                 }
             }
             return {}
@@ -57,25 +66,51 @@ export class CmsConfigController {
     /**
      * @method POST
      * @param {any} payload
-     * @description creates and saves a config from CMS to aerospike
+     * @description creates a config from CMS to aerospike
      */
     async postConfig(headers: ICommonRequest.IHeaders, payload: ICmsConfigRequest.ICmsConfig) {
         try {
             let configChange = {
-                set: ENTITY.ConfigE.set,
-                as: {
-                    create: true,
-                    argv: JSON.stringify(payload.data)
-                }
+                set: ENTITY.ConfigE.set
             }
-            if (payload.action == "update") {
+            if (payload.action == Constant.DATABASE.TYPE.SYNC_ACTION.CREATE) {
+                configChange['as']['create'] = true
+                configChange['as']['argv'] = JSON.stringify(payload)
+            }
+            if (payload.action == Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE) {
                 configChange['as']['update'] = true
-                delete configChange['as']['create']
+                configChange['as']['argv'] = JSON.stringify(payload)
             }
-            kafkaService.kafkaSync(configChange)
+            if (payload.action == Constant.DATABASE.TYPE.SYNC_ACTION.RESET) {
+                configChange['as']['reset'] = true
+                configChange['as']['argv'] = JSON.stringify(payload)
+            }
+            this.syncConfigFromKafka(configChange)
+            // kafkaService.kafkaSync(configChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postConfig", err, false)
+            return Promise.reject(err)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * @param {string=} cmsStoreRef
+     * @param {string=} type
+     * @description Get config from as 
+     */
+    async getConfig(payload: IConfigRequest.IFetchConfig) {
+        try {
+            let data = {}
+            if (payload.cmsStoreRef)
+                data['cmsStoreRef'] = payload.cmsStoreRef
+            if (payload.type)
+                data['type'] = payload.type
+            let config = await ENTITY.ConfigE.getConfig(data)
+            return config
+        } catch (err) {
+            consolelog(process.cwd(), "getConfig", err, false)
             return Promise.reject(err)
         }
     }

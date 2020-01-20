@@ -7,10 +7,10 @@ export class MenuController {
     constructor() { }
 
     /**
-     * @method POST
+     * @method BOOTSTRAP
      * @description : Post bulk menu data
      * */
-    async postMenu() {
+    async bootstrapMenu() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
@@ -19,7 +19,7 @@ export class MenuController {
             }
             return {}
         } catch (err) {
-            consolelog(process.cwd(), "postMenu", err, false)
+            consolelog(process.cwd(), "bootstrapMenu", err, false)
             return Promise.reject(err)
         }
     }
@@ -46,7 +46,8 @@ export class MenuController {
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
             let menuId = 5;
-            return await ENTITY.MenuE.getMenu({ menuId: menuId })
+            let menu = await ENTITY.MenuE.getMenu({ menuId: menuId })
+            return { menu: JSON.stringify(menu) }
         } catch (err) {
             consolelog(process.cwd(), "grpcFetchMenu", err, false)
             return Promise.reject(err)

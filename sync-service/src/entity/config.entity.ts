@@ -20,15 +20,60 @@ export class ConfigEntity extends BaseEntity {
         super('config')
     }
 
+    // {
+    //     "store_code": "ksa_store",
+    //     "store_id": "ksa_store",
+    //     "noon_pay_config": {
+    //       "brand_code": "ksa",
+    //       "country_code": "us",
+    //       "payment_methods": [
+    //         {
+    //           "id": "1",
+    //           "name": "phla method",
+    //           "order_category": "SC"
+    //         },
+    //         {
+    //           "id": "3",
+    //           "name": "Teesra  Method",
+    //           "order_category": "General"
+    //         }
+    //       ],
+    //       "code": "noonpay",
+    //       "status": "1"
+    //     },
+    //     "cod_info": {
+    //       "status": "1",
+    //       "title": "Cash On Delivery",
+    //       "code": "cashondelivery"
+    //     }
+    //   }
+
     public configSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
+        cmsStoreRef: Joi.string().required().description("pk, group of stores at cms"),
         type: Joi.string().required().valid("general", "payment").description("sk"),
+        storeCode: Joi.string().required(),
+        noonPayConfig: Joi.object().keys({
+            brandCode: Joi.string().required(),
+            countryCode: Joi.string().required(),
+            paymentMethods: Joi.array().items(
+                Joi.object().keys({
+                    id: Joi.string().required(),
+                    name: Joi.string().required(),
+                    orderCategory: Joi.string().required(),
+                })),
+            code: Joi.string().required(),
+            status: Joi.string().required(),
+        }),
+        codInfo: Joi.object().keys({
+            code: Joi.string().required(),
+            status: Joi.string().required(),
+        })
     })
 
 
     /**
     * @method INTERNAL
-    * @param {string} configId : config id
+    * @param {string} cmsStoreRef : config id
     * @param {string} type : config type
     * */
     async getConfig(payload: IConfigRequest.IFetchConfig) {
@@ -47,10 +92,10 @@ export class ConfigEntity extends BaseEntity {
                     return configData[0]
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
-            } else if (payload.configId) {
+            } else if (payload.cmsStoreRef) {
                 let getArg: IAerospike.Get = {
                     set: this.set,
-                    key: payload.configId
+                    key: payload.cmsStoreRef
                 }
                 let configData = await Aerospike.get(getArg)
                 if (configData && configData.id) {
