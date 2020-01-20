@@ -4,6 +4,7 @@ import * as Jwt from 'jsonwebtoken';
 import * as Constant from '../constant';
 const cert = config.get('jwtSecret')
 import { consolelog } from '../utils'
+import * as ENTITY from '../entity'
 
 export class TokenManager {
 
@@ -59,7 +60,16 @@ export class TokenManager {
     async  verifyToken(token: string) {
         try {
             const tokenData: IAuthGrpcRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
-            consolelog(process.cwd(), 'tokenManager : verifyToken', [JSON.stringify(token), JSON.stringify(tokenData)], true)
+            if (tokenData && tokenData.id && tokenData.deviceid) {
+                let getSession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
+                if (getSession && getSession.id) {
+                    if (getSession.isLogin == 0)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {

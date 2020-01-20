@@ -19,6 +19,16 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
+    fetchSession: async (call: IUserGrpcRequest.IFetchSessionReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getSession", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.SessionE.getSession(call.request.deviceid, call.request.userId)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getSession", error, false)
+            callback(grpcSendError(error))
+        }
+    },
     fetchUser: async (call: IUserGrpcRequest.IFetchUserReq, callback) => {
         try {
             consolelog(process.cwd(), "fetchUser", JSON.stringify(call.request), true)
