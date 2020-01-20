@@ -108,7 +108,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                            payload['count'] = payload.as.create ? Constant.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_PROMOTION
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -141,7 +141,7 @@ export class KafkaController {
                     break;
                 }
             }
-            return
+            return { data: '' };
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)
             return Promise.reject(error)

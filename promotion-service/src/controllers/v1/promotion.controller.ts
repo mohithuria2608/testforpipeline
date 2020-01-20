@@ -9,17 +9,14 @@ export class PromotionController {
 
     /**
     * @method GRPC
-    * @param {string} data  actuall array of menu or upsell
+    * @param {string} data  actuall array of promotions
     */
     async syncPromoFromKafka(payload: IPromotionGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
             if (payload.as.create || payload.as.update || payload.as.get) {
-                if (payload.as.create) {
-
-                }
-                if (payload.as.update) {
-
+                for (let promotion of data) {
+                    ENTITY.PromotionE.savePromotion(promotion, { createOrReplace: true });
                 }
             }
             return {}
@@ -56,7 +53,7 @@ export class PromotionController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/promotion.json', 'utf-8');
             let promo = JSON.parse(rawdata);
             for (const iterator of promo) {
-                ENTITY.PromotionE.post(iterator)
+                ENTITY.PromotionE.post(iterator, { create: true })
             }
             return {}
         } catch (err) {

@@ -7,9 +7,9 @@ service PromotionService {
 
 message IKafkaReq {
     required string set = 1;
-    required IAerospike as = 2;
-    required ICms cms = 3;
-    required ISdm sdm = 4;
+    optional IAerospike as = 2;
+    optional ICms cms = 3;
+    optional ISdm sdm = 4;
     required int32 count = 5;
 }
 

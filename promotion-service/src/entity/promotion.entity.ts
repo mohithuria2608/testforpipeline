@@ -26,42 +26,55 @@ export class PromotionClass extends BaseEntity {
     }
 
     public promotionSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
+        id: Joi.number().required().description("pk"),
         cmsCouponRef: Joi.string().trim().required().description("sk"),
         couponCode: Joi.string().trim().required().description("sk"),
         promotionType: Joi.string().trim().required(),
-        discountAmount: Joi.string().trim().required(),
-        maximumQtyDiscountIsAppliedTo: Joi.string().trim().required(),
-        usesPerCoupon: Joi.string().trim().required(),
-        usesPerCustomer: Joi.string().trim().required(),
-        timesUsed: Joi.string().trim().required(),
+        discountAmount: Joi.number().required(),
+        maxDiscountApp: Joi.number().required(),
+        usesPerCoupon: Joi.number().required(),
+        usesPerCust: Joi.number().required(),
+        timesUsed: Joi.number().required(),
         dateFrom: Joi.string().trim().required(),
         dateTo: Joi.string().trim().required(),
         ruleName: Joi.string().trim().required(),
-        shortDescription: Joi.string().trim().required(),
-        activeFlag: Joi.string().trim().required(),
-        posId: Joi.string().trim().required(),
-        maxDiscountAmount: Joi.string().trim().required(),
-        isVisible: Joi.string().trim().required(),
-        termsAndConditions: Joi.string().trim().required(),
+        shortDesc: Joi.string().trim().required(),
+        activeFlag: Joi.number().required(),
+        posId: Joi.number().required(),
+        maxDiscountAmt: Joi.number().required(),
+        isVisible: Joi.number().required(),
+        termsAndCond: Joi.string().trim().required()
     });
 
     /**
      * @method INTERNAL
      */
-    async post(data: IPromotionRequest.IPromoData) {
+    async post(data: IPromotionRequest.IPromoData, options: { create?: boolean, update?: boolean, replace?: boolean, createOrReplace?: boolean }) {
         try {
             data = this.filterPromotionData(data);
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
                 key: data.cmsCouponRef,
-                create: true,
+                ...options
             }
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "post promotion", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method INTERNAL
+     * @description inserts promotion into aerospike
+     */
+    async savePromotion(data: IPromotionRequest.IPromoData, options: { create?: boolean, update?: boolean, replace?: boolean, createOrReplace?: boolean }) {
+        try {
+            return this.post(data, options);
+        } catch (error) {
+            consolelog(process.cwd(), "save Promotion", error, false)
             return Promise.reject(error)
         }
     }
@@ -164,5 +177,24 @@ export const PromotionE = new PromotionClass()
         "isVisible": "",
         "termsAndConditions": ""
     }
+
+    id: Joi.number().required().description("pk"),
+    cmsCouponRef: Joi.string().trim().required().description("sk"),
+    couponCode: Joi.string().trim().required().description("sk"),
+    promotionType: Joi.string().trim().required(),
+    discountAmount: Joi.number().required(),
+    maxDiscountApp: Joi.number().required(),
+    usesPerCoupon: Joi.number().required(),
+    usesPerCust: Joi.number().required(),
+    timesUsed: Joi.number().required(),
+    dateFrom: Joi.string().trim().required(),
+    dateTo: Joi.string().trim().required(),
+    ruleName: Joi.string().trim().required(),
+    shortDesc: Joi.string().trim().required(),
+    activeFlag: Joi.number().required(),
+    posId: Joi.number().required(),
+    maxDiscountAmt: Joi.number().required(),
+    isVisible: Joi.number().required(),
+    termsAndCond: Joi.string().trim().required(),
  *
  */
