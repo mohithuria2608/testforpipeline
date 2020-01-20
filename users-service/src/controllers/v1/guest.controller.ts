@@ -119,7 +119,7 @@ export class GuestController {
                     updatedAt: new Date().getTime(),
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
-                await ENTITY.SessionE.buildSession(headers, session, user)
+                await ENTITY.SessionE.buildSession(headers, session, auth.userData)
             }
             return formatUserData(auth.userData, headers)
         } catch (error) {
