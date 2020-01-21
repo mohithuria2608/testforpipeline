@@ -25,7 +25,12 @@ export default (router: Router) => {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
                     email: Joi.string().email().lowercase().required(),
-                    name: Joi.string().required()
+                    name: Joi.string().required(),
+
+                    /**
+                     * @description allow these keys
+                     */
+                    isGuest: Joi.any().description("allow for android")
                 }
             }),
             async (ctx) => {
@@ -54,6 +59,11 @@ export default (router: Router) => {
                     name: Joi.string(),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
                     phnNo: Joi.string().max(9),
+
+                    /**
+                     * @description allow these keys
+                     */
+                    isGuest: Joi.any().description("allow for android")
                 }
             }),
             async (ctx) => {
