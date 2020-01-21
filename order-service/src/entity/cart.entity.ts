@@ -469,9 +469,14 @@ export class CartClass extends BaseEntity {
                 sequence: 5
             })
             dataToUpdate['amount'] = amount
+
+            // console.log("cmsCart.cart_items", cmsCart.cart_items)
+
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 curItems.map(obj => {
+                    console.log("1", obj.id)
                     cmsCart.cart_items.map(elem => {
+                        console.log("2", elem.product_id)
                         if (obj.id == elem.product_id) {
                             dataToUpdate['items'].push(obj)
                         } else {
@@ -2207,7 +2212,7 @@ export class CartClass extends BaseEntity {
                         }])
                 }
             } else {
-                dataToUpdate['notAvailable'] = cmsCart.cart_items
+                dataToUpdate['notAvailable'] = curItems
             }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
