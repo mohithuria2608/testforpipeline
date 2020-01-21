@@ -6,7 +6,8 @@ export enum SET_NAME {
     UPSELL = "upsell",
     PROMOTION = "promotion",
     ORDER = "order",
-    CONFIG = "config"
+    CONFIG = "config",
+    LOGGER = "logger"
 };
 
 export const UDF = {
@@ -36,7 +37,9 @@ export enum KAFKA_TOPIC {
 
     SDM_ORDER = 'sdm_order',
 
-    AS_CONFIG = 'as_config'
+    AS_CONFIG = 'as_config',
+
+    M_LOGGER = 'm_logger'
 };
 
 export enum MIDDLEWARE {
@@ -409,7 +412,7 @@ export const STATUS_MSG = {
             }
         },
         E409: {
-            ORDER_NOT_FOUND:{
+            ORDER_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
                 message: 'Order not found',

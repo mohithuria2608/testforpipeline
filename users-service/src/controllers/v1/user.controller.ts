@@ -67,9 +67,10 @@ export class UserController {
                     otpVerified: 0,
                     isGuest: 0,
                     isLogin: 0,
+                    userId: checkUser[0].id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
-                await ENTITY.SessionE.buildSession(headers, session, checkUser[0])
+                await ENTITY.SessionE.buildSession(headers, session)
                 if (checkUser[0].changePhnNo == 1) {
                     let userUpdate = { changePhnNo: 0 }
                     await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
@@ -136,10 +137,10 @@ export class UserController {
                         isGuest: 0,
                         isLogin: 0,
                         createdAt: new Date().getTime(),
-                        updatedAt: new Date().getTime(),
+                        userId: user.id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
-                    await ENTITY.SessionE.buildSession(headers, session, user)
+                    await ENTITY.SessionE.buildSession(headers, session)
                 }
             }
             return {}
@@ -158,6 +159,7 @@ export class UserController {
     * */
     async verifyOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp) {
         try {
+            let sessionTime = Math.ceil((new Date().getTime())/1000)
             let deleteUserId = ""
             let queryArg: IAerospike.Query = {
                 udf: {
@@ -215,7 +217,7 @@ export class UserController {
                         deleteUserId = userchange.deleteUserId
                 }
                 else {
-                    await ENTITY.SessionE.validateOtp(headers, payload, user[0])
+                    await ENTITY.SessionE.validateOtp(headers, payload, user[0], sessionTime)
                 }
                 user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
                 let sessionUpdate: ISessionRequest.ISession = {
@@ -223,10 +225,12 @@ export class UserController {
                     otpExpAt: 0,
                     otpVerified: 1,
                     isLogin: 1,
-                    isGuest: payload.isGuest
+                    isGuest: payload.isGuest,
+                    sessionTime: sessionTime,
+                    userId: user[0].id
                 }
 
-                await ENTITY.SessionE.buildSession(headers, sessionUpdate, user[0])
+                await ENTITY.SessionE.buildSession(headers, sessionUpdate)
             } else {
                 let queryArg: IAerospike.Query = {
                     udf: {
@@ -262,9 +266,11 @@ export class UserController {
                         otpExpAt: 0,
                         otpVerified: 1,
                         isLogin: 1,
-                        isGuest: payload.isGuest
+                        isGuest: payload.isGuest,
+                        sessionTime: sessionTime,
+                        userId: user[0].id
                     }
-                    await ENTITY.SessionE.buildSession(headers, sessionUpdate, user[0])
+                    await ENTITY.SessionE.buildSession(headers, sessionUpdate)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -278,7 +284,8 @@ export class UserController {
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                 user[0].id,
-                0
+                0,
+                sessionTime
             )
             user[0]['isGuest'] = payload.isGuest
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user[0], headers) }
@@ -295,6 +302,7 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
+            let sessionTime = Math.ceil((new Date().getTime())/1000)
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -321,11 +329,12 @@ export class UserController {
                         otpExpAt: 0,
                         otpVerified: 1,
                         isLogin: 1,
-                        updatedAt: new Date().getTime(),
+                        sessionTime: sessionTime,
+                        userId: user.id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
                     user = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
-                    await ENTITY.SessionE.buildSession(headers, session, user)
+                    await ENTITY.SessionE.buildSession(headers, session)
                 } else {
                     let userUpdate: IUserRequest.IUserUpdate = {
                         name: payload.name,
@@ -342,9 +351,11 @@ export class UserController {
                         otpVerified: 0,
                         isGuest: 0,
                         isLogin: 0,
+                        sessionTime: sessionTime,
+                        userId: userObj[0].id,
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
-                    await ENTITY.SessionE.buildSession(headers, session, userObj[0])
+                    await ENTITY.SessionE.buildSession(headers, session)
                     user = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
                 }
             } else {
@@ -364,17 +375,19 @@ export class UserController {
                     otpExpAt: 0,
                     otpVerified: 1,
                     isLogin: 1,
-                    updatedAt: new Date().getTime(),
+                    sessionTime: sessionTime,
+                    userId: user.id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
-                await ENTITY.SessionE.buildSession(headers, session, user)
+                await ENTITY.SessionE.buildSession(headers, session)
             }
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                 user.id,
-                0
+                0,
+                sessionTime
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
         } catch (err) {
@@ -394,6 +407,7 @@ export class UserController {
     * */
     async createProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.ICreateProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
+            // let sessionTime = Math.ceil((new Date().getTime())/1000)
             if (auth.userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
             if (payload.socialKey && payload.medium) {
@@ -450,9 +464,10 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isLogin: 0,
+                        userId: user.id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
-                    await ENTITY.SessionE.buildSession(headers, session, user)
+                    await ENTITY.SessionE.buildSession(headers, session)
                     return formatUserData(user, headers)
                 }
             } else {

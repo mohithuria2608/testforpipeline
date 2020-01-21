@@ -7,6 +7,7 @@ declare namespace IKafkaGrpcRequest {
         as?: IChangeAerospike
         cms?: IChangeCMS
         sdm?: IChangeSDM
+        mdb?: IChangeMongo
         count?: number,
     }
     interface IChangeAerospike {
@@ -25,6 +26,14 @@ declare namespace IKafkaGrpcRequest {
     }
     interface IChangeSDM {
         create?: boolean,
+        update?: boolean,
+        reset?: boolean,
+        get?: boolean,
+        argv: string
+    }
+
+    interface IChangeMongo {
+        create: boolean,
         update?: boolean,
         reset?: boolean,
         get?: boolean,

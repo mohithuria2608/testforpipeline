@@ -14,6 +14,7 @@ export class LocationController {
     async validateLocation(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IValidateLocation) {
         try {
             let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
+            consolelog(process.cwd(), "store", JSON.stringify(store), true)
             if (store && store.length > 0)
                 return { menuId: store[0].menuId }
             else

@@ -8,6 +8,7 @@ declare namespace ILogGrpcRequest {
         as?: IChangeAerospike
         cms?: IChangeCMS
         sdm?: IChangeSDM
+        mdb?: IChangeMongo
         count?: number,
     }
     interface IChangeAerospike {
@@ -26,6 +27,14 @@ declare namespace ILogGrpcRequest {
     }
     interface IChangeSDM {
         create?: boolean,
+        update?: boolean,
+        reset?: boolean,
+        get?: boolean,
+        argv: string
+    }
+
+    interface IChangeMongo {
+        create: boolean,
         update?: boolean,
         reset?: boolean,
         get?: boolean,

@@ -23,22 +23,24 @@ export default (opts?): Middleware => {
             }
 
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
-            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
+
+            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
-            }
-            else {
-                let user: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: tokenData.id })
-                if (!user && !user.id) {
+
+            if (tokenData.deviceid != ctx.header.deviceid)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
+            let user: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: tokenData.id })
+            if (!user && !user.id) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            } else {
+                let session: ISessionRequest.ISession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
+                if (!session && !session.id) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-                } else {
-                    let session: ISessionRequest.ISession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
-                    if (!session && !session.id) {
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-                    }
                 }
-                tokenData['userData'] = user
-                ctx.state.user = tokenData
             }
+            tokenData['userData'] = user
+            ctx.state.user = tokenData
         } catch (error) {
             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
         }

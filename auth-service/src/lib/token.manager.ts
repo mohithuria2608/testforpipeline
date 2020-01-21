@@ -5,6 +5,7 @@ import * as Constant from '../constant';
 const cert = config.get('jwtSecret')
 import { consolelog } from '../utils'
 import * as ENTITY from '../entity'
+import { parse } from 'path';
 
 export class TokenManager {
 
@@ -64,7 +65,10 @@ export class TokenManager {
 
             if (tokenData && tokenData.id && tokenData.deviceid) {
                 let getSession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
+                consolelog(process.cwd(), "tokenData", JSON.stringify(tokenData), true)
                 if (getSession && getSession.id) {
+                    if (getSession.sessionTime != tokenData.sessionTime)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
                     if (getSession.isLogin == 0)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 } else
@@ -80,7 +84,8 @@ export class TokenManager {
                             deviceid: tokenData.deviceid,
                             devicetype: tokenData.devicetype,
                             id: tokenData.id,
-                            isGuest: tokenData.isGuest
+                            isGuest: tokenData.isGuest,
+                            sessionTime: tokenData.sessionTime,
                         };
                         return tokenVerifiedData
                     } else
@@ -94,7 +99,8 @@ export class TokenManager {
                             deviceid: tokenData.deviceid,
                             devicetype: tokenData.devicetype,
                             id: tokenData.id,
-                            isGuest: tokenData.isGuest
+                            isGuest: tokenData.isGuest,
+                            sessionTime: tokenData.sessionTime
                         };
                         return tokenVerifiedData
                     } else
@@ -108,7 +114,8 @@ export class TokenManager {
                             deviceid: tokenData.deviceid,
                             devicetype: tokenData.devicetype,
                             id: tokenData.id,
-                            isGuest: tokenData.isGuest
+                            isGuest: tokenData.isGuest,
+                            sessionTime: tokenData.sessionTime
                         };
                         return tokenVerifiedData
                     } else
@@ -122,7 +129,8 @@ export class TokenManager {
                         id: tokenData.id ? tokenData.id : undefined,
                         // userData: {},
                         authCred: tokenData.authCred,
-                        isGuest: tokenData.isGuest
+                        isGuest: tokenData.isGuest,
+                        sessionTime: tokenData.sessionTime
                     };
                     return tokenVerifiedData
                 }

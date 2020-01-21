@@ -18,6 +18,7 @@ declare namespace ICommonRequest {
         id: string,
         isGuest: number
         authCred?: IAuthCred,
+        sessionTime: number
     }
 
     interface IAuthCred {

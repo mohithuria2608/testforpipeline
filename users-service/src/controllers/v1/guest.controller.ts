@@ -12,6 +12,7 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
+            let sessionTime = Math.ceil((new Date().getTime())/1000)
             let userCreate: IUserRequest.IUserUpdate = {
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             }
@@ -22,15 +23,18 @@ export class GuestController {
                 otpVerified: 1,
                 isLogin: 1,
                 isGuest: 1,
+                sessionTime: sessionTime,
+                userId: user.id,
                 // ttl: Constant.SERVER.OTP_EXPIRE_TIME
             }
-            await ENTITY.SessionE.buildSession(headers, session, user)
+            await ENTITY.SessionE.buildSession(headers, session)
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                 user.id,
-                1
+                1,
+                sessionTime
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
         } catch (err) {
@@ -116,10 +120,10 @@ export class GuestController {
                     otpVerified: 1,
                     isGuest: 1,
                     createdAt: new Date().getTime(),
-                    updatedAt: new Date().getTime(),
+                    userId: auth.userData.id,
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
-                await ENTITY.SessionE.buildSession(headers, session, auth.userData)
+                await ENTITY.SessionE.buildSession(headers, session)
             }
             auth.userData['isGuest'] = payload.isGuest
             auth.userData['cCode'] = payload.cCode

@@ -127,7 +127,7 @@ export let sendError = function (error) {
             }
         }
         else if (error.name === 'ValidationError') {
-            customError.message += Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
+            customError.message = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
             customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
@@ -261,6 +261,7 @@ export const getBucket = (id) => {
 export const getHashTag = (str: string) => {
     return str.split(" ").filter(obj => { return (obj.indexOf("#") == 0) })
 }
+
 export let arrayToObject = function (array: any) {
     let data = array.reduce((obj, item) => {
         obj[item.key] = item.value

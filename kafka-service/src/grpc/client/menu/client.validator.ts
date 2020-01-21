@@ -34,6 +34,13 @@ export class MenuServiceValidator {
                         get: Joi.boolean(),
                         argv: Joi.string()
                     }),
+                    mdb: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        reset: Joi.boolean(),
+                        get: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
                     count: Joi.number()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })

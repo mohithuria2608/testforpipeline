@@ -31,7 +31,8 @@ export class AuthService {
                     deviceid: payload.deviceid,
                     tokenType: payload.tokenType,
                     devicetype: payload.devicetype,
-                    isGuest: payload.isGuest
+                    isGuest: payload.isGuest,
+                    sessionTime: payload.sessionTime
                 }
                 if (payload.id)
                     dataToSend['id'] = payload.id

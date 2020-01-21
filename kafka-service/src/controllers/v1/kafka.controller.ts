@@ -140,6 +140,20 @@ export class KafkaController {
                     }
                     break;
                 }
+                case Constant.SET_NAME.LOGGER: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.mdb.create) {
+                        messages = { ...payload }
+                        delete messages.as
+                        delete messages.sdm
+                        delete messages.cms
+                        topic = Constant.KAFKA_TOPIC.M_LOGGER
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
             }
             return { data: '' };
         } catch (error) {

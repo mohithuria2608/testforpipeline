@@ -17,6 +17,7 @@ declare namespace ICommonRequest {
         tokenType: string,
         id: string,
         isGuest: number
+        sessionTime: number
     }
 
     interface IPagination {

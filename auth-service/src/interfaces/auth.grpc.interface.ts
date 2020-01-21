@@ -11,6 +11,7 @@ declare namespace IAuthGrpcRequest {
         id?: string,
         authCred?: IAuthCred,
         isGuest: number,
+        sessionTime: number,
     }
 
     interface IAuthCred {

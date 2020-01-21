@@ -156,6 +156,21 @@ export const start = (async () => {
         })
       }
       else if (sitem['typeId'] == 'configurable') {
+        // sitem.configurableProductOptions.filter(obj=>)
+        // let data = sitem['items'].reduce((obj, item) => {
+
+
+
+        //   obj[item.key] = item.value
+        //   return obj
+        // }, {})
+        // return data
+
+
+
+
+
+
         let super_attribute = {};
         let price = null;
         if (sitem['items'] && sitem['items'].length > 0) {
@@ -234,6 +249,11 @@ export const start = (async () => {
         return Promise.reject("Unhandled  products")
       }
     })
+
+
+    let a: IMenuGrpcRequest.IFetchMenuRes 
+
+    
     await bootstrap(server)
   } catch (err) {
     console.error(err)

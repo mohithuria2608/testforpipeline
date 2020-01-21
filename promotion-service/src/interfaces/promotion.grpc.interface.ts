@@ -8,6 +8,7 @@ declare namespace IPromotionGrpcRequest {
         as: IChangeAerospike
         cms: IChangeCMS
         sdm: IChangeSDM
+        mdb?: IChangeMongo
         count?: number,
     }
 
@@ -34,6 +35,14 @@ declare namespace IPromotionGrpcRequest {
         get?: boolean,
         argv: string
     }
+    interface IChangeMongo {
+        create: boolean,
+        update?: boolean,
+        reset?: boolean,
+        get?: boolean,
+        argv: string
+    }
+    
     interface IValidatePromotionReq {
         request: IPromotionRequest.IValidatePromotion
     }

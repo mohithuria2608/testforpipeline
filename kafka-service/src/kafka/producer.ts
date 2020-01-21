@@ -64,6 +64,7 @@ class KafkaProducer {
                 Constant.KAFKA_TOPIC.AS_PROMOTION,
                 Constant.KAFKA_TOPIC.SDM_ORDER,
                 Constant.KAFKA_TOPIC.AS_CONFIG,
+                Constant.KAFKA_TOPIC.M_LOGGER,
             ], (err, data) => {
                 if (err) {
                     consolelog(process.cwd(), 'Err in creating topics', err, false);

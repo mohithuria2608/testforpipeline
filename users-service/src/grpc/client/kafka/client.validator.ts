@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog,validatorErr } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class KafkaServiceValidator {
@@ -28,6 +28,13 @@ export class KafkaServiceValidator {
                         argv: Joi.string()
                     }),
                     sdm: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        reset: Joi.boolean(),
+                        get: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
+                    mdb: Joi.object().keys({
                         create: Joi.boolean(),
                         update: Joi.boolean(),
                         reset: Joi.boolean(),

@@ -244,7 +244,7 @@ export class UserEntity extends BaseEntity {
      * @param {string} id 
      * @param {number} isGuest 
      */
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number, sessionTime: number) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
@@ -253,7 +253,8 @@ export class UserEntity extends BaseEntity {
                         deviceid: deviceid,
                         devicetype: devicetype,
                         tokenType: elem,
-                        isGuest: isGuest
+                        isGuest: isGuest,
+                        sessionTime: sessionTime
                     }
                     if (id)
                         dataToSend['id'] = id
