@@ -36,6 +36,8 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
+    consolelog(process.cwd(), "validationerror", error, true)
+
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     if (error && error.code && error.details) {
         customError.message = error.details
@@ -305,3 +307,10 @@ export let generateRandomString = function (digits: number) {
 export let generateSessionId = function (userId: string, deviceid: string) {
     return userId + "_" + deviceid;
 };
+
+export let validatorErr = function (err) {
+    return {
+        name: "ValidationError",
+        message: err
+    }
+}

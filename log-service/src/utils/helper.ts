@@ -284,3 +284,14 @@ export function sleep(ms: number) {
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
 };
+
+export let generateSessionId = function (userId: string, deviceid: string) {
+    return userId + "_" + deviceid;
+};
+
+export let validatorErr = function (err) {
+    return {
+        name: "ValidationError",
+        message: err
+    }
+}

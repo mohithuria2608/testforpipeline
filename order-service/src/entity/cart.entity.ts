@@ -52,7 +52,7 @@ export class CartClass extends BaseEntity {
             flatNum: Joi.string(),
             tag: Joi.string().valid(
                 Constant.DATABASE.TYPE.TAG.HOME,
-                Constant.DATABASE.TYPE.TAG.WORK,
+                Constant.DATABASE.TYPE.TAG.OFFICE,
                 Constant.DATABASE.TYPE.TAG.HOTEL,
                 Constant.DATABASE.TYPE.TAG.OTHER),
             addressType: Joi.string().valid(
@@ -301,24 +301,24 @@ export class CartClass extends BaseEntity {
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
             let cart = []
-            payload.items.map(obj => {
-                if (obj['typeId'] == 'simple') {
+            payload.items.map(sitem => {
+                if (sitem['typeId'] == 'simple') {
                     cart.push({
-                        product_id: obj.id,
-                        qty: obj.qty ? obj.qty : 1,
-                        price: obj.finalPrice,
-                        type_id: obj['typeId']
+                        product_id: sitem.id,
+                        qty: sitem.qty ? sitem.qty : 1,
+                        price: sitem.finalPrice,
+                        type_id: sitem['typeId']
                     })
                 }
-                else if (obj['typeId'] == 'configurable') {
+                else if (sitem['typeId'] == 'configurable') {
                     let super_attribute = {};
                     let price = null;
-                    if (obj['products'] && obj['products'].length > 0) {
-                        obj['products'].map(p => {
-                            if (parseInt(p['sku']) == obj['selectedItem']) {
-                                price = p['finalPrice']
-                                if (obj['configurableProductOptions'] && obj['configurableProductOptions'].length > 0) {
-                                    obj['configurableProductOptions'].map(co => {
+                    if (sitem['items'] && sitem['items'].length > 0) {
+                        sitem['items'].map(i => {
+                            if (parseInt(i['sku']) == sitem['selectedItem']) {
+                                price = i['finalPrice']
+                                if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
+                                    sitem['configurableProductOptions'].map(co => {
                                         let value = null
                                         if (co['options'] && co['options'].length > 0) {
                                             co['options'].map(o => {
@@ -334,19 +334,19 @@ export class CartClass extends BaseEntity {
                         })
                     }
                     cart.push({
-                        product_id: obj.id,
-                        qty: obj.qty ? obj.qty : 1,
+                        product_id: sitem.id,
+                        qty: sitem.qty ? sitem.qty : 1,
                         price: price,
-                        type_id: obj['typeId'],
+                        type_id: sitem['typeId'],
                         super_attribute: super_attribute
                     })
                 }
-                else if (obj['typeId'] == 'bundle') {
+                else if (sitem['typeId'] == 'bundle') {
                     return Promise.reject("Not handled bundle products")
                     let bundle_option = {};
                     let selection_configurable_option = {};
                     let bundle_super_attribute = {};
-                    obj['bundleProductOptions'].map(bpo => {
+                    sitem['bundleProductOptions'].map(bpo => {
                         let bundleOptValue = null
                         if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
                             bpo['productLinks'].map(pl => {
@@ -367,21 +367,21 @@ export class CartClass extends BaseEntity {
                         bundle_option[bpo['id']] = bundleOptValue
                     })
                     cart.push({
-                        product_id: obj.id,
-                        qty: obj.qty,
-                        price: obj.finalPrice,
-                        type_id: obj['typeId'],
+                        product_id: sitem.id,
+                        qty: sitem.qty,
+                        price: sitem.finalPrice,
+                        type_id: sitem['typeId'],
                         bundle_option: bundle_option,
                         selection_configurable_option: selection_configurable_option,
                         bundle_super_attribute: bundle_super_attribute,
                     })
                 }
-                else if (obj['typeId'] == 'bundle_group') {
+                else if (sitem['typeId'] == 'bundle_group') {
                     return Promise.reject("Not handled bundle group products")
                     cart.push({
-                        product_id: obj.id,
-                        qty: obj.qty,
-                        price: obj.finalPrice,
+                        product_id: sitem.id,
+                        qty: sitem.qty,
+                        price: sitem.finalPrice,
                         type_id: "bundle"
                     })
                 } else {

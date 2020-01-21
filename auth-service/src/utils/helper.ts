@@ -288,3 +288,10 @@ export let generateRandomString = function (digits: number) {
 export let generateSessionId = function (userId: string, deviceid: string) {
     return userId + "_" + deviceid;
 };
+
+export let validatorErr = function (err) {
+    return {
+        name: "ValidationError",
+        message: err
+    }
+}

@@ -23,7 +23,7 @@ export default (router: Router) => {
                     flatNum: Joi.string().required(),
                     tag: Joi.string().valid(
                         Constant.DATABASE.TYPE.TAG.HOME,
-                        Constant.DATABASE.TYPE.TAG.WORK,
+                        Constant.DATABASE.TYPE.TAG.OFFICE,
                         Constant.DATABASE.TYPE.TAG.HOTEL,
                         Constant.DATABASE.TYPE.TAG.OTHER).required(),
                 }

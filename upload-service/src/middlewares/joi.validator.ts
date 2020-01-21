@@ -1,5 +1,5 @@
 import * as Joi from '@hapi/joi';
-
+import { validatorErr } from '../utils'
 /**
  * Helper function to validate an object against the provided schema,
  * and to throw a custom error if object is not valid.
@@ -49,7 +49,7 @@ export const validate = function (validationObj) {
             return next()
         } catch (err) {
             // If any of the objects fails validation, send an HTTP 400 response.
-            return Promise.reject(err)
+            return Promise.reject(validatorErr(err))
         }
     }
 }

@@ -233,7 +233,7 @@ export const DATABASE = {
 
         TAG: {
             HOME: "HOME",
-            WORK: "WORK",
+            OFFICE: "OFFICE",
             HOTEL: "HOTEL",
             OTHER: "OTHER"
         },
