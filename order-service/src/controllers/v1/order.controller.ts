@@ -1692,6 +1692,7 @@ export class OrderController {
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let trackOrderOfUser = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
             let trackOrder: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ $or: [{ _id: payload.orderId }, { orderId: payload.orderId }] },
                 {
                     orderId: 1,
@@ -1701,6 +1702,8 @@ export class OrderController {
                     updatedAt: 1
                 })
             if (trackOrder && trackOrder._id) {
+                if(trackOrderOfUser.id != trackOrder.userId)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 return trackOrder
             } else {
                 return {

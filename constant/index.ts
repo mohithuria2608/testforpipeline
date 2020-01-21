@@ -233,7 +233,7 @@ export const DATABASE = {
 
         TAG: {
             HOME: "HOME",
-            OFFICE: "OFFICE",
+            WORK: "WORK",
             HOTEL: "HOTEL",
             OTHER: "OTHER"
         },
@@ -409,6 +409,13 @@ export const STATUS_MSG = {
             }
         },
         E409: {
+            ORDER_NOT_FOUND:{
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Order not found',
+                type: 'ORDER_NOT_FOUND'
+            },
+
             CONFIG_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,

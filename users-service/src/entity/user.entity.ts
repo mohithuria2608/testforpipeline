@@ -78,15 +78,38 @@ export class UserEntity extends BaseEntity {
     * */
     async getUser(payload: IUserRequest.IFetchUser) {
         try {
-            let getArg: IAerospike.Get = {
-                set: this.set,
-                key: payload.userId
+            if (payload.userId) {
+                let getArg: IAerospike.Get = {
+                    set: this.set,
+                    key: payload.userId
+                }
+                let user: IUserRequest.IUserData = await Aerospike.get(getArg)
+                if (user && user.id) {
+                    return user
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
+            } else {
+                let queryArg: IAerospike.Query = {
+                    udf: {
+                        module: 'user',
+                        func: Constant.UDF.USER.check_phone_exist,
+                        args: [payload.cCode],
+                        forEach: true
+                    },
+                    equal: {
+                        bin: "phnNo",
+                        value: payload.phnNo
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                if (checkUser && checkUser.length > 0) {
+                    return checkUser[0]
+                } else {
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
+                }
             }
-            let user: IUserRequest.IUserData = await Aerospike.get(getArg)
-            if (user && user.id) {
-                return user
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(), "getUser", error, false)
             return Promise.reject(error)

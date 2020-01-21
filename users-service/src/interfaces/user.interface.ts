@@ -80,7 +80,9 @@ declare namespace IUserRequest {
     }
 
     interface IFetchUser {
-        userId: string
+        userId?: string,
+        cCode?: string,
+        phnNo?: string,
     }
 
     interface ICheckUserOnCms {
