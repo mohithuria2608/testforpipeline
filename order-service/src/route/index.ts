@@ -5,6 +5,7 @@ import { Context } from 'koa'
 import staticRoutes from './v1/static.route'
 import cartRoutes from './v1/cart.route'
 import orderRoutes from './v1/order.route'
+import webhookNoonpayRoutes from './v1/webhook.noonpay.route'
 
 const version1 = "/v1"
 
@@ -12,6 +13,7 @@ const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: cartRoutes, prefix: version1 + '/cart' },
   { routes: orderRoutes, prefix: version1 + '/order' },
+  { routes: webhookNoonpayRoutes, prefix: version1 + '/webhook/noonpay' },
 ]
 
 export default function routes() {

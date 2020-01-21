@@ -7,20 +7,29 @@ export class BaseCMS {
     constructor() {
     }
 
-    async request(method: string, url: string, headers: object, form: object) {
+    async request(options: ICommonRequest.IReqPromiseOptions, headers: object, parameter: object): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            let options = {
-                method: method,
-                url: url,
+            let params = {
+                method: options.method,
+                url: options.url,
                 headers: headers,
-                body: form,
                 json: true
             }
-            if (method == "GET")
-                options['qs'] = form
-            consolelog(process.cwd(), "In request manager options", JSON.stringify(options), true)
+            if (options.form) {
+                params['form'] = parameter
+            }
+            else if (options.formData) {
+                params[''] = parameter
+            }
+            else if (options.qs) {
+                params['qs'] = parameter
+            }
+            else {
+                params['body'] = parameter
+            }
+            consolelog(process.cwd(), "In request manager options", JSON.stringify(params), true)
 
-            rp(options)
+            rp(params)
                 .then(function (body) {
                     consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
                     resolve(body)
@@ -36,23 +45,25 @@ export class BaseCMS {
         })
     }
 
-    async auth() {
-        try {
-            const method = Constant.CMS.END_POINTS.AUTH.METHOD;
-            const url = Constant.CMS.END_POINTS.AUTH.URL
-            const headers = {};
-            const form = {
-                "username": config.get("cms.auth.username"),
-                "password": config.get("cms.auth.password")
-            }
-            let cmsRes = await this.request(method, url, headers, form)
-            global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();
-            consolelog(process.cwd(), 'cmsRes', cmsRes, false)
+    // async auth() {
+    //     try {
+    //         const headers = {};
+    //         const form = {
+    //             "username": config.get("cms.auth.username"),
+    //             "password": config.get("cms.auth.password")
+    //         }
+    //         const options = {
+    //             method: Constant.CMS.END_POINTS.AUTH.METHOD,
+    //             url: Constant.CMS.END_POINTS.AUTH.URL
+    //         }
+    //         let cmsRes = await this.request(options, headers, form)
+    //         global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();
+    //         consolelog(process.cwd(), 'cmsRes', cmsRes, false)
 
-            return cmsRes
-        } catch (error) {
-            consolelog(process.cwd(), 'auth', error, false)
-            return (error)
-        }
-    }
+    //         return cmsRes
+    //     } catch (error) {
+    //         consolelog(process.cwd(), 'auth', error, false)
+    //         return (error)
+    //     }
+    // }
 }

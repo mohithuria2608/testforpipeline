@@ -22,106 +22,126 @@ export class KafkaController {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.cms.create || payload.cms.update) {
+                    if (payload.cms.create || payload.cms.update || payload.cms.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.sdm
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.CMS.USER.MAX_RETRY.CREATE : Constant.KAFKA.CMS.USER.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.CMS_USER
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.sdm.create || payload.sdm.update) {
+                    if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.SDM.USER.MAX_RETRY.CREATE : Constant.KAFKA.SDM.USER.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.SDM_USER
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.KAFKA.AS.USER.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_USER
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
-                    kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     break;
                 }
                 case Constant.SET_NAME.MENU: {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.cms.create || payload.cms.update) {
+                    if (payload.cms.create || payload.cms.update || payload.cms.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.sdm
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.CMS_MENU
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.sdm.create || payload.sdm.update) {
+                    if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.SDM_MENU
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_MENU
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
-                    kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     break;
                 }
                 case Constant.SET_NAME.UPSELL: {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
                         messages = { ...payload }
-                        delete messages.as
+                        delete messages.sdm
                         delete messages.cms
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_UPSELL
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
-                    kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     break;
                 }
                 case Constant.SET_NAME.PROMOTION: {
                     let messages = null;
                     let topic = null
                     let partition = 0
-                    if (payload.as.create || payload.as.update) {
+                    if (payload.as.create || payload.as.update || payload.as.get) {
+                        messages = { ...payload }
+                        delete messages.sdm
+                        delete messages.cms
+                        if (!payload.hasOwnProperty('count'))
+                            payload['count'] = payload.as.create ? Constant.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                        topic = Constant.KAFKA_TOPIC.AS_PROMOTION
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
+                case Constant.SET_NAME.ORDER: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                         messages = { ...payload }
                         delete messages.as
                         delete messages.cms
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.AS_PROMOTION
+                        topic = Constant.KAFKA_TOPIC.SDM_ORDER
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
-
-                    kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    break;
+                }
+                case Constant.SET_NAME.CONFIG: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as.create || payload.as.update || payload.as.get) {
+                        messages = { ...payload }
+                        delete messages.sdm
+                        delete messages.cms
+                        topic = Constant.KAFKA_TOPIC.AS_CONFIG
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
                     break;
                 }
             }
-
-
-            if (!payload.hasOwnProperty('count'))
-                payload['count'] = Constant.KAFKA.CMS.USER.MAX_RETRY.CREATE
-
-
-
+            return { data: '' };
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)
             return Promise.reject(error)
@@ -145,6 +165,7 @@ export class KafkaController {
             consolelog(process.cwd(), "produceToFailureTopic", err, false)
             return Promise.reject(err)
         }
+
     }
 }
 

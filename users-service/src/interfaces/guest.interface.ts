@@ -1,5 +1,13 @@
 declare namespace IGuestRequest {
 
-    interface IGuestLogin  {
+    interface IGuestLogin {
+    }
+
+    interface IGuestCheckout {
+        cCode: string,
+        phnNo: string,
+        email: string,
+        name: string,
+        isGuest: number
     }
 }

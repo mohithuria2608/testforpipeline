@@ -7,14 +7,4 @@ export class BaseEntity {
     constructor(set?) {
         this.set = set
     }
-
-    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-        try {
-            
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
-            return Promise.reject(error)
-        }
-    }
 }

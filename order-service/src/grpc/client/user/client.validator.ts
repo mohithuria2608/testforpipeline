@@ -2,16 +2,19 @@
 'use strict';
 import * as Joi from '@hapi/joi';
 import { consolelog } from "../../../utils"
+import * as Constant from '../../../constant'
 
 export class UserServiceValidator {
     constructor() {
     }
 
-    async fetchUser(data: IUserRequest.IFetchUser) {
+    async fetchUserValidator(data: IUserRequest.IFetchUser) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    userId: Joi.string().required()
+                    userId: Joi.string(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
+                    phnNo: Joi.string().max(9),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -23,7 +26,7 @@ export class UserServiceValidator {
         })
     }
 
-    async  fetchAddress(data: IUserGrpcRequest.IFetchAddress) {
+    async  fetchAddressValidator(data: IUserGrpcRequest.IFetchAddress) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

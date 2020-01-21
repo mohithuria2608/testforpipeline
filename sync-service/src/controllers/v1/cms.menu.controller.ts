@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client'
 
 export class CmsMenuController {
 
@@ -12,14 +13,19 @@ export class CmsMenuController {
      */
     async postMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let change = {
+            payload['type'] = "menu"
+            let menuChange = {
                 set: ENTITY.MenuE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
                 }
             }
-            ENTITY.MenuE.syncToKafka(change)
+            if (payload.action == "update") {
+                menuChange['as']['update'] = true
+                delete menuChange['as']['create']
+            }
+            kafkaService.kafkaSync(menuChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postMenu", err, false)
@@ -34,14 +40,19 @@ export class CmsMenuController {
     */
     async postUpsell(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let change = {
+            payload['type'] = "upsell"
+            let upsellChange = {
                 set: ENTITY.UpsellE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
                 }
             }
-            ENTITY.UpsellE.syncToKafka(change)
+            if (payload.action == "update") {
+                upsellChange['as']['update'] = true
+                delete upsellChange['as']['create']
+            }
+            kafkaService.kafkaSync(upsellChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "syncUpsellProducts", err, false)

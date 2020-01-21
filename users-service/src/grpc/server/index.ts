@@ -1,6 +1,7 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity'
+import { userController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -18,6 +19,16 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(userProto.UserService.service, {
+    fetchSession: async (call: IUserGrpcRequest.IFetchSessionReq, callback) => {
+        try {
+            consolelog(process.cwd(), "getSession", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.SessionE.getSession(call.request.deviceid, call.request.userId)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "getSession", error, false)
+            callback(grpcSendError(error))
+        }
+    },
     fetchUser: async (call: IUserGrpcRequest.IFetchUserReq, callback) => {
         try {
             consolelog(process.cwd(), "fetchUser", JSON.stringify(call.request), true)
@@ -31,7 +42,7 @@ server.addService(userProto.UserService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.UserE.syncFromKafka(call.request)
+            let res: {} = await userController.syncUserFromKafka(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)

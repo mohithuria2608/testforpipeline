@@ -1,1 +1,1 @@
-export { Order, IOrder } from "./order.model";
+export { order, Iorder as IOrder } from "./order.model";

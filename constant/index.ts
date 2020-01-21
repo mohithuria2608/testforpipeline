@@ -1,9 +1,12 @@
 
 export enum SET_NAME {
     USER = "user",
+    ADDRESS = "address",
     MENU = "menu",
     UPSELL = "upsell",
-    PROMOTION = "promotion"
+    PROMOTION = "promotion",
+    ORDER = "order",
+    CONFIG = "config"
 };
 
 export const UDF = {
@@ -19,7 +22,7 @@ export const UDF = {
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
-    
+
     SDM_MENU = "sdm_menu",
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
@@ -29,7 +32,11 @@ export enum KAFKA_TOPIC {
     CMS_USER = "cms_user",
     AS_USER = "as_user",
 
-    AS_PROMOTION = 'as_promotion'
+    AS_PROMOTION = 'as_promotion',
+
+    SDM_ORDER = 'sdm_order',
+
+    AS_CONFIG = 'as_config'
 };
 
 export enum MIDDLEWARE {
@@ -43,13 +50,13 @@ export const CMS = {
         AUTH_API_HIT: 'cms-auth-hit-time'
     },
     END_POINTS: {
-        AUTH: {
-            METHOD: "POST",
-            URL: "http://40.123.205.1/rest/default/V1/integration/customer/token",
+        GENERAL_CONFIG: {
+            METHOD: "GET",
+            URL: "http://40.123.205.1/rest/V1/americanaconfig/"
         },
-        CREATE_CUSTOMER: {
+        CREATE_CART: {
             METHOD: "POST",
-            URL: "http://40.123.205.1/rest/default/V1/customers/",
+            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
         }
     }
 };
@@ -78,6 +85,11 @@ export const KAFKA = {
             MAX_RETRY: {
                 CREATE: 5,
                 UPDATE: 5,
+            }
+        },
+        ORDER: {
+            INTERVAL: {
+                GET_STATUS: 10
             }
         }
     },
@@ -221,7 +233,7 @@ export const DATABASE = {
 
         TAG: {
             HOME: "HOME",
-            OFFICE: "OFFICE",
+            WORK: "WORK",
             HOTEL: "HOTEL",
             OTHER: "OTHER"
         },
@@ -241,13 +253,47 @@ export const DATABASE = {
         STATUS: {
             INACTIVE: 0,
             ACTIVE: 1
+        },
+
+        SYNC_CONFIG: {
+            PAYMENT: "payment",
+            GENERAL: "general",
+            SHIPMENT: "shipment",
+        },
+
+        SYNC_ACTION: {
+            CREATE: "create",
+            UPDATE: "update",
+            RESET: "reset",
         }
     },
 
     STATUS: {
         ORDER: {
-            CART: "CART",
-            PENDING: "PENDING",
+            CART: {
+                AS: "CART",
+                CMS: ""
+            },
+            PENDING: {
+                MONGO: "PENDING",
+                CMS: "",
+                SDM: ""
+            },
+            CLOSED: {
+                MONGO: "",
+                CMS: "",
+                SDM: "CLOSED"
+            },
+            CANCELED: {
+                MONGO: "",
+                CMS: "",
+                SDM: "CANCELED"
+            },
+            FAILURE: {
+                MONGO: "",
+                CMS: "",
+                SDM: "FAILURE"
+            },
         }
     }
 };
@@ -255,6 +301,20 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            INVALID_PROMO: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'INVALID_PROMO',
+                message: 'Invalid Promotion'
+            },
+
+            PROMO_EXPIRED: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'PROMO_EXPIRED',
+                message: 'Promo expired'
+            },
+
             INVALID_STORE: {
                 statusCode: 400,
                 httpCode: 400,
@@ -349,6 +409,20 @@ export const STATUS_MSG = {
             }
         },
         E409: {
+            ORDER_NOT_FOUND:{
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Order not found',
+                type: 'ORDER_NOT_FOUND'
+            },
+
+            CONFIG_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Config not found',
+                type: 'CONFIG_NOT_FOUND'
+            },
+
             USER_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
@@ -389,6 +463,13 @@ export const STATUS_MSG = {
                 httpCode: 409,
                 message: 'Store not found',
                 type: 'STORE_NOT_FOUND'
+            },
+
+            PROMO_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Promotion not found',
+                type: 'PROMO_NOT_FOUND'
             },
 
             DATA_NOT_FOUND: {

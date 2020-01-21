@@ -12,11 +12,12 @@ export class MiscUserController {
     * */
     async refreshToken(headers: ICommonRequest.IHeaders, payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
         try {
-
-            const tokenType = authObj.id ? Constant.DATABASE.TYPE.TOKEN.USER_AUTH : Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
-            let tokens = await ENTITY.UserE.getTokens(headers.deviceid, headers.devicetype, [tokenType], authObj.id)
+            if (authObj.tokenType != Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            const toCreateToken = (authObj.isGuest == 0) ? Constant.DATABASE.TYPE.TOKEN.USER_AUTH : Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
+            let tokens = await ENTITY.UserE.getTokens(headers.deviceid, headers.devicetype, [toCreateToken], authObj.id, authObj.isGuest)
             let user = await ENTITY.UserE.getUser({ userId: authObj.id })
-            return { accessToken: tokens.accessToken, response: formatUserData(user, headers.deviceid) }
+            return { accessToken: tokens.accessToken, response: formatUserData(user, headers) }
         } catch (err) {
             consolelog(process.cwd(), "refreshToken", err, false)
             return Promise.reject(err)
@@ -25,7 +26,9 @@ export class MiscUserController {
 
     async logout(headers: ICommonRequest.IHeaders, authObj: ICommonRequest.AuthorizationObj) {
         try {
-            await ENTITY.UserE.removeSession(headers, authObj.userData)
+            let getSession: ISessionRequest.ISession = await ENTITY.SessionE.getSession(headers.deviceid, authObj.userData.id)
+
+            await ENTITY.SessionE.removeSession(headers, authObj.userData)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "logout", err, false)

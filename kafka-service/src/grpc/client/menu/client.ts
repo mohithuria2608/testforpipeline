@@ -23,6 +23,10 @@ export class MenuService {
         consolelog(process.cwd(), 'GRPC connection established menu-service', config.get("grpc.menu.client"), true)
     }
 
+    /**
+     * @description : this will sync both menu and upsell
+     * @param payload 
+     */
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {

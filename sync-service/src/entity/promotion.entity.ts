@@ -8,7 +8,6 @@ export class PromotionEntity extends BaseEntity {
     constructor() {
         super('promotion')
     }
-
 }
 
 export const PromotionE = new PromotionEntity()

@@ -1,8 +1,10 @@
+import * as mongoose from "mongoose";
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { authService, kafkaService } from '../grpc/client'
+import { authService } from '../grpc/client'
 
 export class BaseEntity {
+    public ObjectId = mongoose.Types.ObjectId().toString();
     public set: SetNames;
     constructor(set?) {
         this.set = set
@@ -13,16 +15,6 @@ export class BaseEntity {
             return authService.createToken(dataToSend)
         } catch (error) {
             consolelog(process.cwd(), "createToken", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    async syncToKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-        try {
-            kafkaService.kafkaSync(payload)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncToKafka", error, false)
             return Promise.reject(error)
         }
     }

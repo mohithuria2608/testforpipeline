@@ -5,7 +5,7 @@ import * as _config from "config";
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog, sendSuccess } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 /**
  * Noonpay Payment Config from CMS

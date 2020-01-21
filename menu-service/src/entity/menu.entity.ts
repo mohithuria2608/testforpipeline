@@ -3,7 +3,7 @@ import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 export class MenuClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
@@ -157,7 +157,10 @@ export class MenuClass extends BaseEntity {
         categories: Joi.array().items(this.categorySchema)
     })
 
-    async post(data) {
+    /**
+     * @method BOOTSTRAP
+     * */
+    async postMenu(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
@@ -168,8 +171,7 @@ export class MenuClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "post menu", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 
@@ -177,11 +179,11 @@ export class MenuClass extends BaseEntity {
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getMenuById(id: number) {
+    async getMenu(payload: IMenuRequest.IFetchMenu) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: id
+                key: payload.menuId
             }
             let menu = await Aerospike.get(getArg)
             if (menu && menu.id) {
@@ -189,43 +191,10 @@ export class MenuClass extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.MENU_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getById", error, false)
+            consolelog(process.cwd(), "getMenu", error, false)
             return Promise.reject(error)
         }
     }
-
-    /**
-    * @method GRPC
-    * @param {string} country :current country of user
-    * @param {boolean} isDefault :want to fetch default menu or not
-    * */
-    async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
-        try {
-            let menuId = 5;
-            return await this.getMenuById(menuId)
-        } catch (err) {
-            consolelog(process.cwd(), "grpcFetchMenu", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    // /**
-    //  * @method GRPC
-    //  * @param {string} data :data of the menu
-    //  */
-    // async syncMenuWithCMS(payload: IMenuGrpcRequest.ICMSMenuSync) {
-    //     // call the CMS api request here
-    //     return
-    // }
-
-    // /**
-    //  * @method GRPC
-    //  * @param {string} data :data of the menu
-    //  */
-    // async updateMenuFromCMS(payload: IMenuGrpcRequest.IUpdateMenu) {
-    //     let parsedPayload = JSON.parse(payload.data);
-    //     return this.post(parsedPayload.data);
-    // }
 }
 
 export const MenuE = new MenuClass()

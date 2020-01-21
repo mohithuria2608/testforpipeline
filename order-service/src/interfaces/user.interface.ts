@@ -4,40 +4,25 @@ declare namespace IUserRequest {
         id: string,
         sdmUserRef: number,
         cmsUserRef: number,
-        isGuest: number,
+        // isGuest: number,
         name: string,
         cCode: string,
         phnNo: string,
         phnVerified: number,
         email: string,
-        emailVerified: number,
         profileStep: number,
         socialKey: string,
         medium: string,
         createdAt: number,
-        session: {
-            [deviceid: string]: ISession
-        },
-        removeUserId?: string,
-        password: string,
-    }
-    interface ISession {
-        otp: number,
-        otpExpAt: number,
-        otpVerified: number,
-        language: string,
-        country: string,
-        appversion: string,
-        devicemodel: string,
-        devicetype: string,
-        osversion: string,
-        deviceid: string,
-        isLogin: number,
         cartId: string,
-        createdAt: number,
+        password: string,
+        changePhnNo: number,
+        switchPhnNo: number,
     }
 
     interface IFetchUser {
-        userId: string,
+        userId?: string,
+        cCode?: string,
+        phnNo?: string,
     }
 }

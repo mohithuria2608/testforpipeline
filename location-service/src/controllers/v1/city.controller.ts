@@ -9,19 +9,19 @@ export class CityController {
     constructor() { }
 
     /**
-     * @method POST
+     * @method BOOTSTRAP
      * @description : Post bulk city data
      * */
-    async post() {
+    async bootstrapCity() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/city.json', 'utf-8');
             let cities = JSON.parse(rawdata);
             for (const city of cities) {
-                ENTITY.CityE.postCity(city)
+                await ENTITY.CityE.bootstrapCity(city)
             }
             return {}
         } catch (err) {
-            consolelog(process.cwd(),"post city", err, false)
+            consolelog(process.cwd(),"bootstrapCity", err, false)
             return Promise.reject(err)
         }
     }

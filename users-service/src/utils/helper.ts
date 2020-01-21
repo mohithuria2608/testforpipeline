@@ -225,13 +225,13 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: IUserRequest.IUserData, deviceid) {
+export let formatUserData = function (userObj: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
     try {
-        userObj['country'] = userObj['session'][deviceid].country
-        userObj['language'] = userObj['session'][deviceid].language
+        userObj['country'] = headers.country
+        userObj['language'] = headers.language
 
         delete userObj['session']
-        delete userObj['removeUserId']
+        delete userObj['changePhnNo']
         delete userObj['password']
         delete userObj['sdmUserRef']
         delete userObj['cmsUserRef']
@@ -300,4 +300,8 @@ export function sleep(ms: number) {
 
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
+};
+
+export let generateSessionId = function (userId: string, deviceid: string) {
+    return userId + "_" + deviceid;
 };

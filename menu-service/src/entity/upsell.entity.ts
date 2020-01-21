@@ -1,46 +1,76 @@
 'use strict';
+import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 export class UpsellClass extends BaseEntity {
-    public sindex: IAerospike.CreateIndex[] = []
-    public upsellMenuId = 10;
+    public sindex: IAerospike.CreateIndex[] = [
+        {
+            set: this.set,
+            bin: 'menuId',
+            index: 'idx_' + this.set + '_' + 'menuId',
+            type: "NUMERIC"
+        }
+    ]
+
+    public productSchema = Joi.object().keys({
+        id: Joi.number().required().description("pk")
+    })
+
+    public categorySchema = Joi.object().keys({
+        id: Joi.number().required().description("pk"),
+        position: Joi.number().required(),
+        name: Joi.string().required(),
+        products: Joi.array().items(this.productSchema)
+    })
+
+    public upsellSchema = Joi.object().keys({
+        id: Joi.number().required(),
+        menuTempId: Joi.number().required(),
+        conceptId: Joi.number().required(),
+        menuId: Joi.number().required().description("pk"),
+        currency: Joi.string().required(),
+        language: Joi.string().required(),
+        updatedAt: Joi.number().required(),
+        categories: Joi.array().items(this.categorySchema)
+    })
 
     constructor() {
         super('upsell')
     }
-
-    async post(data) {
+    /**
+     * @method BOOTSTRAP
+     * */
+    async bootstrapUpsell(data) {
         try {
-            console.log("----------> ", typeof data.menuId, data.menuId);
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
                 key: data.menuId,
-                replace: true,
+                create: true,
             }
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "post upsell", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 
     /**
     * @method GRPC
+    * @param {number=} menuId
     * */
-    async getUpsellProducts() {
+    async getUpsellProducts(payload: IUpsellRequest.IFetchUpsell) {
         try {
             let getArg: IAerospike.Get = {
                 set: this.set,
-                key: this.upsellMenuId
+                key: parseInt(payload.menuId.toString())
             }
-            let menu = await Aerospike.get(getArg)
-            if (menu && menu.menuId) {
-                return menu.products
+            let upsell = await Aerospike.get(getArg)
+            if (upsell && upsell.menuId) {
+                return upsell.categories[0].products
             } else
                 return []
         } catch (error) {
@@ -48,15 +78,6 @@ export class UpsellClass extends BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    // /**
-    //  * @method GRPC
-    //  * @param {string} data :data of the menu
-    //  */
-    // async upsellProductsSync(payload: IMenuGrpcRequest.IUpsellProductsSync) {
-    //     let parsedPayload = JSON.parse(payload.data);
-    //     return this.post(parsedPayload.data);
-    // }
 }
 
 export const UpsellE = new UpsellClass()

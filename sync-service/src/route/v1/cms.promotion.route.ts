@@ -16,15 +16,18 @@ export default (router: Router) => {
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
+                    action: Joi.string().required().valid(
+                        Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,
+                        Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE,
+                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET),
                     data: Joi.any()
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ICmsMenuRequest.ICmsMenu = ctx.request.body;
-                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await cmsPromotionController.postPromotion(headers, payload, auth);
+                    let payload: ICmsPromotionRequest.ICmsPromotion = ctx.request.body;
+                    let res = await cmsPromotionController.postPromotion(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

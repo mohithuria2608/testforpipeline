@@ -42,13 +42,14 @@ export default (router: Router) => {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
                     phnNo: Joi.string().max(9).required(),
                     otp: Joi.number().required(),
+                    isGuest: Joi.boolean().valid(0, 1).required(),
                 }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IUserRequest.IAuthVerifyOtp = ctx.request.body;
-                    let res = await userController.loginVerifyOtp(headers, payload);
+                    let res = await userController.verifyOtp(headers, payload);
                     ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, res.response)
                     ctx.status = sendResponse.statusCode;

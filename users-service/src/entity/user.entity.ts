@@ -2,14 +2,13 @@
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog, cryptData } from '../utils'
+import { consolelog } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 
 export class UserEntity extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
@@ -47,25 +46,11 @@ export class UserEntity extends BaseEntity {
         super('user')
     }
 
-    public sessionSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
-        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
-        language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-        appversion: Joi.string().trim().required(),
-        devicemodel: Joi.string().trim().required(),
-        devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
-        osversion: Joi.string().trim().required(),
-        deviceid: Joi.string().trim().required(),
-        isLogin: Joi.number().required(),
-        createdAt: Joi.number().required(),
-    });
-
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
         sdmUserRef: Joi.number().required().description("sk"),
         cmsUserRef: Joi.number().required().description("sk"),
-        isGuest: Joi.number().valid(0, 1),
+        isGuest: Joi.number().valid(0, 1).required(),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
         phnVerified: Joi.number().valid(0, 1).required(),
@@ -80,10 +65,11 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        removeUserId: Joi.string(),
         password: Joi.string(),
-        session: Joi.any(),
+        cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
+        changePhnNo: Joi.number().valid(0, 1).required(),
+        switchPhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
@@ -92,48 +78,69 @@ export class UserEntity extends BaseEntity {
     * */
     async getUser(payload: IUserRequest.IFetchUser) {
         try {
-            let getArg: IAerospike.Get = {
-                set: this.set,
-                key: payload.userId
+            if (payload.userId) {
+                let getArg: IAerospike.Get = {
+                    set: this.set,
+                    key: payload.userId
+                }
+                let user: IUserRequest.IUserData = await Aerospike.get(getArg)
+                if (user && user.id) {
+                    return user
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
+            } else {
+                let queryArg: IAerospike.Query = {
+                    udf: {
+                        module: 'user',
+                        func: Constant.UDF.USER.check_phone_exist,
+                        args: [payload.cCode],
+                        forEach: true
+                    },
+                    equal: {
+                        bin: "phnNo",
+                        value: payload.phnNo
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                if (checkUser && checkUser.length > 0) {
+                    return checkUser[0]
+                } else {
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
+                }
             }
-            let user: IUserRequest.IUserData = await Aerospike.get(getArg)
-            if (user && user.id) {
-                return user
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(), "getUser", error, false)
             return Promise.reject(error)
         }
     }
 
+    /**
+     * @description Build user object
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.IUserUpdate} userInfo 
+     * @param {boolean} isCreate 
+     */
     private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
-        const id = this.uuidv1();
         const user = isCreate ? {
-            id: id,
+            id: this.ObjectId().toString(),
             sdmUserRef: 0,
             cmsUserRef: 0,
-            isGuest: 0,
             name: "",
             cCode: "",
             phnNo: "",
             phnVerified: 0,
             email: "",
-            emailVerified: 0,
             profileStep: 0,
             socialKey: "",
             medium: "",
             createdAt: 0,
-            session: {},
-            removeUserId: "",
-            cartId: await cryptData(headers.deviceid),
-            password: 'Password1'//await cryptData(id)
+            cartId: this.ObjectId().toString(),
+            password: 'Password1', //await cryptData(id),
+            changePhnNo: 0,
+            switchPhnNo: 0,
         } : {}
-        if (userInfo.isGuest != undefined) {
-            if (userInfo.isGuest == 1) {
-                user['isGuest'] = userInfo.isGuest
-            }
-        }
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
         if (userInfo.cCode != undefined)
@@ -144,8 +151,6 @@ export class UserEntity extends BaseEntity {
             user['phnVerified'] = userInfo.phnVerified
         if (userInfo.email != undefined)
             user['email'] = userInfo.email
-        if (userInfo.emailVerified != undefined)
-            user['emailVerified'] = userInfo.emailVerified
         if (userInfo.profileStep != undefined)
             user['profileStep'] = userInfo.profileStep
         if (userInfo.socialKey != undefined)
@@ -156,72 +161,26 @@ export class UserEntity extends BaseEntity {
             user['createdAt'] = userInfo.createdAt
         else
             user['createdAt'] = new Date().getTime()
-        if (userInfo.removeUserId != undefined)
-            user['removeUserId'] = userInfo.removeUserId
         return user
     }
 
+
+
     /**
-     * @todo : add updated time in session token
+     * @description Create user in aerospike
+     * @param {ICommonRequest.IHeaders} headers 
+     * @param {IUserRequest.IUserUpdate} userInfo 
      */
-    public async buildSession(headers: ICommonRequest.IHeaders, sessionInfo: IUserRequest.ISessionUpdate, isCreate: boolean) {
-        let session = isCreate ? {
-            otp: 0,
-            otpExpAt: 0,
-            otpVerified: 0,
-            isLogin: 0,
-            deviceid: headers.deviceid,
-            language: headers.language,
-            country: headers.country,
-            appversion: headers.appversion,
-            devicemodel: headers.devicemodel,
-            devicetype: headers.devicetype,
-            osversion: headers.osversion,
-            createdAt: new Date().getTime(),
-        } : {}
-        if (sessionInfo.otp != undefined)
-            session['otp'] = sessionInfo.otp
-        if (sessionInfo.otpExpAt != undefined)
-            session['otpExpAt'] = sessionInfo.otpExpAt
-        if (sessionInfo.otpVerified != undefined)
-            session['otpVerified'] = sessionInfo.otpVerified
-        if (sessionInfo.isLogin != undefined)
-            session['isLogin'] = sessionInfo.isLogin
-        if (sessionInfo.createdAt != undefined)
-            session['createdAt'] = sessionInfo.createdAt
-
-        if (headers.deviceid != undefined)
-            session['deviceid'] = headers.deviceid
-        if (headers.language != undefined)
-            session['language'] = headers.language
-        if (headers.country != undefined)
-            session['country'] = headers.country
-        if (headers.appversion != undefined)
-            session['appversion'] = headers.appversion
-        if (headers.devicemodel != undefined)
-            session['devicemodel'] = headers.devicemodel
-        if (headers.devicetype != undefined)
-            session['devicetype'] = headers.devicetype
-        if (headers.osversion != undefined)
-            session['osversion'] = headers.osversion
-        return session
-    }
-
-    async createUser(
-        headers: ICommonRequest.IHeaders,
-        userInfo: IUserRequest.IUserUpdate,
-        sessionCreate: IUserRequest.ISessionUpdate,
-    ): Promise<IUserRequest.IUserData> {
+    async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate): Promise<IUserRequest.IUserData> {
         try {
             let dataToSave = {
                 ...await this.buildUser(headers, userInfo, true)
             }
-            dataToSave['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionCreate, true) }
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
                 key: dataToSave.id,
-                ttl: userInfo.isGuest ? Constant.SERVER.INITIAL_GUEST_USER_TTL : Constant.SERVER.INITIAL_USER_TTL,
+                ttl: Constant.SERVER.INITIAL_USER_TTL,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -234,82 +193,42 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async createSession(
-        headers: ICommonRequest.IHeaders,
-        userData: IUserRequest.IUserData,
-        userUpdate: IUserRequest.IUserUpdate,
-        sessionUpdate: IUserRequest.ISessionUpdate,
-    ): Promise<IUserRequest.IUserData> {
-        try {
-            let dataToUpdate = {
-                ...await this.buildUser(headers, userUpdate, false),
-                session: {}
-            }
-            if (userData.session && userData.session.hasOwnProperty(headers.deviceid) && userData.session[headers.deviceid]) {
-                const Context = Aerospike.cdt.Context
-                const context = new Context().addMapKey(headers.deviceid)
-                let op = [
-                    Aerospike.maps.putItems('session', { ...await this.buildSession(headers, sessionUpdate, false) }, {
-                        writeFlags: Aerospike.maps.writeFlags.UPDATE_ONLY | Aerospike.maps.writeFlags.NO_FAIL | Aerospike.maps.writeFlags.PARTIAL
-                    }).withContext(context)
-                ]
-                await Aerospike.operationsOnMap({ set: this.set, key: userData.id }, op)
-                delete dataToUpdate['session']
-            } else {
-                dataToUpdate['session'][headers.deviceid] = { ...await this.buildSession(headers, sessionUpdate, true) }
-            }
-
-            let putArg: IAerospike.Put = {
-                bins: dataToUpdate,
-                set: this.set,
-                key: userData.id,
-                update: true,
-            }
-            await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userData.id })
-            return user
-        } catch (err) {
-            consolelog(process.cwd(), "createSession", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
-        try {
-            if (userData.session && userData.session.hasOwnProperty(headers.deviceid)) {
-                let dataToUpdate = { session: {} }
-                dataToUpdate.session[headers.deviceid] = null
-                let putArg: IAerospike.Put = {
-                    bins: dataToUpdate,
-                    set: this.set,
-                    key: userData.id,
-                    update: true,
-                }
-                await Aerospike.put(putArg)
-                return {}
-            } else
-                return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeSession", err, false)
-            return Promise.reject(err)
-        }
-    }
-
-    async updateUser(userData: IUserRequest.IUserData, payload: IUserRequest.IEditProfile, ) {
+    /**
+     * @description Update user on aerospike
+     * @param {IUserRequest.IUserData} userData 
+     * @param {IUserRequest.IEditProfile} payload 
+     */
+    async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
         try {
             let userUpdate = {}
             if (payload.email)
                 userUpdate['email'] = payload.email
             if (payload.name)
                 userUpdate['name'] = payload.name
+            if (payload.cartId)
+                userUpdate['cartId'] = payload.cartId
+            if (payload.profileStep)
+                userUpdate['profileStep'] = payload.profileStep
+            if (payload.changePhnNo != undefined)
+                userUpdate['changePhnNo'] = payload.changePhnNo
+            if (payload.socialKey)
+                userUpdate['socialKey'] = payload.socialKey
+            if (payload.socialKey)
+                userUpdate['medium'] = payload.medium
+            if (payload.phnNo)
+                userUpdate['phnNo'] = payload.phnNo
+            if (payload.cCode)
+                userUpdate['cCode'] = payload.cCode
+            if (payload.phnVerified != undefined)
+                userUpdate['phnVerified'] = payload.phnVerified
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,
-                key: userData.id,
+                key: userId,
                 update: true,
             }
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userData.id })
+            let user = await this.getUser({ userId: userId })
             return user
         } catch (error) {
             consolelog(process.cwd(), "updateUser", error, false)
@@ -317,7 +236,15 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string) {
+    /**
+     * @description Get access and refresh token from auth service 
+     * @param {string} deviceid 
+     * @param {string} devicetype 
+     * @param {string[]} tokentype 
+     * @param {string} id 
+     * @param {number} isGuest 
+     */
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
@@ -325,7 +252,8 @@ export class UserEntity extends BaseEntity {
                     let dataToSend = {
                         deviceid: deviceid,
                         devicetype: devicetype,
-                        tokenType: elem
+                        tokenType: elem,
+                        isGuest: isGuest
                     }
                     if (id)
                         dataToSend['id'] = id
@@ -355,19 +283,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
-    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
-        try {
-            if (payload.cms.create || payload.cms.update)
-                this.createUserOnCms(payload)
-            if (payload.sdm.create || payload.sdm.update)
-                this.createUserOnSdm(payload)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
-            return Promise.reject(error)
-        }
-    }
-
+    /**
+     * @description Create user on SDM
+     * @param payload 
+     */
     async createUserOnSdm(payload) {
         try {
             const payloadForSdm = {
@@ -379,7 +298,7 @@ export class UserEntity extends BaseEntity {
                 key: "1",// payload.aerospikeId,
                 update: true,
             }
-            await Aerospike.put(putArg)
+            // await Aerospike.put(putArg)
             return res
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", error, false)
@@ -387,6 +306,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Create user on CMS
+     * @param payload 
+     */
     async createUserOnCms(payload) {
         try {
             const payloadForCms = {
@@ -410,7 +333,7 @@ export class UserEntity extends BaseEntity {
                 key: payload.aerospikeId,
                 update: true,
             }
-            await Aerospike.put(putArg)
+            // await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", error, false)
@@ -418,6 +341,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Get user info from CMS
+     * @param payload 
+     */
     async checkUserOnCms(payload: IUserRequest.ICheckUserOnCms): Promise<any> {
         try {
             return {}
@@ -427,6 +354,10 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    /**
+     * @description Get user info from SDM
+     * @param payload 
+     */
     async checkUserOnSdm(payload: IUserRequest.ICheckUserOnSdm): Promise<any> {
         try {
             return {}

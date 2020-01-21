@@ -13,7 +13,7 @@ export class MenuEntity extends BaseEntity {
     /**
      * make it dynamic for menu id and sub menu Id
      */
-    async fetchMenuFromSDM(payload: ICmsMenuRequest.ICmsMenu) {
+    async fetchMenuFromSDM(payload) {
         try {
 
         } catch (err) {

@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import * as ENTITY from '../../entity'
+import { menuController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -21,7 +21,7 @@ server.addService(menuProto.MenuService.service, {
     fetchMenu: async (call: IMenuGrpcRequest.IFetchMenu, callback) => {
         try {
             consolelog(process.cwd(), "grpcFetchMenu", JSON.stringify(call.request), true)
-            let res: IMenuGrpcRequest.IFetchMenuRes = await ENTITY.MenuE.grpcFetchMenu(call.request)
+            let res: IMenuGrpcRequest.IFetchMenuRes = await menuController.grpcFetchMenu(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchMenu-server", error, false)
@@ -31,7 +31,8 @@ server.addService(menuProto.MenuService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res = await ENTITY.MenuE.syncFromKafka(call.request)
+
+            let res = await menuController.syncFromKafka(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)

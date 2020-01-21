@@ -15,13 +15,13 @@ declare namespace ICommonRequest {
         deviceid: string,
         devicetype: string,
         tokenType: string,
-        id?: string,
+        id: string,
+        isGuest: number
         userData: IUserRequest.IUserData,
     }
 
     interface IPagination {
         page?: number,
-        // skip?: number
     }
 
     interface ICordinatesReq {
@@ -34,13 +34,19 @@ declare namespace ICommonRequest {
         lng?: number
     }
 
-    interface IId {
-        id: string
-    }
     interface IError {
         statusCode: number,
         httpCode: number,
         type: string,
         message: string
+    }
+
+    interface IReqPromiseOptions {
+        method: string,
+        url: string,
+        body?: true
+        form?: boolean,
+        qs?: boolean,
+        formData?: boolean
     }
 }

@@ -49,7 +49,19 @@ spec:
         backend:
           serviceName: location-service
           servicePort: 4007
+      - path: /notification-service/(.*)
+        backend:
+          serviceName: notification-service
+          servicePort: 4008
+      - path: /payment-service/(.*)
+        backend:
+          serviceName: payment-service
+          servicePort: 4009
+      - path: /promotion-service/(.*)
+        backend:
+          serviceName: promotion-service
+          servicePort: 4010
       - path: /upload-service/(.*)
         backend:
           serviceName: upload-service
-          servicePort: 4010
+          servicePort: 4011

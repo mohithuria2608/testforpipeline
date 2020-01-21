@@ -9,19 +9,19 @@ export class AreaController {
     constructor() { }
 
     /**
-     * @method POST
+     * @method BOOTSTRAP
      * @description : Post bulk area data
      * */
-    async post() {
+    async bootstrapArea() {
         try {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/area.json', 'utf-8');
             let areas = JSON.parse(rawdata);
             for (const area of areas) {
-                ENTITY.AreaE.postArea(area)
+                await ENTITY.AreaE.bootstrapArea(area)
             }
             return {}
         } catch (err) {
-            consolelog(process.cwd(),"post area", err, false)
+            consolelog(process.cwd(),"bootstrapArea", err, false)
             return Promise.reject(err)
         }
     }

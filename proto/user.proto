@@ -3,6 +3,7 @@ import "google/protobuf/any.proto";
 
 service UserService {
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
+    rpc FetchSession (IFetchSessionReq) returns (ISession) {}
     rpc FetchUser (IFetchUserReq) returns (IUserData) {}
     rpc FetchAddress (IFetchAddressReq) returns (IFetchAddressRes) {}
 }
@@ -16,29 +17,59 @@ message IKafkaReq {
 }
 
 message IAerospike {
-    required bool create = 1;
-    required bool update = 2;
-    required string argv = 3;
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
 }
 
 message ICms {
-    required bool create = 1;
-    required bool update = 2;
-    required string argv = 3;
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
 }
 
 message ISdm {
-    required bool create = 1;
-    required bool update = 2;
-    required string argv = 3;
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
 }
 
 message IKafkaRes {
     required string data = 1;
 }
 
+message IFetchSessionReq {
+    required string userId = 1;
+    required string deviceid = 2;
+}
+
 message IFetchUserReq {
     required string userId = 1;
+}
+
+message ISession {
+    required string id = 1;
+    required int32 otp = 2;
+    required int32 otpExpAt = 3;
+    required string userId = 4;
+    required int32 isGuest = 5;
+    required int32 otpVerified = 6;
+    required int32 isLogin = 7;
+    required int32 createdAt = 8;
+    required string deviceid = 9;
+    required string language = 10;
+    required string country = 11;
+    required string appversion = 12;
+    required string devicemodel = 13;
+    required string devicetype = 14;
+    required string osversion = 15;
+    required int32 updatedAt = 16;
 }
 
 message IUserData {
@@ -51,11 +82,11 @@ message IUserData {
     required string phnNo = 7;
     required bool phnVerified = 8;
     required string email = 9;
-    required bool emailVerified = 10;
     required int32 profileStep = 11;
     required string socialKey = 12;
     required string medium = 13;
     required int32 createdAt = 14;
+    required int32 changePhnNo = 15;
 }
 
 message IFetchAddressReq {

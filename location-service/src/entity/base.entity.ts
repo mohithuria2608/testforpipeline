@@ -1,9 +1,9 @@
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 export class BaseEntity {
-    protected set: SetNames;
+    public set: SetNames;
     constructor(set?) {
         this.set = set
     }

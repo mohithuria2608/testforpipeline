@@ -3,10 +3,9 @@ import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 export class AddressEntity extends BaseEntity {
-    private uuidv1 = require('uuid/v1');
     constructor() {
         super('address')
     }
@@ -23,7 +22,7 @@ export class AddressEntity extends BaseEntity {
         flatNum: Joi.string(),
         tag: Joi.string().valid(
             Constant.DATABASE.TYPE.TAG.HOME,
-            Constant.DATABASE.TYPE.TAG.OFFICE,
+            Constant.DATABASE.TYPE.TAG.WORK,
             Constant.DATABASE.TYPE.TAG.HOTEL,
             Constant.DATABASE.TYPE.TAG.OTHER),
         addressType: Joi.string().valid(
@@ -87,11 +86,12 @@ export class AddressEntity extends BaseEntity {
     }
 
     /**
-    * @method INTERNAL
-    * */
-    async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore): Promise<IUserRequest.IUserData> {
+     * @description Add address on aerospike
+     * @method INTERNAL
+     * */
+    async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            let id = this.uuidv1();
+            const id = this.ObjectId().toString();
             let deliveryAddress = {
                 id: id,
                 lat: addressData.lat,
@@ -116,27 +116,34 @@ export class AddressEntity extends BaseEntity {
                 append: true
             }
             await Aerospike.listOperations(listAppendArg)
-            let listDeliveryAddress = await this.getAddress({ userId: userData.id, bin: bin })
+            // let listDeliveryAddress = await this.getAddress({ userId: userData.id, bin: bin })
 
-            if (listDeliveryAddress && listDeliveryAddress.length > 6) {
-                let listRemoveByIndexArg: IAerospike.ListOperation = {
-                    order: true,
-                    set: this.set,
-                    key: userData.id,
-                    bin: bin,
-                    remByIndex: true,
-                    index: 0
-                }
-                await Aerospike.listOperations(listRemoveByIndexArg)
-                listDeliveryAddress = listDeliveryAddress.slice(1)
-            }
-            return listDeliveryAddress
+            // if (listDeliveryAddress && listDeliveryAddress.length > 6) {
+            //     let listRemoveByIndexArg: IAerospike.ListOperation = {
+            //         order: true,
+            //         set: this.set,
+            //         key: userData.id,
+            //         bin: bin,
+            //         remByIndex: true,
+            //         index: 0
+            //     }
+            //     await Aerospike.listOperations(listRemoveByIndexArg)
+            //     listDeliveryAddress = listDeliveryAddress.slice(1)
+            // }
+            return deliveryAddress
         } catch (err) {
             consolelog(process.cwd(), "addAddress", err, false)
             return Promise.reject(err)
         }
     }
 
+    /**
+     * @description Update address on aerospike
+     * @param addressUpdate 
+     * @param bin 
+     * @param userData 
+     * @param isDelete 
+     */
     async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
             let listaddress = await this.getAddress({ userId: userData.id, bin: bin })

@@ -1,9 +1,14 @@
 syntax = "proto3";
 
 service NotificationService {
-    rpc Func1 (IFunc1Req) returns (IFunc1Res) {}
+    rpc Sms (ISmsReq) returns (ISmsRes) {}
 }
 
-message IFunc1Req { }
+message ISmsReq {
+    required string message = 1;
+    required string destination = 2;
+    required string type = 3;
+    required int32 dlr = 4;
+}
 
-message IFunc1Res { }
+message ISmsRes { }

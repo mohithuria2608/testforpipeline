@@ -1,6 +1,7 @@
 declare namespace IOrderRequest {
 
-    interface IOrderModel {
+    interface IOrderData {
+        _id: string,
         cartId: string,
         cmsCartRef: number,
         sdmOrderRef: number,
@@ -13,11 +14,7 @@ declare namespace IOrderRequest {
         items: any,
         address: IAddress,
         store: IStore,
-        subTotal: number,
-        total: number,
-        tax: ITax[]
-        shipping: IShipping[],
-        coupon: ICoupon[],
+        amount: IAmount[],
         isPreviousOrder: boolean,
     }
 
@@ -36,6 +33,14 @@ declare namespace IOrderRequest {
         lng: number,
     }
 
+    interface IAmount {
+        type: string
+        name: string
+        code: string
+        amount: number,
+        sequence: number,
+    }
+
     interface IStore {
         sdmStoreRef: number,
         lat: number,
@@ -43,20 +48,6 @@ declare namespace IOrderRequest {
         address: string
     }
 
-    interface ITax {
-        name: string,
-        value: number,
-    }
-
-    interface IShipping {
-        name: string,
-        code: string,
-        value: number,
-    }
-
-    interface ICoupon {
-
-    }
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         addressId: string,
         cartId: string,
@@ -66,6 +57,20 @@ declare namespace IOrderRequest {
     }
 
     interface ITrackOrder {
+        cCode: string,
+        phnNo: string,
         orderId: string,
+    }
+
+
+    interface ICreateSdmOrder {
+
+    }
+
+    interface IGetSdmOrder {
+        cartId: string,
+        sdmOrderRef: number,
+        status?: string,
+        timeInterval: number
     }
 }

@@ -1,3 +1,7 @@
+import { Aerospike } from "../aerospike";
+
 export let bootstrap = async function (server) {
-    return
+    await Aerospike.init();
+
+    return {}
 }

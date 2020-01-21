@@ -4,6 +4,7 @@ import * as Jwt from 'jsonwebtoken';
 import * as Constant from '../constant';
 const cert = config.get('jwtSecret')
 import { consolelog } from '../utils'
+import * as ENTITY from '../entity'
 
 export class TokenManager {
 
@@ -47,11 +48,11 @@ export class TokenManager {
                 }
             }
             const token = await Jwt.sign(tokenData, cert, { algorithm: 'HS256' });
-            consolelog(process.cwd(),'token', token, false)
+            consolelog(process.cwd(), 'token', token, false)
 
             return token
         } catch (error) {
-            consolelog(process.cwd(),'setToken', error, false)
+            consolelog(process.cwd(), 'setToken', error, false)
             return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
         }
     };
@@ -59,16 +60,27 @@ export class TokenManager {
     async  verifyToken(token: string) {
         try {
             const tokenData: IAuthGrpcRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
-            consolelog(process.cwd(),'tokenManager : verifyToken', [JSON.stringify(token), JSON.stringify(tokenData)], true)
+            consolelog(process.cwd(), "tokenData", JSON.stringify(tokenData), true)
+
+            if (tokenData && tokenData.id && tokenData.deviceid) {
+                let getSession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
+                if (getSession && getSession.id) {
+                    if (getSession.isLogin == 0)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {
-                        consolelog(process.cwd(),"tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,
                             devicetype: tokenData.devicetype,
                             id: tokenData.id,
+                            isGuest: tokenData.isGuest
                         };
                         return tokenVerifiedData
                     } else
@@ -76,12 +88,13 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
                     if (tokenData.id) {
-                        consolelog(process.cwd(),"tokenData.id", tokenData.id, true)
+                        consolelog(process.cwd(), "tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,
                             devicetype: tokenData.devicetype,
                             id: tokenData.id,
+                            isGuest: tokenData.isGuest
                         };
                         return tokenVerifiedData
                     } else
@@ -89,12 +102,13 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
-                        consolelog(process.cwd(),"tokenData.id", tokenData.id, true)
+                        consolelog(process.cwd(), "tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,
                             devicetype: tokenData.devicetype,
                             id: tokenData.id,
+                            isGuest: tokenData.isGuest
                         };
                         return tokenVerifiedData
                     } else
@@ -107,7 +121,8 @@ export class TokenManager {
                         devicetype: tokenData.devicetype,
                         id: tokenData.id ? tokenData.id : undefined,
                         // userData: {},
-                        authCred: tokenData.authCred
+                        authCred: tokenData.authCred,
+                        isGuest: tokenData.isGuest
                     };
                     return tokenVerifiedData
                 }

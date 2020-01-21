@@ -48,6 +48,10 @@
         "upload": {
             "url": "http://localhost",
             "port": 4011
+        },
+        "log": {
+            "url": "http://localhost",
+            "port": 4012
         }
     },
     "grpc": {
@@ -85,33 +89,23 @@
         },
         "notification": {
             "server": "0.0.0.0:50059",
-            "client": "127.0.0.1:50059"
+            "client": "20.46.149.0:50059"
         },
         "payment": {
             "server": "0.0.0.0:50060",
-            "client": "20.46.147.215:50060"
+            "client": "20.46.150.97:50060"
         },
         "promotion": {
             "server": "localhost:50061",
-            "client": "127.0.0.1:50061"
+            "client": "20.46.151.99:50061"
         },
         "upload": {
             "server": "0.0.0.0:50062",
             "client": "20.46.147.215:50062"
-        }
-    },
-    "kafka": {
-        "url": "localhost:9093"
-    },
-    "aerospike": {
-        "hosts": "40.123.218.180:3000",
-        "username": "aerospikeusr",
-        "password": "GM2nGDQkN5yMdPZs"
-    },
-    "cms": {
-        "auth": {
-            "username": "shashi.bhushan@appinventiv.com",
-            "password": "shashi@123"
+        },
+        "log": {
+            "server": "0.0.0.0:50063",
+            "client": "127.0.0.1:50063"
         }
     },
     "directory": {
@@ -160,6 +154,10 @@
                 "promotion": {
                     "server": "/../../../proto/promotion.proto",
                     "client": "/../../../../proto/promotion.proto"
+                },
+                "log": {
+                    "server": "/../../../proto/log.proto",
+                    "client": "/../../../../proto/log.proto"
                 }
             }
         }
@@ -168,5 +166,33 @@
         "product": "https://bloobstorage.blob.core.windows.net/americana/products/"
     },
     "cryptoSecret": "d6F3Efeq",
-    "jwtSecret": "cgfhfj"
+    "jwtSecret": "cgfhfj",
+    "sms": {
+        "host": "smpp.rmlconnect.net",
+        "port": "2345",
+        "userName": "Adigital",
+        "password": "vSqKeZdc",
+        "endPoint": "bulksms/bulksms",
+        "source": ""
+    },
+    "kafka": {
+        "url": "localhost:9093"
+    },
+    "aerospike": {
+        "hosts": "40.123.218.180:3000",
+        "username": "aerospikeusr",
+        "password": "GM2nGDQkN5yMdPZs"
+    },
+    "mongo": {
+        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",
+        "hosts": "54.176.239.44:2798",
+        "username": "americana_dbusr",
+        "password": "96fMUpk2PGzbu8Hn"
+    },
+    "cms": {
+        "auth": {
+            "username": "shashi.bhushan@appinventiv.com",
+            "password": "shashi@123"
+        }
+    }
 }

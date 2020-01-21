@@ -2,7 +2,7 @@
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
-import { Aerospike } from '../databases/aerospike'
+import { Aerospike } from '../aerospike'
 
 export class CityEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -25,7 +25,7 @@ export class CityEntity extends BaseEntity {
         name_ar: Joi.string().trim().required()
     });
 
-    async postCity(data) {
+    async bootstrapCity(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
@@ -34,9 +34,9 @@ export class CityEntity extends BaseEntity {
                 create: true,
             }
             await Aerospike.put(putArg)
+            return {}
         } catch (error) {
-            consolelog(process.cwd(),"postCity", error, false)
-            return Promise.reject(error)
+            return {}
         }
     }
 }

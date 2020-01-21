@@ -6,10 +6,11 @@ import { consolelog } from "../../../utils"
 export class MenuServiceValidator {
     constructor() {
     }
-    async  fetchMenu(data: IMenuGrpcRequest.IFetchMenuData) {
+    async  fetchMenu(data: IMenuGrpcRequest.IFetchMenuReq) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
+                    menuId: Joi.number(),
                     country: Joi.string().required(),
                     isDefault: Joi.boolean().valid(true, false)
                 });

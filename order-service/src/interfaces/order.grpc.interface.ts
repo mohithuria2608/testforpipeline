@@ -20,4 +20,8 @@ declare namespace IOrderGrpcRequest {
     }
 
     interface IUpdateDefaultCartTTLRes { }
+
+    interface IGetCartReq {
+        request: ICartRequest.IGetCart
+    }
 }

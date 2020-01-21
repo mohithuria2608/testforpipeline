@@ -11,7 +11,10 @@ pipeline {
         Sync_image="americana.azurecr.io/sync"+ ":Sync-service_${env.BUILD_NUMBER}"
         Location_image="americana.azurecr.io/location"+ ":Location-service_${env.BUILD_NUMBER}"
         Upload_image="americana.azurecr.io/upload"+ ":Upload-service_${env.BUILD_NUMBER}"
-        
+        Promotion_image="americana.azurecr.io/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}"
+        Payment_image="americana.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
+        Notification_image="americana.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
+
     }
     agent any
 
@@ -52,6 +55,9 @@ pipeline {
                     SyncImage=docker.build(registry + "/sync"+ ":Sync-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/sync-service/Dockerfile .")
                     LocationImage=docker.build(registry + "/location"+ ":Location-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/location-service/Dockerfile .")
                     UploadImage=docker.build(registry + "/upload"+ ":Upload-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/upload-service/Dockerfile .")
+                    PromotionImage=docker.build(registry + "/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/promotion-service/Dockerfile .")
+                    PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile .")
+                    NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile .")
 
                 }
             }
@@ -69,6 +75,9 @@ pipeline {
                         SyncImage.push()
                         LocationImage.push()
                         UploadImage.push()
+                        PromotionImage.push()
+                        PaymentImage.push()
+                        NotificationImage.push()
                     }
                 }
             }

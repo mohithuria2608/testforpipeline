@@ -12,18 +12,6 @@ const protobuf = require("protobufjs");
 
 export default (router: Router) => {
     router
-        .post('/',
-            async (ctx) => {
-                try {
-                    let res = await menuController.postMenu();
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
-                }
-                catch (error) {
-                    throw error
-                }
-            })
         .get('/',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
@@ -48,28 +36,6 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .get('/upsell',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
-            validate({
-                headers: JOI.COMMON_HEADERS
-            }),
-            async (ctx) => {
-                try {
-                    let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IMenuRequest.IFetchUpsell = ctx.request.query;
-                    let res = await menuController.fetchUpsell(headers, payload);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
-                }
-                catch (error) {
-                    throw error
-                }
-            })
-
         .get('/fs',
             async (ctx) => {
                 try {
@@ -85,7 +51,7 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     var myMessage = protobuf.Writer.create()
-                        .string(JSON.stringify(await ENTITY.MenuE.getMenuById(5)))
+                        .string(JSON.stringify(await ENTITY.MenuE.getMenu({ menuId: 5 })))
                         .finish();
                     ctx.body = myMessage
                 }

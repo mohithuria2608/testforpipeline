@@ -1,3 +1,6 @@
 declare namespace ICmsPromotionRequest {
-    interface ICmsPromotion {}
+    interface ICmsPromotion {
+        action: string
+        data: any
+    }
 }

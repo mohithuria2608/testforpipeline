@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client'
 
 export class CmsUserController {
 
@@ -12,14 +13,18 @@ export class CmsUserController {
      * */
     async postUser(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let change = {
+            let userChange = {
                 set: ENTITY.UserE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
                 }
             }
-            ENTITY.UserE.syncToKafka(change)
+            if (payload.action == "update") {
+                userChange['as']['update'] = true
+                delete userChange['as']['create']
+            }
+            kafkaService.kafkaSync(userChange)
             return {}
         } catch (err) {
             consolelog(process.cwd(), "postUser", err, false)

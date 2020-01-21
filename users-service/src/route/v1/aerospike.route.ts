@@ -1,6 +1,6 @@
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { Aerospike } from '../../databases/aerospike'
+import { Aerospike } from '../../aerospike'
 import { validate } from '../../middlewares'
 
 
