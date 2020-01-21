@@ -14,9 +14,9 @@ export class PaymentController {
     public async getPaymentMethods(payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.getPaymentMethods(payload.storeCode);
-        }catch(err) {
-            consolelog(process.cwd(), "getPaymentMethods", err, false)
-            return Promise.reject(err)
+        }catch(error) {
+            consolelog(process.cwd(), "getPaymentMethods", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -32,9 +32,9 @@ export class PaymentController {
     public async initiatePayment(payload: IPaymentGrpcRequest.IInitiatePayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.initiatePayment(payload);
-        }catch(err) {
-            consolelog(process.cwd(), "initiatePayment", err, false)
-            return Promise.reject(err)
+        }catch(error) {
+            consolelog(process.cwd(), "initiatePayment", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -47,9 +47,9 @@ export class PaymentController {
     public async getPaymentStatus(payload: IPaymentGrpcRequest.IGetPaymentStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.getPaymentStatus(payload);
-        }catch(err) {
-            consolelog(process.cwd(), "getPaymentStatus", err, false)
-            return Promise.reject(err)
+        }catch(error) {
+            consolelog(process.cwd(), "getPaymentStatus", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -63,9 +63,9 @@ export class PaymentController {
     public async capturePayment(payload: IPaymentGrpcRequest.ICapturePayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.capturePayment(payload);
-        }catch(err) {
-            consolelog(process.cwd(), "capturePayment", err, false)
-            return Promise.reject(err)
+        }catch(error) {
+            consolelog(process.cwd(), "capturePayment", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -77,9 +77,9 @@ export class PaymentController {
     public async reversePayment(payload: IPaymentGrpcRequest.IReversePayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.reversePayment(payload);
-        }catch(err) {
-            consolelog(process.cwd(), "reversePayment", err, false)
-            return Promise.reject(err)
+        }catch(error) {
+            consolelog(process.cwd(), "reversePayment", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -93,9 +93,9 @@ export class PaymentController {
     public async refundPayment(payload: IPaymentGrpcRequest.IRefundPayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.refundPayment(payload);
-        }catch(err) {
-            consolelog(process.cwd(), "refundPayment", err, false)
-            return Promise.reject(err)
+        }catch(error) {
+            consolelog(process.cwd(), "refundPayment", error, false)
+            return Promise.reject(error)
         }
     }
    

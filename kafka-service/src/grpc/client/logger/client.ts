@@ -31,13 +31,13 @@ export class LogService {
         return new Promise(async (resolve, reject) => {
             try {
                 await logServiceValidator.syncValidator(payload)
-                this.logClient.sync(payload, (err, res) => {
-                    if (!err) {
+                this.logClient.sync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully synced log on mongo", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing log on mongo", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in syncing log on mongo", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

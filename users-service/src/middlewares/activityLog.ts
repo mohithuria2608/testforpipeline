@@ -1,3 +1,4 @@
+import * as config from "config"
 import { Middleware, Context } from 'koa'
 import * as Constant from '../constant';
 import { consolelog } from '../utils';
@@ -9,7 +10,7 @@ export default (opts?): Middleware => {
         let startTime = new Date().getTime();
         ctx.res.on('finish', () => {
             executionTime = new Date().getTime() - startTime;
-            let data = {
+            let data : ICommonRequest.IActivityLogger = {
                 type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
                 info: {
                     'request': {
@@ -28,6 +29,10 @@ export default (opts?): Middleware => {
                     'user': ctx.state.user ? ctx.state.user : {}
                 },
                 description: "",
+                options: {
+                    env: Constant.SERVER.ENV.production,
+                    
+                },
                 createdAt: new Date().getTime(),
             }
             let dataToSave = {

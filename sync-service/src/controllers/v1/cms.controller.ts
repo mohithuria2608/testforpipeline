@@ -21,9 +21,9 @@ export class CmsController {
                 { username: payload.username, password: payload.password }
             )
             return { accessToken: tokens.accessToken }
-        } catch (err) {
-            consolelog(process.cwd(), "auth", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "auth", error, false)
+            return Promise.reject(error)
         }
     }
 }

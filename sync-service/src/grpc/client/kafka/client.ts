@@ -27,13 +27,13 @@ export class KafkaService {
         return new Promise(async (resolve, reject) => {
             try {
                 await kafkaServiceValidator.kafkaValidator(payload)
-                this.kafkaClient.kafkaSync(payload, (err, res) => {
-                    if (!err) {
+                this.kafkaClient.kafkaSync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully produced config data on kafka for syncing", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in producing config data on kafka  for syncing", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in producing config data on kafka  for syncing", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

@@ -310,9 +310,9 @@ export let generateSessionId = function (userId: string, deviceid: string) {
     return userId + "_" + deviceid;
 };
 
-export let validatorErr = function (err) {
+export let validatorErr = function (error) {
     return {
         name: "ValidationError",
-        message: err
+        message: error
     }
 }

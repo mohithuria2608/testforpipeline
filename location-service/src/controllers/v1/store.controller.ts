@@ -20,9 +20,9 @@ export class StoreController {
                 await ENTITY.StoreE.bootstrapStore(store)
             }
             return stores
-        } catch (err) {
-            consolelog(process.cwd(), "bootstrapStore", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapStore", error, false)
+            return Promise.reject(error)
         }
     }
 

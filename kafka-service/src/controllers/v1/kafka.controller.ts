@@ -175,9 +175,9 @@ export class KafkaController {
                 partition: 0,
             });
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "produceToFailureTopic", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "produceToFailureTopic", error, false)
+            return Promise.reject(error)
         }
 
     }

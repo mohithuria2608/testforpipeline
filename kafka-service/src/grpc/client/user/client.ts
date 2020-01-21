@@ -27,13 +27,13 @@ export class UserService {
         return new Promise(async (resolve, reject) => {
             try {
                 await userServiceValidator.syncValidator(payload)
-                this.userClient.sync(payload, (err, res) => {
-                    if (!err) {
+                this.userClient.sync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully synced user on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing user on cms", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in syncing user on cms", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

@@ -51,9 +51,9 @@ export const validate = function (validationObj) {
             }
 
             return next()
-        } catch (err) {
+        } catch (error) {
             // If any of the objects fails validation, send an HTTP 400 response.
-            return Promise.reject(validatorErr(err))
+            return Promise.reject(validatorErr(error))
         }
     }
 }

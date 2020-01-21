@@ -152,10 +152,10 @@ export const KAFKA = {
 
 export const SERVER = {
     ENV: {
-        DEV: "development",
-        QA: "testing",
-        STAG: "staging",
-        PROD: "production"
+        development: 0,
+        testing: 1,
+        staging: 2,
+        production: 3
     },
     APP_INFO: {
         APP_NAME: "App",
@@ -226,7 +226,8 @@ export const DATABASE = {
         },
 
         ACTIVITY_LOG: {
-            REQUEST: "REQUEST"
+            REQUEST: "REQUEST",
+            ERROR: "ERROR"
         },
 
         PROFILE_STEP: {

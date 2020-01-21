@@ -19,9 +19,9 @@ export class MongoClass {
                 consolelog(process.cwd(), 'Database connection closed.', error, false)
 
             })
-        connect(self.mongoUrl, { useCreateIndex: true, useNewUrlParser: true }, function (err) {
-            if (err) {
-                return Promise.reject(err)
+        connect(self.mongoUrl, { useCreateIndex: true, useNewUrlParser: true }, function (error) {
+            if (error) {
+                return Promise.reject(error)
             }
             console.info(displayColors ? '\x1b[32m%s\x1b[0m' : '%s', `Connected to ${self.mongoUrl}`)
         })

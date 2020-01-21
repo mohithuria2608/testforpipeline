@@ -16,7 +16,7 @@ export const start = (async () => {
 
     await bootstrap(server)
 
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 })()

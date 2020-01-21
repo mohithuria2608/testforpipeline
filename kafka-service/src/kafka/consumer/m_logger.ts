@@ -21,9 +21,9 @@ class FailConsumer extends BaseConsumer {
         try {
             let res = await logService.sync(message)
             return res
-        } catch (err) {
-            consolelog(process.cwd(), `logMessages`, err, false);
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), `logMessages`, error, false);
+            return Promise.reject(error)
         }
     }
 }

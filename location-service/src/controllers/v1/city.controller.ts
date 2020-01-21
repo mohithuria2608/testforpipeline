@@ -20,9 +20,9 @@ export class CityController {
                 await ENTITY.CityE.bootstrapCity(city)
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(),"bootstrapCity", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(),"bootstrapCity", error, false)
+            return Promise.reject(error)
         }
     }
 }

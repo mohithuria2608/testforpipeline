@@ -27,13 +27,13 @@ export class OrderService {
         return new Promise(async (resolve, reject) => {
             try {
                 await orderServiceValidator.getCartValidator(payload)
-                this.orderClient.getCart(payload, (err, res) => {
-                    if (!err) {
+                this.orderClient.getCart(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully received cart", JSON.stringify(res.cart), false)
                         resolve(res.cart)
                     } else {
-                        consolelog(process.cwd(), "Error in receiveing cart", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in receiveing cart", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

@@ -27,9 +27,9 @@ export class CmsMenuController {
             }
             kafkaService.kafkaSync(menuChange)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "postMenu", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "postMenu", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -54,9 +54,9 @@ export class CmsMenuController {
             }
             kafkaService.kafkaSync(upsellChange)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "syncUpsellProducts", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "syncUpsellProducts", error, false)
+            return Promise.reject(error)
         }
     }
 }

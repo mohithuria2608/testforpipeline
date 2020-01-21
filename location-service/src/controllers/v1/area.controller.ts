@@ -20,9 +20,9 @@ export class AreaController {
                 await ENTITY.AreaE.bootstrapArea(area)
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(),"bootstrapArea", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(),"bootstrapArea", error, false)
+            return Promise.reject(error)
         }
     }
 }

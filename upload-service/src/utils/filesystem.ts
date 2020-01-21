@@ -6,8 +6,8 @@ import * as fs from "fs";
 */
 export const readFile = async function (path: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        fs.readFile(path, (err, data) => {
-            if (err) reject(err);
+        fs.readFile(path, (error, data) => {
+            if (error) reject(error);
             else resolve(data);
         });
     });
@@ -19,8 +19,8 @@ export const readFile = async function (path: string): Promise<any> {
 */
 export const deleteFile = async function (path: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        fs.unlink(path, (err) => {
-            if (err) reject(err);
+        fs.unlink(path, (error) => {
+            if (error) reject(error);
             else resolve(true);
         });
     });

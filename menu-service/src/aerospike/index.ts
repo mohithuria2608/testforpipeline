@@ -61,9 +61,9 @@ class AerospikeClass {
                             this.bootstrapIndex(ENTITY.UpsellE.sindex)
                         resolve({})
                     }
-                } catch (err) {
-                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", err, false)
-                    reject(err)
+                } catch (error) {
+                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", error, false)
+                    reject(error)
                 }
             } else reject(Error('Client already initialized'))
         })

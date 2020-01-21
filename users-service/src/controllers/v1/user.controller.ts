@@ -144,9 +144,9 @@ export class UserController {
                 }
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "loginSendOtp", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "loginSendOtp", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -159,7 +159,7 @@ export class UserController {
     * */
     async verifyOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp) {
         try {
-            let sessionTime = Math.ceil((new Date().getTime())/1000)
+            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let deleteUserId = ""
             let queryArg: IAerospike.Query = {
                 udf: {
@@ -289,9 +289,9 @@ export class UserController {
             )
             user[0]['isGuest'] = payload.isGuest
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user[0], headers) }
-        } catch (err) {
-            consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(err), false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(error), false)
+            return Promise.reject(error)
         }
     }
 
@@ -302,7 +302,7 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
-            let sessionTime = Math.ceil((new Date().getTime())/1000)
+            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -390,9 +390,9 @@ export class UserController {
                 sessionTime
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
-        } catch (err) {
-            consolelog(process.cwd(), "socialAuthValidate", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "socialAuthValidate", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -407,8 +407,9 @@ export class UserController {
     * */
     async createProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.ICreateProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             // let sessionTime = Math.ceil((new Date().getTime())/1000)
-            if (auth.userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
+            if (userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
             if (payload.socialKey && payload.medium) {
                 let queryArg: IAerospike.Query = {
@@ -427,7 +428,7 @@ export class UserController {
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 if (checkUser && checkUser.length > 0) {
-                    auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
+                    userData = await ENTITY.UserE.getUser({ userId: auth.id })
                     let userchangePayload = {
                         name: payload.name,
                         email: payload.email,
@@ -438,7 +439,7 @@ export class UserController {
                         otp: Constant.SERVER.BY_PASS_OTP,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
-                        deleteUserId: auth.userData.id,
+                        deleteUserId: userData.id,
                         isGuest: 0,
                     }
                     await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
@@ -446,8 +447,8 @@ export class UserController {
                         changePhnNo: 1
                     }
                     await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
-                    auth.userData['phnVerified'] = 0
-                    return formatUserData(auth.userData, headers)
+                    userData['phnVerified'] = 0
+                    return formatUserData(userData, headers)
                 } else {
                     let userUpdate = {
                         name: payload.name,
@@ -457,7 +458,7 @@ export class UserController {
                         phnVerified: 0,
                         profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
                     }
-                    let user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
+                    let user = await ENTITY.UserE.updateUser(userData.id, userUpdate)
                     let session = {
                         isGuest: 0,
                         otp: Constant.SERVER.BY_PASS_OTP,
@@ -476,7 +477,7 @@ export class UserController {
                     email: payload.email,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
                 }
-                let user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
+                let user = await ENTITY.UserE.updateUser(userData.id, userUpdate)
                 return formatUserData(user, headers)
             }
         } catch (error) {
@@ -494,7 +495,7 @@ export class UserController {
     * */
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
-            auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
+            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let dataToUpdate = {}
             if (payload.name)
                 dataToUpdate['name'] = payload.name
@@ -535,7 +536,7 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0
                     }
-                    await ENTITY.UserchangeE.createUserchange(userchangePayload, auth.userData)
+                    await ENTITY.UserchangeE.createUserchange(userchangePayload, userData)
                     dataToUpdate['changePhnNo'] = 1
                 }
             }

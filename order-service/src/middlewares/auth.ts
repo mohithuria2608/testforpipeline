@@ -7,7 +7,7 @@ import { consolelog } from '../utils'
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
-            consolelog(process.cwd(),'authorization', ctx.header.authorization, true)
+            consolelog(process.cwd(), 'authorization', ctx.header.authorization, true)
             let settings = {
                 tokenType: "Bearer"
             }
@@ -22,12 +22,14 @@ export default (opts?): Middleware => {
             }
 
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
-            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
-            }
-            else {
-                ctx.state.user = tokenData
-            }
+
+            if (!tokenData || !tokenData.deviceid || !tokenData.devicetype || !tokenData.tokenType)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
+            if (tokenData.deviceid != ctx.header.deviceid)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
+            ctx.state.user = tokenData
         } catch (error) {
             return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
         }

@@ -17,9 +17,9 @@ export class WebhookNoonpayController {
     async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "processPayment", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "processPayment", error, false)
+            return Promise.reject(error)
         }
     }
 }

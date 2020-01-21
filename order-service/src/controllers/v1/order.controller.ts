@@ -52,8 +52,8 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            auth.userData = await userService.fetchUser({ userId: auth.id })
-            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.userData.id, addressId: payload.addressId, bin: "delivery" })
+            let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: userData.id, addressId: payload.addressId, bin: "delivery" })
             if (!getAddress.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
@@ -82,9 +82,9 @@ export class OrderController {
 
             ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO })
             return { cartId: newCartId }
-        } catch (err) {
-            consolelog(process.cwd(), "postOrder", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "postOrder", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -95,9 +95,9 @@ export class OrderController {
     async orderHistory(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderHistory, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.OrderE.getOrderHistory(payload, auth)
-        } catch (err) {
-            consolelog(process.cwd(), "orderHistory", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "orderHistory", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -132,9 +132,9 @@ export class OrderController {
                     "updatedAt": 1578558475844,
                 }
             }
-        } catch (err) {
-            consolelog(process.cwd(), "trackOrder", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "trackOrder", error, false)
+            return Promise.reject(error)
         }
     }
 }

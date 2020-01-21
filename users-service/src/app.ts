@@ -28,7 +28,7 @@ export const start = (async () => {
     // await SDM.UserSDME.getCustomerByMobile(1111111)
     // await UserSDME.getCustomersByPhone({ phoneNo: 1111111 })
     // await SDM.UserSDME.getsdmUserRef(1111111, "abc@gmail.com")
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 })()

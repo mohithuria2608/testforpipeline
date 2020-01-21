@@ -19,9 +19,9 @@ export class SmsCLass {
         let command = `curl -X POST ${url}`
         consolelog(process.cwd(), 'singleSms command:', command, true)
 
-        exec(command, function (error, stdout, stderr) {
+        exec(command, function (error, stdout, stderror) {
             consolelog(process.cwd(), 'singleSms stdout:', stdout, true)
-            consolelog(process.cwd(), 'singleSms stderr:', stderr, false)
+            consolelog(process.cwd(), 'singleSms stderr:', stderror, false)
             if (error !== null) {
                 consolelog(process.cwd(), 'singleSms exec:', error, false)
             }

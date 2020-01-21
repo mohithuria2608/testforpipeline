@@ -19,9 +19,9 @@ export class LocationController {
                 return { menuId: store[0].menuId }
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-        } catch (err) {
-            consolelog(process.cwd(), "validateLocation", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "validateLocation", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -74,9 +74,9 @@ export class LocationController {
                 }
             }
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "getPickupList", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "getPickupList", error, false)
+            return Promise.reject(error)
         }
     }
 }

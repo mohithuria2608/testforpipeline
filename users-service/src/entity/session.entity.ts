@@ -186,9 +186,9 @@ export class SessionEntity extends BaseEntity {
             }
             await this.buildSession(headers, sessionUpdate)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "validateOtp", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "validateOtp", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -197,17 +197,17 @@ export class SessionEntity extends BaseEntity {
      * @param {ICommonRequest.IHeaders} headers 
      * @param {IUserRequest.IUserData} userData 
      */
-    async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
+    async removeSession(headers: ICommonRequest.IHeaders, userId: string) {
         try {
             let putArg: IAerospike.Remove = {
-                key: generateSessionId(userData.id, headers.deviceid),
+                key: generateSessionId(userId, headers.deviceid),
                 set: this.set
             }
             await Aerospike.remove(putArg)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeSession", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "removeSession", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -236,9 +236,9 @@ export class SessionEntity extends BaseEntity {
                 })
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeAllSession", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "removeAllSession", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -267,9 +267,9 @@ export class SessionEntity extends BaseEntity {
                 })
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeAllSession", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "removeAllSession", error, false)
+            return Promise.reject(error)
         }
     }
 

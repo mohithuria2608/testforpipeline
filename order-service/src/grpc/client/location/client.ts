@@ -27,13 +27,13 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.fetchStoreValidator(payload)
-                this.locationClient.fetchStore({ storeId: payload.storeId }, (err, res) => {
-                    if (!err) {
+                this.locationClient.fetchStore({ storeId: payload.storeId }, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully fetched store", JSON.stringify(res), false)
                         resolve(res.store)
                     } else {
-                        consolelog(process.cwd(), "Error in  fetching store", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in  fetching store", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {
@@ -46,13 +46,13 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.validateCoordinateValidator(payload)
-                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (err, res) => {
-                    if (!err) {
+                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully verified coordinates", JSON.stringify(res), false)
                         resolve(res.store)
                     } else {
-                        consolelog(process.cwd(), "Error in verifying coordinates", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in verifying coordinates", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

@@ -17,9 +17,9 @@ export class UpsellController {
                 ENTITY.UpsellE.bootstrapUpsell(iterator)
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "bootstrapUpsell", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapUpsell", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -30,9 +30,9 @@ export class UpsellController {
     async fetchUpsellProducts(headers: ICommonRequest.IHeaders, payload: IUpsellRequest.IFetchUpsell) {
         try {
             return await ENTITY.UpsellE.getUpsellProducts(payload)
-        } catch (err) {
-            consolelog(process.cwd(), "fetchMenu", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchMenu", error, false)
+            return Promise.reject(error)
         }
     }
 }

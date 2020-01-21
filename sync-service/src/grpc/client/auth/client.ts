@@ -26,13 +26,13 @@ export class AuthService {
     async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.createTokenValidator(payload)
-            this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype, authCred: payload.authCred }, (err, res) => {
-                if (!err) {
+            this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype, authCred: payload.authCred }, (error, res) => {
+                if (!error) {
                     consolelog(process.cwd(),"successfully created access and refresh token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog(process.cwd(),"Error in creating token", JSON.stringify(err), false)
-                    reject(err)
+                    consolelog(process.cwd(),"Error in creating token", JSON.stringify(error), false)
+                    reject(error)
                 }
             })
         })
@@ -40,13 +40,13 @@ export class AuthService {
     async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
-            this.authClient.verifyToken({ token: payload.token }, (err, res) => {
-                if (!err) {
+            this.authClient.verifyToken({ token: payload.token }, (error, res) => {
+                if (!error) {
                     consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(err), false)
-                    reject(err)
+                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(error), false)
+                    reject(error)
                 }
             })
         })

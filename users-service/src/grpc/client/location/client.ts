@@ -20,20 +20,20 @@ export class LocationService {
     private locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(),'GRPC connection established location-service', config.get("grpc.location.client"), true)
+        console.log(process.cwd(),'GRPC connection established location-service', config.get("grpc.location.client"), true)
     }
 
     async validateCoordinate(payload: IStoreGrpcRequest.IValidateCoordinateData): Promise<IStoreGrpcRequest.IStore[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.validateCoordinateValidator(payload)
-                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (err, res) => {
-                    if (!err) {
+                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(),"successfully verified coordinates", JSON.stringify(res), false)
                         resolve(res.store)
                     } else {
-                        consolelog(process.cwd(),"Error in verifying coordinates", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(),"Error in verifying coordinates", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

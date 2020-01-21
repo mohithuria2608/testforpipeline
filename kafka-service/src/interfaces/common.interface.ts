@@ -40,4 +40,13 @@ declare namespace ICommonRequest {
         type: string,
         message: string
     }
+    interface IActivityLogger {
+        type: string,
+        info: any,
+        description: string,
+        options: {
+            env: number,
+        },
+        createdAt: number
+    }
 }

@@ -18,9 +18,9 @@ export class MenuController {
                 ENTITY.MenuE.postMenu(iterator)
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "bootstrapMenu", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapMenu", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -32,9 +32,9 @@ export class MenuController {
         try {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
             return await ENTITY.MenuE.getMenu({ menuId: menuId })
-        } catch (err) {
-            consolelog(process.cwd(), "fetchMenu", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchMenu", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -48,9 +48,9 @@ export class MenuController {
             let menuId = 5;
             let menu = await ENTITY.MenuE.getMenu({ menuId: menuId })
             return { menu: JSON.stringify(menu) }
-        } catch (err) {
-            consolelog(process.cwd(), "grpcFetchMenu", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "grpcFetchMenu", error, false)
+            return Promise.reject(error)
         }
     }
 

@@ -187,9 +187,9 @@ export class UserEntity extends BaseEntity {
             this.createDefaultCart(dataToSave.cartId, dataToSave.id)
             let user = await this.getUser({ userId: dataToSave.id })
             return user
-        } catch (err) {
-            consolelog(process.cwd(), "createUser", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "createUser", error, false)
+            return Promise.reject(error)
         }
     }
 

@@ -45,4 +45,14 @@ declare namespace ICommonRequest {
         qs?: boolean,
         formData?: boolean
     }
+
+    interface IActivityLogger {
+        type: string,
+        info: any,
+        description: string,
+        options: {
+            env: number,
+        },
+        createdAt: number
+    }
 }

@@ -24,8 +24,8 @@ class AsPromotionConsumer extends BaseConsumer {
         try {
             let res = await promotionService.sync(message)
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "syncPromotion", err, false);
+        } catch (error) {
+            consolelog(process.cwd(), "syncPromotion", error, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)

@@ -27,13 +27,13 @@ export class OrderService {
         return new Promise(async (resolve, reject) => {
             try {
                 await orderServiceValidator.syncValidator(payload)
-                this.orderClient.sync(payload, (err, res) => {
-                    if (!err) {
+                this.orderClient.sync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully synced menu on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing menu on cms", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in syncing menu on cms", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

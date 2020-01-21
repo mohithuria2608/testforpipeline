@@ -127,7 +127,6 @@ export class TokenManager {
                         deviceid: tokenData.deviceid,
                         devicetype: tokenData.devicetype,
                         id: tokenData.id ? tokenData.id : undefined,
-                        // userData: {},
                         authCred: tokenData.authCred,
                         isGuest: tokenData.isGuest,
                         sessionTime: tokenData.sessionTime

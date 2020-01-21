@@ -18,7 +18,7 @@ export const start = (async () => {
     const server = app.listen(port)
     await bootstrap(server)
 
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 })()

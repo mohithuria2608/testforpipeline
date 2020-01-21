@@ -47,8 +47,8 @@ export class BaseSDM {
                 // params['conceptID'] = 3
                 // params['requestID'] = 1
                 consolelog(process.cwd(), "params", params, true)
-                BaseSDM.client[name](params, function (err, result) {
-                    if (err) { reject(err); }
+                BaseSDM.client[name](params, function (error, result) {
+                    if (error) { reject(error); }
                     else {
                         consolelog(process.cwd(), "sdk response : ", JSON.stringify(result), true)
                         resolve(result);

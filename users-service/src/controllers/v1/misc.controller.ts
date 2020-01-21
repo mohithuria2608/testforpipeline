@@ -28,9 +28,9 @@ export class MiscController {
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
-        } catch (err) {
-            consolelog(process.cwd(), "configuration", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "configuration", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -68,9 +68,9 @@ export class MiscController {
                     ]
                 }
             ]
-        } catch (err) {
-            consolelog(process.cwd(), "faq", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "faq", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -81,9 +81,9 @@ export class MiscController {
     async privacyPolicy(headers: ICommonRequest.IHeaders) {
         try {
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "privacyPolicy", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "privacyPolicy", error, false)
+            return Promise.reject(error)
         }
     }
 }
