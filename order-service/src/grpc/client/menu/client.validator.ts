@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog } from "../../../utils"
+import { consolelog,validatorErr } from "../../../utils"
 
 export class MenuServiceValidator {
     constructor() {
@@ -19,7 +19,7 @@ export class MenuServiceValidator {
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }

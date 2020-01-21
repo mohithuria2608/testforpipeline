@@ -26,7 +26,7 @@ export class AuthServiceValidator {
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }
@@ -42,7 +42,7 @@ export class AuthServiceValidator {
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }
