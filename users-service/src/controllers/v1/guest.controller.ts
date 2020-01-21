@@ -126,6 +126,7 @@ export class GuestController {
             auth.userData['phnNo'] = payload.phnNo
             auth.userData['name'] = payload.name
             auth.userData['email'] = payload.email
+            auth.userData['phnVerified'] = 0
             return formatUserData(auth.userData, headers)
         } catch (error) {
             consolelog(process.cwd(), "isGuest", error, false)

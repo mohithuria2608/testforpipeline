@@ -418,7 +418,6 @@ export class CartClass extends BaseEntity {
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
 
-            let seq = 0
             let amount = []
             amount.push({
                 type: "SUB_TOTAL",
