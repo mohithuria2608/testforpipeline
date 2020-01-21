@@ -76,41 +76,71 @@ export class UserController {
                     await Aerospike.remove({ set: ENTITY.UserchangeE.set, key: checkUser[0].id })
                 }
             } else {
-                let userCreate: IUserRequest.IUserUpdate = {
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    phnVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                let queryArg: IAerospike.Query = {
+                    udf: {
+                        module: 'user',
+                        func: Constant.UDF.USER.check_phone_exist,
+                        args: [payload.cCode],
+                        forEach: true
+                    },
+                    equal: {
+                        bin: "phnNo",
+                        value: payload.phnNo
+                    },
+                    set: ENTITY.UserchangeE.set,
+                    background: false,
                 }
-                let userInCms = await ENTITY.UserE.checkUserOnCms({})
-                if (userInCms && userInCms.id) {
-                    userCreate['cmsUserRef'] = userInCms.id
-                    if (userInCms['sdmUserRef'])
-                        userCreate['sdmUserRef'] = userInCms.id
-                    userCreate['name'] = userInCms.name
-                    userCreate['email'] = userInCms.email
-                    userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                let userchange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
+                if (userchange && userchange.length > 0) {
+                    let userData = await ENTITY.UserE.getUser({ userId: userchange[0].id })
+                    let otp = Constant.SERVER.BY_PASS_OTP
+                    let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
+                    let update = {
+                        otp: otp,
+                        otpExpAt: otpExpAt,
+                        otpVerified: 0,
+                        isGuest: 0,
+                        isLogin: 0,
+                        // ttl: Constant.SERVER.OTP_EXPIRE_TIME
+                    }
+                    await ENTITY.UserchangeE.createUserchange(update, userData)
                 } else {
-                    let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
-                    if (userInSdm && userInSdm.id) {
-                        userCreate['sdmUserRef'] = userInSdm.id
+                    let userCreate: IUserRequest.IUserUpdate = {
+                        cCode: payload.cCode,
+                        phnNo: payload.phnNo,
+                        phnVerified: 0,
+                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    }
+                    let userInCms = await ENTITY.UserE.checkUserOnCms({})
+                    if (userInCms && userInCms.id) {
+                        userCreate['cmsUserRef'] = userInCms.id
+                        if (userInCms['sdmUserRef'])
+                            userCreate['sdmUserRef'] = userInCms.id
                         userCreate['name'] = userInCms.name
                         userCreate['email'] = userInCms.email
                         userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    } else {
+                        let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
+                        if (userInSdm && userInSdm.id) {
+                            userCreate['sdmUserRef'] = userInSdm.id
+                            userCreate['name'] = userInCms.name
+                            userCreate['email'] = userInCms.email
+                            userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                        }
                     }
+                    let user = await ENTITY.UserE.createUser(headers, userCreate)
+                    let session = {
+                        otp: Constant.SERVER.BY_PASS_OTP,
+                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpVerified: 0,
+                        isGuest: 0,
+                        isLogin: 0,
+                        createdAt: new Date().getTime(),
+                        updatedAt: new Date().getTime(),
+                        // ttl: Constant.SERVER.OTP_EXPIRE_TIME
+                    }
+                    await ENTITY.SessionE.buildSession(headers, session, user)
                 }
-                let user = await ENTITY.UserE.createUser(headers, userCreate)
-                let session = {
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 0,
-                    isGuest: 0,
-                    isLogin: 0,
-                    createdAt: new Date().getTime(),
-                    updatedAt: new Date().getTime(),
-                    // ttl: Constant.SERVER.OTP_EXPIRE_TIME
-                }
-                await ENTITY.SessionE.buildSession(headers, session, user)
             }
             return {}
         } catch (err) {
