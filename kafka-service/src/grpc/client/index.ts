@@ -3,4 +3,4 @@ export * from './menu/client';
 export * from './promotion/client'
 export * from './order/client'
 export * from './sync/client'
-export * from './log/client'
+export * from './logger/client'
