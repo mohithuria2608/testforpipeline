@@ -413,7 +413,7 @@ export class UserController {
                         phnVerified: 0,
                         profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
                     }
-                    let user = await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
+                    let user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
                     let session = {
                         isGuest: 0,
                         otp: Constant.SERVER.BY_PASS_OTP,

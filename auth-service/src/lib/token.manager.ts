@@ -60,6 +60,8 @@ export class TokenManager {
     async  verifyToken(token: string) {
         try {
             const tokenData: IAuthGrpcRequest.ICreateTokenData = await Jwt.verify(token, cert, { algorithms: ['HS256'] });
+            consolelog(process.cwd(), "tokenData", JSON.stringify(tokenData), true)
+
             if (tokenData && tokenData.id && tokenData.deviceid) {
                 let getSession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
                 if (getSession && getSession.id) {
@@ -73,7 +75,6 @@ export class TokenManager {
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {
-                        consolelog(process.cwd(), "tokenData.id", tokenData.id, true)
                         const tokenVerifiedData: ICommonRequest.AuthorizationObj = {
                             tokenType: tokenData.tokenType,
                             deviceid: tokenData.deviceid,
