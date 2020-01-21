@@ -2,6 +2,7 @@
 'use strict';
 import * as Joi from '@hapi/joi';
 import { consolelog } from "../../../utils"
+import * as Constant from '../../../constant'
 
 export class UserServiceValidator {
     constructor() {
