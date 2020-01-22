@@ -30,6 +30,7 @@ export class CartController {
                     invalidMenu = true
             } else {
                 const defaultMenu = await menuService.fetchMenu({
+                    language: headers.language,
                     country: headers.country,
                     isDefault: true
                 })

@@ -15,6 +15,7 @@ export class MenuController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {
+                console.log(iterator.menuId, iterator.language)
                 ENTITY.MenuE.postMenu(iterator)
             }
             return {}
@@ -31,7 +32,7 @@ export class MenuController {
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
-            return await ENTITY.MenuE.getMenu({ menuId: menuId })
+            return await ENTITY.MenuE.getMenu({ menuId: menuId, language: headers.language })
         } catch (error) {
             consolelog(process.cwd(), "fetchMenu", error, false)
             return Promise.reject(error)
@@ -46,7 +47,7 @@ export class MenuController {
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
             let menuId = 5;
-            let menu = await ENTITY.MenuE.getMenu({ menuId: menuId })
+            let menu = await ENTITY.MenuE.getMenu({ menuId: menuId, language: payload.language })
             return { menu: JSON.stringify(menu) }
         } catch (error) {
             consolelog(process.cwd(), "grpcFetchMenu", error, false)

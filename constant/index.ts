@@ -13,10 +13,10 @@ export enum SET_NAME {
 export const UDF = {
     USER: {
         check_phone_exist: "check_phone_exist",
-        check_social_key: "check_social_key"
+        check_social_key: "check_social_key",
     },
-    ADDRESS: {
-        get_address: "get_address"
+    MENU: {
+        get_menu: "get_menu"
     }
 };
 

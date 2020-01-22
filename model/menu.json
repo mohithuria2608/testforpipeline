@@ -5,8 +5,8 @@
         "conceptId": 3,
         "menuId": 5,
         "currency": "AED",
-        "language": "en_US",
-        "updatedAt": "",
+        "language": "En",
+        "updatedAt": 1579678277000,
         "categories": [
             {
                 "position": 1,
@@ -20,7 +20,7 @@
                         "description": "Product Description",
                         "inSide": 0,
                         "finalPrice": 5.5,
-                        "specialPrice": 4.5,
+                        "specialPrice": 1,
                         "typeId": "simple",
                         "catId": 21,
                         "metaKeyword": [
@@ -372,7 +372,7 @@
                                 "productLinks": [
                                     {
                                         "position": 1,
-                                        "price": 15,
+                                        "price": 0,
                                         "id": 13,
                                         "name": "Chicken Pc - Original",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -384,7 +384,7 @@
                                     },
                                     {
                                         "position": 2,
-                                        "price": 15,
+                                        "price": 0,
                                         "id": 14,
                                         "name": "Chicken Pc - Spicy",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -408,7 +408,7 @@
                                 "productLinks": [
                                     {
                                         "position": 1,
-                                        "price": 12,
+                                        "price": 0,
                                         "id": 17,
                                         "name": "Twister Sandwich - Original",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -585,7 +585,7 @@
                                 "productLinks": [
                                     {
                                         "position": 1,
-                                        "price": 15,
+                                        "price": 0,
                                         "id": 13,
                                         "name": "Chicken Pc - Original",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -597,7 +597,7 @@
                                     },
                                     {
                                         "position": 2,
-                                        "price": 15,
+                                        "price": 0,
                                         "id": 14,
                                         "name": "Chicken Pc - Spicy",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -609,7 +609,7 @@
                                     },
                                     {
                                         "position": 3,
-                                        "price": 15,
+                                        "price": 0,
                                         "id": 214,
                                         "name": "Chicken Pc - Mix",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -671,7 +671,7 @@
                                 "productLinks": [
                                     {
                                         "position": 1,
-                                        "price": 12,
+                                        "price": 0,
                                         "id": 17,
                                         "name": "Twister Sandwich - Original",
                                         "imageThumbnail": "/d/u/dummy-product.png",
@@ -863,6 +863,230 @@
                                         "productLinks": [
                                             {
                                                 "position": 1,
+                                                "price": 0,
+                                                "id": 13,
+                                                "name": "Chicken Pc - Original",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": []
+                                            },
+                                            {
+                                                "position": 2,
+                                                "price": 0,
+                                                "id": 14,
+                                                "name": "Chicken Pc - Spicy",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 2,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Sandwich",
+                                        "subtitle": "Choice of Sandwich",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 17,
+                                                "name": "Twister Sandwich - Original",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": [
+                                                    3
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 3,
+                                        "isDependent": 1,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Condiments",
+                                        "subtitle": "Customize your Condiments",
+                                        "ingredient": 1,
+                                        "type": "checkbox",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 21,
+                                                "name": "American Cheese",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [
+                                                    {
+                                                        "price": 2,
+                                                        "selected": 0,
+                                                        "name": "Regular",
+                                                        "id": 19,
+                                                        "sku": 810001
+                                                    },
+                                                    {
+                                                        "price": 4,
+                                                        "selected": 0,
+                                                        "name": "Extra",
+                                                        "id": 20,
+                                                        "sku": 810001
+                                                    }
+                                                ],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            },
+                                            {
+                                                "position": 2,
+                                                "price": 0,
+                                                "id": 25,
+                                                "name": "Tomato",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [
+                                                    {
+                                                        "price": 0,
+                                                        "selected": 0,
+                                                        "name": "None",
+                                                        "id": 22,
+                                                        "sku": 811703
+                                                    },
+                                                    {
+                                                        "price": 0,
+                                                        "selected": 0,
+                                                        "name": "Regular",
+                                                        "id": 23,
+                                                        "sku": 811703
+                                                    },
+                                                    {
+                                                        "price": 0,
+                                                        "selected": 0,
+                                                        "name": "Extra",
+                                                        "id": 24,
+                                                        "sku": 811703
+                                                    }
+                                                ],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 4,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Sides",
+                                        "subtitle": "Choice of Sides",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 8,
+                                                "name": "Fries Original Medium",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": []
+                                            },
+                                            {
+                                                "position": 2,
+                                                "price": 2,
+                                                "id": 11,
+                                                "name": "Fries Spicy Medium",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 5,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Beverage",
+                                        "subtitle": "Choice of Beverage",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 4,
+                                                "name": "Pepsi Medium",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "selectedItem": 0,
+                                "configurableProductOptions": [],
+                                "sku": 44,
+                                "imageSmall": "/d/u/dummy-product.png",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "image": "/d/u/dummy-product.png",
+                                "sel1Value": 16287,
+                                "sel2Value": -1,
+                                "sel3Value": -1,
+                                "taxClassId": 2,
+                                "virtualGroup": 16298,
+                                "visibility": 4,
+                                "associative": 1
+                            },
+                            {
+                                "id": 26,
+                                "position": 2,
+                                "name": "Twister Box - Large",
+                                "description": "Product Description",
+                                "inSide": 0,
+                                "finalPrice": 24.5,
+                                "specialPrice": 24.5,
+                                "typeId": "bundle",
+                                "catId": 21,
+                                "metaKeyword": [
+                                    "Twister Box - Large"
+                                ],
+                                "bundleProductOptions": [
+                                    {
+                                        "position": 1,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Chicken",
+                                        "subtitle": "Choice of Chicken",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
                                                 "price": 15,
                                                 "id": 13,
                                                 "name": "Chicken Pc - Original",
@@ -900,6 +1124,1078 @@
                                             {
                                                 "position": 1,
                                                 "price": 12,
+                                                "id": 17,
+                                                "name": "Twister Sandwich - Original",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": [
+                                                    3
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 3,
+                                        "isDependent": 1,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Condiments",
+                                        "subtitle": "Customize your Condiments",
+                                        "ingredient": 0,
+                                        "type": "checkbox",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 21,
+                                                "name": "American Cheese",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [
+                                                    {
+                                                        "price": 2,
+                                                        "selected": 0,
+                                                        "name": "Regular",
+                                                        "id": 19,
+                                                        "sku": 810001
+                                                    },
+                                                    {
+                                                        "price": 4,
+                                                        "selected": 0,
+                                                        "name": "Extra",
+                                                        "id": 20,
+                                                        "sku": 810001
+                                                    }
+                                                ],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            },
+                                            {
+                                                "position": 2,
+                                                "price": 0,
+                                                "id": 25,
+                                                "name": "Tomato",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [
+                                                    {
+                                                        "price": 0,
+                                                        "selected": 0,
+                                                        "name": "Regular",
+                                                        "id": 23,
+                                                        "sku": 811703
+                                                    },
+                                                    {
+                                                        "price": 0,
+                                                        "selected": 0,
+                                                        "name": "Extra",
+                                                        "id": 24,
+                                                        "sku": 811703
+                                                    }
+                                                ],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 4,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Sides",
+                                        "subtitle": "Choice of Sides",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 7,
+                                                "name": "Fries Original Large",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 5,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Beverage",
+                                        "subtitle": "Choice of Beverage",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 3,
+                                                "name": "Pepsi Large",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "selectedItem": 0,
+                                "configurableProductOptions": [],
+                                "sku": 45,
+                                "imageSmall": "/d/u/dummy-product.png",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "image": "/d/u/dummy-product.png",
+                                "sel1Value": 16286,
+                                "sel2Value": -1,
+                                "sel3Value": -1,
+                                "taxClassId": 2,
+                                "virtualGroup": 16298,
+                                "visibility": 4,
+                                "associative": 1
+                            }
+                        ],
+                        "configurableProductOptions": [
+                            {
+                                "id": 144,
+                                "position": 1,
+                                "title": "Size",
+                                "subtitle": "Size",
+                                "selIndex": 1,
+                                "options": [
+                                    {
+                                        "isSelected": 1,
+                                        "position": 1,
+                                        "title": "Medium",
+                                        "id": 16287
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 2,
+                                        "title": "Large",
+                                        "id": 16286
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "menuTempId": 17,
+        "conceptId": 3,
+        "menuId": 5,
+        "currency": "AED",
+        "language": "Ar",
+        "updatedAt": 1579678277000,
+        "categories": [
+            {
+                "position": 1,
+                "id": 21,
+                "name": "Deals",
+                "products": [
+                    {
+                        "id": 1,
+                        "position": 1,
+                        "name": "Chocolate Chip Cookie",
+                        "description": "Product Description",
+                        "inSide": 0,
+                        "finalPrice": 5.5,
+                        "specialPrice": 1,
+                        "typeId": "simple",
+                        "catId": 21,
+                        "metaKeyword": [
+                            "Chocolate Chip Cookie"
+                        ],
+                        "bundleProductOptions": [],
+                        "selectedItem": 0,
+                        "configurableProductOptions": [],
+                        "items": [],
+                        "sku": 710003,
+                        "imageSmall": "/d/u/dummy-product.png",
+                        "imageThumbnail": "/d/u/dummy-product.png",
+                        "image": "/d/u/dummy-product.png",
+                        "taxClassId": 2,
+                        "virtualGroup": 0,
+                        "visibility": 4,
+                        "associative": 0
+                    },
+                    {
+                        "id": 5,
+                        "position": 2,
+                        "name": "Pepsi",
+                        "description": "Pepsi description",
+                        "inSide": 0,
+                        "finalPrice": 7.5,
+                        "specialPrice": 6.5,
+                        "typeId": "configurable",
+                        "catId": 21,
+                        "metaKeyword": [
+                            "Pepsi"
+                        ],
+                        "bundleProductOptions": [],
+                        "selectedItem": 600002,
+                        "configurableProductOptions": [
+                            {
+                                "id": 144,
+                                "position": 1,
+                                "title": "Size",
+                                "subtitle": "Choice of Size",
+                                "selIndex": 1,
+                                "options": [
+                                    {
+                                        "isSelected": 1,
+                                        "position": 1,
+                                        "title": "Regular",
+                                        "id": 16285
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 2,
+                                        "title": "Large",
+                                        "id": 16286
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 3,
+                                        "title": "Medium",
+                                        "id": 16287
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 4,
+                                        "title": "Small",
+                                        "id": 16293
+                                    }
+                                ]
+                            }
+                        ],
+                        "items": [
+                            {
+                                "id": 2,
+                                "position": 1,
+                                "title": "Pepsi Regular",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 7.5,
+                                "specialPrice": 6.5,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16285,
+                                "sel2Value": -1,
+                                "sel3Value": -1,
+                                "sku": 600002
+                            },
+                            {
+                                "id": 3,
+                                "position": 2,
+                                "title": "Pepsi Large",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 9.5,
+                                "specialPrice": 8.5,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16286,
+                                "sel2Value": -1,
+                                "sel3Value": -1,
+                                "sku": 600004
+                            },
+                            {
+                                "id": 4,
+                                "position": 3,
+                                "title": "Pepsi Medium",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 8.5,
+                                "specialPrice": 7.5,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16287,
+                                "sel2Value": -1,
+                                "sel3Value": -1,
+                                "sku": 600003
+                            },
+                            {
+                                "id": 160,
+                                "position": 4,
+                                "title": "Pepsi Small",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 5.5,
+                                "specialPrice": 4.5,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16293,
+                                "sel2Value": -1,
+                                "sel3Value": -1,
+                                "sku": 600049
+                            }
+                        ],
+                        "sku": 1,
+                        "imageSmall": "/d/u/dummy-product.png",
+                        "imageThumbnail": "/d/u/dummy-product.png",
+                        "image": "/d/u/dummy-product.png",
+                        "taxClassId": 2,
+                        "virtualGroup": 16298,
+                        "visibility": 4,
+                        "associative": 0
+                    },
+                    {
+                        "id": 12,
+                        "position": 3,
+                        "name": "Fries",
+                        "description": "Fries description",
+                        "inSide": 1,
+                        "finalPrice": 27.53,
+                        "specialPrice": 0,
+                        "typeId": "configurable",
+                        "catId": 21,
+                        "metaKeyword": [
+                            "Fries"
+                        ],
+                        "bundleProductOptions": [],
+                        "selectedItem": 510051,
+                        "configurableProductOptions": [
+                            {
+                                "id": 144,
+                                "position": 1,
+                                "title": "Size",
+                                "subtitle": "Choice of Size",
+                                "selIndex": 1,
+                                "options": [
+                                    {
+                                        "isSelected": 1,
+                                        "position": 1,
+                                        "title": "Regular",
+                                        "id": 16285
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 2,
+                                        "title": "Large",
+                                        "id": 16286
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 3,
+                                        "title": "Medium",
+                                        "id": 16287
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 145,
+                                "position": 2,
+                                "title": "Flavor",
+                                "subtitle": "Choose your flavor",
+                                "selIndex": 2,
+                                "options": [
+                                    {
+                                        "isSelected": 1,
+                                        "position": 1,
+                                        "title": "Original",
+                                        "id": 16288
+                                    },
+                                    {
+                                        "isSelected": 0,
+                                        "position": 2,
+                                        "title": "Spicy",
+                                        "id": 16289
+                                    }
+                                ]
+                            }
+                        ],
+                        "items": [
+                            {
+                                "id": 6,
+                                "position": 1,
+                                "title": "Regular Fries Original",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 9.5,
+                                "specialPrice": 0,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16285,
+                                "sel2Value": 16288,
+                                "sel3Value": -1,
+                                "sku": 510051
+                            },
+                            {
+                                "id": 7,
+                                "position": 2,
+                                "title": "Fries Original Large",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 9,
+                                "specialPrice": 0,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16286,
+                                "sel2Value": 16288,
+                                "sel3Value": -1,
+                                "sku": 510052
+                            },
+                            {
+                                "id": 8,
+                                "position": 3,
+                                "title": "Fries Original Medium",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 8.5,
+                                "specialPrice": 0,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16287,
+                                "sel2Value": 16288,
+                                "sel3Value": -1,
+                                "sku": 510053
+                            },
+                            {
+                                "id": 9,
+                                "position": 4,
+                                "title": "Fries Spicy Regular",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 9.5,
+                                "specialPrice": 0,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16285,
+                                "sel2Value": 16289,
+                                "sel3Value": -1,
+                                "sku": 510054
+                            },
+                            {
+                                "id": 10,
+                                "position": 5,
+                                "title": "Fries Spicy Large",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 10,
+                                "specialPrice": 0,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16286,
+                                "sel2Value": 16289,
+                                "sel3Value": -1,
+                                "sku": 510055
+                            },
+                            {
+                                "id": 11,
+                                "position": 6,
+                                "title": "Fries Spicy Medium",
+                                "description": "Product Description",
+                                "imageThumbnail": "/d/u/dummy-product.png",
+                                "finalPrice": 7.5,
+                                "specialPrice": 0,
+                                "metaKeyword": [
+                                    ""
+                                ],
+                                "typeId": "simple",
+                                "sel1Value": 16287,
+                                "sel2Value": 16289,
+                                "sel3Value": -1,
+                                "sku": 51005
+                            }
+                        ],
+                        "sku": 10,
+                        "imageSmall": "/d/u/dummy-product.png",
+                        "imageThumbnail": "/d/u/dummy-product.png",
+                        "image": "/d/u/dummy-product.png",
+                        "taxClassId": 2,
+                        "virtualGroup": 16298,
+                        "visibility": 4,
+                        "associative": 0
+                    },
+                    {
+                        "id": 15,
+                        "position": 4,
+                        "name": "Zinger Box - Medium",
+                        "description": "Product Description",
+                        "inSide": 1,
+                        "finalPrice": 23,
+                        "specialPrice": 23,
+                        "typeId": "bundle",
+                        "catId": 21,
+                        "metaKeyword": [
+                            "Twister Box - Medium"
+                        ],
+                        "bundleProductOptions": [
+                            {
+                                "position": 1,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Chicken",
+                                "subtitle": "Choice of Chicken",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 13,
+                                        "name": "Chicken Pc - Original",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 2,
+                                        "price": 0,
+                                        "id": 14,
+                                        "name": "Chicken Pc - Spicy",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 2,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Sandwich",
+                                "subtitle": "Choice of Sandwich",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 17,
+                                        "name": "Twister Sandwich - Original",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": [
+                                            3
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 3,
+                                "isDependent": 1,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Condiments",
+                                "subtitle": "Customize your Condiments",
+                                "ingredient": 1,
+                                "type": "checkbox",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 21,
+                                        "name": "American Cheese",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [
+                                            {
+                                                "price": 2,
+                                                "selected": 0,
+                                                "name": "Regular",
+                                                "id": 19,
+                                                "sku": 810001
+                                            },
+                                            {
+                                                "price": 4,
+                                                "selected": 0,
+                                                "name": "Extra",
+                                                "id": 20,
+                                                "sku": 810001
+                                            }
+                                        ],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 2,
+                                        "price": 0,
+                                        "id": 25,
+                                        "name": "Tomato",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [
+                                            {
+                                                "price": 0,
+                                                "selected": 0,
+                                                "name": "Regular",
+                                                "id": 23,
+                                                "sku": 811703
+                                            },
+                                            {
+                                                "price": 0,
+                                                "selected": 0,
+                                                "name": "Extra",
+                                                "id": 24,
+                                                "sku": 811703
+                                            }
+                                        ],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 4,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Sides",
+                                "subtitle": "Choice of Sides",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 8,
+                                        "name": "Fries Original Medium",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 2,
+                                        "price": 0,
+                                        "id": 11,
+                                        "name": "Fries Spicy Medium",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 5,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Beverage",
+                                "subtitle": "Choice of Beverage",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 4,
+                                        "name": "Pepsi Medium",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            }
+                        ],
+                        "configurableProductOptions": [],
+                        "sku": 44,
+                        "imageSmall": "/d/u/dummy-product.png",
+                        "imageThumbnail": "/d/u/dummy-product.png",
+                        "image": "/d/u/dummy-product.png",
+                        "taxClassId": 2,
+                        "virtualGroup": 16298,
+                        "visibility": 4,
+                        "associative": 1
+                    },
+                    {
+                        "id": 65,
+                        "position": 5,
+                        "name": "Super Dinner - Stepper",
+                        "description": "Product Description",
+                        "inSide": 1,
+                        "finalPrice": 56,
+                        "specialPrice": 0,
+                        "typeId": "bundle",
+                        "catId": 21,
+                        "metaKeyword": [
+                            "Super Dinner - Stepper"
+                        ],
+                        "bundleProductOptions": [
+                            {
+                                "position": 1,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Chicken",
+                                "subtitle": "Choice of Chicken",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 13,
+                                        "name": "Chicken Pc - Original",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 2,
+                                        "price": 0,
+                                        "id": 14,
+                                        "name": "Chicken Pc - Spicy",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 3,
+                                        "price": 0,
+                                        "id": 214,
+                                        "name": "Chicken Pc - Mix",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": [
+                                            2
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 2,
+                                "isDependent": 1,
+                                "maximumQty": 9,
+                                "minimumQty": 9,
+                                "title": "Chicken Quantity",
+                                "subtitle": "Choose your chicken quantity",
+                                "ingredient": 0,
+                                "type": "stepper",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 117,
+                                        "name": "Chicken Pc - Original",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 5,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 5,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 118,
+                                        "name": "Chicken Pc - Spicy",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 4,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 4,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 3,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Sandwich",
+                                "subtitle": "Choice of Sandwich",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 17,
+                                        "name": "Twister Sandwich - Original",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": [
+                                            4
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 4,
+                                "isDependent": 1,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Condiments",
+                                "subtitle": "Customize your Condiments",
+                                "ingredient": 1,
+                                "type": "checkbox",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 21,
+                                        "name": "American Cheese",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [
+                                            {
+                                                "price": 2,
+                                                "selected": 0,
+                                                "name": "Regular",
+                                                "id": 19,
+                                                "sku": 810001
+                                            },
+                                            {
+                                                "price": 4,
+                                                "selected": 0,
+                                                "name": "Extra",
+                                                "id": 20,
+                                                "sku": 810001
+                                            }
+                                        ],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 2,
+                                        "price": 0,
+                                        "id": 25,
+                                        "name": "Tomato",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [
+                                            {
+                                                "price": 0,
+                                                "selected": 0,
+                                                "name": "Regular",
+                                                "id": 23,
+                                                "sku": 811703
+                                            },
+                                            {
+                                                "price": 0,
+                                                "selected": 0,
+                                                "name": "Extra",
+                                                "id": 24,
+                                                "sku": 811703
+                                            }
+                                        ],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 5,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Sides",
+                                "subtitle": "Choice of Sides",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 8,
+                                        "name": "Fries Original Medium",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": []
+                                    },
+                                    {
+                                        "position": 2,
+                                        "price": 2,
+                                        "id": 11,
+                                        "name": "Fries Spicy Medium",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 0,
+                                        "default": 0,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            },
+                            {
+                                "position": 6,
+                                "isDependent": 0,
+                                "maximumQty": 0,
+                                "minimumQty": 0,
+                                "title": "Beverage",
+                                "subtitle": "Choice of Beverage",
+                                "ingredient": 0,
+                                "type": "radio",
+                                "productLinks": [
+                                    {
+                                        "position": 1,
+                                        "price": 0,
+                                        "id": 4,
+                                        "name": "Pepsi Medium",
+                                        "imageThumbnail": "/d/u/dummy-product.png",
+                                        "selectionQty": 1,
+                                        "subOptions": [],
+                                        "selected": 1,
+                                        "default": 1,
+                                        "dependentSteps": []
+                                    }
+                                ]
+                            }
+                        ],
+                        "configurableProductOptions": [],
+                        "sku": 44,
+                        "imageSmall": "/d/u/dummy-product.png",
+                        "imageThumbnail": "/d/u/dummy-product.png",
+                        "image": "/d/u/dummy-product.png",
+                        "taxClassId": 2,
+                        "virtualGroup": 16298,
+                        "visibility": 4,
+                        "associative": 1
+                    },
+                    {
+                        "id": 41,
+                        "position": 6,
+                        "name": "Twister Box",
+                        "description": "Twister, 1 PC chicken, fries, coleslaw and Pepsi",
+                        "inSide": 1,
+                        "finalPrice": 23,
+                        "specialPrice": 22.5,
+                        "typeId": "bundle_group",
+                        "catId": 21,
+                        "selectedItem": 44,
+                        "metaKeyword": [
+                            "Twister Box"
+                        ],
+                        "items": [
+                            {
+                                "id": 15,
+                                "position": 1,
+                                "name": "Twister Box - Medium",
+                                "description": "Product Description",
+                                "inSide": 0,
+                                "finalPrice": 23,
+                                "specialPrice": 22.5,
+                                "typeId": "bundle",
+                                "catId": 21,
+                                "metaKeyword": [
+                                    "Twister Box - Medium"
+                                ],
+                                "bundleProductOptions": [
+                                    {
+                                        "position": 1,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Chicken",
+                                        "subtitle": "Choice of Chicken",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
+                                                "id": 13,
+                                                "name": "Chicken Pc - Original",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 1,
+                                                "default": 1,
+                                                "dependentSteps": []
+                                            },
+                                            {
+                                                "position": 2,
+                                                "price": 0,
+                                                "id": 14,
+                                                "name": "Chicken Pc - Spicy",
+                                                "imageThumbnail": "/d/u/dummy-product.png",
+                                                "selectionQty": 1,
+                                                "subOptions": [],
+                                                "selected": 0,
+                                                "default": 0,
+                                                "dependentSteps": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "position": 2,
+                                        "isDependent": 0,
+                                        "maximumQty": 0,
+                                        "minimumQty": 0,
+                                        "title": "Sandwich",
+                                        "subtitle": "Choice of Sandwich",
+                                        "ingredient": 0,
+                                        "type": "radio",
+                                        "productLinks": [
+                                            {
+                                                "position": 1,
+                                                "price": 0,
                                                 "id": 17,
                                                 "name": "Twister Sandwich - Original",
                                                 "imageThumbnail": "/d/u/dummy-product.png",

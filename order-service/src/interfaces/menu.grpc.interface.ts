@@ -2,6 +2,7 @@ declare namespace IMenuGrpcRequest {
 
     interface IFetchMenuReq {
         menuId?: number,
+        language: string
         country: string,
         isDefault: boolean,
     }
