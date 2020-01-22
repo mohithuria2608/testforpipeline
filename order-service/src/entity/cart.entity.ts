@@ -474,9 +474,10 @@ export class CartClass extends BaseEntity {
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 for (const obj of curItems) {
                     console.log("1", obj.id)
+                    let parsedData = {}
                     for (const elem of cmsCart.cart_items) {
                         console.log("2", elem.product_id)
-                        if (obj.id == elem.product_id) {
+                        if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
                             parsedData[obj.id] = true
                             dataToUpdate['items'].push(obj)
                         }
