@@ -21,7 +21,6 @@ export class GuestController {
                 otp: 0,
                 otpExpAt: 0,
                 otpVerified: 1,
-                isLogin: 1,
                 isGuest: 1,
                 sessionTime: sessionTime,
                 userId: user.id,

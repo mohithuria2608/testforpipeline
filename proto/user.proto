@@ -69,7 +69,6 @@ message ISession {
     required string userId = 4;
     required int32 isGuest = 5;
     required int32 otpVerified = 6;
-    required int32 isLogin = 7;
     required int32 createdAt = 8;
     required string deviceid = 9;
     required string language = 10;

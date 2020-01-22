@@ -15,7 +15,6 @@ declare namespace ISessionRequest {
         devicetype?: string,
         osversion?: string,
         deviceid?: string,
-        isLogin?: number,
         createdAt?: number,
         sessionTime?: number,
         // ttl?: number

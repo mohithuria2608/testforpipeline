@@ -66,7 +66,6 @@ export class UserController {
                     otpExpAt: otpExpAt,
                     otpVerified: 0,
                     isGuest: 0,
-                    isLogin: 0,
                     userId: checkUser[0].id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
@@ -101,7 +100,6 @@ export class UserController {
                         otpExpAt: otpExpAt,
                         otpVerified: 0,
                         isGuest: 0,
-                        isLogin: 0,
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
                     await ENTITY.UserchangeE.createUserchange(update, userData)
@@ -135,7 +133,6 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
-                        isLogin: 0,
                         createdAt: new Date().getTime(),
                         userId: user.id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
@@ -217,6 +214,8 @@ export class UserController {
                         deleteUserId = userchange.deleteUserId
                 }
                 else {
+                    if (user[0].email && user[0].name)
+                        userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     await ENTITY.SessionE.validateOtp(headers, payload, user[0], sessionTime)
                 }
                 user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
@@ -224,7 +223,6 @@ export class UserController {
                     otp: 0,
                     otpExpAt: 0,
                     otpVerified: 1,
-                    isLogin: 1,
                     isGuest: payload.isGuest,
                     sessionTime: sessionTime,
                     userId: user[0].id
@@ -267,7 +265,6 @@ export class UserController {
                         otp: 0,
                         otpExpAt: 0,
                         otpVerified: 1,
-                        isLogin: 1,
                         isGuest: payload.isGuest,
                         sessionTime: sessionTime,
                         userId: user[0].id
@@ -286,7 +283,7 @@ export class UserController {
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                 user[0].id,
-                0,
+                payload.isGuest,
                 sessionTime
             )
             user[0]['isGuest'] = payload.isGuest
@@ -329,7 +326,6 @@ export class UserController {
                         otp: 0,
                         otpExpAt: 0,
                         otpVerified: 1,
-                        isLogin: 1,
                         sessionTime: sessionTime,
                         userId: userObj[0].id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
@@ -351,7 +347,6 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
-                        isLogin: 0,
                         sessionTime: sessionTime,
                         userId: userObj[0].id,
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
@@ -375,7 +370,6 @@ export class UserController {
                     otp: 0,
                     otpExpAt: 0,
                     otpVerified: 1,
-                    isLogin: 1,
                     sessionTime: sessionTime,
                     userId: userObj[0].id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
@@ -428,7 +422,7 @@ export class UserController {
                     background: false,
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                if (checkUser && checkUser.length > 0) {
+                if (checkUser && checkUser.length > 0 && (checkUser[0].phnVerified != 0) && (checkUser[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.INIT)) {
                     userData = await ENTITY.UserE.getUser({ userId: auth.id })
                     let userchangePayload = {
                         name: payload.name,
@@ -448,8 +442,7 @@ export class UserController {
                         changePhnNo: 1
                     }
                     await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
-                    userData['phnVerified'] = 0
-                    return formatUserData(userData, headers)
+
                 } else {
                     let userUpdate = {
                         name: payload.name,
@@ -457,21 +450,21 @@ export class UserController {
                         phnNo: payload.phnNo,
                         cCode: payload.cCode,
                         phnVerified: 0,
-                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
+                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     }
-                    let user = await ENTITY.UserE.updateUser(userData.id, userUpdate)
-                    let session = {
-                        isGuest: 0,
-                        otp: Constant.SERVER.BY_PASS_OTP,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0,
-                        isLogin: 0,
-                        userId: user.id
-                        // ttl: Constant.SERVER.OTP_EXPIRE_TIME
-                    }
-                    await ENTITY.SessionE.buildSession(headers, session)
-                    return formatUserData(user, headers)
+                    userData = await ENTITY.UserE.updateUser(userData.id, userUpdate)
                 }
+                let session = {
+                    isGuest: 0,
+                    otp: Constant.SERVER.BY_PASS_OTP,
+                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpVerified: 0,
+                    userId: userData.id
+                    // ttl: Constant.SERVER.OTP_EXPIRE_TIME
+                }
+                await ENTITY.SessionE.buildSession(headers, session)
+                userData['phnVerified'] = 0
+                return formatUserData(userData, headers)
             } else {
                 let userUpdate = {
                     name: payload.name,

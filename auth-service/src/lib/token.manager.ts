@@ -69,8 +69,6 @@ export class TokenManager {
                 if (getSession && getSession.id) {
                     if (getSession.sessionTime != tokenData.sessionTime)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
-                    if (getSession.isLogin == 0)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             } else

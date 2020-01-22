@@ -42,7 +42,6 @@ export class SessionEntity extends BaseEntity {
         devicemodel: Joi.string().trim().required(),
         devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
         osversion: Joi.string().trim().required(),
-        isLogin: Joi.number().required(),
         isGuest: Joi.number().valid(0, 1).required(),
         createdAt: Joi.number().required(),
         sessionTime: Joi.number().required().description("timestamp in seconds")
@@ -109,8 +108,6 @@ export class SessionEntity extends BaseEntity {
                 session['isGuest'] = payload.isGuest
             if (payload.otpVerified != undefined)
                 session['otpVerified'] = payload.otpVerified
-            if (payload.isLogin != undefined)
-                session['isLogin'] = payload.isLogin
             if (isCreate)
                 session['createdAt'] = new Date().getTime()
             if (headers.brand != undefined)
@@ -180,7 +177,6 @@ export class SessionEntity extends BaseEntity {
                 otp: 0,
                 otpExpAt: 0,
                 otpVerified: 1,
-                isLogin: 1,
                 sessionTime: sessionTime,
                 userId: userData.id
             }

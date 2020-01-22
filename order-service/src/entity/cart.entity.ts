@@ -470,8 +470,6 @@ export class CartClass extends BaseEntity {
             })
             dataToUpdate['amount'] = amount
 
-            // console.log("cmsCart.cart_items", cmsCart.cart_items)
-
             let parsedData = {}
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
                 for (const obj of curItems) {
