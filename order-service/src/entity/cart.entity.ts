@@ -472,18 +472,20 @@ export class CartClass extends BaseEntity {
 
             // console.log("cmsCart.cart_items", cmsCart.cart_items)
 
+            let parsedData = {}
             if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
-                curItems.map(obj => {
+                for (const obj of curItems) {
                     console.log("1", obj.id)
-                    cmsCart.cart_items.map(elem => {
+                    for (const elem of cmsCart.cart_items) {
                         console.log("2", elem.product_id)
                         if (obj.id == elem.product_id) {
+                            parsedData[obj.id] = true
                             dataToUpdate['items'].push(obj)
-                        } else {
-                            dataToUpdate['notAvailable'].push(obj)
                         }
-                    })
-                })
+                    }
+                    if (parsedData[obj.id] == undefined)
+                        dataToUpdate['notAvailable'].push(obj)
+                }
             } else {
                 dataToUpdate['notAvailable'] = curItems
             }
