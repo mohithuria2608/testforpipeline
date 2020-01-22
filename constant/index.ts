@@ -17,7 +17,10 @@ export const UDF = {
     },
     MENU: {
         get_menu: "get_menu"
-    }
+    },
+    UPSELL: {
+        get_upsell: "get_upsell"
+    },
 };
 
 

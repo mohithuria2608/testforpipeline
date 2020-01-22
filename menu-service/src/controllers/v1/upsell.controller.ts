@@ -29,9 +29,10 @@ export class UpsellController {
     * */
     async fetchUpsellProducts(headers: ICommonRequest.IHeaders, payload: IUpsellRequest.IFetchUpsell) {
         try {
+            payload['language'] = headers.language
             return await ENTITY.UpsellE.getUpsellProducts(payload)
         } catch (error) {
-            consolelog(process.cwd(), "fetchMenu", error, false)
+            consolelog(process.cwd(), "fetchUpsellProducts", error, false)
             return Promise.reject(error)
         }
     }

@@ -12,6 +12,12 @@ export class UpsellClass extends BaseEntity {
             bin: 'menuId',
             index: 'idx_' + this.set + '_' + 'menuId',
             type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'language',
+            index: 'idx_' + this.set + '_' + 'language',
+            type: "STRING"
         }
     ]
 
@@ -27,12 +33,12 @@ export class UpsellClass extends BaseEntity {
     })
 
     public upsellSchema = Joi.object().keys({
-        id: Joi.number().required(),
+        id: Joi.number().required().description("pk"),
         menuTempId: Joi.number().required(),
         conceptId: Joi.number().required(),
-        menuId: Joi.number().required().description("pk"),
+        menuId: Joi.number().required().description("sk"),
         currency: Joi.string().required(),
-        language: Joi.string().required(),
+        language: Joi.string().required().description("sk"),
         updatedAt: Joi.number().required(),
         categories: Joi.array().items(this.categorySchema)
     })
@@ -48,7 +54,7 @@ export class UpsellClass extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.menuId,
+                key: data.id,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -64,13 +70,23 @@ export class UpsellClass extends BaseEntity {
     * */
     async getUpsellProducts(payload: IUpsellRequest.IFetchUpsell) {
         try {
-            let getArg: IAerospike.Get = {
+            let queryArg: IAerospike.Query = {
+                udf: {
+                    module: 'upsell',
+                    func: Constant.UDF.UPSELL.get_upsell,
+                    args: [payload.language],
+                    forEach: true
+                },
+                equal: {
+                    bin: "menuId",
+                    value: parseInt(payload.menuId.toString())
+                },
                 set: this.set,
-                key: parseInt(payload.menuId.toString())
+                background: false,
             }
-            let upsell = await Aerospike.get(getArg)
-            if (upsell && upsell.menuId) {
-                return upsell.categories[0].products
+            let upsell = await Aerospike.query(queryArg)
+            if (upsell && upsell.length > 0) {
+                return upsell[0].categories[0].products
             } else
                 return []
         } catch (error) {
