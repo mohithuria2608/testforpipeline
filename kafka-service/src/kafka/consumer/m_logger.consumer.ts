@@ -3,7 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { logService } from "../../grpc/client"
 
-class FailConsumer extends BaseConsumer {
+class MLoggerConsumer extends BaseConsumer {
 
     constructor() {
         super(Constant.KAFKA_TOPIC.M_LOGGER, 'client');
@@ -29,4 +29,4 @@ class FailConsumer extends BaseConsumer {
 }
 
 
-export const failConsumerE = new FailConsumer();
+export const m_loggerE = new MLoggerConsumer();

@@ -20,9 +20,9 @@ export class BaseConsumer {
             [topic],
             (error, data) => {
                 if (error) {
-                    consolelog(process.cwd(), `Error: Consumer ${topic} in nudge ${error}`, [], false);
+                    consolelog(process.cwd(), `Error: Consumer ${topic} in nudge ${error}`, "", false);
                 } else {
-                    consolelog(process.cwd(), `Consumer ${topic} in nudge up successfully`, [], true);
+                    consolelog(process.cwd(), `Consumer ${topic} in nudge up successfully`, "", true);
                 }
             });
     }

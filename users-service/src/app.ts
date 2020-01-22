@@ -17,8 +17,8 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
-    
-    // event.emit('logger', {});
+
+    event.emit('logger', { name: "ankit" });
     await bootstrap(server)
 
     // await SDM.UserSDME.getCustomerByUserNameAndPswd("", "")

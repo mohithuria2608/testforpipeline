@@ -41,4 +41,4 @@ class SdmOrderStatusConsumer extends BaseConsumer {
 }
 
 
-export const sdm_menuConsumerE = new SdmOrderStatusConsumer();
+export const sdm_orderConsumerE = new SdmOrderStatusConsumer();

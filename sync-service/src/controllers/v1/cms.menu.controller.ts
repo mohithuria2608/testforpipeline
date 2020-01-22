@@ -13,7 +13,6 @@ export class CmsMenuController {
      */
     async postMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            payload['type'] = "menu"
             let menuChange = {
                 set: ENTITY.MenuE.set,
                 as: {

@@ -4,7 +4,7 @@ import { consolelog } from "../../utils"
 import { syncService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-class AsMenuConsumer extends BaseConsumer {
+class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
         super(Constant.KAFKA_TOPIC.AS_CONFIG, 'client');
@@ -37,4 +37,4 @@ class AsMenuConsumer extends BaseConsumer {
 }
 
 
-export const as_menuConsumerE = new AsMenuConsumer();
+export const as_configConsumerE = new AsConfigConsumer();
