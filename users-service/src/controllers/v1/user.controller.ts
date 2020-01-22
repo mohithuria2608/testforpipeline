@@ -260,6 +260,8 @@ export class UserController {
                         phnVerified: 1,
                         changePhnNo: 0,
                     }
+                    if (user[0].email && user[0].name)
+                        userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
                     let sessionUpdate: ISessionRequest.ISession = {
                         otp: 0,
@@ -475,9 +477,11 @@ export class UserController {
                 let userUpdate = {
                     name: payload.name,
                     email: payload.email,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
+                    // profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
                 }
                 let user = await ENTITY.UserE.updateUser(userData.id, userUpdate)
+                user['cCode'] = payload.cCode
+                user['phnNo'] = payload.phnNo
                 return formatUserData(user, headers)
             }
         } catch (error) {

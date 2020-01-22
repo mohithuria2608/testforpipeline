@@ -1,6 +1,6 @@
 import * as config from "config"
 import * as Koa from 'koa'
-import { bootstrap } from './utils'
+import { bootstrap, consolelog } from './utils'
 require('./grpc/server')
 import middleware from './middlewares'
 import route from './route'
@@ -17,7 +17,7 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
-
+    
     // event.emit('logger', {});
     await bootstrap(server)
 
