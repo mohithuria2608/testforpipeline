@@ -65,7 +65,7 @@ export class TokenManager {
 
             if (tokenData && tokenData.id && tokenData.deviceid) {
                 let getSession = await ENTITY.SessionE.getSession(tokenData.deviceid, tokenData.id)
-                consolelog(process.cwd(), "tokenData", JSON.stringify(tokenData), true)
+                consolelog(process.cwd(), "getSession", JSON.stringify(getSession), true)
                 if (getSession && getSession.id) {
                     if (getSession.sessionTime != tokenData.sessionTime)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)

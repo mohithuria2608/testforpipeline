@@ -316,15 +316,14 @@ export class UserController {
                 background: false,
             }
             let userObj: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-            let user
+            // let user
             if (userObj && userObj.length > 0) {
                 if (userObj[0].phnNo && userObj[0].phnNo != "" && userObj[0].phnVerified == 1) {
                     let userUpdate: IUserRequest.IUserUpdate = {
                         name: payload.name,
                     }
-                    if (payload.email) {
+                    if (payload.email)
                         userUpdate['email'] = payload.email
-                    }
                     let session = {
                         isGuest: 0,
                         otp: 0,
@@ -332,10 +331,10 @@ export class UserController {
                         otpVerified: 1,
                         isLogin: 1,
                         sessionTime: sessionTime,
-                        userId: user.id
+                        userId: userObj[0].id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
-                    user = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
+                    userObj[0] = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
                     await ENTITY.SessionE.buildSession(headers, session)
                 } else {
                     let userUpdate: IUserRequest.IUserUpdate = {
@@ -358,7 +357,7 @@ export class UserController {
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
                     await ENTITY.SessionE.buildSession(headers, session)
-                    user = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
+                    userObj[0] = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
                 }
             } else {
                 let userCreate: IUserRequest.IUserUpdate = {
@@ -370,7 +369,7 @@ export class UserController {
                     phnVerified: 0,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 }
-                user = await ENTITY.UserE.createUser(headers, userCreate)
+                userObj[0] = await ENTITY.UserE.createUser(headers, userCreate)
                 let session = {
                     isGuest: 0,
                     otp: 0,
@@ -378,7 +377,7 @@ export class UserController {
                     otpVerified: 1,
                     isLogin: 1,
                     sessionTime: sessionTime,
-                    userId: user.id
+                    userId: userObj[0].id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
                 await ENTITY.SessionE.buildSession(headers, session)
@@ -387,11 +386,11 @@ export class UserController {
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
-                user.id,
+                userObj[0].id,
                 0,
                 sessionTime
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userObj[0], headers) }
         } catch (error) {
             consolelog(process.cwd(), "socialAuthValidate", error, false)
             return Promise.reject(error)
