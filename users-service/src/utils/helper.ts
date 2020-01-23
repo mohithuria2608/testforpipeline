@@ -234,7 +234,6 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
 
         delete userObj['session']
         delete userObj['changePhnNo']
-        delete userObj['switchPhnNo']
         delete userObj['password']
         delete userObj['sdmUserRef']
         delete userObj['cmsUserRef']

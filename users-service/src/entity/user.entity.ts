@@ -69,7 +69,6 @@ export class UserEntity extends BaseEntity {
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
         changePhnNo: Joi.number().valid(0, 1).required(),
-        switchPhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
@@ -139,7 +138,6 @@ export class UserEntity extends BaseEntity {
             cartId: this.ObjectId().toString(),
             password: 'Password1', //await cryptData(id),
             changePhnNo: 0,
-            switchPhnNo: 0,
         } : {}
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
