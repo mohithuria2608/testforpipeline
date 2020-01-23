@@ -464,6 +464,8 @@ export class UserController {
                 }
                 await ENTITY.SessionE.buildSession(headers, session)
                 userData['phnVerified'] = 0
+                userData['cCode'] = payload.cCode
+                userData['phnNo'] = payload.phnNo
                 return formatUserData(userData, headers)
             } else {
                 let userUpdate = {
