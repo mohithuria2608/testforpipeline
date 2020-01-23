@@ -62,6 +62,11 @@ export class OrderClass extends BaseEntity {
     * */
     async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
         try {
+
+            //if order status in kitschen => transaction log on cms initiating capture
+            //hit payment service for capture payment
+            //if order status in kitschen => transaction log on cms  captured
+            
             setTimeout(async () => {
                 //@todo :get order status from sdm 
                 let dataToUpdate: ICartRequest.ICartData = {

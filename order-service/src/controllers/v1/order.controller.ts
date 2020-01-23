@@ -80,6 +80,10 @@ export class OrderController {
             // await kafkaService.kafkaSync(asUserChange)
             Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
 
+
+
+            //make grpc call to payment-service  (initiate)
+            // => response = {noopayOrderId :"", redirectionUrl :""}
             ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO })
             return { cartId: newCartId }
         } catch (error) {

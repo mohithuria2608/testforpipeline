@@ -68,7 +68,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     storeCode: Joi.string().trim().required(),
-                    orderId: Joi.string().trim().required(),
+                    orderId: Joi.string().trim().required().description("cms order id"),
                     amount: Joi.number().required().greater(0),
                     paymentMethodId: Joi.number().integer(),
                     channel: Joi.string().valid('Mobile', 'Web')
@@ -99,7 +99,7 @@ export default (router: Router) => {
                 query: {
                     storeCode: Joi.string().trim().required(),
                     noonpayOrderId: Joi.number().integer().when('orderId', { is: null, then: Joi.required() }),
-                    orderId: Joi.string().trim()
+                    orderId: Joi.string().trim().description("cms order id"),
                 }
             }),
             async (ctx) => {

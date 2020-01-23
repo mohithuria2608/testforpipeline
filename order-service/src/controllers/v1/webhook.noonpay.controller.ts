@@ -16,6 +16,13 @@ export class WebhookNoonpayController {
      * */
     async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
+
+
+            //noonpay order id + order status
+            // dont rely status hit = > get payment status from payment service  =>response {order status and transaction array [{transactionId : ""},{transactionId : ""}]}
+            //if(status = authorise => update sdm with payment object)
+
+            
             return {}
         } catch (error) {
             consolelog(process.cwd(), "processPayment", error, false)
