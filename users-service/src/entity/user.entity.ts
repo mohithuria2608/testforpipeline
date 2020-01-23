@@ -253,7 +253,7 @@ export class UserEntity extends BaseEntity {
                         deviceid: deviceid,
                         devicetype: devicetype,
                         tokenType: elem,
-                        isGuest: isGuest,
+                        isGuest: parseInt(isGuest.toString()),
                         sessionTime: sessionTime
                     }
                     if (id)

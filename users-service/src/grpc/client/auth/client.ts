@@ -31,7 +31,7 @@ export class AuthService {
                     deviceid: payload.deviceid,
                     tokenType: payload.tokenType,
                     devicetype: payload.devicetype,
-                    isGuest: parseInt(payload.isGuest.toString()),
+                    isGuest: payload.isGuest,
                     sessionTime: payload.sessionTime
                 }
                 if (payload.id)
