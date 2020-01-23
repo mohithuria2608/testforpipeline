@@ -89,8 +89,8 @@ export class GuestController {
             } else {
                 userchangePayload['deleteUserId'] = ""
             }
-            await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
-            await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
+            await ENTITY.UserE.updateUser(userData.id, userUpdate)
+            await ENTITY.UserchangeE.createUserchange(userchangePayload, userData)
             userData['name'] = payload.name
             userData['email'] = payload.email
             userData['cCode'] = payload.cCode
