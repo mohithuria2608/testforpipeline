@@ -4,7 +4,7 @@ import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
-import { kafkaService } from '../grpc/client';
+import { kafkaService, paymentService } from '../grpc/client';
 
 
 export class OrderClass extends BaseEntity {
@@ -24,18 +24,19 @@ export class OrderClass extends BaseEntity {
                 }
             }
             // kafkaService.kafkaSync(sdmOrderChange)
-
-            let cmsOrderChange = {
-                set: this.set,
-                cms: {
-                    create: true,
-                    argv: JSON.stringify(payload)
-                }
-            }
-            // kafkaService.kafkaSync(cmsOrderChange)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOrder", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createOrderOnCMS(payload) {
+        try {
+            let cmsOrder = await CMS.OrderCMSE.createOrder({})
+            return cmsOrder
+        } catch (error) {
+            consolelog(process.cwd(), "createOrderOnCMS", error, false)
             return Promise.reject(error)
         }
     }
@@ -62,13 +63,7 @@ export class OrderClass extends BaseEntity {
     * */
     async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
         try {
-
-            //if order status in kitschen => transaction log on cms initiating capture
-            //hit payment service for capture payment
-            //if order status in kitschen => transaction log on cms  captured
-            
             setTimeout(async () => {
-                //@todo :get order status from sdm 
                 let dataToUpdate: ICartRequest.ICartData = {
                     status: payload.status,
                     updatedAt: new Date().getTime()
@@ -85,6 +80,35 @@ export class OrderClass extends BaseEntity {
                     payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
 
                 } else {
+                    if (payload.status == Constant.DATABASE.STATUS.ORDER.IN_KITCHEN.SDM) {
+                        /**
+                         * @description step 1 create transaction log on CMS for initiating capture
+                         * @description step 2 capture payment on noonpay
+                         * @description step 3 create transaction log on CMS for capture
+                         */
+                        this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                            $addToSet: {
+                                transLogs: {
+                                    noonpayOrderId: 1,
+                                    orderId: "string",
+                                    amount: 100,
+                                    storeCode: "string",
+                                    createdAt: new Date().getTime()
+                                }
+                            }
+                        })
+                        let paymentCapturedObj = await paymentService.capturePayment({
+                            noonpayOrderId: 1,
+                            orderId: "string",
+                            amount: 100,
+                            storeCode: "string"
+                        })
+                        this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                            $addToSet: {
+                                transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
+                            }
+                        })
+                    }
                     let orderChange = {
                         set: this.set,
                         sdm: {

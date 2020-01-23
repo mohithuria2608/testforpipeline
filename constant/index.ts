@@ -63,7 +63,11 @@ export const CMS = {
         CREATE_CART: {
             METHOD: "POST",
             URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
-        }
+        },
+        CREATE_ORDER: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+        },
     }
 };
 
@@ -285,6 +289,11 @@ export const DATABASE = {
                 MONGO: "PENDING",
                 CMS: "",
                 SDM: ""
+            },
+            IN_KITCHEN: {
+                MONGO: "",
+                CMS: "",
+                SDM: "IN_KITCHEN"
             },
             CLOSED: {
                 MONGO: "",

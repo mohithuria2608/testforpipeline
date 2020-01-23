@@ -1,6 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog, cryptData } from '../../utils'
-import { userService, locationService, kafkaService } from '../../grpc/client'
+import { userService, locationService, kafkaService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 
@@ -9,7 +9,7 @@ export class OrderController {
     constructor() { }
 
     /**
-    * @description sync user to cms and sdm coming from KAFKA
+    * @description : sync user to cms and sdm coming from KAFKA
     * @param {IKafkaGrpcRequest.IKafkaBody} payload 
     */
     async syncOrderFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
@@ -63,27 +63,40 @@ export class OrderController {
 
             let cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
 
+            /**
+             * @description step 1 create order on CMS synchronously
+             * @description step 2 create order on SDM async
+             * @description step 3 create order on MONGO synchronously
+             * @description step 4 inititate payment on Noonpay synchronously
+             */
+            let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
             ENTITY.OrderE.syncOrder(cartData)
-
             cartData['status'] = Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
             cartData['updatedAt'] = new Date().getTime()
             await ENTITY.OrderE.createOneEntityMdb(cartData)
+            let initiatePaymentObj = await paymentService.initiatePayment({
+                orderId: "string",
+                amount: 100,
+                storeCode: "string",
+                paymentMethodId: 1,
+                channel: "string",
+                locale: "string",
+            })
+            /**
+             * @description : update user with new cart
+             */
             let newCartId = ENTITY.OrderE.DAOManager.ObjectId().toString()
-            await ENTITY.CartE.assignNewCart(newCartId, auth.id)
-            // let asUserChange = {
-            //     set: Constant.SET_NAME.USER,
-            //     as: {
-            //         update: true,
-            //         argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
-            //     }
-            // }
-            // await kafkaService.kafkaSync(asUserChange)
+            ENTITY.CartE.assignNewCart(newCartId, auth.id)
+            let asUserChange = {
+                set: Constant.SET_NAME.USER,
+                as: {
+                    update: true,
+                    argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
+                }
+            }
+            await kafkaService.kafkaSync(asUserChange)
             Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
 
-
-
-            //make grpc call to payment-service  (initiate)
-            // => response = {noopayOrderId :"", redirectionUrl :""}
             ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO })
             return { cartId: newCartId }
         } catch (error) {

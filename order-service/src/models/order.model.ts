@@ -9,11 +9,12 @@ export interface Iorder extends Document {
     userId: string,
     orderId: string,
     status: string,
-    items: string,
+    items: any,
     amount: string,
     isPriceChanged: number,
-    notAvailable: string,
+    notAvailable: any,
     couponApplied: number,
+    transLogs: any,
     createdAt: number,
     updatedAt: number
 };
@@ -31,6 +32,7 @@ const orderSchema = new Schema({
     isPriceChanged: { type: Number, enum: [1, 0], required: true },
     notAvailable: { type: Schema.Types.Mixed, required: true },
     couponApplied: { type: Number, enum: [1, 0], required: true },
+    transLogs: { type: Schema.Types.Mixed, required: true },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true }
 });
