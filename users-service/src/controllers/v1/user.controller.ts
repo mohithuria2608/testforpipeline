@@ -537,7 +537,8 @@ export class UserController {
                 }
             }
             let user = await ENTITY.UserE.updateUser(auth.id, dataToUpdate)
-            user['phnVerified'] = 0;
+            if (payload.cCode && payload.phnNo)
+                user['phnVerified'] = 0;
             // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers)
         } catch (error) {
