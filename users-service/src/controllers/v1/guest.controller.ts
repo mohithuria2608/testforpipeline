@@ -12,7 +12,7 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            let sessionTime = Math.ceil((new Date().getTime())/1000)
+            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let userCreate: IUserRequest.IUserUpdate = {
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             }
@@ -68,71 +68,38 @@ export class GuestController {
                 background: false,
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-            if (checkUser && checkUser.length > 0) {
-                let userchangePayload = {
-                    name: payload.name,
-                    email: payload.email,
-                    cartId: userData.cartId,
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 0,
-                    deleteUserId: userData.id,
-                    isGuest: payload.isGuest
-                }
-                await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
-                let userUpdate = {
-                    changePhnNo: 1
-                }
-                await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
-            } else {
-                let userUpdate: IUserRequest.IUserUpdate = {
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    name: payload.name,
-                    email: payload.email,
-                    phnVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
-                }
-                let userInCms = await ENTITY.UserE.checkUserOnCms({})
-                if (userInCms && userInCms.id) {
-                    userUpdate['cmsUserRef'] = userInCms.id
-                    if (userInCms['sdmUserRef'])
-                        userUpdate['sdmUserRef'] = userInCms.id
-                    userUpdate['name'] = userInCms.name
-                    userUpdate['email'] = userInCms.email
-                    userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                } else {
-                    let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
-                    if (userInSdm && userInSdm.id) {
-                        userUpdate['sdmUserRef'] = userInSdm.id
-                        userUpdate['name'] = userInCms.name
-                        userUpdate['email'] = userInCms.email
-                        userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                    }
-                }
-                userData = await ENTITY.UserE.updateUser(userData.id, userUpdate)
-                let session = {
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 1,
-                    isGuest: 1,
-                    createdAt: new Date().getTime(),
-                    userId: userData.id,
-                    // ttl: Constant.SERVER.OTP_EXPIRE_TIME
-                }
-                await ENTITY.SessionE.buildSession(headers, session)
+            let userchangePayload = {
+                name: payload.name,
+                email: payload.email,
+                cartId: userData.cartId,
+                cCode: payload.cCode,
+                phnNo: payload.phnNo,
+                otp: Constant.SERVER.BY_PASS_OTP,
+                otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                otpVerified: 0,
+                deleteUserId: userData.id,
+                isGuest: payload.isGuest
             }
-            userData['isGuest'] = payload.isGuest
-            userData['cCode'] = payload.cCode
-            userData['phnNo'] = payload.phnNo
+            let userUpdate = {
+                changePhnNo: 1,
+            }
+            if (checkUser && checkUser.length > 0) {
+                userchangePayload['deleteUserId'] = userData.id
+                userData = checkUser[0]
+            } else {
+                userchangePayload['deleteUserId'] = ""
+            }
+            await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
+            await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
             userData['name'] = payload.name
             userData['email'] = payload.email
+            userData['cCode'] = payload.cCode
+            userData['phnNo'] = payload.phnNo
+            userData['isGuest'] = payload.isGuest
             userData['phnVerified'] = 0
             return formatUserData(userData, headers)
         } catch (error) {
-            consolelog(process.cwd(), "isGuest", error, false)
+            consolelog(process.cwd(), "guestCheckout", error, false)
             return Promise.reject(error)
         }
     }
