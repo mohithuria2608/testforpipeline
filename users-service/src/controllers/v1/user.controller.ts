@@ -311,7 +311,6 @@ export class UserController {
                 background: false,
             }
             let userObj: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-            // let user
             if (userObj && userObj.length > 0) {
                 if (userObj[0].phnNo && userObj[0].phnNo != "" && userObj[0].phnVerified == 1) {
                     let userUpdate: IUserRequest.IUserUpdate = {
@@ -432,6 +431,7 @@ export class UserController {
                     medium: payload.medium,
                     socialKey: payload.socialKey,
                     otp: Constant.SERVER.BY_PASS_OTP,
+                    cartId: userData.cartId,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0,
@@ -503,7 +503,7 @@ export class UserController {
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 if (checkUser && checkUser.length > 0) {
-                    userchangePayload['cartId'] = checkUser[0].cartId
+                    userchangePayload['cartId'] = userData.cartId
                     userchangePayload['deleteUserId'] = checkUser[0].id
                     userData = checkUser[0]
                 }

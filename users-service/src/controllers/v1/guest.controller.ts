@@ -84,6 +84,7 @@ export class GuestController {
                 changePhnNo: 1,
             }
             if (checkUser && checkUser.length > 0) {
+                userchangePayload['cartId'] = userData.cartId
                 userchangePayload['deleteUserId'] = userData.id
                 userData = checkUser[0]
             } else {
