@@ -256,9 +256,10 @@ export class UserController {
                         userUpdate['socialKey'] = userchange[0].socialKey
                     if (userchange[0].medium)
                         userUpdate['medium'] = userchange[0].medium
-                    if (user[0].email && user[0].name)
-                        userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
+                    if (user[0].email && user[0].name && user[0].cCode && user[0].phnNo) {
+                        user[0] = await ENTITY.UserE.updateUser(user[0].id, { profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST })
+                    }
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -266,7 +267,6 @@ export class UserController {
                 await Aerospike.remove({ set: ENTITY.UserE.set, key: deleteUserId })
                 await ENTITY.SessionE.removeAllSessionRelatedToUserId(deleteUserId)
             }
-
             let sessionUpdate: ISessionRequest.ISession = {
                 otp: 0,
                 otpExpAt: 0,
