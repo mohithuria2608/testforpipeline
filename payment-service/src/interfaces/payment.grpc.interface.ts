@@ -31,8 +31,73 @@ declare namespace IPaymentGrpcRequest {
         noonpayOrderId: number;
         orderId: string;
         storeCode: string;
+        paymentStatus?: string;
     }
-    interface IGetPaymentStatusRes {}
+    interface IPaymentDetail {
+        instrument: string;
+        mode: string;
+        integratorAccount: string;
+        paymentInfo: string;
+        paymentMechanism: string;
+        brand: string;
+        scheme: string;
+        expiryMonth: string;
+        expiryYear: string;
+        isNetworkToken: string;
+        cardType: string;
+        cardCountry: string;
+        cardCountryName: string;
+    }
+    interface ITransaction {
+        type: string;
+        authorizationCode?: string;
+        creationTime: Date;
+        status: string;
+        stan: string;
+        id: string;
+        amount: number;
+        currency: string;
+    }
+    interface IGetPaymentStatusRes {
+        resultCode: number;
+        message: string;
+        noonpayOrderId: number;
+        orderId: string;
+        paymentStatus: string;
+        creationTime: Date;
+        amount: number;
+        totalAuthorizedAmount: number;
+        totalCapturedAmount: number;
+        totalRefundedAmount: number;
+        totalReversedAmount: number;
+        currency: string;
+        noonPayOrderCategory: string;
+        channel: string;
+        paymentDetails: IPaymentDetail;
+        transactions: ITransaction[];
+        noonpayRedirectionUrl: string;
+    }
+
+    interface IGetPaymentInitiateStatusRes {
+        resultCode: number;
+        message: string;
+        noonpayOrderId: number;
+        orderId: string;
+        paymentStatus: string;
+        creationTime: Date;
+        amount: number;
+        currency: string;
+        channel: string;
+        noonpayRedirectionUrl?: string;
+    }
+    interface IGetPaymentAuthorizationStatusRes extends IGetPaymentInitiateStatusRes {
+        totalAuthorizedAmount: number;
+        totalCapturedAmount: number;
+        totalRefundedAmount: number;
+        totalReversedAmount: number;
+        paymentDetails: IPaymentDetail;
+        transaction?: ITransaction;
+    }
 
     interface ICapturePaymentReq {
         request: ICapturePayment;

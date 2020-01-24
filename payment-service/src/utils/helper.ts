@@ -130,6 +130,13 @@ export let sendError = function (error) {
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
         }
+        else if (error.name === 'PaymentError') {
+            customError.message = error.message;
+            customError.statusCode = error.statusCode;
+            customError.httpCode = error.httpCode;
+            customError.type =  error.type;
+            customError.actionHint =  error.actionHint;
+        }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
             if (error.hasOwnProperty('statusCode'))
@@ -284,3 +291,7 @@ export function sleep(ms: number) {
 export let generateRandomString = function (digits: number) {
     return randomstring.generate(digits);
 };
+
+export function cloneObject(objectToClone: any) {
+    return JSON.parse(JSON.stringify(objectToClone));
+}

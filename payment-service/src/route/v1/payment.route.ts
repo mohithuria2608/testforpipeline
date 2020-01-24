@@ -99,7 +99,8 @@ export default (router: Router) => {
                 query: {
                     storeCode: Joi.string().trim().required(),
                     noonpayOrderId: Joi.number().integer().when('orderId', { is: null, then: Joi.required() }),
-                    orderId: Joi.string().trim()
+                    orderId: Joi.string().trim(),
+                    paymentStatus: Joi.string().trim().optional().valid('INITIATED', 'AUTHORIZED', 'CANCELLED', 'CAPTURED', 'REFUNDED')
                 }
             }),
             async (ctx) => {
