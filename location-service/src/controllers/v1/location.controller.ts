@@ -31,6 +31,7 @@ export class LocationController {
     * */
     async getPickupList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IPickupLocation) {
         try {
+            let self = this
             let preSelectedStore: IStoreRequest.IStore
             if (payload.lat && payload.lng) {
                 let temp = await storeController.validateCoords(payload)
@@ -46,6 +47,20 @@ export class LocationController {
             consolelog(process.cwd(), "area", area.length, true)
             consolelog(process.cwd(), "store", store.length, true)
             let res = []
+
+            function compare(a, b) {
+                // Use toUpperCase() to ignore character casing
+                const bandA = a.name_en.toUpperCase();
+                const bandB = b.name_en.toUpperCase();
+
+                let comparison = 0;
+                if (bandA > bandB) {
+                    comparison = 1;
+                } else if (bandA < bandB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
             if (city && city.length > 0) {
                 for (const c of city) {
                     let areaCollection = []
@@ -64,15 +79,18 @@ export class LocationController {
                                         }
                                     }
                                 }
+                                storeCollection.sort(compare)
                                 a['store'] = storeCollection
                                 areaCollection.push(a)
                             }
                         }
                     }
+                    areaCollection.sort(compare)
                     c['area'] = areaCollection
                     res.push(c)
                 }
             }
+            res.sort(compare)
             return res
         } catch (error) {
             consolelog(process.cwd(), "getPickupList", error, false)
