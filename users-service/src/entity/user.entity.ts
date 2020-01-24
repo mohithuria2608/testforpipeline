@@ -53,6 +53,24 @@ export class UserEntity extends BaseEntity {
         isGuest: Joi.number().valid(0, 1).required(),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required().description("sk"),
+
+        // brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
+        // acount_uae: {
+        //     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+        //     phnNo: Joi.string().trim().required().description("sk"),
+        //     sdmUserRef: Joi.number().required().description("sk"),
+        //     cmsUserRef: Joi.number().required().description("sk"),
+        //     phnVerified: Joi.number().valid(0, 1).required(),
+        // },
+        // acount_ksa: {
+        //     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+        //     phnNo: Joi.string().trim().required().description("sk"),
+        //     sdmUserRef: Joi.number().required().description("sk"),
+        //     cmsUserRef: Joi.number().required().description("sk"),
+        //     phnVerified: Joi.number().valid(0, 1).required(),
+        // },
+
+
         phnVerified: Joi.number().valid(0, 1).required(),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
         profileStep: Joi.number().valid(

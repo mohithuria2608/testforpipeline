@@ -29,7 +29,6 @@ export class SessionEntity extends BaseEntity {
 
     public sessionSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        // uSessionId: Joi.string().trim().required().description("sk"),
         userId: Joi.string().trim().required().description("sk"),
         deviceid: Joi.string().trim().required().description("sk"),
         otp: Joi.number(),
@@ -45,7 +44,6 @@ export class SessionEntity extends BaseEntity {
         isGuest: Joi.number().valid(0, 1).required(),
         createdAt: Joi.number().required(),
         sessionTime: Joi.number().required().description("timestamp in seconds")
-        // updatedAt: Joi.number().required()
     });
 
     /**

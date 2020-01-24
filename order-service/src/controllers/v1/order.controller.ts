@@ -44,7 +44,6 @@ export class OrderController {
         }
     }
 
-
     /**
      * @method POST
      * @param {string} addressId

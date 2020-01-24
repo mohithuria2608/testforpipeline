@@ -314,11 +314,12 @@ export const DATABASE = {
     }
 };
 
+c
 export const STATUS_MSG = {
     ERROR: {
         E400: {
             INVALID_PROMO: {
-                statusCode: 400,
+                statusCode: 600,
                 httpCode: 400,
                 type: 'INVALID_PROMO',
                 message: 'Invalid Promotion'
