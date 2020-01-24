@@ -314,7 +314,6 @@ export const DATABASE = {
     }
 };
 
-c
 export const STATUS_MSG = {
     ERROR: {
         E400: {
