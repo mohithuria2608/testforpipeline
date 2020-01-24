@@ -19,8 +19,8 @@ export default (router: Router) => {
                     action: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,
                         Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE,
-                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET),
-                    data: Joi.any()
+                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    data: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
             async (ctx) => {
@@ -45,8 +45,8 @@ export default (router: Router) => {
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
-                    action: Joi.string().required().valid("update", "create"),
-                    data: Joi.any()
+                    action: Joi.string().required().valid("update", "create").error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    data: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
             async (ctx) => {

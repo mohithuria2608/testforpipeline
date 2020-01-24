@@ -37,11 +37,11 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-                    phnNo: Joi.string().max(9).required(),
-                    email: Joi.string().email().lowercase().required(),
-                    name: Joi.string().required(),
-                    isGuest: Joi.number().valid(0, 1).required(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+                    email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message)),
+                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.message)),
+                    isGuest: Joi.number().valid(0, 1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                 }
             }),
             async (ctx) => {

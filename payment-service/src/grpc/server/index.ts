@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import * as ENTITY from '../../entity'
+import * as ENTITY from '../../entity';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -41,7 +41,27 @@ server.addService(paymentProto.PaymentService.service, {
     getPaymentStatus: async (call: IPaymentGrpcRequest.IGetPaymentStatusReq, callback) => {
         try {
             consolelog(process.cwd(), "getPaymentStatus", JSON.stringify(call.request), true);
-            let res: IPaymentGrpcRequest.IGetPaymentStatusRes = await ENTITY.PaymentE.getPaymentStatus(call.request);
+            let res: IPaymentGrpcRequest.IGetPaymentStatusRes;
+            switch (call.request.paymentStatus) {
+                case ENTITY.PaymentClass.STATUS.ORDER.INITIATED:
+                    res =  (await ENTITY.PaymentE.getInitiateStatus(call.request)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.AUTHORIZED:
+                    res = await ENTITY.PaymentE.getAuthorizationStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.CANCELLED:
+                    res = await ENTITY.PaymentE.getReverseStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.CAPTURED:
+                    res = await ENTITY.PaymentE.getCaptureStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.REFUNDED:
+                    res = await ENTITY.PaymentE.getRefundStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                default:
+                    res = await ENTITY.PaymentE.getPaymentStatus(call.request);
+                    break;
+            }
             callback(null, res);
         } catch (error) {
             consolelog(process.cwd(), "getPaymentStatus", error, false);

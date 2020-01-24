@@ -8,23 +8,23 @@ declare namespace IMenuGrpcRequest {
     }
 
     interface IFetchMenuRes {
-        menu: IMenu,
+        menu: IMenu[],
     }
 
     interface IMenu {
-        id: number,
-        position: number,
-        name: string,
-        description: string,
-        inSide: number,
-        finalPrice: number,
-        specialPrice: number,
-        typeId: string,
-        catId: number,
-        metaKeyword: string[],
+        id?: number,
+        position?: number,
+        name?: string,
+        description?: string,
+        inSide?: number,
+        finalPrice?: number,
+        specialPrice?: number,
+        typeId?: string,
+        catId?: number,
+        metaKeyword?: string[],
         bundleProductOptions?: IBundleProductOptions[],
         selectedItem?: number,
-        configurableProductOptions: IConfigurableProductOptions[],
+        configurableProductOptions?: IConfigurableProductOptions[],
         items?: IItems[],
         sku?: number,
         imageSmall?: string,
@@ -35,6 +35,31 @@ declare namespace IMenuGrpcRequest {
         visibility?: number,
         associative?: number,
     }
+
+    // interface IMenu {
+    //     id: number,
+    //     position: number,
+    //     name: string,
+    //     description: string,
+    //     inSide: number,
+    //     finalPrice: number,
+    //     specialPrice: number,
+    //     typeId: string,
+    //     catId: number,
+    //     metaKeyword: string[],
+    //     bundleProductOptions?: IBundleProductOptions[],
+    //     selectedItem?: number,
+    //     configurableProductOptions: IConfigurableProductOptions[],
+    //     items?: IItems[],
+    //     sku?: number,
+    //     imageSmall?: string,
+    //     imageThumbnail?: string,
+    //     image?: string,
+    //     taxClassId?: number,
+    //     virtualGroup?: number,
+    //     visibility?: number,
+    //     associative?: number,
+    // }
 
     interface IBundleProductOptions {
         position: number,

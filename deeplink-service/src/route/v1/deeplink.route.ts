@@ -15,8 +15,8 @@ export default (router: Router) => {
             validate({
                 params: {
                     "0": Joi.string(),
-                    path: Joi.string().required(),
-                    id: Joi.number().required(),
+                    path: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    id: Joi.number().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     // url: Joi.string().required(),
                     // ios: Joi.string().required()
                 },
@@ -40,7 +40,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    url: Joi.string().required()
+                    url: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 },
             }), async (ctx) => {
                 try {

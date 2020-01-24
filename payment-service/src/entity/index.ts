@@ -1,1 +1,1 @@
-export { PaymentE } from './payment.entity'
+export { PaymentE, PaymentClass } from './payment.entity'

@@ -16,499 +16,558 @@ export const start = (async () => {
     const port = config.get("server.order.port")
     const server = app.listen(port)
 
-    // let curItems = [
-    //   {
-    //     "description": "Fries description",
-    //     "position": 3,
-    //     "sku": 10,
-    //     "bundleProductOptions": [
+    // let a: IMenuGrpcRequest.IFetchMenuRes
 
-    //     ],
-    //     "image": "/d/u/dummy-product.png",
-    //     "items": [
-    //       {
-    //         "id": 6,
-    //         "description": "",
-    //         "position": 1,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510051,
-    //         "title": "Regular Fries Original",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 9.5,
-    //         "sel1Value": 16285,
-    //         "sel2Value": 16288,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 7,
-    //         "description": "",
-    //         "position": 2,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510052,
-    //         "title": "Fries Original Large",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 9,
-    //         "sel1Value": 16286,
-    //         "sel2Value": 16288,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 8,
-    //         "description": "",
-    //         "position": 3,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510053,
-    //         "title": "Fries Original Medium",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 8.5,
-    //         "sel1Value": 16287,
-    //         "sel2Value": 16288,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 9,
-    //         "description": "",
-    //         "position": 4,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510054,
-    //         "title": "Fries Spicy Regular",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 9.5,
-    //         "sel1Value": 16285,
-    //         "sel2Value": 16289,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 10,
-    //         "description": "",
-    //         "position": 5,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510055,
-    //         "title": "Fries Spicy Large",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 10,
-    //         "sel1Value": 16286,
-    //         "sel2Value": 16289,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 11,
-    //         "description": "",
-    //         "position": 6,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 51005,
-    //         "title": "Fries Spicy Medium",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 7.5,
-    //         "sel1Value": 16287,
-    //         "sel2Value": 16289,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       }
-    //     ],
-    //     "imageSmall": "/d/u/dummy-product.png",
-    //     "catId": 21,
-    //     "visibility": 4,
-    //     "taxClassId": 2,
-    //     "name": "Fries",
-    //     "id": 12,
-    //     "specialPrice": 0,
-    //     "configurableProductOptions": [
-    //       {
-    //         "id": 144,
-    //         "title": "Size",
-    //         "selIndex": 1,
-    //         "subtitle": "Choice of Size",
-    //         "position": 1,
-    //         "options": [
-    //           {
-    //             "isSelected": 1,
-    //             "id": 16285,
-    //             "title": "Regular",
-    //             "position": 1
-    //           },
-    //           {
-    //             "isSelected": 0,
-    //             "id": 16286,
-    //             "title": "Large",
-    //             "position": 2
-    //           },
-    //           {
-    //             "isSelected": 0,
-    //             "id": 16287,
-    //             "title": "Medium",
-    //             "position": 3
-    //           }
-    //         ]
-    //       },
-    //       {
-    //         "id": 145,
-    //         "title": "Flavor",
-    //         "selIndex": 2,
-    //         "subtitle": "Choose your flavor",
-    //         "position": 2,
-    //         "options": [
-    //           {
-    //             "isSelected": 1,
-    //             "id": 16288,
-    //             "title": "Original",
-    //             "position": 1
-    //           },
-    //           {
-    //             "isSelected": 0,
-    //             "id": 16289,
-    //             "title": "Spicy",
-    //             "position": 2
-    //           }
-    //         ]
-    //       }
-    //     ],
-    //     "qty": 1,
-    //     "associative": 0,
-    //     "metaKeyword": [
-    //       "Fries"
-    //     ],
-    //     "typeId": "configurable",
-    //     "selectedItem": 510051,
-    //     "imageThumbnail": "/d/u/dummy-product.png",
-    //     "virtualGroup": 16298,
-    //     "finalPrice": 9.5,
-    //     "inSide": 1
-    //   },
-    //   {
-    //     "description": "Fries description",
-    //     "position": 3,
-    //     "sku": 10,
-    //     "bundleProductOptions": [
-
-    //     ],
-    //     "image": "/d/u/dummy-product.png",
-    //     "items": [
-    //       {
-    //         "id": 6,
-    //         "description": "",
-    //         "position": 1,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510051,
-    //         "title": "Regular Fries Original",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 9.5,
-    //         "sel1Value": 16285,
-    //         "sel2Value": 16288,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 7,
-    //         "description": "",
-    //         "position": 2,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510052,
-    //         "title": "Fries Original Large",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 9,
-    //         "sel1Value": 16286,
-    //         "sel2Value": 16288,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 8,
-    //         "description": "",
-    //         "position": 3,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510053,
-    //         "title": "Fries Original Medium",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 8.5,
-    //         "sel1Value": 16287,
-    //         "sel2Value": 16288,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 9,
-    //         "description": "",
-    //         "position": 4,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510054,
-    //         "title": "Fries Spicy Regular",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 9.5,
-    //         "sel1Value": 16285,
-    //         "sel2Value": 16289,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 10,
-    //         "description": "",
-    //         "position": 5,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 510055,
-    //         "title": "Fries Spicy Large",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 10,
-    //         "sel1Value": 16286,
-    //         "sel2Value": 16289,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       },
-    //       {
-    //         "id": 11,
-    //         "description": "",
-    //         "position": 6,
-    //         "typeId": "simple",
-    //         "imageThumbnail": "/d/u/dummy-product.png",
-    //         "metaKeyword": [
-    //           ""
-    //         ],
-    //         "sku": 51005,
-    //         "title": "Fries Spicy Medium",
-    //         "configurableProductOptions": [
-
-    //         ],
-    //         "finalPrice": 7.5,
-    //         "sel1Value": 16287,
-    //         "sel2Value": 16289,
-    //         "sel3Value": -1,
-    //         "specialPrice": 0,
-    //         "bundleProductOptions": [
-
-    //         ]
-    //       }
-    //     ],
-    //     "imageSmall": "/d/u/dummy-product.png",
-    //     "catId": 21,
-    //     "visibility": 4,
-    //     "taxClassId": 2,
-    //     "name": "Fries",
-    //     "id": 12,
-    //     "specialPrice": 0,
-    //     "configurableProductOptions": [
-    //       {
-    //         "id": 144,
-    //         "title": "Size",
-    //         "selIndex": 1,
-    //         "subtitle": "Choice of Size",
-    //         "position": 1,
-    //         "options": [
-    //           {
-    //             "isSelected": 0,
-    //             "id": 16285,
-    //             "title": "Regular",
-    //             "position": 1
-    //           },
-    //           {
-    //             "isSelected": 1,
-    //             "id": 16286,
-    //             "title": "Large",
-    //             "position": 2
-    //           },
-    //           {
-    //             "isSelected": 0,
-    //             "id": 16287,
-    //             "title": "Medium",
-    //             "position": 3
-    //           }
-    //         ]
-    //       },
-    //       {
-    //         "id": 145,
-    //         "title": "Flavor",
-    //         "selIndex": 2,
-    //         "subtitle": "Choose your flavor",
-    //         "position": 2,
-    //         "options": [
-    //           {
-    //             "isSelected": 0,
-    //             "id": 16288,
-    //             "title": "Original",
-    //             "position": 1
-    //           },
-    //           {
-    //             "isSelected": 1,
-    //             "id": 16289,
-    //             "title": "Spicy",
-    //             "position": 2
-    //           }
-    //         ]
-    //       }
-    //     ],
-    //     "qty": 1,
-    //     "associative": 0,
-    //     "metaKeyword": [
-    //       "Fries"
-    //     ],
-    //     "typeId": "configurable",
-    //     "selectedItem": 510052,
-    //     "imageThumbnail": "/d/u/dummy-product.png",
-    //     "virtualGroup": 16298,
-    //     "finalPrice": 10,
-    //     "inSide": 1
-    //   }
-    // ]
-    // let cmsCart = {
-    //   "cart_items": [
+    // let sitem = {
+    //   "id": 680,
+    //   "position": 0,
+    //   "name": "Mighty Twist - Large",
+    //   "description": "",
+    //   "inSide": 1,
+    //   "finalPrice": 26.55,
+    //   "specialPrice": 26.55,
+    //   "typeId": "bundle",
+    //   "metaKeyword": [
+    //     "Mighty Twist - Large"
+    //   ],
+    //   "bundleProductOptions": [
     //     {
-    //       "product_id": 12,
-    //       "qty": 1,
-    //       "price": 34.865,
-    //       "type_id": "configurable"
+    //       "position": 1,
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
+    //       "title": "Cheese",
+    //       "ingredient": 0,
+    //       "type": "checkbox",
+    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "productLinks": [
+    //         {
+    //           "position": 1,
+    //           "option_id": "233",
+    //           "selection_id": "902",
+    //           "price": 0,
+    //           "id": 664,
+    //           "name": "American Cheese",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [
+    //             {
+    //               "option_id": "664",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 1,
+    //               "name": "None",
+    //               "id": 661,
+    //               "sku": 8100011
+    //             },
+    //             {
+    //               "option_id": "664",
+    //               "selection_id": null,
+    //               "price": 1.8,
+    //               "selected": 0,
+    //               "name": "Regular",
+    //               "id": 662,
+    //               "sku": 8100012
+    //             },
+    //             {
+    //               "option_id": "664",
+    //               "selection_id": null,
+    //               "price": 3.6,
+    //               "selected": 0,
+    //               "name": "Extra",
+    //               "id": 663,
+    //               "sku": 8100013
+    //             }
+    //           ],
+    //           "selected": 1,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 2,
+    //           "option_id": "233",
+    //           "selection_id": "903",
+    //           "price": 0,
+    //           "id": 668,
+    //           "name": "Lettuce",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [
+    //             {
+    //               "option_id": "668",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 1,
+    //               "name": "None",
+    //               "id": 665,
+    //               "sku": 8117011
+    //             },
+    //             {
+    //               "option_id": "668",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 0,
+    //               "name": "Regular",
+    //               "id": 666,
+    //               "sku": 8117012
+    //             },
+    //             {
+    //               "option_id": "668",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 0,
+    //               "name": "Extra",
+    //               "id": 667,
+    //               "sku": 8117013
+    //             }
+    //           ],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 3,
+    //           "option_id": "233",
+    //           "selection_id": "904",
+    //           "price": 0,
+    //           "id": 672,
+    //           "name": "Tomato",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [
+    //             {
+    //               "option_id": "672",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 1,
+    //               "name": "None",
+    //               "id": 669,
+    //               "sku": 8117031
+    //             },
+    //             {
+    //               "option_id": "672",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 0,
+    //               "name": "Regular",
+    //               "id": 670,
+    //               "sku": 8117032
+    //             },
+    //             {
+    //               "option_id": "672",
+    //               "selection_id": null,
+    //               "price": 0,
+    //               "selected": 0,
+    //               "name": "Extra",
+    //               "id": 671,
+    //               "sku": 8117033
+    //             }
+    //           ],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 4,
+    //           "option_id": "233",
+    //           "selection_id": "905",
+    //           "price": 0,
+    //           "id": 557,
+    //           "name": "Twister Sandwich - Spicy",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 5,
+    //           "option_id": "233",
+    //           "selection_id": "906",
+    //           "price": 10,
+    //           "id": 601,
+    //           "name": "Large Fries",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         }
+    //       ],
+    //       "isDependent": 0
     //     },
     //     {
-    //       "product_id": 12,
-    //       "qty": 1,
-    //       "price": 36.7,
-    //       "type_id": "configurable"
+    //       "position": 2,
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
+    //       "title": "Choice of Second Sandwich",
+    //       "ingredient": 0,
+    //       "type": "radio",
+    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "productLinks": [
+    //         {
+    //           "position": 1,
+    //           "option_id": "234",
+    //           "selection_id": "907",
+    //           "price": 0,
+    //           "id": 558,
+    //           "name": "Twister Sandwich - Original",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 1,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         }
+    //       ],
+    //       "isDependent": 0
+    //     },
+    //     {
+    //       "position": 3,
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
+    //       "title": "Choice of side item",
+    //       "ingredient": 0,
+    //       "type": "radio",
+    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "productLinks": [
+    //         {
+    //           "position": 1,
+    //           "option_id": "235",
+    //           "selection_id": "908",
+    //           "price": 11,
+    //           "id": 604,
+    //           "name": "Large Fries Spicy",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 1,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 2,
+    //           "option_id": "235",
+    //           "selection_id": "909",
+    //           "price": 7,
+    //           "id": 589,
+    //           "name": "Coleslaw Salad Small",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 3,
+    //           "option_id": "235",
+    //           "selection_id": "910",
+    //           "price": 10,
+    //           "id": 598,
+    //           "name": "Loaded Fries Regular",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 4,
+    //           "option_id": "235",
+    //           "selection_id": "911",
+    //           "price": 8,
+    //           "id": 609,
+    //           "name": "Potato Dipper- Regular",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 5,
+    //           "option_id": "235",
+    //           "selection_id": "912",
+    //           "price": 5,
+    //           "id": 621,
+    //           "name": "Cheese Potato Dipper",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 6,
+    //           "option_id": "235",
+    //           "selection_id": "913",
+    //           "price": 3,
+    //           "id": 622,
+    //           "name": "Loaded Fries P.Chili Reg",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         }
+    //       ],
+    //       "isDependent": 0
+    //     },
+    //     {
+    //       "position": 4,
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
+    //       "title": "Choice of Beverages",
+    //       "ingredient": 0,
+    //       "type": "radio",
+    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "productLinks": [
+    //         {
+    //           "position": 1,
+    //           "option_id": "236",
+    //           "selection_id": "914",
+    //           "price": 10,
+    //           "id": 576,
+    //           "name": "Pepsi Large",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 1,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 2,
+    //           "option_id": "236",
+    //           "selection_id": "915",
+    //           "price": 10,
+    //           "id": 588,
+    //           "name": "Mirinda Large",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 3,
+    //           "option_id": "236",
+    //           "selection_id": "2433",
+    //           "price": 10,
+    //           "id": 713,
+    //           "name": "7Up Large",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 4,
+    //           "option_id": "236",
+    //           "selection_id": "917",
+    //           "price": 10,
+    //           "id": 579,
+    //           "name": "Diet Pepsi Large",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 5,
+    //           "option_id": "236",
+    //           "selection_id": "918",
+    //           "price": 10,
+    //           "id": 585,
+    //           "name": "Mountain Dew Large",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 6,
+    //           "option_id": "236",
+    //           "selection_id": "919",
+    //           "price": 5,
+    //           "id": 570,
+    //           "name": "Mojito Krusher",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 7,
+    //           "option_id": "236",
+    //           "selection_id": "920",
+    //           "price": 0,
+    //           "id": 623,
+    //           "name": "Small Aquafina",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         },
+    //         {
+    //           "position": 8,
+    //           "option_id": "236",
+    //           "selection_id": "921",
+    //           "price": 8,
+    //           "id": 569,
+    //           "name": "Fresh Orange Juice",
+    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": [
+    //             "0"
+    //           ]
+    //         }
+    //       ],
+    //       "isDependent": 0
     //     }
     //   ],
-    //   "cms_cart_id": "65",
-    //   "currency_code": "AED",
-    //   "subtotal": 71.57,
-    //   "grandtotal": 71.57,
-    //   "tax": [
-
+    //   "selectedItem": 0,
+    //   "configurableProductOptions": [
+    //     {
+    //       "id": "144",
+    //       "position": 1,
+    //       "title": "Choice of Size",
+    //       "subtitle": "Choice of Size",
+    //       "selIndex": 0,
+    //       "options": [
+    //         {
+    //           "isSelected": 1,
+    //           "position": 1,
+    //           "title": "Regular",
+    //           "id": "16285"
+    //         },
+    //         {
+    //           "isSelected": 0,
+    //           "position": 2,
+    //           "title": "Large",
+    //           "id": "16286"
+    //         },
+    //         {
+    //           "isSelected": 0,
+    //           "position": 3,
+    //           "title": "Medium",
+    //           "id": "16287"
+    //         },
+    //         {
+    //           "isSelected": 0,
+    //           "position": 4,
+    //           "title": "Small",
+    //           "id": "16293"
+    //         },
+    //         {
+    //           "isSelected": 0,
+    //           "position": 5,
+    //           "title": "Family",
+    //           "id": "16294"
+    //         }
+    //       ]
+    //     }
     //   ],
-    //   "not_available": [
-
-    //   ],
-    //   "is_price_changed": true,
-    //   "coupon_code": "",
-    //   "discount_amount": 0,
-    //   "success": true
+    //   "items": [],
+    //   "sku": 71,
+    //   "imageSmall": "\/d\/u\/dummy-product.png",
+    //   "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //   "image": "\/d\/u\/dummy-product.png",
+    //   "taxClassId": 2,
+    //   "virtualGroup": 0,
+    //   "visibility": 4,
+    //   "associative": 0
     // }
 
-    // let dataToUpdate = {
-    //   items: [],
-    //   notAvailable: [],
-    // }
-    // if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
-    //   for (const obj of curItems) {
-    //     console.log("1", obj.id)
-    //     let parsedData = {}
-    //     for (const elem of cmsCart.cart_items) {
-    //       console.log("2", elem.product_id)
-    //       if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
-    //         parsedData[obj.id] = true
-    //         dataToUpdate['items'].push(obj)
+    // let bundle_option = {};
+    // let selection_configurable_option = {};
+    // sitem['bundleProductOptions'].map(bpo => {
+    //   if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+    //     bpo['productLinks'].map(pl => {
+    //       if (pl['selected'] == 1) {
+    //         if (pl['subOptions'] && pl['subOptions'].length > 0) {
+    //           if (bundle_option[pl['option_id']] == null)
+    //             bundle_option[pl['option_id']] = {}
+    //           bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+
+    //         } else {
+    //           bundle_option[pl['option_id']] = pl['selection_id']
+    //         }
     //       }
-    //     }
-    //     if (parsedData[obj.id] == undefined)
-    //       dataToUpdate['notAvailable'].push(obj)
+    //       if (bundle_option.hasOwnProperty(pl['option_id'])) {
+    //         pl['subOptions'].map(so => {
+    //           if (pl['selected'] == 1 && so['selected'] == 1) {
+    //             selection_configurable_option[pl['selection_id']] = so['id']
+    //           }
+    //           else {
+    //             if (selection_configurable_option[pl['selection_id']] == undefined)
+    //               selection_configurable_option[pl['selection_id']] = ""
+    //           }
+    //         })
+    //       }
+    //     })
     //   }
-    // } else {
-    //   dataToUpdate['notAvailable'] = curItems
-    // }
-
-    // console.log("here.................", JSON.stringify(dataToUpdate))
-    let a: IMenuGrpcRequest.IFetchMenuRes
-
-
+    // })
+    // console.log("bundle_option", bundle_option)
+    // console.log("selection_configurable_option", selection_configurable_option)
     await bootstrap(server)
   } catch (error) {
     console.error(error)

@@ -16,13 +16,13 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    cartId: Joi.string().required(),
-                    curMenuId: Joi.number(),
-                    menuUpdatedAt: Joi.number(),
-                    lat: Joi.number().min(0).max(90),
-                    lng: Joi.number().min(-180).max(180),
-                    couponCode: Joi.string().allow(""),
-                    items: Joi.any()
+                    cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
+                    curMenuId: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    menuUpdatedAt: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    lat: Joi.number().min(0).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    couponCode: Joi.string().allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
+                    items: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PRODUCTS.message))
                 }
             }),
             async (ctx) => {
@@ -47,8 +47,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    cartId: Joi.string().required(),
-                    cartUpdatedAt: Joi.number().required(),
+                    cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
+                    cartUpdatedAt: Joi.number().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                 }
             }),
             async (ctx) => {

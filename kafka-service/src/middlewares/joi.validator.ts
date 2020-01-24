@@ -18,7 +18,8 @@ async function validateObject(object = {}, label, schema, options) {
             const value = await schema.validateAsync(object, options)
         } catch (error) {
             // Throw error with custom message if validation failed
-            throw new Error(`Invalid ${label} - ${error.message}`)
+            consolelog(process.cwd(), "validation error", error.message, false)
+            return  Promise.reject(error.message)
         }
     }
 }

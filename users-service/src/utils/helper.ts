@@ -36,7 +36,8 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
-    consolelog(process.cwd(), "validationerror", error, true)
+    consolelog(process.cwd(), "In error handler direct ", error, false)
+    consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
 
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     if (error && error.code && error.details) {
@@ -127,7 +128,7 @@ export let sendError = function (error) {
             }
         }
         else if (error.name === 'ValidationError') {
-            customError.message = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
+            customError.message = error.message
             customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
@@ -143,6 +144,10 @@ export let sendError = function (error) {
         }
         else {
             consolelog(process.cwd(), "Unhandled error type 2", JSON.stringify(error), true)
+            customError.message = error
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+            customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+            customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
         }
     }
     else {

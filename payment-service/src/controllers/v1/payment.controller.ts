@@ -46,10 +46,31 @@ export class PaymentController {
      */
     public async getPaymentStatus(payload: IPaymentGrpcRequest.IGetPaymentStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.PaymentE.getPaymentStatus(payload);
-        }catch(error) {
-            consolelog(process.cwd(), "getPaymentStatus", error, false)
-            return Promise.reject(error)
+            let res: IPaymentGrpcRequest.IGetPaymentStatusRes;
+            switch (payload.paymentStatus) {
+                case ENTITY.PaymentClass.STATUS.ORDER.INITIATED:
+                    res =  (await ENTITY.PaymentE.getInitiateStatus(payload)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.AUTHORIZED:
+                    res = await ENTITY.PaymentE.getAuthorizationStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.CANCELLED:
+                    res = await ENTITY.PaymentE.getReverseStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.CAPTURED:
+                    res = await ENTITY.PaymentE.getCaptureStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                case ENTITY.PaymentClass.STATUS.ORDER.REFUNDED:
+                    res = await ENTITY.PaymentE.getRefundStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    break;
+                default:
+                    res = await ENTITY.PaymentE.getPaymentStatus(payload);
+                    break;
+            }
+            return res;
+        }catch(err) {
+            consolelog(process.cwd(), "getPaymentStatus", err, false)
+            return Promise.reject(err)
         }
     }
 

@@ -38,10 +38,13 @@ declare namespace ICommonRequest {
         id: string
     }
     interface IError {
+        name?: string,
         statusCode: number,
         httpCode: number,
         type: string,
-        message: string
+        message: string,
+        actionHint?: string,
+        useNoonPayMessage?: boolean;
     }
     interface IActivityLogger {
         type: string,
