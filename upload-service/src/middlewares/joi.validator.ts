@@ -1,5 +1,5 @@
 import * as Joi from '@hapi/joi';
-import { validatorErr } from '../utils'
+import { consolelog, validatorErr } from '../utils'
 /**
  * Helper function to validate an object against the provided schema,
  * and to throw a custom error if object is not valid.
@@ -18,7 +18,7 @@ async function validateObject(object = {}, label, schema, options) {
         } catch (error) {
             // Throw error with custom message if validation failed
             consolelog(process.cwd(), "validation error", error.message, false)
-            return  Promise.reject(error.message)
+            return Promise.reject(error.message)
         }
     }
 }
