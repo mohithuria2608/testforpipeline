@@ -388,7 +388,8 @@ export class CartClass extends BaseEntity {
                         price: sitem.finalPrice,
                         type_id: "bundle"
                     })
-                } else {
+                }
+                else {
                     return Promise.reject("Unhandled  products")
                 }
             })

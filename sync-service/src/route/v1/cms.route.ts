@@ -15,8 +15,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI_CMS_HEADERS,
                 body: {
-                    username: Joi.string().required(),
-                    password: Joi.string().required(),
+                    username: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_USERNAME.message)),
+                    password: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PASSWORD.message)),
                 }
             }),
             async (ctx) => {

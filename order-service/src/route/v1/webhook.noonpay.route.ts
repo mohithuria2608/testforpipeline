@@ -16,10 +16,10 @@ export default (router: Router) => {
             validate({
                 // headers: JOI.COMMON_HEADERS,
                 query: {
-                    paymentInfo: Joi.string().required(),
-                    result: Joi.string().required(),
-                    orderReference: Joi.string().required(),
-                    orderId: Joi.string().required(),
+                    paymentInfo: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    result: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    orderReference: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                 }
             }),
             async (ctx) => {

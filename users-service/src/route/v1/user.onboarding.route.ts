@@ -15,8 +15,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-                    phnNo: Joi.string().max(9).required(),//@todo : Country specific regex
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),//@todo : Country specific regex
                 }
             }),
             async (ctx) => {
@@ -39,10 +39,10 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-                    phnNo: Joi.string().max(9).required(),
-                    otp: Joi.number().required().error(new Error('Invalid OTP.')),
-                    isGuest: Joi.boolean().valid(0, 1).required(),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+                    otp: Joi.number().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_OTP.message)),
+                    isGuest: Joi.boolean().valid(0, 1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                 }
             }),
             async (ctx) => {
@@ -66,14 +66,14 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    socialKey: Joi.string().required(),
+                    socialKey: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.message)),
                     medium: Joi.string().valid(
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
-                    ).required(),
-                    name: Joi.string(),
-                    email: Joi.string().email().lowercase().allow(null).allow("")
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.message)),
+                    name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.message)),
+                    email: Joi.string().email().lowercase().allow(null).allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message))
                 }
             }),
             async (ctx) => {

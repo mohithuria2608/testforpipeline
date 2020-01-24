@@ -19,12 +19,12 @@ export default (router: Router) => {
                     type: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.SYNC_CONFIG.GENERAL,
                         Constant.DATABASE.TYPE.SYNC_CONFIG.PAYMENT,
-                        Constant.DATABASE.TYPE.SYNC_CONFIG.SHIPMENT),
+                        Constant.DATABASE.TYPE.SYNC_CONFIG.SHIPMENT).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     action: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,
                         Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE,
-                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET),
-                    data: Joi.any().required()
+                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    data: Joi.any().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
             async (ctx) => {

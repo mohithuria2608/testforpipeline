@@ -314,10 +314,6 @@ export const DATABASE = {
     }
 };
 
-const STATUS_CODE = {
-    SOMETHING_WENT_WRONG: 700,
-}
-
 export const STATUS_MSG = {
     ERROR: {
         E400: {
@@ -500,6 +496,114 @@ export const STATUS_MSG = {
             },
         },
         E422: {
+            INVALID_COUNTRY_CODE: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid country code',
+                type: 'INVALID_COUNTRY_CODE'
+            },
+            INVALID_PHONE_NO: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid phone number',
+                type: 'INVALID_PHONE_NO'
+            },
+            INVALID_EMAIL: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid email',
+                type: 'INVALID_EMAIL'
+            },
+            INVALID_NAME: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid name',
+                type: 'INVALID_NAME'
+            },
+            INVALID_LOCATION: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid location',
+                type: 'INVALID_LOCATION'
+            },
+            INVALID_ADDRESS: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid address',
+                type: 'INVALID_ADDRESS'
+            },
+            INVALID_OTP: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid otp',
+                type: 'INVALID_OTP'
+            },
+            INVALID_SOCIAL_INFO: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid social info',
+                type: 'INVALID_SOCIAL_INFO'
+            },
+            INVALID_CART: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid cart',
+                type: 'INVALID_CART'
+            },
+            INVALID_COUPON: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid coupon',
+                type: 'INVALID_COUPON'
+            },
+            INVALID_PRODUCTS: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid products',
+                type: 'INVALID_PRODUCTS'
+            },
+            INVALID_ORDER: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid order',
+                type: 'INVALID_ORDER'
+            },
+            INVALID_USERNAME:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid user name',
+                type: 'INVALID_USERNAME'
+            },
+            INVALID_PASSWORD:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid password',
+                type: 'INVALID_PASSWORD'
+            },
+            INVALID_LANGUAGE:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid language',
+                type: 'INVALID_LANGUAGE'
+            },
+            INVALID_BRAND:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid brand',
+                type: 'INVALID_BRAND'
+            },
+            INVALID_COUNTRY:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid country',
+                type: 'INVALID_COUNTRY'
+            },
+            DEFAULT_VALIDATION_ERROR: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid info provided',
+                type: 'DEFAULT_VALIDATION_ERROR'
+            },
             VALIDATION_ERROR: {
                 statusCode: 422,
                 httpCode: 422,
