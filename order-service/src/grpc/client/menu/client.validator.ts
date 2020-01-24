@@ -1,7 +1,8 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
+import * as Constant from '../../../constant'
 
 export class MenuServiceValidator {
     constructor() {
@@ -11,6 +12,10 @@ export class MenuServiceValidator {
             try {
                 let dataToValidate = Joi.object().keys({
                     menuId: Joi.number(),
+                    language: Joi.string().valid(
+                        Constant.DATABASE.LANGUAGE.AR,
+                        Constant.DATABASE.LANGUAGE.EN
+                    ).required(),
                     country: Joi.string().required(),
                     isDefault: Joi.boolean().valid(true, false)
                 });
@@ -19,7 +24,7 @@ export class MenuServiceValidator {
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }

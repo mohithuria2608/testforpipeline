@@ -23,8 +23,8 @@ class AsMenuConsumer extends BaseConsumer {
         try {
             let res = await menuService.sync(message)
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "syncMenu", err, false);
+        } catch (error) {
+            consolelog(process.cwd(), "syncMenu", error, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)

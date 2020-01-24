@@ -34,13 +34,13 @@ export class AuthService {
                 }
                 if (payload.id)
                     dataToSend['id'] = payload.id
-                this.authClient.createToken(dataToSend, (err, res) => {
-                    if (!err) {
+                this.authClient.createToken(dataToSend, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(),"successfully created access and refresh token", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(),"Error in creating token", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(),"Error in creating token", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {
@@ -52,13 +52,13 @@ export class AuthService {
         return new Promise(async (resolve, reject) => {
             try {
                 await authServiceValidator.verifyTokenValidator(payload)
-                this.authClient.verifyToken({ token: payload.token }, (err, res) => {
-                    if (!err) {
+                this.authClient.verifyToken({ token: payload.token }, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(),"Error in verifying token", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(),"Error in verifying token", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

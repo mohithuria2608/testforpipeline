@@ -13,7 +13,7 @@ class KafkaProducer {
             requireAcks: 1,
         });
 
-        this.producer.on('error', function (err) { consolelog(process.cwd(), 'Err in starting the producer', err, false); })
+        this.producer.on('error', function (error) { consolelog(process.cwd(), 'Err in starting the producer', error, false); })
 
         /**
          * @param 
@@ -64,9 +64,10 @@ class KafkaProducer {
                 Constant.KAFKA_TOPIC.AS_PROMOTION,
                 Constant.KAFKA_TOPIC.SDM_ORDER,
                 Constant.KAFKA_TOPIC.AS_CONFIG,
-            ], (err, data) => {
-                if (err) {
-                    consolelog(process.cwd(), 'Err in creating topics', err, false);
+                Constant.KAFKA_TOPIC.M_LOGGER,
+            ], (error, data) => {
+                if (error) {
+                    consolelog(process.cwd(), 'Err in creating topics', error, false);
                 } else {
                     consolelog(process.cwd(), 'kafka topics created successfully', data, true);
                 }
@@ -81,9 +82,9 @@ class KafkaProducer {
                 topic: req.topic,
                 messages: req.messages,
             }
-        ], (err, data) => {
-            if (err) {
-                consolelog(process.cwd(), 'Err in producing to kafka topic', err, false);
+        ], (error, data) => {
+            if (error) {
+                consolelog(process.cwd(), 'Err in producing to kafka topic', error, false);
             } else {
                 consolelog(process.cwd(), 'message produced to kafka successfully', JSON.stringify(data), true);
             }

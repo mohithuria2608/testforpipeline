@@ -27,13 +27,13 @@ export class SyncService {
         return new Promise(async (resolve, reject) => {
             try {
                 await syncServiceValidator.syncValidator(payload)
-                this.syncClient.sync(payload, (err, res) => {
-                    if (!err) {
+                this.syncClient.sync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully synced sync on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing sync on cms", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in syncing sync on cms", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

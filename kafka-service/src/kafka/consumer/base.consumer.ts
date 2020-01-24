@@ -18,11 +18,11 @@ export class BaseConsumer {
         this.consumer.setOffset(topic, 0, 0);
         this.consumer.addTopics(
             [topic],
-            (err, data) => {
-                if (err) {
-                    consolelog(process.cwd(), `Error: Consumer ${topic} in nudge ${err}`, [], false);
+            (error, data) => {
+                if (error) {
+                    consolelog(process.cwd(), `Error: Consumer ${topic} in nudge ${error}`, "", false);
                 } else {
-                    consolelog(process.cwd(), `Consumer ${topic} in nudge up successfully`, [], true);
+                    consolelog(process.cwd(), `Consumer ${topic} in nudge up successfully`, "", true);
                 }
             });
     }
@@ -60,17 +60,17 @@ export class BaseConsumer {
             try {
                 const parsedMessage = JSON.parse(message.value as string);
                 this._onMessage.next(parsedMessage);
-            } catch (err) {
-                consolelog(process.cwd(), `Error while parsing payload of topic ${this.topic} in nudge ${err}`, [], false);
+            } catch (error) {
+                consolelog(process.cwd(), `Error while parsing payload of topic ${this.topic} in nudge ${error}`, [], false);
             }
         });
 
-        this.consumer.on('error', (err) => {
-            consolelog(process.cwd(), `Error while parsing payload of topic ${this.topic} in nudge ${err}`, [], false);
+        this.consumer.on('error', (error) => {
+            consolelog(process.cwd(), `Error while parsing payload of topic ${this.topic} in nudge ${error}`, [], false);
         })
 
-        this.consumer.on('offsetOutOfRange', function (err) {
-            consolelog(process.cwd(), `Offset out of range ${this.topic} in nudge ${err}`, [], false);
+        this.consumer.on('offsetOutOfRange', function (error) {
+            consolelog(process.cwd(), `Offset out of range ${this.topic} in nudge ${error}`, [], false);
         });
     }
 }
@@ -95,9 +95,9 @@ export class BaseConsumer {
 //         this.consumer.setOffset(topic, 0, 0);
 //         this.consumer.addTopics(
 //             [topic],
-//             (err, data) => {
-//                 if (err) {
-//                     appLogger.error(`Consumer ${topic} in nudge ${err}`);
+//             (error, data) => {
+//                 if (error) {
+//                     appLogger.error(`Consumer ${topic} in nudge ${error}`);
 //                 } else {
 //                     appLogger.info(`Consumer ${topic} in nudge up successfully`);
 //                 }
@@ -137,17 +137,17 @@ export class BaseConsumer {
 //             try {
 //                 const parsedMessage = JSON.parse(message.value as string);
 //                 this._onMessage.next(parsedMessage);
-//             } catch (err) {
-//                 appLogger.error(`Error while parsing payload of topic ${this.topic} in Nudge ${err}`)
+//             } catch (error) {
+//                 appLogger.error(`Error while parsing payload of topic ${this.topic} in Nudge ${error}`)
 //             }
 //         });
 
-//         this.consumer.on('error', (err) => {
-//             appLogger.error(`Error in topic ${this.topic} in Nudge ${err}`);
+//         this.consumer.on('error', (error) => {
+//             appLogger.error(`Error in topic ${this.topic} in Nudge ${error}`);
 //         })
 
-//         this.consumer.on('offsetOutOfRange', function (err) {
-//             appLogger.error(`Offset out of range ${this.topic} in Nudge ${err}`);
+//         this.consumer.on('offsetOutOfRange', function (error) {
+//             appLogger.error(`Offset out of range ${this.topic} in Nudge ${error}`);
 //         });
 //     }
 // }

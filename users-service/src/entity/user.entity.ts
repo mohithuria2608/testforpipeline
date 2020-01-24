@@ -69,7 +69,6 @@ export class UserEntity extends BaseEntity {
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
         changePhnNo: Joi.number().valid(0, 1).required(),
-        switchPhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
@@ -139,7 +138,6 @@ export class UserEntity extends BaseEntity {
             cartId: this.ObjectId().toString(),
             password: 'Password1', //await cryptData(id),
             changePhnNo: 0,
-            switchPhnNo: 0,
         } : {}
         if (userInfo.name != undefined)
             user['name'] = userInfo.name
@@ -187,9 +185,9 @@ export class UserEntity extends BaseEntity {
             this.createDefaultCart(dataToSave.cartId, dataToSave.id)
             let user = await this.getUser({ userId: dataToSave.id })
             return user
-        } catch (err) {
-            consolelog(process.cwd(), "createUser", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "createUser", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -244,7 +242,7 @@ export class UserEntity extends BaseEntity {
      * @param {string} id 
      * @param {number} isGuest 
      */
-    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number) {
+    async getTokens(deviceid: string, devicetype: string, tokentype: string[], id: string, isGuest: number, sessionTime: number) {
         try {
             if (tokentype && tokentype.length > 0) {
                 let promise = []
@@ -253,7 +251,8 @@ export class UserEntity extends BaseEntity {
                         deviceid: deviceid,
                         devicetype: devicetype,
                         tokenType: elem,
-                        isGuest: isGuest
+                        isGuest: parseInt(isGuest.toString()),
+                        sessionTime: sessionTime
                     }
                     if (id)
                         dataToSend['id'] = id

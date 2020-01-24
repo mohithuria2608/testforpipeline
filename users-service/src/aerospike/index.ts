@@ -55,6 +55,7 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
+                        this.udfRegister({ module: process.cwd() + '/lua/user.lua' })
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.UserE.sindex)
                         if (ENTITY.SessionE.sindex && ENTITY.SessionE.sindex.length > 0)
@@ -63,9 +64,9 @@ class AerospikeClass {
                             this.bootstrapIndex(ENTITY.UserchangeE.sindex)
                         resolve({})
                     }
-                } catch (err) {
-                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", err, false)
-                    reject(err)
+                } catch (error) {
+                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", error, false)
+                    reject(error)
                 }
             } else reject(Error('Client already initialized'))
         })

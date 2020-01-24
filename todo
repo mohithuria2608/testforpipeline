@@ -48,3 +48,15 @@ Please help us with following detail
 11. validate coupon on hit of validate cart
 12. aerospike call with thier team
 13. 
+
+
+# default language as En
+# check guest user ttl with deepesh 
+# expire old token after guest checkout
+# check with front end if we need to change the accToken every time
+
+# make email unique
+
+
+
+

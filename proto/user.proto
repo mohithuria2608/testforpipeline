@@ -10,10 +10,11 @@ service UserService {
 
 message IKafkaReq {
     required string set = 1;
-    required IAerospike as = 2;
-    required ICms cms = 3;
-    required ISdm sdm = 4;
-    required int32 count = 5;
+    optional IAerospike as = 2;
+    optional ICms cms = 3;
+    optional ISdm sdm = 4;
+    optional IMdb mdb = 5;
+    required int32 count = 6;
 }
 
 message IAerospike {
@@ -33,6 +34,14 @@ message ICms {
 }
 
 message ISdm {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    required string argv = 5;
+}
+
+message IMdb {
     optional bool create = 1;
     optional bool update = 2;
     optional bool reset = 3;
@@ -60,7 +69,6 @@ message ISession {
     required string userId = 4;
     required int32 isGuest = 5;
     required int32 otpVerified = 6;
-    required int32 isLogin = 7;
     required int32 createdAt = 8;
     required string deviceid = 9;
     required string language = 10;

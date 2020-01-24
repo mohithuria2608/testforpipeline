@@ -19,9 +19,9 @@ class FailConsumer extends BaseConsumer {
     private async handleFailReq(message) {
         try {
             consolelog(process.cwd(), "Data in fail queue", message, true)
-        } catch (err) {
-            consolelog(process.cwd(), `handleFailReq`, err, false);
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), `handleFailReq`, error, false);
+            return Promise.reject(error)
         }
     }
 }

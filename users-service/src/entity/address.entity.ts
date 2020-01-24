@@ -22,7 +22,7 @@ export class AddressEntity extends BaseEntity {
         flatNum: Joi.string(),
         tag: Joi.string().valid(
             Constant.DATABASE.TYPE.TAG.HOME,
-            Constant.DATABASE.TYPE.TAG.WORK,
+            Constant.DATABASE.TYPE.TAG.OFFICE,
             Constant.DATABASE.TYPE.TAG.HOTEL,
             Constant.DATABASE.TYPE.TAG.OTHER),
         addressType: Joi.string().valid(
@@ -131,9 +131,9 @@ export class AddressEntity extends BaseEntity {
             //     listDeliveryAddress = listDeliveryAddress.slice(1)
             // }
             return deliveryAddress
-        } catch (err) {
-            consolelog(process.cwd(), "addAddress", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "addAddress", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -187,9 +187,9 @@ export class AddressEntity extends BaseEntity {
             }
             await Aerospike.listOperations(listAppendArg)
             return bins
-        } catch (err) {
-            consolelog(process.cwd(), "updateAddress", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "updateAddress", error, false)
+            return Promise.reject(error)
         }
     }
 }

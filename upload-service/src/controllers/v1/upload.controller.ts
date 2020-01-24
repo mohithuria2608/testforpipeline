@@ -19,9 +19,9 @@ export class UploadController {
             }
             await deleteFile(image.path);
             return true;
-        } catch (err) {
-            consolelog(process.cwd(),"uploadImage", err, false)
-            return Promise.reject(err);
+        } catch (error) {
+            consolelog(process.cwd(),"uploadImage", error, false)
+            return Promise.reject(error);
         }
     }
 }

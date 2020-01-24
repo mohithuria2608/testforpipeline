@@ -12,7 +12,6 @@ declare namespace ISessionRequest {
         userId: string,
         isGuest: number,
         otpVerified: number,
-        isLogin: number,
         createdAt: number,
         deviceid: string,
         language: string,

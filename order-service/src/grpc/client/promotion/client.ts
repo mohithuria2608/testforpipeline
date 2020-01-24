@@ -27,13 +27,13 @@ export class PromotionService {
         return new Promise(async (resolve, reject) => {
             try {
                 await promotionServiceValidator.validateCouponValidator(payload)
-                this.promotionClient.validatePromotion(payload, (err, res) => {
-                    if (!err) {
+                this.promotionClient.validatePromotion(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully validated promotion on as", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in  validating promotion on as", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in  validating promotion on as", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

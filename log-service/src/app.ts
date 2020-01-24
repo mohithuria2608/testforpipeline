@@ -21,7 +21,7 @@ export const start = (async () => {
     event.emit('logger', { name: "ankit" });
     await bootstrap(server)
 
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 })()

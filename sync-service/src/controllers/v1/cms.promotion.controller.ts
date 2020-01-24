@@ -27,9 +27,9 @@ export class CmsPromotionController {
             }
             kafkaService.kafkaSync(promoChange)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "postPromotion", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "postPromotion", error, false)
+            return Promise.reject(error)
         }
     }
 }

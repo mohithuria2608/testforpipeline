@@ -26,13 +26,13 @@ export class MenuService {
     async fetchMenu(payload: IMenuGrpcRequest.IFetchMenuReq): Promise<any> {
         return new Promise(async (resolve, reject) => {
             await menuServiceValidator.fetchMenu(payload)
-            this.menuClient.fetchMenu({ country: payload.country, isDefault: payload.isDefault }, (err, res) => {
-                if (!err) {
+            this.menuClient.fetchMenu({ country: payload.country, language: payload.language, isDefault: payload.isDefault }, (error, res) => {
+                if (!error) {
                     consolelog(process.cwd(), "successfully fetched Menu", JSON.stringify(res), false)
                     resolve(JSON.parse(res.menu))
                 } else {
-                    consolelog(process.cwd(), "Error in fetching Menu", JSON.stringify(err), false)
-                    reject(sendError(err))
+                    consolelog(process.cwd(), "Error in fetching Menu", JSON.stringify(error), false)
+                    reject(sendError(error))
                 }
             })
         })

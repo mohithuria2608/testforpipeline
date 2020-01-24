@@ -31,13 +31,13 @@ export class MenuService {
         return new Promise(async (resolve, reject) => {
             try {
                 await menuServiceValidator.syncValidator(payload)
-                this.menuClient.sync(payload, (err, res) => {
-                    if (!err) {
+                this.menuClient.sync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully synced menu on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing menu on cms", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in syncing menu on cms", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

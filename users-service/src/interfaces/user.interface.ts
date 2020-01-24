@@ -17,7 +17,6 @@ declare namespace IUserRequest {
         cartId: string,
         password: string,
         changePhnNo: number,
-        switchPhnNo: number,
     }
     interface IPhone {
         cCode: string,
@@ -44,7 +43,6 @@ declare namespace IUserRequest {
         cartId?: string,
         password?: string,
         changePhnNo?: number,
-        switchPhnNo?: number
     }
 
     interface IRefreshToken {

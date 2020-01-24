@@ -17,7 +17,7 @@ declare namespace ICommonRequest {
         tokenType: string,
         id: string,
         isGuest: number
-        userData: IUserRequest.IUserData,
+        sessionTime: number
     }
 
     interface IPagination {
@@ -48,5 +48,14 @@ declare namespace ICommonRequest {
         form?: boolean,
         qs?: boolean,
         formData?: boolean
+    }
+    interface IActivityLogger {
+        type: string,
+        info: any,
+        description: string,
+        options: {
+            env: number,
+        },
+        createdAt: number
     }
 }

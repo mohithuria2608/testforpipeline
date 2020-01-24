@@ -1,6 +1,8 @@
+import * as config from "config"
 import { Middleware, Context } from 'koa'
 import * as Constant from '../constant';
 import { consolelog } from '../utils';
+import { kafkaService } from '../grpc/client';
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
@@ -8,7 +10,7 @@ export default (opts?): Middleware => {
         let startTime = new Date().getTime();
         ctx.res.on('finish', () => {
             executionTime = new Date().getTime() - startTime;
-            let dataToSave = {
+            let data : ICommonRequest.IActivityLogger = {
                 type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
                 info: {
                     'request': {
@@ -24,12 +26,24 @@ export default (opts?): Middleware => {
                     },
                     'ip': ctx.request.ip,
                     'executionTime': executionTime,
-                    'userId': ctx.state.user ? ctx.state.user._id : null
+                    'user': ctx.state.user ? ctx.state.user : {}
                 },
                 description: "",
+                options: {
+                    env: Constant.SERVER.ENV.production,
+                    
+                },
                 createdAt: new Date().getTime(),
             }
-            consolelog(process.cwd(),"activity log", dataToSave, true, 'entryLog')
+            let dataToSave = {
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify(data)
+                }
+            }
+            consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
+            kafkaService.kafkaSync(dataToSave)
         })
 
         await next()

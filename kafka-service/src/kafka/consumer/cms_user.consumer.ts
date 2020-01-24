@@ -23,8 +23,8 @@ class CmsUserConsumer extends BaseConsumer {
         try {
             let res = await userService.sync(message)
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "syncUser", err, false);
+        } catch (error) {
+            consolelog(process.cwd(), "syncUser", error, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)

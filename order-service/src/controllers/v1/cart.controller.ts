@@ -19,7 +19,7 @@ export class CartController {
      * */
     async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
-            auth.userData = await userService.fetchUser({ userId: auth.id })
+            let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             let invalidMenu = false
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
@@ -30,6 +30,7 @@ export class CartController {
                     invalidMenu = true
             } else {
                 const defaultMenu = await menuService.fetchMenu({
+                    language: headers.language,
                     country: headers.country,
                     isDefault: true
                 })
@@ -43,13 +44,13 @@ export class CartController {
                     delete payload['couponCode']
                 // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             }
-            let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, auth.userData)
+            let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
             res['invalidMenu'] = invalidMenu
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "postCart", JSON.stringify(err), false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "postCart", JSON.stringify(error), false)
+            return Promise.reject(error)
         }
     }
 
@@ -61,9 +62,9 @@ export class CartController {
     async getCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IGetCart, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.CartE.getCart({ cartId: payload.cartId })
-        } catch (err) {
-            consolelog(process.cwd(), "getCart", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "getCart", error, false)
+            return Promise.reject(error)
         }
     }
 }

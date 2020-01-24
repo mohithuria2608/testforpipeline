@@ -41,10 +41,9 @@ export class SessionEntity extends BaseEntity {
         devicemodel: Joi.string().trim().required(),
         devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
         osversion: Joi.string().trim().required(),
-        isLogin: Joi.number().required(),
         isGuest: Joi.number().valid(0, 1).required(),
         createdAt: Joi.number().required(),
-        updatedAt: Joi.number().required()
+        sessionTime: Joi.number().required().description("timestamp in seconds")
     });
 
     /**
@@ -76,10 +75,10 @@ export class SessionEntity extends BaseEntity {
      * @param {ISessionRequest.ISession} payload 
      * @param {IUserRequest.IUserUpdate} userData 
      */
-    public async buildSession(headers: ICommonRequest.IHeaders, payload: ISessionRequest.ISession, userData: IUserRequest.IUserData) {
+    public async buildSession(headers: ICommonRequest.IHeaders, payload: ISessionRequest.ISession) {
         try {
             let isCreate = false
-            let session: ISessionRequest.ISession = await this.getSession(headers.deviceid, userData.id)
+            let session: ISessionRequest.ISession = await this.getSession(headers.deviceid, payload.userId)
             consolelog(process.cwd(), "session", JSON.stringify(session), false)
             if (session && session.id) {
                 if (session.otpExpAt <= new Date().getTime() && session.otpExpAt != 0) {
@@ -96,25 +95,19 @@ export class SessionEntity extends BaseEntity {
             }
             else {
                 isCreate = true
-                session['id'] = generateSessionId(userData.id, headers.deviceid)
+                session['id'] = generateSessionId(payload.userId, headers.deviceid)
                 if (payload.otp != undefined)
                     session['otp'] = payload.otp
                 if (payload.otpExpAt != undefined)
                     session['otpExpAt'] = payload.otpExpAt
             }
-            session['userId'] = userData.id
 
             if (payload.isGuest != undefined)
                 session['isGuest'] = payload.isGuest
             if (payload.otpVerified != undefined)
                 session['otpVerified'] = payload.otpVerified
-            if (payload.isLogin != undefined)
-                session['isLogin'] = payload.isLogin
             if (isCreate)
                 session['createdAt'] = new Date().getTime()
-            else
-                session['updatedAt'] = new Date().getTime()
-
             if (headers.brand != undefined)
                 session['brand'] = headers.brand
             if (headers.deviceid != undefined)
@@ -131,6 +124,10 @@ export class SessionEntity extends BaseEntity {
                 session['devicetype'] = headers.devicetype
             if (headers.osversion != undefined)
                 session['osversion'] = headers.osversion
+
+            if (payload.sessionTime)
+                session['sessionTime'] = payload.sessionTime
+            session['userId'] = payload.userId
 
             let putArg: IAerospike.Put = {
                 bins: session,
@@ -159,7 +156,7 @@ export class SessionEntity extends BaseEntity {
      * @param {IUserRequest.IAuthVerifyOtp} payload 
      * @param {IUserRequest.IUserData} userData 
      */
-    async validateOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp, userData: IUserRequest.IUserData) {
+    async validateOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp, userData: IUserRequest.IUserData, sessionTime: number) {
         try {
             let getSession: ISessionRequest.ISession = await this.getSession(headers.deviceid, userData.id)
             consolelog(process.cwd(), "getSession", JSON.stringify(getSession), false)
@@ -178,13 +175,14 @@ export class SessionEntity extends BaseEntity {
                 otp: 0,
                 otpExpAt: 0,
                 otpVerified: 1,
-                isLogin: 1
+                sessionTime: sessionTime,
+                userId: userData.id
             }
-            await this.buildSession(headers, sessionUpdate, userData)
+            await this.buildSession(headers, sessionUpdate)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "validateOtp", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "validateOtp", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -193,17 +191,17 @@ export class SessionEntity extends BaseEntity {
      * @param {ICommonRequest.IHeaders} headers 
      * @param {IUserRequest.IUserData} userData 
      */
-    async removeSession(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData) {
+    async removeSession(headers: ICommonRequest.IHeaders, userId: string) {
         try {
             let putArg: IAerospike.Remove = {
-                key: generateSessionId(userData.id, headers.deviceid),
+                key: generateSessionId(userId, headers.deviceid),
                 set: this.set
             }
             await Aerospike.remove(putArg)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeSession", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "removeSession", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -232,9 +230,9 @@ export class SessionEntity extends BaseEntity {
                 })
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeAllSession", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "removeAllSession", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -263,9 +261,9 @@ export class SessionEntity extends BaseEntity {
                 })
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "removeAllSession", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "removeAllSession", error, false)
+            return Promise.reject(error)
         }
     }
 

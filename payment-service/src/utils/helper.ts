@@ -36,6 +36,8 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
+    consolelog(process.cwd(), "In error handler direct ", error, false)
+    consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     if (error && error.code && error.details) {
         customError.message = error.details
@@ -125,7 +127,7 @@ export let sendError = function (error) {
             }
         }
         else if (error.name === 'ValidationError') {
-            customError.message += Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
+            customError.message = error.message
             customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
@@ -134,8 +136,8 @@ export let sendError = function (error) {
             customError.message = error.message;
             customError.statusCode = error.statusCode;
             customError.httpCode = error.httpCode;
-            customError.type =  error.type;
-            customError.actionHint =  error.actionHint;
+            customError.type = error.type;
+            customError.actionHint = error.actionHint;
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
@@ -148,6 +150,10 @@ export let sendError = function (error) {
         }
         else {
             consolelog(process.cwd(), "Unhandled error type 2", JSON.stringify(error), true)
+            customError.message = error
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+            customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+            customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
         }
     }
     else {
@@ -294,4 +300,11 @@ export let generateRandomString = function (digits: number) {
 
 export function cloneObject(objectToClone: any) {
     return JSON.parse(JSON.stringify(objectToClone));
+}
+
+export let validatorErr = function (error) {
+    return {
+        name: "ValidationError",
+        message: error
+    }
 }

@@ -19,9 +19,9 @@ export class CountryController {
                 await ENTITY.CountryE.bootstrapCountry(country)
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(),"bootstrapCountry", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(),"bootstrapCountry", error, false)
+            return Promise.reject(error)
         }
     }
 }

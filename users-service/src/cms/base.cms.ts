@@ -34,10 +34,10 @@ export class BaseCMS {
                     consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
                     resolve(body)
                 })
-                .catch(function (err) {
-                    consolelog(process.cwd(), "In request manager err", err.message, true)
-                    if (err.statusCode || err.error || err.message) {
-                        reject(err.message)
+                .catch(function (error) {
+                    consolelog(process.cwd(), "In request manager err", error.message, true)
+                    if (error.statusCode || error.error || error.message) {
+                        reject(error.message)
                     }
                     else
                         reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)

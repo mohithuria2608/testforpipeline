@@ -20,20 +20,20 @@ export class KafkaService {
     private kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
+        console.log(process.cwd(), 'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
     }
 
     async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
                 await kafkaServiceValidator.kafkaValidator(payload)
-                this.kafkaClient.kafkaSync(payload, (err, res) => {
-                    if (!err) {
+                this.kafkaClient.kafkaSync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully produced user on kafka for syncing to SDM", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in producing user on kafka  for syncing to SDM", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in producing user on kafka  for syncing to SDM", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

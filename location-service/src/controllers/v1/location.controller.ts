@@ -14,13 +14,14 @@ export class LocationController {
     async validateLocation(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IValidateLocation) {
         try {
             let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
+            consolelog(process.cwd(), "store", JSON.stringify(store), true)
             if (store && store.length > 0)
                 return { menuId: store[0].menuId }
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-        } catch (err) {
-            consolelog(process.cwd(), "validateLocation", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "validateLocation", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -30,6 +31,7 @@ export class LocationController {
     * */
     async getPickupList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IPickupLocation) {
         try {
+            let self = this
             let preSelectedStore: IStoreRequest.IStore
             if (payload.lat && payload.lng) {
                 let temp = await storeController.validateCoords(payload)
@@ -45,6 +47,20 @@ export class LocationController {
             consolelog(process.cwd(), "area", area.length, true)
             consolelog(process.cwd(), "store", store.length, true)
             let res = []
+
+            function compare(a, b) {
+                // Use toUpperCase() to ignore character casing
+                const bandA = a.name_en.toUpperCase();
+                const bandB = b.name_en.toUpperCase();
+
+                let comparison = 0;
+                if (bandA > bandB) {
+                    comparison = 1;
+                } else if (bandA < bandB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
             if (city && city.length > 0) {
                 for (const c of city) {
                     let areaCollection = []
@@ -63,19 +79,22 @@ export class LocationController {
                                         }
                                     }
                                 }
+                                storeCollection.sort(compare)
                                 a['store'] = storeCollection
                                 areaCollection.push(a)
                             }
                         }
                     }
+                    areaCollection.sort(compare)
                     c['area'] = areaCollection
                     res.push(c)
                 }
             }
+            res.sort(compare)
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "getPickupList", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "getPickupList", error, false)
+            return Promise.reject(error)
         }
     }
 }

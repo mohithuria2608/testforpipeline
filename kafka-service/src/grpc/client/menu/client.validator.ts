@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog } from "../../../utils"
+import { consolelog ,validatorErr} from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class MenuServiceValidator {
@@ -34,6 +34,13 @@ export class MenuServiceValidator {
                         get: Joi.boolean(),
                         argv: Joi.string()
                     }),
+                    mdb: Joi.object().keys({
+                        create: Joi.boolean(),
+                        update: Joi.boolean(),
+                        reset: Joi.boolean(),
+                        get: Joi.boolean(),
+                        argv: Joi.string()
+                    }),
                     count: Joi.number()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
@@ -41,7 +48,7 @@ export class MenuServiceValidator {
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }

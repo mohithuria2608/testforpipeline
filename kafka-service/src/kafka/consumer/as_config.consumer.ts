@@ -4,7 +4,7 @@ import { consolelog } from "../../utils"
 import { syncService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-class AsMenuConsumer extends BaseConsumer {
+class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
         super(Constant.KAFKA_TOPIC.AS_CONFIG, 'client');
@@ -23,8 +23,8 @@ class AsMenuConsumer extends BaseConsumer {
         try {
             let res = await syncService.sync(message)
             return res
-        } catch (err) {
-            consolelog(process.cwd(), "syncConfig", err, false);
+        } catch (error) {
+            consolelog(process.cwd(), "syncConfig", error, false);
             if (message.count != 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
@@ -37,4 +37,4 @@ class AsMenuConsumer extends BaseConsumer {
 }
 
 
-export const as_menuConsumerE = new AsMenuConsumer();
+export const as_configConsumerE = new AsConfigConsumer();

@@ -10,9 +10,9 @@ export class AuthController {
         try {
             let token: string = await tokenManager.setToken(payload)
             return { token }
-        } catch (err) {
-            consolelog(process.cwd(),"AuthController : createToken", JSON.stringify(err), false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(),"AuthController : createToken", JSON.stringify(error), false)
+            return Promise.reject(error)
         }
     }
 
@@ -20,9 +20,9 @@ export class AuthController {
         try {
             let tokenData: ICommonRequest.AuthorizationObj = await tokenManager.verifyToken(payload.token)
             return tokenData
-        } catch (err) {
-            consolelog(process.cwd(),"AuthController : verifyToken", JSON.stringify(err), false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(),"AuthController : verifyToken", JSON.stringify(error), false)
+            return Promise.reject(error)
         }
     }
 }

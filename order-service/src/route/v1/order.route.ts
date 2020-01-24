@@ -16,8 +16,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    addressId: Joi.string().required(),
-                    cartId: Joi.string().required(),
+                    addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
+                    cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
                 }
             }),
             async (ctx) => {
@@ -42,7 +42,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    page: Joi.number().min(1).required()
+                    page: Joi.number().min(1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
             async (ctx) => {
@@ -67,9 +67,9 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-                    phnNo: Joi.string().max(9).required(),
-                    orderId: Joi.string().required().required()
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
                 }
             }),
             async (ctx) => {

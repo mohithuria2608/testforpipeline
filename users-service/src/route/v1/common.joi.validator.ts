@@ -10,20 +10,20 @@ export const COMMON_HEADERS = {
     language: Joi.string().valid(
         Constant.DATABASE.LANGUAGE.AR,
         Constant.DATABASE.LANGUAGE.EN
-    ).required(),
+    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
     brand: Joi.string().valid(
         Constant.DATABASE.BRAND.KFC,
         Constant.DATABASE.BRAND.PH
-    ),
+    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_BRAND.message)),
     country: Joi.string().valid(
         Constant.DATABASE.COUNTRY.UAE
-    ).required(),
-    appversion: Joi.string().required(),
-    devicemodel: Joi.string().required(),
+    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY.message)),
+    appversion: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+    devicemodel: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
     devicetype: Joi.string().valid(
         Constant.DATABASE.TYPE.DEVICE.ANDROID,
         Constant.DATABASE.TYPE.DEVICE.IOS
-    ).required(),
-    osversion: Joi.string().required(),
-    deviceid: Joi.string().trim().required()
+    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+    osversion: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+    deviceid: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
 }

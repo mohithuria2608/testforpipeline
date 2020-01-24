@@ -6,6 +6,7 @@ declare namespace IAuthGrpcRequest {
         tokenType: string,
         isGuest: number,
         id?: string,
+        sessionTime: number
     }
 
     interface IVerifyTokenObj {

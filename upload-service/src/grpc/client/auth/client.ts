@@ -28,13 +28,13 @@ export class AuthService {
     async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)
-            this.authClient.verifyToken({ token: payload.token }, (err, res) => {
-                if (!err) {
+            this.authClient.verifyToken({ token: payload.token }, (error, res) => {
+                if (!error) {
                     consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(err), false)
-                    reject(err)
+                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(error), false)
+                    reject(error)
                 }
             })
         })

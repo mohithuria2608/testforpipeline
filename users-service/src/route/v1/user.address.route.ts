@@ -16,16 +16,16 @@ export default (router: Router) => {
             validate({
                 headers: COMMON_HEADERS,
                 body: {
-                    lat: Joi.number().min(0).max(90).required(),
-                    lng: Joi.number().min(-180).max(180).required(),
-                    bldgName: Joi.string().required(),
-                    description: Joi.string().required(),
-                    flatNum: Joi.string().required(),
+                    lat: Joi.number().min(0).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    bldgName: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    description: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    flatNum: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     tag: Joi.string().valid(
                         Constant.DATABASE.TYPE.TAG.HOME,
-                        Constant.DATABASE.TYPE.TAG.WORK,
+                        Constant.DATABASE.TYPE.TAG.OFFICE,
                         Constant.DATABASE.TYPE.TAG.HOTEL,
-                        Constant.DATABASE.TYPE.TAG.OTHER).required(),
+                        Constant.DATABASE.TYPE.TAG.OTHER).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 }
             }),
             async (ctx) => {
@@ -50,13 +50,13 @@ export default (router: Router) => {
             validate({
                 headers: COMMON_HEADERS,
                 body: {
-                    addressId: Joi.string().required(),
-                    lat: Joi.number().min(0).max(90).required(),
-                    lng: Joi.number().min(-180).max(180).required(),
-                    bldgName: Joi.string().required(),
-                    description: Joi.string().required(),
-                    flatNum: Joi.string().required(),
-                    tag: Joi.string().required(),
+                    addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
+                    lat: Joi.number().min(0).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    bldgName: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    description: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    flatNum: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    tag: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 }
             }),
             async (ctx) => {
@@ -102,7 +102,7 @@ export default (router: Router) => {
             validate({
                 headers: COMMON_HEADERS,
                 query: {
-                    addressId: Joi.string().required(),
+                    addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
                 },
             }),
             async (ctx) => {

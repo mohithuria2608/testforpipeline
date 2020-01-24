@@ -9,6 +9,7 @@ declare namespace IKafkaRequest {
         as?: IChangeAerospike
         cms?: IChangeCMS
         sdm?: IChangeSDM,
+        mdb?: IChangeMongo
         count?: number,
     }
 
@@ -30,6 +31,14 @@ declare namespace IKafkaRequest {
 
     interface IChangeSDM {
         create?: boolean,
+        update?: boolean,
+        reset?: boolean,
+        get?: boolean,
+        argv: string
+    }
+
+    interface IChangeMongo {
+        create: boolean,
         update?: boolean,
         reset?: boolean,
         get?: boolean,

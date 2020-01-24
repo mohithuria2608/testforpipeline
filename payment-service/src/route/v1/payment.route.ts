@@ -68,7 +68,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     storeCode: Joi.string().trim().required(),
-                    orderId: Joi.string().trim().required(),
+                    orderId: Joi.string().trim().required().description("cms order id"),
                     amount: Joi.number().required().greater(0),
                     paymentMethodId: Joi.number().integer(),
                     channel: Joi.string().valid('Mobile', 'Web')

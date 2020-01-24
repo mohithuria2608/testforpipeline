@@ -66,56 +66,84 @@ export class UserController {
                     otpExpAt: otpExpAt,
                     otpVerified: 0,
                     isGuest: 0,
-                    isLogin: 0,
+                    userId: checkUser[0].id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
-                await ENTITY.SessionE.buildSession(headers, session, checkUser[0])
+                await ENTITY.SessionE.buildSession(headers, session)
                 if (checkUser[0].changePhnNo == 1) {
-                    let userUpdate = { changePhnNo: 0 }
+                    let userUpdate = {
+                        changePhnNo: 0
+                    }
                     await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
                     await Aerospike.remove({ set: ENTITY.UserchangeE.set, key: checkUser[0].id })
                 }
             } else {
-                let userCreate: IUserRequest.IUserUpdate = {
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    phnVerified: 0,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                let queryArg: IAerospike.Query = {
+                    udf: {
+                        module: 'user',
+                        func: Constant.UDF.USER.check_phone_exist,
+                        args: [payload.cCode],
+                        forEach: true
+                    },
+                    equal: {
+                        bin: "phnNo",
+                        value: payload.phnNo
+                    },
+                    set: ENTITY.UserchangeE.set,
+                    background: false,
                 }
-                let userInCms = await ENTITY.UserE.checkUserOnCms({})
-                if (userInCms && userInCms.id) {
-                    userCreate['cmsUserRef'] = userInCms.id
-                    if (userInCms['sdmUserRef'])
-                        userCreate['sdmUserRef'] = userInCms.id
-                    userCreate['name'] = userInCms.name
-                    userCreate['email'] = userInCms.email
-                    userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                } else {
-                    let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
-                    if (userInSdm && userInSdm.id) {
-                        userCreate['sdmUserRef'] = userInSdm.id
-                        userCreate['name'] = userInCms.name
-                        userCreate['email'] = userInCms.email
-                        userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                let userchange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
+                if (userchange && userchange.length > 0) {
+                    let userData = await ENTITY.UserE.getUser({ userId: userchange[0].id })
+                    let otp = Constant.SERVER.BY_PASS_OTP
+                    let otpExpAt = new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME
+                    let update = {
+                        otp: otp,
+                        otpExpAt: otpExpAt,
+                        otpVerified: 0,
+                        isGuest: 0,
+                        // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
+                    await ENTITY.UserchangeE.createUserchange(update, userData)
+                } else {
+                    let userCreate: IUserRequest.IUserUpdate = {
+                        changePhnNo: 1,
+                        phnVerified: 0,
+                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    }
+                    // let userInCms = await ENTITY.UserE.checkUserOnCms({})
+                    // if (userInCms && userInCms.id) {
+                    //     userCreate['cmsUserRef'] = userInCms.id
+                    //     if (userInCms['sdmUserRef'])
+                    //         userCreate['sdmUserRef'] = userInCms.id
+                    //     userCreate['name'] = userInCms.name
+                    //     userCreate['email'] = userInCms.email
+                    //     userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    // } else {
+                    //     let userInSdm = await ENTITY.UserE.checkUserOnSdm({})
+                    //     if (userInSdm && userInSdm.id) {
+                    //         userCreate['sdmUserRef'] = userInSdm.id
+                    //         userCreate['name'] = userInCms.name
+                    //         userCreate['email'] = userInCms.email
+                    //         userCreate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    //     }
+                    // }
+                    let user = await ENTITY.UserE.createUser(headers, userCreate)
+                    let userchangePayload = {
+                        cCode: payload.cCode,
+                        phnNo: payload.phnNo,
+                        otp: Constant.SERVER.BY_PASS_OTP,
+                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpVerified: 0,
+                        isGuest: 0,
+                    }
+                    await ENTITY.UserchangeE.createUserchange(userchangePayload, user)
                 }
-                let user = await ENTITY.UserE.createUser(headers, userCreate)
-                let session = {
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 0,
-                    isGuest: 0,
-                    isLogin: 0,
-                    createdAt: new Date().getTime(),
-                    updatedAt: new Date().getTime(),
-                    // ttl: Constant.SERVER.OTP_EXPIRE_TIME
-                }
-                await ENTITY.SessionE.buildSession(headers, session, user)
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "loginSendOtp", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "loginSendOtp", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -128,7 +156,13 @@ export class UserController {
     * */
     async verifyOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp) {
         try {
+            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let deleteUserId = ""
+            let userUpdate: IUserRequest.IUserUpdate = {
+                cCode: payload.cCode,
+                phnNo: payload.phnNo,
+                phnVerified: 1
+            }
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -147,20 +181,7 @@ export class UserController {
             if (user && user.length > 0) {
                 if (user.length >= 2)
                     return Promise.reject("Same phone number used more than once")
-                let userUpdate: IUserRequest.IUserUpdate = {
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    phnVerified: 1
-                }
-                if (user[0] && user[0].id && user[0].switchPhnNo == 1) {
-                    userUpdate['switchPhnNo'] = 0
-                    let userchange = await ENTITY.UserchangeE.validateOtpOnPhnChange(payload, user[0])
-                    if (userchange && userchange.isGuest != undefined)
-                        payload.isGuest = userchange.isGuest
-                    if (userchange.cartId)
-                        userUpdate['cartId'] = userchange.cartId
-                }
-                else if (user[0] && user[0].id && user[0].changePhnNo == 1) {
+                if (user[0] && user[0].id && user[0].changePhnNo == 1) {
                     userUpdate['changePhnNo'] = 0
                     let userchange = await ENTITY.UserchangeE.validateOtpOnPhnChange(payload, user[0])
                     if (userchange && userchange.isGuest != undefined)
@@ -185,18 +206,11 @@ export class UserController {
                         deleteUserId = userchange.deleteUserId
                 }
                 else {
-                    await ENTITY.SessionE.validateOtp(headers, payload, user[0])
+                    if (user[0].email && user[0].name)
+                        userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    await ENTITY.SessionE.validateOtp(headers, payload, user[0], sessionTime)
                 }
                 user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
-                let sessionUpdate: ISessionRequest.ISession = {
-                    otp: 0,
-                    otpExpAt: 0,
-                    otpVerified: 1,
-                    isLogin: 1,
-                    isGuest: payload.isGuest
-                }
-
-                await ENTITY.SessionE.buildSession(headers, sessionUpdate, user[0])
             } else {
                 let queryArg: IAerospike.Query = {
                     udf: {
@@ -226,15 +240,26 @@ export class UserController {
                         phnVerified: 1,
                         changePhnNo: 0,
                     }
+                    if (userchange && userchange[0].isGuest != undefined)
+                        payload.isGuest = userchange[0].isGuest
+                    if (userchange[0].cCode)
+                        userUpdate['cCode'] = userchange[0].cCode
+                    if (userchange[0].phnNo)
+                        userUpdate['phnNo'] = userchange[0].phnNo
+                    if (userchange[0].cartId)
+                        userUpdate['cartId'] = userchange[0].cartId
+                    if (userchange[0].name)
+                        userUpdate['name'] = userchange[0].name
+                    if (userchange[0].email)
+                        userUpdate['email'] = userchange[0].email
+                    if (userchange[0].socialKey)
+                        userUpdate['socialKey'] = userchange[0].socialKey
+                    if (userchange[0].medium)
+                        userUpdate['medium'] = userchange[0].medium
                     user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
-                    let sessionUpdate: ISessionRequest.ISession = {
-                        otp: 0,
-                        otpExpAt: 0,
-                        otpVerified: 1,
-                        isLogin: 1,
-                        isGuest: payload.isGuest
+                    if (user[0].email && user[0].name && user[0].cCode && user[0].phnNo) {
+                        user[0] = await ENTITY.UserE.updateUser(user[0].id, { profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST })
                     }
-                    await ENTITY.SessionE.buildSession(headers, sessionUpdate, user[0])
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -242,19 +267,28 @@ export class UserController {
                 await Aerospike.remove({ set: ENTITY.UserE.set, key: deleteUserId })
                 await ENTITY.SessionE.removeAllSessionRelatedToUserId(deleteUserId)
             }
-
+            let sessionUpdate: ISessionRequest.ISession = {
+                otp: 0,
+                otpExpAt: 0,
+                otpVerified: 1,
+                isGuest: payload.isGuest,
+                sessionTime: sessionTime,
+                userId: user[0].id
+            }
+            await ENTITY.SessionE.buildSession(headers, sessionUpdate)
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
                 user[0].id,
-                0
+                payload.isGuest,
+                sessionTime
             )
             user[0]['isGuest'] = payload.isGuest
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user[0], headers) }
-        } catch (err) {
-            consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(err), false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(error), false)
+            return Promise.reject(error)
         }
     }
 
@@ -265,6 +299,7 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
+            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -276,26 +311,24 @@ export class UserController {
                 background: false,
             }
             let userObj: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-            let user
             if (userObj && userObj.length > 0) {
                 if (userObj[0].phnNo && userObj[0].phnNo != "" && userObj[0].phnVerified == 1) {
                     let userUpdate: IUserRequest.IUserUpdate = {
                         name: payload.name,
                     }
-                    if (payload.email) {
+                    if (payload.email)
                         userUpdate['email'] = payload.email
-                    }
                     let session = {
                         isGuest: 0,
                         otp: 0,
                         otpExpAt: 0,
                         otpVerified: 1,
-                        isLogin: 1,
-                        updatedAt: new Date().getTime(),
+                        sessionTime: sessionTime,
+                        userId: userObj[0].id
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
-                    user = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
-                    await ENTITY.SessionE.buildSession(headers, session, user)
+                    userObj[0] = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
+                    await ENTITY.SessionE.buildSession(headers, session)
                 } else {
                     let userUpdate: IUserRequest.IUserUpdate = {
                         name: payload.name,
@@ -311,11 +344,12 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
-                        isLogin: 0,
+                        sessionTime: sessionTime,
+                        userId: userObj[0].id,
                         // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                     }
-                    await ENTITY.SessionE.buildSession(headers, session, userObj[0])
-                    user = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
+                    await ENTITY.SessionE.buildSession(headers, session)
+                    userObj[0] = await ENTITY.UserE.updateUser(userObj[0].id, userUpdate)
                 }
             } else {
                 let userCreate: IUserRequest.IUserUpdate = {
@@ -327,29 +361,30 @@ export class UserController {
                     phnVerified: 0,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 }
-                user = await ENTITY.UserE.createUser(headers, userCreate)
+                userObj[0] = await ENTITY.UserE.createUser(headers, userCreate)
                 let session = {
                     isGuest: 0,
                     otp: 0,
                     otpExpAt: 0,
                     otpVerified: 1,
-                    isLogin: 1,
-                    updatedAt: new Date().getTime(),
+                    sessionTime: sessionTime,
+                    userId: userObj[0].id
                     // ttl: Constant.SERVER.OTP_EXPIRE_TIME
                 }
-                await ENTITY.SessionE.buildSession(headers, session, user)
+                await ENTITY.SessionE.buildSession(headers, session)
             }
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
-                user.id,
-                0
+                userObj[0].id,
+                0,
+                sessionTime
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
-        } catch (err) {
-            consolelog(process.cwd(), "socialAuthValidate", err, false)
-            return Promise.reject(err)
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userObj[0], headers) }
+        } catch (error) {
+            consolelog(process.cwd(), "socialAuthValidate", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -364,9 +399,15 @@ export class UserController {
     * */
     async createProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.ICreateProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
-            if (auth.userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
+            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+            if (userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
+            let userUpdate = {
+                name: payload.name,
+                email: payload.email,
+            }
             if (payload.socialKey && payload.medium) {
+                userUpdate['changePhnNo'] = 1
                 let queryArg: IAerospike.Query = {
                     udf: {
                         module: 'user',
@@ -382,56 +423,39 @@ export class UserController {
                     background: false,
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                if (checkUser && checkUser.length > 0) {
-                    auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
-                    let userchangePayload = {
-                        name: payload.name,
-                        email: payload.email,
-                        cCode: payload.cCode,
-                        phnNo: payload.phnNo,
-                        medium: payload.medium,
-                        socialKey: payload.socialKey,
-                        otp: Constant.SERVER.BY_PASS_OTP,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0,
-                        deleteUserId: auth.userData.id,
-                        isGuest: 0,
-                    }
-                    await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
-                    let userUpdate = {
-                        changePhnNo: 1
-                    }
-                    await ENTITY.UserE.updateUser(checkUser[0].id, userUpdate)
-                    auth.userData['phnVerified'] = 0
-                    return formatUserData(auth.userData, headers)
-                } else {
-                    let userUpdate = {
-                        name: payload.name,
-                        email: payload.email,
-                        phnNo: payload.phnNo,
-                        cCode: payload.cCode,
-                        phnVerified: 0,
-                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
-                    }
-                    let user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
-                    let session = {
-                        isGuest: 0,
-                        otp: Constant.SERVER.BY_PASS_OTP,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0,
-                        isLogin: 0,
-                        // ttl: Constant.SERVER.OTP_EXPIRE_TIME
-                    }
-                    await ENTITY.SessionE.buildSession(headers, session, user)
-                    return formatUserData(user, headers)
-                }
-            } else {
-                let userUpdate = {
+                let userchangePayload = {
                     name: payload.name,
                     email: payload.email,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
+                    cCode: payload.cCode,
+                    phnNo: payload.phnNo,
+                    medium: payload.medium,
+                    socialKey: payload.socialKey,
+                    otp: Constant.SERVER.BY_PASS_OTP,
+                    cartId: userData.cartId,
+                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpVerified: 0,
+                    isGuest: 0,
                 }
-                let user = await ENTITY.UserE.updateUser(auth.userData.id, userUpdate)
+                if (checkUser && checkUser.length > 0) {
+                    userchangePayload['deleteUserId'] = userData.id
+                    userData = checkUser[0]
+                } else {
+                    userchangePayload['deleteUserId'] = ""
+                }
+                userData = await ENTITY.UserE.updateUser(userData.id, userUpdate)
+                await ENTITY.UserchangeE.createUserchange(userchangePayload, userData)
+                userData['phnVerified'] = 0
+                userData['name'] = payload.name
+                userData['email'] = payload.email
+                userData['cCode'] = payload.cCode
+                userData['phnNo'] = payload.phnNo
+                userData['medium'] = payload.medium
+                userData['socialKey'] = payload.socialKey
+                userData['isGuest'] = 0
+                return formatUserData(userData, headers)
+            } else {
+                userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                let user = await ENTITY.UserE.updateUser(userData.id, userUpdate)
                 return formatUserData(user, headers)
             }
         } catch (error) {
@@ -449,13 +473,20 @@ export class UserController {
     * */
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
-            auth.userData = await ENTITY.UserE.getUser({ userId: auth.id })
+            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let dataToUpdate = {}
             if (payload.name)
                 dataToUpdate['name'] = payload.name
             if (payload.email)
                 dataToUpdate['email'] = payload.email
             if (payload.cCode && payload.phnNo) {
+                let userchangePayload = {
+                    cCode: payload.cCode,
+                    phnNo: payload.phnNo,
+                    otp: Constant.SERVER.BY_PASS_OTP,
+                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpVerified: 0
+                }
                 let queryArg: IAerospike.Query = {
                     udf: {
                         module: 'user',
@@ -472,30 +503,19 @@ export class UserController {
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 if (checkUser && checkUser.length > 0) {
-                    let userchangePayload = {
-                        cartId: checkUser[0].cartId,
-                        cCode: payload.cCode,
-                        phnNo: payload.phnNo,
-                        otp: Constant.SERVER.BY_PASS_OTP,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0
-                    }
-                    await ENTITY.UserchangeE.createUserchange(userchangePayload, checkUser[0])
-                    await ENTITY.UserE.updateUser(checkUser[0].id, { switchPhnNo: 1 })
-                } else {
-                    let userchangePayload = {
-                        cCode: payload.cCode,
-                        phnNo: payload.phnNo,
-                        otp: Constant.SERVER.BY_PASS_OTP,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0
-                    }
-                    await ENTITY.UserchangeE.createUserchange(userchangePayload, auth.userData)
-                    dataToUpdate['changePhnNo'] = 1
+                    userchangePayload['cartId'] = userData.cartId
+                    userchangePayload['deleteUserId'] = checkUser[0].id
+                    userData = checkUser[0]
                 }
+                dataToUpdate['changePhnNo'] = 1
+                await ENTITY.UserchangeE.createUserchange(userchangePayload, userData)
             }
             let user = await ENTITY.UserE.updateUser(auth.id, dataToUpdate)
-            user['phnVerified'] = 0;
+            if (payload.cCode && payload.phnNo) {
+                user['phnVerified'] = 0;
+                user['cCode'] = payload.cCode
+                user['phnNo'] = payload.phnNo
+            }
             // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers)
         } catch (error) {

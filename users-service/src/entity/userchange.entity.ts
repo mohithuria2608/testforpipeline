@@ -94,9 +94,9 @@ export class UserchangeEntity extends BaseEntity {
             }
             await Aerospike.remove({ set: this.set, key: userData.id })
             return getUserchange
-        } catch (err) {
-            consolelog(process.cwd(), "validateOtpOnPhnChange", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "validateOtpOnPhnChange", error, false)
+            return Promise.reject(error)
         }
     }
 

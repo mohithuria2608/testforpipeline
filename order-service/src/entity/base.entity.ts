@@ -60,6 +60,18 @@ export class BaseEntity {
         }
     }
 
+    async aggregateMdb(pipeline, option?) {
+        try {
+            if (option == undefined)
+                option = { lean: true }
+            let data = await this.DAOManager.aggregateData(this.set, pipeline, option)
+            return data
+        } catch (error) {
+            consolelog(process.cwd(), 'Base entity aggregateMdb', error, false)
+            return Promise.reject(error)
+        }
+    }
+
     async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore[]> {
         try {
             return await locationService.validateCoordinate({ lat, lng })

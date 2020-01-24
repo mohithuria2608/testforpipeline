@@ -36,6 +36,9 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
+    consolelog(process.cwd(), "In error handler direct ", error, false)
+    consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
+
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     if (error && error.code && error.details) {
         customError.message = error.details
@@ -125,7 +128,7 @@ export let sendError = function (error) {
             }
         }
         else if (error.name === 'ValidationError') {
-            customError.message += Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.message + error.message
+            customError.message = error.message
             customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
@@ -141,6 +144,10 @@ export let sendError = function (error) {
         }
         else {
             consolelog(process.cwd(), "Unhandled error type 2", JSON.stringify(error), true)
+            customError.message = error
+            customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+            customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+            customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
         }
     }
     else {
@@ -258,6 +265,7 @@ export const getBucket = (id) => {
 export const getHashTag = (str: string) => {
     return str.split(" ").filter(obj => { return (obj.indexOf("#") == 0) })
 }
+
 export let arrayToObject = function (array: any) {
     let data = array.reduce((obj, item) => {
         obj[item.key] = item.value
@@ -305,3 +313,10 @@ export let generateRandomString = function (digits: number) {
 export let generateSessionId = function (userId: string, deviceid: string) {
     return userId + "_" + deviceid;
 };
+
+export let validatorErr = function (error) {
+    return {
+        name: "ValidationError",
+        message: error
+    }
+}

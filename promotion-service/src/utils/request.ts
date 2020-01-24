@@ -6,8 +6,8 @@ import * as request from "request";
 */
 export const getRequest = async function (url: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        request.get(url, (err, res, body) => {
-            if (err) reject(err);
+        request.get(url, (error, res, body) => {
+            if (error) reject(error);
             else resolve(body);
         });
     });

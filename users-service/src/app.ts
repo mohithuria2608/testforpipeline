@@ -1,6 +1,6 @@
 import * as config from "config"
 import * as Koa from 'koa'
-import { bootstrap } from './utils'
+import { bootstrap, consolelog } from './utils'
 require('./grpc/server')
 import middleware from './middlewares'
 import route from './route'
@@ -18,7 +18,7 @@ export const start = (async () => {
     const port = config.get("server.user.port")
     const server = app.listen(port)
 
-    // event.emit('logger', {});
+    event.emit('logger', { name: "ankit" });
     await bootstrap(server)
 
     // await SDM.UserSDME.getCustomerByUserNameAndPswd("", "")
@@ -28,7 +28,7 @@ export const start = (async () => {
     // await SDM.UserSDME.getCustomerByMobile(1111111)
     // await UserSDME.getCustomersByPhone({ phoneNo: 1111111 })
     // await SDM.UserSDME.getsdmUserRef(1111111, "abc@gmail.com")
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
   }
 })()

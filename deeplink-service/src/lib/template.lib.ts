@@ -7,15 +7,15 @@ export class TemplateClass {
     }
     compileFile(template, complieData: Object) {
         return new Promise((resolve, reject) => {
-            this.fs.readFile(template, 'utf8', (err, content) => {
-                if (err)
-                    reject(err);
+            this.fs.readFile(template, 'utf8', (error, content) => {
+                if (error)
+                    reject(error);
                 try {
                     const template = handlebars.compile(content)
                     let html = template(complieData)
                     resolve(html)
-                } catch (err) {
-                    reject(err)
+                } catch (error) {
+                    reject(error)
                 }
             })
         });

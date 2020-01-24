@@ -130,9 +130,9 @@ export class CmsConfigController {
             this.syncConfigFromKafka(configChange)
             // kafkaService.kafkaSync(configChange)
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "postConfig", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "postConfig", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -151,9 +151,9 @@ export class CmsConfigController {
                 data['type'] = payload.type
             let config = await ENTITY.ConfigE.getConfig(data)
             return config
-        } catch (err) {
-            consolelog(process.cwd(), "getConfig", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "getConfig", error, false)
+            return Promise.reject(error)
         }
     }
 }

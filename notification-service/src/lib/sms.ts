@@ -16,12 +16,12 @@ export class SmsCLass {
     singleSms(payload: ISmsRequest.ISingleSms) {
 
         let url = `http://${this.host}:${this.port}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=${payload.type}&dlr=${payload.dlr}&destination=${payload.destination}&source=${this.source}&message=${payload.message}`
-        let command = `curl -X POST ${url}`
+        let command = `curl -X GET ${url}`
         consolelog(process.cwd(), 'singleSms command:', command, true)
 
-        exec(command, function (error, stdout, stderr) {
+        exec(command, function (error, stdout, stderror) {
             consolelog(process.cwd(), 'singleSms stdout:', stdout, true)
-            consolelog(process.cwd(), 'singleSms stderr:', stderr, false)
+            consolelog(process.cwd(), 'singleSms stderr:', stderror, false)
             if (error !== null) {
                 consolelog(process.cwd(), 'singleSms exec:', error, false)
             }

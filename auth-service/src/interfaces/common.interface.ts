@@ -18,6 +18,7 @@ declare namespace ICommonRequest {
         id: string,
         isGuest: number
         authCred?: IAuthCred,
+        sessionTime: number
     }
 
     interface IAuthCred {
@@ -30,5 +31,14 @@ declare namespace ICommonRequest {
         httpCode: number,
         type: string,
         message: string
+    }
+    interface IActivityLogger {
+        type: string,
+        info: any,
+        description: string,
+        options: {
+            env: number,
+        },
+        createdAt: number
     }
 }

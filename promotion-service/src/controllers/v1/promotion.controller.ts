@@ -39,9 +39,9 @@ export class PromotionController {
                 ENTITY.PromotionE.post(iterator, { create: true })
             }
             return {}
-        } catch (err) {
-            consolelog(process.cwd(), "postPromotion", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "postPromotion", error, false)
+            return Promise.reject(error)
         }
     }
 
@@ -59,9 +59,9 @@ export class PromotionController {
                 nextPage: promolist[((parseInt(payload.page.toString()) * 10) + 1)] ? parseInt(payload.page.toString()) + 1 : -1,
                 currentPage: parseInt(payload.page.toString())
             }
-        } catch (err) {
-            consolelog(process.cwd(), "getPromotionsList", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "getPromotionsList", error, false)
+            return Promise.reject(error)
         }
     }
 

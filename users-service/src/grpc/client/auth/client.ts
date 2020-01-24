@@ -20,7 +20,7 @@ export class AuthService {
     private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
+        console.log(process.cwd(), 'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
     }
 
     async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {
@@ -31,17 +31,18 @@ export class AuthService {
                     deviceid: payload.deviceid,
                     tokenType: payload.tokenType,
                     devicetype: payload.devicetype,
-                    isGuest: payload.isGuest
+                    isGuest: payload.isGuest,
+                    sessionTime: payload.sessionTime
                 }
                 if (payload.id)
                     dataToSend['id'] = payload.id
-                this.authClient.createToken(dataToSend, (err, res) => {
-                    if (!err) {
+                this.authClient.createToken(dataToSend, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully created access and refresh token", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in creating token", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in creating token", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {
@@ -53,13 +54,13 @@ export class AuthService {
         return new Promise(async (resolve, reject) => {
             try {
                 await authServiceValidator.verifyTokenValidator(payload)
-                this.authClient.verifyToken({ token: payload.token }, (err, res) => {
-                    if (!err) {
+                this.authClient.verifyToken({ token: payload.token }, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully verified token", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in verifying token", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in verifying token", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

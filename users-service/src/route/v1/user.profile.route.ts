@@ -16,16 +16,21 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    socialKey: Joi.string(),
+                    socialKey: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.message)),
                     medium: Joi.string().valid(
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
-                    ),
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-                    phnNo: Joi.string().max(9).required(),
-                    email: Joi.string().email().lowercase().required(),
-                    name: Joi.string().required()
+                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.message)),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+                    email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message)),
+                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.message)),
+
+                    /**
+                     * @description allow these keys
+                     */
+                    isGuest: Joi.any().description("allow for android").error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                 }
             }),
             async (ctx) => {
@@ -50,10 +55,15 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    email: Joi.string().email().lowercase(),
-                    name: Joi.string(),
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-                    phnNo: Joi.string().max(9),
+                    email: Joi.string().email().lowercase().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message)),
+                    name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.message)),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
+                    phnNo: Joi.string().max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+
+                    /**
+                     * @description allow these keys
+                     */
+                    isGuest: Joi.any().description("allow for android")
                 }
             }),
             async (ctx) => {

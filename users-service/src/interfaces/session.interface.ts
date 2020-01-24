@@ -2,7 +2,7 @@ declare namespace ISessionRequest {
 
     interface ISession {
         id?: string,
-        userId?: string,
+        userId: string,
         isGuest?: number,
         otp?: number,
         otpExpAt?: number,
@@ -15,9 +15,8 @@ declare namespace ISessionRequest {
         devicetype?: string,
         osversion?: string,
         deviceid?: string,
-        isLogin?: number,
         createdAt?: number,
-        updatedAt?: number,
+        sessionTime?: number,
         // ttl?: number
     }
 }

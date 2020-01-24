@@ -8,7 +8,7 @@ export class LogController {
 
     async log(payload: ILogGrpcRequest.IKafkaBody) {
         try {
-
+            
         } catch (error) {
             consolelog(process.cwd(), 'log', error, false)
             return Promise.reject(error)

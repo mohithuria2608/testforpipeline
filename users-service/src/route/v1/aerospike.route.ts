@@ -31,22 +31,6 @@ export default (router: Router) => {
                     throw error
                 }
             })
-
-        .post('/register-ufd',
-            async (ctx) => {
-                try {
-                    let payload = { ...ctx.request.body };
-                    if (payload.module == "user")
-                        Aerospike.udfRegister({ module: __dirname + '/../../../lua/user.lua' })
-                    // else if (payload.module == "address")
-                    //     Aerospike.udfRegister({ module: __dirname + '/../../../lua/address.lua' })
-                    ctx.body = {}
-                }
-                catch (error) {
-                    throw error
-                }
-            })
-
         .post('/test',
             async (ctx) => {
                 ctx.body = {}
@@ -551,6 +535,9 @@ export default (router: Router) => {
 
                     // AGGREGATE address.orderby(1,"createdAt") ON americana.address WHERE userId='2ad59710-2bb4-11ea-9373-cd68a8a900ff'
 
+                    // AGGREGATE menu.get_menu('En') ON americana.menu WHERE menuId='5'
+
+                    // AGGREGATE upsell.get_upsell('En') ON americana.upsell WHERE menuId='5'
                     ctx.body = {}
                 }
                 catch (error) {

@@ -6,6 +6,7 @@ declare namespace IMenuGrpcRequest {
 
     interface IFetchMenuData {
         menuId: string,
+        language: string,
         country: string,
         isDefault: boolean,
     }

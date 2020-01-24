@@ -27,13 +27,13 @@ export class PromotionService {
         return new Promise(async (resolve, reject) => {
             try {
                 await promotionServiceValidator.syncValidator(payload)
-                this.promotionClient.sync(payload, (err, res) => {
-                    if (!err) {
+                this.promotionClient.sync(payload, (error, res) => {
+                    if (!error) {
                         consolelog(process.cwd(), "successfully synced promotion on cms", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing promotion on cms", JSON.stringify(err), false)
-                        reject(err)
+                        consolelog(process.cwd(), "Error in syncing promotion on cms", JSON.stringify(error), false)
+                        reject(error)
                     }
                 })
             } catch (error) {

@@ -16,9 +16,9 @@ export class MenuEntity extends BaseEntity {
     async fetchMenuFromSDM(payload) {
         try {
 
-        } catch (err) {
-            consolelog(process.cwd(), "fetchMenuFromSDM", err, false)
-            return Promise.reject(err)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchMenuFromSDM", error, false)
+            return Promise.reject(error)
         }
     }
 }

@@ -22,8 +22,8 @@ describe("/login api where language type is English and devicetype is Android ",
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
 
@@ -49,8 +49,8 @@ describe("/login api where language type is Arab and device type is android ", (
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -74,8 +74,8 @@ describe("/login api where language type is En but DeviceType is wrong", () => {
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -99,8 +99,8 @@ describe("/login api where language type is English and DeviceType is IOS ", () 
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -124,8 +124,8 @@ describe("/login api where language type is Arab and DeviceType is Ios", () => {
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -148,8 +148,8 @@ describe("/login api where language type is Arab and DeviceType is Ios but osver
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -174,8 +174,8 @@ describe("/login api where language type is Arab and DeviceType is Ios and sendi
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -199,8 +199,8 @@ describe("/login api where language type is Arab and DeviceType is Ios  and send
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -224,8 +224,8 @@ describe("/login api where language type is Arab and DeviceType is Ios  and send
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);
@@ -249,8 +249,8 @@ describe("/login api where language type is Arab and DeviceType is Ios but langu
       .post("/v1/guest/login")
       .set(headers)
       .send(body)
-      .end((err, res) => {
-        if (err) {
+      .end((error, res) => {
+        if (error) {
           return "error occured '{err}'";
         }
         expect(res).to.have.status(200);

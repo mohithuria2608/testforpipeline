@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class AuthServiceValidator {
@@ -22,14 +22,15 @@ export class AuthServiceValidator {
                         Constant.DATABASE.TYPE.DEVICE.IOS
                     ).required(),
                     id: Joi.string().optional(),
-                    isGuest: Joi.boolean().valid(0, 1).required()
+                    isGuest: Joi.boolean().valid(0, 1).required(),
+                    sessionTime: Joi.number().required()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }
@@ -45,7 +46,7 @@ export class AuthServiceValidator {
                     reject(`Invalid Info- ${error.message}`)
                 resolve({})
             } catch (error) {
-                reject(error.message)
+                reject(validatorErr(error.message))
             }
         })
     }

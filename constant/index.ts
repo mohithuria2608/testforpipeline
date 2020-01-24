@@ -6,17 +6,21 @@ export enum SET_NAME {
     UPSELL = "upsell",
     PROMOTION = "promotion",
     ORDER = "order",
-    CONFIG = "config"
+    CONFIG = "config",
+    LOGGER = "logger"
 };
 
 export const UDF = {
     USER: {
         check_phone_exist: "check_phone_exist",
-        check_social_key: "check_social_key"
+        check_social_key: "check_social_key",
     },
-    ADDRESS: {
-        get_address: "get_address"
-    }
+    MENU: {
+        get_menu: "get_menu"
+    },
+    UPSELL: {
+        get_upsell: "get_upsell"
+    },
 };
 
 
@@ -36,7 +40,9 @@ export enum KAFKA_TOPIC {
 
     SDM_ORDER = 'sdm_order',
 
-    AS_CONFIG = 'as_config'
+    AS_CONFIG = 'as_config',
+
+    M_LOGGER = 'm_logger'
 };
 
 export enum MIDDLEWARE {
@@ -57,7 +63,11 @@ export const CMS = {
         CREATE_CART: {
             METHOD: "POST",
             URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
-        }
+        },
+        CREATE_ORDER: {
+            METHOD: "POST",
+            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+        },
     }
 };
 
@@ -149,10 +159,10 @@ export const KAFKA = {
 
 export const SERVER = {
     ENV: {
-        DEV: "development",
-        QA: "testing",
-        STAG: "staging",
-        PROD: "production"
+        development: 0,
+        testing: 1,
+        staging: 2,
+        production: 3
     },
     APP_INFO: {
         APP_NAME: "App",
@@ -223,7 +233,8 @@ export const DATABASE = {
         },
 
         ACTIVITY_LOG: {
-            REQUEST: "REQUEST"
+            REQUEST: "REQUEST",
+            ERROR: "ERROR"
         },
 
         PROFILE_STEP: {
@@ -233,7 +244,7 @@ export const DATABASE = {
 
         TAG: {
             HOME: "HOME",
-            WORK: "WORK",
+            OFFICE: "OFFICE",
             HOTEL: "HOTEL",
             OTHER: "OTHER"
         },
@@ -278,6 +289,11 @@ export const DATABASE = {
                 MONGO: "PENDING",
                 CMS: "",
                 SDM: ""
+            },
+            IN_KITCHEN: {
+                MONGO: "",
+                CMS: "",
+                SDM: "IN_KITCHEN"
             },
             CLOSED: {
                 MONGO: "",
@@ -409,7 +425,7 @@ export const STATUS_MSG = {
             }
         },
         E409: {
-            ORDER_NOT_FOUND:{
+            ORDER_NOT_FOUND: {
                 statusCode: 409,
                 httpCode: 409,
                 message: 'Order not found',
@@ -480,6 +496,114 @@ export const STATUS_MSG = {
             },
         },
         E422: {
+            INVALID_COUNTRY_CODE: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid country code',
+                type: 'INVALID_COUNTRY_CODE'
+            },
+            INVALID_PHONE_NO: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid phone number',
+                type: 'INVALID_PHONE_NO'
+            },
+            INVALID_EMAIL: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid email',
+                type: 'INVALID_EMAIL'
+            },
+            INVALID_NAME: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid name',
+                type: 'INVALID_NAME'
+            },
+            INVALID_LOCATION: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid location',
+                type: 'INVALID_LOCATION'
+            },
+            INVALID_ADDRESS: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid address',
+                type: 'INVALID_ADDRESS'
+            },
+            INVALID_OTP: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid otp',
+                type: 'INVALID_OTP'
+            },
+            INVALID_SOCIAL_INFO: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid social info',
+                type: 'INVALID_SOCIAL_INFO'
+            },
+            INVALID_CART: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid cart',
+                type: 'INVALID_CART'
+            },
+            INVALID_COUPON: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid coupon',
+                type: 'INVALID_COUPON'
+            },
+            INVALID_PRODUCTS: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid products',
+                type: 'INVALID_PRODUCTS'
+            },
+            INVALID_ORDER: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid order',
+                type: 'INVALID_ORDER'
+            },
+            INVALID_USERNAME:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid user name',
+                type: 'INVALID_USERNAME'
+            },
+            INVALID_PASSWORD:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid password',
+                type: 'INVALID_PASSWORD'
+            },
+            INVALID_LANGUAGE:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid language',
+                type: 'INVALID_LANGUAGE'
+            },
+            INVALID_BRAND:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid brand',
+                type: 'INVALID_BRAND'
+            },
+            INVALID_COUNTRY:{
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid country',
+                type: 'INVALID_COUNTRY'
+            },
+            DEFAULT_VALIDATION_ERROR: {
+                statusCode: 422,
+                httpCode: 422,
+                message: 'Invalid info provided',
+                type: 'DEFAULT_VALIDATION_ERROR'
+            },
             VALIDATION_ERROR: {
                 statusCode: 422,
                 httpCode: 422,
