@@ -48,31 +48,16 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        sdmUserRef: Joi.number().required().description("sk"),
-        cmsUserRef: Joi.number().required().description("sk"),
-        isGuest: Joi.number().valid(0, 1).required(),
-        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-        phnNo: Joi.string().trim().required().description("sk"),
-
-        // brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
-        // acount_uae: {
-        //     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-        //     phnNo: Joi.string().trim().required().description("sk"),
-        //     sdmUserRef: Joi.number().required().description("sk"),
-        //     cmsUserRef: Joi.number().required().description("sk"),
-        //     phnVerified: Joi.number().valid(0, 1).required(),
-        // },
-        // acount_ksa: {
-        //     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-        //     phnNo: Joi.string().trim().required().description("sk"),
-        //     sdmUserRef: Joi.number().required().description("sk"),
-        //     cmsUserRef: Joi.number().required().description("sk"),
-        //     phnVerified: Joi.number().valid(0, 1).required(),
-        // },
-
-
-        phnVerified: Joi.number().valid(0, 1).required(),
+        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH).description("sk"),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
+        acount_uae: {
+            cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+            phnNo: Joi.string().trim().required().description("sk"),
+            sdmUserRef: Joi.number().required().description("sk"),
+            cmsUserRef: Joi.number().required().description("sk"),
+            phnVerified: Joi.number().valid(0, 1).required(),
+        },
+        changePhnNo: Joi.number().valid(0, 1).required(),
         profileStep: Joi.number().valid(
             Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
@@ -86,7 +71,6 @@ export class UserEntity extends BaseEntity {
         password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
-        changePhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
