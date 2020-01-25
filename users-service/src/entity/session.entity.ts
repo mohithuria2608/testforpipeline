@@ -34,7 +34,6 @@ export class SessionEntity extends BaseEntity {
         otp: Joi.number(),
         otpExpAt: Joi.number(),
         otpVerified: Joi.number(),
-        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         appversion: Joi.string().trim().required(),

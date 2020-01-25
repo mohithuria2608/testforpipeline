@@ -11,6 +11,9 @@ export enum SET_NAME {
 };
 
 export const UDF = {
+    ACCOUNT: {
+        check_phone_exist: "check_phone_exist"
+    },
     USER: {
         check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key",
@@ -568,31 +571,31 @@ export const STATUS_MSG = {
                 message: 'Invalid order',
                 type: 'INVALID_ORDER'
             },
-            INVALID_USERNAME:{
+            INVALID_USERNAME: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid user name',
                 type: 'INVALID_USERNAME'
             },
-            INVALID_PASSWORD:{
+            INVALID_PASSWORD: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid password',
                 type: 'INVALID_PASSWORD'
             },
-            INVALID_LANGUAGE:{
+            INVALID_LANGUAGE: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid language',
                 type: 'INVALID_LANGUAGE'
             },
-            INVALID_BRAND:{
+            INVALID_BRAND: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid brand',
                 type: 'INVALID_BRAND'
             },
-            INVALID_COUNTRY:{
+            INVALID_COUNTRY: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid country',

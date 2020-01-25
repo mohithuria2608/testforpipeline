@@ -2,21 +2,25 @@ declare namespace IUserRequest {
 
     interface IUserData {
         id: string,
-        sdmUserRef: number,
-        cmsUserRef: number,
-        // isGuest: number,
-        name: string,
-        cCode: string,
-        phnNo: string,
-        phnVerified: number,
+        brand: string,
         email: string,
-        profileStep: number,
+        acount_uae: IAccount,
+        name: string,
         socialKey: string,
         medium: string,
-        createdAt: number,
-        cartId: string,
-        password: string,
+        profileStep: number,
         changePhnNo: number,
+        password: string,
+        cartId: string,
+        createdAt: number
+    }
+
+    interface IAccount {
+        cCode: string,
+        phnNo: string,
+        sdmUserRef: number,
+        cmsUserRef: number,
+        phnVerified: number,
     }
     interface IPhone {
         cCode: string,
@@ -28,21 +32,18 @@ declare namespace IUserRequest {
     }
 
     interface IUserUpdate {
-        sdmUserRef?: number,
-        cmsUserRef?: number,
-        // isGuest?: number,
-        name?: string,
-        cCode?: string,
-        phnNo?: string,
-        phnVerified?: number,
+        id?: string,
+        brand?: string,
         email?: string,
-        profileStep?: number,
+        acount_uae?: IAccount,
+        name?: string,
         socialKey?: string,
         medium?: string,
-        createdAt?: number,
-        cartId?: string,
-        password?: string,
+        profileStep?: number,
         changePhnNo?: number,
+        password?: string,
+        cartId?: string,
+        createdAt?: number
     }
 
     interface IRefreshToken {

@@ -395,7 +395,22 @@ class AerospikeClass {
                 if (this.client) {
                     const key = new aerospike.Key(this.namespace, argv.set, argv.key)
                     let result = await this.client.operate(key, operations)
-                    consolelog(process.cwd(), 'Map updated successfully', "", false)
+                    consolelog(process.cwd(), 'Map updated successfully', JSON.stringify(result), false)
+                    resolve(result)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async getByValue(binName, value, returnType, context?) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    // const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let result = await this.maps.getByValue(binName, value, returnType, context)
+                    consolelog(process.cwd(), 'Map updated successfully', JSON.stringify(result), false)
                     resolve(result)
                 } else reject('Client not initialized');
             } catch (error) {

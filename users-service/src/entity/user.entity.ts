@@ -45,19 +45,13 @@ export class UserEntity extends BaseEntity {
     constructor() {
         super('user')
     }
-
+    
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
         brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH).description("sk"),
         email: Joi.string().email().lowercase().trim().required().description("sk"),
-        acount_uae: {
-            cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-            phnNo: Joi.string().trim().required().description("sk"),
-            sdmUserRef: Joi.number().required().description("sk"),
-            cmsUserRef: Joi.number().required().description("sk"),
-            phnVerified: Joi.number().valid(0, 1).required(),
-        },
-        changePhnNo: Joi.number().valid(0, 1).required(),
+        acount_uae: Joi.string().required(),
+        name: Joi.string().trim().required(),
         profileStep: Joi.number().valid(
             Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
@@ -124,44 +118,44 @@ export class UserEntity extends BaseEntity {
      * @param {boolean} isCreate 
      */
     private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
-        const user = isCreate ? {
-            id: this.ObjectId().toString(),
-            sdmUserRef: 0,
-            cmsUserRef: 0,
-            name: "",
-            cCode: "",
-            phnNo: "",
-            phnVerified: 0,
-            email: "",
-            profileStep: 0,
-            socialKey: "",
-            medium: "",
-            createdAt: 0,
-            cartId: this.ObjectId().toString(),
-            password: 'Password1', //await cryptData(id),
-            changePhnNo: 0,
-        } : {}
-        if (userInfo.name != undefined)
-            user['name'] = userInfo.name
-        if (userInfo.cCode != undefined)
-            user['cCode'] = userInfo.cCode
-        if (userInfo.phnNo != undefined)
-            user['phnNo'] = userInfo.phnNo
-        if (userInfo.phnVerified != undefined)
-            user['phnVerified'] = userInfo.phnVerified
-        if (userInfo.email != undefined)
-            user['email'] = userInfo.email
-        if (userInfo.profileStep != undefined)
-            user['profileStep'] = userInfo.profileStep
-        if (userInfo.socialKey != undefined)
-            user['socialKey'] = userInfo.socialKey
-        if (userInfo.medium != undefined)
-            user['medium'] = userInfo.medium
-        if (userInfo.createdAt != undefined)
-            user['createdAt'] = userInfo.createdAt
-        else
-            user['createdAt'] = new Date().getTime()
-        return user
+        // const user = isCreate ? {
+        //     id: this.ObjectId().toString(),
+        //     sdmUserRef: 0,
+        //     cmsUserRef: 0,
+        //     name: "",
+        //     cCode: "",
+        //     phnNo: "",
+        //     phnVerified: 0,
+        //     email: "",
+        //     profileStep: 0,
+        //     socialKey: "",
+        //     medium: "",
+        //     createdAt: 0,
+        //     cartId: this.ObjectId().toString(),
+        //     password: 'Password1', //await cryptData(id),
+        //     changePhnNo: 0,
+        // } : {}
+        // if (userInfo.name != undefined)
+        //     user['name'] = userInfo.name
+        // if (userInfo.cCode != undefined)
+        //     user['cCode'] = userInfo.cCode
+        // if (userInfo.phnNo != undefined)
+        //     user['phnNo'] = userInfo.phnNo
+        // if (userInfo.phnVerified != undefined)
+        //     user['phnVerified'] = userInfo.phnVerified
+        // if (userInfo.email != undefined)
+        //     user['email'] = userInfo.email
+        // if (userInfo.profileStep != undefined)
+        //     user['profileStep'] = userInfo.profileStep
+        // if (userInfo.socialKey != undefined)
+        //     user['socialKey'] = userInfo.socialKey
+        // if (userInfo.medium != undefined)
+        //     user['medium'] = userInfo.medium
+        // if (userInfo.createdAt != undefined)
+        //     user['createdAt'] = userInfo.createdAt
+        // else
+        //     user['createdAt'] = new Date().getTime()
+        // return user
     }
 
 
@@ -171,70 +165,70 @@ export class UserEntity extends BaseEntity {
      * @param {ICommonRequest.IHeaders} headers 
      * @param {IUserRequest.IUserUpdate} userInfo 
      */
-    async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate): Promise<IUserRequest.IUserData> {
-        try {
-            let dataToSave = {
-                ...await this.buildUser(headers, userInfo, true)
-            }
-            let putArg: IAerospike.Put = {
-                bins: dataToSave,
-                set: this.set,
-                key: dataToSave.id,
-                ttl: Constant.SERVER.INITIAL_USER_TTL,
-                create: true,
-            }
-            await Aerospike.put(putArg)
-            this.createDefaultCart(dataToSave.cartId, dataToSave.id)
-            let user = await this.getUser({ userId: dataToSave.id })
-            return user
-        } catch (error) {
-            consolelog(process.cwd(), "createUser", error, false)
-            return Promise.reject(error)
-        }
-    }
+    // async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate): Promise<IUserRequest.IUserData> {
+    //     try {
+    //         let dataToSave = {
+    //             ...await this.buildUser(headers, userInfo, true)
+    //         }
+    //         let putArg: IAerospike.Put = {
+    //             bins: dataToSave,
+    //             set: this.set,
+    //             key: dataToSave.id,
+    //             ttl: Constant.SERVER.INITIAL_USER_TTL,
+    //             create: true,
+    //         }
+    //         await Aerospike.put(putArg)
+    //         this.createDefaultCart(dataToSave.cartId, dataToSave.id)
+    //         let user = await this.getUser({ userId: dataToSave.id })
+    //         return user
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "createUser", error, false)
+    //         return Promise.reject(error)
+    //     }
+    // }
 
     /**
      * @description Update user on aerospike
      * @param {IUserRequest.IUserData} userData 
      * @param {IUserRequest.IEditProfile} payload 
      */
-    async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
-        try {
-            let userUpdate = {}
-            if (payload.email)
-                userUpdate['email'] = payload.email
-            if (payload.name)
-                userUpdate['name'] = payload.name
-            if (payload.cartId)
-                userUpdate['cartId'] = payload.cartId
-            if (payload.profileStep)
-                userUpdate['profileStep'] = payload.profileStep
-            if (payload.changePhnNo != undefined)
-                userUpdate['changePhnNo'] = payload.changePhnNo
-            if (payload.socialKey)
-                userUpdate['socialKey'] = payload.socialKey
-            if (payload.socialKey)
-                userUpdate['medium'] = payload.medium
-            if (payload.phnNo)
-                userUpdate['phnNo'] = payload.phnNo
-            if (payload.cCode)
-                userUpdate['cCode'] = payload.cCode
-            if (payload.phnVerified != undefined)
-                userUpdate['phnVerified'] = payload.phnVerified
-            let putArg: IAerospike.Put = {
-                bins: userUpdate,
-                set: this.set,
-                key: userId,
-                update: true,
-            }
-            await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userId })
-            return user
-        } catch (error) {
-            consolelog(process.cwd(), "updateUser", error, false)
-            return Promise.reject(error)
-        }
-    }
+    // async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
+    //     try {
+    //         let userUpdate = {}
+    //         if (payload.email)
+    //             userUpdate['email'] = payload.email
+    //         if (payload.name)
+    //             userUpdate['name'] = payload.name
+    //         if (payload.cartId)
+    //             userUpdate['cartId'] = payload.cartId
+    //         if (payload.profileStep)
+    //             userUpdate['profileStep'] = payload.profileStep
+    //         if (payload.changePhnNo != undefined)
+    //             userUpdate['changePhnNo'] = payload.changePhnNo
+    //         if (payload.socialKey)
+    //             userUpdate['socialKey'] = payload.socialKey
+    //         if (payload.socialKey)
+    //             userUpdate['medium'] = payload.medium
+    //         if (payload.phnNo)
+    //             userUpdate['phnNo'] = payload.phnNo
+    //         if (payload.cCode)
+    //             userUpdate['cCode'] = payload.cCode
+    //         if (payload.phnVerified != undefined)
+    //             userUpdate['phnVerified'] = payload.phnVerified
+    //         let putArg: IAerospike.Put = {
+    //             bins: userUpdate,
+    //             set: this.set,
+    //             key: userId,
+    //             update: true,
+    //         }
+    //         await Aerospike.put(putArg)
+    //         let user = await this.getUser({ userId: userId })
+    //         return user
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "updateUser", error, false)
+    //         return Promise.reject(error)
+    //     }
+    // }
 
     /**
      * @description Get access and refresh token from auth service 
