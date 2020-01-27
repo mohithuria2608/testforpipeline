@@ -358,15 +358,17 @@ export class CartClass extends BaseEntity {
                                     }
                                 }
                                 if (bundle_option.hasOwnProperty(pl['option_id'])) {
-                                    pl['subOptions'].map(so => {
-                                        if (pl['selected'] == 1 && so['selected'] == 1) {
-                                            selection_configurable_option[pl['selection_id']] = so['id']
-                                        }
-                                        else {
-                                            if (selection_configurable_option[pl['selection_id']] == undefined)
-                                                selection_configurable_option[pl['selection_id']] = ""
-                                        }
-                                    })
+                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                        pl['subOptions'].map(so => {
+                                            if (pl['selected'] == 1 && so['selected'] == 1) {
+                                                selection_configurable_option[pl['selection_id']] = so['id']
+                                            }
+                                            else {
+                                                if (selection_configurable_option[pl['selection_id']] == undefined)
+                                                    selection_configurable_option[pl['selection_id']] = ""
+                                            }
+                                        })
+                                    }
                                 }
                             })
                         }
