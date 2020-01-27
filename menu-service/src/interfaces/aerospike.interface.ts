@@ -11,6 +11,7 @@ declare namespace IAerospike {
         key: string,
         set: string,
     }
+
     interface Put {
         bins?: object,
         set: string,
@@ -107,5 +108,10 @@ declare namespace IAerospike {
     interface MapOperation {
         set: string,
         key: string,
+    }
+
+    interface Truncate {
+        set: string,
+        before_nanos: number
     }
 }

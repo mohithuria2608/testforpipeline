@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../aerospike'
 
 export class UpsellController {
     constructor() { }
@@ -11,6 +12,7 @@ export class UpsellController {
     * */
     async bootstrapUpsell() {
         try {
+            await Aerospike.truncate({ set: ENTITY.UpsellE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/upsell.json', 'utf-8');
             let upsell = JSON.parse(rawdata);
             for (const iterator of upsell) {

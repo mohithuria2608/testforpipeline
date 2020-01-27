@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../aerospike'
 
 export class MenuController {
     constructor() { }
@@ -12,6 +13,7 @@ export class MenuController {
      * */
     async bootstrapMenu() {
         try {
+            await Aerospike.truncate({ set: ENTITY.MenuE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {

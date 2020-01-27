@@ -434,6 +434,19 @@ class AerospikeClass {
             }
         })
     }
+
+    async truncate(argv: IAerospike.Truncate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    await this.client.truncate(this.namespace, argv.set, argv.before_nanos)
+                    resolve()
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const Aerospike = new AerospikeClass('americana');

@@ -400,17 +400,44 @@ class AerospikeClass {
             }
         })
     }
-
+    
     async  listOperations(argv: IAerospike.ListOperation): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {
                     const key = new aerospike.Key(this.namespace, argv.set, argv.key)
-                    let operations = [
-                        this.lists.append(argv.bin, argv.bins)
-                    ]
+                    let operations = []
+                    if (argv.order == true)
+                        this.lists.order.ORDERED
+                    else
+                        this.lists.order.UNORDERED
+                    if (argv.append)
+                        operations.push(this.lists.append(argv.bin, argv.bins))
+                    if (argv.remByIndex) {
+                        operations.push(this.lists.removeByIndex(argv.bin, argv.index)
+                            .andReturn(this.lists.returnType.VALUE))
+                    }
+                    if (argv.getByIndexRange) {
+                        operations.push(this.lists.getByIndexRange(argv.bin, argv.index)
+                            .andReturn(this.lists.returnType.VALUE))
+                    }
                     let res = await this.client.operate(key, operations)
                     resolve(res)
+                } else reject('Client not initialized');
+            } catch (error) {
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DATA_NOT_FOUND)
+                    resolve({})
+                reject(error)
+            }
+        })
+    }
+
+    async truncate(argv: IAerospike.Truncate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    await this.client.truncate(this.namespace, argv.set, argv.before_nanos)
+                    resolve()
                 } else reject('Client not initialized');
             } catch (error) {
                 reject(error)

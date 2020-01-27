@@ -52,6 +52,7 @@ export class MenuClass extends BaseEntity {
      * */
     async postMenu(data) {
         try {
+            
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
