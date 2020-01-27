@@ -21,264 +21,259 @@ export const start = (async () => {
     // let bundle_option = {};
     // let selection_configurable_option = {};
     // let sitem = {
-    //   "id": 1535,
-    //   "qty": 2,
-    //   "position": 3,
-    //   "name": "Super Mega Deal",
-    //   "title": "Super Mega Deal",
     //   "description": "12 chicken pcs & Family fries",
-    //   "inSide": 1,
-    //   "finalPrice": 44.1,
-    //   "specialPrice": 44.1,
-    //   "catId": 21,
-    //   "metaKeyword": [
-    //     "Super Mega Deal"
-    //   ],
+    //   "position": 3,
+    //   "sku": 67,
     //   "bundleProductOptions": [
     //     {
     //       "position": 1,
-    //       "name": "Choice of flavor",
-    //       "title": "Choice of flavor",
-    //       "ingredient": 0,
-    //       "type": "radio",
-    //       "imageThumbnail": "/d/u/dummy-product.png",
+    //       "subtitle": "",
+    //       "maximumQty": 0,
     //       "productLinks": [
     //         {
-    //           "position": 0,
     //           "option_id": "1258",
-    //           "selection_id": "8949",
-    //           "price": 0,
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
     //           "id": 1469,
+    //           "price": 0,
     //           "name": "Super Mega Deal - Original",
-    //           "title": "Super Mega Deal - Original",
-    //           "imageThumbnail": "/imagestemp/itm413002.png",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
     //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 1
+    //         },
+    //         {
+    //           "option_id": "1258",
+    //           "position": 0,
     //           "subOptions": [
 
     //           ],
-    //           "selected": 0,
-    //           "default": 1,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
-    //         },
-    //         {
-    //           "position": 0,
-    //           "option_id": "1258",
-    //           "selection_id": "8950",
-    //           "price": 0,
     //           "id": 1470,
+    //           "price": 0,
     //           "name": "Super Mega Deal - Spicy",
-    //           "title": "Super Mega Deal - Spicy",
-    //           "imageThumbnail": "/imagestemp/itm413003.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
+    //           "selected": 0,
+    //           "dependentSteps": [
 
     //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
     //         },
     //         {
-    //           "position": 0,
     //           "option_id": "1258",
-    //           "selection_id": "10015",
-    //           "price": 0,
-    //           "id": 1579,
-    //           "name": "Super Mega Deal - Mix",
-    //           "title": "Super Mega Deal - Mix",
-    //           "imageThumbnail": "/imagestemp/itm413004.png",
-    //           "selectionQty": 1,
+    //           "position": 0,
     //           "subOptions": [
 
     //           ],
+    //           "id": 1579,
+    //           "price": 0,
+    //           "name": "Super Mega Deal - Mix",
     //           "selected": 1,
-    //           "default": 0,
     //           "dependentSteps": [
     //             2
-    //           ]
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
     //         }
     //       ],
-    //       "maximumQty": 12,
-    //       "minimumQty": 12,
-    //       "isDependent": 0
+    //       "ingredient": 0,
+    //       "title": "Choice of flavor",
+    //       "minimumQty": 0,
+    //       "isDependent": 0,
+    //       "type": "radio"
     //     },
     //     {
     //       "position": 2,
-    //       "name": "Super Mega Deal - Mix",
-    //       "title": "Super Mega Deal - Mix",
-    //       "ingredient": 0,
-    //       "type": "radio",
-    //       "imageThumbnail": "/d/u/dummy-product.png",
+    //       "subtitle": "",
+    //       "maximumQty": 12,
     //       "productLinks": [
     //         {
     //           "option_id": "1259",
-    //           "selection_id": 0,
-    //           "price": 0,
-    //           "selected": 0,
-    //           "name": "Chicken Pc - Original",
-    //           "title": "Chicken Pc - Original",
+    //           "position": -1,
+    //           "subOptions": [
+
+    //           ],
     //           "id": 1471,
-    //           "sku": 910001
+    //           "price": 0,
+    //           "name": "Chicken Pc - Original",
+    //           "selected": 1,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 0,
+    //           "selection_id": 0,
+    //           "default": 0
     //         },
     //         {
     //           "option_id": "1259",
-    //           "selection_id": 0,
-    //           "price": 0,
-    //           "selected": 1,
-    //           "name": "Chicken Pc - Spicy",
-    //           "title": "Chicken Pc - Spicy",
+    //           "position": -1,
+    //           "subOptions": [
+
+    //           ],
     //           "id": 1472,
-    //           "sku": 910002
+    //           "price": 0,
+    //           "name": "Chicken Pc - Spicy",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 0,
+    //           "selection_id": 0,
+    //           "default": 0
     //         }
     //       ],
-    //       "maximumQty": 12,
+    //       "ingredient": 0,
+    //       "title": "Super Mega Deal - Mix",
     //       "minimumQty": 12,
-    //       "isDependent": 1
+    //       "isDependent": 1,
+    //       "type": "radio"
     //     },
     //     {
     //       "position": 3,
-    //       "name": "Choice of side item",
-    //       "title": "Choice of side item",
-    //       "ingredient": 0,
-    //       "type": "radio",
-    //       "imageThumbnail": "/d/u/dummy-product.png",
+    //       "subtitle": "",
+    //       "maximumQty": 0,
     //       "productLinks": [
     //         {
-    //           "position": 0,
     //           "option_id": "1259",
-    //           "selection_id": "8951",
-    //           "price": 15,
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
     //           "id": 1459,
-    //           "name": "Family Fries",
-    //           "title": "Family Fries",
-    //           "imageThumbnail": "/imagestemp/itm510005.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-
-    //           ],
-    //           "selected": 0,
-    //           "default": 1,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
-    //         },
-    //         {
-    //           "position": 0,
-    //           "option_id": "1259",
-    //           "selection_id": "8952",
-    //           "price": 17,
-    //           "id": 1462,
-    //           "name": "Family Fries Spicy",
-    //           "title": "Family Fries Spicy",
-    //           "imageThumbnail": "/imagestemp/itm510014.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-
-    //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
-    //         },
-    //         {
-    //           "position": 0,
-    //           "option_id": "1259",
-    //           "selection_id": "8953",
-    //           "price": 18,
-    //           "id": 1456,
-    //           "name": "Loaded Fries Family",
-    //           "title": "Loaded Fries Family",
-    //           "imageThumbnail": "/imagestemp/itm510030.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-
-    //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
-    //         },
-    //         {
-    //           "position": 0,
-    //           "option_id": "1259",
-    //           "selection_id": "8954",
     //           "price": 15,
-    //           "id": 1465,
-    //           "name": "Family Dipper Fries",
-    //           "title": "Family Dipper Fries",
-    //           "imageThumbnail": "/imagestemp/itm510074.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-
-    //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
-    //         },
-    //         {
-    //           "position": 0,
-    //           "option_id": "1259",
-    //           "selection_id": "8955",
-    //           "price": 12,
-    //           "id": 1473,
-    //           "name": "Cheese Potato Dipper Fami",
-    //           "title": "Cheese Potato Dipper Fami",
-    //           "imageThumbnail": "/imagestemp/itm510076.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-
-    //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
-    //         },
-    //         {
-    //           "position": 0,
-    //           "option_id": "1259",
-    //           "selection_id": "8956",
-    //           "price": 5,
-    //           "id": 1474,
-    //           "name": "Loaded Fries P.Chili Fami",
-    //           "title": "Loaded Fries P.Chili Fami",
-    //           "imageThumbnail": "/imagestemp/itm510080.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-
-    //           ],
+    //           "name": "Family Fries",
     //           "selected": 1,
-    //           "default": 0,
     //           "dependentSteps": [
-    //             "not dependent"
-    //           ]
+
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 1
+    //         },
+    //         {
+    //           "option_id": "1259",
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
+    //           "id": 1462,
+    //           "price": 17,
+    //           "name": "Family Fries Spicy",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
+    //         },
+    //         {
+    //           "option_id": "1259",
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
+    //           "id": 1456,
+    //           "price": 18,
+    //           "name": "Loaded Fries Family",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
+    //         },
+    //         {
+    //           "option_id": "1259",
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
+    //           "id": 1465,
+    //           "price": 15,
+    //           "name": "Family Dipper Fries",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
+    //         },
+    //         {
+    //           "option_id": "1259",
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
+    //           "id": 1473,
+    //           "price": 12,
+    //           "name": "Cheese Potato Dipper Fami",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
+    //         },
+    //         {
+    //           "option_id": "1259",
+    //           "position": 0,
+    //           "subOptions": [
+
+    //           ],
+    //           "id": 1474,
+    //           "price": 5,
+    //           "name": "Loaded Fries P.Chili Fami",
+    //           "selected": 0,
+    //           "dependentSteps": [
+
+    //           ],
+    //           "selectionQty": 1,
+    //           "selection_id": 0,
+    //           "default": 0
     //         }
     //       ],
-    //       "maximumQty": 0,
+    //       "ingredient": 0,
+    //       "title": "Choice of side item",
     //       "minimumQty": 0,
-    //       "isDependent": 0
+    //       "isDependent": 0,
+    //       "type": "radio"
     //     }
     //   ],
-    //   "typeId": "bundle",
-    //   "originalTypeId": "bundle",
-    //   "selectedItem": 0,
-    //   "configurableProductOptions": [],
-    //   "items": [],
-    //   "sku": 67,
-    //   "imageSmall": "/d/u/dummy-product.png",
-    //   "imageThumbnail": "/d/u/dummy-product.png",
     //   "image": "/d/u/dummy-product.png",
-    //   "taxClassId": 2,
-    //   "virtualGroup": 0,
+    //   "items": [
+
+    //   ],
+    //   "imageSmall": "/d/u/dummy-product.png",
+    //   "catId": 21,
     //   "visibility": 4,
-    //   "associative": 0
+    //   "taxClassId": 2,
+    //   "name": "Super Mega Deal",
+    //   "id": 1535,
+    //   "specialPrice": 44.099998474121094,
+    //   "configurableProductOptions": [
+
+    //   ],
+    //   "qty": 1,
+    //   "associative": 0,
+    //   "metaKeyword": [
+    //     "Super Mega Deal"
+    //   ],
+    //   "typeId": "bundle",
+    //   "selectedItem": 0,
+    //   "imageThumbnail": "/d/u/dummy-product.png",
+    //   "virtualGroup": 0,
+    //   "finalPrice": 44.099998474121094,
+    //   "inSide": 1
     // }
 
     // sitem['bundleProductOptions'].forEach(bpo => {
