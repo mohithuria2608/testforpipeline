@@ -406,7 +406,7 @@ export class UserController {
                 name: payload.name,
                 email: payload.email,
             }
-            if (payload.socialKey && payload.medium) {
+            if ((payload.socialKey && payload.medium) || (userData.socialKey && userData.socialKey != "" && userData.medium && userData.medium != "")) {
                 userUpdate['changePhnNo'] = 1
                 let queryArg: IAerospike.Query = {
                     udf: {
@@ -428,8 +428,8 @@ export class UserController {
                     email: payload.email,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
-                    medium: payload.medium,
-                    socialKey: payload.socialKey,
+                    medium: userData.medium,
+                    socialKey: userData.socialKey,
                     otp: Constant.SERVER.BY_PASS_OTP,
                     cartId: userData.cartId,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
@@ -449,8 +449,8 @@ export class UserController {
                 userData['email'] = payload.email
                 userData['cCode'] = payload.cCode
                 userData['phnNo'] = payload.phnNo
-                userData['medium'] = payload.medium
-                userData['socialKey'] = payload.socialKey
+                userData['medium'] = userData.medium
+                userData['socialKey'] = userData.socialKey
                 userData['isGuest'] = 0
                 return formatUserData(userData, headers)
             } else {
