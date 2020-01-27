@@ -354,30 +354,21 @@ export class CartClass extends BaseEntity {
                                         bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
                                     } else {
                                         bundle_option[pl['option_id']] = pl['selection_id']
-                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
-                                            console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
-                                            sitem['bundleProductOptions'].forEach(bpo2 => {
-                                                if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                                    bpo2['productLinks'].forEach(pl2 => {
-                                                        if (pl2['selected'] == 1)
-                                                            selection_configurable_option[pl['selection_id']] = pl2['id']
-                                                    })
-                                                }
-                                            })
-                                        }
                                     }
                                 }
-                                // if (bundle_option.hasOwnProperty(pl['option_id'])) {
-                                //   pl['subOptions'].forEach(so => {
-                                //     if (pl['selected'] == 1 && so['selected'] == 1) {
-                                //       selection_configurable_option[pl['selection_id']] = so['id']
-                                //     }
-                                //     else {
-                                //       if (selection_configurable_option[pl['selection_id']] == undefined)
-                                //         selection_configurable_option[pl['selection_id']] = ""
-                                //     }
-                                //   })
-                                // }
+                                if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
+                                    console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
+                                    sitem['bundleProductOptions'].forEach(bpo2 => {
+                                        if (bpo2['position'] == pl['dependentSteps'][0]) {
+                                            bpo2['productLinks'].forEach(pl2 => {
+                                                if (pl2['selected'] == 1)
+                                                    selection_configurable_option[pl['selection_id']] = pl2['id']
+                                                else
+                                                    selection_configurable_option[pl['selection_id']] = ""
+                                            })
+                                        }
+                                    })
+                                }
                             })
                         }
                     })
@@ -407,7 +398,7 @@ export class CartClass extends BaseEntity {
                 cms_user_id: 10, //userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart, // [{ "product_id": 1, "qty": 1, "price": 5, "type_id": "simple" }]// cart,
+                cart_items: cart,
             }
             if (payload.couponCode)
                 req['coupon_code'] = payload.couponCode
