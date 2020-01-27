@@ -34,7 +34,10 @@ export class CartController {
                     country: headers.country,
                     isDefault: true
                 })
-                if ((defaultMenu.menuId != payload.curMenuId) || (defaultMenu.updatedAt > payload.menuUpdatedAt)) {
+                if (
+                    (defaultMenu.menuId != payload.curMenuId) 
+                    // || (defaultMenu.updatedAt > payload.menuUpdatedAt)
+                    ) {
                     invalidMenu = true
                 }
             }

@@ -416,6 +416,32 @@ export class CartClass extends BaseEntity {
         try {
             let subtotal = 0
             let grandtotal = 0
+            let tax = 0.05
+            if (payload.items && payload.items.length > 0) {
+                payload.items.map(item => {
+                    subtotal = subtotal + item.finalPrice
+                    if (item['bundleProductOptions'] && item['bundleProductOptions'].length > 0) {
+                        item['bundleProductOptions'].map(bpo => {
+                            if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                                bpo['productLinks'].map(pl => {
+                                    if (pl['selected']) {
+                                        if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                            pl['subOptions'].map(so => {
+                                                if (so['selected'] == 1) {
+                                                    subtotal = subtotal + so.price
+                                                }
+                                            })
+                                        } else
+                                            subtotal = subtotal + (pl.price ? pl.price : 0)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+            grandtotal = Math.round(((subtotal / 1.05) + Number.EPSILON) * 100) / 100
+            tax = subtotal - grandtotal
             let cmsres = {
                 cms_cart_id: 5,
                 currency_code: "AED",
@@ -424,7 +450,7 @@ export class CartClass extends BaseEntity {
                 grandtotal: grandtotal,
                 tax: [{
                     tax_name: "VAT",
-                    amount: 2.5,
+                    amount: tax,
                 }],
                 not_available: [],
                 is_price_changed: false,
@@ -491,7 +517,7 @@ export class CartClass extends BaseEntity {
                 type: "SHIPPING",
                 name: "Free Delivery",
                 code: "FLAT",
-                amount: 7.5,
+                amount: 0,
                 sequence: 4
             })
             amount.push({

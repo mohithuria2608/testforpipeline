@@ -14,7 +14,7 @@
                 "name": "Upsell",
                 "products": [
                     {
-                        "id": 1430,
+                        "id": 1603,
                         "position": 10,
                         "name": "Chocolate Chip Cookie",
                         "title": "Chocolate Chip Cookie",
@@ -33,9 +33,9 @@
                         "configurableProductOptions": [],
                         "items": [],
                         "sku": 710003,
-                        "imageSmall": "/d/u/dummy-product.png",
-                        "imageThumbnail": "/d/u/dummy-product.png",
-                        "image": "/d/u/dummy-product.png",
+                        "imageSmall": "/imagestemp/itm410009.png",
+                        "imageThumbnail": "/imagestemp/itm410009.png",
+                        "image": "/imagestemp/itm410009.png",
                         "taxClassId": 2,
                         "virtualGroup": 0,
                         "visibility": 4,
@@ -60,7 +60,7 @@
                 "name": "Upsell_ar",
                 "products": [
                     {
-                        "id": 1430,
+                        "id": 1603,
                         "position": 10,
                         "name": "Chocolate Chip Cookie",
                         "title": "Chocolate Chip Cookie",
@@ -79,9 +79,9 @@
                         "configurableProductOptions": [],
                         "items": [],
                         "sku": 710003,
-                        "imageSmall": "/d/u/dummy-product.png",
-                        "imageThumbnail": "/d/u/dummy-product.png",
-                        "image": "/d/u/dummy-product.png",
+                        "imageSmall": "/imagestemp/itm410009.png",
+                        "imageThumbnail": "/imagestemp/itm410009.png",
+                        "image": "/imagestemp/itm410009.png",
                         "taxClassId": 2,
                         "virtualGroup": 0,
                         "visibility": 4,
