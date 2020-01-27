@@ -27,24 +27,15 @@ export class UserchangeEntity extends BaseEntity {
 
     public userchangeSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk, user id"),
-        parentId: Joi.string().trim().required(),
         isGuest: Joi.number().valid(0, 1),
-        /**
-         * @description : phone number otp verify
-         */
         fullPhnNo: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
         phnNo: Joi.string().trim(),
-        phnVerified: Joi.number(),
         otp: Joi.number(),
         otpExpAt: Joi.number(),
         otpVerified: Joi.number(),
         name: Joi.string().email().lowercase().trim(),
         email: Joi.string().email().lowercase().trim(),
-        profileStep: Joi.number().valid(
-            Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-            Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-        ),
         socialKey: Joi.string().trim(),
         medium: Joi.string().trim().valid(
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
@@ -104,13 +95,12 @@ export class UserchangeEntity extends BaseEntity {
         }
     }
 
-    async buildUserchange(payload: IUserchangeRequest.IUserchange, userData?: IUserRequest.IUserData) {
+    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange) {
         try {
-            let userId = (userData != undefined) ? userData.id : ""
             let isCreate = false
-            let checkUserchange = []
-            if (userId && userId != "") {
-                checkUserchange[0] = await this.getUserchange({ userId: userId })
+            let checkUserchange = await this.getUserchange({ userId: userId })
+            if (checkUserchange && checkUserchange.length > 0) {
+                userId = checkUserchange[0].id
             } else {
                 let queryArg: IAerospike.Query = {
                     set: this.set,
@@ -122,31 +112,33 @@ export class UserchangeEntity extends BaseEntity {
                         bin: "fullPhnNo",
                         value: fullPhnNo
                     }
+                    checkUserchange = await Aerospike.query(queryArg)
+                    if (checkUserchange && checkUserchange.length > 0) {
+                        userId = checkUserchange[0].id
+                    } else {
+                        isCreate = true
+                    }
                 }
                 else if (payload.socialKey) {
                     queryArg['equal'] = {
                         bin: "socialKey",
                         value: payload.socialKey
                     }
+                    checkUserchange = await Aerospike.query(queryArg)
+                    if (checkUserchange && checkUserchange.length > 0) {
+                        userId = checkUserchange[0].id
+                    } else {
+                        isCreate = true
+                    }
+                } else {
+                    isCreate = true
                 }
-                checkUserchange = await Aerospike.query(queryArg)
-            }
-            if (checkUserchange && checkUserchange.length > 0) {
-                isCreate = false
-                userId = checkUserchange[0].id
-            } else {
-                isCreate = true
-                userId = this.ObjectId.toString()
             }
             let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
                 id: userId
             }
             if (payload.isGuest != undefined)
                 dataToUpdateUserchange['isGuest'] = payload.isGuest
-            if (payload.parentId)
-                dataToUpdateUserchange['parentId'] = payload.parentId
-            if (payload.username)
-                dataToUpdateUserchange['username'] = payload.username
             if (payload.fullPhnNo)
                 dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)
@@ -171,10 +163,6 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.deleteUserId)
                 dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
-            if (payload.profileStep != undefined)
-                dataToUpdateUserchange['profileStep'] = payload.profileStep
-            if (payload.phnVerified != undefined)
-                dataToUpdateUserchange['phnVerified'] = payload.phnVerified
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,

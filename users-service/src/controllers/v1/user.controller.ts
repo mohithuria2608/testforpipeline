@@ -64,24 +64,19 @@ export class UserController {
                     otpVerified: 0,
                     isGuest: 0
                 }
-                await ENTITY.UserchangeE.buildUserchange(userchange, checkUser[0])
+                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchange)
             } else {
+                let newUserId = ENTITY.UserE.ObjectId.toString()
                 let userchange: IUserchangeRequest.IUserchange = {
-                    parentId: ENTITY.UserE.ObjectId.toString(),
                     fullPhnNo: fullPhnNo,
-                    username: username,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
-                    profileStep: 0,
-                    phnVerified: 0,
-                    email: "",
-                    name: "",
                     isGuest: 0
                 }
-                await ENTITY.UserchangeE.buildUserchange(userchange)
+                await ENTITY.UserchangeE.buildUserchange(newUserId, userchange)
             }
             return {}
         } catch (error) {
@@ -117,10 +112,6 @@ export class UserController {
                     id: userchange[0].id,
                     phnVerified: 1,
                 }
-                if (userchange[0].parentId)
-                    userUpdate['parentId'] = userchange[0].parentId
-                if (userchange[0].username)
-                    userUpdate['username'] = userchange[0].username
                 if (userchange[0].fullPhnNo)
                     userUpdate['fullPhnNo'] = userchange[0].fullPhnNo
                 if (userchange[0].cCode)
@@ -137,8 +128,6 @@ export class UserController {
                     userUpdate['medium'] = userchange[0].medium
                 if (userchange[0].cartId)
                     userUpdate['cartId'] = userchange[0].cartId
-                if (userchange[0].profileStep != undefined)
-                    userUpdate['profileStep'] = userchange[0].profileStep
                 if (userchange[0].isGuest != undefined)
                     userUpdate['isGuest'] = userchange[0].isGuest
                 if (userchange[0].deleteUserId)
@@ -209,21 +198,18 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0
                     }
-                    await ENTITY.UserchangeE.buildUserchange(userchange, userData)
+                    await ENTITY.UserchangeE.buildUserchange(userData.id, userchange)
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
                 userData['id'] = ENTITY.UserchangeE.ObjectId.toString()
                 let userchange: IUserchangeRequest.IUserchange = {
-                    id: userData.id,
                     name: payload.name,
                     socialKey: payload.socialKey,
                     medium: payload.medium,
                     email: payload.email ? payload.email : "",
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-                    phnVerified: 0
                 }
-                await ENTITY.UserchangeE.buildUserchange(userchange)
+                await ENTITY.UserchangeE.buildUserchange(userData.id, userchange)
             }
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
@@ -272,7 +258,6 @@ export class UserController {
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
-
                 let userchangePayload = {
                     username: username,
                     fullPhnNo: fullPhnNo,
@@ -283,20 +268,23 @@ export class UserController {
                     medium: payload.medium,
                     socialKey: payload.socialKey,
                     otp: Constant.SERVER.BY_PASS_OTP,
-                    cartId: userData.cartId,
+                    cartId: ENTITY.UserE.ObjectId.toString(),
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0,
                 }
                 if (checkUser && checkUser.length > 0) {
                     userchangePayload['id'] = checkUser[0].id
-                    userchangePayload['deleteUserId'] = userData.id
-                    userData = checkUser[0]
+                    userchangePayload['deleteUserId'] = auth.id
+                    console.log("1", checkUser[0].id, JSON.stringify(userchangePayload))
+                    await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
+                    Aerospike.remove({ set: ENTITY.UserchangeE.set, key: auth.id })
                 } else {
-                    userchangePayload['id'] = userData.id
+                    userchangePayload['id'] = auth.id
                     userchangePayload['deleteUserId'] = ""
+                    console.log("2", auth.id, JSON.stringify(userchangePayload))
+                    await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
                 }
-                await ENTITY.UserchangeE.buildUserchange(userchangePayload, userData)
                 return formatUserData(userData, headers)
             } else {
                 let userUpdate: IUserRequest.IUserData = {
@@ -353,7 +341,7 @@ export class UserController {
                 if (checkUser && checkUser.length > 0) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_ALREADY_EXIST)
                 }
-                await ENTITY.UserchangeE.buildUserchange(userchangePayload, userData)
+                await ENTITY.UserchangeE.buildUserchange(userData.id, userchangePayload)
             }
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
             // ENTITY.UserE.syncUser(user)

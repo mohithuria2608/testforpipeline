@@ -16,7 +16,7 @@ export class GuestController {
                 id: ENTITY.UserE.ObjectId.toString(),
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             }
-            let userData = await ENTITY.UserE.buildUser( userCreate)
+            let userData = await ENTITY.UserE.buildUser(userCreate)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 1,
                 userId: userData.id
@@ -78,12 +78,14 @@ export class GuestController {
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
                 userchangePayload['cartId'] = userData.cartId
-                userchangePayload['deleteUserId'] = userData.id
+                userchangePayload['deleteUserId'] = auth.id
+                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
+                Aerospike.remove({ set: ENTITY.UserchangeE.set, key: auth.id })
             } else {
-                userchangePayload['id'] = userData.id
+                userchangePayload['id'] = auth.id
                 userchangePayload['deleteUserId'] = ""
+                await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
             }
-            await ENTITY.UserchangeE.buildUserchange(userchangePayload)
             return formatUserData(userData, headers)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", error, false)
