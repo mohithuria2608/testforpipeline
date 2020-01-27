@@ -197,15 +197,15 @@
         "endPoints": {
             "generalConfig": {
                 "method": "GET",
-                "url": "http://40.123.205.1/rest/V1/americanaconfig/"
+                "url": "http://40.123.207.192/rest/V1/americanaconfig/"
             },
             "createCart": {
                 "method": "POST",
-                "url": "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+                "url": "http://40.123.207.192/rest/V1/customcart/create-validate-cart"
             },
             "createOrder": {
                 "method": "POST",
-                "url": "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+                "url": "http://40.123.207.192/rest/V1/customcart/create-validate-cart"
             }
         }
     }
