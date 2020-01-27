@@ -344,32 +344,40 @@ export class CartClass extends BaseEntity {
                 else if (sitem['typeId'] == 'bundle') {
                     let bundle_option = {};
                     let selection_configurable_option = {};
-                    sitem['bundleProductOptions'].map(bpo => {
+                    sitem['bundleProductOptions'].forEach(bpo => {
                         if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-                            bpo['productLinks'].map(pl => {
+                            bpo['productLinks'].forEach(pl => {
                                 if (pl['selected'] == 1) {
                                     if (pl['subOptions'] && pl['subOptions'].length > 0) {
                                         if (bundle_option[pl['option_id']] == null)
                                             bundle_option[pl['option_id']] = {}
                                         bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-
                                     } else {
                                         bundle_option[pl['option_id']] = pl['selection_id']
+                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
+                                            console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
+                                            sitem['bundleProductOptions'].forEach(bpo2 => {
+                                                if (bpo2['position'] == pl['dependentSteps'][0]) {
+                                                    bpo2['productLinks'].forEach(pl2 => {
+                                                        if (pl2['selected'] == 1)
+                                                            selection_configurable_option[pl['selection_id']] = pl2['id']
+                                                    })
+                                                }
+                                            })
+                                        }
                                     }
                                 }
-                                if (bundle_option.hasOwnProperty(pl['option_id'])) {
-                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                        pl['subOptions'].map(so => {
-                                            if (pl['selected'] == 1 && so['selected'] == 1) {
-                                                selection_configurable_option[pl['selection_id']] = so['id']
-                                            }
-                                            else {
-                                                if (selection_configurable_option[pl['selection_id']] == undefined)
-                                                    selection_configurable_option[pl['selection_id']] = ""
-                                            }
-                                        })
-                                    }
-                                }
+                                // if (bundle_option.hasOwnProperty(pl['option_id'])) {
+                                //   pl['subOptions'].forEach(so => {
+                                //     if (pl['selected'] == 1 && so['selected'] == 1) {
+                                //       selection_configurable_option[pl['selection_id']] = so['id']
+                                //     }
+                                //     else {
+                                //       if (selection_configurable_option[pl['selection_id']] == undefined)
+                                //         selection_configurable_option[pl['selection_id']] = ""
+                                //     }
+                                //   })
+                                // }
                             })
                         }
                     })

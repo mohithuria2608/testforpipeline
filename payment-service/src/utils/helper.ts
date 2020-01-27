@@ -36,6 +36,7 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
+    consolelog(process.cwd(), "In error handler type of ", typeof error, false)
     consolelog(process.cwd(), "In error handler direct ", error, false)
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
