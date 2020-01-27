@@ -17,7 +17,7 @@ declare namespace IUserchangeRequest {
         medium?: string,
         profileStep?: number
         cartId?: string,
-        // deleteUserId?: string,
+        deleteUserId?: string,
     }
 
     interface IGetUserchange {

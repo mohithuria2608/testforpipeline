@@ -39,16 +39,16 @@ server.addService(userProto.UserService.service, {
             callback(grpcSendError(error))
         }
     },
-    // sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
-    //     try {
-    //         consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-    //         let res: {} = await userController.syncUserFromKafka(call.request)
-    //         callback(null, res)
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "sync", error, false)
-    //         callback(grpcSendError(error))
-    //     }
-    // },
+    sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
+        try {
+            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
+            let res: {} = await userController.syncUserFromKafka(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "sync", error, false)
+            callback(grpcSendError(error))
+        }
+    },
     fetchAddress: async (call: IUserGrpcRequest.IFetchAddressReq, callback) => {
         try {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(call.request), true)

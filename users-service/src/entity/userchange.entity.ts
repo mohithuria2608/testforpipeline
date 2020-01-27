@@ -46,7 +46,7 @@ export class UserchangeEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
         cartId: Joi.string(),
-        // deleteUserId: Joi.string(),
+        deleteUserId: Joi.string(),
     });
 
     /**
@@ -153,8 +153,8 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['medium'] = payload.medium
             if (payload.cartId)
                 dataToUpdateUserchange['cartId'] = payload.cartId
-            // if (payload.deleteUserId)
-            //     dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+            if (payload.deleteUserId)
+                dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
             if (payload.profileStep != undefined)
                 dataToUpdateUserchange['profileStep'] = payload.profileStep
             if (payload.phnVerified != undefined)

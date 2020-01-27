@@ -97,7 +97,7 @@ export class UserController {
     async verifyOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp) {
         try {
             let userData: IUserRequest.IUserData
-            // let deleteUserId = ""
+            let deleteUserId = ""
             const fullPhnNo = payload.cCode + payload.phnNo;
             let queryArg: IAerospike.Query = {
                 equal: {
@@ -112,13 +112,16 @@ export class UserController {
                 await ENTITY.UserchangeE.validateOtpOnPhnChange(payload, userchange[0])
                 let userUpdate = {
                     id: userchange[0].id,
-                    fullPhnNo: fullPhnNo,
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
                     phnVerified: 1,
-                    profileStep: 1,
-                    isGuest: payload.isGuest
                 }
+                if (userchange[0].parentId)
+                    userUpdate['parentId'] = userchange[0].parentId
+                if (userchange[0].fullPhnNo)
+                    userUpdate['fullPhnNo'] = userchange[0].fullPhnNo
+                if (userchange[0].cCode)
+                    userUpdate['cCode'] = userchange[0].cCode
+                if (userchange[0].phnNo)
+                    userUpdate['phnNo'] = userchange[0].phnNo
                 if (userchange[0].name)
                     userUpdate['name'] = userchange[0].name
                 if (userchange[0].email)
@@ -129,22 +132,21 @@ export class UserController {
                     userUpdate['medium'] = userchange[0].medium
                 if (userchange[0].cartId)
                     userUpdate['cartId'] = userchange[0].cartId
-                if (userchange[0].parentId)
-                    userUpdate['parentId'] = userchange[0].parentId
-                // if (userchange[0].deleteUserId)
-                //     userUpdate['deleteUserId'] = userchange[0].deleteUserId
                 if (userchange[0].profileStep != undefined)
                     userUpdate['profileStep'] = userchange[0].profileStep
-                if (userchange[0].phnVerified != undefined)
-                    userUpdate['phnVerified'] = userchange[0].phnVerified
+                if (userchange[0].isGuest != undefined)
+                    userUpdate['isGuest'] = userchange[0].isGuest
+                if (userchange[0].deleteUserId)
+                    deleteUserId = userchange[0].deleteUserId
                 userData = await ENTITY.UserE.buildUser(userchange[0].id, userUpdate)
+                await Aerospike.remove({ set: ENTITY.UserchangeE.set, key: userchange[0].id })
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
-            // if (deleteUserId && deleteUserId != "") {
-            //     await Aerospike.remove({ set: ENTITY.UserE.set, key: deleteUserId })
-            //     await ENTITY.SessionE.removeAllSessionRelatedToUserId(deleteUserId)
-            // }
+            if (deleteUserId && deleteUserId != "") {
+                await Aerospike.remove({ set: ENTITY.UserE.set, key: deleteUserId })
+                await ENTITY.SessionE.removeAllSessionRelatedToUserId(deleteUserId)
+            }
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: payload.isGuest,
                 userId: userData.id,
@@ -200,11 +202,8 @@ export class UserController {
                         phnNo: userData.phnNo,
                         otp: Constant.SERVER.BY_PASS_OTP,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0,
-                        name: payload.name,
+                        otpVerified: 0
                     }
-                    if (payload.email)
-                        userUpdate['email'] = payload.email
                     await ENTITY.UserchangeE.buildUserchange(userchange, userData)
                     userData = await ENTITY.UserE.buildUser(userObj[0].id, userUpdate)
                 }
@@ -258,8 +257,18 @@ export class UserController {
             if (userData && userData.id && userData.profileStep && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
             if (payload.socialKey && payload.medium) {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "username",
+                        value: username
+                    },
+                    set: ENTITY.UserE.set,
+                    background: false,
+                }
+                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 let userchangePayload = {
-                    id: userData.id,
+                    username: username,
+                    fullPhnNo: fullPhnNo,
                     name: payload.name,
                     email: payload.email,
                     cCode: payload.cCode,
@@ -272,20 +281,13 @@ export class UserController {
                     otpVerified: 0,
                     isGuest: 0,
                 }
-                let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "username",
-                        value: username
-                    },
-                    set: ENTITY.UserE.set,
-                    background: false,
-                }
-                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 if (checkUser && checkUser.length > 0) {
-                    // userchangePayload['deleteUserId'] = userData.id
+                    userchangePayload['id'] = checkUser[0].id
+                    userchangePayload['deleteUserId'] = userData.id
                     userData = checkUser[0]
                 } else {
-                    // userchangePayload['deleteUserId'] = ""
+                    userchangePayload['id'] = userData.id
+                    userchangePayload['deleteUserId'] = ""
                 }
                 await ENTITY.UserchangeE.buildUserchange(userchangePayload, userData)
                 return formatUserData(userData, headers)
@@ -295,8 +297,8 @@ export class UserController {
                     email: payload.email,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                 }
-                let user = await ENTITY.UserE.buildUser(userData.id, userUpdate)
-                return formatUserData(user, headers)
+                userData = await ENTITY.UserE.buildUser(userData.id, userUpdate)
+                return formatUserData(userData, headers)
             }
         } catch (error) {
             consolelog(process.cwd(), "profileUpdate", error, false)
@@ -339,11 +341,8 @@ export class UserController {
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                 if (checkUser && checkUser.length > 0) {
-                    userchangePayload['cartId'] = userData.cartId
-                    userchangePayload['deleteUserId'] = checkUser[0].id
-                    userData = checkUser[0]
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_ALREADY_EXIST)
                 }
-                // dataToUpdate['changePhnNo'] = 1
                 await ENTITY.UserchangeE.buildUserchange(userchangePayload, userData)
             }
             let user = await ENTITY.UserE.buildUser(auth.id, dataToUpdate)

@@ -41,7 +41,6 @@ export class UserEntity extends BaseEntity {
         sdmUserRef: Joi.number().required(),
         cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
-        changePhnNo: Joi.number().valid(0, 1).required(),
         name: Joi.string().trim().required(),
         profileStep: Joi.number().valid(
             Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
@@ -129,8 +128,6 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cmsUserRef'] = payload.cmsUserRef
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
-            if (payload.changePhnNo != undefined)
-                userUpdate['changePhnNo'] = payload.changePhnNo
             if (payload.name)
                 userUpdate['name'] = payload.name
             if (payload.socialKey)
