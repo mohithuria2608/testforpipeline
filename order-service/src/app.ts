@@ -18,472 +18,357 @@ export const start = (async () => {
 
     // let a: IMenuGrpcRequest.IFetchMenuRes
 
+    // let bundle_option = {};
+    // let selection_configurable_option = {};
     // let sitem = {
-    //   "id": 680,
-    //   "position": 0,
-    //   "name": "Mighty Twist - Large",
-    //   "description": "",
+    //   "id": 1575,
+    //   "position": 1,
+    //   "name": "21 Pcs Super Bucket",
+    //   "title": "21 Pcs Super Bucket",
+    //   "description": "21 chicken pcs + 5 crispy strips + 2 family fries + 2 family coleslaw +7 bun + 2.25 L drink",
     //   "inSide": 1,
-    //   "finalPrice": 26.55,
-    //   "specialPrice": 26.55,
-    //   "typeId": "bundle",
+    //   "finalPrice": 135,
+    //   "specialPrice": 135,
     //   "metaKeyword": [
-    //     "Mighty Twist - Large"
+    //     "21 Pcs Super Bucket"
     //   ],
     //   "bundleProductOptions": [
     //     {
     //       "position": 1,
-    //       "maximumQty": 0,
-    //       "minimumQty": 0,
-    //       "title": "Cheese",
+    //       "name": "Choice Of Chicken",
+    //       "title": "Choice Of Chicken",
     //       "ingredient": 0,
     //       "type": "checkbox",
-    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "imageThumbnail": "/d/u/dummy-product.png",
     //       "productLinks": [
     //         {
-    //           "position": 1,
-    //           "option_id": "233",
-    //           "selection_id": "902",
+    //           "position": 0,
+    //           "option_id": "1421",
+    //           "selection_id": 0,
     //           "price": 0,
-    //           "id": 664,
-    //           "name": "American Cheese",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "id": 1471,
+    //           "name": "Chicken Pc - Original",
+    //           "title": "Chicken Pc - Original",
+    //           "imageThumbnail": "/imagestemp/itm910001.png",
     //           "selectionQty": 1,
-    //           "subOptions": [
-    //             {
-    //               "option_id": "664",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 1,
-    //               "name": "None",
-    //               "id": 661,
-    //               "sku": 8100011
-    //             },
-    //             {
-    //               "option_id": "664",
-    //               "selection_id": null,
-    //               "price": 1.8,
-    //               "selected": 0,
-    //               "name": "Regular",
-    //               "id": 662,
-    //               "sku": 8100012
-    //             },
-    //             {
-    //               "option_id": "664",
-    //               "selection_id": null,
-    //               "price": 3.6,
-    //               "selected": 0,
-    //               "name": "Extra",
-    //               "id": 663,
-    //               "sku": 8100013
-    //             }
-    //           ],
+    //           "subOptions": [],
     //           "selected": 1,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "default": 1,
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 2,
-    //           "option_id": "233",
-    //           "selection_id": "903",
+    //           "position": 0,
+    //           "option_id": "1421",
+    //           "selection_id": 0,
     //           "price": 0,
-    //           "id": 668,
-    //           "name": "Lettuce",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-    //             {
-    //               "option_id": "668",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 1,
-    //               "name": "None",
-    //               "id": 665,
-    //               "sku": 8117011
-    //             },
-    //             {
-    //               "option_id": "668",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 0,
-    //               "name": "Regular",
-    //               "id": 666,
-    //               "sku": 8117012
-    //             },
-    //             {
-    //               "option_id": "668",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 0,
-    //               "name": "Extra",
-    //               "id": 667,
-    //               "sku": 8117013
-    //             }
-    //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 3,
-    //           "option_id": "233",
-    //           "selection_id": "904",
-    //           "price": 0,
-    //           "id": 672,
-    //           "name": "Tomato",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [
-    //             {
-    //               "option_id": "672",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 1,
-    //               "name": "None",
-    //               "id": 669,
-    //               "sku": 8117031
-    //             },
-    //             {
-    //               "option_id": "672",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 0,
-    //               "name": "Regular",
-    //               "id": 670,
-    //               "sku": 8117032
-    //             },
-    //             {
-    //               "option_id": "672",
-    //               "selection_id": null,
-    //               "price": 0,
-    //               "selected": 0,
-    //               "name": "Extra",
-    //               "id": 671,
-    //               "sku": 8117033
-    //             }
-    //           ],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 4,
-    //           "option_id": "233",
-    //           "selection_id": "905",
-    //           "price": 0,
-    //           "id": 557,
-    //           "name": "Twister Sandwich - Spicy",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "id": 1472,
+    //           "name": "Chicken Pc - Spicy",
+    //           "title": "Chicken Pc - Spicy",
+    //           "imageThumbnail": "/imagestemp/itm910002.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 5,
-    //           "option_id": "233",
-    //           "selection_id": "906",
-    //           "price": 10,
-    //           "id": 601,
-    //           "name": "Large Fries",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         }
     //       ],
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
     //       "isDependent": 0
     //     },
     //     {
     //       "position": 2,
-    //       "maximumQty": 0,
-    //       "minimumQty": 0,
-    //       "title": "Choice of Second Sandwich",
+    //       "name": "Choice of Strips",
+    //       "title": "Choice of Strips",
     //       "ingredient": 0,
-    //       "type": "radio",
-    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "type": "checkbox",
+    //       "imageThumbnail": "/d/u/dummy-product.png",
     //       "productLinks": [
     //         {
-    //           "position": 1,
-    //           "option_id": "234",
-    //           "selection_id": "907",
+    //           "position": 0,
+    //           "option_id": "1422",
+    //           "selection_id": 0,
     //           "price": 0,
-    //           "id": 558,
-    //           "name": "Twister Sandwich - Original",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "id": 1491,
+    //           "name": "Crispy Strips Original",
+    //           "title": "Crispy Strips Original",
+    //           "imageThumbnail": "/imagestemp/itm511001.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 1,
+    //           "default": 1,
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1422",
+    //           "selection_id": 0,
+    //           "price": 0,
+    //           "id": 1492,
+    //           "name": "Crispy Strips Spicy",
+    //           "title": "Crispy Strips Spicy",
+    //           "imageThumbnail": "/imagestemp/itm511002.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         }
     //       ],
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
     //       "isDependent": 0
     //     },
     //     {
     //       "position": 3,
-    //       "maximumQty": 0,
-    //       "minimumQty": 0,
-    //       "title": "Choice of side item",
+    //       "name": "Choice of first side item",
+    //       "title": "Choice of first side item",
     //       "ingredient": 0,
     //       "type": "radio",
-    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "imageThumbnail": "/d/u/dummy-product.png",
     //       "productLinks": [
     //         {
-    //           "position": 1,
-    //           "option_id": "235",
-    //           "selection_id": "908",
-    //           "price": 11,
-    //           "id": 604,
-    //           "name": "Large Fries Spicy",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 15,
+    //           "id": 1459,
+    //           "name": "Family Fries",
+    //           "title": "Family Fries",
+    //           "imageThumbnail": "/imagestemp/itm510005.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 1,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "default": 1,
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 2,
-    //           "option_id": "235",
-    //           "selection_id": "909",
-    //           "price": 7,
-    //           "id": 589,
-    //           "name": "Coleslaw Salad Small",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 17,
+    //           "id": 1462,
+    //           "name": "Family Fries Spicy",
+    //           "title": "Family Fries Spicy",
+    //           "imageThumbnail": "/imagestemp/itm510014.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 3,
-    //           "option_id": "235",
-    //           "selection_id": "910",
-    //           "price": 10,
-    //           "id": 598,
-    //           "name": "Loaded Fries Regular",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 15,
+    //           "id": 1447,
+    //           "name": "Coleslaw Salad Large",
+    //           "title": "Coleslaw Salad Large",
+    //           "imageThumbnail": "/imagestemp/itm510002.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 4,
-    //           "option_id": "235",
-    //           "selection_id": "911",
-    //           "price": 8,
-    //           "id": 609,
-    //           "name": "Potato Dipper- Regular",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 18,
+    //           "id": 1456,
+    //           "name": "Loaded Fries Family",
+    //           "title": "Loaded Fries Family",
+    //           "imageThumbnail": "/imagestemp/itm510030.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 5,
-    //           "option_id": "235",
-    //           "selection_id": "912",
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 0,
+    //           "id": 1507,
+    //           "name": "Chips Large Catering",
+    //           "title": "Chips Large Catering",
+    //           "imageThumbnail": "/imagestemp/itm510068.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 15,
+    //           "id": 1465,
+    //           "name": "Family Dipper Fries",
+    //           "title": "Family Dipper Fries",
+    //           "imageThumbnail": "/imagestemp/itm510074.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
+    //           "price": 12,
+    //           "id": 1473,
+    //           "name": "Cheese Potato Dipper Fami",
+    //           "title": "Cheese Potato Dipper Fami",
+    //           "imageThumbnail": "/imagestemp/itm510076.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1423",
+    //           "selection_id": 0,
     //           "price": 5,
-    //           "id": 621,
-    //           "name": "Cheese Potato Dipper",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "id": 1474,
+    //           "name": "Loaded Fries P.Chili Fami",
+    //           "title": "Loaded Fries P.Chili Fami",
+    //           "imageThumbnail": "/imagestemp/itm510080.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 6,
-    //           "option_id": "235",
-    //           "selection_id": "913",
-    //           "price": 3,
-    //           "id": 622,
-    //           "name": "Loaded Fries P.Chili Reg",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         }
     //       ],
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
     //       "isDependent": 0
     //     },
     //     {
     //       "position": 4,
+    //       "name": "Choice of second side item",
+    //       "title": "Choice of second side item",
+    //       "ingredient": 0,
+    //       "type": "radio",
+    //       "imageThumbnail": "/d/u/dummy-product.png",
+    //       "productLinks": [],
     //       "maximumQty": 0,
     //       "minimumQty": 0,
+    //       "isDependent": 0
+    //     },
+    //     {
+    //       "position": 5,
+    //       "name": "Choice of Beverages",
     //       "title": "Choice of Beverages",
     //       "ingredient": 0,
     //       "type": "radio",
-    //       "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //       "imageThumbnail": "/d/u/dummy-product.png",
     //       "productLinks": [
     //         {
-    //           "position": 1,
-    //           "option_id": "236",
-    //           "selection_id": "914",
-    //           "price": 10,
-    //           "id": 576,
-    //           "name": "Pepsi Large",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "position": 0,
+    //           "option_id": "1425",
+    //           "selection_id": 0,
+    //           "price": 0,
+    //           "id": 1516,
+    //           "name": "Pepsi 2.25",
+    //           "title": "Pepsi 2.25",
+    //           "imageThumbnail": "/imagestemp/itm610034.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 1,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "default": 1,
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 2,
-    //           "option_id": "236",
-    //           "selection_id": "915",
-    //           "price": 10,
-    //           "id": 588,
-    //           "name": "Mirinda Large",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 3,
-    //           "option_id": "236",
-    //           "selection_id": "2433",
-    //           "price": 10,
-    //           "id": 713,
-    //           "name": "7Up Large",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 4,
-    //           "option_id": "236",
-    //           "selection_id": "917",
-    //           "price": 10,
-    //           "id": 579,
-    //           "name": "Diet Pepsi Large",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 5,
-    //           "option_id": "236",
-    //           "selection_id": "918",
-    //           "price": 10,
-    //           "id": 585,
-    //           "name": "Mountain Dew Large",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 6,
-    //           "option_id": "236",
-    //           "selection_id": "919",
-    //           "price": 5,
-    //           "id": 570,
-    //           "name": "Mojito Krusher",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //           "selectionQty": 1,
-    //           "subOptions": [],
-    //           "selected": 0,
-    //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
-    //         },
-    //         {
-    //           "position": 7,
-    //           "option_id": "236",
-    //           "selection_id": "920",
+    //           "position": 0,
+    //           "option_id": "1425",
+    //           "selection_id": 0,
     //           "price": 0,
-    //           "id": 623,
-    //           "name": "Small Aquafina",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "id": 1517,
+    //           "name": "7Up  2.25",
+    //           "title": "7Up  2.25",
+    //           "imageThumbnail": "/imagestemp/itm610035.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
     //         },
     //         {
-    //           "position": 8,
-    //           "option_id": "236",
-    //           "selection_id": "921",
-    //           "price": 8,
-    //           "id": 569,
-    //           "name": "Fresh Orange Juice",
-    //           "imageThumbnail": "\/d\/u\/dummy-product.png",
+    //           "position": 0,
+    //           "option_id": "1425",
+    //           "selection_id": 0,
+    //           "price": 0,
+    //           "id": 1518,
+    //           "name": "Mountain Dew 2.25",
+    //           "title": "Mountain Dew 2.25",
+    //           "imageThumbnail": "/imagestemp/itm610036.png",
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
     //           "default": 0,
-    //           "dependentSteps": [
-    //             "0"
-    //           ]
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1425",
+    //           "selection_id": 0,
+    //           "price": 0,
+    //           "id": 1519,
+    //           "name": "Diet Pepsi 2.25",
+    //           "title": "Diet Pepsi 2.25",
+    //           "imageThumbnail": "/imagestemp/itm610037.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1425",
+    //           "selection_id": 0,
+    //           "price": 0,
+    //           "id": 1520,
+    //           "name": "Mirinda 2.25",
+    //           "title": "Mirinda 2.25",
+    //           "imageThumbnail": "/imagestemp/itm610038.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": []
+    //         },
+    //         {
+    //           "position": 0,
+    //           "option_id": "1425",
+    //           "selection_id": 0,
+    //           "price": 21,
+    //           "id": 1513,
+    //           "name": "Orange Juice 1L",
+    //           "title": "Orange Juice 1L",
+    //           "imageThumbnail": "/imagestemp/itm610033.png",
+    //           "selectionQty": 1,
+    //           "subOptions": [],
+    //           "selected": 0,
+    //           "default": 0,
+    //           "dependentSteps": []
     //         }
     //       ],
+    //       "maximumQty": 0,
+    //       "minimumQty": 0,
     //       "isDependent": 0
     //     }
     //   ],
+    //   "typeId": "bundle",
     //   "selectedItem": 0,
     //   "configurableProductOptions": [
     //     {
@@ -491,35 +376,40 @@ export const start = (async () => {
     //       "position": 1,
     //       "title": "Choice of Size",
     //       "subtitle": "Choice of Size",
-    //       "selIndex": 0,
+    //       "selIndex": 1,
     //       "options": [
     //         {
     //           "isSelected": 1,
     //           "position": 1,
+    //           "name": "Regular",
     //           "title": "Regular",
     //           "id": "16285"
     //         },
     //         {
     //           "isSelected": 0,
     //           "position": 2,
-    //           "title": "Large",
-    //           "id": "16286"
-    //         },
-    //         {
-    //           "isSelected": 0,
-    //           "position": 3,
+    //           "name": "Medium",
     //           "title": "Medium",
     //           "id": "16287"
     //         },
     //         {
     //           "isSelected": 0,
+    //           "position": 3,
+    //           "name": "Large",
+    //           "title": "Large",
+    //           "id": "16286"
+    //         },
+    //         {
+    //           "isSelected": 0,
     //           "position": 4,
+    //           "name": "Small",
     //           "title": "Small",
     //           "id": "16293"
     //         },
     //         {
     //           "isSelected": 0,
     //           "position": 5,
+    //           "name": "Family",
     //           "title": "Family",
     //           "id": "16294"
     //         }
@@ -527,18 +417,19 @@ export const start = (async () => {
     //     }
     //   ],
     //   "items": [],
-    //   "sku": 71,
-    //   "imageSmall": "\/d\/u\/dummy-product.png",
-    //   "imageThumbnail": "\/d\/u\/dummy-product.png",
-    //   "image": "\/d\/u\/dummy-product.png",
+    //   "sku": 118,
+    //   "imageSmall": "/d/u/dummy-product.png",
+    //   "imageThumbnail": "/d/u/dummy-product.png",
+    //   "image": "/d/u/dummy-product.png",
     //   "taxClassId": 2,
     //   "virtualGroup": 0,
     //   "visibility": 4,
+    //   "sel1Value": 0,
+    //   "sel2Value": 0,
+    //   "sel3Value": -1,
     //   "associative": 0
     // }
 
-    // let bundle_option = {};
-    // let selection_configurable_option = {};
     // sitem['bundleProductOptions'].map(bpo => {
     //   if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
     //     bpo['productLinks'].map(pl => {

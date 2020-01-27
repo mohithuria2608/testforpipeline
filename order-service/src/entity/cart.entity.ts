@@ -455,7 +455,7 @@ export class CartClass extends BaseEntity {
                     type: "TAX",
                     name: "VAT",
                     code: "VAT",
-                    amount: 1.05,
+                    amount: 0,
                     sequence: 3
                 })
             }

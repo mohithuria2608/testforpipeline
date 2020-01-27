@@ -31,7 +31,7 @@ export class MenuController {
     * */
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
-            let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 5;
+            let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 1;
             return await ENTITY.MenuE.getMenu({ menuId: menuId, language: headers.language })
         } catch (error) {
             consolelog(process.cwd(), "fetchMenu", error, false)
@@ -46,7 +46,7 @@ export class MenuController {
     * */
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
-            let menuId = 5;
+            let menuId = 1;
             let menu = await ENTITY.MenuE.getMenu({ menuId: menuId, language: payload.language })
             return { menu: JSON.stringify(menu) }
         } catch (error) {
