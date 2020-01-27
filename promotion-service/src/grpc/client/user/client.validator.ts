@@ -15,7 +15,7 @@ export class UserServiceValidator {
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
-                    reject(`Invalid Info- ${error.message}`)
+                    reject(error.message)
                 resolve({})
             } catch (error) {
                 reject(validatorErr(error.message))

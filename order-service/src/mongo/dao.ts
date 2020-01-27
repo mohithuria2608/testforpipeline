@@ -4,7 +4,7 @@ import * as mongoose from "mongoose";
 import { consolelog } from '../utils'
 
 export class DAOManager {
-    public ObjectId = mongoose.Types.ObjectId;
+    public ObjectId = mongoose.Types.ObjectId();
     constructor() {
 
     }

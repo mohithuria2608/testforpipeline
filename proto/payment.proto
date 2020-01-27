@@ -1,10 +1,93 @@
 syntax = "proto3";
 
 service PaymentService {
-    rpc Func1 (IFunc1Req) returns (IFunc1Res) {}
-    rpc getPaymentMethods (IFunc1Req) returns (IFunc1Res) {}
+    rpc GetPaymentMethods (IGetPaymentMethodsReq) returns (IGetPaymentMethodsRes) {}
+    rpc InitiatePayment (IInitiatePaymentReq) returns (IInitiatePaymentRes) {}
+    rpc GetPaymentStatus (IGetPaymentStatusReq) returns (IGetPaymentStatusRes) {}
+    rpc CapturePayment (ICapturePaymentReq) returns (ICapturePaymentRes) {}
 }
 
-message IFunc1Req { }
+message IGetPaymentMethodsReq { }
 
-message IFunc1Res { }
+message IGetPaymentMethodsRes { }
+
+message IInitiatePaymentReq {
+    required string orderId = 1;
+    required float amount = 2;
+    required string storeCode = 3;
+    required int32 paymentMethodId = 4;
+    required string channel = 5;
+    required string locale = 6;
+}
+
+message IInitiatePaymentRes {
+    required int32 resultCode = 1;
+    required string message = 2;
+    required int64 noonpayOrderId = 3;
+    required string orderId = 4;
+    required string paymentStatus = 5;
+    required string creationTime = 6;
+    required float amount = 7;
+    required string currency = 8;
+    required string channel = 9;
+    required string noonpayRedirectionUrl = 10;
+ }
+
+message IGetPaymentStatusReq {
+    required int64 noonpayOrderId = 1;
+    required string orderId = 2;
+    required string storeCode = 3;
+    required string  paymentStatus =4;
+}
+
+message IGetPaymentStatusRes { 
+    required int32 resultCode = 1;
+    required string message = 2;
+    required int64 noonpayOrderId = 3;
+    required string orderId = 4;
+    required string creationTime = 5;
+    required float amount = 6;
+    required float totalAuthorizedAmount = 7;
+    required float totalCapturedAmount = 8;
+    required float totalRefundedAmount = 9;
+    required float totalReversedAmount = 10;
+    required string currency = 11;
+    required string channel = 12;
+    required IPaymentDetails paymentDetails = 13;
+    repeated ITransaction transaction = 14;
+}
+
+message IPaymentDetails {
+    required string instrument = 1;
+    required string mode = 2;
+    required string integratorAccount = 3;
+    required string paymentInfo = 4;
+    required string paymentMechanism = 5;
+    required string brand = 6;
+    required string scheme = 7;
+    required string expiryMonth = 8;
+    required string expiryYear = 9;
+    required string isNetworkToken = 10;
+    required string cardType = 11;
+    required string cardCountry = 12;
+    required string cardCountryName = 13;
+}
+
+message ITransaction {
+    required string type = 1;
+    required string authorizationCode = 2;
+    required string creationTime = 3;
+    required string status = 4;
+    required string stan = 5;
+    required string id = 6;
+    required float amount = 7;
+    required string currency = 8;
+}
+
+message ICapturePaymentReq {
+    required int64 noonpayOrderId = 1;
+    required string orderId = 2;
+    required string storeCode = 3;
+}
+
+message ICapturePaymentRes { }
