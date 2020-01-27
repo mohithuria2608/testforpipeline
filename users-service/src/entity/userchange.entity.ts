@@ -9,8 +9,8 @@ export class UserchangeEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
-            bin: 'phnNo',
-            index: 'idx_' + this.set + '_' + 'phnNo',
+            bin: 'fullPhnNo',
+            index: 'idx_' + this.set + '_' + 'fullPhnNo',
             type: "STRING"
         }
     ]
@@ -25,14 +25,14 @@ export class UserchangeEntity extends BaseEntity {
         /**
          * @description : phone number otp verify
          */
+        fullPhnNo: Joi.string().trim().required().description("sk"),
+        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
+        phnNo: Joi.string().trim(),
+        phnVerified: Joi.number(),
         otp: Joi.number(),
         otpExpAt: Joi.number(),
         otpVerified: Joi.number(),
-        /**
-         * @description : merge keys
-         */
-        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-        phnNo: Joi.string().trim(),
+        name: Joi.string().email().lowercase().trim(),
         email: Joi.string().email().lowercase().trim(),
         profileStep: Joi.number().valid(
             Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
@@ -45,7 +45,7 @@ export class UserchangeEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
         cartId: Joi.string(),
-        deleteUserId: Joi.string(),
+        // deleteUserId: Joi.string(),
     });
 
     /**
@@ -73,41 +73,63 @@ export class UserchangeEntity extends BaseEntity {
     /**
     * 
     * @param {IUserRequest.IAuthVerifyOtp} payload 
-    * @param {IUserRequest.IUserData} userData 
+    * @param {IUserchangeRequest.IUserchange} curUserchnage 
     */
-    async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, userData: IUserRequest.IUserData) {
+    async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, curUserchnage: IUserchangeRequest.IUserchange) {
         try {
-            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: userData.id })
-            consolelog(process.cwd(), "getUserchange", JSON.stringify(getUserchange), false)
-
-            if (getUserchange && getUserchange.id) {
-                if (getUserchange.cCode != payload.cCode || getUserchange.phnNo != payload.phnNo)
+            if (curUserchnage && curUserchnage.id) {
+                if (curUserchnage.cCode != payload.cCode || curUserchnage.phnNo != payload.phnNo)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                if (getUserchange.otp == 0 && getUserchange.otpExpAt == 0)
+                if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (getUserchange.otp != payload.otp)
+                if (curUserchnage.otp != payload.otp)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                if (getUserchange.otpExpAt < new Date().getTime())
+                if (curUserchnage.otpExpAt < new Date().getTime())
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_EXPIRED)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
             }
-            await Aerospike.remove({ set: this.set, key: userData.id })
-            return getUserchange
+            Aerospike.remove({ set: this.set, key: curUserchnage.id })
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "validateOtpOnPhnChange", error, false)
             return Promise.reject(error)
         }
     }
 
-    async createUserchange(payload: IUserchangeRequest.IUserchange, userData: IUserRequest.IUserData) {
+    async buildUserchange(payload: IUserchangeRequest.IUserchange, userData?: IUserRequest.IUserData) {
         try {
-            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: userData.id })
-            let dataToUpdateUserchange = {
-                id: userData.id
-            };
+            let userId = (userData != undefined) ? userData.id : ""
+            let isCreate = false
+            let checkUserchange
+            if (userId && userId != "") {
+                checkUserchange[0] = await this.getUserchange({ userId: userId })
+            } else {
+                const fullPhnNo = payload.cCode + payload.phnNo;
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "fullPhnNo",
+                        value: fullPhnNo
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                checkUserchange = await Aerospike.query(queryArg)
+            }
+            if (checkUserchange && checkUserchange.length > 0 ) {
+                isCreate = false
+                userId = checkUserchange[0].id
+            } else {
+                isCreate = true
+                userId = this.ObjectId.toString()
+            }
+            let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
+                id: userId
+            }
             if (payload.isGuest != undefined)
                 dataToUpdateUserchange['isGuest'] = payload.isGuest
+            if (payload.fullPhnNo)
+                dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)
                 dataToUpdateUserchange['cCode'] = payload.cCode
             if (payload.phnNo)
@@ -116,35 +138,38 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['otp'] = payload.otp
             if (payload.otpExpAt)
                 dataToUpdateUserchange['otpExpAt'] = payload.otpExpAt
-            if (payload.otpVerified != undefined)
+            if (payload.otpVerified)
                 dataToUpdateUserchange['otpVerified'] = payload.otpVerified
-            if (payload.cartId)
-                dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.name)
                 dataToUpdateUserchange['name'] = payload.name
             if (payload.email)
                 dataToUpdateUserchange['email'] = payload.email
-            if (payload.cCode && payload.phnNo && payload.email && payload.name)
-                dataToUpdateUserchange['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-            if (payload.socialKey != undefined)
+            if (payload.socialKey)
                 dataToUpdateUserchange['socialKey'] = payload.socialKey
-            if (payload.medium != undefined)
+            if (payload.medium)
                 dataToUpdateUserchange['medium'] = payload.medium
-            if (payload.deleteUserId)
-                dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+            if (payload.cartId)
+                dataToUpdateUserchange['cartId'] = payload.cartId
+            // if (payload.deleteUserId)
+            //     dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+            if (payload.profileStep != undefined)
+                dataToUpdateUserchange['profileStep'] = payload.profileStep
+            if (payload.phnVerified != undefined)
+                dataToUpdateUserchange['phnVerified'] = payload.phnVerified
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,
                 set: this.set,
-                key: userData.id,
+                key: dataToUpdateUserchange['id'],
             }
-            if (getUserchange && getUserchange.id) {
-                putArg['update'] = true
-            } else {
+            if (isCreate)
                 putArg['create'] = true
-            }
+            else
+                putArg['update'] = true
+
             await Aerospike.put(putArg)
-            return {}
+            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: dataToUpdateUserchange['id'] })
+            return getUserchange
         } catch (error) {
             consolelog(process.cwd(), "createUserchange", error, false)
             return Promise.reject(error)

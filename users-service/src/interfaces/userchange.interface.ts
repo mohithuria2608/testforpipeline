@@ -3,17 +3,20 @@ declare namespace IUserchangeRequest {
     interface IUserchange {
         id?: string,
         isGuest?: number,
+        fullPhnNo?: string,
+        cCode?: string,
+        phnNo?: string,
+        phnVerified?: number,
         otp?: number,
         otpExpAt?: number,
         otpVerified?: number,
         name?: string,
-        cCode?: string,
-        phnNo?: string,
         email?: string,
         socialKey?: string,
         medium?: string,
+        profileStep?: number
         cartId?: string,
-        deleteUserId?: string,
+        // deleteUserId?: string,
     }
 
     interface IGetUserchange {

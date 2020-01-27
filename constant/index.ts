@@ -11,11 +11,7 @@ export enum SET_NAME {
 };
 
 export const UDF = {
-    ACCOUNT: {
-        check_phone_exist: "check_phone_exist"
-    },
     USER: {
-        check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key",
     },
     MENU: {

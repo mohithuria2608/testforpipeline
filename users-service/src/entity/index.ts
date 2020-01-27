@@ -1,5 +1,4 @@
 export { UserE } from './user.entity'
-export { AccountE } from './account.entity'
 export { AddressE } from './address.entity'
 export { SessionE } from './session.entity'
 export { UserchangeE } from './userchange.entity'
