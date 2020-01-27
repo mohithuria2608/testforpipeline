@@ -21,6 +21,7 @@ export class UserchangeEntity extends BaseEntity {
 
     public userchangeSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk, user id"),
+        parentId: Joi.string().trim().required(),
         isGuest: Joi.number().valid(0, 1),
         /**
          * @description : phone number otp verify
@@ -116,7 +117,7 @@ export class UserchangeEntity extends BaseEntity {
                 }
                 checkUserchange = await Aerospike.query(queryArg)
             }
-            if (checkUserchange && checkUserchange.length > 0 ) {
+            if (checkUserchange && checkUserchange.length > 0) {
                 isCreate = false
                 userId = checkUserchange[0].id
             } else {
@@ -128,6 +129,8 @@ export class UserchangeEntity extends BaseEntity {
             }
             if (payload.isGuest != undefined)
                 dataToUpdateUserchange['isGuest'] = payload.isGuest
+            if (payload.parentId)
+                dataToUpdateUserchange['parentId'] = payload.parentId
             if (payload.fullPhnNo)
                 dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)

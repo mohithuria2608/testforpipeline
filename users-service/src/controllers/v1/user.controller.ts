@@ -66,6 +66,7 @@ export class UserController {
                 await ENTITY.UserchangeE.buildUserchange(userchange, checkUser[0])
             } else {
                 let userchange: IUserchangeRequest.IUserchange = {
+                    parentId: ENTITY.UserE.ObjectId.toString(),
                     fullPhnNo: fullPhnNo,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
@@ -73,7 +74,9 @@ export class UserController {
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     profileStep: 0,
-                    phnVerified: 0
+                    phnVerified: 0,
+                    email: "",
+                    name: ""
                 }
                 await ENTITY.UserchangeE.buildUserchange(userchange)
             }
@@ -126,6 +129,8 @@ export class UserController {
                     userUpdate['medium'] = userchange[0].medium
                 if (userchange[0].cartId)
                     userUpdate['cartId'] = userchange[0].cartId
+                if (userchange[0].parentId)
+                    userUpdate['parentId'] = userchange[0].parentId
                 // if (userchange[0].deleteUserId)
                 //     userUpdate['deleteUserId'] = userchange[0].deleteUserId
                 if (userchange[0].profileStep != undefined)
