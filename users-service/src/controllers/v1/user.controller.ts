@@ -259,63 +259,65 @@ export class UserController {
     * @param {string} phnNo : phone number max length 9 digits
     * @param {string} email : email
     * @param {string} name : name
-    * @param {string=} socialKey : social id
-    * @param {string=} medium : Social Platform type : FB, GOOGLE
     * */
     async createProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.ICreateProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            if (userData && userData.id && userData.profileStep && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
-            if (payload.socialKey && payload.medium) {
-                let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "username",
-                        value: username
-                    },
-                    set: ENTITY.UserE.set,
-                    background: false,
-                }
-                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
-                let userchangePayload = {
-                    username: username,
-                    fullPhnNo: fullPhnNo,
-                    name: payload.name,
-                    email: payload.email,
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    medium: payload.medium,
-                    socialKey: payload.socialKey,
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    cartId: userData.cartId,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 0,
-                    isGuest: 0,
-                    brand: headers.brand,
-                    country: headers.country,
-                }
-                if (checkUser && checkUser.length > 0) {
-                    userchangePayload['id'] = checkUser[0].id
-                    userchangePayload['deleteUserId'] = auth.id
-                    await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
+            if (userData && userData.id) {
+                if (userData && userData.id && userData.profileStep && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
+                if (userData.socialKey && userData.medium) {
+                    let queryArg: IAerospike.Query = {
+                        equal: {
+                            bin: "username",
+                            value: username
+                        },
+                        set: ENTITY.UserE.set,
+                        background: false,
+                    }
+                    let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                    consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
+                    let userchangePayload = {
+                        username: username,
+                        fullPhnNo: fullPhnNo,
+                        name: payload.name,
+                        email: payload.email,
+                        cCode: payload.cCode,
+                        phnNo: payload.phnNo,
+                        medium: userData.medium,
+                        socialKey: userData.socialKey,
+                        otp: Constant.SERVER.BY_PASS_OTP,
+                        cartId: userData.cartId,
+                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpVerified: 0,
+                        isGuest: 0,
+                        brand: headers.brand,
+                        country: headers.country,
+                    }
+                    if (checkUser && checkUser.length > 0) {
+                        userchangePayload['id'] = checkUser[0].id
+                        userchangePayload['deleteUserId'] = auth.id
+                        await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
+                    } else {
+                        userchangePayload['id'] = auth.id
+                        userchangePayload['deleteUserId'] = ""
+                        await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
+                    }
+                    return formatUserData(userData, headers)
                 } else {
-                    userchangePayload['id'] = auth.id
-                    userchangePayload['deleteUserId'] = ""
-                    await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
+                    let userUpdate: IUserRequest.IUserData = {
+                        id: userData.id,
+                        name: payload.name,
+                        email: payload.email,
+                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    }
+                    userData = await ENTITY.UserE.buildUser(userUpdate)
+                    return formatUserData(userData, headers)
                 }
-                return formatUserData(userData, headers)
             } else {
-                let userUpdate: IUserRequest.IUserData = {
-                    id: userData.id,
-                    name: payload.name,
-                    email: payload.email,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                }
-                userData = await ENTITY.UserE.buildUser(userUpdate)
-                return formatUserData(userData, headers)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
             }
         } catch (error) {
             consolelog(process.cwd(), "profileUpdate", error, false)

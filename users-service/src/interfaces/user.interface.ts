@@ -45,12 +45,10 @@ declare namespace IUserRequest {
     }
 
     interface ICreateProfile {
-        socialKey?: string,
-        medium?: string,
-        cCode?: string,
-        phnNo?: string,
-        email?: string,
-        name?: string
+        cCode: string,
+        phnNo: string,
+        email: string,
+        name: string
     }
 
     interface IEditProfile {
