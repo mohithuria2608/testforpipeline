@@ -17,7 +17,7 @@ export const start = (async () => {
     const server = app.listen(port)
 
     // let a: IMenuGrpcRequest.IFetchMenuRes
-
+    
     // let bundle_option = {};
     // let selection_configurable_option = {};
     // let sitem = {
