@@ -248,7 +248,6 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
             userObj['socialKey'] = ""
         if (userObj.medium == undefined)
             userObj['medium'] = ""
-        delete userObj['parentId']
         delete userObj['username']
         delete userObj['session']
         delete userObj['password']

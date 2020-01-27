@@ -3,7 +3,6 @@ declare namespace IUserRequest {
     interface IUserData {
         id?: string,
         username?: string,
-        parentId?: string,
         brand?: string,
         country?: string,
         email?: string,

@@ -57,8 +57,6 @@ export class UserController {
             if (checkUser && checkUser.length > 0) {
                 let userchange: IUserchangeRequest.IUserchange = {
                     fullPhnNo: fullPhnNo,
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
@@ -66,17 +64,28 @@ export class UserController {
                 }
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchange)
             } else {
-                let newUserId = ENTITY.UserE.ObjectId.toString()
+                let tempUser: IUserRequest.IUserData = {
+                    id: ENTITY.UserE.ObjectId().toString(),
+                    cartId: ENTITY.UserE.ObjectId().toString(),
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    phnVerified: 0,
+                    brand: headers.brand,
+                    country: headers.country,
+                }
+                let user = await ENTITY.UserE.buildUser(tempUser)
                 let userchange: IUserchangeRequest.IUserchange = {
+                    username: username,
                     fullPhnNo: fullPhnNo,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
+                    brand: headers.brand,
+                    country: headers.country,
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0
                 }
-                await ENTITY.UserchangeE.buildUserchange(newUserId, userchange)
+                await ENTITY.UserchangeE.buildUserchange(user.id, userchange)
             }
             return {}
         } catch (error) {
@@ -114,6 +123,8 @@ export class UserController {
                 }
                 if (userchange[0].fullPhnNo)
                     userUpdate['fullPhnNo'] = userchange[0].fullPhnNo
+                if (userchange[0].username)
+                    userUpdate['username'] = userchange[0].username
                 if (userchange[0].cCode)
                     userUpdate['cCode'] = userchange[0].cCode
                 if (userchange[0].phnNo)
@@ -130,6 +141,10 @@ export class UserController {
                     userUpdate['cartId'] = userchange[0].cartId
                 if (userchange[0].isGuest != undefined)
                     userUpdate['isGuest'] = userchange[0].isGuest
+                if (userchange[0].brand)
+                    userUpdate['brand'] = userchange[0].brand
+                if (userchange[0].country)
+                    userUpdate['country'] = userchange[0].country
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
                 userData = await ENTITY.UserE.buildUser(userUpdate)
@@ -196,20 +211,27 @@ export class UserController {
                         phnNo: userData.phnNo,
                         otp: Constant.SERVER.BY_PASS_OTP,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                        otpVerified: 0
+                        otpVerified: 0,
+                        brand: headers.brand,
+                        country: headers.country,
                     }
                     await ENTITY.UserchangeE.buildUserchange(userData.id, userchange)
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
-                userData['id'] = ENTITY.UserchangeE.ObjectId.toString()
-                let userchange: IUserchangeRequest.IUserchange = {
-                    name: payload.name,
+                let tempUser: IUserRequest.IUserData = {
+                    id: ENTITY.UserE.ObjectId().toString(),
+                    cartId: ENTITY.UserE.ObjectId().toString(),
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    phnVerified: 0,
                     socialKey: payload.socialKey,
+                    brand: headers.brand,
+                    country: headers.country,
                     medium: payload.medium,
+                    name: payload.name,
                     email: payload.email ? payload.email : "",
                 }
-                await ENTITY.UserchangeE.buildUserchange(userData.id, userchange)
+                userData = await ENTITY.UserE.buildUser(tempUser)
             }
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
@@ -268,21 +290,20 @@ export class UserController {
                     medium: payload.medium,
                     socialKey: payload.socialKey,
                     otp: Constant.SERVER.BY_PASS_OTP,
-                    cartId: ENTITY.UserE.ObjectId.toString(),
+                    cartId: userData.cartId,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0,
+                    brand: headers.brand,
+                    country: headers.country,
                 }
                 if (checkUser && checkUser.length > 0) {
                     userchangePayload['id'] = checkUser[0].id
                     userchangePayload['deleteUserId'] = auth.id
-                    console.log("1", checkUser[0].id, JSON.stringify(userchangePayload))
                     await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
-                    Aerospike.remove({ set: ENTITY.UserchangeE.set, key: auth.id })
                 } else {
                     userchangePayload['id'] = auth.id
                     userchangePayload['deleteUserId'] = ""
-                    console.log("2", auth.id, JSON.stringify(userchangePayload))
                     await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
                 }
                 return formatUserData(userData, headers)
@@ -327,7 +348,9 @@ export class UserController {
                     phnNo: payload.phnNo,
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 0
+                    otpVerified: 0,
+                    brand: headers.brand,
+                    country: headers.country,
                 }
                 let queryArg: IAerospike.Query = {
                     equal: {

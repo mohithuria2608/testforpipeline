@@ -15,12 +15,6 @@ export class UserEntity extends BaseEntity {
             bin: 'username',
             index: 'idx_' + this.set + '_' + 'username',
             type: "STRING"
-        },
-        {
-            set: this.set,
-            bin: 'parentId',
-            index: 'idx_' + this.set + '_' + 'parentId',
-            type: "STRING"
         }
     ]
 
@@ -31,7 +25,6 @@ export class UserEntity extends BaseEntity {
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
         username: Joi.string().trim().required().description("sk - unique"),
-        parentId: Joi.string().trim().required().description("sk"),
         brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         email: Joi.string().email().lowercase().trim().required(),
@@ -109,8 +102,6 @@ export class UserEntity extends BaseEntity {
                 userUpdate['id'] = payload.id
             if (payload.username)
                 userUpdate['username'] = payload.username
-            if (payload.parentId)
-                userUpdate['parentId'] = payload.parentId
             if (payload.brand)
                 userUpdate['brand'] = payload.brand
             if (payload.country)
@@ -142,15 +133,14 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-            let checkUser = await this.getUser({ userId: payload.id })
-            consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
 
+
+            let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
                 isCreate = false
             } else {
                 isCreate = true
-                let cartId = this.ObjectId.toString()
-                userUpdate['cartId'] = cartId
+                let cartId = payload.cartId
                 this.createDefaultCart(cartId, userUpdate.id)
             }
             let putArg: IAerospike.Put = {
@@ -162,8 +152,6 @@ export class UserEntity extends BaseEntity {
                 putArg['create'] = true
             else
                 putArg['update'] = true
-                consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
-
             await Aerospike.put(putArg)
             let user = await this.getUser({ userId: payload.id })
             return user

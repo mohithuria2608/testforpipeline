@@ -27,22 +27,38 @@ export class UserchangeEntity extends BaseEntity {
 
     public userchangeSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk, user id"),
-        isGuest: Joi.number().valid(0, 1),
-        fullPhnNo: Joi.string().trim().required().description("sk"),
-        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-        phnNo: Joi.string().trim(),
-        otp: Joi.number(),
-        otpExpAt: Joi.number(),
-        otpVerified: Joi.number(),
-        name: Joi.string().email().lowercase().trim(),
-        email: Joi.string().email().lowercase().trim(),
-        socialKey: Joi.string().trim(),
+        username: Joi.string().trim().required().description("sk - unique"),
+        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
+        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
+        email: Joi.string().email().lowercase().trim().required(),
+        fullPhnNo: Joi.string().trim().required(),
+        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+        phnNo: Joi.string().trim().required(),
+        sdmUserRef: Joi.number().required(),
+        cmsUserRef: Joi.number().required(),
+        phnVerified: Joi.number().valid(0, 1).required(),
+        name: Joi.string().trim().required(),
+        profileStep: Joi.number().valid(
+            Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+            Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+        ).required(),
+        socialKey: Joi.string().trim().required(),
         medium: Joi.string().trim().valid(
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        cartId: Joi.string(),
+        password: Joi.string(),
+        cartId: Joi.string().required(),
+        createdAt: Joi.number().required(),
+
+        /**
+         * @description extra validator keys
+         */
+        isGuest: Joi.number().valid(0, 1),
+        otp: Joi.number(),
+        otpExpAt: Joi.number(),
+        otpVerified: Joi.number(),
         deleteUserId: Joi.string(),
     });
 
@@ -76,8 +92,14 @@ export class UserchangeEntity extends BaseEntity {
     async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, curUserchnage: IUserchangeRequest.IUserchange) {
         try {
             if (curUserchnage && curUserchnage.id) {
-                if (curUserchnage.cCode != payload.cCode || curUserchnage.phnNo != payload.phnNo)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                if (curUserchnage.fullPhnNo) {
+                    if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo))
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                }
+                if (curUserchnage.cCode && curUserchnage.phnNo) {
+                    if (curUserchnage.cCode != payload.cCode || curUserchnage.phnNo != payload.phnNo)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                }
                 if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
                 if (curUserchnage.otp != payload.otp)
@@ -99,8 +121,8 @@ export class UserchangeEntity extends BaseEntity {
         try {
             let isCreate = false
             let checkUserchange = await this.getUserchange({ userId: userId })
-            if (checkUserchange && checkUserchange.length > 0) {
-                userId = checkUserchange[0].id
+            if (checkUserchange && checkUserchange.id) {
+                userId = checkUserchange.id
             } else {
                 let queryArg: IAerospike.Query = {
                     set: this.set,
@@ -112,31 +134,23 @@ export class UserchangeEntity extends BaseEntity {
                         bin: "fullPhnNo",
                         value: fullPhnNo
                     }
-                    checkUserchange = await Aerospike.query(queryArg)
-                    if (checkUserchange && checkUserchange.length > 0) {
-                        userId = checkUserchange[0].id
+                    let userchangeByPhnNo = await Aerospike.query(queryArg)
+                    if (userchangeByPhnNo && userchangeByPhnNo.length > 0) {
+                        checkUserchange = userchangeByPhnNo[0]
+                        userId = checkUserchange.id
                     } else {
                         isCreate = true
                     }
                 }
-                else if (payload.socialKey) {
-                    queryArg['equal'] = {
-                        bin: "socialKey",
-                        value: payload.socialKey
-                    }
-                    checkUserchange = await Aerospike.query(queryArg)
-                    if (checkUserchange && checkUserchange.length > 0) {
-                        userId = checkUserchange[0].id
-                    } else {
-                        isCreate = true
-                    }
-                } else {
+                else {
                     isCreate = true
                 }
             }
             let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
                 id: userId
             }
+            if (payload.username)
+                dataToUpdateUserchange['username'] = payload.username
             if (payload.isGuest != undefined)
                 dataToUpdateUserchange['isGuest'] = payload.isGuest
             if (payload.fullPhnNo)
@@ -174,6 +188,7 @@ export class UserchangeEntity extends BaseEntity {
             else
                 putArg['update'] = true
 
+            consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
             await Aerospike.put(putArg)
             let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: dataToUpdateUserchange['id'] })
             return getUserchange

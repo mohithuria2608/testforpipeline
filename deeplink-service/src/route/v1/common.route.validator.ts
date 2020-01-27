@@ -14,7 +14,7 @@ export const COMMON_HEADERS = {
     brand: Joi.string().valid(
         Constant.DATABASE.BRAND.KFC,
         Constant.DATABASE.BRAND.PH
-    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_BRAND.message)),
+    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_BRAND.message)),
     country: Joi.string().valid(
         Constant.DATABASE.COUNTRY.UAE
     ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY.message)),

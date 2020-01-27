@@ -3,7 +3,7 @@ import { consolelog } from '../utils';
 import { authService, locationService, orderService } from '../grpc/client';
 
 export class BaseEntity {
-    public ObjectId = mongoose.Types.ObjectId();
+    public ObjectId = mongoose.Types.ObjectId;
     public set: SetNames;
     constructor(set?) {
         this.set = set

@@ -13,8 +13,12 @@ export class GuestController {
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
             let userCreate: IUserRequest.IUserData = {
-                id: ENTITY.UserE.ObjectId.toString(),
+                id: ENTITY.UserE.ObjectId().toString(),
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                brand: headers.brand,
+                country: headers.country,
+                cartId: ENTITY.UserE.ObjectId().toString(),
+                phnVerified: 0,
             }
             let userData = await ENTITY.UserE.buildUser(userCreate)
             let sessionUpdate: ISessionRequest.ISession = {
@@ -65,22 +69,20 @@ export class GuestController {
                 fullPhnNo: fullPhnNo,
                 name: payload.name,
                 email: payload.email,
-                cartId: userData.cartId,
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
                 otp: Constant.SERVER.BY_PASS_OTP,
+                cartId: userData.cartId,
                 otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                 otpVerified: 0,
-                deleteUserId: userData.id,
                 isGuest: payload.isGuest,
-                phnVerified: 0
+                brand: headers.brand,
+                country: headers.country,
             }
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
-                userchangePayload['cartId'] = userData.cartId
                 userchangePayload['deleteUserId'] = auth.id
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
-                Aerospike.remove({ set: ENTITY.UserchangeE.set, key: auth.id })
             } else {
                 userchangePayload['id'] = auth.id
                 userchangePayload['deleteUserId'] = ""

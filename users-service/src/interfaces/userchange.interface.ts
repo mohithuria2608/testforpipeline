@@ -1,19 +1,10 @@
 declare namespace IUserchangeRequest {
 
-    interface IUserchange {
-        id?: string,
+    interface IUserchange extends IUserRequest.IUserData {
         isGuest?: number,
-        fullPhnNo?: string,
-        cCode?: string,
-        phnNo?: string,
         otp?: number,
         otpExpAt?: number,
         otpVerified?: number,
-        name?: string,
-        email?: string,
-        socialKey?: string,
-        medium?: string,
-        cartId?: string,
         deleteUserId?: string
     }
 
