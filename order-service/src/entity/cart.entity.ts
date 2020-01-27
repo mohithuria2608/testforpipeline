@@ -442,6 +442,9 @@ export class CartClass extends BaseEntity {
             }
             grandtotal = Math.round(((subtotal / 1.05) + Number.EPSILON) * 100) / 100
             tax = subtotal - grandtotal
+
+            if (payload.couponCode)
+                grandtotal = grandtotal - 5
             let cmsres = {
                 cms_cart_id: 5,
                 currency_code: "AED",
