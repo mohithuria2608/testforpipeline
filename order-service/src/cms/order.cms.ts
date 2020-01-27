@@ -1,4 +1,5 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
@@ -14,8 +15,8 @@ export class OrderCMSEntity extends BaseCMS {
             const headers = {};
             const form = formObj;
             const options: ICommonRequest.IReqPromiseOptions = {
-                method: Constant.CMS.END_POINTS.CREATE_ORDER.METHOD,
-                url: Constant.CMS.END_POINTS.CREATE_ORDER.URL,
+                method:config.get("cms.endPoints.createOrder.method"),
+                url: config.get("cms.endPoints.createCart.url"),
                 body: true
             }
             let cmsRes = await this.request(options, headers, form)

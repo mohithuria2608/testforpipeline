@@ -53,8 +53,8 @@ export class BaseCMS {
     //             "password": config.get("cms.auth.password")
     //         }
     //         const options = {
-    //             method: Constant.CMS.END_POINTS.AUTH.METHOD,
-    //             url: Constant.CMS.END_POINTS.AUTH.URL
+    //             method:config.get("cms.endPoints.auth.method"), 
+    //             url:config.get("cms.endPoints.auth.url"),
     //         }
     //         let cmsRes = await this.request(options, headers, form)
     //         global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();
