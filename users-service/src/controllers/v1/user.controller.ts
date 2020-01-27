@@ -19,7 +19,7 @@ export class UserController {
 
                 }
                 if (payload.as.update)
-                    ENTITY.UserE.buildUser(data.userId, { cartId: data.cartId })
+                    ENTITY.UserE.buildUser({ id: data.userId, cartId: data.cartId })
             }
             if (payload.cms.create || payload.cms.update || payload.cms.get) {
                 if (payload.cms.create)
@@ -62,12 +62,14 @@ export class UserController {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
+                    isGuest: 0
                 }
                 await ENTITY.UserchangeE.buildUserchange(userchange, checkUser[0])
             } else {
                 let userchange: IUserchangeRequest.IUserchange = {
                     parentId: ENTITY.UserE.ObjectId.toString(),
                     fullPhnNo: fullPhnNo,
+                    username: username,
                     cCode: payload.cCode,
                     phnNo: payload.phnNo,
                     otp: Constant.SERVER.BY_PASS_OTP,
@@ -76,7 +78,8 @@ export class UserController {
                     profileStep: 0,
                     phnVerified: 0,
                     email: "",
-                    name: ""
+                    name: "",
+                    isGuest: 0
                 }
                 await ENTITY.UserchangeE.buildUserchange(userchange)
             }
@@ -116,6 +119,8 @@ export class UserController {
                 }
                 if (userchange[0].parentId)
                     userUpdate['parentId'] = userchange[0].parentId
+                if (userchange[0].username)
+                    userUpdate['username'] = userchange[0].username
                 if (userchange[0].fullPhnNo)
                     userUpdate['fullPhnNo'] = userchange[0].fullPhnNo
                 if (userchange[0].cCode)
@@ -138,8 +143,7 @@ export class UserController {
                     userUpdate['isGuest'] = userchange[0].isGuest
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
-                userData = await ENTITY.UserE.buildUser(userchange[0].id, userUpdate)
-                await Aerospike.remove({ set: ENTITY.UserchangeE.set, key: userchange[0].id })
+                userData = await ENTITY.UserE.buildUser(userUpdate)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -174,7 +178,7 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
-            let userData: IUserRequest.IUserData
+            let userData: IUserRequest.IUserData = {}
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -189,12 +193,13 @@ export class UserController {
             if (userObj && userObj.length > 0) {
                 userData = userObj[0]
                 let userUpdate: IUserRequest.IUserData = {
+                    id: userObj[0].id,
                     name: payload.name,
                 }
                 if (payload.email)
                     userUpdate['email'] = payload.email
                 if (userObj[0].phnVerified == 1) {
-                    userData = await ENTITY.UserE.buildUser(userObj[0].id, userUpdate)
+                    userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
                     let userchange: IUserchangeRequest.IUserchange = {
                         fullPhnNo: userData.fullPhnNo,
@@ -205,7 +210,7 @@ export class UserController {
                         otpVerified: 0
                     }
                     await ENTITY.UserchangeE.buildUserchange(userchange, userData)
-                    userData = await ENTITY.UserE.buildUser(userObj[0].id, userUpdate)
+                    userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
                 userData['id'] = ENTITY.UserchangeE.ObjectId.toString()
@@ -229,7 +234,7 @@ export class UserController {
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.USER_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
-                userObj[0].id,
+                userData.id,
                 0,
                 session.sessionTime
             )
@@ -266,6 +271,8 @@ export class UserController {
                     background: false,
                 }
                 let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
+
                 let userchangePayload = {
                     username: username,
                     fullPhnNo: fullPhnNo,
@@ -293,11 +300,12 @@ export class UserController {
                 return formatUserData(userData, headers)
             } else {
                 let userUpdate: IUserRequest.IUserData = {
+                    id: userData.id,
                     name: payload.name,
                     email: payload.email,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                 }
-                userData = await ENTITY.UserE.buildUser(userData.id, userUpdate)
+                userData = await ENTITY.UserE.buildUser(userUpdate)
                 return formatUserData(userData, headers)
             }
         } catch (error) {
@@ -316,7 +324,9 @@ export class UserController {
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let dataToUpdate = {}
+            let dataToUpdate = {
+                id: userData.id,
+            }
             if (payload.name)
                 dataToUpdate['name'] = payload.name
             if (payload.email)
@@ -345,7 +355,7 @@ export class UserController {
                 }
                 await ENTITY.UserchangeE.buildUserchange(userchangePayload, userData)
             }
-            let user = await ENTITY.UserE.buildUser(auth.id, dataToUpdate)
+            let user = await ENTITY.UserE.buildUser(dataToUpdate)
             // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers)
         } catch (error) {

@@ -12,6 +12,12 @@ export class UserchangeEntity extends BaseEntity {
             bin: 'fullPhnNo',
             index: 'idx_' + this.set + '_' + 'fullPhnNo',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'socialKey',
+            index: 'idx_' + this.set + '_' + 'socialKey',
+            type: "STRING"
         }
     ]
 
@@ -102,18 +108,26 @@ export class UserchangeEntity extends BaseEntity {
         try {
             let userId = (userData != undefined) ? userData.id : ""
             let isCreate = false
-            let checkUserchange
+            let checkUserchange = []
             if (userId && userId != "") {
                 checkUserchange[0] = await this.getUserchange({ userId: userId })
             } else {
-                const fullPhnNo = payload.cCode + payload.phnNo;
                 let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "fullPhnNo",
-                        value: fullPhnNo
-                    },
                     set: this.set,
                     background: false,
+                }
+                if (payload.phnNo && payload.cCode) {
+                    const fullPhnNo = payload.cCode + payload.phnNo;
+                    queryArg['equal'] = {
+                        bin: "fullPhnNo",
+                        value: fullPhnNo
+                    }
+                }
+                else if (payload.socialKey) {
+                    queryArg['equal'] = {
+                        bin: "socialKey",
+                        value: payload.socialKey
+                    }
                 }
                 checkUserchange = await Aerospike.query(queryArg)
             }
@@ -131,6 +145,8 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['isGuest'] = payload.isGuest
             if (payload.parentId)
                 dataToUpdateUserchange['parentId'] = payload.parentId
+            if (payload.username)
+                dataToUpdateUserchange['username'] = payload.username
             if (payload.fullPhnNo)
                 dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)

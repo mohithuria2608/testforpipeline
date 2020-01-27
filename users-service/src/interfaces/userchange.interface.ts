@@ -3,6 +3,7 @@ declare namespace IUserchangeRequest {
     interface IUserchange {
         id?: string,
         parentId?: string,
+        username?: string,
         isGuest?: number,
         fullPhnNo?: string,
         cCode?: string,

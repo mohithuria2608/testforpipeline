@@ -101,8 +101,9 @@ export class UserEntity extends BaseEntity {
      * @param {IUserRequest.IUserData} userData 
      * @param {IUserRequest.IEditProfile} payload 
      */
-    async buildUser(userId: string, payload: IUserRequest.IUserData) {
+    async buildUser(payload: IUserRequest.IUserData) {
         try {
+            let isCreate = false
             let userUpdate: IUserRequest.IUserData = {}
             if (payload.id)
                 userUpdate['id'] = payload.id
@@ -141,21 +142,30 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-            let checkUser = await this.getUser({ userId: userId })
+            let checkUser = await this.getUser({ userId: payload.id })
+            consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
 
+            if (checkUser && checkUser.id) {
+                isCreate = false
+            } else {
+                isCreate = true
+                let cartId = this.ObjectId.toString()
+                userUpdate['cartId'] = cartId
+                this.createDefaultCart(cartId, userUpdate.id)
+            }
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,
-                key: userId,
+                key: payload.id,
             }
-            if (checkUser && checkUser.id) {
-                putArg['update'] = true
-            } else {
+            if (isCreate)
                 putArg['create'] = true
-                this.createDefaultCart(userUpdate.cartId, userUpdate.id)
-            }
+            else
+                putArg['update'] = true
+                consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
+
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userId })
+            let user = await this.getUser({ userId: payload.id })
             return user
         } catch (error) {
             consolelog(process.cwd(), "updateUser", error, false)

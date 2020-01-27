@@ -225,7 +225,7 @@ class AerospikeClass {
                 if (this.client) {
                     const key = new aerospike.Key(this.namespace, argv.set, argv.key)
                     await this.client.remove(key)
-                    consolelog(process.cwd(), 'Removed record:', key, false)
+                    consolelog(process.cwd(), 'Removed record:', JSON.stringify(key), false)
                     resolve()
                 } else reject('Client not initialized');
             } catch (error) {

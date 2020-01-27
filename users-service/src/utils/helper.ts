@@ -236,7 +236,20 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
     try {
         userObj['country'] = headers.country
         userObj['language'] = headers.language
-
+        if (userObj.phnNo == undefined)
+            userObj['phnNo'] = ""
+        if (userObj.cCode == undefined)
+            userObj['cCode'] = ""
+        if (userObj.email == undefined)
+            userObj['email'] = ""
+        if (userObj.name == undefined)
+            userObj['name'] = ""
+        if (userObj.socialKey == undefined)
+            userObj['socialKey'] = ""
+        if (userObj.medium == undefined)
+            userObj['medium'] = ""
+        delete userObj['parentId']
+        delete userObj['username']
         delete userObj['session']
         delete userObj['password']
         delete userObj['sdmUserRef']

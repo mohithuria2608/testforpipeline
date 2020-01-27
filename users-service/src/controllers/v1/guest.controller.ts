@@ -12,12 +12,11 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            let userId = ENTITY.UserE.ObjectId.toString()
             let userCreate: IUserRequest.IUserData = {
-                id: userId,
+                id: ENTITY.UserE.ObjectId.toString(),
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             }
-            let userData = await ENTITY.UserE.buildUser(userId, userCreate)
+            let userData = await ENTITY.UserE.buildUser( userCreate)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 1,
                 userId: userData.id
