@@ -15,8 +15,8 @@ export class OrderCMSEntity extends BaseCMS {
             const headers = {};
             const form = formObj;
             const options: ICommonRequest.IReqPromiseOptions = {
-                method:config.get("cms.endPoints.createOrder.method"),
-                url: config.get("cms.endPoints.createCart.url"),
+                method: Constant.CMS.END_POINTS.CREATE_ORDER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.CREATE_ORDER.URL,
                 body: true
             }
             let cmsRes = await this.request(options, headers, form)
