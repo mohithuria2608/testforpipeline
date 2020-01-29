@@ -61,7 +61,7 @@ pipeline {
 */
                 }
             }
-        }
+        }/*
         stage('Push Image to Azure Container Registry') {
             steps{
                 script {
@@ -82,7 +82,7 @@ pipeline {
                 }
             }
         }
-        /*stage('Delpoying the App on Azure Kubernetes Service') {
+        stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
                        // sh "docker system prune -a"
