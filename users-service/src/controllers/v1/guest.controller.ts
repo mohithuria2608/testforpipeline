@@ -34,7 +34,7 @@ export class GuestController {
                 1,
                 session.sessionTime
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, 1) }
         } catch (error) {
             consolelog(process.cwd(), "guestLogin", error, false)
             return Promise.reject(error)
@@ -95,7 +95,7 @@ export class GuestController {
             userData['cCode'] = payload.cCode
             userData['phnVerified'] = 0
             userData['profileStep'] = 1
-            return formatUserData(userData, headers)
+            return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", error, false)
             return Promise.reject(error)

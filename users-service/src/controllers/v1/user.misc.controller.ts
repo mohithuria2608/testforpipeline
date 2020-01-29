@@ -24,7 +24,7 @@ export class MiscUserController {
             const toCreateToken = (authObj.isGuest == 0) ? Constant.DATABASE.TYPE.TOKEN.USER_AUTH : Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH
             let tokens = await ENTITY.UserE.getTokens(headers.deviceid, headers.devicetype, [toCreateToken], authObj.id, authObj.isGuest, sessionTime)
             let user = await ENTITY.UserE.getUser({ userId: authObj.id })
-            return { accessToken: tokens.accessToken, response: formatUserData(user, headers) }
+            return { accessToken: tokens.accessToken, response: formatUserData(user, headers, authObj.isGuest) }
         } catch (error) {
             consolelog(process.cwd(), "refreshToken", error, false)
             return Promise.reject(error)

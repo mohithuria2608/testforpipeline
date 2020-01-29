@@ -176,7 +176,7 @@ export class UserController {
                 payload.isGuest,
                 session.sessionTime
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, payload.isGuest) }
         } catch (error) {
             consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -254,7 +254,7 @@ export class UserController {
                 0,
                 session.sessionTime
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, 0) }
         } catch (error) {
             consolelog(process.cwd(), "socialAuthValidate", error, false)
             return Promise.reject(error)
@@ -319,7 +319,7 @@ export class UserController {
                     userData['cCode'] = payload.cCode
                     userData['profileStep'] = 1
                     userData['phnVerified'] = 0
-                    return formatUserData(userData, headers)
+                    return formatUserData(userData, headers, auth.isGuest)
                 } else {
                     let userUpdate: IUserRequest.IUserData = {
                         id: userData.id,
@@ -340,7 +340,7 @@ export class UserController {
                         },
                     }
                     kafkaService.kafkaSync(userSync)
-                    return formatUserData(userData, headers)
+                    return formatUserData(userData, headers, auth.isGuest)
                 }
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
@@ -402,7 +402,7 @@ export class UserController {
                 user['cCode'] = payload.cCode
                 user['phnVerified'] = 0
             }
-            return formatUserData(user, headers)
+            return formatUserData(user, headers, auth.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "editProfile", error, false)
             return Promise.reject(error)
