@@ -74,9 +74,13 @@ export class OrderController {
             cartData['updatedAt'] = new Date().getTime()
             cartData['transLogs'] = []
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOneEntityMdb(cartData)
+            let amount = order.amount.reduce((init, elem) => {
+                if (elem.type == "TOTAL")
+                    return init + elem.amount
+            }, 0)
             let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                 orderId: order._id.toString(),
-                amount: 100,
+                amount: amount,
                 storeCode: "kfc_uae_store",
                 paymentMethodId: 1,
                 channel: "Mobile",

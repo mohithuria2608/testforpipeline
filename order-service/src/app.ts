@@ -17,7 +17,7 @@ export const start = (async () => {
     const port = config.get("server.order.port")
     const server = app.listen(port)
 
-    // let a: IMenuGrpcRequest.IFetchMenuRes
+    let a: IMenuGrpcRequest.IFetchMenuRes 
 
     // let bundle_option = {};
     // let selection_configurable_option = {};

@@ -5,6 +5,7 @@ declare namespace IPromotionGrpcRequest {
     }
 
     interface IValidatePromotionRes {
+        isValid?: boolean,
         cmsCouponRef: number,
         couponCode: string,
         promotionType: string,

@@ -454,7 +454,7 @@ export class CartClass extends BaseEntity {
             let discountAmnt = 0
             if (payload.couponCode) {
                 let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                if (validPromo && validPromo.couponCode) {
+                if (validPromo && validPromo.isValid) {
                     if (validPromo.promotionType == "by_percent") {
                         discountAmnt = ((grandtotal * (validPromo.discountAmount / 100)) <= validPromo.maxDiscountAmt) ? (grandtotal * (validPromo.discountAmount / 100)) : validPromo.maxDiscountAmt
                     } else {
