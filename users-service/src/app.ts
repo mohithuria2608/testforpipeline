@@ -6,6 +6,7 @@ import middleware from './middlewares'
 import route from './route'
 import { event } from './lib'
 import * as SDM from './sdm';
+import * as Constant from './constant';
 
 const app = new Koa()
 
@@ -19,7 +20,15 @@ export const start = (async () => {
     const port = config.get("server.user.port")
     const server = app.listen(port)
 
-    event.emit('logger', { name: "ankit" });
+    // event.emit('logger', {
+    //   type: Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
+    //   info: { name: "ankit" },
+    //   description: "test logger",
+    //   options: {
+    //     env: Constant.SERVER.ENV[config.get("env")],
+    //   },
+    //   createdAt: new Date().getTime()
+    // });
     await bootstrap(server)
     // await SDM.UserSDME.createCustomer({})
     // await SDM.UserSDME.getCustomerByUserNameAndPswd({ customerUserName: "", customerPassword: "" })

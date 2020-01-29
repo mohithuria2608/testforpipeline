@@ -16,7 +16,7 @@ export class KafkaController {
     * */
     async kafkaSync(payload: IKafkaRequest.IKafkaBody) {
         try {
-            consolelog(process.cwd(), "produce data to sync with legacy systems in KAFKA service", JSON.stringify(payload), true)
+            consolelog(process.cwd(), "produce data to sync with persistent systems in KAFKA service", JSON.stringify(payload), true)
             switch (payload.set) {
                 case Constant.SET_NAME.USER: {
                     let messages = null;
@@ -165,7 +165,7 @@ export class KafkaController {
                     break;
                 }
             }
-            return { data: '' };
+            return { data: 'succes' };
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)
             return Promise.reject(error)

@@ -20,7 +20,7 @@ export class UserService {
     private userClient = new this.loadUser(config.get("grpc.user.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
+        console.log(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
