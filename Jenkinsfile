@@ -77,7 +77,7 @@ pipeline {
                         UploadImage.push()
                         PromotionImage.push()
                         PaymentImage.push()
-                        NotificationImage.push()*/
+                        NotificationImage.push()
                     }
                 }
             }
