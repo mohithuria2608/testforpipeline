@@ -99,8 +99,8 @@ pipeline {
     }
     post{
         always{
-           // emailext attachLog: true,
-            //body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br><font size='+1'> To Check SonarQube Vulnerability test report: http://ec2-18-205-104-25.compute-1.amazonaws.com/dashboard/index/Americana_Backend <br><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com, abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
+            emailext attachLog: true,
+            body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br><font size='+1'> To Check SonarQube Vulnerability test report: http://ec2-18-205-104-25.compute-1.amazonaws.com/dashboard/index/Americana_Backend <br><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com, abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
         }
     }
 }
