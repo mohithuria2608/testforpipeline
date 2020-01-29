@@ -46,9 +46,9 @@ pipeline {
         stage('Build image') {
             steps{
                 script{
-                    AuthImage=docker.build(registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/auth-service/Dockerfile  .")
+                   // AuthImage=docker.build(registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/auth-service/Dockerfile  .")
                     UsersImage=docker.build(registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/users-service/Dockerfile .")
-                    MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")
+                    /*MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")
                     OrderImage=docker.build(registry + "/order"+ ":Order-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/order-service/Dockerfile .")
                     DeeplinkImage=docker.build(registry + "/deeplink"+ ":Deeplink-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/deeplink-service/Dockerfile .")
                     KafkaImage=docker.build(registry + "/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/kafka-service/Dockerfile .")
@@ -58,7 +58,7 @@ pipeline {
                     PromotionImage=docker.build(registry + "/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/promotion-service/Dockerfile .")
                     PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile .")
                     NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile .")
-
+*/
                 }
             }
         }
@@ -66,9 +66,9 @@ pipeline {
             steps{
                 script {
                     docker.withRegistry("https://americana.azurecr.io", registryCredential ) {
-                        AuthImage.push()
+                        //AuthImage.push()
                         UsersImage.push()
-                        MenuImage.push()
+                        /*MenuImage.push()
                         OrderImage.push()
                         DeeplinkImage.push()
                         KafkaImage.push()
@@ -77,12 +77,12 @@ pipeline {
                         UploadImage.push()
                         PromotionImage.push()
                         PaymentImage.push()
-                        NotificationImage.push()
+                        NotificationImage.push()*/
                     }
                 }
             }
         }
-        stage('Delpoying the App on Azure Kubernetes Service') {
+        /*stage('Delpoying the App on Azure Kubernetes Service') {
             steps{
                 script{
                        // sh "docker system prune -a"
@@ -91,12 +91,12 @@ pipeline {
  
                 }
             }
-        }
-    }
+        }*/
+    }/*
     post{
         always{
-            emailext attachLog: true,
-            body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br><font size='+1'> To Check SonarQube Vulnerability test report: http://ec2-18-205-104-25.compute-1.amazonaws.com/dashboard/index/Americana_Backend <br><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com, abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
+           // emailext attachLog: true,
+            //body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br><font size='+1'> To Check SonarQube Vulnerability test report: http://ec2-18-205-104-25.compute-1.amazonaws.com/dashboard/index/Americana_Backend <br><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com, abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
         }
-    }
+    }*/
 }
