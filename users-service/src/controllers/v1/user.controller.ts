@@ -141,6 +141,8 @@ export class UserController {
                     userUpdate['cartId'] = userchange[0].cartId
                 if (userchange[0].isGuest != undefined)
                     userUpdate['isGuest'] = userchange[0].isGuest
+                if (userchange[0].profileStep != undefined)
+                    userUpdate['profileStep'] = userchange[0].profileStep
                 if (userchange[0].brand)
                     userUpdate['brand'] = userchange[0].brand
                 if (userchange[0].country)
@@ -293,6 +295,7 @@ export class UserController {
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
+                        profileStep: 1,
                         brand: headers.brand,
                         country: headers.country,
                     }
@@ -305,6 +308,11 @@ export class UserController {
                         userchangePayload['deleteUserId'] = ""
                         await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
                     }
+                    userData['fullPhnNo'] = fullPhnNo
+                    userData['phnNo'] = payload.phnNo
+                    userData['cCode'] = payload.cCode
+                    userData['profileStep'] = 1
+                    userData['phnVerified'] = 0
                     return formatUserData(userData, headers)
                 } else {
                     let userUpdate: IUserRequest.IUserData = {
@@ -370,6 +378,12 @@ export class UserController {
             }
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
             // ENTITY.UserE.syncUser(user)
+            if (payload.cCode && payload.phnNo) {
+                user['fullPhnNo'] =  payload.cCode + payload.phnNo
+                user['phnNo'] = payload.phnNo
+                user['cCode'] = payload.cCode
+                user['phnVerified'] = 0
+            }
             return formatUserData(user, headers)
         } catch (error) {
             consolelog(process.cwd(), "editProfile", error, false)

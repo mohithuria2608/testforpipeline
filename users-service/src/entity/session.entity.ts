@@ -116,42 +116,6 @@ export class SessionEntity extends BaseEntity {
     }
 
     /**
-     * 
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.IAuthVerifyOtp} payload 
-     * @param {IUserRequest.IUserData} userData 
-     */
-    async validateOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp, userData: IUserRequest.IUserData, sessionTime: number) {
-        try {
-            let getSession: ISessionRequest.ISession = await this.getSession(headers.deviceid, userData.id)
-            consolelog(process.cwd(), "getSession", JSON.stringify(getSession), false)
-
-            if (getSession && getSession.id) {
-                if (getSession.otp == 0 && getSession.otpExpAt == 0)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (getSession.otp != payload.otp)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                if (getSession.otpExpAt < new Date().getTime())
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_EXPIRED)
-            } else {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-            }
-            let sessionUpdate: ISessionRequest.ISession = {
-                otp: 0,
-                otpExpAt: 0,
-                otpVerified: 1,
-                sessionTime: sessionTime,
-                userId: userData.id
-            }
-            await this.buildSession(headers, sessionUpdate)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "validateOtp", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
      * @description Remove session from aerospike
      * @param {ICommonRequest.IHeaders} headers 
      * @param {IUserRequest.IUserData} userData 

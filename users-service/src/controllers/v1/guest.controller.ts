@@ -26,7 +26,6 @@ export class GuestController {
                 userId: userData.id
             }
             let session = await ENTITY.SessionE.buildSession(headers, sessionUpdate)
-            await ENTITY.SessionE.buildSession(headers, session)
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
@@ -78,6 +77,7 @@ export class GuestController {
                 isGuest: payload.isGuest,
                 brand: headers.brand,
                 country: headers.country,
+                profileStep: 1
             }
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
@@ -88,6 +88,13 @@ export class GuestController {
                 userchangePayload['deleteUserId'] = ""
                 await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
             }
+            userData['name'] = payload.name
+            userData['email'] = payload.email
+            userData['fullPhnNo'] = payload.cCode + payload.phnNo
+            userData['phnNo'] = payload.phnNo
+            userData['cCode'] = payload.cCode
+            userData['phnVerified'] = 0
+            userData['profileStep'] = 1
             return formatUserData(userData, headers)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", error, false)

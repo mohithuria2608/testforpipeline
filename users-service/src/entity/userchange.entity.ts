@@ -183,8 +183,10 @@ export class UserchangeEntity extends BaseEntity {
                 set: this.set,
                 key: dataToUpdateUserchange['id'],
             }
-            if (isCreate)
+            if (isCreate) {
+                putArg['ttl'] = Constant.SERVER.USERCHANGE_TTL
                 putArg['create'] = true
+            }
             else
                 putArg['update'] = true
 

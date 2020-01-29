@@ -174,6 +174,7 @@ export const SERVER = {
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
+    USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
     OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),

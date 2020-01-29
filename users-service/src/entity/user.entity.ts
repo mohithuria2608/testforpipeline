@@ -98,8 +98,7 @@ export class UserEntity extends BaseEntity {
         try {
             let isCreate = false
             let userUpdate: IUserRequest.IUserData = {}
-            if (payload.id)
-                userUpdate['id'] = payload.id
+            userUpdate['id'] = payload.id
             if (payload.username)
                 userUpdate['username'] = payload.username
             if (payload.brand)

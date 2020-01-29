@@ -302,15 +302,47 @@ export class CartClass extends BaseEntity {
     //     try {
     //         let cart = []
     //         payload.items.map(sitem => {
-    //             if (sitem['typeId'] == 'simple') {
-    //                 cart.push({
-    //                     product_id: sitem.id,
-    //                     qty: sitem.qty ? sitem.qty : 1,
-    //                     price: sitem.finalPrice,
-    //                     type_id: sitem['typeId']
-    //                 })
+    //             if (sitem['originalTypeId'] == 'simple') {
+    //                 if (sitem['type_id'] == 'simple') {
+    //                     cart.push({
+    //                         product_id: sitem.id,
+    //                         qty: sitem.qty ? sitem.qty : 1,
+    //                         price: sitem.finalPrice,
+    //                         type_id: sitem['originalTypeId']
+    //                     })
+    //                 } else {
+    //                     let product = {};
+    //                     product['product_id'] = sitem['id']
+    //                     product['qty'] = sitem['qty']
+    //                     product['type_id'] = sitem['originalTypeId']
+    //                     let option = {}
+    //                     if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
+    //                         sitem['bundleProductOptions'].forEach(bpo => {
+    //                             if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+    //                                 bpo['productLinks'].forEach(pl => {
+    //                                     if (pl['selected'] == 1) {
+    //                                         if (pl['subOptions'] && pl['subOptions'].length > 0) {
+    //                                             pl['subOptions'].map(so => {
+    //                                                 if (so['selected'] == 1) {
+    //                                                     option[pl['id']] = so['id']
+    //                                                     cart.push({
+    //                                                         product_id: so['product_id'],
+    //                                                         qty: sitem['qty'],
+    //                                                         type_id: "simple",
+    //                                                     })
+    //                                                 }
+    //                                             })
+    //                                         }
+    //                                     }
+    //                                 })
+    //                             }
+    //                         })
+    //                     }
+    //                     product['option'] = option
+    //                     cart.push(product)
+    //                 }
     //             }
-    //             else if (sitem['typeId'] == 'configurable') {
+    //             else if (sitem['originalTypeId'] == 'configurable') {
     //                 let super_attribute = {};
     //                 let price = null;
     //                 if (sitem['items'] && sitem['items'].length > 0) {
@@ -341,7 +373,7 @@ export class CartClass extends BaseEntity {
     //                     super_attribute: super_attribute
     //                 })
     //             }
-    //             else if (sitem['typeId'] == 'bundle') {
+    //             else if (sitem['originalTypeId'] == 'bundle') {
     //                 let bundle_option = {};
     //                 let selection_configurable_option = {};
     //                 sitem['bundleProductOptions'].forEach(bpo => {
@@ -381,7 +413,7 @@ export class CartClass extends BaseEntity {
     //                     selection_configurable_option: selection_configurable_option,
     //                 })
     //             }
-    //             else if (sitem['typeId'] == 'bundle_group') {
+    //             else if (sitem['originalTypeId'] == 'bundle_group') {
     //                 return Promise.reject("Not handled bundle group products")
     //                 cart.push({
     //                     product_id: sitem.id,
@@ -442,8 +474,14 @@ export class CartClass extends BaseEntity {
                     subtotal = subtotal + price
                 })
             }
+            console.log("subtotal", subtotal)
+
             grandtotal = Math.round(((subtotal / 1.05) + Number.EPSILON) * 100) / 100
             tax = subtotal - grandtotal
+
+            console.log("grandtotal", grandtotal)
+            console.log("subtotal", subtotal)
+            console.log("tax", tax)
 
             if (payload.couponCode)
                 grandtotal = grandtotal - 5
