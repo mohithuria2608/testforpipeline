@@ -286,18 +286,18 @@ export class UserEntity extends BaseEntity {
      * @description Create user on SDM
      * @param payload 
      */
-    async createUserOnSdm(payload) {
+    async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
-            const payloadForSdm = {
-            }
-            let res = await SDM.UserSDME.createCustomer(payloadForSdm)
+            let res = await SDM.UserSDME.createCustomer(payload)
             let putArg: IAerospike.Put = {
-                bins: { sdmUserRef: parseInt(res.id.toString()) },
+                bins: {
+                    sdmUserRef: parseInt(res.id.toString())
+                },
                 set: this.set,
-                key: "1",// payload.aerospikeId,
+                key: payload.id,
                 update: true,
             }
-            // await Aerospike.put(putArg)
+            await Aerospike.put(putArg)
             return res
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", error, false)
@@ -306,36 +306,52 @@ export class UserEntity extends BaseEntity {
     }
 
     /**
+     * @description Update user on SDM
+     * @param payload 
+     */
+    async updateUserOnSdm(payload: IUserRequest.IUserData) {
+        try {
+            let res = await SDM.UserSDME.updateCustomer(payload)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "updateUserOnSdm", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
      * @description Create user on CMS
      * @param payload 
      */
-    async createUserOnCms(payload) {
+    async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            const payloadForCms = {
-                customer: {
-                    firstname: payload.firstname,
-                    lastname: payload.lastname,
-                    email: payload.email,
-                    store_id: payload.storeId,
-                    website_id: payload.websiteId,
-                    addresses: []
-                },
-                password: payload.password
-            }
-            let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
-
-            consolelog(process.cwd(), "resresresresresres", res, false)
-
+            let res = await CMS.UserCMSE.createCostomer(payload)
+            consolelog(process.cwd(), "createUserOnCms", res, false)
             let putArg: IAerospike.Put = {
                 bins: { cmsUserRef: parseInt(res.id.toString()) },
                 set: this.set,
-                key: payload.aerospikeId,
+                key: payload.id,
                 update: true,
             }
-            // await Aerospike.put(putArg)
+            await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @description Update user on CMS
+     * @param payload 
+     */
+    async updateUserOnCms(payload: IUserRequest.IUserData) {
+        try {
+            let res = await CMS.UserCMSE.updateCostomer(payload)
+            consolelog(process.cwd(), "updateUserOnCms", res, false)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateUserOnCms", error, false)
             return Promise.reject(error)
         }
     }

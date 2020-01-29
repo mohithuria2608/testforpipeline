@@ -14,23 +14,54 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async createCustomer(payload: IUserSDMRequest.ICreateUser) {
+    async createCustomer(payload: IUserRequest.IUserData) {
         try {
-            // const data = {
-            //     name: "GetCustomer",
-            //     req: {
-            //         licenseCode: "AmericanaWeb",
-            //         conceptID: 3,
-            //         requestID: 1,
-            //         language: "En",
-            //         customerUserName: payload.customerUserName,
-            //         customerPassword: payload.customerPassword,
-            //     }
-            // }
-            // let res = await this.requestData(data.name, data.req)
-            // return res
+            let data: IUserSDMRequest.ICreateUserReq = {
+                name: "RegisterCustomer",
+                req: {
+                    customer: {
+                        CUST_CLASSID: -1,
+                        CUST_EMAIL: payload.email,// "nkhan1000@mailinator.com",
+                        CUST_FIRSTNAME: payload.name,// "nusrattest",
+                        CUST_LASTNAME: payload.name,// "user",
+                        CUST_NATID: -1,
+                        CUST_NOTIFICATION_MOBILE: parseInt((payload.cCode + payload.phnNo).replace('+', '')),// 525454090,
+                        CUST_PHONEAREACODE: parseInt(payload.cCode.replace('+', '')),//52
+                        CUST_PHONELOOKUP: parseInt((payload.cCode + payload.phnNo).replace('+', '')),// 525454090,
+                        CUST_PHONENUMBER: parseInt(payload.phnNo),// 5454090,
+                        CUST_PHONETYPE: 2,
+                        PASSWORD: payload.password,
+                        USERNAME: payload.email,
+                        WCUST_FIRSTNAME: payload.name,
+                        WCUST_IS_GUEST: false,
+                        WCUST_LASTNAME: payload.name,
+                    }
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            return res
         } catch (error) {
             consolelog(process.cwd(), 'createCostomer', error, false)
+            return (error)
+        }
+    }
+
+    /**
+    * @method SDK
+    * */
+    async updateCustomer(payload: IUserRequest.IUserData) {
+        try {
+            let data: IUserSDMRequest.IUpdateUserReq = {
+                name: "UpdateCustomer",
+                req: {
+                    customer: {
+                    }
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), 'updateCustomer', error, false)
             return (error)
         }
     }
@@ -42,13 +73,9 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async getCustomerByUserNameAndPswd(payload: IUserSDMRequest.IGetCustomerByUserNameAndPswd) {
         try {
-            const data = {
+            const data: IUserSDMRequest.IGetCustomerByUserNameAndPswdReq = {
                 name: "GetCustomer",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: 3,
-                    requestID: 1,
-                    language: "En",
                     customerUserName: payload.customerUserName,
                     customerPassword: payload.customerPassword,
                 }
@@ -65,15 +92,11 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {string} email : customer email
     * */
-    async getCustomerByEmail(payload: IUserSDMRequest.IGetCustomerByEmail) {
+    async getCustomerByEmail(payload) {
         try {
-            const data = {
+            const data: IUserSDMRequest.IGetCustomerByEmailReq = {
                 name: "GetCustomerByEmail",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: 3,
-                    requestID: 1,
-                    language: "En",
                     email: payload.email,
                 }
             }
@@ -89,15 +112,11 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {string} email : customer email
     * */
-    async getCustomersByEmail(payload: IUserSDMRequest.IGetCustomerByEmail): Promise<number[]> {
+    async getCustomersByEmail(payload): Promise<number[]> {
         try {
-            const data = {
+            const data: IUserSDMRequest.IGetCustomerByEmailReq = {
                 name: "GetCustomersByEmail",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: 3,
-                    requestID: 1,
-                    language: "En",
                     email: payload.email,
                 }
             }
@@ -113,15 +132,11 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {number} customerID : sdm customer id
     * */
-    async getCustomerById(payload: IUserSDMRequest.IGetCustomerByCustomerId) {
+    async getCustomerById(payload) {
         try {
-            const data = {
+            const data: IUserSDMRequest.IGetCustomerByCustomerIdReq = {
                 name: "GetCustomerByID",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: 3,
-                    requestID: 1,
-                    language: "En",
                     customerID: payload.customerID,
                 }
             }
@@ -137,15 +152,11 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {number} mobileNo : customer PHONELOOKUP
     * */
-    async getCustomerByMobile(payload: IUserSDMRequest.IGetCustomerByMobileNo) {
+    async getCustomerByMobile(payload) {
         try {
-            const data = {
+            const data: IUserSDMRequest.IGetCustomerByMobileNoReq = {
                 name: "GetCustomerByMobile",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: 3,
-                    requestID: 1,
-                    language: "En",
                     mobileNo: payload.mobileNo,
                 }
             }
@@ -161,15 +172,11 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {number} phoneNo : customer PHONELOOKUP
     * */
-    async getCustomersByPhone(payload: IUserSDMRequest.IGetCustomerByPhoneNo): Promise<number[]> {
+    async getCustomersByPhone(payload): Promise<number[]> {
         try {
-            const data = {
+            const data: IUserSDMRequest.IGetCustomerByPhoneNoReq = {
                 name: "GetCustomersByPhone",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: 3,
-                    requestID: 1,
-                    language: "En",
                     phoneNo: payload.phoneNo,
                 }
             }
@@ -177,24 +184,6 @@ export class UserSDMEntity extends BaseSDM {
             return res
         } catch (error) {
             consolelog(process.cwd(), "getCustomersByPhone", error, true)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-    * @method SDK
-    * @param {number} phoneNo : customer PHONELOOKUP
-    * @param {number} email : customer email
-    * */
-    async getsdmUserRef(payload: IUserSDMRequest.IGetCustomerSdmUserRef) {
-        try {
-            let sdmUserRefByPhoneNo = await this.getCustomersByPhone({ phoneNo: payload.phoneNo })
-            let sdmUserRefByEmail = await this.getCustomersByEmail({ email: payload.email })
-            let intersectionsdmUserRef = _.intersection(sdmUserRefByPhoneNo, sdmUserRefByEmail)
-            consolelog(process.cwd(), "getsdmUserRef", JSON.stringify(intersectionsdmUserRef), false)
-            return intersectionsdmUserRef
-        } catch (error) {
-            consolelog(process.cwd(), "getsdmUserRef", error, true)
             return Promise.reject(error)
         }
     }

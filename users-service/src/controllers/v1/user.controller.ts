@@ -24,10 +24,14 @@ export class UserController {
             if (payload.cms.create || payload.cms.update || payload.cms.get) {
                 if (payload.cms.create)
                     ENTITY.UserE.createUserOnCms(data)
+                if (payload.cms.update)
+                    ENTITY.UserE.updateUserOnCms(data)
             }
             if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                 if (payload.sdm.create)
                     ENTITY.UserE.createUserOnSdm(data)
+                if (payload.sdm.update)
+                    ENTITY.UserE.updateUserOnSdm(data)
             }
             return {}
         } catch (error) {
@@ -228,8 +232,11 @@ export class UserController {
                 }
                 let userchange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
                 if (userchange && userchange.length > 0) {
-                    if (userchange[0].deleteUserId)
+                    let isSync = false
+                    if (userchange[0].deleteUserId) {
+                        isSync = true
                         deleteUserId = userchange[0].deleteUserId
+                    }
                     user[0] = await ENTITY.UserE.getUser({ userId: userchange[0].id })
                     userchange[0] = await ENTITY.UserchangeE.validateOtpOnPhnChange(payload, user[0])
                     if (userchange[0] && userchange[0].isGuest != undefined)
@@ -257,6 +264,21 @@ export class UserController {
                     if (userchange[0].medium)
                         userUpdate['medium'] = userchange[0].medium
                     user[0] = await ENTITY.UserE.updateUser(user[0].id, userUpdate)
+
+                    if (isSync) {
+                        let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                            set: ENTITY.UserE.set,
+                            sdm: {
+                                create: true,
+                                argv: JSON.stringify(user[0])
+                            },
+                            cms: {
+                                create: true,
+                                argv: JSON.stringify(user[0])
+                            },
+                        }
+                        kafkaService.kafkaSync(userSync)
+                    }
                     if (user[0].email && user[0].name && user[0].cCode && user[0].phnNo) {
                         user[0] = await ENTITY.UserE.updateUser(user[0].id, { profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST })
                     }
@@ -456,6 +478,18 @@ export class UserController {
             } else {
                 userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                 let user = await ENTITY.UserE.updateUser(userData.id, userUpdate)
+                let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                    set: ENTITY.UserE.set,
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(user)
+                    },
+                    cms: {
+                        create: true,
+                        argv: JSON.stringify(user)
+                    },
+                }
+                kafkaService.kafkaSync(userSync)
                 return formatUserData(user, headers)
             }
         } catch (error) {
@@ -516,7 +550,6 @@ export class UserController {
                 user['cCode'] = payload.cCode
                 user['phnNo'] = payload.phnNo
             }
-            // ENTITY.UserE.syncUser(user)
             return formatUserData(user, headers)
         } catch (error) {
             consolelog(process.cwd(), "editProfile", error, false)
