@@ -65,3 +65,7 @@ spec:
         backend:
           serviceName: upload-service
           servicePort: 4011
+      - path: /log-service/(.*)
+        backend:
+          serviceName: log-service
+          servicePort: 4012
