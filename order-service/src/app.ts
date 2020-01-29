@@ -199,8 +199,8 @@ export const start = (async () => {
     //     })
     //   }
     // })
-    console.log("bundle_option", bundle_option)
-    console.log("selection_configurable_option", selection_configurable_option)
+    // console.log("bundle_option", bundle_option)
+    // console.log("selection_configurable_option", selection_configurable_option)
     await bootstrap(server)
   } catch (error) {
     console.error(error)
