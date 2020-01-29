@@ -4,6 +4,7 @@ require('./grpc/server')
 import { bootstrap, consolelog } from './utils'
 import middleware from './middlewares'
 import route from './route'
+import * as ENTITY from './entity'
 
 const app = new Koa()
 
@@ -241,11 +242,8 @@ export const start = (async () => {
     //     products.push(product)
     //   }
     // })
-
     // console.log("bundle_option", bundle_option)
     // console.log("selection_configurable_option", selection_configurable_option)
-    // console.log("products", products)
-
 
     await bootstrap(server)
   } catch (error) {

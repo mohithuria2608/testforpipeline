@@ -15,7 +15,7 @@ export class OrderController {
     async syncOrderFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
-            if (payload.as.create || payload.as.update || payload.as.get) {
+            if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
                 if (payload.as.create) {
 
                 }
@@ -26,12 +26,12 @@ export class OrderController {
 
                 }
             }
-            if (payload.cms.create || payload.cms.update || payload.cms.get) {
+            if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
                 if (payload.cms.create) {
 
                 }
             }
-            if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
+            if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
                 if (payload.sdm.create)
                     ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
@@ -69,7 +69,7 @@ export class OrderController {
              * @description step 4 inititate payment on Noonpay synchronously
              */
             // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
-            // ENTITY.OrderE.syncOrder(cartData)
+            ENTITY.OrderE.syncOrder(cartData)
             cartData['status'] = Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
             cartData['updatedAt'] = new Date().getTime()
             cartData['transLogs'] = []
@@ -99,10 +99,15 @@ export class OrderController {
                     argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
                 }
             }
-            await kafkaService.kafkaSync(asUserChange)
+            await userService.sync(asUserChange)
             // Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
 
-            ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO })
+            ENTITY.OrderE.getSdmOrder({
+                cartId: payload.cartId,
+                sdmOrderRef: 0,
+                timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
+                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+            })
             return { cartId: newCartId, noonpayRedirectionUrl: initiatePaymentObj.noonpayRedirectionUrl }
         } catch (error) {
             consolelog(process.cwd(), "postOrder", error, false)

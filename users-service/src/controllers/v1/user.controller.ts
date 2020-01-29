@@ -11,23 +11,29 @@ export class UserController {
      * @description sync user to cms and sdm coming from KAFKA
      * @param {IKafkaGrpcRequest.IKafkaBody} payload 
      */
-    async syncUserFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+    async syncUser(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
             if (payload.as.create || payload.as.update || payload.as.get) {
                 if (payload.as.create) {
 
                 }
-                if (payload.as.update)
-                    ENTITY.UserE.buildUser({ id: data.userId, cartId: data.cartId })
+                if (payload.as.update) {
+                    data['id'] = data.userId
+                    ENTITY.UserE.buildUser(data)
+                }
             }
             if (payload.cms.create || payload.cms.update || payload.cms.get) {
                 if (payload.cms.create)
                     ENTITY.UserE.createUserOnCms(data)
+                if (payload.cms.update)
+                    ENTITY.UserE.updateUserOnCms(data)
             }
             if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
                 if (payload.sdm.create)
                     ENTITY.UserE.createUserOnSdm(data)
+                if (payload.sdm.update)
+                    ENTITY.UserE.updateUserOnSdm(data)
             }
             return {}
         } catch (error) {
@@ -322,6 +328,18 @@ export class UserController {
                         profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
+                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                        set: ENTITY.UserE.set,
+                        sdm: {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        },
+                        cms: {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        },
+                    }
+                    kafkaService.kafkaSync(userSync)
                     return formatUserData(userData, headers)
                 }
             } else {
@@ -379,7 +397,7 @@ export class UserController {
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
             // ENTITY.UserE.syncUser(user)
             if (payload.cCode && payload.phnNo) {
-                user['fullPhnNo'] =  payload.cCode + payload.phnNo
+                user['fullPhnNo'] = payload.cCode + payload.phnNo
                 user['phnNo'] = payload.phnNo
                 user['cCode'] = payload.cCode
                 user['phnVerified'] = 0

@@ -76,7 +76,7 @@ export class PromotionController {
     async validatePromotion(payload: IPromotionRequest.IValidatePromotion) {
         try {
             let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
-            return { isValid: true }
+            return promo[0]
             if ((new Date().toISOString() > new Date(promo[0].dateFrom).toISOString()) && (new Date().toISOString() < new Date(promo[0].dateTo).toISOString())) {
                 return { isValid: true }
             } else
