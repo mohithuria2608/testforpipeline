@@ -55,21 +55,22 @@ message IValidatePromotionReq {
 }
 
 message IValidatePromotionRes {
-    required int32 cmsCouponRef = 1;
-    required string couponCode = 2;
-    required string promotionType = 3;
-    required int32 discountAmount = 4;
-    required int32 maxDiscountQty = 5;
-    required int32 usesPerCoupon = 6;
-    required int32 usesPerCust = 7;
-    required int32 timesUsed = 8;
-    required string dateFrom = 9;
-    required string dateTo = 10;
-    required string ruleName = 11;
-    required string shortDesc = 12;
-    required int32 activeFlag = 13;
-    required int32 posId = 14;
-    required int32 maxDiscountAmt = 15;
-    required int32 isVisible = 16;
-    required string termsAndConds = 17;
+    optional int32 cmsCouponRef = 1;
+    optional string couponCode = 2;
+    optional string promotionType = 3;
+    optional int32 discountAmount = 4;
+    optional int32 maxDiscountQty = 5;
+    optional int32 usesPerCoupon = 6;
+    optional int32 usesPerCust = 7;
+    optional int32 timesUsed = 8;
+    optional string dateFrom = 9;
+    optional string dateTo = 10;
+    optional string ruleName = 11;
+    optional string shortDesc = 12;
+    optional int32 activeFlag = 13;
+    optional int32 posId = 14;
+    optional int32 maxDiscountAmt = 15;
+    optional int32 isVisible = 16;
+    optional string termsAndConds = 17;
+    required bool isValid = 18;
 }
