@@ -35,9 +35,9 @@ export class CartController {
                     isDefault: true
                 })
                 if (
-                    (defaultMenu.menuId != payload.curMenuId)
+                    (defaultMenu.menuId != payload.curMenuId) 
                     // || (defaultMenu.updatedAt > payload.menuUpdatedAt)
-                ) {
+                    ) {
                     invalidMenu = true
                 }
             }
@@ -47,7 +47,7 @@ export class CartController {
                     delete payload['couponCode']
                 // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
             }
-            let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
+            let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload)
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
             res['invalidMenu'] = invalidMenu
             return res

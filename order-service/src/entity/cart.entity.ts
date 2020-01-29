@@ -412,7 +412,9 @@ export class CartClass extends BaseEntity {
     //     }
     // }
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData ) {
+    async createCartOnCMS(payload: ICartRequest.IValidateCart,
+        // userData: IUserRequest.IUserData
+    ) {
         try {
             let subtotal = 0
             let grandtotal = 0
@@ -439,12 +441,12 @@ export class CartClass extends BaseEntity {
                     //     })
                     // }
                     // price = price * item.qty
-                    subtotal = subtotal + price
+                    grandtotal = grandtotal + price
                 })
             }
-            tax = Math.round(((subtotal - (Math.round(((subtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
-            subtotal = subtotal - tax
-            grandtotal = subtotal + tax
+            tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            subtotal = grandtotal - tax
+            // grandtotal = subtotal + tax
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
@@ -492,7 +494,7 @@ export class CartClass extends BaseEntity {
                 type: "SUB_TOTAL",
                 name: "Sub Total",
                 code: "SUB_TOTAL",
-                amount: parseInt(cmsCart.subtotal.toString()),
+                amount: cmsCart.subtotal,
                 sequence: 1
             })
             if (cmsCart.discount_amount && cmsCart.coupon_code && cmsCart.coupon_code != "") {
@@ -500,7 +502,7 @@ export class CartClass extends BaseEntity {
                     type: "DISCOUNT",
                     name: "Discount",
                     code: cmsCart.coupon_code,
-                    amount: parseInt(cmsCart.discount_amount.toString()),
+                    amount: cmsCart.discount_amount,
                     sequence: 2
                 })
                 dataToUpdate['couponApplied'] = 1
@@ -511,7 +513,7 @@ export class CartClass extends BaseEntity {
                     type: "TAX",
                     name: cmsCart.tax[0].tax_name,
                     code: cmsCart.tax[0].tax_name,
-                    amount: parseInt(cmsCart.tax[0].amount.toString()),
+                    amount: cmsCart.tax[0].amount,
                     sequence: 3
                 })
             } else {
@@ -534,7 +536,7 @@ export class CartClass extends BaseEntity {
                 type: "TOTAL",
                 name: "Total",
                 code: "TOTAL",
-                amount: parseInt(cmsCart.grandtotal.toString()),
+                amount: cmsCart.grandtotal,
                 sequence: 5
             })
             dataToUpdate['amount'] = amount
