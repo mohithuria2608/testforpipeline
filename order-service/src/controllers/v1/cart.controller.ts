@@ -35,9 +35,9 @@ export class CartController {
                     isDefault: true
                 })
                 if (
-                    (defaultMenu.menuId != payload.curMenuId) 
+                    (defaultMenu.menuId != payload.curMenuId)
                     // || (defaultMenu.updatedAt > payload.menuUpdatedAt)
-                    ) {
+                ) {
                     invalidMenu = true
                 }
             }

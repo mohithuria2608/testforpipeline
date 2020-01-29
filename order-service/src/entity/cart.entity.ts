@@ -412,38 +412,43 @@ export class CartClass extends BaseEntity {
     //     }
     // }
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData ) {
         try {
             let subtotal = 0
             let grandtotal = 0
             let tax = 0.05
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    let price = item.finalPrice
-                    if (item['bundleProductOptions'] && item['bundleProductOptions'].length > 0) {
-                        item['bundleProductOptions'].map(bpo => {
-                            if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-                                bpo['productLinks'].map(pl => {
-                                    if (pl['selected']) {
-                                        if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                            pl['subOptions'].map(so => {
-                                                if (so['selected'] == 1) {
-                                                    price = price + so.price
-                                                }
-                                            })
-                                        } else
-                                            price = price + (pl.price ? pl.price : 0)
-                                    }
-                                })
-                            }
-                        })
-                    }
-                    price = price * item.qty
+                    let price = item.finalPrice * item.qty
+                    // if (item['bundleProductOptions'] && item['bundleProductOptions'].length > 0) {
+                    //     item['bundleProductOptions'].map(bpo => {
+                    //         if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                    //             bpo['productLinks'].map(pl => {
+                    //                 if (pl['selected'] == 1) {
+                    //                     if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                    //                         pl['subOptions'].map(so => {
+                    //                             if (so['selected'] == 1) {
+                    //                                 price = price + so.price
+                    //                             }
+                    //                         })
+                    //                     } else
+                    //                         price = price + (pl.price ? pl.price : 0)
+                    //                 }
+                    //             })
+                    //         }
+                    //     })
+                    // }
+                    // price = price * item.qty
                     subtotal = subtotal + price
                 })
             }
-            grandtotal = Math.round(((subtotal / 1.05) + Number.EPSILON) * 100) / 100
-            tax = subtotal - grandtotal
+            tax = Math.round(((subtotal - (Math.round(((subtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            subtotal = subtotal - tax
+            grandtotal = subtotal + tax
+
+            console.log("grandtotal", grandtotal)
+            console.log("subtotal", subtotal)
+            console.log("tax", tax)
 
             if (payload.couponCode)
                 grandtotal = grandtotal - 5
