@@ -69,7 +69,7 @@ pipeline {
             steps{
                 script {
                     docker.withRegistry("https://americana.azurecr.io", registryCredential ) {
-                        //AuthImage.push()
+                        AuthImage.push()
                         UsersImage.push()
                         MenuImage.push()
                         OrderImage.push()
