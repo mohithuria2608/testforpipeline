@@ -16,8 +16,19 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomer(payload: IUserSDMRequest.ICreateUser) {
         try {
-            
-            return {}
+            // const data = {
+            //     name: "GetCustomer",
+            //     req: {
+            //         licenseCode: "AmericanaWeb",
+            //         conceptID: 3,
+            //         requestID: 1,
+            //         language: "En",
+            //         customerUserName: payload.customerUserName,
+            //         customerPassword: payload.customerPassword,
+            //     }
+            // }
+            // let res = await this.requestData(data.name, data.req)
+            // return res
         } catch (error) {
             consolelog(process.cwd(), 'createCostomer', error, false)
             return (error)

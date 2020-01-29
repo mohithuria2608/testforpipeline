@@ -32,15 +32,15 @@ export function initConsumers() {
 
     as_menuConsumerE.handleMessage();
     sdm_menuConsumerE.handleMessage();
-    // cms_menuConsumerE.handleMessage();
+    cms_menuConsumerE.handleMessage();
 
-    // as_upsellConsumerE.handleMessage();
+    as_upsellConsumerE.handleMessage();
 
-    // as_promotionConsumerE.handleMessage();
+    as_promotionConsumerE.handleMessage();
 
-    // as_promotionConsumerE.handleMessage();
+    as_promotionConsumerE.handleMessage();
 
-    // sdm_orderConsumerE.handleMessage();
+    sdm_orderConsumerE.handleMessage();
 
     m_loggerE.handleMessage();
 }

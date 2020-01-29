@@ -5,6 +5,7 @@ import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
+import { promotionService } from '../grpc/client'
 
 export class CartClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -444,20 +445,34 @@ export class CartClass extends BaseEntity {
             }
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             subtotal = grandtotal - tax
-            // grandtotal = subtotal + tax
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
             console.log("tax", tax)
 
-            if (payload.couponCode)
-                grandtotal = grandtotal - 5
+
+            let discountAmnt = 0
+            if (payload.couponCode) {
+                let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                if (validPromo && validPromo.couponCode) {
+                    if (validPromo.promotionType == "by_percent") {
+                        discountAmnt = ((grandtotal * (validPromo.discountAmount / 100)) <= validPromo.maxDiscountAmt) ? (grandtotal * (validPromo.discountAmount / 100)) : validPromo.maxDiscountAmt
+                    } else {
+                        delete payload['couponCode']
+                    }
+                } else
+                    delete payload['couponCode']
+            }
+            console.log("discountAmnt", discountAmnt)
+
+            if (discountAmnt > 0)
+                grandtotal = grandtotal - discountAmnt
             let cmsres = {
                 cms_cart_id: 5,
                 currency_code: "AED",
                 cart_items: payload.items,
                 subtotal: subtotal,
-                grandtotal: grandtotal,
+                grandtotal: grandtotal + 6, //add shipping charges
                 tax: [{
                     tax_name: "VAT",
                     amount: tax,
@@ -465,7 +480,7 @@ export class CartClass extends BaseEntity {
                 not_available: [],
                 is_price_changed: false,
                 coupon_code: payload.couponCode ? payload.couponCode : "",
-                discount_amount: payload.couponCode ? 5 : 0,
+                discount_amount: discountAmnt,
                 success: true,
             }
             return cmsres
@@ -495,7 +510,7 @@ export class CartClass extends BaseEntity {
                 amount: cmsCart.subtotal,
                 sequence: 1
             })
-            if (cmsCart.discount_amount && cmsCart.coupon_code && cmsCart.coupon_code != "") {
+            if (cmsCart.discount_amount != 0 && cmsCart.coupon_code && cmsCart.coupon_code != "") {
                 amount.push({
                     type: "DISCOUNT",
                     name: "Discount",
@@ -525,9 +540,9 @@ export class CartClass extends BaseEntity {
             }
             amount.push({
                 type: "SHIPPING",
-                name: "Free Delivery",
-                code: "FLAT",
-                amount: 0,
+                name: "Delivery",
+                code: "DELIVERY",
+                amount: 6,
                 sequence: 4
             })
             amount.push({

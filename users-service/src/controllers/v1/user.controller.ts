@@ -11,7 +11,7 @@ export class UserController {
      * @description sync user to cms and sdm coming from KAFKA
      * @param {IKafkaGrpcRequest.IKafkaBody} payload 
      */
-    async syncUserFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+    async syncUser(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
             if (payload.as.create || payload.as.update || payload.as.get) {
@@ -19,7 +19,7 @@ export class UserController {
 
                 }
                 if (payload.as.update)
-                    ENTITY.UserE.updateUser(data.userId, { cartId: data.cartId })
+                    ENTITY.UserE.updateUser(data.userId, data)
             }
             if (payload.cms.create || payload.cms.update || payload.cms.get) {
                 if (payload.cms.create)

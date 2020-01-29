@@ -42,7 +42,7 @@ server.addService(userProto.UserService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await userController.syncUserFromKafka(call.request)
+            let res: {} = await userController.syncUser(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", error, false)

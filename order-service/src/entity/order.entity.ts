@@ -23,7 +23,7 @@ export class OrderClass extends BaseEntity {
                     argv: JSON.stringify(payload)
                 }
             }
-            // kafkaService.kafkaSync(sdmOrderChange)
+            kafkaService.kafkaSync(sdmOrderChange)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOrder", error, false)
@@ -46,7 +46,7 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.ICreateSdmOrder) {
         try {
-
+            
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", error, false)
@@ -64,51 +64,55 @@ export class OrderClass extends BaseEntity {
     async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
         try {
             setTimeout(async () => {
-                let dataToUpdate: ICartRequest.ICartData = {
+                let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
                     status: payload.status,
                     updatedAt: new Date().getTime()
-                }
-                let putArg: IAerospike.Put = {
-                    bins: dataToUpdate,
-                    set: this.set,
-                    key: payload.cartId,
-                    update: true,
-                }
-                await Aerospike.put(putArg)
-                if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
-                    payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
-                    payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
+                }, { new: true })
+                if (order && order.sdmOrderRef) {
+                    if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
+                        payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
+                        payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
 
-                } else {
-                    if (payload.status == Constant.DATABASE.STATUS.ORDER.IN_KITCHEN.SDM) {
-                        /**
-                         * @description step 1 create transaction log on CMS for initiating capture
-                         * @description step 2 capture payment on noonpay
-                         * @description step 3 create transaction log on CMS for capture
-                         */
-                        this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                            $addToSet: {
-                                transLogs: {
-                                    noonpayOrderId: 1,
-                                    orderId: "string",
-                                    amount: 100,
-                                    storeCode: "string",
-                                    createdAt: new Date().getTime()
+                    } else {
+                        if (payload.status == Constant.DATABASE.STATUS.ORDER.IN_KITCHEN.SDM) {
+                            /**
+                             * @description step 1 create transaction log on CMS for initiating capture
+                             * @description step 2 capture payment on noonpay
+                             * @description step 3 create transaction log on CMS for capture
+                             */
+                            this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                                $addToSet: {
+                                    transLogs: {
+                                        noonpayOrderId: 1,
+                                        orderId: "string",
+                                        amount: 100,
+                                        storeCode: "string",
+                                        createdAt: new Date().getTime()
+                                    }
                                 }
+                            })
+                            let paymentCapturedObj = await paymentService.capturePayment({
+                                noonpayOrderId: 1,
+                                orderId: "string",
+                                amount: 100,
+                                storeCode: "string"
+                            })
+                            this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                                $addToSet: {
+                                    transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
+                                }
+                            })
+                        }
+                        let orderChange = {
+                            set: this.set,
+                            sdm: {
+                                get: true,
+                                argv: JSON.stringify(payload)
                             }
-                        })
-                        let paymentCapturedObj = await paymentService.capturePayment({
-                            noonpayOrderId: 1,
-                            orderId: "string",
-                            amount: 100,
-                            storeCode: "string"
-                        })
-                        this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                            $addToSet: {
-                                transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
-                            }
-                        })
+                        }
+                        kafkaService.kafkaSync(orderChange)
                     }
+                } else {
                     let orderChange = {
                         set: this.set,
                         sdm: {
