@@ -20,7 +20,7 @@ export class LocationService {
     private locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established location-service', config.get("grpc.location.client"), true)
+        console.log(process.cwd(), 'GRPC connection established location-service', config.get("grpc.location.client"), true)
     }
 
     async fetchStore(payload: IStoreGrpcRequest.IFetchStore): Promise<IStoreGrpcRequest.IStore> {

@@ -1,5 +1,5 @@
 {
-    "environment": "local",
+    "env": "default",
     "server": {
         "auth": {
             "url": "http://localhost",
