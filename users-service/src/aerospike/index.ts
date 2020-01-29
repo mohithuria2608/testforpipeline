@@ -309,7 +309,7 @@ class AerospikeClass {
                         res = await this.queryForeach(query)
                     }
                     resolve(res)
-                } else reject('Client not initialized');
+                } else reject('Client is not initialized');
             } catch (error) {
                 reject(error)
             }
