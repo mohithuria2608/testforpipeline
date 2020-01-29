@@ -10,7 +10,7 @@ export default (router: Router) => {
     router
         .get('/order/process-payment',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
+                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({

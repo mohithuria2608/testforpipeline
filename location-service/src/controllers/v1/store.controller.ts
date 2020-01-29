@@ -14,6 +14,7 @@ export class StoreController {
      * */
     async bootstrapStore() {
         try {
+            await Aerospike.truncate({ set: ENTITY.StoreE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
             let stores = JSON.parse(rawdata);
             for (const store of stores) {

@@ -68,23 +68,29 @@ export class OrderController {
              * @description step 3 create order on MONGO synchronously
              * @description step 4 inititate payment on Noonpay synchronously
              */
-            let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
-            ENTITY.OrderE.syncOrder(cartData)
+            // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
+            // ENTITY.OrderE.syncOrder(cartData)
             cartData['status'] = Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
             cartData['updatedAt'] = new Date().getTime()
-            await ENTITY.OrderE.createOneEntityMdb(cartData)
-            let initiatePaymentObj = await paymentService.initiatePayment({
-                orderId: "string",
+            cartData['transLogs'] = []
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOneEntityMdb(cartData)
+            let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
+                orderId: order._id.toString(),
                 amount: 100,
-                storeCode: "string",
+                storeCode: "kfc_uae_store",
                 paymentMethodId: 1,
-                channel: "string",
-                locale: "string",
+                channel: "Mobile",
+                locale: "en",
+            })
+            await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                $addToSet: {
+                    transLogs: initiatePaymentObj
+                }
             })
             /**
              * @description : update user with new cart
              */
-            let newCartId = ENTITY.OrderE.DAOManager.ObjectId().toString()
+            let newCartId = ENTITY.OrderE.DAOManager.ObjectId.toString()
             ENTITY.CartE.assignNewCart(newCartId, auth.id)
             let asUserChange = {
                 set: Constant.SET_NAME.USER,
@@ -94,10 +100,10 @@ export class OrderController {
                 }
             }
             await kafkaService.kafkaSync(asUserChange)
-            Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
+            // Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
 
             ENTITY.OrderE.getSdmOrder({ cartId: payload.cartId, sdmOrderRef: 0, timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO })
-            return { cartId: newCartId }
+            return { cartId: newCartId, noonpayRedirectionUrl: initiatePaymentObj.noonpayRedirectionUrl }
         } catch (error) {
             consolelog(process.cwd(), "postOrder", error, false)
             return Promise.reject(error)

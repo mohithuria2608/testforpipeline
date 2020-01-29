@@ -38,10 +38,10 @@ export class LocationController {
                 if (temp && temp.length > 0)
                     preSelectedStore = temp[0]
             }
-            const promise = await Promise.all([ENTITY.CityE.scanAerospike(), ENTITY.AreaE.scanAerospike(), ENTITY.StoreE.scanAerospike()])
-            const city: ICityRequest.ICity[] = promise[0]
-            const area: IAreaRequest.IArea[] = promise[1]
-            const store: IStoreRequest.IStore[] = promise[2]
+            // const promise = await Promise.all([,, ])
+            const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
+            const area: IAreaRequest.IArea[] = await  ENTITY.AreaE.scanAerospike()
+            const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
 
             consolelog(process.cwd(), "city", city.length, true)
             consolelog(process.cwd(), "area", area.length, true)

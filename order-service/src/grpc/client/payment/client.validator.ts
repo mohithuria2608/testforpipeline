@@ -12,16 +12,16 @@ export class PaymentServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    orderId: Joi.string().string().required(),
-                    amount: Joi.number().string().required(),
-                    storeCode: Joi.string().string().required(),
-                    paymentMethodId: Joi.number().string().required(),
-                    channel: Joi.string().string().required(),
-                    locale: Joi.string().string(),
+                    orderId: Joi.string().required(),
+                    amount: Joi.number().required(),
+                    storeCode: Joi.string().required(),
+                    paymentMethodId: Joi.number().required(),
+                    channel: Joi.string().required(),
+                    locale: Joi.string().required(),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
-                    reject(`Invalid Info- ${error.message}`)
+                    reject(error.message)
                 resolve({})
             } catch (error) {
                 reject(validatorErr(error.message))
@@ -33,13 +33,14 @@ export class PaymentServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    noonpayOrderId: Joi.number().string().required(),
-                    orderId: Joi.string().string().required(),
-                    storeCode: Joi.string().string().required()
+                    noonpayOrderId: Joi.number().required(),
+                    orderId: Joi.number(),
+                    storeCode: Joi.string().required(),
+                    paymentStatus: Joi.string(),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
-                    reject(`Invalid Info- ${error.message}`)
+                    reject(error.message)
                 resolve({})
             } catch (error) {
                 reject(validatorErr(error.message))
@@ -51,14 +52,14 @@ export class PaymentServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    noonpayOrderId: Joi.number().string().required(),
-                    orderId: Joi.string().string().required(),
-                    amount: Joi.number().string().required(),
-                    storeCode: Joi.string().string().required()
+                    noonpayOrderId: Joi.number().required(),
+                    orderId: Joi.string().required(),
+                    amount: Joi.number().required(),
+                    storeCode: Joi.string().required()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
-                    reject(`Invalid Info- ${error.message}`)
+                    reject(error.message)
                 resolve({})
             } catch (error) {
                 reject(validatorErr(error.message))

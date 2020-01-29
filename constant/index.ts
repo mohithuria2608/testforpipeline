@@ -57,15 +57,15 @@ export const CMS = {
     END_POINTS: {
         GENERAL_CONFIG: {
             METHOD: "GET",
-            URL: "http://40.123.205.1/rest/V1/americanaconfig/"
+            URL: "americanaconfig/"
         },
         CREATE_CART: {
             METHOD: "POST",
-            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+            URL: "customcart/create-validate-cart"
         },
         CREATE_ORDER: {
             METHOD: "POST",
-            URL: "http://40.123.205.1/rest/V1/customcart/create-validate-cart"
+            URL: "customcart/create-validate-cart"
         },
     }
 };

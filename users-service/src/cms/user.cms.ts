@@ -33,9 +33,9 @@ export class UserCMSEntity extends BaseCMS {
             // headers['Authorization'] = "bearer" + auth
             // const form = formObj;
             // const options = {
-            //     method: Constant.CMS.END_POINTS.CREATE_CUSTOMER.METHOD,
-            //     url: Constant.CMS.END_POINTS.CREATE_CUSTOMER.URL
-            // }
+            //              method: Constant.CMS.END_POINTS.AUTH.METHOD,
+            //              url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.AUTH.URL,
+            //         }
             // let cmsRes = await this.request(options, headers, form)
             // return cmsRes
         } catch (error) {

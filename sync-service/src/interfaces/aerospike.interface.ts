@@ -108,4 +108,8 @@ declare namespace IAerospike {
         set: string,
         key: string,
     }
+    interface Truncate {
+        set: string,
+        before_nanos: number
+    }
 }

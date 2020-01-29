@@ -3,6 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+import { Aerospike } from '../../aerospike'
 
 export class CityController {
 
@@ -14,6 +15,7 @@ export class CityController {
      * */
     async bootstrapCity() {
         try {
+            await Aerospike.truncate({ set: ENTITY.CityE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/city.json', 'utf-8');
             let cities = JSON.parse(rawdata);
             for (const city of cities) {

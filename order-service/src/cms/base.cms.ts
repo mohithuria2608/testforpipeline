@@ -54,7 +54,7 @@ export class BaseCMS {
     //         }
     //         const options = {
     //             method: Constant.CMS.END_POINTS.AUTH.METHOD,
-    //             url: Constant.CMS.END_POINTS.AUTH.URL
+    //             url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.AUTH.URL,
     //         }
     //         let cmsRes = await this.request(options, headers, form)
     //         global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();

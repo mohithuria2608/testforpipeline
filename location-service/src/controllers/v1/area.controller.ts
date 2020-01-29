@@ -3,6 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+import { Aerospike } from '../../aerospike'
 
 export class AreaController {
 
@@ -14,6 +15,7 @@ export class AreaController {
      * */
     async bootstrapArea() {
         try {
+            await Aerospike.truncate({ set: ENTITY.AreaE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/area.json', 'utf-8');
             let areas = JSON.parse(rawdata);
             for (const area of areas) {

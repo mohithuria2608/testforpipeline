@@ -3,6 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { userService, orderService } from '../../grpc/client';
+import { Aerospike } from '../../aerospike'
 
 export class PromotionController {
     constructor() { }
@@ -32,6 +33,8 @@ export class PromotionController {
      * */
     async postPromotion() {
         try {
+            await Aerospike.truncate({ set: ENTITY.PromotionE.set, before_nanos: 0 })
+
             let rawdata = fs.readFileSync(__dirname + '/../../../model/promotion.json', 'utf-8');
             let promo = JSON.parse(rawdata);
 

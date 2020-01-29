@@ -96,7 +96,7 @@ declare namespace IPaymentGrpcRequest {
         totalRefundedAmount: number;
         totalReversedAmount: number;
         paymentDetails: IPaymentDetail;
-        transaction?: ITransaction;
+        transaction?: ITransaction[];
     }
 
     interface ICapturePaymentReq {

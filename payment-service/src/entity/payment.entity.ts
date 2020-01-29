@@ -295,7 +295,8 @@ export class PaymentClass extends BaseEntity {
      * @description Returns noonpay post authorization callback url
      */
     private getReturnUrl(): string {
-        return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order/processPayment`;
+        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order/process-payment`;
+        return "http://localhost:3080/order-service/v1/webhook/noonpay/order/process-payment"
     }
     /**
      * @description Returns custom error objects corresponding to noonpay error codes
@@ -308,7 +309,7 @@ export class PaymentClass extends BaseEntity {
                 err.message = nonzeroResponse.message;
                 delete err.useNoonPayMessage;
             }
-        }else {
+        } else {
             err = cloneObject(PaymentClass.NOONPAY_ERRORS.default);
             err.message = nonzeroResponse.message;
         }
@@ -340,7 +341,7 @@ export class PaymentClass extends BaseEntity {
             return availablePaymentMethods;
         } catch (error) {
             consolelog(process.cwd(), 'Get Payment Methods', error, false);
-            if(error && !error.name) {
+            if (error && !error.name) {
                 error.name = 'PaymentError';
             }
             return Promise.reject(error);
@@ -389,7 +390,7 @@ export class PaymentClass extends BaseEntity {
                 json: true,
                 timeout: PaymentClass.PAYMENT_OPTIONS.API_TIMEOUT
             });
-            
+
             console.log('--Payment INITIATE');
             let result = {
                 resultCode: response.resultCode,
@@ -406,6 +407,8 @@ export class PaymentClass extends BaseEntity {
             // TODO: Update Payment status and noonpay order id
             // To be done in order service
             if (response.resultCode === 0) {
+                console.log('--Payment INITIATE 1', result);
+
                 return result;
             } else {
                 // some error
@@ -416,10 +419,10 @@ export class PaymentClass extends BaseEntity {
             // TODO: Update Payment status and noonpay order id
             // To be done in order service
             error = error && error.error ? error.error : error;
-            if(error.resultCode) {
+            if (error.resultCode) {
                 error = this.getErrorObject(error);
             }
-            consolelog(process.cwd(), 'Payment INITIATE', (error && error.message ? error.message : error) , false);
+            consolelog(process.cwd(), 'Payment INITIATE', (error && error.message ? error.message : error), false);
             return Promise.reject(error);
         }
     }
@@ -475,7 +478,7 @@ export class PaymentClass extends BaseEntity {
             }
         } catch (error) {
             error = error && error.error ? error.error : error;
-            if(error.resultCode) {
+            if (error.resultCode) {
                 error = this.getErrorObject(error);
             }
             consolelog(process.cwd(), 'Payment ORDER STATUS', (error && error.message ? error.message : error), false);
@@ -523,7 +526,7 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -542,7 +545,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter authorization transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } }))[0] : undefined
+                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -562,9 +565,9 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_CANCELLATION;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -583,7 +586,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter void transaction(reverse) details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } }))[0] : undefined
+                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -603,11 +606,11 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CANCELLED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CANCELLED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -626,7 +629,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter capture transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } }))[0] : undefined
+                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -646,13 +649,13 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CANCELLED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CANCELLED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
-            }else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CAPTURED) {
+            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CAPTURED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -671,7 +674,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter refund transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } }))[0] : undefined
+                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -744,7 +747,7 @@ export class PaymentClass extends BaseEntity {
             }
         } catch (error) {
             error = error && error.error ? error.error : error;
-            if(error.resultCode) {
+            if (error.resultCode) {
                 error = this.getErrorObject(error);
             }
             // TODO: Update Payment status and noonpay order id
@@ -811,7 +814,7 @@ export class PaymentClass extends BaseEntity {
             }
         } catch (error) {
             error = error && error.error ? error.error : error;
-            if(error.resultCode) {
+            if (error.resultCode) {
                 error = this.getErrorObject(error);
             }
             // TODO: Update Payment status and noonpay order id
@@ -883,7 +886,7 @@ export class PaymentClass extends BaseEntity {
             }
         } catch (error) {
             error = error && error.error ? error.error : error;
-            if(error.resultCode) {
+            if (error.resultCode) {
                 error = this.getErrorObject(error);
             }
             // TODO: Update Payment status and noonpay order id
