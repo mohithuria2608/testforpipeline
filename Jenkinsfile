@@ -14,6 +14,8 @@ pipeline {
         Promotion_image="americana.azurecr.io/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}"
         Payment_image="americana.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
         Notification_image="americana.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
+        Log_image="americana.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
+
 
     }
     agent any
@@ -58,6 +60,8 @@ pipeline {
                     PromotionImage=docker.build(registry + "/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/promotion-service/Dockerfile .")
                     PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile .")
                     NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile .")
+                    LogImage=docker.build(registry + "/log"+ ":Log-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/log-service/Dockerfile .")
+
 
                 }
             }
@@ -78,6 +82,7 @@ pipeline {
                         PromotionImage.push()
                         PaymentImage.push()
                         NotificationImage.push()
+                        LogImage.push()
                     }
                 }
             }
