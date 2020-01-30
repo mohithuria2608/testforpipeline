@@ -11,11 +11,11 @@
     "dateFrom": "2020-01-01",
     "dateTo": "2020-12-31",
     "ruleName": "KFC 10",
-    "shortDesc": "Get 10% off on all orders upto 10AED",
+    "shortDesc": "Get 10% off on all orders upto 10 AED",
     "activeFlag": 1,
     "posId": 7193,
     "maxDiscountAmt": 10,
     "isVisible": 0,
-    "termsAndConds": "<html>  <head>  </head> <body>10 % off upto max 10</body> </html>"
+    "termsAndConds": "<html>  <head>  </head> <body>10 % off upto max 10 AED</body> </html>"
     }
 ]

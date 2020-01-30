@@ -6,13 +6,13 @@ import { logService } from "../../grpc/client"
 class MLoggerConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.M_LOGGER, 'client');
+        super(Constant.KAFKA_TOPIC.M_LOGGER, Constant.KAFKA_TOPIC.M_LOGGER);
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                consolelog(process.cwd(), "consumer m_logger", message, true)
+                consolelog(process.cwd(), "consumer m_logger", JSON.stringify(message), true)
                 this.logMessages(message);
             })
     }
