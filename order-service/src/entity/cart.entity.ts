@@ -452,7 +452,9 @@ export class CartClass extends BaseEntity {
 
 
             let discountAmnt = 0
-            if (payload.couponCode) {
+            let couponCode = ""
+            if (payload.couponCode && payload.items && payload.items.length > 0) {
+                couponCode = payload.couponCode
                 let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (validPromo && validPromo.isValid) {
                     if (validPromo.promotionType == "by_percent") {
@@ -462,7 +464,9 @@ export class CartClass extends BaseEntity {
                     }
                 } else
                     delete payload['couponCode']
-            }
+            } else
+                delete payload['couponCode']
+
             console.log("discountAmnt", discountAmnt)
 
             if (discountAmnt > 0)
@@ -479,7 +483,7 @@ export class CartClass extends BaseEntity {
                 }],
                 not_available: [],
                 is_price_changed: false,
-                coupon_code: payload.couponCode ? payload.couponCode : "",
+                coupon_code: couponCode,
                 discount_amount: discountAmnt,
                 success: true,
             }
