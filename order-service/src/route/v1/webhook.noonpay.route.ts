@@ -10,11 +10,9 @@ export default (router: Router) => {
     router
         .get('/order/process-payment',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                // headers: JOI.COMMON_HEADERS,
                 query: {
                     paymentInfo: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     result: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),

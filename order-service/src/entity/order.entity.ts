@@ -46,7 +46,7 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.ICreateSdmOrder) {
         try {
-            
+
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", error, false)
@@ -68,6 +68,10 @@ export class OrderClass extends BaseEntity {
                     status: payload.status,
                     updatedAt: new Date().getTime()
                 }, { new: true })
+                let amount = order.amount.reduce((init, elem) => {
+                    if (elem.type == "TOTAL")
+                        return init + elem.amount
+                }, 0)
                 if (order && order.sdmOrderRef) {
                     if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
                         payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
@@ -83,19 +87,19 @@ export class OrderClass extends BaseEntity {
                             this.updateOneEntityMdb({ cartId: payload.cartId }, {
                                 $addToSet: {
                                     transLogs: {
-                                        noonpayOrderId: 1,
-                                        orderId: "string",
-                                        amount: 100,
-                                        storeCode: "string",
+                                        noonpayOrderId: order.transLogs[0].noonpayOrderId,
+                                        orderId: order.transLogs[0].orderId,
+                                        amount: amount,
+                                        storeCode: "kfc_uae_store",
                                         createdAt: new Date().getTime()
                                     }
                                 }
                             })
                             let paymentCapturedObj = await paymentService.capturePayment({
-                                noonpayOrderId: 1,
-                                orderId: "string",
-                                amount: 100,
-                                storeCode: "string"
+                                noonpayOrderId: order.transLogs[0].noonpayOrderId,
+                                orderId: order.transLogs[0].orderId,
+                                amount: amount,
+                                storeCode: "kfc_uae_store"
                             })
                             this.updateOneEntityMdb({ cartId: payload.cartId }, {
                                 $addToSet: {
