@@ -420,7 +420,7 @@ export class CartClass extends BaseEntity {
             let tax = 0.05
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    let price = item.finalPrice * item.qty
+                    // let price = item.finalPrice * item.qty
                     // if (item['bundleProductOptions'] && item['bundleProductOptions'].length > 0) {
                     //     item['bundleProductOptions'].map(bpo => {
                     //         if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
@@ -440,7 +440,7 @@ export class CartClass extends BaseEntity {
                     //     })
                     // }
                     // price = price * item.qty
-                    grandtotal = grandtotal + price
+                    grandtotal = grandtotal + item.sellingPrice
                 })
             }
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
