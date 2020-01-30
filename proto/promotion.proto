@@ -51,7 +51,7 @@ message IKafkaRes {
 }
 
 message IValidatePromotionReq {
-    required int32 couponCode = 1;
+    required string couponCode = 1;
 }
 
 message IValidatePromotionRes {
