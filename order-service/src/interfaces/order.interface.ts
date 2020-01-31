@@ -45,7 +45,9 @@ declare namespace IOrderRequest {
         sdmStoreRef: number,
         lat: number,
         lng: number,
-        address: string
+        address: string,
+        name_en: string,
+        name_ar: string,
     }
 
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {

@@ -46,7 +46,7 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.ICreateSdmOrder) {
         try {
-            
+
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", error, false)
@@ -254,7 +254,9 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
                         "isPreviousOrder": false
                     },
@@ -271,7 +273,7 @@ export class OrderClass extends BaseEntity {
                         "updatedAt": 1578558475844,
                         "items": [
                             {
-                                "id": 5,
+                                "id": 1,
                                 "position": 1,
                                 "name": "Chocolate Chip Cookie",
                                 "description": "",
@@ -352,205 +354,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
-                    },
-                    {
-                        "_id": "5e2422631f66da1fa13402f1",
-                        "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
-                        "cmsCartRef": 0,
-                        "sdmOrderRef": 0,
-                        "cmsOrderRef": 0,
-                        "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                        "orderId": "UAE-1",
-                        "status": "PENDING",
-                        "createdAt": 1578558475844,
-                        "updatedAt": 1578558475844,
-                        "items": [
-                            {
-                                "id": 12,
-                                "position": 1,
-                                "name": "Chocolate Chip Cookie",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 5.5,
-                                "specialPrice": 4.5,
-                                "typeId": "simple",
-                                "catId": 21,
-                                "metaKeyword": [
-                                    "Chocolate Chip Cookie"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "items": [],
-                                "sku": 710003,
-                                "imageSmall": "/d/u/dummy-product.png",
-                                "imageThumbnail": "/d/u/dummy-product.png",
-                                "image": "/d/u/dummy-product.png",
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            }
-                        ],
-                        "amount": [
-                            {
-                                "type": "SUB_TOTAL",
-                                "name": "Sub Total",
-                                "code": "SUB_TOTAL",
-                                "amount": 30.25,
-                                "sequence": 1
-
-                            },
-                            {
-                                "type": "DISCOUNT",
-                                "name": "Discount",
-                                "code": "KFC 10",
-                                "amount": 2,
-                                "sequence": 2
-                            },
-                            {
-                                "type": "TAX",
-                                "name": "VAT",
-                                "code": "VAT",
-                                "amount": 0.26,
-                                "sequence": 3
-                            },
-                            {
-                                "type": "SHIPPING",
-                                "name": "Free Delivery",
-                                "code": "FLAT",
-                                "amount": 7.5,
-                                "sequence": 4
-                            },
-                            {
-                                "type": "TOTAL",
-                                "name": "Total",
-                                "code": "TOTAL",
-                                "amount": 30.25,
-                                "sequence": 5
-                            }],
-                        "address": {
-                            "areaId": 520,
-                            "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                            "storeId": 0,
-                            "sdmAddressRef": 0,
-                            "cmsAddressRef": 0,
-                            "tag": "HOME",
-                            "bldgName": "Peru",
-                            "description": "Peru society, street 2",
-                            "flatNum": "35",
-                            "addressType": "DELIVERY",
-                            "lat": 50.322,
-                            "lng": 20.322
-                        },
-                        "store": {
-                            "sdmStoreRef": 28,
-                            "lat": 50.322,
-                            "lng": 20.322,
-                            "address": "store is open address"
-                        },
-                        "isPreviousOrder": true
-                    },
-                    {
-                        "_id": "5e2422631f66da1fa13402f1",
-                        "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
-                        "cmsCartRef": 0,
-                        "sdmOrderRef": 0,
-                        "cmsOrderRef": 0,
-                        "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                        "orderId": "UAE-1",
-                        "status": "PENDING",
-                        "createdAt": 1578558475844,
-                        "updatedAt": 1578558475844,
-                        "items": [
-                            {
-                                "id": 11,
-                                "position": 1,
-                                "name": "Chocolate Chip Cookie",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 5.5,
-                                "specialPrice": 4.5,
-                                "typeId": "simple",
-                                "catId": 21,
-                                "metaKeyword": [
-                                    "Chocolate Chip Cookie"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "items": [],
-                                "sku": 710003,
-                                "imageSmall": "/d/u/dummy-product.png",
-                                "imageThumbnail": "/d/u/dummy-product.png",
-                                "image": "/d/u/dummy-product.png",
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            }
-                        ],
-                        "amount": [
-                            {
-                                "type": "SUB_TOTAL",
-                                "name": "Sub Total",
-                                "code": "SUB_TOTAL",
-                                "amount": 30.25,
-                                "sequence": 1
-
-                            },
-                            {
-                                "type": "DISCOUNT",
-                                "name": "Discount",
-                                "code": "KFC 10",
-                                "amount": 2,
-                                "sequence": 2
-                            },
-                            {
-                                "type": "TAX",
-                                "name": "VAT",
-                                "code": "VAT",
-                                "amount": 0.26,
-                                "sequence": 3
-                            },
-                            {
-                                "type": "SHIPPING",
-                                "name": "Free Delivery",
-                                "code": "FLAT",
-                                "amount": 7.5,
-                                "sequence": 4
-                            },
-                            {
-                                "type": "TOTAL",
-                                "name": "Total",
-                                "code": "TOTAL",
-                                "amount": 30.25,
-                                "sequence": 5
-                            }],
-                        "address": {
-                            "areaId": 520,
-                            "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                            "storeId": 0,
-                            "sdmAddressRef": 0,
-                            "cmsAddressRef": 0,
-                            "tag": "HOME",
-                            "bldgName": "Peru",
-                            "description": "Peru society, street 2",
-                            "flatNum": "35",
-                            "addressType": "DELIVERY",
-                            "lat": 50.322,
-                            "lng": 20.322
-                        },
-                        "store": {
-                            "sdmStoreRef": 28,
-                            "lat": 50.322,
-                            "lng": 20.322,
-                            "address": "store is open address"
-                        },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -646,9 +454,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -744,9 +554,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -842,9 +654,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -940,9 +754,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1038,9 +854,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1136,9 +954,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1234,9 +1054,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1332,9 +1154,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1430,9 +1254,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1528,9 +1354,11 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
+                        "isPreviousOrder": false
                     },
                     {
                         "_id": "5e2422631f66da1fa13402f1",
@@ -1626,108 +1454,12 @@ export class OrderClass extends BaseEntity {
                             "sdmStoreRef": 28,
                             "lat": 50.322,
                             "lng": 20.322,
-                            "address": "store is open address"
+                            "address": "store is open address",
+                            "name_en": "ABU KADRA - DUBAI",
+                            "name_ar": "كنتاكى أبو خضرة  - دبى",
                         },
-                        "isPreviousOrder": true
-                    },
-                    {
-                        "_id": "5e2422631f66da1fa13402f1",
-                        "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
-                        "cmsCartRef": 0,
-                        "sdmOrderRef": 0,
-                        "cmsOrderRef": 0,
-                        "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                        "orderId": "UAE-1",
-                        "status": "PENDING",
-                        "createdAt": 1578558475844,
-                        "updatedAt": 1578558475844,
-                        "items": [
-                            {
-                                "id": 1,
-                                "position": 1,
-                                "name": "Chocolate Chip Cookie",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 5.5,
-                                "specialPrice": 4.5,
-                                "typeId": "simple",
-                                "catId": 21,
-                                "metaKeyword": [
-                                    "Chocolate Chip Cookie"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "items": [],
-                                "sku": 710003,
-                                "imageSmall": "/d/u/dummy-product.png",
-                                "imageThumbnail": "/d/u/dummy-product.png",
-                                "image": "/d/u/dummy-product.png",
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            }
-                        ],
-                        "amount": [
-                            {
-                                "type": "SUB_TOTAL",
-                                "name": "Sub Total",
-                                "code": "SUB_TOTAL",
-                                "amount": 30.25,
-                                "sequence": 1
-
-                            },
-                            {
-                                "type": "DISCOUNT",
-                                "name": "Discount",
-                                "code": "KFC 10",
-                                "amount": 2,
-                                "sequence": 2
-                            },
-                            {
-                                "type": "TAX",
-                                "name": "VAT",
-                                "code": "VAT",
-                                "amount": 0.26,
-                                "sequence": 3
-                            },
-                            {
-                                "type": "SHIPPING",
-                                "name": "Free Delivery",
-                                "code": "FLAT",
-                                "amount": 7.5,
-                                "sequence": 4
-                            },
-                            {
-                                "type": "TOTAL",
-                                "name": "Total",
-                                "code": "TOTAL",
-                                "amount": 30.25,
-                                "sequence": 5
-                            }],
-                        "address": {
-                            "areaId": 520,
-                            "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                            "storeId": 0,
-                            "sdmAddressRef": 0,
-                            "cmsAddressRef": 0,
-                            "tag": "HOME",
-                            "bldgName": "Peru",
-                            "description": "Peru society, street 2",
-                            "flatNum": "35",
-                            "addressType": "DELIVERY",
-                            "lat": 50.322,
-                            "lng": 20.322
-                        },
-                        "store": {
-                            "sdmStoreRef": 28,
-                            "lat": 50.322,
-                            "lng": 20.322,
-                            "address": "store is open address"
-                        },
-                        "isPreviousOrder": true
-                    },
+                        "isPreviousOrder": false
+                    }
                 ]
                 nextPage = (getOrderHistory[((parseInt(payload.page.toString()) * 10) + 1)] !== undefined) ? parseInt(parseInt(payload.page.toString()).toString()) + 1 : -1
                 getOrderHistory = getOrderHistory.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
