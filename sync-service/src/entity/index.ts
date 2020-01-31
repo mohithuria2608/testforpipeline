@@ -4,3 +4,4 @@ export { UpsellE } from './upsell.entity'
 export { UserE } from './user.entity'
 export { PromotionE } from './promotion.entity'
 export { ConfigE } from './config.entity'
+export { LocationE } from './location.entity';
