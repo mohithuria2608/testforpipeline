@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class SdmUserConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_USER, 'client');
+        super(Constant.KAFKA_TOPIC.SDM_USER, Constant.KAFKA_TOPIC.SDM_USER);
     }
 
     handleMessage() {

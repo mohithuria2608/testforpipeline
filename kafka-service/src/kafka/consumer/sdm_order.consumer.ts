@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class SdmOrderStatusConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_MENU, 'client');
+        super(Constant.KAFKA_TOPIC.SDM_MENU, Constant.KAFKA_TOPIC.SDM_MENU);
     }
 
     handleMessage() {

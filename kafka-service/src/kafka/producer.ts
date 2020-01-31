@@ -1,5 +1,5 @@
 import * as kafka from 'kafka-node';
-import { kafkaClient } from './client';
+import { KafkaClientClass } from './client';
 import { consolelog } from "../utils"
 import * as Constant from '../constant'
 
@@ -8,7 +8,7 @@ class KafkaProducer {
     producer: kafka.Producer;
 
     constructor() {
-        this.producer = new kafka.Producer(kafkaClient.getKafkaInstance(), {
+        this.producer = new kafka.Producer(new KafkaClientClass().getKafkaInstance(), {
             partitionerType: 2,
             requireAcks: 1,
         });

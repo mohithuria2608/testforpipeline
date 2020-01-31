@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsUpsellConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_UPSELL, 'client');
+        super(Constant.KAFKA_TOPIC.AS_UPSELL, Constant.KAFKA_TOPIC.AS_UPSELL);
     }
 
     handleMessage() {

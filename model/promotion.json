@@ -1,21 +1,21 @@
 [
     {
-    "cmsCouponRef": 3,
-    "couponCode": "KFC 10",
-    "promotionType": "by_percent",
-    "discountAmount": 10,
-    "maxDiscountQty": 15,
-    "usesPerCoupon": 10,
-    "usesPerCust": 1,
-    "timesUsed": 0,
-    "dateFrom": "2020-01-01",
-    "dateTo": "2020-12-31",
-    "ruleName": "KFC 10",
-    "shortDesc": "Get 10% off on all orders upto 10AED",
-    "activeFlag": 1,
-    "posId": 7193,
-    "maxDiscountAmt": 10,
-    "isVisible": 0,
-    "termsAndConds": "<html>  <head>  </head> <body>10 % off upto max 10</body> </html>"
+        "cmsCouponRef": 3,
+        "couponCode": "KFC 10",
+        "promotionType": "by_percent",
+        "discountAmount": 10,
+        "maxDiscountQty": 15,
+        "usesPerCoupon": 10,
+        "usesPerCust": 1,
+        "timesUsed": 0,
+        "dateFrom": "2020-01-01",
+        "dateTo": "2020-12-31",
+        "ruleName": "KFC 10",
+        "shortDesc": "Get 10% off on all orders upto 10 AED",
+        "activeFlag": 1,
+        "posId": 7193,
+        "maxDiscountAmt": 10,
+        "isVisible": 0,
+        "termsAndConds": "<html>  <head>  </head> <body> <p style='padding-left: 30px; text-align: left;'>Promo Code : KFC 10</p><p style='padding-left: 30px; text-align: left;'>Get 10% off on all orders upto 10 AED</p><p style='padding-left: 30px; text-align: left;'>Max of 10 AED discount is applicable</p><p style='padding-left: 30px; text-align: left;'>Offer valid on all items</p><p style='padding-left: 30px; text-align: left;'>Offer valid on delivery and pick up</p><p style='padding-left: 30px; text-align: left;'>Offer valid till 31st Dec 2020</p></body> </html>"
     }
 ]

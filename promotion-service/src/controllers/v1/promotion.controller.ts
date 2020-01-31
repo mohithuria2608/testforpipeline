@@ -77,8 +77,8 @@ export class PromotionController {
         try {
             let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
             if (promo && promo.length > 0) {
-                if (new Date(promo[0].dateFrom).toUTCString() < new Date().toUTCString() &&
-                    new Date().toUTCString() > new Date(promo[0].dateTo).toUTCString()) {
+                if (new Date(promo[0].dateFrom).getTime() < new Date().getTime() &&
+                    new Date().getTime() < new Date(promo[0].dateTo).getTime()) {
                     return { isValid: true, ...promo[0] }
                 } else
                     return { isValid: false }

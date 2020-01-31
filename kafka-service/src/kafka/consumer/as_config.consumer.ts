@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_CONFIG, 'client');
+        super(Constant.KAFKA_TOPIC.AS_CONFIG, Constant.KAFKA_TOPIC.AS_CONFIG);
     }
 
     handleMessage() {

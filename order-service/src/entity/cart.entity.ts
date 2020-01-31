@@ -452,7 +452,7 @@ export class CartClass extends BaseEntity {
             let tax = 0.05
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    let price = item.finalPrice * item.qty
+                    // let price = item.finalPrice * item.qty
                     // if (item['bundleProductOptions'] && item['bundleProductOptions'].length > 0) {
                     //     item['bundleProductOptions'].map(bpo => {
                     //         if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
@@ -472,7 +472,7 @@ export class CartClass extends BaseEntity {
                     //     })
                     // }
                     // price = price * item.qty
-                    grandtotal = grandtotal + price
+                    grandtotal = grandtotal + item.sellingPrice
                 })
             }
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
@@ -484,7 +484,9 @@ export class CartClass extends BaseEntity {
 
 
             let discountAmnt = 0
-            if (payload.couponCode) {
+            let couponCode = ""
+            if (payload.couponCode && payload.items && payload.items.length > 0) {
+                couponCode = payload.couponCode
                 let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (validPromo && validPromo.isValid) {
                     if (validPromo.promotionType == "by_percent") {
@@ -494,7 +496,9 @@ export class CartClass extends BaseEntity {
                     }
                 } else
                     delete payload['couponCode']
-            }
+            } else
+                delete payload['couponCode']
+
             console.log("discountAmnt", discountAmnt)
 
             if (discountAmnt > 0)
@@ -511,7 +515,7 @@ export class CartClass extends BaseEntity {
                 }],
                 not_available: [],
                 is_price_changed: false,
-                coupon_code: payload.couponCode ? payload.couponCode : "",
+                coupon_code: couponCode,
                 discount_amount: discountAmnt,
                 success: true,
             }
@@ -540,7 +544,8 @@ export class CartClass extends BaseEntity {
                 name: "Sub Total",
                 code: "SUB_TOTAL",
                 amount: cmsCart.subtotal,
-                sequence: 1
+                sequence: 1,
+                action: "add"
             })
             if (cmsCart.discount_amount != 0 && cmsCart.coupon_code && cmsCart.coupon_code != "") {
                 amount.push({
@@ -548,7 +553,8 @@ export class CartClass extends BaseEntity {
                     name: "Discount",
                     code: cmsCart.coupon_code,
                     amount: cmsCart.discount_amount,
-                    sequence: 2
+                    sequence: 2,
+                    action: "subtract"
                 })
                 dataToUpdate['couponApplied'] = 1
             } else
@@ -559,7 +565,8 @@ export class CartClass extends BaseEntity {
                     name: cmsCart.tax[0].tax_name,
                     code: cmsCart.tax[0].tax_name,
                     amount: cmsCart.tax[0].amount,
-                    sequence: 3
+                    sequence: 3,
+                    action: "add"
                 })
             } else {
                 amount.push({
@@ -567,7 +574,8 @@ export class CartClass extends BaseEntity {
                     name: "VAT",
                     code: "VAT",
                     amount: 0,
-                    sequence: 3
+                    sequence: 3,
+                    action: "add"
                 })
             }
             amount.push({
@@ -575,14 +583,16 @@ export class CartClass extends BaseEntity {
                 name: "Delivery",
                 code: "DELIVERY",
                 amount: 6,
-                sequence: 4
+                sequence: 4,
+                action: "add"
             })
             amount.push({
                 type: "TOTAL",
                 name: "Total",
                 code: "TOTAL",
                 amount: cmsCart.grandtotal,
-                sequence: 5
+                sequence: 5,
+                action: "add"
             })
             dataToUpdate['amount'] = amount
 

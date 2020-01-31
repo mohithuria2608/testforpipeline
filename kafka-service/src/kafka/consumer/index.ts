@@ -22,25 +22,25 @@ import { m_loggerE } from './m_logger.consumer';
 
 
 export function initConsumers() {
-    // failConsumerE.handleMessage();
+    failConsumerE.handleMessage();
 
-    // as_configConsumerE.handleMessage();
+    as_configConsumerE.handleMessage();
 
-    // as_userConsumerE.handleMessage();
-    // sdm_userConsumerE.handleMessage();
-    // cms_userConsumerE.handleMessage();
+    as_userConsumerE.handleMessage();
+    sdm_userConsumerE.handleMessage();
+    cms_userConsumerE.handleMessage();
 
-    // as_menuConsumerE.handleMessage();
-    // sdm_menuConsumerE.handleMessage();
-    // cms_menuConsumerE.handleMessage();
+    as_menuConsumerE.handleMessage();
+    sdm_menuConsumerE.handleMessage();
+    cms_menuConsumerE.handleMessage();
 
-    // as_upsellConsumerE.handleMessage();
+    as_upsellConsumerE.handleMessage();
 
-    // as_promotionConsumerE.handleMessage();
+    as_promotionConsumerE.handleMessage();
 
-    // as_promotionConsumerE.handleMessage();
+    as_promotionConsumerE.handleMessage();
 
-    // sdm_orderConsumerE.handleMessage();
+    sdm_orderConsumerE.handleMessage();
 
     m_loggerE.handleMessage();
 }
