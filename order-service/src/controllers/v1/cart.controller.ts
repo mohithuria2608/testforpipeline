@@ -1,6 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { menuService, userService, promotionService } from '../../grpc/client'
+import { menuService, userService, promotionService, PromotionService } from '../../grpc/client'
 import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
 
@@ -20,6 +20,9 @@ export class CartController {
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            if (userData || !userData.id || userData.id != "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
             let invalidMenu = false
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
