@@ -295,8 +295,8 @@ export class PaymentClass extends BaseEntity {
      * @description Returns noonpay post authorization callback url
      */
     private getReturnUrl(): string {
-        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order/process-payment`;
-        return "http://localhost:3080/order-service/v1/webhook/noonpay/order/process-payment"
+        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order-service/v1/webhook/noonpay/order/process-payment`;
+        return "https://americananode.appskeeper.com/order-service/v1/webhook/noonpay/order/process-payment"
     }
     /**
      * @description Returns custom error objects corresponding to noonpay error codes

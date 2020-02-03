@@ -14,7 +14,7 @@ export class UserController {
     async syncUser(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
-            if (payload.as.create || payload.as.update || payload.as.get) {
+            if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
                 if (payload.as.create) {
 
                 }
@@ -23,13 +23,13 @@ export class UserController {
                     ENTITY.UserE.buildUser(data)
                 }
             }
-            if (payload.cms.create || payload.cms.update || payload.cms.get) {
+            if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
                 if (payload.cms.create)
                     ENTITY.UserE.createUserOnCms(data)
                 if (payload.cms.update)
                     ENTITY.UserE.updateUserOnCms(data)
             }
-            if (payload.sdm.create || payload.sdm.update || payload.sdm.get) {
+            if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
                 if (payload.sdm.create)
                     ENTITY.UserE.createUserOnSdm(data)
                 if (payload.sdm.update)

@@ -299,220 +299,217 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    // async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
-    //     try {
-    //         let cart = []
-    //         payload.items.map(sitem => {
-    //             if (sitem['originalTypeId'] == 'simple') {
-    //                 if (sitem['type_id'] == 'simple') {
-    //                     cart.push({
-    //                         product_id: sitem.id,
-    //                         qty: sitem.qty ? sitem.qty : 1,
-    //                         price: sitem.finalPrice,
-    //                         type_id: sitem['originalTypeId']
-    //                     })
-    //                 } else {
-    //                     let product = {};
-    //                     product['product_id'] = sitem['id']
-    //                     product['qty'] = sitem['qty']
-    //                     product['type_id'] = sitem['originalTypeId']
-    //                     let option = {}
-    //                     if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
-    //                         sitem['bundleProductOptions'].forEach(bpo => {
-    //                             if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-    //                                 bpo['productLinks'].forEach(pl => {
-    //                                     if (pl['selected'] == 1) {
-    //                                         if (pl['subOptions'] && pl['subOptions'].length > 0) {
-    //                                             pl['subOptions'].map(so => {
-    //                                                 if (so['selected'] == 1) {
-    //                                                     option[pl['id']] = so['id']
-    //                                                     cart.push({
-    //                                                         product_id: so['product_id'],
-    //                                                         qty: sitem['qty'],
-    //                                                         type_id: "simple",
-    //                                                     })
-    //                                                 }
-    //                                             })
-    //                                         }
-    //                                     }
-    //                                 })
-    //                             }
-    //                         })
-    //                     }
-    //                     product['option'] = option
-    //                     cart.push(product)
-    //                 }
-    //             }
-    //             else if (sitem['originalTypeId'] == 'configurable') {
-    //                 let super_attribute = {};
-    //                 let price = null;
-    //                 if (sitem['items'] && sitem['items'].length > 0) {
-    //                     sitem['items'].map(i => {
-    //                         if (parseInt(i['sku']) == sitem['selectedItem']) {
-    //                             price = i['finalPrice']
-    //                             if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
-    //                                 sitem['configurableProductOptions'].map(co => {
-    //                                     let value = null
-    //                                     if (co['options'] && co['options'].length > 0) {
-    //                                         co['options'].map(o => {
-    //                                             if (o['isSelected'] == 1) {
-    //                                                 value = o['id']
-    //                                             }
-    //                                         })
-    //                                         super_attribute[co['id']] = value
-    //                                     }
-    //                                 })
-    //                             }
-    //                         }
-    //                     })
-    //                 }
-    //                 cart.push({
-    //                     product_id: sitem.id,
-    //                     qty: sitem.qty ? sitem.qty : 1,
-    //                     price: price,
-    //                     type_id: sitem['typeId'],
-    //                     super_attribute: super_attribute
-    //                 })
-    //             }
-    //             else if (sitem['originalTypeId'] == 'bundle') {
-    //                 let bundle_option = {};
-    //                 let selection_configurable_option = {};
-    //                 sitem['bundleProductOptions'].forEach(bpo => {
-    //                     if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-    //                         bpo['productLinks'].forEach(pl => {
-    //                             if (pl['selected'] == 1) {
-    //                                 if (pl['subOptions'] && pl['subOptions'].length > 0) {
-    //                                     if (bundle_option[pl['option_id']] == null)
-    //                                         bundle_option[pl['option_id']] = {}
-    //                                     bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-    //                                 } else {
-    //                                     bundle_option[pl['option_id']] = pl['selection_id']
-    //                                 }
-    //                             }
-    //                             if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
-    //                                 console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
-    //                                 sitem['bundleProductOptions'].forEach(bpo2 => {
-    //                                     if (bpo2['position'] == pl['dependentSteps'][0]) {
-    //                                         bpo2['productLinks'].forEach(pl2 => {
-    //                                             if (pl2['selected'] == 1)
-    //                                                 selection_configurable_option[pl['selection_id']] = pl2['id']
-    //                                             else
-    //                                                 selection_configurable_option[pl['selection_id']] = ""
-    //                                         })
-    //                                     }
-    //                                 })
-    //                             }
-    //                         })
-    //                     }
-    //                 })
-    //                 cart.push({
-    //                     product_id: sitem.id,
-    //                     qty: sitem.qty,
-    //                     price: sitem.finalPrice,
-    //                     type_id: sitem['typeId'],
-    //                     bundle_option: bundle_option,
-    //                     selection_configurable_option: selection_configurable_option,
-    //                 })
-    //             }
-    //             else if (sitem['originalTypeId'] == 'bundle_group') {
-    //                 return Promise.reject("Not handled bundle group products")
-    //                 cart.push({
-    //                     product_id: sitem.id,
-    //                     qty: sitem.qty,
-    //                     price: sitem.finalPrice,
-    //                     type_id: "bundle"
-    //                 })
-    //             }
-    //             else {
-    //                 return Promise.reject("Unhandled  products")
-    //             }
-    //         })
-    //         let req: ICartCMSRequest.ICreateCartCms = {
-    //             cms_user_id: 10, //userData.cmsUserRef,
-    //             website_id: 1,
-    //             category_id: 20,
-    //             cart_items: cart,
-    //         }
-    //         if (payload.couponCode)
-    //             req['coupon_code'] = payload.couponCode
-    //         else
-    //             req['coupon_code'] = ""
-    //         let cmsCart = await CMS.CartCMSE.createCart(req)
-    //         return cmsCart
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "createCartOnCMS", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
-
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
-            let promo: IPromotionGrpcRequest.IValidatePromotionRes
-            let subtotal = 0
-            let grandtotal = 0
-            let tax = 0.05
-            if (payload.items && payload.items.length > 0) {
-                payload.items.map(item => {
-                    grandtotal = grandtotal + item.sellingPrice
-                })
-            }
-            tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
-            subtotal = grandtotal - tax
-
-            console.log("grandtotal", grandtotal)
-            console.log("subtotal", subtotal)
-            console.log("tax", tax)
-
-
-            let discountAmnt = 0
-            let couponCode = ""
-            if (payload.couponCode && payload.items && payload.items.length > 0) {
-                couponCode = payload.couponCode
-                promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                if (promo && promo.isValid) {
-                    if (promo.promotionType == "by_percent") {
-                        discountAmnt = ((grandtotal * (promo.discountAmount / 100)) <= promo.maxDiscountAmt) ? (grandtotal * (promo.discountAmount / 100)) : promo.maxDiscountAmt
+            let cart = []
+            payload.items.map(sitem => {
+                if (sitem['originalTypeId'] == 'simple') {
+                    if (sitem['type_id'] == 'simple') {
+                        cart.push({
+                            product_id: sitem.id,
+                            qty: sitem.qty ? sitem.qty : 1,
+                            price: sitem.finalPrice,
+                            type_id: sitem['originalTypeId']
+                        })
                     } else {
-                        delete payload['couponCode']
+                        let product = {};
+                        product['product_id'] = sitem['id']
+                        product['qty'] = sitem['qty']
+                        product['type_id'] = sitem['originalTypeId']
+                        let option = {}
+                        if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
+                            sitem['bundleProductOptions'].forEach(bpo => {
+                                if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                                    bpo['productLinks'].forEach(pl => {
+                                        if (pl['selected'] == 1) {
+                                            if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                                pl['subOptions'].map(so => {
+                                                    if (so['selected'] == 1) {
+                                                        option[pl['id']] = so['id']
+                                                        cart.push({
+                                                            product_id: so['product_id'],
+                                                            qty: sitem['qty'],
+                                                            type_id: "simple",
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                        product['option'] = option
+                        cart.push(product)
                     }
-                } else
-                    delete payload['couponCode']
-            } else
-                delete payload['couponCode']
-
-            console.log("discountAmnt", discountAmnt)
-
-            if (discountAmnt > 0)
-                grandtotal = grandtotal - discountAmnt
-            let cmsres = {
-                cms_cart_id: 5,
-                currency_code: "AED",
-                cart_items: payload.items,
-                subtotal: subtotal,
-                grandtotal: grandtotal + 6, //add shipping charges
-                tax: [{
-                    tax_name: "VAT",
-                    amount: tax,
-                }],
-                not_available: [],
-                is_price_changed: false,
-                coupon_code: couponCode,
-                discount_amount: discountAmnt,
-                success: true,
-                promo: promo
+                }
+                else if (sitem['originalTypeId'] == 'configurable') {
+                    let super_attribute = {};
+                    let price = null;
+                    if (sitem['items'] && sitem['items'].length > 0) {
+                        sitem['items'].map(i => {
+                            if (parseInt(i['sku']) == sitem['selectedItem']) {
+                                price = i['finalPrice']
+                                if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
+                                    sitem['configurableProductOptions'].map(co => {
+                                        let value = null
+                                        if (co['options'] && co['options'].length > 0) {
+                                            co['options'].map(o => {
+                                                if (o['isSelected'] == 1) {
+                                                    value = o['id']
+                                                }
+                                            })
+                                            super_attribute[co['id']] = value
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
+                    cart.push({
+                        product_id: sitem.id,
+                        qty: sitem.qty ? sitem.qty : 1,
+                        price: price,
+                        type_id: sitem['typeId'],
+                        super_attribute: super_attribute
+                    })
+                }
+                else if (sitem['originalTypeId'] == 'bundle' || sitem['originalTypeId'] == 'bundle_group') {
+                    let bundle_option = {};
+                    let selection_configurable_option = {};
+                    sitem['bundleProductOptions'].forEach(bpo => {
+                        if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                            bpo['productLinks'].forEach(pl => {
+                                if (pl['selected'] == 1) {
+                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                        if (bundle_option[pl['option_id']] == null)
+                                            bundle_option[pl['option_id']] = {}
+                                        bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                    } else {
+                                        bundle_option[pl['option_id']] = pl['selection_id']
+                                    }
+                                }
+                                if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
+                                    console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
+                                    if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
+                                        sitem['bundleProductOptions'].forEach(bpo2 => {
+                                            if (bpo2['position'] == pl['dependentSteps'][0]) {
+                                                if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
+                                                    bpo2['productLinks'].forEach(pl2 => {
+                                                        if (pl2['selected'] == 1)
+                                                            selection_configurable_option[pl['selection_id']] = pl2['id']
+                                                        else
+                                                            selection_configurable_option[pl['selection_id']] = ""
+                                                    })
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                    cart.push({
+                        product_id: sitem.id,
+                        qty: sitem.qty,
+                        price: sitem.finalPrice,
+                        type_id: sitem['typeId'],
+                        bundle_option: bundle_option,
+                        selection_configurable_option: selection_configurable_option,
+                    })
+                }
+                else {
+                    return Promise.reject("Unhandled  products")
+                }
+            })
+            let req: ICartCMSRequest.ICreateCartCms = {
+                cms_user_id: 7, //userData.cmsUserRef,
+                website_id: 1,
+                category_id: 20,
+                cart_items: cart,
             }
-            return cmsres
+            if (payload.couponCode)
+                req['coupon_code'] = payload.couponCode
+            else
+                req['coupon_code'] = ""
+            let cmsCart = await CMS.CartCMSE.createCart(req)
+            return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", error, false)
             return Promise.reject(error)
         }
     }
 
+    // async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+    //     try {
+    //         let promo: IPromotionGrpcRequest.IValidatePromotionRes
+    //         let subtotal = 0
+    //         let grandtotal = 0
+    //         let tax = 0.05
+    //         if (payload.items && payload.items.length > 0) {
+    //             payload.items.map(item => {
+    //                 grandtotal = grandtotal + item.sellingPrice
+    //             })
+    //         }
+    //         tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+    //         subtotal = grandtotal - tax
+
+    //         console.log("grandtotal", grandtotal)
+    //         console.log("subtotal", subtotal)
+    //         console.log("tax", tax)
+
+
+    //         let discountAmnt = 0
+    //         let couponCode = ""
+    //         if (payload.couponCode && payload.items && payload.items.length > 0) {
+    //             couponCode = payload.couponCode
+    //             promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+    //             if (promo && promo.isValid) {
+    //                 if (promo.promotionType == "by_percent") {
+    //                     discountAmnt = ((grandtotal * (promo.discountAmount / 100)) <= promo.maxDiscountAmt) ? (grandtotal * (promo.discountAmount / 100)) : promo.maxDiscountAmt
+    //                 } else {
+    //                     delete payload['couponCode']
+    //                 }
+    //             } else
+    //                 delete payload['couponCode']
+    //         } else
+    //             delete payload['couponCode']
+
+    //         console.log("discountAmnt", discountAmnt)
+
+    //         if (discountAmnt > 0)
+    //             grandtotal = grandtotal - discountAmnt
+    //         let cmsres = {
+    //             cms_cart_id: 5,
+    //             currency_code: "AED",
+    //             cart_items: payload.items,
+    //             subtotal: subtotal,
+    //             grandtotal: grandtotal + 6, //add shipping charges
+    //             tax: [{
+    //                 tax_name: "VAT",
+    //                 amount: tax,
+    //             }],
+    //             not_available: [],
+    //             is_price_changed: false,
+    //             coupon_code: couponCode,
+    //             discount_amount: discountAmnt,
+    //             success: true,
+    //             promo: promo
+    //         }
+    //         return cmsres
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "createCartOnCMS", error, false)
+    //         return Promise.reject(error)
+    //     }
+    // }
+
     async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
         try {
-            let prevCart = await this.getCart({ cartId: cartId })
-            if (curItems == undefined)
+            let prevCart: ICartRequest.ICartData
+            if (curItems == undefined) {
+                prevCart = await this.getCart({ cartId: cartId })
                 curItems = prevCart.items
+            }
             let dataToUpdate: ICartRequest.ICartData = {}
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
@@ -539,8 +536,9 @@ export class CartClass extends BaseEntity {
                     action: "subtract"
                 })
                 dataToUpdate['couponApplied'] = 1
-            } else
+            } else {
                 dataToUpdate['couponApplied'] = 0
+            }
             if (cmsCart.tax && cmsCart.tax.length > 0) {
                 amount.push({
                     type: "TAX",
@@ -577,30 +575,27 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             dataToUpdate['amount'] = amount
-
-            let parsedData = {}
-            dataToUpdate['items'] = cmsCart.cart_items
-            // if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
-            //     for (const obj of curItems) {
-            //         console.log("1", obj.id)
-            //         let parsedData = {}
-            //         for (const elem of cmsCart.cart_items) {
-            //             console.log("2", elem.product_id)
-            //             if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
-            //                 parsedData[obj.id] = true
-            //                 dataToUpdate['items'].push(obj)
-            //             }
-            //         }
-            //         if (parsedData[obj.id] == undefined)
-            //             dataToUpdate['notAvailable'].push(obj)
-            //     }
-            // } else {
-            //     dataToUpdate['notAvailable'] = curItems
-            // }
+            if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
+                curItems.forEach(obj => {
+                    console.log("1", obj.id)
+                    let parsedData = {}
+                    cmsCart.cart_items.forEach(elem => {
+                        console.log("2", elem.product_id)
+                        if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
+                            parsedData[obj.id] = true
+                            dataToUpdate['items'].push(obj)
+                        }
+                    })
+                    if (parsedData[obj.id] == undefined)
+                        dataToUpdate['notAvailable'].push(obj)
+                })
+            } else {
+                dataToUpdate['notAvailable'] = curItems
+            }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
-                key: prevCart.cartId,
+                key: cartId,
                 update: true,
             }
             await Aerospike.put(putArg)

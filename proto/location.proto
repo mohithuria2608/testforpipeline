@@ -14,8 +14,8 @@ message IFetchStoreRes {
 }
 
 message IValidateCoordinateReq {
-    required float lat = 1;
-    required float lng = 2;
+    required double lat = 1;
+    required double lng = 2;
 }
 
 message IValidateCoordinateRes {
@@ -54,8 +54,8 @@ message IService {
 
 message ILocation {
     required string description = 1;
-    required float latitude = 2;
-    required float longitude = 3;
+    required double latitude = 2;
+    required double longitude = 3;
 } 
 
 message IGeoFence { } 

@@ -112,6 +112,6 @@ message IFetchAddressRes {
     required string description = 7;
     required string flatNum = 8;
     required string addressType = 9;
-    required float lat = 10;
-    required float lng = 11;
+    required double lat = 10;
+    required double lng = 11;
 }

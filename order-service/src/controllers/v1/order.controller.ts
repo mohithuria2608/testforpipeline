@@ -61,7 +61,7 @@ export class OrderController {
             }
             let cartData: ICartRequest.ICartData = await cartController.validateCart(headers, postCartPayload, auth)
             if (cartData['isPriceChanged'] || cartData['invalidMenu'])
-                return { cart: cartData }
+                return { cartValidate: cartData }
 
             let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: "delivery" })
             if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
@@ -81,16 +81,16 @@ export class OrderController {
             // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
             ENTITY.OrderE.syncOrder(cartData)
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(cartData, getAddress, getStore)
-            let amount = 0
-            order.amount.forEach(elem => {
+            let amount
+            order.amount.filter(elem => {
                 if (elem.code == "TOTAL") {
-                    amount = elem.amount
+                    return amount = elem
                 }
             })
             console.log("amount", typeof amount, amount)
             let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                 orderId: order._id.toString(),
-                amount:75,// amount,
+                amount:  amount.amount,
                 storeCode: "kfc_uae_store",
                 paymentMethodId: 1,
                 channel: "Mobile",
@@ -104,7 +104,7 @@ export class OrderController {
             /**
              * @description : update user with new cart
              */
-            let newCartId = ENTITY.OrderE.DAOManager.ObjectId.toString()
+            let newCartId = ENTITY.OrderE.ObjectId().toString()
             ENTITY.CartE.assignNewCart(newCartId, auth.id)
             let asUserChange = {
                 set: Constant.SET_NAME.USER,
@@ -123,109 +123,10 @@ export class OrderController {
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
             })
             return {
-                order: {
-                    cartId: newCartId,
+                orderPlaced: {
+                    newCartId: newCartId,
                     noonpayRedirectionUrl: initiatePaymentObj.noonpayRedirectionUrl,
-                    order: {
-                        "_id": "5e2422631f66da1fa13402f1",
-                        "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
-                        "cmsCartRef": 0,
-                        "sdmOrderRef": 0,
-                        "cmsOrderRef": 0,
-                        "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                        "orderId": "UAE-1",
-                        "status": "PENDING",
-                        "createdAt": 1578558475844,
-                        "updatedAt": 1578558475844,
-                        "items": [
-                            {
-                                "id": 1,
-                                "position": 1,
-                                "name": "Chocolate Chip Cookie",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 5.5,
-                                "specialPrice": 4.5,
-                                "typeId": "simple",
-                                "catId": 21,
-                                "metaKeyword": [
-                                    "Chocolate Chip Cookie"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "items": [],
-                                "sku": 710003,
-                                "imageSmall": "/d/u/dummy-product.png",
-                                "imageThumbnail": "/d/u/dummy-product.png",
-                                "image": "/d/u/dummy-product.png",
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            }
-                        ],
-                        "amount": [
-                            {
-                                "type": "SUB_TOTAL",
-                                "name": "Sub Total",
-                                "code": "SUB_TOTAL",
-                                "amount": 30.25,
-                                "sequence": 1
-
-                            },
-                            {
-                                "type": "DISCOUNT",
-                                "name": "Discount",
-                                "code": "KFC 10",
-                                "amount": 2,
-                                "sequence": 2
-                            },
-                            {
-                                "type": "TAX",
-                                "name": "VAT",
-                                "code": "VAT",
-                                "amount": 0.26,
-                                "sequence": 3
-                            },
-                            {
-                                "type": "SHIPPING",
-                                "name": "Free Delivery",
-                                "code": "FLAT",
-                                "amount": 7.5,
-                                "sequence": 4
-                            },
-                            {
-                                "type": "TOTAL",
-                                "name": "Total",
-                                "code": "TOTAL",
-                                "amount": 30.25,
-                                "sequence": 5
-                            }],
-                        "address": {
-                            "areaId": 520,
-                            "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                            "storeId": 0,
-                            "sdmAddressRef": 0,
-                            "cmsAddressRef": 0,
-                            "tag": "HOME",
-                            "bldgName": "Peru",
-                            "description": "Peru society, street 2",
-                            "flatNum": "35",
-                            "addressType": "DELIVERY",
-                            "lat": 50.322,
-                            "lng": 20.322
-                        },
-                        "store": {
-                            "sdmStoreRef": 28,
-                            "lat": 50.322,
-                            "lng": 20.322,
-                            "address": "store is open address",
-                            "name_en": "ABU KADRA - DUBAI",
-                            "name_ar": "كنتاكى أبو خضرة  - دبى",
-                        },
-                        "isPreviousOrder": false
-                    }
+                    orderInfo: order
                 }
 
             }
@@ -257,62 +158,17 @@ export class OrderController {
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
-            if (userData || !userData.id || userData.id != "")
+            if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             let trackOrder: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ $or: [{ _id: payload.orderId }, { orderId: payload.orderId }] },
-                {
-                    orderId: 1,
-                    userId: 1,
-                    status: 1,
-                    address: 1,
-                    store: 1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                    amount: 1,
-                })
+                {})
             if (trackOrder && trackOrder._id) {
                 if (userData.id != trackOrder.userId)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 trackOrder.amount.filter(obj => { return obj.type == "TOTAL" })[0]
                 return trackOrder
             } else {
-                return {
-                    "_id": "5e2422631f66da1fa13402f1",
-                    "orderId": "UAE-1",
-                    "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                    "status": "PENDING",
-                    "createdAt": 1578558475844,
-                    "updatedAt": 1578558475844,
-                    "address": {
-                        "areaId": 520,
-                        "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                        "storeId": 0,
-                        "sdmAddressRef": 0,
-                        "cmsAddressRef": 0,
-                        "tag": "HOME",
-                        "bldgName": "Peru",
-                        "description": "Peru society, street 2",
-                        "flatNum": "35",
-                        "addressType": "DELIVERY",
-                        "lat": 50.322,
-                        "lng": 20.322
-                    },
-                    "store": {
-                        "sdmStoreRef": 28,
-                        "lat": 50.322,
-                        "lng": 20.322,
-                        "address": "store is open address",
-                        "name_en": "ABU KADRA - DUBAI",
-                        "name_ar": "كنتاكى أبو خضرة  - دبى",
-                    },
-                    "amount": {
-                        "type": "TOTAL",
-                        "name": "Total",
-                        "code": "TOTAL",
-                        "amount": 30.25,
-                        "sequence": 5
-                    }
-                }
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
             consolelog(process.cwd(), "trackOrder", error, false)

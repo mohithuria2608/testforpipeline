@@ -51,3 +51,7 @@ Kfcapptestuser3
 
  # retry option for kafka
  * https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
+
+
+ # install aerospike prerequisite 
+ * sudo apt-get install g++ libssl1.0.0 libssl-dev libz-dev
