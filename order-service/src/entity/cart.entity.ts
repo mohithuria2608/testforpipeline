@@ -316,6 +316,7 @@ export class CartClass extends BaseEntity {
                         product['product_id'] = sitem['id']
                         product['qty'] = sitem['qty']
                         product['type_id'] = sitem['originalTypeId']
+                        product['price'] = sitem['finalPrice']
                         let option = {}
                         if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
                             sitem['bundleProductOptions'].forEach(bpo => {
@@ -330,6 +331,7 @@ export class CartClass extends BaseEntity {
                                                             product_id: so['product_id'],
                                                             qty: sitem['qty'],
                                                             type_id: "simple",
+                                                            price: so['price']
                                                         })
                                                     }
                                                 })
