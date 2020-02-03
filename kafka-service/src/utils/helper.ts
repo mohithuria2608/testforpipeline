@@ -168,7 +168,6 @@ export let sendError = function (error) {
             customError.statusCode = error.statusCode;
             customError.httpCode = error.httpCode;
             customError.type = error.type;
-            customError.actionHint = error.actionHint;
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']

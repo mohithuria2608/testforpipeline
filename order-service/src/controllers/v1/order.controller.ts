@@ -3,6 +3,7 @@ import { consolelog, cryptData } from '../../utils'
 import { userService, locationService, kafkaService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import { cartController } from './cart.controller';
 
 export class OrderController {
 
@@ -51,16 +52,26 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
-            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: userData.id, addressId: payload.addressId, bin: "delivery" })
-            if (!getAddress.hasOwnProperty("id"))
+            let postCartPayload: ICartRequest.IValidateCart = {
+                cartId: payload.cartId,
+                curMenuId: payload.curMenuId,
+                menuUpdatedAt: payload.menuUpdatedAt,
+                couponCode: payload.couponCode,
+                items: payload.items
+            }
+            let cartData = await cartController.validateCart(headers, postCartPayload, auth)
+            console.log("............cartData..............", JSON.stringify(cartData))
+            if (cartData['isPriceChanged'] || cartData['invalidMenu'])
+                return cartData
+
+            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: "delivery" })
+            if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
             let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
             if (!getStore.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
 
-            let cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
 
             /**
              * @description step 1 create order on CMS synchronously

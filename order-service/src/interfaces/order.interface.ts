@@ -50,9 +50,8 @@ declare namespace IOrderRequest {
         name_ar: string,
     }
 
-    interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
+    interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination, ICartRequest.IValidateCart {
         addressId: string,
-        cartId: string,
     }
 
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {

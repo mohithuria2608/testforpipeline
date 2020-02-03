@@ -17,7 +17,7 @@ export class CartController {
      * @param {string=} couponCode :couponCode
      * @param {Array} items :array of products
      * */
-    async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
+    async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             let invalidMenu = false
