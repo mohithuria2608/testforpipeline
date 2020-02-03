@@ -90,7 +90,7 @@ export class OrderController {
             console.log("amount", typeof amount, amount)
             let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                 orderId: order._id.toString(),
-                amount:  amount.amount,
+                amount: amount.amount,
                 storeCode: "kfc_uae_store",
                 paymentMethodId: 1,
                 channel: "Mobile",
@@ -159,13 +159,12 @@ export class OrderController {
             let userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let trackOrder: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ $or: [{ _id: payload.orderId }, { orderId: payload.orderId }] },
-                {})
-            if (trackOrder && trackOrder._id) {
-                if (userData.id != trackOrder.userId)
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            if (order && order._id) {
+                if (userData.id != order.userId)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                trackOrder.amount.filter(obj => { return obj.type == "TOTAL" })[0]
-                return trackOrder
+                order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
+                return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }

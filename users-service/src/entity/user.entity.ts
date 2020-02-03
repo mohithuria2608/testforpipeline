@@ -15,6 +15,12 @@ export class UserEntity extends BaseEntity {
             bin: 'username',
             index: 'idx_' + this.set + '_' + 'username',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'fullPhnNo',
+            index: 'idx_' + this.set + '_' + 'fullPhnNo',
+            type: "STRING"
         }
     ]
 
@@ -28,7 +34,7 @@ export class UserEntity extends BaseEntity {
         brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         email: Joi.string().email().lowercase().trim().required(),
-        fullPhnNo: Joi.string().trim().required(),
+        fullPhnNo: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
         sdmUserRef: Joi.number().required(),
