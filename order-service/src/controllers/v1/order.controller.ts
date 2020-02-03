@@ -60,8 +60,8 @@ export class OrderController {
                 items: payload.items
             }
             let cartData: ICartRequest.ICartData = await cartController.validateCart(headers, postCartPayload, auth)
-            if (cartData['isPriceChanged'] || cartData['invalidMenu'])
-                return { cartValidate: cartData }
+            // if (cartData['isPriceChanged'] || cartData['invalidMenu'])
+            //     return { cartValidate: cartData }
 
             let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: "delivery" })
             if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
@@ -128,7 +128,6 @@ export class OrderController {
                     noonpayRedirectionUrl: initiatePaymentObj.noonpayRedirectionUrl,
                     orderInfo: order
                 }
-
             }
         } catch (error) {
             consolelog(process.cwd(), "postOrder", error, false)

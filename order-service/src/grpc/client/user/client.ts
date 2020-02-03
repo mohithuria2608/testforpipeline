@@ -40,6 +40,8 @@ export class UserService {
 
     async fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
         return new Promise(async (resolve, reject) => {
+            consolelog(process.cwd(), "fetchAddress", payload, false)
+
             await userServiceValidator.fetchAddressValidator(payload)
             this.userClient.fetchAddress({ userId: payload.userId, addressId: payload.addressId, bin: payload.bin }, (error, res) => {
                 if (!error) {

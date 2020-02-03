@@ -16,10 +16,10 @@ export class WebhookNoonpayController {
      * */
     async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
-            let getOrder = await ENTITY.OrderE.getOneEntityMdb({
+            let order = await ENTITY.OrderE.getOneEntityMdb({
                 "transLogs.noonpayOrderId": payload.orderId
             }, { transLogs: 1 }, { lean: true })
-            if (getOrder && getOrder._id) {
+            if (order && order._id) {
                 /**
                  * @description step 1 get noonpay order status
                  */
@@ -34,13 +34,13 @@ export class WebhookNoonpayController {
                     },
                     paymentStatus: status.paymentStatus
                 }
-                await ENTITY.OrderE.updateOneEntityMdb({ _id: getOrder._id }, dataToUpdateOrder)
+                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                 if (status.paymentStatus == "AUTHORIZED") {
                     /**
                      * @description update order on sdm with payment object
                      */
                 }
-                return {}
+                return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
