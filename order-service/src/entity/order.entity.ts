@@ -207,7 +207,12 @@ export class OrderClass extends BaseEntity {
                 },
                 { $sort: { isPreviousOrder: 1 } },
                 { $skip: skip },
-                { $limit: limit }
+                { $limit: limit },
+                {
+                    $project: {
+                        transLogs: 0,
+                    }
+                }
             ]
             let getOrderHistory: IOrderRequest.IOrderData[] = await this.aggregateMdb(pipeline, { lean: true })
             nextPage = (getOrderHistory.length == limit) ? (payload.page + 1) : -1
