@@ -2,55 +2,55 @@
     "env": "testing",
     "server": {
         "auth": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/auth-service/",
             "port": 4000
         },
         "user": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/user-service/",
             "port": 4001
         },
         "menu": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/menu-service/",
             "port": 4002
         },
         "order": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/order-service/",
             "port": 4003
         },
         "sync": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/sync-service/",
             "port": 4004
         },
         "deeplink": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/deeplink-service/",
             "port": 4005
         },
         "kafka": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/kafka-service/",
             "port": 4006
         },
         "location": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/location-service/",
             "port": 4007
         },
         "notification": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/notification-service/",
             "port": 4008
         },
         "payment": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/payment-service/",
             "port": 4009
         },
         "upload": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/upload-service/",
             "port": 4010
         },
         "promotion": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/promotion-service/",
             "port": 4011
         },
         "log": {
-            "url": "http://localhost",
+            "url": "https://americanaqa.appskeeper.com/log-service/",
             "port": 4012
         }
     },
