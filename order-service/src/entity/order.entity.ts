@@ -5,6 +5,7 @@ import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
 import { kafkaService, paymentService } from '../grpc/client';
+import { add } from 'winston';
 
 
 export class OrderClass extends BaseEntity {
@@ -50,6 +51,55 @@ export class OrderClass extends BaseEntity {
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method INTERNAL
+    * */
+    async createOrder(cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore) {
+        try {
+            let orderData = {
+                cartId: cartData.cartId,
+                cmsCartRef: cartData.cmsCartRef,
+                sdmOrderRef: 0,
+                cmsOrderRef: 0,
+                userId: cartData.userId,
+                orderId: cartData.orderId,
+                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
+                items: cartData.items,
+                amount: cartData.amount,
+                address: {
+                    addressId: address.id,
+                    sdmStoreRef: address.sdmStoreRef,
+                    sdmAddressRef: address.sdmAddressRef,
+                    cmsAddressRef: address.cmsAddressRef,
+                    tag: address.tag,
+                    bldgName: address.bldgName,
+                    description: address.description,
+                    flatNum: address.flatNum,
+                    addressType: address.addressType,
+                    lat: address.lat,
+                    lng: address.lng
+                },
+                store: {
+                    sdmStoreRef: store.storeId,
+                    areaId: store.areaId,
+                    location: store.location,
+                    address_en: store.address_en,
+                    address_ar: store.address_ar,
+                    name_en: store.name_en,
+                    name_ar: store.name_ar
+                },
+                transLogs: [],
+                createdAt: new Date().getTime(),
+                updatedAt: 0
+            }
+            let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
+            return order
+        } catch (error) {
+            consolelog(process.cwd(), "createOrder", error, false)
             return Promise.reject(error)
         }
     }

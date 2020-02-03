@@ -13,7 +13,6 @@ export interface Iorder extends Document {
     amount: any,
     address: any,
     store: any,
-    couponApplied: number,
     transLogs: any,
     createdAt: number,
     updatedAt: number
@@ -31,7 +30,6 @@ const orderSchema = new Schema({
     amount: { type: Schema.Types.Mixed, required: true },
     address: { type: Schema.Types.Mixed, required: true },
     store: { type: Schema.Types.Mixed, required: true },
-    couponApplied: { type: Number, enum: [1, 0], required: true },
     transLogs: { type: Schema.Types.Mixed, required: true },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true }
