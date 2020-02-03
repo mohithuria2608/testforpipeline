@@ -52,6 +52,8 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            if (userData || !userData.id || userData.id != "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: userData.id, addressId: payload.addressId, bin: "delivery" })
             if (!getAddress.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
@@ -243,7 +245,9 @@ export class OrderController {
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let trackOrderOfUser = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+            let userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+            if (userData || !userData.id || userData.id != "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             let trackOrder: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ $or: [{ _id: payload.orderId }, { orderId: payload.orderId }] },
                 {
                     orderId: 1,
@@ -256,7 +260,7 @@ export class OrderController {
                     amount: 1,
                 })
             if (trackOrder && trackOrder._id) {
-                if (trackOrderOfUser.id != trackOrder.userId)
+                if (userData.id != trackOrder.userId)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 trackOrder.amount.filter(obj => { return obj.type == "TOTAL" })[0]
                 return trackOrder
