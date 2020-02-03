@@ -5,7 +5,7 @@ import { consolelog } from "../../utils"
 class FailConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.FAIL_Q, 'client');
+        super(Constant.KAFKA_TOPIC.FAIL_Q, Constant.KAFKA_TOPIC.FAIL_Q);
     }
 
     handleMessage() {

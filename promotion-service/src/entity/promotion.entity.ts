@@ -120,7 +120,7 @@ export class PromotionClass extends BaseEntity {
                 if (promo && promo.length > 0) {
                     return promo
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.PROMO_NOT_FOUND)
+                    return []
             } else {
                 let getArg: IAerospike.Scan = {
                     set: this.set

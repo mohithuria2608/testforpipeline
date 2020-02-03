@@ -20,7 +20,7 @@ export class UserService {
     private userClient = new this.loadUser(config.get("grpc.user.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
+        console.log(process.cwd(), 'GRPC connection established user-service', config.get("grpc.user.client"), true)
     }
 
     async fetchUser(payload: IUserRequest.IFetchUser): Promise<IUserRequest.IUserData> {
@@ -50,6 +50,25 @@ export class UserService {
                     reject(sendError(error))
                 }
             })
+        })
+    }
+
+    async sync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await userServiceValidator.syncValidator(payload)
+                this.userClient.sync(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully synced user on cms", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in syncing user on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
         })
     }
 }

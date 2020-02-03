@@ -2,7 +2,7 @@ import * as config from "config"
 const kafka = require('kafka-node');
 import { consolelog } from "../utils"
 
-class KafkaClientClass {
+export class KafkaClientClass {
 
     private kafkaClient
 
@@ -18,5 +18,3 @@ class KafkaClientClass {
         return this.kafkaClient;
     }
 }
-
-export const kafkaClient = new KafkaClientClass();

@@ -159,10 +159,11 @@ export const KAFKA = {
 
 export const SERVER = {
     ENV: {
-        development: 0,
-        testing: 1,
-        staging: 2,
-        production: 3
+        default: 0,
+        development: 1,
+        testing: 2,
+        staging: 3,
+        production: 4
     },
     APP_INFO: {
         APP_NAME: "App",
@@ -234,7 +235,8 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST",
-            ERROR: "ERROR"
+            ERROR: "ERROR",
+            INFO: "INFO",
         },
 
         PROFILE_STEP: {
@@ -568,31 +570,31 @@ export const STATUS_MSG = {
                 message: 'Invalid order',
                 type: 'INVALID_ORDER'
             },
-            INVALID_USERNAME:{
+            INVALID_USERNAME: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid user name',
                 type: 'INVALID_USERNAME'
             },
-            INVALID_PASSWORD:{
+            INVALID_PASSWORD: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid password',
                 type: 'INVALID_PASSWORD'
             },
-            INVALID_LANGUAGE:{
+            INVALID_LANGUAGE: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid language',
                 type: 'INVALID_LANGUAGE'
             },
-            INVALID_BRAND:{
+            INVALID_BRAND: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid brand',
                 type: 'INVALID_BRAND'
             },
-            INVALID_COUNTRY:{
+            INVALID_COUNTRY: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid country',

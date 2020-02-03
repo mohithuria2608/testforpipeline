@@ -1,5 +1,5 @@
 {
-    "environment": "development",
+    "env": "development",
     "server": {
         "auth": {
             "url": "http://localhost",
@@ -163,7 +163,7 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.123.207.192/"
+        "product": "http://40.123.207.192/media/catalog/product/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
