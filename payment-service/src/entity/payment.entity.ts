@@ -334,7 +334,7 @@ export class PaymentClass extends BaseEntity {
                 // COD available
                 availablePaymentMethods.offline.push({
                     id: 0,
-                    title: config.codInfo.title,
+                    name: config.codInfo.title,
                     min_order_total: config.codInfo.min_order_total,
                     max_order_total: config.codInfo.max_order_total,
                     code: config.codInfo.code
