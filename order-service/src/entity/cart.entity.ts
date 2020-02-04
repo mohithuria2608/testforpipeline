@@ -253,7 +253,7 @@ export class CartClass extends BaseEntity {
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
                 userId: payload.userId,
-                orderId: "UAE-1",
+                orderId: this.ObjectId().toString(),
                 status: Constant.DATABASE.STATUS.ORDER.CART.AS,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
