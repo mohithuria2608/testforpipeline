@@ -377,7 +377,7 @@ export class CartClass extends BaseEntity {
                         super_attribute: super_attribute
                     })
                 }
-                else if (sitem['originalTypeId'] == 'bundle' || sitem['originalTypeId'] == 'bundle_group') {
+                else if (sitem['originalTypeId'] == 'bundle') {
                     let bundle_option = {};
                     let selection_configurable_option = {};
                     sitem['bundleProductOptions'].forEach(bpo => {
@@ -396,6 +396,50 @@ export class CartClass extends BaseEntity {
                                     console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
                                     if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
                                         sitem['bundleProductOptions'].forEach(bpo2 => {
+                                            if (bpo2['position'] == pl['dependentSteps'][0]) {
+                                                if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
+                                                    bpo2['productLinks'].forEach(pl2 => {
+                                                        if (pl2['selected'] == 1)
+                                                            selection_configurable_option[pl['selection_id']] = pl2['id']
+                                                        else
+                                                            selection_configurable_option[pl['selection_id']] = ""
+                                                    })
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                    cart.push({
+                        product_id: sitem.id,
+                        qty: sitem.qty,
+                        price: sitem.finalPrice,
+                        type_id: sitem['typeId'],
+                        bundle_option: bundle_option,
+                        selection_configurable_option: selection_configurable_option,
+                    })
+                }
+                else if (sitem['originalTypeId'] == 'bundle_group') {
+                    let bundle_option = {};
+                    let selection_configurable_option = {};
+                    sitem['items'].forEach(bpo => {
+                        if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                            bpo['productLinks'].forEach(pl => {
+                                if (pl['selected'] == 1) {
+                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                        if (bundle_option[pl['option_id']] == null)
+                                            bundle_option[pl['option_id']] = {}
+                                        bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                    } else {
+                                        bundle_option[pl['option_id']] = pl['selection_id']
+                                    }
+                                }
+                                if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
+                                    console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
+                                    if (sitem['items'] && sitem['items'].length > 0) {
+                                        sitem['items'].forEach(bpo2 => {
                                             if (bpo2['position'] == pl['dependentSteps'][0]) {
                                                 if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
                                                     bpo2['productLinks'].forEach(pl2 => {
