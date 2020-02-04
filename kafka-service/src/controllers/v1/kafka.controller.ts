@@ -164,6 +164,20 @@ export class KafkaController {
                     }
                     break;
                 }
+                case Constant.SET_NAME.LOCATION: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as && payload.as.create) {
+                        messages = { ...payload }
+                        delete messages.mdb
+                        delete messages.sdm
+                        delete messages.cms
+                        topic = Constant.KAFKA_TOPIC.AS_LOCATION;
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
             }
             return { data: '' };
         } catch (error) {

@@ -110,6 +110,9 @@ class AerospikeClass {
         if (argv.update) {
             policy['exists'] = aerospike.policy.exists.UPDATE
         }
+        if(argv.createOrReplace) {
+            policy['exists'] = aerospike.policy.exists.CREATE_OR_REPLACE
+        }
         return policy
     }
 

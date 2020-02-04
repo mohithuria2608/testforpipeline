@@ -74,6 +74,23 @@ export class StoreController {
             return Promise.reject(error)
         }
     }
+
+    /**
+     * @method GRPC
+     * syncs stores from CMS to Aerospike
+     */
+    async syncStores(payload): Promise<any> {
+        try {
+            let storesList = JSON.parse(payload.as.argv);
+            for (let store of storesList.data) {
+                await ENTITY.StoreE.postStores(store);
+            }
+            return {};
+        } catch (error) {
+            consolelog(process.cwd(), "syncStores", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const storeController = new StoreController();

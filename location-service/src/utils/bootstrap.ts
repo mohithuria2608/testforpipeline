@@ -6,6 +6,6 @@ export let bootstrap = async function (server) {
     countryController.bootstrapCountry()
     cityController.bootstrapCity()
     areaController.bootstrapArea()
-    storeController.bootstrapStore()
+    // storeController.bootstrapStore()
     return {}
 }

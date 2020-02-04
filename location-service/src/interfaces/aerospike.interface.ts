@@ -88,6 +88,7 @@ declare namespace IAerospike {
         ttl?: number,
         create?: boolean,
         replace?: boolean,
+        createOrReplace?: boolean,
         update?: boolean
     }
 

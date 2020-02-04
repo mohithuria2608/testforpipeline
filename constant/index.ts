@@ -7,7 +7,8 @@ export enum SET_NAME {
     PROMOTION = "promotion",
     ORDER = "order",
     CONFIG = "config",
-    LOGGER = "logger"
+    LOGGER = "logger",
+    LOCATION = "location"
 };
 
 export const UDF = {
@@ -31,6 +32,7 @@ export enum KAFKA_TOPIC {
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
     AS_UPSELL = "as_upsell",
+    AS_LOCATION = "as_location",
 
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
@@ -568,31 +570,31 @@ export const STATUS_MSG = {
                 message: 'Invalid order',
                 type: 'INVALID_ORDER'
             },
-            INVALID_USERNAME:{
+            INVALID_USERNAME: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid user name',
                 type: 'INVALID_USERNAME'
             },
-            INVALID_PASSWORD:{
+            INVALID_PASSWORD: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid password',
                 type: 'INVALID_PASSWORD'
             },
-            INVALID_LANGUAGE:{
+            INVALID_LANGUAGE: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid language',
                 type: 'INVALID_LANGUAGE'
             },
-            INVALID_BRAND:{
+            INVALID_BRAND: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid brand',
                 type: 'INVALID_BRAND'
             },
-            INVALID_COUNTRY:{
+            INVALID_COUNTRY: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid country',

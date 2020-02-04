@@ -83,6 +83,19 @@ export class StoreEntity extends BaseEntity {
             return {}
         }
     }
+
+    /** posts the stores in aerospike database */
+    async postStores(data) {
+        console.log("DATAAAAA--->", data);
+        let putArg: IAerospike.Put = {
+            bins: data,
+            set: this.set,
+            key: data.id,
+            createOrReplace: true,
+        }
+        await Aerospike.put(putArg);
+        return {};
+    }
 }
 
 export const StoreE = new StoreEntity()
