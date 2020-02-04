@@ -1,4 +1,3 @@
-import * as config from 'config'
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
@@ -26,9 +25,9 @@ export default (router: Router) => {
                     let payload: IWebhookNoonpayRequest.IOrderProcessPayment = ctx.request.query;
                     let res = await webhookNoonpayController.processPayment(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    console.log(process.cwd(), "processPayment", sendResponse, false)
 
-                    let redirectUrl = config.get("server.order.url") + sendResponse
-                    ctx.redirect(redirectUrl)
+                    ctx.redirect(sendResponse)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse
                 }

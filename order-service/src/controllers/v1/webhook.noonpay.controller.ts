@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { paymentService } from '../../grpc/client'
@@ -16,6 +17,7 @@ export class WebhookNoonpayController {
      * */
     async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
+            let redirectUrl = config.get("server.order.url")
             let order = await ENTITY.OrderE.getOneEntityMdb({
                 "transLogs.noonpayOrderId": payload.orderId
             }, { transLogs: 1 }, { lean: true })
@@ -39,10 +41,11 @@ export class WebhookNoonpayController {
                     /**
                      * @description update order on sdm with payment object
                      */
-                    return "order/redirect/success"
+                    redirectUrl = redirectUrl + "order/redirect/success"
                 } else {
-                    return "order/redirect/failure"
+                    redirectUrl = redirectUrl + "order/redirect/failure"
                 }
+                return redirectUrl
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }

@@ -52,6 +52,7 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let noonpayRedirectionUrl = ""
             let postCartPayload: ICartRequest.IValidateCart = {
                 cartId: payload.cartId,
                 curMenuId: payload.curMenuId,
@@ -62,6 +63,8 @@ export class OrderController {
             let cartData: ICartRequest.ICartData = await cartController.validateCart(headers, postCartPayload, auth)
             // if (cartData['isPriceChanged'] || cartData['invalidMenu'])
             //     return { cartValidate: cartData }
+
+            consolelog(process.cwd(), "cartData", JSON.stringify(cartData), false)
 
             let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: "delivery" })
             if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
@@ -88,19 +91,33 @@ export class OrderController {
                 }
             })
             console.log("amount", typeof amount, amount)
-            let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                orderId: order._id.toString(),
-                amount: 100,// amount.amount,
-                storeCode: "kfc_uae_store",
-                paymentMethodId: 1,
-                channel: "Mobile",
-                locale: "en",
-            })
-            await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
-                $addToSet: {
-                    transLogs: initiatePaymentObj
-                }
-            })
+            if (payload.paymentMethodId != 0) {
+                let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
+                    orderId: order._id.toString(),
+                    amount: amount.amount,
+                    storeCode: "kfc_uae_store",
+                    paymentMethodId: 1,
+                    channel: "Mobile",
+                    locale: "en",
+                })
+                noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl,
+                    await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                        $addToSet: {
+                            transLogs: initiatePaymentObj
+                        },
+                        payment: {
+                            paymentMethodId: payload.paymentMethodId,
+                            amount: amount.amount,
+                        }
+                    })
+            } else {
+                await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                    payment: {
+                        paymentMethodId: payload.paymentMethodId,
+                        amount: amount.amount,
+                    }
+                })
+            }
             /**
              * @description : update user with new cart
              */
@@ -125,7 +142,7 @@ export class OrderController {
             return {
                 orderPlaced: {
                     newCartId: newCartId,
-                    noonpayRedirectionUrl: initiatePaymentObj.noonpayRedirectionUrl,
+                    noonpayRedirectionUrl: noonpayRedirectionUrl,
                     orderInfo: order
                 }
             }

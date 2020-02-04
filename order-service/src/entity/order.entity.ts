@@ -92,6 +92,7 @@ export class OrderClass extends BaseEntity {
                     name_en: store.name_en,
                     name_ar: store.name_ar
                 },
+                payment: {},
                 transLogs: [],
                 createdAt: new Date().getTime(),
                 updatedAt: 0

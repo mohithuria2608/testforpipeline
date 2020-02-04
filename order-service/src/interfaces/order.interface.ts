@@ -52,6 +52,7 @@ declare namespace IOrderRequest {
 
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination, ICartRequest.IValidateCart {
         addressId: string,
+        paymentMethodId: number
     }
 
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {

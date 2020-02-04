@@ -30,6 +30,7 @@ const orderSchema = new Schema({
     amount: { type: Schema.Types.Mixed, required: true },
     address: { type: Schema.Types.Mixed, required: true },
     store: { type: Schema.Types.Mixed, required: true },
+    payment: { type: Schema.Types.Mixed, required: true },
     transLogs: { type: Schema.Types.Mixed, required: true },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true }
