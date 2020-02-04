@@ -485,6 +485,13 @@ export const STATUS_MSG = {
                 type: 'MENU_NOT_FOUND'
             },
 
+            HOME_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Home not found',
+                type: 'HOME_NOT_FOUND'
+            },
+
             SERVICE_UNAVAILABLE: {
                 statusCode: 409,
                 httpCode: 409,

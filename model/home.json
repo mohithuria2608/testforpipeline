@@ -1,6 +1,7 @@
 [
     {
         "id": 1,
+        "language": "En",
         "sequence": 1,
         "widgetType": "top_banner",
         "status": 1,
@@ -48,6 +49,7 @@
     },
     {
         "id": 2,
+        "language": "En",
         "sequence": 2,
         "widgetType": "menu",
         "title": "Explore Menu",
@@ -113,6 +115,7 @@
     },
     {
         "id": 3,
+        "language": "En",
         "sequence": 3,
         "widgetType": "products_list1",
         "title": "Best Sellers",
@@ -168,6 +171,7 @@
     },
     {
         "id": 4,
+        "language": "En",
         "sequence": 4,
         "widgetType": "banner_100",
         "status": 1,
@@ -179,6 +183,7 @@
     },
     {
         "id": 5,
+        "language": "En",
         "sequence": 5,
         "widgetType": "products_list2",
         "title": "What's New",
@@ -234,6 +239,7 @@
     },
     {
         "id": 6,
+        "language": "En",
         "sequence": 6,
         "widgetType": "banner_100_logo",
         "mediaUrl": "logo.png",
@@ -247,6 +253,7 @@
     },
     {
         "id": 7,
+        "language": "En",
         "sequence": 7,
         "widgetType": "banner_logo_tagline",
         "content": "KFC | KENTUCKY FRIED WINGS | LOST IN THE SAUCE",
@@ -259,6 +266,7 @@
     },
     {
         "id": 8,
+        "language": "En",
         "sequence": 8,
         "widgetType": "bottom_video_100",
         "mediaUrl": "http://www.youtube.com",

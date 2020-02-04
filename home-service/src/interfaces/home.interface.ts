@@ -49,4 +49,8 @@ declare namespace IHomeRequest {
         type?: string,
         delimeters?: string
     }
+
+    interface IFetchHome{
+        language: string
+    }
 }
