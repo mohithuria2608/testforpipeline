@@ -29,6 +29,7 @@ export default (router: Router) => {
                      * @description : ignore
                      */
                     addressId: Joi.any(),
+                    orderType: Joi.any(),
                     paymentMethodId: Joi.any(),
                 }
             }),

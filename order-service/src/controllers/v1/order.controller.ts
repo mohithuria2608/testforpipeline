@@ -103,18 +103,18 @@ export class OrderController {
                     channel: "Mobile",
                     locale: "en",
                 })
-                noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl,
-                    await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
-                        $addToSet: {
-                            transLogs: initiatePaymentObj
-                        },
-                        payment: {
-                            paymentMethodId: payload.paymentMethodId,
-                            amount: amount.amount,
-                        }
-                    })
+                noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
+                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                    $addToSet: {
+                        transLogs: initiatePaymentObj
+                    },
+                    payment: {
+                        paymentMethodId: payload.paymentMethodId,
+                        amount: amount.amount,
+                    }
+                })
             } else {
-                await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: amount.amount,
