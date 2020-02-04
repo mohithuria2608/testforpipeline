@@ -300,12 +300,32 @@ export const DATABASE = {
             PENDING: {
                 MONGO: "PENDING",
                 CMS: "",
-                SDM: ""
+                SDM: "OPEN + SUSPENDED"
             },
-            IN_KITCHEN: {
-                MONGO: "",
+            PLACED: {
+                MONGO: "PLACED",
+                CMS: "",
+                SDM: "OPEN"
+            },
+            CONFIRMED: {
+                MONGO: "CONFIRMED",
                 CMS: "",
                 SDM: "IN_KITCHEN"
+            },
+            BEING_PREPARED: {
+                MONGO: "BEING_PREPARED",
+                CMS: "",
+                SDM: "IN_KITCHEN"
+            },
+            READY: {
+                MONGO: "READY",
+                CMS: "",
+                SDM: "READY"
+            },
+            ON_THE_WAY: {
+                MONGO: "ON_THE_WAY",
+                CMS: "",
+                SDM: "ASSIGNED / ENROUTE"
             },
             CLOSED: {
                 MONGO: "",

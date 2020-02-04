@@ -5,7 +5,7 @@ import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
 import { kafkaService, paymentService } from '../grpc/client';
-import { add } from 'winston';
+import { SDM } from '../sdm';
 
 
 export class OrderClass extends BaseEntity {
@@ -45,8 +45,12 @@ export class OrderClass extends BaseEntity {
     /**
     * @method GRPC
     * */
-    async createSdmOrder(payload: IOrderRequest.ICreateSdmOrder) {
+    async createSdmOrder(payload: ICartRequest.ICartData) {
         try {
+            /**
+             * @step 1 :create order on sdm 
+             * @step 2 :update mongo order using payload.cartId sdmOrderRef
+             */
 
             return {}
         } catch (error) {
@@ -108,56 +112,75 @@ export class OrderClass extends BaseEntity {
     /**
     * @method GRPC
     * @param {string} orderId : order id
-    * @param {string} status : order status
+    * @param {string} status : mongo order status
     * @param {string} sdmOrderRef : sdm order id
     * @param {string} timeInterval : set timeout interval
     * */
     async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
         try {
             setTimeout(async () => {
-                let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                    status: payload.status,
-                    updatedAt: new Date().getTime()
-                }, { new: true })
-                let amount = order.amount.reduce((init, elem) => {
-                    if (elem.type == "TOTAL")
-                        return init + elem.amount
-                }, 0)
-                if (order && order.sdmOrderRef) {
-                    if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
-                        payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
-                        payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
+                let order = await this.getOneEntityMdb({ cartId: payload.cartId }, { items: 0 })
+                if (order && order._id) {
+                    if (order.sdmOrderRef && order.sdmOrderRef != 0) {
+                        let sdmOrder = await SDM.OrderSDME.getOrderDetail({})
+                        /**
+                         * @step 1 : update mongo order status wrt to sdmOrder status
+                         */
+                        if (sdmOrder && sdmOrder.id) {
+                            order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                                status: sdmOrder.status,
+                                updatedAt: new Date().getTime()
+                            }, { new: true })
+                            if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
+                                payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
+                                payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
 
-                    } else {
-                        if (payload.status == Constant.DATABASE.STATUS.ORDER.IN_KITCHEN.SDM) {
-                            /**
-                             * @description step 1 create transaction log on CMS for initiating capture
-                             * @description step 2 capture payment on noonpay
-                             * @description step 3 create transaction log on CMS for capture
-                             */
-                            this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                                $addToSet: {
-                                    transLogs: {
+                            } else {
+                                if (order.status == Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO && payload.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.SDM) {
+                                    let amount = order.amount.reduce((init, elem) => {
+                                        if (elem.type == "TOTAL")
+                                            return init + elem.amount
+                                    }, 0)
+                                    /**
+                                     * @description step 1 create transaction log on CMS for initiating capture
+                                     * @description step 2 capture payment on noonpay
+                                     * @description step 3 create transaction log on CMS for capture
+                                     */
+                                    this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                                        status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                        $addToSet: {
+                                            transLogs: {
+                                                noonpayOrderId: order.transLogs[0].noonpayOrderId,
+                                                orderId: order.transLogs[0].orderId,
+                                                amount: amount,
+                                                storeCode: "kfc_uae_store",
+                                                createdAt: new Date().getTime()
+                                            }
+                                        }
+                                    })
+                                    let paymentCapturedObj = await paymentService.capturePayment({
                                         noonpayOrderId: order.transLogs[0].noonpayOrderId,
                                         orderId: order.transLogs[0].orderId,
                                         amount: amount,
-                                        storeCode: "kfc_uae_store",
-                                        createdAt: new Date().getTime()
+                                        storeCode: "kfc_uae_store"
+                                    })
+                                    this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                                        $addToSet: {
+                                            transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
+                                        }
+                                    })
+                                }
+                                let orderChange = {
+                                    set: this.set,
+                                    sdm: {
+                                        get: true,
+                                        argv: JSON.stringify(payload)
                                     }
                                 }
-                            })
-                            let paymentCapturedObj = await paymentService.capturePayment({
-                                noonpayOrderId: order.transLogs[0].noonpayOrderId,
-                                orderId: order.transLogs[0].orderId,
-                                amount: amount,
-                                storeCode: "kfc_uae_store"
-                            })
-                            this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                                $addToSet: {
-                                    transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
-                                }
-                            })
+                                kafkaService.kafkaSync(orderChange)
+                            }
                         }
+                    } else {
                         let orderChange = {
                             set: this.set,
                             sdm: {
@@ -167,15 +190,6 @@ export class OrderClass extends BaseEntity {
                         }
                         kafkaService.kafkaSync(orderChange)
                     }
-                } else {
-                    let orderChange = {
-                        set: this.set,
-                        sdm: {
-                            get: true,
-                            argv: JSON.stringify(payload)
-                        }
-                    }
-                    kafkaService.kafkaSync(orderChange)
                 }
             }, payload.timeInterval)
 

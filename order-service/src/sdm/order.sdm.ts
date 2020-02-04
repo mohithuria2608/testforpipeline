@@ -16,10 +16,23 @@ export class OrderSDMEntity extends BaseSDM {
     * */
     async createOrder(payload: IOrderSdmRequest.ICreateOrder) {
         try {
-            
+
             return {}
         } catch (error) {
             consolelog(process.cwd(), 'createOrder', error, false)
+            return (error)
+        }
+    }
+
+    /**
+    * @method SDK
+    * */
+    async getOrderDetail(payload: IOrderSdmRequest.IOrderDetail) {
+        try {
+
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), 'getOrderDetail', error, false)
             return (error)
         }
     }
