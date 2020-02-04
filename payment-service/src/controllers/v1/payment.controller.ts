@@ -17,18 +17,18 @@ export class PaymentController {
             return [
                 {
                     "id": 1,
-                    "name": "Card"
+                    "name": "Card",
+                    "image": "",
                 },
                 {
                     "id": 2,
-                    "name": "Visa Checkout"
+                    "name": "Visa Checkout",
+                    "image": "",
                 },
                 {
                     "id": 0,
                     "name": "Cash On Delivery",
-                    "min_order_total": null,
-                    "max_order_total": null,
-                    "code": "cashondelivery"
+                    "image": "",
                 }
             ]
             // await ENTITY.PaymentE.getPaymentMethods(storeCode);
