@@ -36,21 +36,22 @@ export default (router: Router) => {
             })
         .get('/methods',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
-                // query: {
-                //     // storeCode: Joi.string().trim().required()
-                // }
+                query: {
+                    cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
+                    // storeCode: Joi.string().trim().required()
+                }
             }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    // let payload: IPaymentGrpcRequest.IGetPaymentMethods = ctx.request.query;
+                    let payload: IPaymentGrpcRequest.IGetPaymentMethods = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await paymentController.getPaymentMethods(headers, auth);
+                    let res = await paymentController.getPaymentMethods(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

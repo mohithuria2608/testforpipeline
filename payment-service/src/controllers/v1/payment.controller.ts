@@ -11,7 +11,7 @@ export class PaymentController {
      * @method GET
      * @param {string} storeCode :cms store code
      */
-    public async getPaymentMethods(headers: ICommonRequest.IHeaders, auth: ICommonRequest.AuthorizationObj) {
+    public async getPaymentMethods(headers: ICommonRequest.IHeaders, payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
         try {
             let storeCode = "kfc_uae_store"
             return [
@@ -19,19 +19,22 @@ export class PaymentController {
                     "id": 1,
                     "name": "Card",
                     "image": "",
+                    default: 0
                 },
                 {
                     "id": 2,
                     "name": "Visa Checkout",
                     "image": "",
+                    default: 0
                 },
                 {
                     "id": 0,
                     "name": "Cash On Delivery",
                     "image": "",
+                    default: 1
                 }
             ]
-            // await ENTITY.PaymentE.getPaymentMethods(storeCode);
+            await ENTITY.PaymentE.getPaymentMethods(storeCode);
         } catch (error) {
             consolelog(process.cwd(), "getPaymentMethods", error, false)
             return Promise.reject(error)

@@ -58,6 +58,9 @@ declare namespace IOrderRequest {
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
     }
 
+    interface IOrderDetail {
+        orderId: string,
+    }
     interface ITrackOrder {
         cCode: string,
         phnNo: string,

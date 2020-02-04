@@ -167,6 +167,24 @@ export class OrderController {
 
     /**
      * @method GET
+     * @param {number} orderId
+     * */
+    async orderDetail(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderDetail, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            if (order && order._id) {
+                return order
+            } else {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "orderDetail", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GET
      * @param {string} cCode
      * @param {string} phnNo
      * @param {number} orderId

@@ -66,6 +66,31 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/detail',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
+                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IOrderRequest.IOrderDetail = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await orderController.orderDetail(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
         .get('/track',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
