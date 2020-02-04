@@ -107,7 +107,7 @@ export class AddressEntity extends BaseEntity {
                 cmsAddressRef: 0,
                 sdmStoreRef: store.storeId
             };
-            if (bin == "delivery") {
+            if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,
                     bins: deliveryAddress,
@@ -122,7 +122,7 @@ export class AddressEntity extends BaseEntity {
                 let dataToUpdate = {
                     pickup: [deliveryAddress]
                 }
-                let oldAdd: IAddressRequest.IAddressModel[] = await this.getAddress({ userId: userData.id, bin: "pickup" })
+                let oldAdd: IAddressRequest.IAddressModel[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
                 if (oldAdd && oldAdd.length > 0) {
                     if (deliveryAddress.sdmStoreRef == store.storeId) {
                         return oldAdd[0]

@@ -23,7 +23,7 @@ export class AddressController {
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId)
                 if (store && store.length) {
-                    type = "pickup"
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude
                     payload['lng'] = store[0].location.longitude
                     payload['bldgName'] = ""
@@ -35,7 +35,7 @@ export class AddressController {
             } else if (payload.lat && payload.lng) {
                 store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.length) {
-                    type = "delivery"
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             } else
@@ -67,7 +67,7 @@ export class AddressController {
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             }
-            return await ENTITY.AddressE.updateAddress(payload, "delivery", userData, false)
+            return await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
         } catch (error) {
             consolelog(process.cwd(), "updateAddressById", error, false)
             return Promise.reject(error)
@@ -81,7 +81,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let address: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: "delivery" })
+            let address: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
             return address
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", error, false)
@@ -96,7 +96,7 @@ export class AddressController {
     async deleteAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IDeleteAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId }, "delivery", userData, true)
+            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId }, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, true)
         } catch (error) {
             consolelog(process.cwd(), "deleteAddressById", error, false)
             return Promise.reject(error)

@@ -256,6 +256,16 @@ export const DATABASE = {
             DELIVERY: "DELIVERY"
         },
 
+        ADDRESS_BIN: {
+            PICKUP: "pickup",
+            DELIVERY: "delivery"
+        },
+
+        ORDER: {
+            PICKUP: "PICKUP",
+            DELIVERY: "DELIVERY"
+        },
+
         DEEPLINK_REDIRECTION: {
             HOME: "HOME",
             CATEGORY: "CATEGORY",

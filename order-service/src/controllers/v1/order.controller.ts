@@ -66,7 +66,10 @@ export class OrderController {
 
             consolelog(process.cwd(), "cartData", JSON.stringify(cartData), false)
 
-            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: "delivery" })
+            let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
             if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
