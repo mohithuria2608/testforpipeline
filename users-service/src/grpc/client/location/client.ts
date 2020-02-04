@@ -20,7 +20,26 @@ export class LocationService {
     private locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(),'GRPC connection established location-service', config.get("grpc.location.client"), true)
+        console.log(process.cwd(), 'GRPC connection established location-service', config.get("grpc.location.client"), true)
+    }
+
+    async fetchStore(payload: IStoreGrpcRequest.IFetchStore): Promise<IStoreGrpcRequest.IStore> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await locationServiceValidator.fetchStoreValidator(payload)
+                this.locationClient.fetchStore({ storeId: payload.storeId }, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully fetched store", JSON.stringify(res), false)
+                        resolve(res.store)
+                    } else {
+                        consolelog(process.cwd(), "Error in fetched store", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
 
     async validateCoordinate(payload: IStoreGrpcRequest.IValidateCoordinateData): Promise<IStoreGrpcRequest.IStore[]> {
@@ -29,10 +48,10 @@ export class LocationService {
                 await locationServiceValidator.validateCoordinateValidator(payload)
                 this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (error, res) => {
                     if (!error) {
-                        consolelog(process.cwd(),"successfully verified coordinates", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully verified coordinates", JSON.stringify(res), false)
                         resolve(res.store)
                     } else {
-                        consolelog(process.cwd(),"Error in verifying coordinates", JSON.stringify(error), false)
+                        consolelog(process.cwd(), "Error in verifying coordinates", JSON.stringify(error), false)
                         reject(error)
                     }
                 })

@@ -18,12 +18,30 @@ export class AddressController {
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let store: IStoreGrpcRequest.IStore[] = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-            if (store && store.length) {
-                return await ENTITY.AddressE.addAddress(userData, "delivery", payload, store[0])
+            let type = ""
+            let store: IStoreGrpcRequest.IStore[]
+            if (payload.storeId) {
+                store = await ENTITY.UserE.fetchStore(payload.storeId)
+                if (store && store.length) {
+                    type = "pickup"
+                    payload['lat'] = store[0].location.latitude
+                    payload['lng'] = store[0].location.longitude
+                    payload['bldgName'] = ""
+                    payload['description'] = ""
+                    payload['flatNum'] = ""
+                    payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+            } else if (payload.lat && payload.lng) {
+                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.length) {
+                    type = "delivery"
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
+            return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
         } catch (error) {
             consolelog(process.cwd(), "registerAddress", error, false)
             return Promise.reject(error)
