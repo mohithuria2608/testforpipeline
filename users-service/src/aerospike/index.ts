@@ -51,6 +51,7 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
+                        maxConnsPerNode: 1000
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
