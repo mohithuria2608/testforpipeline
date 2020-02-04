@@ -605,19 +605,20 @@ export class CartClass extends BaseEntity {
                     action: "add"
                 })
             }
-            amount.push({
+            let delivery = {
                 type: "SHIPPING",
                 name: "Delivery",
                 code: "DELIVERY",
                 amount: 6,
                 sequence: 4,
                 action: "add"
-            })
+            }
+            amount.push(delivery)
             amount.push({
                 type: "TOTAL",
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal,
+                amount: cmsCart.grandtotal + delivery.amount,
                 sequence: 5,
                 action: "add"
             })
