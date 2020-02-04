@@ -39,8 +39,10 @@ export class WebhookNoonpayController {
                     /**
                      * @description update order on sdm with payment object
                      */
+                    return "order/redirect/success"
+                } else {
+                    return "order/redirect/failure"
                 }
-                return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }

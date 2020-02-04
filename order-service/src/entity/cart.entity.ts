@@ -331,7 +331,8 @@ export class CartClass extends BaseEntity {
                                                             product_id: so['product_id'],
                                                             qty: sitem['qty'],
                                                             type_id: "simple",
-                                                            price: so['price']
+                                                            price: so['price'],
+                                                            final_price: true
                                                         })
                                                     }
                                                 })

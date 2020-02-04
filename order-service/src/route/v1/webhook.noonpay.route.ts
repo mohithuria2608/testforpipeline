@@ -1,10 +1,10 @@
+import * as config from 'config'
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { webhookNoonpayController } from '../../controllers';
-import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
     router
@@ -26,8 +26,11 @@ export default (router: Router) => {
                     let payload: IWebhookNoonpayRequest.IOrderProcessPayment = ctx.request.query;
                     let res = await webhookNoonpayController.processPayment(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
+
+                    let redirectUrl = config.get("server.order.url") + sendResponse
+                    ctx.redirect(redirectUrl)
+                    // ctx.status = sendResponse.statusCode;
+                    // ctx.body = sendResponse
                 }
                 catch (error) {
                     throw error

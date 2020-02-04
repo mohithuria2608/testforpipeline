@@ -90,7 +90,7 @@ export class OrderController {
             console.log("amount", typeof amount, amount)
             let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                 orderId: order._id.toString(),
-                amount: amount.amount,
+                amount: 100,// amount.amount,
                 storeCode: "kfc_uae_store",
                 paymentMethodId: 1,
                 channel: "Mobile",
