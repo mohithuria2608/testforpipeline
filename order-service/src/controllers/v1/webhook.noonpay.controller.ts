@@ -37,14 +37,14 @@ export class WebhookNoonpayController {
                     paymentStatus: status.paymentStatus
                 }
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                if (status.paymentStatus == "AUTHORIZED") {
+                // if (status.paymentStatus == "AUTHORIZED") {
                     /**
                      * @description update order on sdm with payment object
                      */
-                    redirectUrl = redirectUrl + "order/redirect/success"
-                } else {
-                    redirectUrl = redirectUrl + "order/redirect/failure"
-                }
+                    redirectUrl = redirectUrl + "payment/success"
+                // } else {
+                //     redirectUrl = redirectUrl + "payment/failure"
+                // }
                 return redirectUrl
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)

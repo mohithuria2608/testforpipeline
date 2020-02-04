@@ -24,10 +24,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IWebhookNoonpayRequest.IOrderProcessPayment = ctx.request.query;
                     let res = await webhookNoonpayController.processPayment(headers, payload);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
-                    console.log(process.cwd(), "processPayment", sendResponse, false)
-
-                    ctx.redirect(sendResponse)
+                    ctx.redirect(res)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse
                 }
