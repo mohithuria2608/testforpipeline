@@ -15,7 +15,7 @@ export class MenuServiceValidator {
                     language: Joi.string().valid(
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
-                    ).required(),
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
                     country: Joi.string().required(),
                     isDefault: Joi.boolean().valid(true, false)
                 });

@@ -30,7 +30,7 @@ export let grpcSendError = function (error) {
         grpcErrType = "INTERNAL"
     }
     else {
-        consolelog(process.cwd(), "Unhandled grpcSendError 1", JSON.stringify(error), true)
+        consolelog(process.cwd(), "Unhandled grpcSendError status code", JSON.stringify(error), true)
     }
     return Constant.STATUS_MSG.GRPC_ERROR.ERROR(grpcErrCode, grpcErrType, message)
 }
@@ -46,10 +46,16 @@ export let sendError = function (error) {
         switch (error.code) {
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.CANCELLED: {
                 consolelog(process.cwd(), "Unhandled grpc error type CANCELLED", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNKNOWN: {
                 consolelog(process.cwd(), "Unhandled grpc error type UNKNOWN", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.INVALID_ARGUMENT: {
@@ -60,21 +66,29 @@ export let sendError = function (error) {
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.DEADLINE_EXCEEDED: {
                 consolelog(process.cwd(), "Unhandled grpc error type DEADLINE_EXCEEDED", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.NOT_FOUND: {
                 customError.statusCode = Constant.STATUS_MSG.ERROR.E409.DATA_NOT_FOUND.statusCode
                 customError.httpCode = Constant.STATUS_MSG.ERROR.E409.DATA_NOT_FOUND.httpCode
                 customError.type = Constant.STATUS_MSG.ERROR.E409.DATA_NOT_FOUND.type
-                // consolelog(process.cwd(), "Unhandled grpc error type NOT_FOUND", JSON.stringify(error), true)
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.ALREADY_EXISTS: {
                 consolelog(process.cwd(), "Unhandled grpc error type ALREADY_EXISTS", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.PERMISSION_DENIED: {
                 consolelog(process.cwd(), "Unhandled grpc error type PERMISSION_DENIED", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAUTHENTICATED: {
@@ -85,14 +99,23 @@ export let sendError = function (error) {
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.RESOURCE_EXHAUSTED: {
                 consolelog(process.cwd(), "Unhandled grpc error type RESOURCE_EXHAUSTED", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.FAILED_PRECONDITION: {
                 consolelog(process.cwd(), "Unhandled grpc error type FAILED_PRECONDITION", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.ABORTED: {
                 consolelog(process.cwd(), "Unhandled grpc error type ABORTED", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNIMPLEMENTED:
@@ -110,10 +133,16 @@ export let sendError = function (error) {
             }
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.DATA_LOSS: {
                 consolelog(process.cwd(), "Unhandled grpc error type DATA_LOSS", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
             default: {
                 consolelog(process.cwd(), "Unhandled grpc error type 1", JSON.stringify(error), true)
+                customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
+                customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
+                customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
                 break;
             }
         }
@@ -133,6 +162,12 @@ export let sendError = function (error) {
             customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
+        }
+        else if (error.name === 'PaymentError') {
+            customError.message = error.message;
+            customError.statusCode = error.statusCode;
+            customError.httpCode = error.httpCode;
+            customError.type = error.type;
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
@@ -239,7 +274,6 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
         userObj['language'] = headers.language
 
         delete userObj['session']
-        delete userObj['changePhnNo']
         delete userObj['password']
         delete userObj['sdmUserRef']
         delete userObj['cmsUserRef']

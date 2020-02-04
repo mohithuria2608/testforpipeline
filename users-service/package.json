@@ -6,6 +6,7 @@
   "scripts": {
     "local": "NODE_ENV=default gulp",
     "dev": "NODE_ENV=development gulp",
+    "qa": "NODE_ENV=testing node dist/app.js",
     "stg": "NODE_ENV=staging node dist/app.js",
     "test-mocha": "node_modules/.bin/ts-mocha ./test/*.ts",
     "test-jest": "node_modules/.bin/jest",
@@ -20,7 +21,7 @@
     "@koa/cors": "^3.0.0",
     "@types/lodash": "^4.14.149",
     "@types/node": "^10.12.2",
-    "aerospike": "^3.13.0",
+    "aerospike": "3.13.0",
     "chai-http": "^4.3.0",
     "config": "^3.2.4",
     "grpc": "^1.24.1",

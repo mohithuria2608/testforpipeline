@@ -11,10 +11,31 @@ export class PaymentController {
      * @method GET
      * @param {string} storeCode :cms store code
      */
-    public async getPaymentMethods(payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
+    public async getPaymentMethods(headers: ICommonRequest.IHeaders, payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.PaymentE.getPaymentMethods(payload.storeCode);
-        }catch(error) {
+            let storeCode = "kfc_uae_store"
+            return [
+                {
+                    "id": 1,
+                    "name": "Card",
+                    "image": "",
+                    default: 0
+                },
+                {
+                    "id": 2,
+                    "name": "Visa Checkout",
+                    "image": "",
+                    default: 0
+                },
+                {
+                    "id": 0,
+                    "name": "Cash On Delivery",
+                    "image": "",
+                    default: 1
+                }
+            ]
+            await ENTITY.PaymentE.getPaymentMethods(storeCode);
+        } catch (error) {
             consolelog(process.cwd(), "getPaymentMethods", error, false)
             return Promise.reject(error)
         }
@@ -32,7 +53,7 @@ export class PaymentController {
     public async initiatePayment(payload: IPaymentGrpcRequest.IInitiatePayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.initiatePayment(payload);
-        }catch(error) {
+        } catch (error) {
             consolelog(process.cwd(), "initiatePayment", error, false)
             return Promise.reject(error)
         }
@@ -49,7 +70,7 @@ export class PaymentController {
             let res: IPaymentGrpcRequest.IGetPaymentStatusRes;
             switch (payload.paymentStatus) {
                 case ENTITY.PaymentClass.STATUS.ORDER.INITIATED:
-                    res =  (await ENTITY.PaymentE.getInitiateStatus(payload)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    res = (await ENTITY.PaymentE.getInitiateStatus(payload)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
                 case ENTITY.PaymentClass.STATUS.ORDER.AUTHORIZED:
                     res = await ENTITY.PaymentE.getAuthorizationStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
@@ -68,7 +89,7 @@ export class PaymentController {
                     break;
             }
             return res;
-        }catch(err) {
+        } catch (err) {
             consolelog(process.cwd(), "getPaymentStatus", err, false)
             return Promise.reject(err)
         }
@@ -84,7 +105,7 @@ export class PaymentController {
     public async capturePayment(payload: IPaymentGrpcRequest.ICapturePayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.capturePayment(payload);
-        }catch(error) {
+        } catch (error) {
             consolelog(process.cwd(), "capturePayment", error, false)
             return Promise.reject(error)
         }
@@ -98,7 +119,7 @@ export class PaymentController {
     public async reversePayment(payload: IPaymentGrpcRequest.IReversePayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.reversePayment(payload);
-        }catch(error) {
+        } catch (error) {
             consolelog(process.cwd(), "reversePayment", error, false)
             return Promise.reject(error)
         }
@@ -114,12 +135,12 @@ export class PaymentController {
     public async refundPayment(payload: IPaymentGrpcRequest.IRefundPayment, auth: ICommonRequest.AuthorizationObj) {
         try {
             return await ENTITY.PaymentE.refundPayment(payload);
-        }catch(error) {
+        } catch (error) {
             consolelog(process.cwd(), "refundPayment", error, false)
             return Promise.reject(error)
         }
     }
-   
+
 }
 
 export const paymentController = new PaymentController();

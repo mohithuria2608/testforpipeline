@@ -295,8 +295,9 @@ export class PaymentClass extends BaseEntity {
      * @description Returns noonpay post authorization callback url
      */
     private getReturnUrl(): string {
-        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order/process-payment`;
-        return "http://localhost:3080/order-service/v1/webhook/noonpay/order/process-payment"
+        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order-service/v1/webhook/noonpay/order/process-payment`;
+        let api = 'v1/webhook/noonpay/order/process-payment'
+        return `${_config.get('server.order.url')}${api}`
     }
     /**
      * @description Returns custom error objects corresponding to noonpay error codes
@@ -332,7 +333,8 @@ export class PaymentClass extends BaseEntity {
             if (config.codInfo && config.codInfo.status === 1) {
                 // COD available
                 availablePaymentMethods.offline.push({
-                    title: config.codInfo.title,
+                    id: 0,
+                    name: config.codInfo.title,
                     min_order_total: config.codInfo.min_order_total,
                     max_order_total: config.codInfo.max_order_total,
                     code: config.codInfo.code

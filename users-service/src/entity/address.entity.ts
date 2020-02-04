@@ -43,7 +43,7 @@ export class AddressEntity extends BaseEntity {
      */
     public addressSchema = Joi.object().keys({
         delivery: Joi.array().items(this.subSddressSchema),
-        pickup: Joi.array().items(this.subSddressSchema)
+        pickup: Joi.array().items(this.subSddressSchema),
     })
 
 
@@ -107,15 +107,37 @@ export class AddressEntity extends BaseEntity {
                 cmsAddressRef: 0,
                 sdmStoreRef: store.storeId
             };
-            let listAppendArg: IAerospike.ListOperation = {
-                order: true,
-                bins: deliveryAddress,
-                set: this.set,
-                key: userData.id,
-                bin: bin,
-                append: true
+            if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
+                let listAppendArg: IAerospike.ListOperation = {
+                    order: true,
+                    bins: deliveryAddress,
+                    set: this.set,
+                    key: userData.id,
+                    bin: bin,
+                    append: true
+                }
+                await Aerospike.listOperations(listAppendArg)
+            } else {
+                deliveryAddress['addressType'] = Constant.DATABASE.TYPE.ADDRESS.PICKUP
+                let dataToUpdate = {
+                    pickup: [deliveryAddress]
+                }
+                let oldAdd: IAddressRequest.IAddressModel[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
+                if (oldAdd && oldAdd.length > 0) {
+                    if (deliveryAddress.sdmStoreRef == store.storeId) {
+                        return oldAdd[0]
+                    }
+                }
+                let putArg: IAerospike.Put = {
+                    bins: dataToUpdate,
+                    set: this.set,
+                    key: userData.id,
+                    createOrReplace: true
+                }
+                consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
+                await Aerospike.put(putArg)
             }
-            await Aerospike.listOperations(listAppendArg)
+
             // let listDeliveryAddress = await this.getAddress({ userId: userData.id, bin: bin })
 
             // if (listDeliveryAddress && listDeliveryAddress.length > 6) {

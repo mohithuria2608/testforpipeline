@@ -12,30 +12,29 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
-            let userCreate: IUserRequest.IUserUpdate = {
+            let userCreate: IUserRequest.IUserData = {
+                id: ENTITY.UserE.ObjectId().toString(),
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                brand: headers.brand,
+                country: headers.country,
+                cartId: ENTITY.UserE.ObjectId().toString(),
+                phnVerified: 0,
             }
-            let user = await ENTITY.UserE.createUser(headers, userCreate)
-            let session = {
-                otp: 0,
-                otpExpAt: 0,
-                otpVerified: 1,
+            let userData = await ENTITY.UserE.buildUser(userCreate)
+            let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 1,
-                sessionTime: sessionTime,
-                userId: user.id,
-                // ttl: Constant.SERVER.OTP_EXPIRE_TIME
+                userId: userData.id
             }
-            await ENTITY.SessionE.buildSession(headers, session)
+            let session = await ENTITY.SessionE.buildSession(headers, sessionUpdate)
             let tokens = await ENTITY.UserE.getTokens(
                 headers.deviceid,
                 headers.devicetype,
                 [Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH, Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH],
-                user.id,
+                userData.id,
                 1,
-                sessionTime
+                session.sessionTime
             )
-            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(user, headers) }
+            return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, 1) }
         } catch (error) {
             consolelog(process.cwd(), "guestLogin", error, false)
             return Promise.reject(error)
@@ -52,53 +51,51 @@ export class GuestController {
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
+            const fullPhnNo = payload.cCode + payload.phnNo;
+            const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let queryArg: IAerospike.Query = {
-                udf: {
-                    module: 'user',
-                    func: Constant.UDF.USER.check_phone_exist,
-                    args: [payload.cCode],
-                    forEach: true
-                },
                 equal: {
-                    bin: "phnNo",
-                    value: payload.phnNo
+                    bin: "username",
+                    value: username
                 },
                 set: ENTITY.UserE.set,
                 background: false,
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             let userchangePayload = {
+                username: username,
+                fullPhnNo: fullPhnNo,
                 name: payload.name,
                 email: payload.email,
-                cartId: userData.cartId,
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
                 otp: Constant.SERVER.BY_PASS_OTP,
+                cartId: userData.cartId,
                 otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                 otpVerified: 0,
-                deleteUserId: userData.id,
-                isGuest: payload.isGuest
-            }
-            let userUpdate = {
-                changePhnNo: 1,
+                isGuest: payload.isGuest,
+                brand: headers.brand,
+                country: headers.country,
+                profileStep: 1
             }
             if (checkUser && checkUser.length > 0) {
-                userchangePayload['cartId'] = userData.cartId
-                userchangePayload['deleteUserId'] = userData.id
-                userData = checkUser[0]
+                userchangePayload['id'] = checkUser[0].id
+                userchangePayload['deleteUserId'] = auth.id
+                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
+                userchangePayload['id'] = auth.id
                 userchangePayload['deleteUserId'] = ""
+                await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
             }
-            await ENTITY.UserE.updateUser(userData.id, userUpdate)
-            await ENTITY.UserchangeE.createUserchange(userchangePayload, userData)
             userData['name'] = payload.name
             userData['email'] = payload.email
-            userData['cCode'] = payload.cCode
+            userData['fullPhnNo'] = payload.cCode + payload.phnNo
             userData['phnNo'] = payload.phnNo
-            userData['isGuest'] = payload.isGuest
+            userData['cCode'] = payload.cCode
             userData['phnVerified'] = 0
-            return formatUserData(userData, headers)
+            userData['profileStep'] = 1
+            return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", error, false)
             return Promise.reject(error)

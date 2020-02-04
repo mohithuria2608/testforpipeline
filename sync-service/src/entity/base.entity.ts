@@ -4,7 +4,7 @@ import { consolelog } from '../utils'
 import { authService } from '../grpc/client'
 
 export class BaseEntity {
-    public ObjectId = mongoose.Types.ObjectId().toString();
+    public ObjectId = mongoose.Types.ObjectId;
     public set: SetNames;
     constructor(set?) {
         this.set = set

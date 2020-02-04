@@ -27,7 +27,7 @@ export class CmsConfigController {
                             if (data.data && data.data.length > 0) {
                                 data.data.map(async config => {
                                     let dataToSave = {
-                                        id: ENTITY.ConfigE.ObjectId,
+                                        id: ENTITY.ConfigE.ObjectId().toString(),
                                         type: data.type,
                                     }
                                     if (config.store_code)
@@ -68,7 +68,7 @@ export class CmsConfigController {
                             if (data.data && data.data.length > 0) {
                                 data.data.map(async config => {
                                     let dataToSave = {
-                                        id: ENTITY.ConfigE.ObjectId,
+                                        id: ENTITY.ConfigE.ObjectId().toString(),
                                         type: data.type,
                                     }
                                     if (config.store_code)

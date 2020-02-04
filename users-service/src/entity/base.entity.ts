@@ -24,6 +24,23 @@ export class BaseEntity {
     /**
      * @description Validate latitude and longitude from location service
      */
+    async fetchStore(storeId: number): Promise<IStoreGrpcRequest.IStore[]> {
+        try {
+            let store = await locationService.fetchStore({ storeId })
+            if (store && store.id)
+                return [store]
+            else
+                []
+        } catch (error) {
+            consolelog(process.cwd(), "fetchStore", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+
+    /**
+     * @description Validate latitude and longitude from location service
+     */
     async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore[]> {
         try {
             return await locationService.validateCoordinate({ lat, lng })

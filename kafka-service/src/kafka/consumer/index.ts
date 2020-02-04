@@ -5,6 +5,7 @@ import { as_configConsumerE } from './as_config.consumer';
 import { cms_menuConsumerE } from './cms_menu.consumer';
 import { sdm_menuConsumerE } from './sdm_menu.consumer';
 import { as_menuConsumerE } from './as_menu.consumer';
+
 import { as_locationConsumerE } from './as_location.consumer';
 
 import { as_upsellConsumerE } from './as_upsell.consumer';
@@ -33,8 +34,9 @@ export function initConsumers() {
 
     as_menuConsumerE.handleMessage();
     sdm_menuConsumerE.handleMessage();
-    as_locationConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
+
+    as_locationConsumerE.handleMessage();
 
     as_upsellConsumerE.handleMessage();
 

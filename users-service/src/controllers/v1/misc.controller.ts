@@ -12,10 +12,13 @@ export class MiscController {
     * */
     async configuration(headers: ICommonRequest.IHeaders) {
         try {
+            let redirectUrl = config.get("server.order.url")
             return {
                 otpDigits: 4,
                 blobBaseUrl: config.get("blobBaseUrl"),
                 locationVicinity: 100,
+                paymentSuccessUrl: redirectUrl + "payment/success",
+                paymentFailureUrl: redirectUrl + "payment/failure",
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,

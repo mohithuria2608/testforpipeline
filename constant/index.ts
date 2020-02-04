@@ -13,7 +13,6 @@ export enum SET_NAME {
 
 export const UDF = {
     USER: {
-        check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key",
     },
     MENU: {
@@ -161,10 +160,11 @@ export const KAFKA = {
 
 export const SERVER = {
     ENV: {
-        development: 0,
-        testing: 1,
-        staging: 2,
-        production: 3
+        default: 0,
+        development: 1,
+        testing: 2,
+        staging: 3,
+        production: 4
     },
     APP_INFO: {
         APP_NAME: "App",
@@ -177,6 +177,7 @@ export const SERVER = {
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
+    USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
     OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
@@ -236,7 +237,8 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST",
-            ERROR: "ERROR"
+            ERROR: "ERROR",
+            INFO: "INFO",
         },
 
         PROFILE_STEP: {
@@ -252,6 +254,16 @@ export const DATABASE = {
         },
 
         ADDRESS: {
+            PICKUP: "PICKUP",
+            DELIVERY: "DELIVERY"
+        },
+
+        ADDRESS_BIN: {
+            PICKUP: "pickup",
+            DELIVERY: "delivery"
+        },
+
+        ORDER: {
             PICKUP: "PICKUP",
             DELIVERY: "DELIVERY"
         },
@@ -290,12 +302,32 @@ export const DATABASE = {
             PENDING: {
                 MONGO: "PENDING",
                 CMS: "",
-                SDM: ""
+                SDM: "OPEN + SUSPENDED"
             },
-            IN_KITCHEN: {
-                MONGO: "",
+            PLACED: {
+                MONGO: "PLACED",
+                CMS: "",
+                SDM: "OPEN"
+            },
+            CONFIRMED: {
+                MONGO: "CONFIRMED",
                 CMS: "",
                 SDM: "IN_KITCHEN"
+            },
+            BEING_PREPARED: {
+                MONGO: "BEING_PREPARED",
+                CMS: "",
+                SDM: "IN_KITCHEN"
+            },
+            READY: {
+                MONGO: "READY",
+                CMS: "",
+                SDM: "READY"
+            },
+            ON_THE_WAY: {
+                MONGO: "ON_THE_WAY",
+                CMS: "",
+                SDM: "ASSIGNED / ENROUTE"
             },
             CLOSED: {
                 MONGO: "",
@@ -453,6 +485,13 @@ export const STATUS_MSG = {
                 httpCode: 409,
                 message: 'Menu not found',
                 type: 'MENU_NOT_FOUND'
+            },
+
+            HOME_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Home not found',
+                type: 'HOME_NOT_FOUND'
             },
 
             SERVICE_UNAVAILABLE: {

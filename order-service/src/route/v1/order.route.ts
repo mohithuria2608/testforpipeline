@@ -17,7 +17,15 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
+                    orderType: Joi.string().required().valid(Constant.DATABASE.TYPE.ORDER.DELIVERY, Constant.DATABASE.TYPE.ORDER.PICKUP),
+                    paymentMethodId: Joi.number().required().valid(0, 1, 2),
                     cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
+                    curMenuId: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    menuUpdatedAt: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    lat: Joi.number().min(0).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    couponCode: Joi.string().allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
+                    items: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PRODUCTS.message))
                 }
             }),
             async (ctx) => {
@@ -51,6 +59,56 @@ export default (router: Router) => {
                     let payload: IOrderRequest.IOrderHistory = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.orderHistory(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/detail',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
+                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IOrderRequest.IOrderDetail = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await orderController.orderDetail(headers, payload, auth);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+        .get('/status',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                headers: JOI.COMMON_HEADERS,
+                query: {
+                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IOrderRequest.IOrderStatus = ctx.request.query;
+                    let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    let res = await orderController.orderStatusPing(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

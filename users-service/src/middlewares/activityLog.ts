@@ -30,7 +30,7 @@ export default (opts?): Middleware => {
                 },
                 description: "",
                 options: {
-                    env: Constant.SERVER.ENV.production,
+                    env: Constant.SERVER.ENV[config.get("env")],
                     
                 },
                 createdAt: new Date().getTime(),

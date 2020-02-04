@@ -6,7 +6,8 @@ declare namespace IPaymentGrpcRequest {
     }
 
     interface IGetPaymentMethods {
-        storeCode: string;
+        cartId?: string;
+        storeCode?: string;
     }
 
     interface IGetPaymentMethodsRes { }
@@ -22,7 +23,7 @@ declare namespace IPaymentGrpcRequest {
         channel: string;
         locale?: string;
     }
-    interface IInitiatePaymentRes {}
+    interface IInitiatePaymentRes { }
 
     interface IGetPaymentStatusReq {
         request: IGetPaymentStatus;
@@ -108,7 +109,7 @@ declare namespace IPaymentGrpcRequest {
         amount: number;
         storeCode: string;
     }
-    interface ICapturePaymentRes {}
+    interface ICapturePaymentRes { }
 
     interface IReversePaymentReq {
         request: IReversePayment;
@@ -117,7 +118,7 @@ declare namespace IPaymentGrpcRequest {
         noonpayOrderId: number;
         storeCode: string;
     }
-    interface IReversePaymentRes {}
+    interface IReversePaymentRes { }
 
     interface IRefundPaymentReq {
         request: IRefundPayment;
@@ -128,5 +129,5 @@ declare namespace IPaymentGrpcRequest {
         captureTransactionId: string;
         storeCode: string;
     }
-    interface IRefundPaymentRes {}
+    interface IRefundPaymentRes { }
 }

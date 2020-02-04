@@ -22,7 +22,15 @@ export default (router: Router) => {
                     lat: Joi.number().min(0).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     couponCode: Joi.string().allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
-                    items: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PRODUCTS.message))
+                    items: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PRODUCTS.message)),
+
+
+                    /**
+                     * @description : ignore
+                     */
+                    addressId: Joi.any(),
+                    orderType: Joi.any(),
+                    paymentMethodId: Joi.any(),
                 }
             }),
             async (ctx) => {
@@ -30,7 +38,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ICartRequest.IValidateCart = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await cartController.postCart(headers, payload, auth);
+                    let res = await cartController.validateCart(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

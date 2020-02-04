@@ -12,12 +12,12 @@ export class PaymentServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    orderId: Joi.string().required(),
-                    amount: Joi.number().required(),
-                    storeCode: Joi.string().required(),
-                    paymentMethodId: Joi.number().required(),
-                    channel: Joi.string().required(),
-                    locale: Joi.string().required(),
+                    storeCode: Joi.string().trim().required().description('CMS store code'),
+                    orderId: Joi.string().trim().required().description('CMS order id'),
+                    amount: Joi.number().required().greater(0),
+                    paymentMethodId: Joi.number().integer().required().description('User selected payment method id of noonpay payment methods'),
+                    channel: Joi.string().trim().required().valid('Mobile', 'Web'),
+                    locale: Joi.string().trim().lowercase().optional().valid('en', 'ar'),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

@@ -1,9 +1,11 @@
 import * as Constant from '../constant'
+import * as mongoose from "mongoose";
 import * as Services from '../mongo/dao';
 import { consolelog } from '../utils'
 import { locationService } from '../grpc/client'
 
 export class BaseEntity {
+    public ObjectId = mongoose.Types.ObjectId;
     public DAOManager = new Services.DAOManager();
     public set: SetNames;
     constructor(set) {

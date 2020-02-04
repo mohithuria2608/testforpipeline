@@ -31,12 +31,7 @@ export class SessionEntity extends BaseEntity {
         id: Joi.string().trim().required().description("pk"),
         userId: Joi.string().trim().required().description("sk"),
         deviceid: Joi.string().trim().required().description("sk"),
-        otp: Joi.number(),
-        otpExpAt: Joi.number(),
-        otpVerified: Joi.number(),
-        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         language: Joi.string().valid(Constant.DATABASE.LANGUAGE.AR, Constant.DATABASE.LANGUAGE.EN).trim().required(),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         appversion: Joi.string().trim().required(),
         devicemodel: Joi.string().trim().required(),
         devicetype: Joi.string().valid(Constant.DATABASE.TYPE.DEVICE.ANDROID, Constant.DATABASE.TYPE.DEVICE.IOS).trim().required(),
@@ -77,57 +72,28 @@ export class SessionEntity extends BaseEntity {
      */
     public async buildSession(headers: ICommonRequest.IHeaders, payload: ISessionRequest.ISession) {
         try {
+            let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let isCreate = false
-            let session: ISessionRequest.ISession = await this.getSession(headers.deviceid, payload.userId)
-            consolelog(process.cwd(), "session", JSON.stringify(session), false)
-            if (session && session.id) {
-                if (session.otpExpAt <= new Date().getTime() && session.otpExpAt != 0) {
-                    if (payload.otp != undefined)
-                        session['otp'] = session.otp
-                    if (payload.otpExpAt != undefined)
-                        session['otpExpAt'] = session.otpExpAt
-                } else {
-                    if (payload.otp != undefined)
-                        session['otp'] = payload.otp
-                    if (payload.otpExpAt != undefined)
-                        session['otpExpAt'] = payload.otpExpAt
-                }
+            let session: ISessionRequest.ISession = {
+                userId: payload.userId,
+                deviceid: headers.deviceid,
+                language: headers.language,
+                appversion: headers.appversion,
+                devicemodel: headers.devicemodel,
+                devicetype: headers.devicetype,
+                osversion: headers.osversion,
+                isGuest: payload.isGuest,
+                createdAt: new Date().getTime(),
+                sessionTime: sessionTime,
             }
-            else {
+            let checkSession = await this.getSession(headers.deviceid, payload.userId)
+            consolelog(process.cwd(), "session", JSON.stringify(session), false)
+            if (checkSession && checkSession.id) {
+                session['id'] = checkSession.id
+            } else {
                 isCreate = true
                 session['id'] = generateSessionId(payload.userId, headers.deviceid)
-                if (payload.otp != undefined)
-                    session['otp'] = payload.otp
-                if (payload.otpExpAt != undefined)
-                    session['otpExpAt'] = payload.otpExpAt
             }
-
-            if (payload.isGuest != undefined)
-                session['isGuest'] = payload.isGuest
-            if (payload.otpVerified != undefined)
-                session['otpVerified'] = payload.otpVerified
-            if (isCreate)
-                session['createdAt'] = new Date().getTime()
-            if (headers.brand != undefined)
-                session['brand'] = headers.brand
-            if (headers.deviceid != undefined)
-                session['deviceid'] = headers.deviceid
-            if (headers.language != undefined)
-                session['language'] = headers.language
-            if (headers.country != undefined)
-                session['country'] = headers.country
-            if (headers.appversion != undefined)
-                session['appversion'] = headers.appversion
-            if (headers.devicemodel != undefined)
-                session['devicemodel'] = headers.devicemodel
-            if (headers.devicetype != undefined)
-                session['devicetype'] = headers.devicetype
-            if (headers.osversion != undefined)
-                session['osversion'] = headers.osversion
-
-            if (payload.sessionTime)
-                session['sessionTime'] = payload.sessionTime
-            session['userId'] = payload.userId
 
             let putArg: IAerospike.Put = {
                 bins: session,
@@ -138,50 +104,13 @@ export class SessionEntity extends BaseEntity {
             if (isCreate) {
                 putArg['create'] = true
                 await this.removeAllSessionRelatedToDeviceId(headers.deviceid)
-            }
-            else {
+            } else
                 putArg['update'] = true
-            }
+
             await Aerospike.put(putArg)
             return session
         } catch (error) {
             consolelog(process.cwd(), "buildSession", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * 
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.IAuthVerifyOtp} payload 
-     * @param {IUserRequest.IUserData} userData 
-     */
-    async validateOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthVerifyOtp, userData: IUserRequest.IUserData, sessionTime: number) {
-        try {
-            let getSession: ISessionRequest.ISession = await this.getSession(headers.deviceid, userData.id)
-            consolelog(process.cwd(), "getSession", JSON.stringify(getSession), false)
-
-            if (getSession && getSession.id) {
-                if (getSession.otp == 0 && getSession.otpExpAt == 0)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (getSession.otp != payload.otp)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                if (getSession.otpExpAt < new Date().getTime())
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_EXPIRED)
-            } else {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-            }
-            let sessionUpdate: ISessionRequest.ISession = {
-                otp: 0,
-                otpExpAt: 0,
-                otpVerified: 1,
-                sessionTime: sessionTime,
-                userId: userData.id
-            }
-            await this.buildSession(headers, sessionUpdate)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "validateOtp", error, false)
             return Promise.reject(error)
         }
     }

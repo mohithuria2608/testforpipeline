@@ -1,7 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
-import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
 
 export class CartController {
@@ -17,9 +16,13 @@ export class CartController {
      * @param {string=} couponCode :couponCode
      * @param {Array} items :array of products
      * */
-    async postCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
+    async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let promo: IPromotionGrpcRequest.IValidatePromotionRes
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            if (userData.id == undefined || userData.id == null || userData.id == "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
             let invalidMenu = false
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
@@ -41,15 +44,18 @@ export class CartController {
                     invalidMenu = true
                 }
             }
-            if (payload.couponCode) {
-                let validPromo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                if (!validPromo.isValid)
+            if (payload.couponCode && payload.items && payload.items.length > 0) {
+                promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                if (!promo || (promo && !promo.isValid)) {
                     delete payload['couponCode']
-                // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PROMO)
-            }
+                }
+            } else
+                delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
+
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
             res['invalidMenu'] = invalidMenu
+            res['promo'] = promo
             return res
         } catch (error) {
             consolelog(process.cwd(), "postCart", JSON.stringify(error), false)

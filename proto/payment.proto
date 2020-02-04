@@ -13,7 +13,7 @@ message IGetPaymentMethodsRes { }
 
 message IInitiatePaymentReq {
     required string orderId = 1;
-    required float amount = 2;
+    required double amount = 2;
     required string storeCode = 3;
     required int32 paymentMethodId = 4;
     required string channel = 5;
@@ -27,7 +27,7 @@ message IInitiatePaymentRes {
     required string orderId = 4;
     required string paymentStatus = 5;
     required string creationTime = 6;
-    required float amount = 7;
+    required double amount = 7;
     required string currency = 8;
     required string channel = 9;
     required string noonpayRedirectionUrl = 10;
@@ -46,11 +46,11 @@ message IGetPaymentStatusRes {
     required int64 noonpayOrderId = 3;
     required string orderId = 4;
     required string creationTime = 5;
-    required float amount = 6;
-    required float totalAuthorizedAmount = 7;
-    required float totalCapturedAmount = 8;
-    required float totalRefundedAmount = 9;
-    required float totalReversedAmount = 10;
+    required double amount = 6;
+    required double totalAuthorizedAmount = 7;
+    required double totalCapturedAmount = 8;
+    required double totalRefundedAmount = 9;
+    required double totalReversedAmount = 10;
     required string currency = 11;
     required string channel = 12;
     required IPaymentDetails paymentDetails = 13;
@@ -80,7 +80,7 @@ message ITransaction {
     required string status = 4;
     required string stan = 5;
     required string id = 6;
-    required float amount = 7;
+    required double amount = 7;
     required string currency = 8;
 }
 

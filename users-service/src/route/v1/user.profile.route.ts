@@ -16,12 +16,6 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    socialKey: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.message)),
-                    medium: Joi.string().valid(
-                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
-                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
-                        Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
-                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.message)),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
                     phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
                     email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message)),

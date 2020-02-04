@@ -20,7 +20,7 @@ export class OrderService {
     private orderClient = new this.loadOrder(config.get("grpc.order.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established order-service', config.get("grpc.order.client"), true)
+        console.log(process.cwd(), 'GRPC connection established order-service', config.get("grpc.order.client"), true)
     }
 
     async getCart(payload: IOrderGrpcRequest.IGetOrder): Promise<IOrderGrpcRequest.IGetOrderRes> {
