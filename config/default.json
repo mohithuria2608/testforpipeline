@@ -52,6 +52,10 @@
         "log": {
             "url": "http://localhost:3080/log-service/",
             "port": 4012
+        },
+        "home": {
+            "url": "http://localhost:3080/home-service/",
+            "port": 4013
         }
     },
     "grpc": {
@@ -106,6 +110,10 @@
         "log": {
             "server": "localhost:50063",
             "client": "127.0.0.1:50063"
+        },
+        "home": {
+            "server": "localhost:50064",
+            "client": "127.0.0.1:50064"
         }
     },
     "directory": {
@@ -158,6 +166,10 @@
                 "log": {
                     "server": "/../../../proto/log.proto",
                     "client": "/../../../../proto/log.proto"
+                },
+                "home": {
+                    "server": "/../../../proto/home.proto",
+                    "client": "/../../../../proto/home.proto"
                 }
             }
         }
