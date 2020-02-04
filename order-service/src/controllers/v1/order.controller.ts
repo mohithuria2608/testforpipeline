@@ -111,6 +111,7 @@ export class OrderController {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: amount.amount,
+                        name: "Card"
                     }
                 })
             } else {
@@ -118,6 +119,7 @@ export class OrderController {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: amount.amount,
+                        name: "Cash On Delivery"
                     }
                 })
             }
