@@ -147,10 +147,6 @@ export default (router: Router) => {
             })
 
         .get('/test',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 query: {
                     orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message)),
