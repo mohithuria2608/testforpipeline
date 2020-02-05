@@ -19,6 +19,8 @@ export class UserSDMEntity extends BaseSDM {
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_EMAIL: payload.email,// "nkhan1000@mailinator.com",
@@ -35,7 +37,8 @@ export class UserSDMEntity extends BaseSDM {
                         WCUST_FIRSTNAME: payload.name,
                         WCUST_IS_GUEST: false,
                         WCUST_LASTNAME: payload.name,
-                    }
+                    },
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -54,8 +57,9 @@ export class UserSDMEntity extends BaseSDM {
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
-                    customer: {
-                    }
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -76,8 +80,11 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByUserNameAndPswdReq = {
                 name: "GetCustomer",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     customerUserName: payload.customerUserName,
                     customerPassword: payload.customerPassword,
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -94,10 +101,14 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async getCustomerByEmail(payload) {
         try {
-            const data: IUserSDMRequest.IGetCustomerByEmailReq = {
+            // : IUserSDMRequest.IGetCustomerByEmailReq
+            const data = {
                 name: "GetCustomerByEmail",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     email: payload.email,
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -117,7 +128,10 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByEmailReq = {
                 name: "GetCustomersByEmail",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     email: payload.email,
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -137,7 +151,10 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByCustomerIdReq = {
                 name: "GetCustomerByID",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     customerID: payload.customerID,
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -157,7 +174,10 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByMobileNoReq = {
                 name: "GetCustomerByMobile",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     mobileNo: payload.mobileNo,
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -177,7 +197,10 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByPhoneNoReq = {
                 name: "GetCustomersByPhone",
                 req: {
+                    licenseCode: "AmericanaWeb",
+                    language: "En",
                     phoneNo: payload.phoneNo,
+                    conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)

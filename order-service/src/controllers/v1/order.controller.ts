@@ -212,12 +212,15 @@ export class OrderController {
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
-            if (userData.id == undefined || userData.id == null || userData.id == "")
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            let userData: IUserRequest.IUserData
+            if (payload.cCode && payload.phnNo) {
+                userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+                if (userData.id == undefined || userData.id == null || userData.id == "")
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            }
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
             if (order && order._id) {
-                if (userData.id != order.userId)
+                if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
                 return order

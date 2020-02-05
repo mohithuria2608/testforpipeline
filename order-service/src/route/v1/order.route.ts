@@ -126,7 +126,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 query: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
-                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+                    phnNo: Joi.string().max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
                     orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
                 }
             }),
