@@ -23,9 +23,12 @@ export const start = (async () => {
     let a: IHomeRequest.Home[] = [
       {
         "id": 1,
+        "language": "En",
         "sequence": 1,
-        "widgetType": "top_banner",
+        "widgetType": "BANNER_LARGE",
         "status": 1,
+        "title": "",
+        "ctaAction": [],
         "media": [
           {
             "sequence": 1,
@@ -65,86 +68,107 @@ export const start = (async () => {
               "type": "menu",
               "delimeters": "delimeters"
             }
-          },
-        ]
+          }
+        ],
+        "products": [],
+        "content": ""
       },
       {
         "id": 2,
+        "language": "En",
         "sequence": 2,
-        "widgetType": "menu",
+        "widgetType": "EXPLORE_MENU",
         "title": "Explore Menu",
         "status": 1,
-        "ctaAction": {
+        "ctaAction": [{
           "title": "View all",
           "id": 1,
           "type": "product",
           "delimeters": "delimeters"
-        },
+        }],
         "media": [
           {
             "sequence": 1,
             "mediaUrl": "banner.png",
+            "mediaType": "image",
             "extension": "png",
             "action": {
               "id": 1,
               "type": "menu",
               "delimeters": " 1"
-            }
+            },
+            "theme": "",
+            "bgColorCode": ""
           },
           {
             "sequence": 2,
             "mediaUrl": "banner.png",
+            "mediaType": "image",
             "extension": "png",
             "action": {
               "id": 1,
               "type": "menu",
               "delimeters": "delimeters"
-            }
+            },
+            "theme": "",
+            "bgColorCode": ""
           },
           {
             "sequence": 3,
             "mediaUrl": "banner.png",
+            "mediaType": "image",
             "extension": "png",
             "action": {
               "id": 1,
               "type": "menu",
               "delimeters": "delimeters"
-            }
+            },
+            "theme": "",
+            "bgColorCode": ""
           },
           {
             "sequence": 4,
             "mediaUrl": "banner.png",
+            "mediaType": "image",
             "extension": "png",
             "action": {
               "id": 1,
               "type": "menu",
               "delimeters": "delimeters"
-            }
+            },
+            "theme": "",
+            "bgColorCode": ""
           },
           {
             "sequence": 5,
             "mediaUrl": "banner.png",
+            "mediaType": "image",
             "extension": "png",
             "action": {
               "id": 1,
               "type": "menu",
               "delimeters": "delimeters"
-            }
+            },
+            "theme": "",
+            "bgColorCode": ""
           }
-        ]
+        ],
+        "products": [],
+        "content": ""
       },
       {
         "id": 3,
+        "language": "En",
         "sequence": 3,
-        "widgetType": "products_list1",
+        "widgetType": "BEST_SELLERS",
         "title": "Best Sellers",
         "status": 1,
-        "ctaAction": {
+        "ctaAction": [{
           "title": "View all",
           "id": 1,
           "type": "product",
           "delimeters": "delimeters"
-        },
+        }],
         "products": [
           {
             "sequence": 1,
@@ -186,31 +210,49 @@ export const start = (async () => {
               "delimeters": "delimeters"
             }
           }
-        ]
+        ],
+        "media": [],
+        "content": ""
       },
       {
         "id": 4,
+        "language": "En",
         "sequence": 4,
-        "widgetType": "banner_100",
+        "widgetType": "BANNER_MEDIUM",
         "status": 1,
-        "action": {
-          "id": 1,
-          "type": "product",
-          "delimeters": "delimeters"
-        }
+        "title": "",
+        "ctaAction": [],
+        "media": [
+          {
+            "sequence": 1,
+            "mediaUrl": "banner.png",
+            "mediaType": "image",
+            "extension": "png",
+            "theme": "light",
+            "bgColorCode": "#000000",
+            "action": {
+              "id": 1,
+              "type": "product",
+              "delimeters": "delimeters"
+            }
+          }
+        ],
+        "products": [],
+        "content": ""
       },
       {
         "id": 5,
+        "language": "En",
         "sequence": 5,
-        "widgetType": "products_list2",
+        "widgetType": "WHATS_NEW",
         "title": "What's New",
         "status": 1,
-        "ctaAction": {
+        "ctaAction": [{
           "title": "View all",
           "id": 1,
           "type": "product",
           "delimeters": "delimeters"
-        },
+        }],
         "products": [
           {
             "sequence": 1,
@@ -252,45 +294,61 @@ export const start = (async () => {
               "delimeters": "delimeters"
             }
           }
-        ]
+        ],
+        "media": [],
+        "content": ""
       },
       {
         "id": 6,
+        "language": "En",
         "sequence": 6,
-        "widgetType": "banner_100_logo",
-        "mediaUrl": "logo.png",
-        "extension": "png",
+        "widgetType": "BANNER_SMALL",
         "status": 1,
-        "action": {
-          "id": 1,
-          "type": "product",
-          "delimeters": "delimeters"
-        }
+        "media": [
+          {
+            "sequence": 1,
+            "mediaUrl": "logo.png",
+            "mediaType": "image",
+            "extension": "png",
+            "action": {
+              "id": 1,
+              "type": "menu",
+              "delimeters": " 1"
+            },
+            "theme": "",
+            "bgColorCode": ""
+          }
+        ],
+        "content": "KFC | KENTUCKY FRIED WINGS | LOST IN THE SAUCE",
+        "products": [],
+        "title": "",
+        "ctaAction": []
       },
       {
         "id": 7,
+        "language": "En",
         "sequence": 7,
-        "widgetType": "banner_logo_tagline",
-        "content": "KFC | KENTUCKY FRIED WINGS | LOST IN THE SAUCE",
+        "widgetType": "BANNER_VIDEO",
         "status": 1,
-        "action": {
-          "id": 1,
-          "type": "product",
-          "delimeters": "delimeters"
-        }
-      },
-      {
-        "id": 8,
-        "sequence": 8,
-        "widgetType": "bottom_video_100",
-        "mediaUrl": "http://www.youtube.com",
-        "extension": "mp4",
-        "status": 1,
-        "action": {
-          "id": 1,
-          "type": "product",
-          "delimeters": "delimeters"
-        }
+        "media": [
+          {
+            "sequence": 1,
+            "mediaUrl": "www.kfc.com/kfc_uae.mp4",
+            "mediaType": "video",
+            "extension": "mp4",
+            "action": {
+              "id": 1,
+              "type": "menu",
+              "delimeters": "delimeters"
+            },
+            "theme": "",
+            "bgColorCode": ""
+          }
+        ],
+        "title": "",
+        "ctaAction": [],
+        "products": [],
+        "content": ""
       }
     ]
   } catch (error) {
