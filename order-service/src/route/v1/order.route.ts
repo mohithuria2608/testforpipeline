@@ -155,7 +155,7 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    await ENTITY.OrderE.updateOneEntityMdb({ cartId: ctx.request.query.orderId }, {
+                    await ENTITY.OrderE.updateOneEntityMdb({ orderId: ctx.request.query.orderId }, {
                         status: ctx.request.query.status,
                         updatedAt: new Date().getTime()
                     })
