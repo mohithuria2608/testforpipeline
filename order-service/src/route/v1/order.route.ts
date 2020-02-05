@@ -5,6 +5,7 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { orderController } from '../../controllers';
 import * as JOI from './common.joi.validator';
+import * as ENTITY from '../../entity'
 
 export default (router: Router) => {
     router
@@ -75,7 +76,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
+                    orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
                 }
             }),
             async (ctx) => {
@@ -100,7 +101,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
+                    orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
                 }
             }),
             async (ctx) => {
@@ -127,7 +128,7 @@ export default (router: Router) => {
                 query: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
                     phnNo: Joi.string().max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
-                    orderId: Joi.string().required().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
+                    orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message))
                 }
             }),
             async (ctx) => {
@@ -139,6 +140,31 @@ export default (router: Router) => {
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
+
+        .get('/test',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
+            validate({
+                query: {
+                    orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message)),
+                    status: Joi.string().required()
+                }
+            }),
+            async (ctx) => {
+                try {
+                    await ENTITY.OrderE.updateOneEntityMdb({ cartId: ctx.request.query.orderId }, {
+                        status: ctx.request.query.status,
+                        updatedAt: new Date().getTime()
+                    })
+                    ctx.status = 200;
+                    ctx.body = {}
                 }
                 catch (error) {
                     throw error

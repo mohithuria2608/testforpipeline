@@ -64,8 +64,6 @@ export class OrderController {
             // if (cartData['isPriceChanged'] || cartData['invalidMenu'])
             //     return { cartValidate: cartData }
 
-            consolelog(process.cwd(), "cartData", JSON.stringify(cartData), false)
-
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                 addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
@@ -76,7 +74,6 @@ export class OrderController {
             let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
             if (!getStore.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
-
 
             /**
              * @description step 1 create order on CMS synchronously
@@ -206,8 +203,8 @@ export class OrderController {
     }
     /**
      * @method GET
-     * @param {string} cCode
-     * @param {string} phnNo
+     * @param {string=} cCode
+     * @param {string=} phnNo
      * @param {number} orderId
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {

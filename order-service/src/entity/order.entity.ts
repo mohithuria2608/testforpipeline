@@ -5,7 +5,7 @@ import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
 import { kafkaService, paymentService } from '../grpc/client';
-import { SDM } from '../sdm';
+import { OrderSDME } from '../sdm';
 
 
 export class OrderClass extends BaseEntity {
@@ -14,8 +14,9 @@ export class OrderClass extends BaseEntity {
     }
     /**
     * @method INTERNAL
+    * @description Sync order request in KAFKA for creating order on SDM
     */
-    async syncOrder(payload) {
+    async syncOrder(payload: ICartRequest.ICartData) {
         try {
             let sdmOrderChange = {
                 set: this.set,
@@ -44,6 +45,7 @@ export class OrderClass extends BaseEntity {
 
     /**
     * @method GRPC
+    * @description : Create order on SDM
     * */
     async createSdmOrder(payload: ICartRequest.ICartData) {
         try {
@@ -51,7 +53,17 @@ export class OrderClass extends BaseEntity {
              * @step 1 :create order on sdm 
              * @step 2 :update mongo order using payload.cartId sdmOrderRef
              */
+            let data: IOrderSdmRequest.ICreateOrder = {}
+            let createOrder = await OrderSDME.createOrder(data)
+            if (createOrder && createOrder['orderId']) {
+                this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                    sdmOrderRef: createOrder['orderId'],
+                    status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                    updatedAt: new Date().getTime()
+                })
+            } else {
 
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", error, false)
@@ -122,7 +134,7 @@ export class OrderClass extends BaseEntity {
                 let order = await this.getOneEntityMdb({ cartId: payload.cartId }, { items: 0 })
                 if (order && order._id) {
                     if (order.sdmOrderRef && order.sdmOrderRef != 0) {
-                        let sdmOrder = await SDM.OrderSDME.getOrderDetail({})
+                        let sdmOrder = await OrderSDME.getOrderDetail({})
                         /**
                          * @step 1 : update mongo order status wrt to sdmOrder status
                          */
