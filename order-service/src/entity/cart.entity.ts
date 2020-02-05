@@ -289,9 +289,14 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async assignNewCart(cartId: string, userId: string) {
+    async assignNewCart(oldCartId: string, cartId: string, userId: string) {
         try {
+            consolelog(process.cwd(), "assignNewCart111111111111111111", "error", false)
+
             await this.createDefaultCart({ userId: userId, cartId: cartId })
+            await Aerospike.remove({ set: this.set, key: oldCartId })
+            consolelog(process.cwd(), "assignNewCart1111111111111111112222222222222222", oldCartId, false)
+
             return
         } catch (error) {
             consolelog(process.cwd(), "assignNewCart", error, false)

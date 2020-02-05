@@ -127,7 +127,7 @@ export class OrderController {
              * @description : update user with new cart
              */
             let newCartId = ENTITY.OrderE.ObjectId().toString()
-            ENTITY.CartE.assignNewCart(newCartId, auth.id)
+            ENTITY.CartE.assignNewCart(cartData.cartId, newCartId, auth.id)
             let asUserChange = {
                 set: Constant.SET_NAME.USER,
                 as: {
@@ -136,7 +136,6 @@ export class OrderController {
                 }
             }
             await userService.sync(asUserChange)
-            // Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
 
             ENTITY.OrderE.getSdmOrder({
                 cartId: payload.cartId,
@@ -194,7 +193,7 @@ export class OrderController {
      * */
     async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1, orderId: 1 })
             if (order && order._id) {
                 return order
             } else {

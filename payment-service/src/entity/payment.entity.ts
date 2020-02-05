@@ -379,7 +379,7 @@ export class PaymentClass extends BaseEntity {
                 returnUrl: this.getReturnUrl(),
                 locale: payload.locale || PaymentClass.PAYMENT_OPTIONS.LOCALE.EN, // default english
                 paymentAction: PaymentClass.PAYMENT_OPTIONS.ACTIONS.AUTHORIZE,
-                // initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString()
+                initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString()
             }
         };
 

@@ -356,6 +356,20 @@ class AerospikeClass {
         }
     }
 
+    async exists(argv: IAerospike.Exists) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let record = await this.client.exists(key)
+                    resolve(record)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+    
     async  udfRegister(argv) {
         return new Promise(async (resolve, reject) => {
             try {

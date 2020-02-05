@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../aerospike'
 
 export class CartController {
 
@@ -22,6 +23,11 @@ export class CartController {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+
+            let checkCart = await Aerospike.exists({ set: ENTITY.CartE.set, key: payload.cartId })
+            if (!checkCart) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            }
 
             let invalidMenu = false
             if (payload.lat && payload.lng) {
