@@ -28,7 +28,7 @@ export const start = (async () => {
         "widgetType": "BANNER_LARGE",
         "status": 1,
         "title": "",
-        "ctaAction": [],
+        "ctaAction": {},
         "media": [
           {
             "sequence": 1,
@@ -80,12 +80,12 @@ export const start = (async () => {
         "widgetType": "EXPLORE_MENU",
         "title": "Explore Menu",
         "status": 1,
-        "ctaAction": [{
+        "ctaAction": {
           "title": "View all",
           "id": 1,
           "type": "product",
           "delimeters": "delimeters"
-        }],
+        },
         "media": [
           {
             "sequence": 1,
@@ -163,12 +163,12 @@ export const start = (async () => {
         "widgetType": "BEST_SELLERS",
         "title": "Best Sellers",
         "status": 1,
-        "ctaAction": [{
+        "ctaAction": {
           "title": "View all",
           "id": 1,
           "type": "product",
           "delimeters": "delimeters"
-        }],
+        },
         "products": [
           {
             "sequence": 1,
@@ -221,7 +221,7 @@ export const start = (async () => {
         "widgetType": "BANNER_MEDIUM",
         "status": 1,
         "title": "",
-        "ctaAction": [],
+        "ctaAction": {},
         "media": [
           {
             "sequence": 1,
@@ -247,12 +247,12 @@ export const start = (async () => {
         "widgetType": "WHATS_NEW",
         "title": "What's New",
         "status": 1,
-        "ctaAction": [{
+        "ctaAction": {
           "title": "View all",
           "id": 1,
           "type": "product",
           "delimeters": "delimeters"
-        }],
+        },
         "products": [
           {
             "sequence": 1,
@@ -322,7 +322,7 @@ export const start = (async () => {
         "content": "KFC | KENTUCKY FRIED WINGS | LOST IN THE SAUCE",
         "products": [],
         "title": "",
-        "ctaAction": []
+        "ctaAction": {}
       },
       {
         "id": 7,
@@ -346,7 +346,7 @@ export const start = (async () => {
           }
         ],
         "title": "",
-        "ctaAction": [],
+        "ctaAction": {},
         "products": [],
         "content": ""
       }

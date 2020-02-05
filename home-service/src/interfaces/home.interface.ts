@@ -7,7 +7,7 @@ declare namespace IHomeRequest {
         widgetType: string,
         title: string,
         status: number,
-        ctaAction: ctaAction[]
+        ctaAction: ctaAction
         media: media[],
         products: products[],
         content: string
