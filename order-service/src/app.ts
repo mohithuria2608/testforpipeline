@@ -21,6 +21,40 @@ export const start = (async () => {
     let a: IMenuGrpcRequest.IFetchMenuRes
 
     await bootstrap(server)
+    //   Entries: {
+    //     "CEntry": [
+    //         {
+    //             "ItemID": "110002",
+    //             "Level": "0",
+    //             "ModCode": "NONE",
+    //             "Name": "Kids Chicken Meal",
+    //             "OrdrMode": "OM_SAVED",
+    //             "Price": "13",
+    //             "Status": "NOTAPPLIED"
+    //         },
+    //         {
+    //             "ItemID": "110002",
+    //             "Level": "0",
+    //             "ModCode": "NONE",
+    //             "Name": "Kids Chicken Meal",
+    //             "OrdrMode": "OM_SAVED",
+    //             "Price": "13",
+    //             "Status": "NOTAPPLIED"
+    //         },
+    //         {
+    //             "ItemID": "110002",
+    //             "Level": "0",
+    //             "ModCode": "NONE",
+    //             "Name": "Kids Chicken Meal",
+    //             "OrdrMode": "OM_SAVED",
+    //             "Price": "13",
+    //             "Status": "NOTAPPLIED"
+    //         }
+    //     ]
+    // },
+    let entry = {}
+    
+
 
     // await SDM.OrderSDME.getOrderDetail({})
 

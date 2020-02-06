@@ -130,7 +130,7 @@
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
-        "bgColorCode": "#000000",
+        "bgColorCode": "E4002B",
         "action": {
           "id": 1,
           "type": "menu",
@@ -144,7 +144,7 @@
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
-        "bgColorCode": "#000000",
+        "bgColorCode": "00E42B",
         "action": {
           "id": 1,
           "type": "menu",
@@ -158,7 +158,7 @@
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
-        "bgColorCode": "#000000",
+        "bgColorCode": "2B00E4",
         "action": {
           "id": 1,
           "type": "menu",
@@ -288,7 +288,7 @@
   {
     "id": 6,
     "language": "En",
-    "sequence": 7,
+    "sequence": 6,
     "widgetType": "BANNER_SMALL",
     "status": 1,
     "media": [
@@ -315,7 +315,7 @@
   {
     "id": 7,
     "language": "En",
-    "sequence": 6,
+    "sequence": 7,
     "widgetType": "BANNER_VIDEO",
     "status": 1,
     "media": [
