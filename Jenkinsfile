@@ -15,7 +15,10 @@ pipeline {
         Payment_image="americana.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
         Notification_image="americana.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
         Log_image="americana.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
+<<<<<<< HEAD
 
+=======
+>>>>>>> qa
 
     }
     agent any

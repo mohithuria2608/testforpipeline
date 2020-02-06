@@ -51,6 +51,7 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
+                        maxConnsPerNode: 1000
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
@@ -309,7 +310,7 @@ class AerospikeClass {
                         res = await this.queryForeach(query)
                     }
                     resolve(res)
-                } else reject('Client not initialized');
+                } else reject('Client is not initialized');
             } catch (error) {
                 reject(error)
             }
