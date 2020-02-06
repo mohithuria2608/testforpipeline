@@ -217,6 +217,8 @@ export class OrderController {
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
+                order['nextPing'] = 15
+                order['unit'] = "second"
                 return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
