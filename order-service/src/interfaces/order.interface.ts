@@ -57,6 +57,7 @@ declare namespace IOrderRequest {
     }
 
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
+        isActive: number
     }
 
     interface IOrderDetail {

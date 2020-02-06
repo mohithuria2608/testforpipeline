@@ -51,6 +51,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
+                    isActive: Joi.number().valid(0, 1).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     page: Joi.number().min(1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),

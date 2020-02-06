@@ -245,7 +245,8 @@ export class OrderClass extends BaseEntity {
             let pipeline = [
                 {
                     $match: {
-                        userId: auth.id
+                        userId: auth.id,
+                        isActive: payload.isActive
                     }
                 },
                 { $sort: { isActive: -1, updatedAt: -1 } },
