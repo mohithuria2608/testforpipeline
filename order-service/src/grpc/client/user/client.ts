@@ -26,7 +26,7 @@ export class UserService {
     async fetchUser(payload: IUserRequest.IFetchUser): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             await userServiceValidator.fetchUserValidator(payload)
-            this.userClient.fetchUser({ userId: payload.userId }, (error, res) => {
+            this.userClient.fetchUser(payload, (error, res) => {
                 if (!error) {
                     consolelog(process.cwd(), "successfully fetched user by id", JSON.stringify(res), false)
                     resolve(res)
@@ -40,6 +40,8 @@ export class UserService {
 
     async fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
         return new Promise(async (resolve, reject) => {
+            consolelog(process.cwd(), "fetchAddress", payload, false)
+
             await userServiceValidator.fetchAddressValidator(payload)
             this.userClient.fetchAddress({ userId: payload.userId, addressId: payload.addressId, bin: payload.bin }, (error, res) => {
                 if (!error) {

@@ -25,7 +25,7 @@ server.addService(orderProto.OrderService.service, {
             let res: {} = await ENTITY.CartE.createDefaultCart(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "createDefaultCart", error, false)
+            consolelog(process.cwd(), "createDefaultCart", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -35,7 +35,7 @@ server.addService(orderProto.OrderService.service, {
             let res: {} = await ENTITY.CartE.updateCartTTL(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", error, false)
+            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -45,17 +45,17 @@ server.addService(orderProto.OrderService.service, {
             let res = await ENTITY.CartE.getCart(call.request)
             callback(null, { cart: JSON.stringify(res) })
         } catch (error) {
-            consolelog(process.cwd(), "getCart", error, false)
+            consolelog(process.cwd(), "getCart", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
+            // consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
             let res: {} = await orderController.syncOrderFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

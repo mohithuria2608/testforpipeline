@@ -22,7 +22,7 @@ export class CountryController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"bootstrapCountry", error, false)
+            consolelog(process.cwd(),"bootstrapCountry", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

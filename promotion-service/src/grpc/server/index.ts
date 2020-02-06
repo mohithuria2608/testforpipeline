@@ -26,7 +26,7 @@ server.addService(promotionProto.PromotionService.service, {
             let res: {} = await promotionController.syncPromoFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -36,7 +36,7 @@ server.addService(promotionProto.PromotionService.service, {
             let res: {} = await promotionController.validatePromotion(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "validatePromotion", error, false)
+            consolelog(process.cwd(), "validatePromotion", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

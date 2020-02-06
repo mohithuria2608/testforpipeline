@@ -42,8 +42,8 @@ export default (opts?): Middleware => {
                     argv: JSON.stringify(data)
                 }
             }
-            consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
-            kafkaService.kafkaSync(dataToSave)
+            // consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
+            // kafkaService.kafkaSync(dataToSave)
         })
 
         await next()

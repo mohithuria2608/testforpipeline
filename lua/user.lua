@@ -6,20 +6,23 @@ local function rec_to_map(rec)
     return xrec
 end
 
-function check_phone_exist(stream, cCode)
-   local function cCode_filter(rec)
-      local val = rec['cCode']
-      if val == cCode then
+function check_social_key(stream, brand, country, medium, socialKey)
+   local function brand_filter(rec)
+      local val = rec['brand']
+      if val == brand then
          return true
       else
          return false
       end
    end
-
-  return stream:filter(cCode_filter):map(rec_to_map)
-end
-
-function check_social_key(stream, medium, socialKey)
+   local function country_filter(rec)
+      local val = rec['country']
+      if val == country then
+         return true
+      else
+         return false
+      end
+   end
    local function medium_filter(rec)
       local val = rec['medium']
       if val == medium then
@@ -37,5 +40,5 @@ function check_social_key(stream, medium, socialKey)
       end
    end
 
-return stream:filter(medium_filter):filter(socialKey_filter):map(rec_to_map)
+return stream:filter(brand_filter):filter(country_filter):filter(medium_filter):filter(socialKey_filter):map(rec_to_map)
 end

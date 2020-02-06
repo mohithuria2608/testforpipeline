@@ -23,7 +23,7 @@ export class CityController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"bootstrapCity", error, false)
+            consolelog(process.cwd(),"bootstrapCity", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

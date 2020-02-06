@@ -50,27 +50,29 @@ declare namespace IOrderRequest {
         name_ar: string,
     }
 
-    interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
+    interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination, ICartRequest.IValidateCart {
         addressId: string,
-        cartId: string,
+        orderType: string,
+        paymentMethodId: number
     }
 
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
     }
 
+    interface IOrderDetail {
+        orderId: string,
+    }
+
+    interface IOrderStatus {
+        orderId: string,
+    }
     interface ITrackOrder {
         cCode: string,
         phnNo: string,
         orderId: string,
     }
 
-
-    interface ICreateSdmOrder {
-
-    }
-
     interface IGetSdmOrder {
-        cartId: string,
         sdmOrderRef: number,
         status?: string,
         timeInterval: number

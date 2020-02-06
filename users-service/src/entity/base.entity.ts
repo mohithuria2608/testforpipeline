@@ -16,10 +16,27 @@ export class BaseEntity {
         try {
             return authService.createToken(dataToSend)
         } catch (error) {
-            consolelog(process.cwd(), "createToken", error, false)
+            consolelog(process.cwd(), "createToken", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
+
+    /**
+     * @description Validate latitude and longitude from location service
+     */
+    async fetchStore(storeId: number): Promise<IStoreGrpcRequest.IStore[]> {
+        try {
+            let store = await locationService.fetchStore({ storeId })
+            if (store && store.id)
+                return [store]
+            else
+                []
+        } catch (error) {
+            consolelog(process.cwd(), "fetchStore", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
 
     /**
      * @description Validate latitude and longitude from location service
@@ -28,7 +45,7 @@ export class BaseEntity {
         try {
             return await locationService.validateCoordinate({ lat, lng })
         } catch (error) {
-            consolelog(process.cwd(), "validateCoordinate", error, false)
+            consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -40,7 +57,7 @@ export class BaseEntity {
         try {
             return await orderService.createDefaultCart({ cartId, userId })
         } catch (error) {
-            consolelog(process.cwd(), "createDefaultCart", error, false)
+            consolelog(process.cwd(), "createDefaultCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -52,7 +69,7 @@ export class BaseEntity {
         try {
             return await orderService.updateCartTTL({ cartId })
         } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", error, false)
+            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -23,7 +23,7 @@ export class AreaController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"bootstrapArea", error, false)
+            consolelog(process.cwd(),"bootstrapArea", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

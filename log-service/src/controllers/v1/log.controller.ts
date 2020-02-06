@@ -14,7 +14,7 @@ export class LogController {
 
             return {}
         } catch (error) {
-            consolelog(process.cwd(), 'log', error, false)
+            consolelog(process.cwd(), 'log', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

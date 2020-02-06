@@ -9,8 +9,14 @@ export class UserchangeEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
-            bin: 'phnNo',
-            index: 'idx_' + this.set + '_' + 'phnNo',
+            bin: 'fullPhnNo',
+            index: 'idx_' + this.set + '_' + 'fullPhnNo',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'socialKey',
+            index: 'idx_' + this.set + '_' + 'socialKey',
             type: "STRING"
         }
     ]
@@ -21,30 +27,38 @@ export class UserchangeEntity extends BaseEntity {
 
     public userchangeSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk, user id"),
-        isGuest: Joi.number().valid(0, 1),
-        /**
-         * @description : phone number otp verify
-         */
-        otp: Joi.number(),
-        otpExpAt: Joi.number(),
-        otpVerified: Joi.number(),
-        /**
-         * @description : merge keys
-         */
-        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-        phnNo: Joi.string().trim(),
-        email: Joi.string().email().lowercase().trim(),
+        username: Joi.string().trim().required().description("sk - unique"),
+        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
+        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
+        email: Joi.string().email().lowercase().trim().required(),
+        fullPhnNo: Joi.string().trim().required(),
+        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
+        phnNo: Joi.string().trim().required(),
+        sdmUserRef: Joi.number().required(),
+        cmsUserRef: Joi.number().required(),
+        phnVerified: Joi.number().valid(0, 1).required(),
+        name: Joi.string().trim().required(),
         profileStep: Joi.number().valid(
             Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-        ),
-        socialKey: Joi.string().trim(),
+        ).required(),
+        socialKey: Joi.string().trim().required(),
         medium: Joi.string().trim().valid(
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        cartId: Joi.string(),
+        password: Joi.string(),
+        cartId: Joi.string().required(),
+        createdAt: Joi.number().required(),
+
+        /**
+         * @description extra validator keys
+         */
+        isGuest: Joi.number().valid(0, 1),
+        otp: Joi.number(),
+        otpExpAt: Joi.number(),
+        otpVerified: Joi.number(),
         deleteUserId: Joi.string(),
     });
 
@@ -65,7 +79,7 @@ export class UserchangeEntity extends BaseEntity {
                 return {}
             }
         } catch (error) {
-            consolelog(process.cwd(), "getUserchange", error, false)
+            consolelog(process.cwd(), "getUserchange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -73,41 +87,74 @@ export class UserchangeEntity extends BaseEntity {
     /**
     * 
     * @param {IUserRequest.IAuthVerifyOtp} payload 
-    * @param {IUserRequest.IUserData} userData 
+    * @param {IUserchangeRequest.IUserchange} curUserchnage 
     */
-    async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, userData: IUserRequest.IUserData) {
+    async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, curUserchnage: IUserchangeRequest.IUserchange) {
         try {
-            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: userData.id })
-            consolelog(process.cwd(), "getUserchange", JSON.stringify(getUserchange), false)
-
-            if (getUserchange && getUserchange.id) {
-                if (getUserchange.cCode != payload.cCode || getUserchange.phnNo != payload.phnNo)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                if (getUserchange.otp == 0 && getUserchange.otpExpAt == 0)
+            if (curUserchnage && curUserchnage.id) {
+                if (curUserchnage.fullPhnNo) {
+                    if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo))
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                }
+                if (curUserchnage.cCode && curUserchnage.phnNo) {
+                    if (curUserchnage.cCode != payload.cCode || curUserchnage.phnNo != payload.phnNo)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                }
+                if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (getUserchange.otp != payload.otp)
+                if (curUserchnage.otp != payload.otp)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                if (getUserchange.otpExpAt < new Date().getTime())
+                if (curUserchnage.otpExpAt < new Date().getTime())
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_EXPIRED)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
             }
-            await Aerospike.remove({ set: this.set, key: userData.id })
-            return getUserchange
+            Aerospike.remove({ set: this.set, key: curUserchnage.id })
+            return {}
         } catch (error) {
-            consolelog(process.cwd(), "validateOtpOnPhnChange", error, false)
+            consolelog(process.cwd(), "validateOtpOnPhnChange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async createUserchange(payload: IUserchangeRequest.IUserchange, userData: IUserRequest.IUserData) {
+    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange) {
         try {
-            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: userData.id })
-            let dataToUpdateUserchange = {
-                id: userData.id
-            };
+            let isCreate = false
+            let checkUserchange = await this.getUserchange({ userId: userId })
+            if (checkUserchange && checkUserchange.id) {
+                userId = checkUserchange.id
+            } else {
+                let queryArg: IAerospike.Query = {
+                    set: this.set,
+                    background: false,
+                }
+                if (payload.phnNo && payload.cCode) {
+                    const fullPhnNo = payload.cCode + payload.phnNo;
+                    queryArg['equal'] = {
+                        bin: "fullPhnNo",
+                        value: fullPhnNo
+                    }
+                    let userchangeByPhnNo = await Aerospike.query(queryArg)
+                    if (userchangeByPhnNo && userchangeByPhnNo.length > 0) {
+                        checkUserchange = userchangeByPhnNo[0]
+                        userId = checkUserchange.id
+                    } else {
+                        isCreate = true
+                    }
+                }
+                else {
+                    isCreate = true
+                }
+            }
+            let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
+                id: userId
+            }
+            if (payload.username)
+                dataToUpdateUserchange['username'] = payload.username
             if (payload.isGuest != undefined)
                 dataToUpdateUserchange['isGuest'] = payload.isGuest
+            if (payload.fullPhnNo)
+                dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)
                 dataToUpdateUserchange['cCode'] = payload.cCode
             if (payload.phnNo)
@@ -116,37 +163,39 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['otp'] = payload.otp
             if (payload.otpExpAt)
                 dataToUpdateUserchange['otpExpAt'] = payload.otpExpAt
-            if (payload.otpVerified != undefined)
+            if (payload.otpVerified)
                 dataToUpdateUserchange['otpVerified'] = payload.otpVerified
-            if (payload.cartId)
-                dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.name)
                 dataToUpdateUserchange['name'] = payload.name
             if (payload.email)
                 dataToUpdateUserchange['email'] = payload.email
-            if (payload.cCode && payload.phnNo && payload.email && payload.name)
-                dataToUpdateUserchange['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-            if (payload.socialKey != undefined)
+            if (payload.socialKey)
                 dataToUpdateUserchange['socialKey'] = payload.socialKey
-            if (payload.medium != undefined)
+            if (payload.medium)
                 dataToUpdateUserchange['medium'] = payload.medium
+            if (payload.cartId)
+                dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.deleteUserId)
                 dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,
                 set: this.set,
-                key: userData.id,
+                key: dataToUpdateUserchange['id'],
             }
-            if (getUserchange && getUserchange.id) {
-                putArg['update'] = true
-            } else {
+            if (isCreate) {
+                putArg['ttl'] = Constant.SERVER.USERCHANGE_TTL
                 putArg['create'] = true
             }
+            else
+                putArg['update'] = true
+
+            consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
             await Aerospike.put(putArg)
-            return {}
+            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: dataToUpdateUserchange['id'] })
+            return getUserchange
         } catch (error) {
-            consolelog(process.cwd(), "createUserchange", error, false)
+            consolelog(process.cwd(), "createUserchange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

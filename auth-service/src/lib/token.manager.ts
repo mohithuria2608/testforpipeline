@@ -53,7 +53,7 @@ export class TokenManager {
 
             return token
         } catch (error) {
-            consolelog(process.cwd(), 'setToken', error, false)
+            consolelog(process.cwd(), 'setToken', JSON.stringify(error), false)
             return Promise.reject(Constant.STATUS_MSG.ERROR.E501.TOKENIZATION_ERROR)
         }
     };

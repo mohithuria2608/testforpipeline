@@ -3,6 +3,7 @@ import { consolelog, cryptData } from '../../utils'
 import { userService, locationService, kafkaService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import { cartController } from './cart.controller';
 
 export class OrderController {
 
@@ -14,8 +15,8 @@ export class OrderController {
     */
     async syncOrderFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
 
                 }
@@ -27,11 +28,13 @@ export class OrderController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.cms.create) {
 
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
+                let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
                     ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
@@ -39,7 +42,7 @@ export class OrderController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -51,18 +54,28 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
-            if (userData || !userData.id || userData.id != "")
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: userData.id, addressId: payload.addressId, bin: "delivery" })
-            if (!getAddress.hasOwnProperty("id"))
+            let noonpayRedirectionUrl = ""
+            let postCartPayload: ICartRequest.IValidateCart = {
+                cartId: payload.cartId,
+                curMenuId: payload.curMenuId,
+                menuUpdatedAt: payload.menuUpdatedAt,
+                couponCode: payload.couponCode,
+                items: payload.items
+            }
+            let cartData: ICartRequest.ICartData = await cartController.validateCart(headers, postCartPayload, auth)
+            // if (cartData['isPriceChanged'] || cartData['invalidMenu'])
+            //     return { cartValidate: cartData }
+
+            let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+            if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
             let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
             if (!getStore.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
-
-            let cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
 
             /**
              * @description step 1 create order on CMS synchronously
@@ -72,32 +85,48 @@ export class OrderController {
              */
             // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
             ENTITY.OrderE.syncOrder(cartData)
-            cartData['status'] = Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
-            cartData['updatedAt'] = new Date().getTime()
-            cartData['transLogs'] = []
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOneEntityMdb(cartData)
-            let amount = order.amount.reduce((init, elem) => {
-                if (elem.type == "TOTAL")
-                    return init + elem.amount
-            }, 0)
-            let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                orderId: order._id.toString(),
-                amount: amount,
-                storeCode: "kfc_uae_store",
-                paymentMethodId: 1,
-                channel: "Mobile",
-                locale: "en",
-            })
-            await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
-                $addToSet: {
-                    transLogs: initiatePaymentObj
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(cartData, getAddress, getStore)
+            let amount
+            order.amount.filter(elem => {
+                if (elem.code == "TOTAL") {
+                    return amount = elem
                 }
             })
+            console.log("amount", typeof amount, amount)
+            if (payload.paymentMethodId != 0) {
+                let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
+                    orderId: order._id.toString(),
+                    amount: amount.amount,
+                    storeCode: "kfc_uae_store",
+                    paymentMethodId: 1,
+                    channel: "Mobile",
+                    locale: "en",
+                })
+                noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
+                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                    $addToSet: {
+                        transLogs: initiatePaymentObj
+                    },
+                    payment: {
+                        paymentMethodId: payload.paymentMethodId,
+                        amount: amount.amount,
+                        name: "Card",
+                    }
+                })
+            } else {
+                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                    payment: {
+                        paymentMethodId: payload.paymentMethodId,
+                        amount: amount.amount,
+                        name: "Cash On Delivery"
+                    }
+                })
+            }
             /**
              * @description : update user with new cart
              */
-            let newCartId = ENTITY.OrderE.DAOManager.ObjectId.toString()
-            ENTITY.CartE.assignNewCart(newCartId, auth.id)
+            let newCartId = ENTITY.OrderE.ObjectId().toString()
+            ENTITY.CartE.assignNewCart(cartData.cartId, newCartId, auth.id)
             let asUserChange = {
                 set: Constant.SET_NAME.USER,
                 as: {
@@ -106,120 +135,15 @@ export class OrderController {
                 }
             }
             await userService.sync(asUserChange)
-            // Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
-
-            ENTITY.OrderE.getSdmOrder({
-                cartId: payload.cartId,
-                sdmOrderRef: 0,
-                timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
-                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
-            })
             return {
-                cartId: newCartId,
-                noonpayRedirectionUrl: initiatePaymentObj.noonpayRedirectionUrl,
-                order: {
-                    "_id": "5e2422631f66da1fa13402f1",
-                    "cartId": "aad04f8b5fd63bafd0e26c52731eb4a5ad4ac50f5c22c4c5424cdb35988e09c9",
-                    "cmsCartRef": 0,
-                    "sdmOrderRef": 0,
-                    "cmsOrderRef": 0,
-                    "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                    "orderId": "UAE-1",
-                    "status": "PENDING",
-                    "createdAt": 1578558475844,
-                    "updatedAt": 1578558475844,
-                    "items": [
-                        {
-                            "id": 1,
-                            "position": 1,
-                            "name": "Chocolate Chip Cookie",
-                            "description": "",
-                            "inSide": 0,
-                            "finalPrice": 5.5,
-                            "specialPrice": 4.5,
-                            "typeId": "simple",
-                            "catId": 21,
-                            "metaKeyword": [
-                                "Chocolate Chip Cookie"
-                            ],
-                            "bundleProductOptions": [],
-                            "selectedItem": 0,
-                            "configurableProductOptions": [],
-                            "items": [],
-                            "sku": 710003,
-                            "imageSmall": "/d/u/dummy-product.png",
-                            "imageThumbnail": "/d/u/dummy-product.png",
-                            "image": "/d/u/dummy-product.png",
-                            "taxClassId": 2,
-                            "virtualGroup": 0,
-                            "visibility": 4,
-                            "associative": 0
-                        }
-                    ],
-                    "amount": [
-                        {
-                            "type": "SUB_TOTAL",
-                            "name": "Sub Total",
-                            "code": "SUB_TOTAL",
-                            "amount": 30.25,
-                            "sequence": 1
-
-                        },
-                        {
-                            "type": "DISCOUNT",
-                            "name": "Discount",
-                            "code": "KFC 10",
-                            "amount": 2,
-                            "sequence": 2
-                        },
-                        {
-                            "type": "TAX",
-                            "name": "VAT",
-                            "code": "VAT",
-                            "amount": 0.26,
-                            "sequence": 3
-                        },
-                        {
-                            "type": "SHIPPING",
-                            "name": "Free Delivery",
-                            "code": "FLAT",
-                            "amount": 7.5,
-                            "sequence": 4
-                        },
-                        {
-                            "type": "TOTAL",
-                            "name": "Total",
-                            "code": "TOTAL",
-                            "amount": 30.25,
-                            "sequence": 5
-                        }],
-                    "address": {
-                        "areaId": 520,
-                        "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                        "storeId": 0,
-                        "sdmAddressRef": 0,
-                        "cmsAddressRef": 0,
-                        "tag": "HOME",
-                        "bldgName": "Peru",
-                        "description": "Peru society, street 2",
-                        "flatNum": "35",
-                        "addressType": "DELIVERY",
-                        "lat": 50.322,
-                        "lng": 20.322
-                    },
-                    "store": {
-                        "sdmStoreRef": 28,
-                        "lat": 50.322,
-                        "lng": 20.322,
-                        "address": "store is open address",
-                        "name_en": "ABU KADRA - DUBAI",
-                        "name_ar": "كنتاكى أبو خضرة  - دبى",
-                    },
-                    "isPreviousOrder": false
+                orderPlaced: {
+                    newCartId: newCartId,
+                    noonpayRedirectionUrl: noonpayRedirectionUrl,
+                    orderInfo: order
                 }
             }
         } catch (error) {
-            consolelog(process.cwd(), "postOrder", error, false)
+            consolelog(process.cwd(), "postOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -232,79 +156,71 @@ export class OrderController {
         try {
             return await ENTITY.OrderE.getOrderHistory(payload, auth)
         } catch (error) {
-            consolelog(process.cwd(), "orderHistory", error, false)
+            consolelog(process.cwd(), "orderHistory", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
     /**
      * @method GET
-     * @param {string} cCode
-     * @param {string} phnNo
+     * @param {number} orderId
+     * */
+    async orderDetail(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderDetail, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            if (order && order._id) {
+                return order
+            } else {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "orderDetail", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GET
+     * @param {number} orderId
+     * */
+    async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1, orderId: 1 })
+            if (order && order._id) {
+                return order
+            } else {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "orderStatusPing", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+    /**
+     * @method GET
+     * @param {string=} cCode
+     * @param {string=} phnNo
      * @param {number} orderId
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
-            if (userData || !userData.id || userData.id != "")
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let trackOrder: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ $or: [{ _id: payload.orderId }, { orderId: payload.orderId }] },
-                {
-                    orderId: 1,
-                    userId: 1,
-                    status: 1,
-                    address: 1,
-                    store: 1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                    amount: 1,
-                })
-            if (trackOrder && trackOrder._id) {
-                if (userData.id != trackOrder.userId)
+            let userData: IUserRequest.IUserData
+            if (payload.cCode && payload.phnNo) {
+                userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+                if (userData.id == undefined || userData.id == null || userData.id == "")
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            }
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            if (order && order._id) {
+                if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                trackOrder.amount.filter(obj => { return obj.type == "TOTAL" })[0]
-                return trackOrder
+                order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
+                return order
             } else {
-                return {
-                    "_id": "5e2422631f66da1fa13402f1",
-                    "orderId": "UAE-1",
-                    "userId": "d234b6b0-32b9-11ea-ad4b-376448739c79",
-                    "status": "PENDING",
-                    "createdAt": 1578558475844,
-                    "updatedAt": 1578558475844,
-                    "address": {
-                        "areaId": 520,
-                        "addressId": "4c0c6cd0-32ba-11ea-ad4b-376448739c79",
-                        "storeId": 0,
-                        "sdmAddressRef": 0,
-                        "cmsAddressRef": 0,
-                        "tag": "HOME",
-                        "bldgName": "Peru",
-                        "description": "Peru society, street 2",
-                        "flatNum": "35",
-                        "addressType": "DELIVERY",
-                        "lat": 50.322,
-                        "lng": 20.322
-                    },
-                    "store": {
-                        "sdmStoreRef": 28,
-                        "lat": 50.322,
-                        "lng": 20.322,
-                        "address": "store is open address",
-                        "name_en": "ABU KADRA - DUBAI",
-                        "name_ar": "كنتاكى أبو خضرة  - دبى",
-                    },
-                    "amount": {
-                        "type": "TOTAL",
-                        "name": "Total",
-                        "code": "TOTAL",
-                        "amount": 30.25,
-                        "sequence": 5
-                    }
-                }
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "trackOrder", error, false)
+            consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

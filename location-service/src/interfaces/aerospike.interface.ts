@@ -74,6 +74,11 @@ declare namespace IAerospike {
         lng: number,
     }
 
+    interface Exists {
+        set: string,
+        key: string,
+    }
+
     interface Udf {
         forEach: boolean,
         module: any,
@@ -88,6 +93,7 @@ declare namespace IAerospike {
         ttl?: number,
         create?: boolean,
         replace?: boolean,
+        createOrReplace?: boolean,
         update?: boolean
     }
 

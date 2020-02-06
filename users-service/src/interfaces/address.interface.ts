@@ -20,14 +20,15 @@ declare namespace IAddressRequest {
         cmsAddressRef: number,
         sdmStoreRef: number,
     }
-    
+
     interface IRegisterAddress {
-        lat: number,
-        lng: number,
-        bldgName: string,
-        description: string,
-        flatNum: string,
-        tag: string
+        storeId?: number,
+        lat?: number,
+        lng?: number,
+        bldgName?: string,
+        description?: string,
+        flatNum?: string,
+        tag?: string
     }
 
     interface IUpdateAddress {

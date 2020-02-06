@@ -24,7 +24,7 @@ server.addService(syncProto.SyncService.service, {
             let res = await cmsConfigController.syncConfigFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -34,7 +34,7 @@ server.addService(syncProto.SyncService.service, {
             let res = await cmsConfigController.getConfig(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "getConfig", error, false)
+            consolelog(process.cwd(), "getConfig", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

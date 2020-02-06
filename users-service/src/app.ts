@@ -32,7 +32,7 @@ export const start = (async () => {
     await bootstrap(server)
     // await SDM.UserSDME.createCustomer({})
     // await SDM.UserSDME.getCustomerByUserNameAndPswd({ customerUserName: "", customerPassword: "" })
-    // await SDM.UserSDME.getCustomerByEmail({ email: "abc@gmail.com" })
+    await SDM.UserSDME.getCustomerByEmail({ email: "abc@gmail.com" })
     // await SDM.UserSDME.getCustomersByEmail("")
     // await SDM.UserSDME.getCustomerById(7340706)
     // await SDM.UserSDME.getCustomerByMobile(1111111)

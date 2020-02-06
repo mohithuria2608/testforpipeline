@@ -12,10 +12,13 @@ export class MiscController {
     * */
     async configuration(headers: ICommonRequest.IHeaders) {
         try {
+            let redirectUrl = config.get("server.order.url")
             return {
                 otpDigits: 4,
                 blobBaseUrl: config.get("blobBaseUrl"),
                 locationVicinity: 100,
+                paymentSuccessUrl: redirectUrl + "payment/success",
+                paymentFailureUrl: redirectUrl + "payment/failure",
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
@@ -23,13 +26,34 @@ export class MiscController {
                         defaultCCode: '+971',
                         phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
                         phnLength: 9,
-                        customerCare: "666666666"
+                        customerCare: "666666666",
+                        supportEmail: "kfc_uae@ag.com",
+                        paymentMethods: [
+                            {
+                                "id": 1,
+                                "name": "Card",
+                                "image": "",
+                                default: 0
+                            },
+                            {
+                                "id": 2,
+                                "name": "Visa Checkout",
+                                "image": "",
+                                default: 0
+                            },
+                            {
+                                "id": 0,
+                                "name": "Cash On Delivery",
+                                "image": "",
+                                default: 1
+                            }
+                        ]
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
         } catch (error) {
-            consolelog(process.cwd(), "configuration", error, false)
+            consolelog(process.cwd(), "configuration", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -69,7 +93,7 @@ export class MiscController {
                 }
             ]
         } catch (error) {
-            consolelog(process.cwd(), "faq", error, false)
+            consolelog(process.cwd(), "faq", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -82,7 +106,7 @@ export class MiscController {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "privacyPolicy", error, false)
+            consolelog(process.cwd(), "privacyPolicy", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

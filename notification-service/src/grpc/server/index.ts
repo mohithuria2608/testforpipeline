@@ -23,7 +23,7 @@ server.addService(notificationProto.NotificationService.service, {
             let res: {} = await sms.singleSms(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sms", error, false)
+            consolelog(process.cwd(), "sms", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

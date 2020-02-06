@@ -44,10 +44,16 @@ Kfcapptestuser3
 * jy9ypeF8DQf2ZTLT
 * https://americananode.appskeeper.com/
  
+# pm2 -qa environment SSH Credentials
+* ssh americana-qa@40.123.196.7
+* 99eL78gctCEbaYVC
+* http://americanaqa.appskeeper.com/
 
+# protobuf any type for address 
+* https://github.com/protobufjs/protobuf.js/issues/1082
 
- # protobuf any type for address 
- * https://github.com/protobufjs/protobuf.js/issues/1082
+# retry option for kafka
+* https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
 
- # retry option for kafka
- * https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
+# install aerospike prerequisite 
+* sudo apt-get install g++ libssl1.0.0 libssl-dev libz-dev

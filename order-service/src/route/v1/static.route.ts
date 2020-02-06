@@ -5,4 +5,10 @@ export default (router: Router) => {
         .get('/', async (ctx: Router.IRouterContext) => {
             ctx.body = "<html>  <head>  </head> <body> order-service@kfc2019</body> </html>"
         })
+        .get('/payment/success', async (ctx: Router.IRouterContext) => {
+            ctx.body = {}
+        })
+        .get('/payment/failure', async (ctx: Router.IRouterContext) => {
+            ctx.body = {}
+        })
 }

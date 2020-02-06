@@ -16,7 +16,6 @@ declare namespace IUserRequest {
         createdAt: number,
         cartId: string,
         password: string,
-        changePhnNo: number,
     }
 
     interface IFetchUser {

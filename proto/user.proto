@@ -59,7 +59,9 @@ message IFetchSessionReq {
 }
 
 message IFetchUserReq {
-    required string userId = 1;
+    optional string userId = 1;
+    optional string cCode = 2;
+    optional string phnNo = 3;
 }
 
 message ISession {
@@ -94,7 +96,6 @@ message IUserData {
     required string socialKey = 12;
     required string medium = 13;
     required int32 createdAt = 14;
-    required int32 changePhnNo = 15;
 }
 
 message IFetchAddressReq {
@@ -113,6 +114,6 @@ message IFetchAddressRes {
     required string description = 7;
     required string flatNum = 8;
     required string addressType = 9;
-    required float lat = 10;
-    required float lng = 11;
+    required double lat = 10;
+    required double lng = 11;
 }
