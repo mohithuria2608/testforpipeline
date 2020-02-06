@@ -2,12 +2,12 @@ FROM node:10.17.0
 
 RUN npm cache clean --force
 
-ADD users-service/package.json /tmp/package.json
+ADD order-service/package.json /tmp/package.json
 RUN cd /tmp && npm install -g typescript && npm install
 RUN mkdir -p /usr/src/app && cp -a /tmp/node_modules /usr/src/app/
 
 WORKDIR /usr/src/app
-COPY users-service/ .
+COPY order-service/ .
 
 COPY proto/ /usr/src/app/proto/
 COPY config/ /usr/src/app/config/
