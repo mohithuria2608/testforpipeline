@@ -242,14 +242,20 @@ export class OrderClass extends BaseEntity {
             let nextPage
             let limit = 11
             let skip = (limit * (payload.page - 1));
-            let pipeline = [
-                {
-                    $match: {
-                        userId: auth.id,
-                        isActive: payload.isActive
-                    }
-                },
-                { $sort: { isActive: -1, updatedAt: -1 } },
+            let pipeline = [];
+
+            let match = { userId: auth.id }
+            if (payload.isActive == 1)
+                match['isActive'] = payload.isActive
+            pipeline.push({
+                $match: match
+            })
+            if (payload.isActive == 1) {
+                pipeline.push({ $sort: { updatedAt: -1 } })
+            } else {
+                pipeline.push({ $sort: { isActive: -1, updatedAt: -1 } })
+            }
+            pipeline = pipeline.concat([
                 { $skip: skip },
                 { $limit: limit },
                 {
@@ -257,7 +263,7 @@ export class OrderClass extends BaseEntity {
                         transLogs: 0,
                     }
                 }
-            ]
+            ])
             let getOrderHistory: IOrderRequest.IOrderData[] = await this.aggregateMdb(pipeline, { lean: true })
             nextPage = (getOrderHistory.length == limit) ? (payload.page + 1) : -1
             return {
