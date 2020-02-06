@@ -187,6 +187,10 @@
         "endPoint": "bulksms/bulksms",
         "source": ""
     },
+    "email": {
+        "sgKey": "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",
+        "sender": "support@americana.com"
+    },
     "kafka": {
         "url": "localhost:9093"
     },
