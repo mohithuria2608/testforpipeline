@@ -321,7 +321,7 @@ export class OrderClass extends BaseEntity {
 
             let match = { userId: auth.id }
             if (payload.isActive == 1)
-                match['isActive'] = payload.isActive
+                match['isActive'] = 1
             pipeline.push({
                 $match: match
             })
