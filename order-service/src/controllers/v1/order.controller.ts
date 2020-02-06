@@ -15,8 +15,8 @@ export class OrderController {
     */
     async syncOrderFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
 
                 }
@@ -28,11 +28,13 @@ export class OrderController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.cms.create) {
 
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
+                let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
                     ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
@@ -40,7 +42,7 @@ export class OrderController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -108,7 +110,7 @@ export class OrderController {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: amount.amount,
-                        name: "Card"
+                        name: "Card",
                     }
                 })
             } else {
@@ -133,13 +135,6 @@ export class OrderController {
                 }
             }
             await userService.sync(asUserChange)
-
-            ENTITY.OrderE.getSdmOrder({
-                cartId: payload.cartId,
-                sdmOrderRef: 0,
-                timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
-                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
-            })
             return {
                 orderPlaced: {
                     newCartId: newCartId,
@@ -148,7 +143,7 @@ export class OrderController {
                 }
             }
         } catch (error) {
-            consolelog(process.cwd(), "postOrder", error, false)
+            consolelog(process.cwd(), "postOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -161,7 +156,7 @@ export class OrderController {
         try {
             return await ENTITY.OrderE.getOrderHistory(payload, auth)
         } catch (error) {
-            consolelog(process.cwd(), "orderHistory", error, false)
+            consolelog(process.cwd(), "orderHistory", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -179,7 +174,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "orderDetail", error, false)
+            consolelog(process.cwd(), "orderDetail", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -197,7 +192,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "orderStatusPing", error, false)
+            consolelog(process.cwd(), "orderStatusPing", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -225,7 +220,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "trackOrder", error, false)
+            consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

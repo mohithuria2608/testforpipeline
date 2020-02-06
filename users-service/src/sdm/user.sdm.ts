@@ -44,7 +44,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), 'createCostomer', error, false)
+            consolelog(process.cwd(), 'createCostomer', JSON.stringify(error), false)
             return (error)
         }
     }
@@ -65,7 +65,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), 'updateCustomer', error, false)
+            consolelog(process.cwd(), 'updateCustomer', JSON.stringify(error), false)
             return (error)
         }
     }
@@ -90,7 +90,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getCustomerByUserNameAndPswd", error, true)
+            consolelog(process.cwd(), "getCustomerByUserNameAndPswd", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -114,7 +114,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getCustomerByEmail", error, true)
+            consolelog(process.cwd(), "getCustomerByEmail", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -137,7 +137,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getCustomersByEmail", error, true)
+            consolelog(process.cwd(), "getCustomersByEmail", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -160,7 +160,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getCustomerById", error, true)
+            consolelog(process.cwd(), "getCustomerById", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -183,7 +183,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getCustomerByMobile", error, true)
+            consolelog(process.cwd(), "getCustomerByMobile", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -206,7 +206,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getCustomersByPhone", error, true)
+            consolelog(process.cwd(), "getCustomersByPhone", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

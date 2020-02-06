@@ -37,7 +37,7 @@ export class UserController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -95,7 +95,7 @@ export class UserController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "loginSendOtp", error, false)
+            consolelog(process.cwd(), "loginSendOtp", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -256,7 +256,7 @@ export class UserController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, 0) }
         } catch (error) {
-            consolelog(process.cwd(), "socialAuthValidate", error, false)
+            consolelog(process.cwd(), "socialAuthValidate", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -346,7 +346,7 @@ export class UserController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "profileUpdate", error, false)
+            consolelog(process.cwd(), "profileUpdate", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -404,7 +404,7 @@ export class UserController {
             }
             return formatUserData(user, headers, auth.isGuest)
         } catch (error) {
-            consolelog(process.cwd(), "editProfile", error, false)
+            consolelog(process.cwd(), "editProfile", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

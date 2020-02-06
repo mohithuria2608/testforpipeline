@@ -21,7 +21,7 @@ export interface Iorder extends Document {
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
     cmsCartRef: { type: Number, required: true },
-    sdmOrderRef: { type: Number, required: true },
+    sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true },
     userId: { type: String, required: true, index: true },
     orderId: { type: String, required: true, index: true },
@@ -32,6 +32,7 @@ const orderSchema = new Schema({
     store: { type: Schema.Types.Mixed, required: true },
     payment: { type: Schema.Types.Mixed, required: true },
     transLogs: { type: Schema.Types.Mixed, required: true },
+    isActive: { type: Number, required: true, enum: [0, 1] },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true }
 });

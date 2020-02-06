@@ -29,10 +29,10 @@ export class OrderService {
                 await orderServiceValidator.syncValidator(payload)
                 this.orderClient.sync(payload, (error, res) => {
                     if (!error) {
-                        consolelog(process.cwd(), "successfully synced menu on cms", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully synced order", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in syncing menu on cms", JSON.stringify(error), false)
+                        consolelog(process.cwd(), "Error in syncing order", JSON.stringify(error), false)
                         reject(error)
                     }
                 })

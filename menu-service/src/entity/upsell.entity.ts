@@ -90,7 +90,7 @@ export class UpsellClass extends BaseEntity {
             } else
                 return []
         } catch (error) {
-            consolelog(process.cwd(), "getUpsellProducts", error, false)
+            consolelog(process.cwd(), "getUpsellProducts", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

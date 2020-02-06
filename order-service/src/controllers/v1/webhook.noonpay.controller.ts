@@ -34,14 +34,15 @@ export class WebhookNoonpayController {
                     $addToSet: {
                         transLogs: status
                     },
-                    paymentStatus: status.paymentStatus
+                    "payment.transactionId": status.transaction[0].id,
+                    "payment.status": status.transaction[0].type
                 }
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                 // if (status.paymentStatus == "AUTHORIZED") {
-                    /**
-                     * @description update order on sdm with payment object
-                     */
-                    redirectUrl = redirectUrl + "payment/success"
+                /**
+                 * @description update order on sdm with payment object
+                 */
+                redirectUrl = redirectUrl + "payment/success"
                 // } else {
                 //     redirectUrl = redirectUrl + "payment/failure"
                 // }
@@ -51,7 +52,7 @@ export class WebhookNoonpayController {
             }
 
         } catch (error) {
-            consolelog(process.cwd(), "processPayment", error, false)
+            consolelog(process.cwd(), "processPayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

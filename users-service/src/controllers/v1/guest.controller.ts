@@ -36,7 +36,7 @@ export class GuestController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, 1) }
         } catch (error) {
-            consolelog(process.cwd(), "guestLogin", error, false)
+            consolelog(process.cwd(), "guestLogin", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -97,7 +97,7 @@ export class GuestController {
             userData['profileStep'] = 1
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
-            consolelog(process.cwd(), "guestCheckout", error, false)
+            consolelog(process.cwd(), "guestCheckout", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

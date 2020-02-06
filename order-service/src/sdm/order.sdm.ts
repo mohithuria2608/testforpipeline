@@ -76,10 +76,13 @@ export class OrderSDMEntity extends BaseSDM {
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            return res
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.UpdateOrderResult
+            else
+                return Promise.reject(JSON.stringify(res))
         } catch (error) {
-            consolelog(process.cwd(), 'createOrder', error, false)
-            return (error)
+            consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
+            return Promise.reject(error)
         }
     }
 
@@ -91,17 +94,20 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "GetOrderDetails",
                 req: {
-                    "licenseCode": "AmericanaWeb",
-                    "conceptID": "3",
+                    licenseCode: "AmericanaWeb",
+                    conceptID: "3",
                     language: "En",
-                    orderID: 39784301,
-                    "menuTemplateID": "17"
+                    orderID: payload.sdmOrderRef,
+                    menuTemplateID: "17"
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            return res
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.GetOrderDetailsResult
+            else
+                return {}
         } catch (error) {
-            consolelog(process.cwd(), 'getOrderDetail', error, false)
+            consolelog(process.cwd(), 'getOrderDetail', JSON.stringify(error), false)
             return (error)
         }
     }

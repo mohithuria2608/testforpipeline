@@ -26,7 +26,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), 'createAddress', error, false)
+            consolelog(process.cwd(), 'createAddress', JSON.stringify(error), false)
             return (error)
         }
     }

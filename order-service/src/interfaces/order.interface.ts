@@ -73,7 +73,6 @@ declare namespace IOrderRequest {
     }
 
     interface IGetSdmOrder {
-        cartId: string,
         sdmOrderRef: number,
         status?: string,
         timeInterval: number

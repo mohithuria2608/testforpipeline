@@ -22,7 +22,7 @@ export class PromotionController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncPromoFromKafka", error, false)
+            consolelog(process.cwd(), "syncPromoFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -43,7 +43,7 @@ export class PromotionController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "postPromotion", error, false)
+            consolelog(process.cwd(), "postPromotion", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -63,7 +63,7 @@ export class PromotionController {
                 currentPage: parseInt(payload.page.toString())
             }
         } catch (error) {
-            consolelog(process.cwd(), "getPromotionsList", error, false)
+            consolelog(process.cwd(), "getPromotionsList", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -85,7 +85,7 @@ export class PromotionController {
             } else
                 return { isValid: false }
         } catch (error) {
-            consolelog(process.cwd(), "validatePromotion", error, false)
+            consolelog(process.cwd(), "validatePromotion", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

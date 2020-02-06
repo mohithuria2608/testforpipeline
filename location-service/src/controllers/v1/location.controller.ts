@@ -20,7 +20,7 @@ export class LocationController {
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
         } catch (error) {
-            consolelog(process.cwd(), "validateLocation", error, false)
+            consolelog(process.cwd(), "validateLocation", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -93,7 +93,7 @@ export class LocationController {
             res.sort(compare)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "getPickupList", error, false)
+            consolelog(process.cwd(), "getPickupList", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

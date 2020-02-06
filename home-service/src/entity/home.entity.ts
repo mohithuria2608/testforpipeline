@@ -62,7 +62,7 @@ export class HomeClass extends BaseEntity {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.HOME_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getHome", error, false)
+            consolelog(process.cwd(), "getHome", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

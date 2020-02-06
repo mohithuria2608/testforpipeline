@@ -3,7 +3,6 @@ import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import * as CMS from "../cms"
-import { Aerospike } from '../aerospike'
 import { kafkaService, paymentService } from '../grpc/client';
 import { OrderSDME } from '../sdm';
 
@@ -28,7 +27,7 @@ export class OrderClass extends BaseEntity {
             kafkaService.kafkaSync(sdmOrderChange)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncOrder", error, false)
+            consolelog(process.cwd(), "syncOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -38,7 +37,7 @@ export class OrderClass extends BaseEntity {
             let cmsOrder = await CMS.OrderCMSE.createOrder({})
             return cmsOrder
         } catch (error) {
-            consolelog(process.cwd(), "createOrderOnCMS", error, false)
+            consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -55,18 +54,24 @@ export class OrderClass extends BaseEntity {
              */
             let data: IOrderSdmRequest.ICreateOrder = {}
             let createOrder = await OrderSDME.createOrder(data)
-            if (createOrder && createOrder['orderId']) {
-                this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                    sdmOrderRef: createOrder['orderId'],
-                    status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+            if (createOrder) {
+                let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                    sdmOrderRef: createOrder,
+                    isActive: 1,
                     updatedAt: new Date().getTime()
-                })
-            } else {
-
-            }
-            return {}
+                }, { new: true })
+                if (order && order._id) {
+                    this.getSdmOrder({
+                        sdmOrderRef: order.sdmOrderRef,
+                        timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
+                        status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                    })
+                }
+                return {}
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
         } catch (error) {
-            consolelog(process.cwd(), "createSdmOrder", error, false)
+            consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -111,103 +116,118 @@ export class OrderClass extends BaseEntity {
                 payment: {},
                 transLogs: [],
                 createdAt: new Date().getTime(),
-                updatedAt: 0
+                updatedAt: 0,
+                isActive: 1,
             }
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order
         } catch (error) {
-            consolelog(process.cwd(), "createOrder", error, false)
+            consolelog(process.cwd(), "createOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
     /**
     * @method GRPC
-    * @param {string} orderId : order id
     * @param {string} status : mongo order status
     * @param {string} sdmOrderRef : sdm order id
     * @param {string} timeInterval : set timeout interval
     * */
     async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
         try {
+            let recheck = true
             setTimeout(async () => {
-                let order = await this.getOneEntityMdb({ cartId: payload.cartId }, { items: 0 })
+                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, amount: 0 })
                 if (order && order._id) {
                     if (order.sdmOrderRef && order.sdmOrderRef != 0) {
-                        let sdmOrder = await OrderSDME.getOrderDetail({})
+                        let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
                         /**
                          * @step 1 : update mongo order status wrt to sdmOrder status
                          */
-                        if (sdmOrder && sdmOrder.id) {
-                            order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                                status: sdmOrder.status,
-                                updatedAt: new Date().getTime()
-                            }, { new: true })
-                            if (payload.status == Constant.DATABASE.STATUS.ORDER.CLOSED.SDM ||
-                                payload.status == Constant.DATABASE.STATUS.ORDER.CANCELED.SDM ||
-                                payload.status == Constant.DATABASE.STATUS.ORDER.FAILURE.SDM) {
-
-                            } else {
-                                if (order.status == Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO && payload.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.SDM) {
-                                    let amount = order.amount.reduce((init, elem) => {
-                                        if (elem.type == "TOTAL")
-                                            return init + elem.amount
-                                    }, 0)
+                        if (sdmOrder && sdmOrder.OrderID) {
+                            if (Constant.DATABASE.STATUS.ORDER.CLOSED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
+                                consolelog(process.cwd(), "STATE : 1", sdmOrder.Status, true)
+                                recheck = false
+                                this.updateOneEntityMdb({ _id: order._id }, {
+                                    isActive: 0,
+                                    status: Constant.DATABASE.STATUS.ORDER.CLOSED.MONGO,
+                                    updatedAt: new Date().getTime()
+                                })
+                            }
+                            else if (Constant.DATABASE.STATUS.ORDER.CANCELED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
+                                consolelog(process.cwd(), "STATE : 2", sdmOrder.Status, true)
+                                recheck = false
+                                this.updateOneEntityMdb({ _id: order._id }, {
+                                    isActive: 0,
+                                    status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
+                                    updatedAt: new Date().getTime()
+                                })
+                            }
+                            else if (Constant.DATABASE.STATUS.ORDER.FAILURE.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
+                                consolelog(process.cwd(), "STATE : 3", sdmOrder.Status, true)
+                                recheck = false
+                                this.updateOneEntityMdb({ _id: order._id }, {
+                                    isActive: 0,
+                                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                    updatedAt: new Date().getTime()
+                                })
+                            }
+                            else if (Constant.DATABASE.STATUS.ORDER.PENDING.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
+                                consolelog(process.cwd(), "STATE : 4", sdmOrder.Status, true)
+                                if (sdmOrder.Status == 0 && order.payment.status == "AUTHORIZATION") {
+                                    consolelog(process.cwd(), "STATE : 5", sdmOrder.Status, true)
                                     /**
-                                     * @description step 1 create transaction log on CMS for initiating capture
-                                     * @description step 2 capture payment on noonpay
-                                     * @description step 3 create transaction log on CMS for capture
-                                     */
-                                    this.updateOneEntityMdb({ cartId: payload.cartId }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                        $addToSet: {
-                                            transLogs: {
-                                                noonpayOrderId: order.transLogs[0].noonpayOrderId,
-                                                orderId: order.transLogs[0].orderId,
-                                                amount: amount,
-                                                storeCode: "kfc_uae_store",
-                                                createdAt: new Date().getTime()
-                                            }
-                                        }
-                                    })
+                                    * @description : add payment object to sdm
+                                    */
+                                }
+                            }
+                            else if (Constant.DATABASE.STATUS.ORDER.CONFIRMED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
+                                consolelog(process.cwd(), "STATE : 6", sdmOrder.Status, true)
+                                if (order.payment.status == "AUTHORIZATION") {
+                                    consolelog(process.cwd(), "STATE : 7", sdmOrder.Status, true)
+                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                        status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                        updatedAt: new Date().getTime()
+                                    }, { new: true })
                                     let paymentCapturedObj = await paymentService.capturePayment({
                                         noonpayOrderId: order.transLogs[0].noonpayOrderId,
                                         orderId: order.transLogs[0].orderId,
-                                        amount: amount,
+                                        amount: order.payment.amount,
                                         storeCode: "kfc_uae_store"
                                     })
-                                    this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                                    this.updateOneEntityMdb({ _id: order._id }, {
+                                        status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                        "order.payment.status": "CAPTURE",
+                                        "order.payment.transactionId": paymentCapturedObj['transaction'][0]['id'],
                                         $addToSet: {
                                             transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
-                                        }
+                                        },
+                                        updatedAt: new Date().getTime()
                                     })
                                 }
-                                let orderChange = {
-                                    set: this.set,
-                                    sdm: {
-                                        get: true,
-                                        argv: JSON.stringify(payload)
-                                    }
-                                }
-                                kafkaService.kafkaSync(orderChange)
+                            }
+                            else {
+                                recheck = false
+                                consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
                             }
                         }
-                    } else {
-                        let orderChange = {
-                            set: this.set,
-                            sdm: {
-                                get: true,
-                                argv: JSON.stringify(payload)
+                        if (recheck) {
+                            let orderChange = {
+                                set: this.set,
+                                sdm: {
+                                    get: true,
+                                    argv: JSON.stringify(payload)
+                                },
+                                count: -1
                             }
+                            kafkaService.kafkaSync(orderChange)
                         }
-                        kafkaService.kafkaSync(orderChange)
                     }
                 }
             }, payload.timeInterval)
-
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "getSdmOrder", error, false)
+            consolelog(process.cwd(), "getSdmOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -249,7 +269,7 @@ export class OrderClass extends BaseEntity {
                 currentPage: parseInt(payload.page.toString())
             }
         } catch (error) {
-            consolelog(process.cwd(), "getOrderHistory", error, false)
+            consolelog(process.cwd(), "getOrderHistory", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

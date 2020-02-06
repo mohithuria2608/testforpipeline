@@ -22,7 +22,7 @@ export const start = (async () => {
 
     await bootstrap(server)
 
-    await SDM.OrderSDME.getOrderDetail({})
+    // await SDM.OrderSDME.getOrderDetail({})
 
   } catch (error) {
     console.error(error)

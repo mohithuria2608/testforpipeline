@@ -29,7 +29,7 @@ export class BaseEntity {
             }
             return await Aerospike.scan(argv)
         } catch (error) {
-            consolelog(process.cwd(), "scanAerospike", error, false)
+            consolelog(process.cwd(), "scanAerospike", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

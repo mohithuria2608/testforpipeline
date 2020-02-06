@@ -80,7 +80,7 @@ export class AddressEntity extends BaseEntity {
                 return listaddress
 
         } catch (error) {
-            consolelog(process.cwd(), "getAddress", error, false)
+            consolelog(process.cwd(), "getAddress", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -154,7 +154,7 @@ export class AddressEntity extends BaseEntity {
             // }
             return deliveryAddress
         } catch (error) {
-            consolelog(process.cwd(), "addAddress", error, false)
+            consolelog(process.cwd(), "addAddress", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -210,7 +210,7 @@ export class AddressEntity extends BaseEntity {
             await Aerospike.listOperations(listAppendArg)
             return bins
         } catch (error) {
-            consolelog(process.cwd(), "updateAddress", error, false)
+            consolelog(process.cwd(), "updateAddress", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

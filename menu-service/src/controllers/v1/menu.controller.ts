@@ -21,7 +21,7 @@ export class MenuController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "bootstrapMenu", error, false)
+            consolelog(process.cwd(), "bootstrapMenu", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -35,7 +35,7 @@ export class MenuController {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 1;
             return await ENTITY.MenuE.getMenu({ menuId: menuId, language: headers.language })
         } catch (error) {
-            consolelog(process.cwd(), "fetchMenu", error, false)
+            consolelog(process.cwd(), "fetchMenu", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -51,7 +51,7 @@ export class MenuController {
             let menu = await ENTITY.MenuE.getMenu({ menuId: menuId, language: payload.language })
             return { menu: JSON.stringify(menu) }
         } catch (error) {
-            consolelog(process.cwd(), "grpcFetchMenu", error, false)
+            consolelog(process.cwd(), "grpcFetchMenu", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -86,7 +86,7 @@ export class MenuController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

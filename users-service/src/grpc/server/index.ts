@@ -25,7 +25,7 @@ server.addService(userProto.UserService.service, {
             let res: {} = await ENTITY.SessionE.getSession(call.request.deviceid, call.request.userId)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "getSession", error, false)
+            consolelog(process.cwd(), "getSession", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -35,7 +35,7 @@ server.addService(userProto.UserService.service, {
             let res: IUserRequest.IUserData = await ENTITY.UserE.getUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchUser", error, false)
+            consolelog(process.cwd(), "fetchUser", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -45,7 +45,7 @@ server.addService(userProto.UserService.service, {
             let res: {} = await userController.syncUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -55,7 +55,7 @@ server.addService(userProto.UserService.service, {
             let res: {} = await ENTITY.AddressE.getAddress(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchAddress", error, false)
+            consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

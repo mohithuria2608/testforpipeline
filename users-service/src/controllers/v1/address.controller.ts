@@ -43,7 +43,7 @@ export class AddressController {
 
             return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
         } catch (error) {
-            consolelog(process.cwd(), "registerAddress", error, false)
+            consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -69,7 +69,7 @@ export class AddressController {
             }
             return await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
         } catch (error) {
-            consolelog(process.cwd(), "updateAddressById", error, false)
+            consolelog(process.cwd(), "updateAddressById", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -84,7 +84,7 @@ export class AddressController {
             let address: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
             return address
         } catch (error) {
-            consolelog(process.cwd(), "fetchAddress", error, false)
+            consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -98,7 +98,7 @@ export class AddressController {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId }, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, true)
         } catch (error) {
-            consolelog(process.cwd(), "deleteAddressById", error, false)
+            consolelog(process.cwd(), "deleteAddressById", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

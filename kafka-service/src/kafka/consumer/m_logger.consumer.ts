@@ -22,7 +22,7 @@ class MLoggerConsumer extends BaseConsumer {
             let res = await logService.sync(message)
             return res
         } catch (error) {
-            consolelog(process.cwd(), `logMessages`, error, false);
+            consolelog(process.cwd(), `logMessages`, JSON.stringify(error), false);
             return Promise.reject(error)
         }
     }

@@ -131,7 +131,7 @@ export class ConfigEntity extends BaseEntity {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "getConfig", error, false)
+            consolelog(process.cwd(), "getConfig", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

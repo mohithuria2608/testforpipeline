@@ -4,5 +4,6 @@ declare namespace IOrderSdmRequest {
     }
 
     interface IOrderDetail {
+        sdmOrderRef: string
     }
 }

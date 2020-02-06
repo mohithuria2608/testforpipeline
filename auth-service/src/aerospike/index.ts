@@ -58,7 +58,7 @@ class AerospikeClass {
                         resolve({})
                     }
                 } catch (error) {
-                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", error, false)
+                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", JSON.stringify(error), false)
                     reject(error)
                 }
             } else reject(Error('Client already initialized'))
@@ -77,7 +77,7 @@ class AerospikeClass {
                 }
                 else reject('Client not initialized');
             } catch (error) {
-                consolelog(process.cwd(), "bootstrap index error ", error, false)
+                consolelog(process.cwd(), "bootstrap index error ", JSON.stringify(error), false)
                 reject(error)
             }
         })

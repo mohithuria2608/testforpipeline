@@ -90,7 +90,7 @@ export class UserEntity extends BaseEntity {
                 }
             }
         } catch (error) {
-            consolelog(process.cwd(), "getUser", error, false)
+            consolelog(process.cwd(), "getUser", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -161,7 +161,7 @@ export class UserEntity extends BaseEntity {
             let user = await this.getUser({ userId: payload.id })
             return user
         } catch (error) {
-            consolelog(process.cwd(), "updateUser", error, false)
+            consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -209,7 +209,7 @@ export class UserEntity extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
         } catch (error) {
-            consolelog(process.cwd(), "getTokens", error, false)
+            consolelog(process.cwd(), "getTokens", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -232,7 +232,7 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -246,7 +246,7 @@ export class UserEntity extends BaseEntity {
             let res = await SDM.UserSDME.updateCustomer(payload)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "updateUserOnSdm", error, false)
+            consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -268,7 +268,7 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnCms", error, false)
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -283,7 +283,7 @@ export class UserEntity extends BaseEntity {
             consolelog(process.cwd(), "updateUserOnCms", res, false)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "updateUserOnCms", error, false)
+            consolelog(process.cwd(), "updateUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -296,7 +296,7 @@ export class UserEntity extends BaseEntity {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "checkUserOnCms", error, false)
+            consolelog(process.cwd(), "checkUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -309,7 +309,7 @@ export class UserEntity extends BaseEntity {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "checkUserOnSdm", error, false)
+            consolelog(process.cwd(), "checkUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

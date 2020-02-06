@@ -24,10 +24,15 @@ class SdmOrderStatusConsumer extends BaseConsumer {
             await orderService.sync(message)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "sdmOrder", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "sdmOrder", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

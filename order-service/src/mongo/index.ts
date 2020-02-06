@@ -16,7 +16,7 @@ export class MongoClass {
         set('useUnifiedTopology', true)
         db.on('error', err => { console.error('%s', err) })
             .on('close', (error) => {
-                consolelog(process.cwd(), 'Database connection closed.', error, false)
+                consolelog(process.cwd(), 'Database connection closed.', JSON.stringify(error), false)
 
             })
         connect(self.mongoUrl, { useCreateIndex: true, useNewUrlParser: true }, function (error) {

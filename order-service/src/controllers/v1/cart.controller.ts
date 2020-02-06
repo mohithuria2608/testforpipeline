@@ -78,7 +78,7 @@ export class CartController {
         try {
             return await ENTITY.CartE.getCart({ cartId: payload.cartId })
         } catch (error) {
-            consolelog(process.cwd(), "getCart", error, false)
+            consolelog(process.cwd(), "getCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

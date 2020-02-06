@@ -240,7 +240,7 @@ export class CartClass extends BaseEntity {
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getCart", error, false)
+            consolelog(process.cwd(), "getCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -271,7 +271,7 @@ export class CartClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "createDefaultCart", error, false)
+            consolelog(process.cwd(), "createDefaultCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -284,7 +284,7 @@ export class CartClass extends BaseEntity {
             await Aerospike.operationsOnMap({ set: this.set, key: payload.cartId }, op)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", error, false)
+            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -299,7 +299,7 @@ export class CartClass extends BaseEntity {
 
             return
         } catch (error) {
-            consolelog(process.cwd(), "assignNewCart", error, false)
+            consolelog(process.cwd(), "assignNewCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -487,7 +487,7 @@ export class CartClass extends BaseEntity {
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
         } catch (error) {
-            consolelog(process.cwd(), "createCartOnCMS", error, false)
+            consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -550,7 +550,7 @@ export class CartClass extends BaseEntity {
     //         }
     //         return cmsres
     //     } catch (error) {
-    //         consolelog(process.cwd(), "createCartOnCMS", error, false)
+    //         consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
     //         return Promise.reject(error)
     //     }
     // }

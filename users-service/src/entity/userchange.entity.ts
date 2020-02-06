@@ -79,7 +79,7 @@ export class UserchangeEntity extends BaseEntity {
                 return {}
             }
         } catch (error) {
-            consolelog(process.cwd(), "getUserchange", error, false)
+            consolelog(process.cwd(), "getUserchange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -112,7 +112,7 @@ export class UserchangeEntity extends BaseEntity {
             Aerospike.remove({ set: this.set, key: curUserchnage.id })
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "validateOtpOnPhnChange", error, false)
+            consolelog(process.cwd(), "validateOtpOnPhnChange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -195,7 +195,7 @@ export class UserchangeEntity extends BaseEntity {
             let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: dataToUpdateUserchange['id'] })
             return getUserchange
         } catch (error) {
-            consolelog(process.cwd(), "createUserchange", error, false)
+            consolelog(process.cwd(), "createUserchange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -20,7 +20,7 @@ export class UploadController {
             await deleteFile(image.path);
             return true;
         } catch (error) {
-            consolelog(process.cwd(),"uploadImage", error, false)
+            consolelog(process.cwd(),"uploadImage", JSON.stringify(error), false)
             return Promise.reject(error);
         }
     }

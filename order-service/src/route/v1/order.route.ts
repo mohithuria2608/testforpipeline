@@ -145,7 +145,6 @@ export default (router: Router) => {
                     throw error
                 }
             })
-
         .get('/test',
             validate({
                 query: {
