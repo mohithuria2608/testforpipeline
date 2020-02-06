@@ -187,6 +187,8 @@ export class OrderController {
         try {
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1, orderId: 1 })
             if (order && order._id) {
+                order['nextPing'] = 15
+                order['unit'] = "second"
                 return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
