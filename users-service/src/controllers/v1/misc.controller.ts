@@ -28,26 +28,7 @@ export class MiscController {
                         phnLength: 9,
                         customerCare: "666666666",
                         supportEmail: "kfc_uae@ag.com",
-                        paymentMethods: [
-                            {
-                                "id": 1,
-                                "name": "Card",
-                                "image": "",
-                                default: 0
-                            },
-                            {
-                                "id": 2,
-                                "name": "Visa Checkout",
-                                "image": "",
-                                default: 0
-                            },
-                            {
-                                "id": 0,
-                                "name": "Cash On Delivery",
-                                "image": "",
-                                default: 1
-                            }
-                        ]
+                        cashondelivery: 0,
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
