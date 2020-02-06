@@ -101,13 +101,16 @@ export class OrderClass extends BaseEntity {
                 OrderMode: 1,
                 OriginalStoreID: 65,// payload.store.sdmStoreRef,
                 PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
-                ServiceCharge: 0, //@todo : ask from Nusrat
+                PaymentMethod: (payload['paymentMethodId'] == 0) ? "Cash" : "Credit",
+                ServiceCharge: "0.25", //@todo : ask from Nusrat
                 Source: 4,
                 Status: 0,
                 StoreID: 65,// payload.store.sdmStoreRef,
                 SubTotal: "2.75",// subtotal.amount,
                 Total: "3.0",// total.amount,
                 ValidateStore: 0,
+                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? false : true,
+                isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1
             }
             let entries = {}
 
@@ -194,6 +197,8 @@ export class OrderClass extends BaseEntity {
                 createdAt: new Date().getTime(),
                 updatedAt: 0,
                 isActive: 1,
+                changePaymentMode: 0,
+                paymentMethodAddedOnSdm: 0,
             }
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order
@@ -250,11 +255,29 @@ export class OrderClass extends BaseEntity {
                             }
                             else if (Constant.DATABASE.STATUS.ORDER.PENDING.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
                                 consolelog(process.cwd(), "STATE : 4", sdmOrder.Status, true)
-                                if (sdmOrder.Status == 0 && order.payment.status == "AUTHORIZATION") {
+                                if (sdmOrder.Status == 0 && order.payment && order.payment.status == "AUTHORIZATION" && (order.paymentMethodAddedOnSdm == 0)) {
                                     consolelog(process.cwd(), "STATE : 5", sdmOrder.Status, true)
                                     /**
                                     * @description : add payment object to sdm
                                     */
+                                    let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({ sdmOrderRef: order.sdmOrderRef, transaction: order.transLogs[1] })
+                                    if (paymentObjAdded) {
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                            paymentMethodAddedOnSdm: 1,
+                                            updatedAt: new Date().getTime()
+                                        }, { new: true })
+                                    }
+                                    else {
+                                        /**
+                                        * @description : in case of failure while adding payment object
+                                        */
+                                        recheck = false
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                            changePaymentMode: true,
+                                            updatedAt: new Date().getTime()
+                                        }, { new: true })
+                                    }
                                 }
                             }
                             else if (Constant.DATABASE.STATUS.ORDER.CONFIRMED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
@@ -265,18 +288,23 @@ export class OrderClass extends BaseEntity {
                                         status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                         updatedAt: new Date().getTime()
                                     }, { new: true })
-                                    let paymentCapturedObj = await paymentService.capturePayment({
-                                        noonpayOrderId: order.transLogs[0].noonpayOrderId,
-                                        orderId: order.transLogs[0].orderId,
-                                        amount: order.payment.amount,
+                                    await paymentService.capturePayment({
+                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        orderId: order.transLogs[1].orderId,
+                                        amount: order.transLogs[1].amount,
                                         storeCode: "kfc_uae_store"
+                                    })
+                                    let status = await paymentService.getPaymentStatus({
+                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        storeCode: "kfc_uae_store",
+                                        paymentStatus: "CAPTURED",
                                     })
                                     this.updateOneEntityMdb({ _id: order._id }, {
                                         status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                        "order.payment.status": "CAPTURE",
-                                        "order.payment.transactionId": paymentCapturedObj['transaction'][0]['id'],
+                                        "payment.transactionId": status.transaction[1].id,
+                                        "payment.status": status.transaction[1].type,
                                         $addToSet: {
-                                            transLogs: { ...paymentCapturedObj, createdAt: new Date().getTime() }
+                                            transLogs: status
                                         },
                                         updatedAt: new Date().getTime()
                                     })

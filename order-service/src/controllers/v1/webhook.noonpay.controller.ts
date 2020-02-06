@@ -15,7 +15,7 @@ export class WebhookNoonpayController {
      * @param {string} orderReference :eg : 281226369065
      * @param {string} orderId :eg : 281226369065
      * */
-    async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
+    async authorizePayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
             let redirectUrl = config.get("server.order.url")
             let order = await ENTITY.OrderE.getOneEntityMdb({
@@ -52,7 +52,7 @@ export class WebhookNoonpayController {
             }
 
         } catch (error) {
-            consolelog(process.cwd(), "processPayment", JSON.stringify(error), false)
+            consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -4,6 +4,11 @@ declare namespace IOrderSdmRequest {
     }
 
     interface IOrderDetail {
-        sdmOrderRef: string
+        sdmOrderRef: number
+    }
+
+    interface IProcessCreditCardOnSdm {
+        sdmOrderRef: number,
+        transaction: any
     }
 }

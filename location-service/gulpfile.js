@@ -2,6 +2,7 @@ const gulp = require("gulp");
 const ts = require("gulp-typescript");
 const del = require("del");
 const tsProject = ts.createProject("tsconfig.json");
+const pm2 = require('pm2');
 
 const outputFolder = "dist";
 
@@ -63,3 +64,22 @@ gulp.task("copyLua", function () {
   * @todo add "lint" after "clean"
   */
 gulp.task('default', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
+
+
+gulp.task('server', function () {
+	pm2.connect(true, function () {
+		pm2.start({
+			name: 'location',
+			script: 'dist/app.js',
+			env: {
+				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
+			}
+		}, function () {
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
+			pm2.streamLogs('location', 0);
+		});
+	});
+});
+
+
+gulp.task('one', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "server"));

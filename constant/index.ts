@@ -674,7 +674,7 @@ export const STATUS_MSG = {
                 type: 'INVALID_TOKEN_TYPE'
             },
 
-            CREATE_ORDER_ERROR:{
+            CREATE_ORDER_ERROR: {
                 statusCode: 500,
                 httpCode: 500,
                 type: 'CREATE_ORDER_ERROR',

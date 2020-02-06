@@ -84,6 +84,7 @@ export const start = (async () => {
     //           "name": "Chicken Pc - Original",
     //           "title": "Chicken Pc - Original",
     //           "imageThumbnail": "/imagestemp/itm910001.png",
+    //           "modGroupId": 10202,
     //           "selectionQty": 11,
     //           "subOptions": [],
     //           "selected": 0,
@@ -99,6 +100,7 @@ export const start = (async () => {
     //           "name": "Chicken Pc - Spicy",
     //           "title": "Chicken Pc - Spicy",
     //           "imageThumbnail": "/imagestemp/itm910002.png",
+    //           "modGroupId": 10202,
     //           "selectionQty": 10,
     //           "subOptions": [],
     //           "selected": 0,
@@ -126,6 +128,7 @@ export const start = (async () => {
     //           "selection_id": 12182,
     //           "price": 0,
     //           "id": 1664,
+    //           "modGroupId": 10208,
     //           "name": "Crispy Strips Original",
     //           "title": "Crispy Strips Original",
     //           "imageThumbnail": "/imagestemp/itm511001.png",
@@ -141,6 +144,7 @@ export const start = (async () => {
     //           "selection_id": 12183,
     //           "price": 0,
     //           "id": 1665,
+    //           "modGroupId": 10208,
     //           "name": "Crispy Strips Spicy",
     //           "title": "Crispy Strips Spicy",
     //           "imageThumbnail": "/imagestemp/itm511002.png",
@@ -160,6 +164,7 @@ export const start = (async () => {
     //       "name": "Choice of first side item",
     //       "title": "Choice of first side item",
     //       "subtitle": "Choice of first side item",
+    //       "modGroupId": 10208,
     //       "compId": 2,
     //       "ingredient": 0,
     //       "type": "radio",
@@ -175,6 +180,7 @@ export const start = (async () => {
     //           "title": "Family Fries",
     //           "imageThumbnail": "/imagestemp/itm510005.png",
     //           "selectionQty": 1,
+    //           "modGroupId": -1,
     //           "subOptions": [],
     //           "selected": 1,
     //           "default": 1,
@@ -189,6 +195,7 @@ export const start = (async () => {
     //           "name": "Family Fries Spicy",
     //           "title": "Family Fries Spicy",
     //           "imageThumbnail": "/imagestemp/itm510014.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -204,6 +211,7 @@ export const start = (async () => {
     //           "name": "Coleslaw Salad Large",
     //           "title": "Coleslaw Salad Large",
     //           "imageThumbnail": "/imagestemp/itm510002.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -219,6 +227,7 @@ export const start = (async () => {
     //           "name": "Loaded Fries Family",
     //           "title": "Loaded Fries Family",
     //           "imageThumbnail": "/imagestemp/itm510030.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -234,6 +243,7 @@ export const start = (async () => {
     //           "name": "Family Dipper Fries",
     //           "title": "Family Dipper Fries",
     //           "imageThumbnail": "/imagestemp/itm510074.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -264,6 +274,7 @@ export const start = (async () => {
     //           "name": "Family Fries",
     //           "title": "Family Fries",
     //           "imageThumbnail": "/imagestemp/itm510005.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 1,
@@ -279,6 +290,7 @@ export const start = (async () => {
     //           "name": "Family Fries Spicy",
     //           "title": "Family Fries Spicy",
     //           "imageThumbnail": "/imagestemp/itm510014.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -294,6 +306,7 @@ export const start = (async () => {
     //           "name": "Coleslaw Salad Large",
     //           "title": "Coleslaw Salad Large",
     //           "imageThumbnail": "/imagestemp/itm510002.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -309,6 +322,7 @@ export const start = (async () => {
     //           "name": "Loaded Fries Family",
     //           "title": "Loaded Fries Family",
     //           "imageThumbnail": "/imagestemp/itm510030.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -324,6 +338,7 @@ export const start = (async () => {
     //           "name": "Family Dipper Fries",
     //           "title": "Family Dipper Fries",
     //           "imageThumbnail": "/imagestemp/itm510074.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -354,6 +369,7 @@ export const start = (async () => {
     //           "name": "Pepsi 2.25",
     //           "title": "Pepsi 2.25",
     //           "imageThumbnail": "/imagestemp/itm610034.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 1,
@@ -369,6 +385,7 @@ export const start = (async () => {
     //           "name": "7Up 2.25",
     //           "title": "7Up 2.25",
     //           "imageThumbnail": "/imagestemp/itm610035.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -384,6 +401,7 @@ export const start = (async () => {
     //           "name": "Mountain Dew 2.25",
     //           "title": "Mountain Dew 2.25",
     //           "imageThumbnail": "/imagestemp/itm610036.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -399,6 +417,7 @@ export const start = (async () => {
     //           "name": "Diet Pepsi 2.25",
     //           "title": "Diet Pepsi 2.25",
     //           "imageThumbnail": "/imagestemp/itm610037.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -414,6 +433,7 @@ export const start = (async () => {
     //           "name": "Mirinda 2.25",
     //           "title": "Mirinda 2.25",
     //           "imageThumbnail": "/imagestemp/itm610038.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -429,6 +449,7 @@ export const start = (async () => {
     //           "name": "Orange Juice 1L",
     //           "title": "Orange Juice 1L",
     //           "imageThumbnail": "/imagestemp/itm610033.png",
+    //           "modGroupId": -1,
     //           "selectionQty": 1,
     //           "subOptions": [],
     //           "selected": 0,
@@ -454,27 +475,22 @@ export const start = (async () => {
     //   "visibility": 4,
     //   "associative": 0
     // }
+
     // let entry = {}
 
 
     // product.bundleProductOptions.forEach(bpo => {
-    //   let CEntry = {}
     //   if (bpo.type == "stepper") {
-
     //     console.log("111111111111")
 
-    //     CEntry['DealID'] = 0
-    //     CEntry['Entries'] = {}
+
     //     bpo.productLinks.forEach(pl => {
-    //       console.log("222222222222222")
-
+    //       let CEntryObj = {}
+    //       CEntryObj['DealID'] = 0
+    //       let CEntryArr = []
     //       if (pl.selectionQty > 0) {
-    //         console.log("333333333333333")
-
     //         for (let i = 0; i < pl.selectionQty; i++) {
-    //           console.log("44444444444444444", i)
-
-    //           let subCEntry = {
+    //           CEntryArr.push({
     //             ID: 0,
     //             ItemID: pl.id,
     //             ModCode: "NONE",
@@ -482,9 +498,17 @@ export const start = (async () => {
     //             Name: pl.name,
     //             OrdrMode: "OM_SAVED",
     //             Weight: 0,
-    //           }
-    //           CEntry['Entries']['CEntry'] = subCEntry
+    //           })
     //         }
+    //         CEntryObj['Entries'] = { CEntry: CEntryArr }
+    //         CEntryObj['ID'] = 0
+    //         CEntryObj['ItemID'] =
+    //           CEntryObj['ModCode'] =
+    //           CEntryObj['Name'] =
+    //           CEntryObj['QCComponent'] =
+    //           CEntryObj['QCInstanceID'] =
+    //           CEntryObj['QCLevel'] =
+    //           CEntryObj['QCProID'] = 
     //       }
     //     })
     //   } else {

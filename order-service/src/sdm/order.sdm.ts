@@ -111,6 +111,40 @@ export class OrderSDMEntity extends BaseSDM {
             return (error)
         }
     }
+
+    async processCreditCardOnSdm(payload: IOrderSdmRequest.IProcessCreditCardOnSdm) {
+        try {
+            let data = {
+                name: "ProcessCreditCardPayment",
+                req: {
+                    licenseCode: "AmericanaWeb",
+                    conceptID: "3",
+                    language: "En",
+                    orderID: payload.sdmOrderRef,
+                    paymentType: 2,
+                    paymentSubType: 1,
+                    paymentTenderID: 34,
+                    amount: "3.0",// payload.transaction.amount,
+                    holderName: "Test payment user",
+                    cardNumber: payload.transaction.paymentDetails.paymentInfo,
+                    cardCCV: "123",
+                    cardExpire: payload.transaction.paymentDetails.expiryYear,
+                    refNumber: payload.transaction.transaction[0].id,
+                    refCountry: payload.transaction.paymentDetails.cardCountry,
+                    refGateway: "noonpay",
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.ProcessCreditCardPaymentResult
+            else {
+                return false
+            }
+        } catch (error) {
+            consolelog(process.cwd(), 'getOrderDetail', JSON.stringify(error), false)
+            return (error)
+        }
+    }
 }
 
 export const OrderSDME = new OrderSDMEntity()

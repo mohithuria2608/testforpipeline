@@ -15,6 +15,9 @@ export interface Iorder extends Document {
     address: any,
     store: any,
     transLogs: any,
+    isActive: number,
+    changePaymentMode: number,
+    paymentMethodAddedOnSdm: number,
     createdAt: number,
     updatedAt: number
 };
@@ -35,6 +38,8 @@ const orderSchema = new Schema({
     payment: { type: Schema.Types.Mixed, required: true },
     transLogs: { type: Schema.Types.Mixed, required: true },
     isActive: { type: Number, required: true, enum: [0, 1] },
+    changePaymentMode: { type: Number, required: true, enum: [0, 1] },
+    paymentMethodAddedOnSdm: { type: Number, required: true, enum: [0, 1] },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true }
 });

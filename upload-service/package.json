@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "americana - kfc upload service",
   "main": "app.js",
-  "scripts":{
+  "scripts": {
     "local": "NODE_ENV=default gulp",
     "dev": "NODE_ENV=development gulp",
     "stg": "NODE_ENV=staging node dist/app.js",
@@ -31,6 +31,7 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "multer": "^1.4.2",
+    "pm2": "^4.2.3",
     "randomstring": "^1.1.5",
     "winston": "^3.2.1"
   },
