@@ -279,7 +279,7 @@
   {
     "id": 6,
     "language": "En",
-    "sequence": 6,
+    "sequence": 7,
     "widgetType": "BANNER_SMALL",
     "status": 1,
     "media": [
@@ -305,7 +305,7 @@
   {
     "id": 7,
     "language": "En",
-    "sequence": 7,
+    "sequence": 6,
     "widgetType": "BANNER_VIDEO",
     "status": 1,
     "media": [
