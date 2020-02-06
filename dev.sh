@@ -1,15 +1,15 @@
 #!/bin/bash
 export NODE_ENV='development';
 
-cd log-service
-gulp
-pm2 start dist/app.js --name log
-sleep 2 
-
-cd ../auth-service
+cd auth-service
 gulp
 pm2 start dist/app.js --name auth
 sleep 2   
+
+cd ../users-service
+gulp
+pm2 start dist/app.js --name user
+sleep 2 
 
 cd ../menu-service
 gulp
@@ -46,9 +46,9 @@ gulp
 pm2 start dist/app.js --name payment
 sleep 2 
 
-cd ../user-service
+cd ../log-service
 gulp
-pm2 start dist/app.js --name user
+pm2 start dist/app.js --name log
 sleep 2 
 
 cd ../order-service

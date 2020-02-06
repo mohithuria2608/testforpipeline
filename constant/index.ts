@@ -67,8 +67,8 @@ export const CMS = {
         },
         CREATE_ORDER: {
             METHOD: "POST",
-            URL: "customcart/create-validate-cart"
-        },
+            URL: "custom-order/create-order"
+        }
     }
 };
 
