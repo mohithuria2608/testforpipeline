@@ -48,11 +48,82 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: ICartRequest.ICartData) {
         try {
+            let total
+            payload.amount.filter(elem => {
+                if (elem.code == "TOTAL") {
+                    return total = elem
+                }
+            })
+            let subtotal
+            payload.amount.filter(elem => {
+                if (elem.code == "SUB_TOTAL") {
+                    return subtotal = elem
+                }
+            })
+            let order = {
+                AddressID: 10084693,// payload.address.sdmAddressRef,
+                AreaID: 538,// payload.address.sdmAddressRef,
+                BackupStoreID: 2,// payload.address.sdmAddressRef,
+                ConceptID: 3,// payload.address.sdmAddressRef,
+                CustomerID: 7323013,//payload.address.sdmAddressRef,
+                Entries: {
+                    "CEntry": [
+                        {
+                            "ItemID": "110002",
+                            "Level": "0",
+                            "ModCode": "NONE",
+                            "Name": "Kids Chicken Meal",
+                            "OrdrMode": "OM_SAVED",
+                            "Price": "13",
+                            "Status": "NOTAPPLIED"
+                        },
+                        {
+                            "ItemID": "110002",
+                            "Level": "0",
+                            "ModCode": "NONE",
+                            "Name": "Kids Chicken Meal",
+                            "OrdrMode": "OM_SAVED",
+                            "Price": "13",
+                            "Status": "NOTAPPLIED"
+                        },
+                        {
+                            "ItemID": "110002",
+                            "Level": "0",
+                            "ModCode": "NONE",
+                            "Name": "Kids Chicken Meal",
+                            "OrdrMode": "OM_SAVED",
+                            "Price": "13",
+                            "Status": "NOTAPPLIED"
+                        }
+                    ]
+                },
+                OrderMode: 1,
+                OriginalStoreID: 65,// payload.store.sdmStoreRef,
+                PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
+                ServiceCharge: 0, //@todo : ask from Nusrat
+                Source: 4,
+                Status: 0,
+                StoreID: 65,// payload.store.sdmStoreRef,
+                SubTotal: "2.75",// subtotal.amount,
+                Total: "3.0",// total.amount,
+                ValidateStore: 0,
+            }
             /**
              * @step 1 :create order on sdm 
              * @step 2 :update mongo order using payload.cartId sdmOrderRef
              */
-            let data: IOrderSdmRequest.ICreateOrder = {}
+            let data: IOrderSdmRequest.ICreateOrder = {
+                licenseCode: "AmericanaWeb",
+                conceptID: 3,
+                order: order,
+                autoApprove: true,
+                useBackupStoreIfAvailable: true,
+                orderNotes1: "Test order notes 1",
+                orderNotes2: "Test order notes 2",
+                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? 0 : 1,
+                isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1,
+                menuTemplateID: 17,
+            }
             let createOrder = await OrderSDME.createOrder(data)
             if (createOrder) {
                 let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {

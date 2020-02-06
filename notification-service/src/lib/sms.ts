@@ -21,7 +21,7 @@ export class SmsCLass {
 
         exec(command, function (error, stdout, stderror) {
             consolelog(process.cwd(), 'singleSms stdout:', stdout, true)
-            consolelog(process.cwd(), 'singleSms stderr:', stdJSON.stringify(error), false)
+            consolelog(process.cwd(), 'singleSms stderr:', JSON.stringify(error), false)
             if (error !== null) {
                 consolelog(process.cwd(), 'singleSms exec:', JSON.stringify(error), false)
             }

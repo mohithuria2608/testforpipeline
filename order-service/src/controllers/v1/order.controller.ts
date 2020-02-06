@@ -78,21 +78,23 @@ export class OrderController {
             if (!getStore.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
 
+            let amount
+            cartData.amount.filter(elem => {
+                if (elem.code == "TOTAL") {
+                    return amount = elem
+                }
+            })
             /**
-             * @description step 1 create order on CMS synchronously
+             * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
              * @description step 2 create order on SDM async
              * @description step 3 create order on MONGO synchronously
              * @description step 4 inititate payment on Noonpay synchronously
              */
             // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
+            cartData['paymentMethodId'] = payload.paymentMethodId;
             ENTITY.OrderE.syncOrder(cartData)
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
-            let amount
-            order.amount.filter(elem => {
-                if (elem.code == "TOTAL") {
-                    return amount = elem
-                }
-            })
+
             console.log("amount", typeof amount, amount)
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({

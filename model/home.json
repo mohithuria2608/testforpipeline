@@ -11,6 +11,7 @@
       {
         "sequence": 1,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
@@ -42,6 +43,7 @@
       {
         "sequence": 1,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "action": {
@@ -55,6 +57,7 @@
       {
         "sequence": 2,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "action": {
@@ -68,6 +71,7 @@
       {
         "sequence": 3,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "action": {
@@ -81,6 +85,7 @@
       {
         "sequence": 4,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "action": {
@@ -94,6 +99,7 @@
       {
         "sequence": 5,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "action": {
@@ -120,6 +126,7 @@
       {
         "sequence": 1,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
@@ -133,6 +140,7 @@
       {
         "sequence": 2,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
@@ -146,6 +154,7 @@
       {
         "sequence": 3,
         "mediaUrl": "banner.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "theme": "light",
@@ -286,6 +295,7 @@
       {
         "sequence": 1,
         "mediaUrl": "logo.png",
+        "mediaUrlThumbnail": "",
         "mediaType": "image",
         "extension": "png",
         "action": {
@@ -312,6 +322,7 @@
       {
         "sequence": 1,
         "mediaUrl": "www.kfc.com/kfc_uae.mp4",
+        "mediaUrlThumbnail": "www.kfc.com/kfc_uae.mp4",
         "mediaType": "video",
         "extension": "mp4",
         "action": {

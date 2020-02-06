@@ -1,0 +1,32 @@
+WARNING: NODE_APP_INSTANCE value of '1' did not match any instance config file names.
+WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established auth-service 127.0.0.1:50051 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established menu-service 127.0.0.1:50053 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established location-service 127.0.0.1:50058 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established user-service 127.0.0.1:50052 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established kafka-service 127.0.0.1:50057 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established promotion-service 127.0.0.1:50062 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established payment-service 127.0.0.1:50060 true
+{"level":"info","message":"order-service--------------GRPC server running at--------------localhost:50054","timestamp":"2020-02-06T11:18:45.958Z"}
+{"level":"info","message":"order-service--------------Aerospike Client Connected--------------","timestamp":"2020-02-06T11:18:46.408Z"}
+[0;36mMongoose:[0m orders.createIndex({ sdmOrderRef: [33m1[39m }, { background: [33mtrue[39m })
+[32mConnected to mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db[0m
+[0;36mMongoose:[0m orders.createIndex({ userId: [33m1[39m }, { background: [33mtrue[39m })
+[0;36mMongoose:[0m orders.createIndex({ orderId: [33m1[39m }, { background: [33mtrue[39m })
+{"level":"info","message":"order-service--------------Soap client connected--------------","timestamp":"2020-02-06T11:20:18.011Z"}
+WARNING: NODE_APP_INSTANCE value of '1' did not match any instance config file names.
+WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established auth-service 127.0.0.1:50051 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established menu-service 127.0.0.1:50053 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established location-service 127.0.0.1:50058 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established user-service 127.0.0.1:50052 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established kafka-service 127.0.0.1:50057 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established promotion-service 127.0.0.1:50062 true
+/home/appinventiv/Documents/americana/code/order-service GRPC connection established payment-service 127.0.0.1:50060 true
+{"level":"info","message":"order-service--------------GRPC server running at--------------localhost:50054","timestamp":"2020-02-06T11:21:54.054Z"}
+{"level":"info","message":"order-service--------------Aerospike Client Connected--------------","timestamp":"2020-02-06T11:21:54.140Z"}
+[0;36mMongoose:[0m orders.createIndex({ sdmOrderRef: [33m1[39m }, { background: [33mtrue[39m })
+[32mConnected to mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db[0m
+[0;36mMongoose:[0m orders.createIndex({ userId: [33m1[39m }, { background: [33mtrue[39m })
+[0;36mMongoose:[0m orders.createIndex({ orderId: [33m1[39m }, { background: [33mtrue[39m })
+{"level":"info","message":"order-service--------------Soap client connected--------------","timestamp":"2020-02-06T11:22:04.699Z"}
