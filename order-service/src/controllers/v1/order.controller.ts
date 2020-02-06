@@ -49,6 +49,7 @@ export class OrderController {
 
     /**
      * @method POST
+     * @param {string} orderType
      * @param {string} addressId
      * @param {string} cartId
      * */
@@ -85,7 +86,7 @@ export class OrderController {
              */
             // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
             ENTITY.OrderE.syncOrder(cartData)
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(cartData, getAddress, getStore)
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
             let amount
             order.amount.filter(elem => {
                 if (elem.code == "TOTAL") {

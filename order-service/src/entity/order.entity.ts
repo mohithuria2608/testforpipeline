@@ -79,9 +79,10 @@ export class OrderClass extends BaseEntity {
     /**
     * @method INTERNAL
     * */
-    async createOrder(cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore) {
+    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore) {
         try {
             let orderData = {
+                orderType: orderType,
                 cartId: cartData.cartId,
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
@@ -247,12 +248,7 @@ export class OrderClass extends BaseEntity {
                         userId: auth.id
                     }
                 },
-                {
-                    $addFields: {
-                        isPreviousOrder: true
-                    }
-                },
-                { $sort: { isPreviousOrder: 1 } },
+                { $sort: { isActive: -1, updatedAt: -1 } },
                 { $skip: skip },
                 { $limit: limit },
                 {

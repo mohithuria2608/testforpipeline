@@ -3,6 +3,7 @@ import * as Constant from '../constant';
 
 export interface Iorder extends Document {
     cartId: string,
+    orderType: string,
     cmsCartRef: number,
     sdmOrderRef: number,
     cmsOrderRef: number,
@@ -20,6 +21,7 @@ export interface Iorder extends Document {
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
+    orderType: { type: String, required: true },
     cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true },
