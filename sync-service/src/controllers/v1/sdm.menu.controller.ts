@@ -15,7 +15,7 @@ export class SdmMenuController {
             ENTITY.MenuE.fetchMenuFromSDM(payload)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "postMenu", error, false)
+            consolelog(process.cwd(), "postMenu", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

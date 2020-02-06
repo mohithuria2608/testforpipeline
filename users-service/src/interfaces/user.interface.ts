@@ -1,22 +1,24 @@
 declare namespace IUserRequest {
 
     interface IUserData {
-        id: string,
-        sdmUserRef: number,
-        cmsUserRef: number,
-        // isGuest: number,
-        name: string,
-        cCode: string,
-        phnNo: string,
-        phnVerified: number,
-        email: string,
-        profileStep: number,
-        socialKey: string,
-        medium: string,
-        createdAt: number,
-        cartId: string,
-        password: string,
-        changePhnNo: number,
+        id?: string,
+        username?: string,
+        brand?: string,
+        country?: string,
+        email?: string,
+        fullPhnNo?: string,
+        cCode?: string,
+        phnNo?: string,
+        sdmUserRef?: number,
+        cmsUserRef?: number,
+        phnVerified?: number,
+        name?: string,
+        socialKey?: string,
+        medium?: string,
+        profileStep?: number,
+        password?: string,
+        cartId?: string,
+        createdAt?: number,
     }
     interface IPhone {
         cCode: string,
@@ -26,25 +28,6 @@ declare namespace IUserRequest {
     interface IEmail {
         email: string
     }
-
-    interface IUserUpdate {
-        sdmUserRef?: number,
-        cmsUserRef?: number,
-        // isGuest?: number,
-        name?: string,
-        cCode?: string,
-        phnNo?: string,
-        phnVerified?: number,
-        email?: string,
-        profileStep?: number,
-        socialKey?: string,
-        medium?: string,
-        createdAt?: number,
-        cartId?: string,
-        password?: string,
-        changePhnNo?: number,
-    }
-
     interface IRefreshToken {
     }
 
@@ -62,12 +45,10 @@ declare namespace IUserRequest {
     }
 
     interface ICreateProfile {
-        socialKey?: string,
-        medium?: string,
-        cCode?: string,
-        phnNo?: string,
-        email?: string,
-        name?: string
+        cCode: string,
+        phnNo: string,
+        email: string,
+        name: string
     }
 
     interface IEditProfile {

@@ -20,7 +20,7 @@ export class PaymentService {
     private paymentClient = new this.loadPayment(config.get("grpc.payment.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established payment-service', config.get("grpc.payment.client"), true)
+        console.log(process.cwd(), 'GRPC connection established payment-service', config.get("grpc.payment.client"), true)
     }
 
     async initiatePayment(payload: IPaymentGrpcRequest.IInitiatePayment): Promise<IPaymentGrpcRequest.IInitiatePaymentRes> {
@@ -31,6 +31,9 @@ export class PaymentService {
                     consolelog(process.cwd(), "successfully initiated payment", JSON.stringify(res), false)
                     resolve(res)
                 } else {
+                    /**
+                     * @todo : handle failure of payment
+                     */
                     consolelog(process.cwd(), "Error in initiating payment", JSON.stringify(error), false)
                     reject(sendError(error))
                 }

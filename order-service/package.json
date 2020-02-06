@@ -6,6 +6,7 @@
   "scripts": {
     "local": "NODE_ENV=default gulp",
     "dev": "NODE_ENV=development gulp",
+    "qa": "NODE_ENV=testing node dist/app.js",
     "stg": "NODE_ENV=staging node dist/app.js",
     "test-mocha": "node_modules/.bin/ts-mocha ./test/*.ts",
     "test-jest": "node_modules/.bin/jest",
@@ -33,6 +34,7 @@
     "pm2": "^4.2.0",
     "randomstring": "^1.1.5",
     "request-promise": "^4.2.5",
+    "soap": "^0.30.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {

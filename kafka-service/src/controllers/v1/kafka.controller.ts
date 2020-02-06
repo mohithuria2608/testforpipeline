@@ -16,7 +16,6 @@ export class KafkaController {
     * */
     async kafkaSync(payload: IKafkaRequest.IKafkaBody) {
         try {
-            consolelog(process.cwd(), "produce data to sync with legacy systems in KAFKA service", JSON.stringify(payload), true)
             switch (payload.set) {
                 case Constant.SET_NAME.USER: {
                     let messages = null;
@@ -164,10 +163,24 @@ export class KafkaController {
                     }
                     break;
                 }
+                case Constant.SET_NAME.LOCATION: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as && payload.as.create) {
+                        messages = { ...payload }
+                        delete messages.mdb
+                        delete messages.sdm
+                        delete messages.cms
+                        topic = Constant.KAFKA_TOPIC.AS_LOCATION;
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
             }
-            return { data: '' };
+            return { data: 'succes' };
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -186,7 +199,7 @@ export class KafkaController {
             });
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "produceToFailureTopic", error, false)
+            consolelog(process.cwd(), "produceToFailureTopic", JSON.stringify(error), false)
             return Promise.reject(error)
         }
 

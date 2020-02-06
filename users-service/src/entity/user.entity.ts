@@ -12,33 +12,15 @@ export class UserEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
-            bin: 'phnNo',
-            index: 'idx_' + this.set + '_' + 'phnNo',
+            bin: 'username',
+            index: 'idx_' + this.set + '_' + 'username',
             type: "STRING"
         },
         {
             set: this.set,
-            bin: 'email',
-            index: 'idx_' + this.set + '_' + 'email',
+            bin: 'fullPhnNo',
+            index: 'idx_' + this.set + '_' + 'fullPhnNo',
             type: "STRING"
-        },
-        {
-            set: this.set,
-            bin: 'socialKey',
-            index: 'idx_' + this.set + '_' + 'socialKey',
-            type: "STRING"
-        },
-        {
-            set: this.set,
-            bin: 'cmsUserRef',
-            index: 'idx_' + this.set + '_' + 'cmsUserRef',
-            type: "NUMERIC"
-        },
-        {
-            set: this.set,
-            bin: 'sdmUserRef',
-            index: 'idx_' + this.set + '_' + 'sdmUserRef',
-            type: "NUMERIC"
         }
     ]
 
@@ -48,18 +30,22 @@ export class UserEntity extends BaseEntity {
 
     public userSchema = Joi.object().keys({
         id: Joi.string().trim().required().description("pk"),
-        sdmUserRef: Joi.number().required().description("sk"),
-        cmsUserRef: Joi.number().required().description("sk"),
-        isGuest: Joi.number().valid(0, 1).required(),
+        username: Joi.string().trim().required().description("sk - unique"),
+        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
+        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
+        email: Joi.string().email().lowercase().trim().required(),
+        fullPhnNo: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-        phnNo: Joi.string().trim().required().description("sk"),
+        phnNo: Joi.string().trim().required(),
+        sdmUserRef: Joi.number().required(),
+        cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
-        email: Joi.string().email().lowercase().trim().required().description("sk"),
+        name: Joi.string().trim().required(),
         profileStep: Joi.number().valid(
             Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
             Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
         ).required(),
-        socialKey: Joi.string().trim().required().description("sk"),
+        socialKey: Joi.string().trim().required(),
         medium: Joi.string().trim().valid(
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
@@ -68,7 +54,6 @@ export class UserEntity extends BaseEntity {
         password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
-        changePhnNo: Joi.number().valid(0, 1).required(),
     });
 
     /**
@@ -86,18 +71,13 @@ export class UserEntity extends BaseEntity {
                 if (user && user.id) {
                     return user
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
+                    return {}
             } else {
+                const fullPhnNo = payload.cCode + payload.phnNo;
                 let queryArg: IAerospike.Query = {
-                    udf: {
-                        module: 'user',
-                        func: Constant.UDF.USER.check_phone_exist,
-                        args: [payload.cCode],
-                        forEach: true
-                    },
                     equal: {
-                        bin: "phnNo",
-                        value: payload.phnNo
+                        bin: "fullPhnNo",
+                        value: fullPhnNo
                     },
                     set: this.set,
                     background: false,
@@ -106,87 +86,11 @@ export class UserEntity extends BaseEntity {
                 if (checkUser && checkUser.length > 0) {
                     return checkUser[0]
                 } else {
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
+                    return {}
                 }
             }
         } catch (error) {
-            consolelog(process.cwd(), "getUser", error, false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @description Build user object
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.IUserUpdate} userInfo 
-     * @param {boolean} isCreate 
-     */
-    private async buildUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate, isCreate: boolean) {
-        const user = isCreate ? {
-            id: this.ObjectId().toString(),
-            sdmUserRef: 0,
-            cmsUserRef: 0,
-            name: "",
-            cCode: "",
-            phnNo: "",
-            phnVerified: 0,
-            email: "",
-            profileStep: 0,
-            socialKey: "",
-            medium: "",
-            createdAt: 0,
-            cartId: this.ObjectId().toString(),
-            password: 'Password1', //await cryptData(id),
-            changePhnNo: 0,
-        } : {}
-        if (userInfo.name != undefined)
-            user['name'] = userInfo.name
-        if (userInfo.cCode != undefined)
-            user['cCode'] = userInfo.cCode
-        if (userInfo.phnNo != undefined)
-            user['phnNo'] = userInfo.phnNo
-        if (userInfo.phnVerified != undefined)
-            user['phnVerified'] = userInfo.phnVerified
-        if (userInfo.email != undefined)
-            user['email'] = userInfo.email
-        if (userInfo.profileStep != undefined)
-            user['profileStep'] = userInfo.profileStep
-        if (userInfo.socialKey != undefined)
-            user['socialKey'] = userInfo.socialKey
-        if (userInfo.medium != undefined)
-            user['medium'] = userInfo.medium
-        if (userInfo.createdAt != undefined)
-            user['createdAt'] = userInfo.createdAt
-        else
-            user['createdAt'] = new Date().getTime()
-        return user
-    }
-
-
-
-    /**
-     * @description Create user in aerospike
-     * @param {ICommonRequest.IHeaders} headers 
-     * @param {IUserRequest.IUserUpdate} userInfo 
-     */
-    async createUser(headers: ICommonRequest.IHeaders, userInfo: IUserRequest.IUserUpdate): Promise<IUserRequest.IUserData> {
-        try {
-            let dataToSave = {
-                ...await this.buildUser(headers, userInfo, true)
-            }
-            let putArg: IAerospike.Put = {
-                bins: dataToSave,
-                set: this.set,
-                key: dataToSave.id,
-                ttl: Constant.SERVER.INITIAL_USER_TTL,
-                create: true,
-            }
-            await Aerospike.put(putArg)
-            this.createDefaultCart(dataToSave.cartId, dataToSave.id)
-            let user = await this.getUser({ userId: dataToSave.id })
-            return user
-        } catch (error) {
-            consolelog(process.cwd(), "createUser", error, false)
+            consolelog(process.cwd(), "getUser", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -196,40 +100,68 @@ export class UserEntity extends BaseEntity {
      * @param {IUserRequest.IUserData} userData 
      * @param {IUserRequest.IEditProfile} payload 
      */
-    async updateUser(userId: string, payload: IUserRequest.IUserUpdate) {
+    async buildUser(payload: IUserRequest.IUserData) {
         try {
-            let userUpdate = {}
+            let isCreate = false
+            let userUpdate: IUserRequest.IUserData = {}
+            userUpdate['id'] = payload.id
+            if (payload.username)
+                userUpdate['username'] = payload.username
+            if (payload.brand)
+                userUpdate['brand'] = payload.brand
+            if (payload.country)
+                userUpdate['country'] = payload.country
             if (payload.email)
                 userUpdate['email'] = payload.email
+            if (payload.fullPhnNo)
+                userUpdate['fullPhnNo'] = payload.fullPhnNo
+            if (payload.cCode)
+                userUpdate['cCode'] = payload.cCode
+            if (payload.phnNo)
+                userUpdate['phnNo'] = payload.phnNo
+            if (payload.sdmUserRef)
+                userUpdate['sdmUserRef'] = payload.sdmUserRef
+            if (payload.cmsUserRef)
+                userUpdate['cmsUserRef'] = payload.cmsUserRef
+            if (payload.phnVerified != undefined)
+                userUpdate['phnVerified'] = payload.phnVerified
             if (payload.name)
                 userUpdate['name'] = payload.name
-            if (payload.cartId)
-                userUpdate['cartId'] = payload.cartId
-            if (payload.profileStep)
-                userUpdate['profileStep'] = payload.profileStep
-            if (payload.changePhnNo != undefined)
-                userUpdate['changePhnNo'] = payload.changePhnNo
             if (payload.socialKey)
                 userUpdate['socialKey'] = payload.socialKey
             if (payload.socialKey)
                 userUpdate['medium'] = payload.medium
-            if (payload.phnNo)
-                userUpdate['phnNo'] = payload.phnNo
-            if (payload.cCode)
-                userUpdate['cCode'] = payload.cCode
-            if (payload.phnVerified != undefined)
-                userUpdate['phnVerified'] = payload.phnVerified
+            if (payload.profileStep != undefined)
+                userUpdate['profileStep'] = payload.profileStep
+            userUpdate['password'] = "Password1"
+            if (payload.cartId)
+                userUpdate['cartId'] = payload.cartId
+            if (payload.createdAt)
+                userUpdate['createdAt'] = payload.createdAt
+
+
+            let checkUser = await this.getUser({ userId: payload.id })
+            if (checkUser && checkUser.id) {
+                isCreate = false
+            } else {
+                isCreate = true
+                let cartId = payload.cartId
+                this.createDefaultCart(cartId, userUpdate.id)
+            }
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
                 set: this.set,
-                key: userId,
-                update: true,
+                key: payload.id,
             }
+            if (isCreate)
+                putArg['create'] = true
+            else
+                putArg['update'] = true
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: userId })
+            let user = await this.getUser({ userId: payload.id })
             return user
         } catch (error) {
-            consolelog(process.cwd(), "updateUser", error, false)
+            consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -277,7 +209,7 @@ export class UserEntity extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.INVALID_TOKEN_TYPE)
             }
         } catch (error) {
-            consolelog(process.cwd(), "getTokens", error, false)
+            consolelog(process.cwd(), "getTokens", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -286,21 +218,35 @@ export class UserEntity extends BaseEntity {
      * @description Create user on SDM
      * @param payload 
      */
-    async createUserOnSdm(payload) {
+    async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
-            const payloadForSdm = {
-            }
-            let res = await SDM.UserSDME.createCustomer(payloadForSdm)
+            let res = await SDM.UserSDME.createCustomer(payload)
             let putArg: IAerospike.Put = {
-                bins: { sdmUserRef: parseInt(res.id.toString()) },
+                bins: {
+                    sdmUserRef: parseInt(res.id.toString())
+                },
                 set: this.set,
-                key: "1",// payload.aerospikeId,
+                key: payload.id,
                 update: true,
             }
-            // await Aerospike.put(putArg)
+            await Aerospike.put(putArg)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnSdm", error, false)
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @description Update user on SDM
+     * @param payload 
+     */
+    async updateUserOnSdm(payload: IUserRequest.IUserData) {
+        try {
+            let res = await SDM.UserSDME.updateCustomer(payload)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -309,33 +255,35 @@ export class UserEntity extends BaseEntity {
      * @description Create user on CMS
      * @param payload 
      */
-    async createUserOnCms(payload) {
+    async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            const payloadForCms = {
-                customer: {
-                    firstname: payload.firstname,
-                    lastname: payload.lastname,
-                    email: payload.email,
-                    store_id: payload.storeId,
-                    website_id: payload.websiteId,
-                    addresses: []
-                },
-                password: payload.password
-            }
-            let res = await CMS.UserCMSE.createCostomer({}, payloadForCms)
-
-            consolelog(process.cwd(), "resresresresresres", res, false)
-
+            let res = await CMS.UserCMSE.createCostomer(payload)
+            consolelog(process.cwd(), "createUserOnCms", res, false)
             let putArg: IAerospike.Put = {
                 bins: { cmsUserRef: parseInt(res.id.toString()) },
                 set: this.set,
-                key: payload.aerospikeId,
+                key: payload.id,
                 update: true,
             }
-            // await Aerospike.put(putArg)
+            await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "createUserOnCms", error, false)
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @description Update user on CMS
+     * @param payload 
+     */
+    async updateUserOnCms(payload: IUserRequest.IUserData) {
+        try {
+            let res = await CMS.UserCMSE.updateCostomer(payload)
+            consolelog(process.cwd(), "updateUserOnCms", res, false)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -348,7 +296,7 @@ export class UserEntity extends BaseEntity {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "checkUserOnCms", error, false)
+            consolelog(process.cwd(), "checkUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -361,7 +309,7 @@ export class UserEntity extends BaseEntity {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "checkUserOnSdm", error, false)
+            consolelog(process.cwd(), "checkUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

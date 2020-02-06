@@ -22,7 +22,7 @@ export class OrderCMSEntity extends BaseCMS {
             let cmsRes = await this.request(options, headers, form)
             return cmsRes[0]
         } catch (error) {
-            consolelog(process.cwd(), 'createOrder', error, false)
+            consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -6,6 +6,7 @@ import staticRoutes from './v1/static.route'
 import cmsConfigRoutes from './v1/cms.config.route'
 import cmsRoutes from './v1/cms.route'
 import cmsMenuRoutes from './v1/cms.menu.route'
+import cmsLocationRoutes from './v1/cms.location.route'
 import cmsPromotionRoutes from './v1/cms.promotion.route'
 import cmsUserRoutes from './v1/cms.user.route'
 import sdmMenuRoutes from './v1/sdm.menu.route';
@@ -17,6 +18,7 @@ const children = [
   { routes: cmsConfigRoutes, prefix: version1 + '/config' },
   { routes: cmsRoutes, prefix: version1 + '/cms' },
   { routes: cmsMenuRoutes, prefix: version1 + '/menu' },
+  { routes: cmsLocationRoutes, prefix: version1 + '/location' },
   { routes: cmsPromotionRoutes, prefix: version1 + '/promotion' },
   { routes: sdmMenuRoutes, prefix: version1 + '/sdm/menu' },
   { routes: cmsUserRoutes, prefix: version1 + '/user' },

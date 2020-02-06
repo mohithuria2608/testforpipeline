@@ -72,7 +72,7 @@ export class PromotionClass extends BaseEntity {
         try {
             return this.post(data, options);
         } catch (error) {
-            consolelog(process.cwd(), "save Promotion", error, false)
+            consolelog(process.cwd(), "save Promotion", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -120,7 +120,7 @@ export class PromotionClass extends BaseEntity {
                 if (promo && promo.length > 0) {
                     return promo
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.PROMO_NOT_FOUND)
+                    return []
             } else {
                 let getArg: IAerospike.Scan = {
                     set: this.set
@@ -129,7 +129,7 @@ export class PromotionClass extends BaseEntity {
                 return promotionsList
             }
         } catch (error) {
-            consolelog(process.cwd(), "getPromotions", error, false)
+            consolelog(process.cwd(), "getPromotions", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

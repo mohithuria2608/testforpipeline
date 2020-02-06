@@ -22,7 +22,7 @@ export class StoreController {
             }
             return stores
         } catch (error) {
-            consolelog(process.cwd(), "bootstrapStore", error, false)
+            consolelog(process.cwd(), "bootstrapStore", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -47,7 +47,7 @@ export class StoreController {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "fetchStore", error, false)
+            consolelog(process.cwd(), "fetchStore", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -70,7 +70,24 @@ export class StoreController {
             let res = await Aerospike.query(geoWithinArg)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "validateCoords", error, false)
+            consolelog(process.cwd(), "validateCoords", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * syncs stores from CMS to Aerospike
+     */
+    async syncStores(payload): Promise<any> {
+        try {
+            let storesList = JSON.parse(payload.as.argv);
+            for (let store of storesList.data) {
+                await ENTITY.StoreE.postStores(store);
+            }
+            return {};
+        } catch (error) {
+            consolelog(process.cwd(), "syncStores", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

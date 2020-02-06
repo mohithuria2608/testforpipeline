@@ -25,7 +25,7 @@ server.addService(userProto.UserService.service, {
             let res: {} = await ENTITY.SessionE.getSession(call.request.deviceid, call.request.userId)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "getSession", error, false)
+            consolelog(process.cwd(), "getSession", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -35,17 +35,17 @@ server.addService(userProto.UserService.service, {
             let res: IUserRequest.IUserData = await ENTITY.UserE.getUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchUser", error, false)
+            consolelog(process.cwd(), "fetchUser", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await userController.syncUserFromKafka(call.request)
+            let res: {} = await userController.syncUser(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -55,7 +55,7 @@ server.addService(userProto.UserService.service, {
             let res: {} = await ENTITY.AddressE.getAddress(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchAddress", error, false)
+            consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

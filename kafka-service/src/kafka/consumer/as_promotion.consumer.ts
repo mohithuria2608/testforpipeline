@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsPromotionConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_PROMOTION, 'client');
+        super(Constant.KAFKA_TOPIC.AS_PROMOTION, Constant.KAFKA_TOPIC.AS_PROMOTION);
     }
 
     handleMessage() {
@@ -25,10 +25,15 @@ class AsPromotionConsumer extends BaseConsumer {
             let res = await promotionService.sync(message)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "syncPromotion", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "syncPromotion", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

@@ -24,7 +24,7 @@ server.addService(paymentProto.PaymentService.service, {
             let res: IPaymentGrpcRequest.IGetPaymentMethodsRes = await ENTITY.PaymentE.getPaymentMethods(call.request.storeCode);
             callback(null, res);
         } catch (error) {
-            consolelog(process.cwd(), "getPaymentMethods", error, false);
+            consolelog(process.cwd(), "getPaymentMethods", JSON.stringify(error), false);
             callback(grpcSendError(error));
         }
     },
@@ -34,7 +34,7 @@ server.addService(paymentProto.PaymentService.service, {
             let res: IPaymentGrpcRequest.IInitiatePaymentRes = await ENTITY.PaymentE.initiatePayment(call.request);
             callback(null, res);
         } catch (error) {
-            consolelog(process.cwd(), "initiatePayment", error, false);
+            consolelog(process.cwd(), "initiatePayment", JSON.stringify(error), false);
             callback(grpcSendError(error));
         }
     },
@@ -64,7 +64,7 @@ server.addService(paymentProto.PaymentService.service, {
             }
             callback(null, res);
         } catch (error) {
-            consolelog(process.cwd(), "getPaymentStatus", error, false);
+            consolelog(process.cwd(), "getPaymentStatus", JSON.stringify(error), false);
             callback(grpcSendError(error));
         }
     },
@@ -74,7 +74,7 @@ server.addService(paymentProto.PaymentService.service, {
             let res: IPaymentGrpcRequest.ICapturePaymentRes = await ENTITY.PaymentE.capturePayment(call.request);
             callback(null, res);
         } catch (error) {
-            consolelog(process.cwd(), "capturePayment", error, false);
+            consolelog(process.cwd(), "capturePayment", JSON.stringify(error), false);
             callback(grpcSendError(error));
         }
     },
@@ -84,7 +84,7 @@ server.addService(paymentProto.PaymentService.service, {
             let res: IPaymentGrpcRequest.IReversePaymentRes = await ENTITY.PaymentE.reversePayment(call.request);
             callback(null, res);
         } catch (error) {
-            consolelog(process.cwd(), "reversePayment", error, false);
+            consolelog(process.cwd(), "reversePayment", JSON.stringify(error), false);
             callback(grpcSendError(error));
         }
     },
@@ -94,7 +94,7 @@ server.addService(paymentProto.PaymentService.service, {
             let res: IPaymentGrpcRequest.IRefundPaymentRes = await ENTITY.PaymentE.refundPayment(call.request);
             callback(null, res);
         } catch (error) {
-            consolelog(process.cwd(), "refundPayment", error, false);
+            consolelog(process.cwd(), "refundPayment", JSON.stringify(error), false);
             callback(grpcSendError(error));
         }
     },

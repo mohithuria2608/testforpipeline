@@ -28,7 +28,7 @@ export default (router: Router) => {
                     ctx.body = deeplink
                 }
                 catch (error) {
-                    consolelog(process.cwd(),'deeplink', error, false)
+                    consolelog(process.cwd(),'deeplink', JSON.stringify(error), false)
                     throw error
                 }
             })

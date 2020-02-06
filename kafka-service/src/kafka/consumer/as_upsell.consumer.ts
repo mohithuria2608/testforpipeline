@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsUpsellConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_UPSELL, 'client');
+        super(Constant.KAFKA_TOPIC.AS_UPSELL, Constant.KAFKA_TOPIC.AS_UPSELL);
     }
 
     handleMessage() {
@@ -24,10 +24,15 @@ class AsUpsellConsumer extends BaseConsumer {
             let res = await menuService.sync(message)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

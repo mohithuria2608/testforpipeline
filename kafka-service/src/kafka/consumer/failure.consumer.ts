@@ -5,7 +5,7 @@ import { consolelog } from "../../utils"
 class FailConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.FAIL_Q, 'client');
+        super(Constant.KAFKA_TOPIC.FAIL_Q, Constant.KAFKA_TOPIC.FAIL_Q);
     }
 
     handleMessage() {
@@ -20,7 +20,7 @@ class FailConsumer extends BaseConsumer {
         try {
             consolelog(process.cwd(), "Data in fail queue", message, true)
         } catch (error) {
-            consolelog(process.cwd(), `handleFailReq`, error, false);
+            consolelog(process.cwd(), `handleFailReq`, JSON.stringify(error), false);
             return Promise.reject(error)
         }
     }

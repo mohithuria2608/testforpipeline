@@ -24,7 +24,7 @@ server.addService(menuProto.MenuService.service, {
             let res: IMenuGrpcRequest.IFetchMenuRes = await menuController.grpcFetchMenu(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "fetchMenu-server", error, false)
+            consolelog(process.cwd(), "fetchMenu-server", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -35,7 +35,7 @@ server.addService(menuProto.MenuService.service, {
             let res = await menuController.syncFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

@@ -20,7 +20,7 @@ export class LogService {
     private logClient = new this.loadLog(config.get("grpc.log.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established log-service', config.get("grpc.log.client"), true)
+        console.log(process.cwd(), 'GRPC connection established log-service', config.get("grpc.log.client"), true)
     }
 
     /**

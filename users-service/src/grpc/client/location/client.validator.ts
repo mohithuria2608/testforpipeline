@@ -1,11 +1,27 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog,validatorErr } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class LocationServiceValidator {
     constructor() {
+    }
+
+    async fetchStoreValidator(data: IStoreGrpcRequest.IFetchStore) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                    storeId: Joi.number().required(),
+                })
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(error.message)
+                resolve({})
+            } catch (error) {
+                reject(validatorErr(error.message))
+            }
+        })
     }
     async validateCoordinateValidator(data: IStoreGrpcRequest.IValidateCoordinateData) {
         return new Promise((resolve, reject) => {

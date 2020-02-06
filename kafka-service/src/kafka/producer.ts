@@ -1,5 +1,5 @@
 import * as kafka from 'kafka-node';
-import { kafkaClient } from './client';
+import { KafkaClientClass } from './client';
 import { consolelog } from "../utils"
 import * as Constant from '../constant'
 
@@ -8,12 +8,12 @@ class KafkaProducer {
     producer: kafka.Producer;
 
     constructor() {
-        this.producer = new kafka.Producer(kafkaClient.getKafkaInstance(), {
+        this.producer = new kafka.Producer(new KafkaClientClass().getKafkaInstance(), {
             partitionerType: 2,
             requireAcks: 1,
         });
 
-        this.producer.on('error', function (error) { consolelog(process.cwd(), 'Err in starting the producer', error, false); })
+        this.producer.on('error', function (error) { consolelog(process.cwd(), 'Err in starting the producer', JSON.stringify(error), false); })
 
         /**
          * @param 
@@ -67,7 +67,7 @@ class KafkaProducer {
                 Constant.KAFKA_TOPIC.M_LOGGER,
             ], (error, data) => {
                 if (error) {
-                    consolelog(process.cwd(), 'Err in creating topics', error, false);
+                    consolelog(process.cwd(), 'Err in creating topics', JSON.stringify(error), false);
                 } else {
                     consolelog(process.cwd(), 'kafka topics created successfully', data, true);
                 }
@@ -84,7 +84,7 @@ class KafkaProducer {
             }
         ], (error, data) => {
             if (error) {
-                consolelog(process.cwd(), 'Err in producing to kafka topic', error, false);
+                consolelog(process.cwd(), 'Err in producing to kafka topic', JSON.stringify(error), false);
             } else {
                 consolelog(process.cwd(), 'message produced to kafka successfully', JSON.stringify(data), true);
             }

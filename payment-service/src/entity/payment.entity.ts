@@ -295,8 +295,9 @@ export class PaymentClass extends BaseEntity {
      * @description Returns noonpay post authorization callback url
      */
     private getReturnUrl(): string {
-        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order/process-payment`;
-        return "http://localhost:3080/order-service/v1/webhook/noonpay/order/process-payment"
+        // return `${_config.get('server.order.url')}:${_config.get('server.order.port')}/order-service/v1/webhook/noonpay/order/process-payment`;
+        let api = 'v1/webhook/noonpay/order/process-payment'
+        return `${_config.get('server.order.url')}${api}`
     }
     /**
      * @description Returns custom error objects corresponding to noonpay error codes
@@ -332,7 +333,8 @@ export class PaymentClass extends BaseEntity {
             if (config.codInfo && config.codInfo.status === 1) {
                 // COD available
                 availablePaymentMethods.offline.push({
-                    title: config.codInfo.title,
+                    id: 0,
+                    name: config.codInfo.title,
                     min_order_total: config.codInfo.min_order_total,
                     max_order_total: config.codInfo.max_order_total,
                     code: config.codInfo.code
@@ -340,7 +342,7 @@ export class PaymentClass extends BaseEntity {
             }
             return availablePaymentMethods;
         } catch (error) {
-            consolelog(process.cwd(), 'Get Payment Methods', error, false);
+            consolelog(process.cwd(), 'Get Payment Methods', JSON.stringify(error), false);
             if (error && !error.name) {
                 error.name = 'PaymentError';
             }
@@ -354,7 +356,7 @@ export class PaymentClass extends BaseEntity {
     public async initiatePayment(payload: IPaymentGrpcRequest.IInitiatePayment) {
         const { error, value } = PaymentClass.INITIATE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment INITIATE Validation error', error, false);
+            consolelog(process.cwd(), 'Payment INITIATE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         // get payment method details
@@ -510,7 +512,7 @@ export class PaymentClass extends BaseEntity {
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER INITIATE STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER INITIATE STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -549,7 +551,7 @@ export class PaymentClass extends BaseEntity {
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER AUTHORIZATION STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER AUTHORIZATION STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -590,7 +592,7 @@ export class PaymentClass extends BaseEntity {
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER REVERSE STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER REVERSE STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -633,7 +635,7 @@ export class PaymentClass extends BaseEntity {
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER CAPTURE STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER CAPTURE STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -678,7 +680,7 @@ export class PaymentClass extends BaseEntity {
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER REFUND STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER REFUND STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -690,7 +692,7 @@ export class PaymentClass extends BaseEntity {
     public async capturePayment(payload: IPaymentGrpcRequest.ICapturePayment) {
         const { error, value } = PaymentClass.CAPTURE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment CAPTURE Validation error', error, false);
+            consolelog(process.cwd(), 'Payment CAPTURE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         const config = await this.getNoonpayConfig(payload.storeCode);
@@ -763,7 +765,7 @@ export class PaymentClass extends BaseEntity {
     public async reversePayment(payload: IPaymentGrpcRequest.IReversePayment) {
         const { error, value } = PaymentClass.REVERSE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment REVERSE Validation error', error, false);
+            consolelog(process.cwd(), 'Payment REVERSE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         const config = await this.getNoonpayConfig(payload.storeCode);
@@ -830,7 +832,7 @@ export class PaymentClass extends BaseEntity {
     public async refundPayment(payload: IPaymentGrpcRequest.IRefundPayment) {
         const { error, value } = PaymentClass.REFUND_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment REFUND Validation error', error, false);
+            consolelog(process.cwd(), 'Payment REFUND Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         const config = await this.getNoonpayConfig(payload.storeCode);

@@ -85,6 +85,7 @@ declare namespace IPaymentGrpcRequest {
         amount: number;
         storeCode: string;
     }
+    
     interface ICapturePaymentRes { }
 
     interface IReversePayment {

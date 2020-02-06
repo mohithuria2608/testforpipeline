@@ -62,7 +62,7 @@ export class BaseCMS {
 
     //         return cmsRes
     //     } catch (error) {
-    //         consolelog(process.cwd(), 'auth', error, false)
+    //         consolelog(process.cwd(), 'auth', JSON.stringify(error), false)
     //         return (error)
     //     }
     // }

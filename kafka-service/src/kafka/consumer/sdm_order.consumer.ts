@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class SdmOrderStatusConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_MENU, 'client');
+        super(Constant.KAFKA_TOPIC.SDM_ORDER, Constant.KAFKA_TOPIC.SDM_ORDER);
     }
 
     handleMessage() {
@@ -22,16 +22,17 @@ class SdmOrderStatusConsumer extends BaseConsumer {
     private async sdmOrder(message: IKafkaRequest.IKafkaBody) {
         try {
             await orderService.sync(message)
-            // if (message.sdm.create)
-            //     await orderService.createSdmOrder(JSON.parse(message.sdm.argv))
-            // if (message.sdm.get)
-            //     await orderService.getSdmOrder(JSON.parse(message.sdm.argv))
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "sdmOrder", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "sdmOrder", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

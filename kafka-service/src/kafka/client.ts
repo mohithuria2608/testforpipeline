@@ -2,7 +2,7 @@ import * as config from "config"
 const kafka = require('kafka-node');
 import { consolelog } from "../utils"
 
-class KafkaClientClass {
+export class KafkaClientClass {
 
     private kafkaClient
 
@@ -10,7 +10,7 @@ class KafkaClientClass {
         this.kafkaClient = new kafka.KafkaClient(config.get("kafka.url"))
 
         this.kafkaClient.on('error', (error) => {
-            consolelog(process.cwd(),'Kafka client error in connection', error, false)
+            consolelog(process.cwd(),'Kafka client error in connection', JSON.stringify(error), false)
         });
     }
 
@@ -18,5 +18,3 @@ class KafkaClientClass {
         return this.kafkaClient;
     }
 }
-
-export const kafkaClient = new KafkaClientClass();

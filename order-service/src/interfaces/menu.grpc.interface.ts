@@ -20,6 +20,7 @@ declare namespace IMenuGrpcRequest {
         finalPrice?: number,
         specialPrice?: number,
         typeId?: string,
+        originalTypeId?: string,
         catId?: number,
         metaKeyword?: string[],
         bundleProductOptions?: IBundleProductOptions[],
@@ -36,31 +37,6 @@ declare namespace IMenuGrpcRequest {
         associative?: number,
     }
 
-    // interface IMenu {
-    //     id: number,
-    //     position: number,
-    //     name: string,
-    //     description: string,
-    //     inSide: number,
-    //     finalPrice: number,
-    //     specialPrice: number,
-    //     typeId: string,
-    //     catId: number,
-    //     metaKeyword: string[],
-    //     bundleProductOptions?: IBundleProductOptions[],
-    //     selectedItem?: number,
-    //     configurableProductOptions: IConfigurableProductOptions[],
-    //     items?: IItems[],
-    //     sku?: number,
-    //     imageSmall?: string,
-    //     imageThumbnail?: string,
-    //     image?: string,
-    //     taxClassId?: number,
-    //     virtualGroup?: number,
-    //     visibility?: number,
-    //     associative?: number,
-    // }
-
     interface IBundleProductOptions {
         position: number,
         isDependent: number,
@@ -70,20 +46,26 @@ declare namespace IMenuGrpcRequest {
         subtitle: string,
         ingredient: number,
         type: string,
-        productLinks: IProductLinks[]
+        productLinks: IProductLinks[],
+        name: string,
+        imageThumbnail: string,
     }
 
     interface IProductLinks {
-        position: number,
-        price: number,
-        id: number,
-        name: string,
-        imageThumbnail: string,
-        selectionQty: number,
-        subOptions: ISubOptions[],
-        selected: number,
-        default: number,
-        dependentSteps: number[],
+        position?: number,
+        price?: number,
+        id?: number,
+        name?: string,
+        imageThumbnail?: string,
+        selectionQty?: number,
+        subOptions?: ISubOptions[],
+        selected?: number,
+        default?: number,
+        dependentSteps?: number[],
+        option_id?: number,
+        selection_id?: number,
+        title?: string,
+        sku?: number,
     }
 
     interface ISubOptions {
@@ -92,6 +74,9 @@ declare namespace IMenuGrpcRequest {
         name: string,
         id: number,
         sku: number,
+        option_id: number,
+        selection_id: number,
+        title: string,
     }
     interface IConfigurableProductOptions {
         id: number,
@@ -107,6 +92,7 @@ declare namespace IMenuGrpcRequest {
         position: number,
         title: string,
         id: number,
+        name: string,
     }
 
     interface IItems {

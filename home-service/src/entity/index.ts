@@ -1,0 +1,1 @@
+export { HomeE } from './home.entity'

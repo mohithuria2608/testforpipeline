@@ -43,10 +43,7 @@ export class BaseSDM {
     async requestData(name: string, params: object): Promise<any> {
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
-                // params['licenseCode'] = 'AmericanaWeb'
-                // params['conceptID'] = 3
-                // params['requestID'] = 1
-                consolelog(process.cwd(), "params", params, true)
+                consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
                 BaseSDM.client[name](params, function (error, result) {
                     if (error) { reject(error); }
                     else {

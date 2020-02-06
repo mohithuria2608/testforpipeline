@@ -54,4 +54,10 @@ declare namespace ICommonRequest {
         },
         createdAt: number
     }
+
+    interface ISDM {
+        licenseCode: string,
+        conceptID: string,
+        language: string,
+    }
 }

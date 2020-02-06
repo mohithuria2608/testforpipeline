@@ -7,12 +7,12 @@ export enum SET_NAME {
     PROMOTION = "promotion",
     ORDER = "order",
     CONFIG = "config",
-    LOGGER = "logger"
+    LOGGER = "logger",
+    LOCATION = "location"
 };
 
 export const UDF = {
     USER: {
-        check_phone_exist: "check_phone_exist",
         check_social_key: "check_social_key",
     },
     MENU: {
@@ -31,6 +31,7 @@ export enum KAFKA_TOPIC {
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
     AS_UPSELL = "as_upsell",
+    AS_LOCATION = "as_location",
 
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
@@ -99,7 +100,7 @@ export const KAFKA = {
         },
         ORDER: {
             INTERVAL: {
-                GET_STATUS: 10
+                GET_STATUS: 10000
             }
         }
     },
@@ -159,10 +160,11 @@ export const KAFKA = {
 
 export const SERVER = {
     ENV: {
-        development: 0,
-        testing: 1,
-        staging: 2,
-        production: 3
+        default: 0,
+        development: 1,
+        testing: 2,
+        staging: 3,
+        production: 4
     },
     APP_INFO: {
         APP_NAME: "App",
@@ -175,6 +177,7 @@ export const SERVER = {
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
+    USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
     OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
@@ -234,7 +237,8 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             REQUEST: "REQUEST",
-            ERROR: "ERROR"
+            ERROR: "ERROR",
+            INFO: "INFO",
         },
 
         PROFILE_STEP: {
@@ -250,6 +254,16 @@ export const DATABASE = {
         },
 
         ADDRESS: {
+            PICKUP: "PICKUP",
+            DELIVERY: "DELIVERY"
+        },
+
+        ADDRESS_BIN: {
+            PICKUP: "pickup",
+            DELIVERY: "delivery"
+        },
+
+        ORDER: {
             PICKUP: "PICKUP",
             DELIVERY: "DELIVERY"
         },
@@ -288,27 +302,47 @@ export const DATABASE = {
             PENDING: {
                 MONGO: "PENDING",
                 CMS: "",
-                SDM: ""
+                SDM: [0, 1] //@description : ((open + isSuspended) = 0)/(open = 1)
             },
-            IN_KITCHEN: {
-                MONGO: "",
+            CONFIRMED: {
+                MONGO: "CONFIRMED",
                 CMS: "",
-                SDM: "IN_KITCHEN"
+                SDM: [2] //@description : in kitchen
+            },
+            BEING_PREPARED: {
+                MONGO: "BEING_PREPARED",
+                CMS: "",
+                SDM: [2] //@description : in kitchen
+            },
+            READY: {
+                MONGO: "READY",
+                CMS: "",
+                SDM: [8] //@description : ready
+            },
+            ON_THE_WAY: {
+                MONGO: "ON_THE_WAY",
+                CMS: "",
+                SDM: [16, 32] //@description : assigned/shipped
+            },
+            DELIVERED: {
+                MONGO: "DELIVERED",
+                CMS: "",
+                SDM: [64, 128, 2048] //@description : delivered
             },
             CLOSED: {
                 MONGO: "",
                 CMS: "",
-                SDM: "CLOSED"
+                SDM: []
             },
             CANCELED: {
-                MONGO: "",
+                MONGO: "CANCELED",
                 CMS: "",
-                SDM: "CANCELED"
+                SDM: [512, 256, 1024, 4096, 8192] //@description : cancelled
             },
             FAILURE: {
-                MONGO: "",
+                MONGO: "FAILURE",
                 CMS: "",
-                SDM: "FAILURE"
+                SDM: []
             },
         }
     }
@@ -453,6 +487,13 @@ export const STATUS_MSG = {
                 type: 'MENU_NOT_FOUND'
             },
 
+            HOME_NOT_FOUND: {
+                statusCode: 409,
+                httpCode: 409,
+                message: 'Home not found',
+                type: 'HOME_NOT_FOUND'
+            },
+
             SERVICE_UNAVAILABLE: {
                 statusCode: 409,
                 httpCode: 409,
@@ -568,31 +609,31 @@ export const STATUS_MSG = {
                 message: 'Invalid order',
                 type: 'INVALID_ORDER'
             },
-            INVALID_USERNAME:{
+            INVALID_USERNAME: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid user name',
                 type: 'INVALID_USERNAME'
             },
-            INVALID_PASSWORD:{
+            INVALID_PASSWORD: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid password',
                 type: 'INVALID_PASSWORD'
             },
-            INVALID_LANGUAGE:{
+            INVALID_LANGUAGE: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid language',
                 type: 'INVALID_LANGUAGE'
             },
-            INVALID_BRAND:{
+            INVALID_BRAND: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid brand',
                 type: 'INVALID_BRAND'
             },
-            INVALID_COUNTRY:{
+            INVALID_COUNTRY: {
                 statusCode: 422,
                 httpCode: 422,
                 message: 'Invalid country',
@@ -631,7 +672,14 @@ export const STATUS_MSG = {
                 httpCode: 500,
                 message: 'Invalid token type provided',
                 type: 'INVALID_TOKEN_TYPE'
-            }
+            },
+
+            CREATE_ORDER_ERROR:{
+                statusCode: 500,
+                httpCode: 500,
+                type: 'CREATE_ORDER_ERROR',
+                message: 'Error while creating order on SDM'
+            },
         },
         E501: {
             TOKENIZATION_ERROR: {

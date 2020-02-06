@@ -4,7 +4,6 @@ require('./grpc/server')
 import { bootstrap } from './utils'
 import middleware from './middlewares'
 import route from './route'
-import { event } from './lib'
 
 const app = new Koa()
 
@@ -18,7 +17,6 @@ export const start = (async () => {
     const port = config.get("server.log.port")
     const server = app.listen(port)
 
-    event.emit('logger', { name: "ankit" });
     await bootstrap(server)
 
   } catch (error) {

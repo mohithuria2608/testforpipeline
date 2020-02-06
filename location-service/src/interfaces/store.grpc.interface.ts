@@ -10,4 +10,8 @@ declare namespace IStoreGrpcRequest {
 
     interface IValidateCoordinateData extends ICommonRequest.ICordinatesOpt {
     }
+
+    interface ISyncStoresReq {
+        request: any
+    }
 }

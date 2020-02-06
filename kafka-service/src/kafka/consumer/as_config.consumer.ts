@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_CONFIG, 'client');
+        super(Constant.KAFKA_TOPIC.AS_CONFIG, Constant.KAFKA_TOPIC.AS_CONFIG);
     }
 
     handleMessage() {
@@ -24,10 +24,15 @@ class AsConfigConsumer extends BaseConsumer {
             let res = await syncService.sync(message)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "syncConfig", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "syncConfig", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)
