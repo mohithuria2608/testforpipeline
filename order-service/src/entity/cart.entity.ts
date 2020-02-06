@@ -304,7 +304,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart) {
         try {
             let cart = []
             payload.items.map(sitem => {
@@ -474,16 +474,26 @@ export class CartClass extends BaseEntity {
                     return Promise.reject("Unhandled  products")
                 }
             })
-            let req: ICartCMSRequest.ICreateCartCms = {
-                cms_user_id: 7, //userData.cmsUserRef,
+            let req = {
+                cms_user_id: 12, //userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart,
+                cart_items: cart
             }
             if (payload.couponCode)
                 req['coupon_code'] = payload.couponCode
             else
                 req['coupon_code'] = ""
+            return req
+        } catch (error) {
+            consolelog(process.cwd(), "createCartReqForCms", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+        try {
+            let req = await this.createCartReqForCms(payload)
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
         } catch (error) {

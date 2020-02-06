@@ -32,9 +32,10 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async createOrderOnCMS(payload) {
+    async createOrderOnCMS(payload: IOrderCMSRequest.ICreateOrderCms, cmsAddressRef: number) {
         try {
-            let cmsOrder = await CMS.OrderCMSE.createOrder({})
+            payload['address_id'] = 7// cmsAddressRef
+            let cmsOrder = await CMS.OrderCMSE.createOrder(payload)
             return cmsOrder
         } catch (error) {
             consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
@@ -108,6 +109,9 @@ export class OrderClass extends BaseEntity {
                 Total: "3.0",// total.amount,
                 ValidateStore: 0,
             }
+            let entries = {}
+
+            // order['Entries'] = entries
             /**
              * @step 1 :create order on sdm 
              * @step 2 :update mongo order using payload.cartId sdmOrderRef
@@ -157,7 +161,7 @@ export class OrderClass extends BaseEntity {
                 cartId: cartData.cartId,
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
-                cmsOrderRef: 0,
+                cmsOrderRef: cartData.cmsOrderRef,
                 userId: cartData.userId,
                 orderId: cartData.orderId,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
