@@ -656,12 +656,16 @@ export class CartClass extends BaseEntity {
             //     curItems.forEach(obj => {
             //         console.log("1", obj.id)
             //         let parsedData = {}
-            //         cmsCart.cart_items.forEach(elem => {
-            //             if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
-            //                 parsedData[obj.id] = true
-            //                 dataToUpdate['items'].push(obj)
-            //             }
-            //         })
+            //         if (obj['originalTypeId'] == "bundle_group") {
+            //             obj['items'].map()
+            //         } else {
+            //             cmsCart.cart_items.forEach(elem => {
+            //                 if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
+            //                     parsedData[obj.id] = true
+            //                     dataToUpdate['items'].push(obj)
+            //                 }
+            //             })
+            //         }
             //         if (parsedData[obj.id] == undefined)
             //             dataToUpdate['notAvailable'].push(obj)
             //     })
