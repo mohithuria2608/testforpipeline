@@ -109,7 +109,7 @@ message IFetchAddressRes {
     required int32 sdmAddressRef = 2;
     required int32 cmsAddressRef = 3;
     required int32 sdmStoreRef = 4;
-    required int32 tag = 5;
+    required string tag = 5;
     required string bldgName = 6;
     required string description = 7;
     required string flatNum = 8;

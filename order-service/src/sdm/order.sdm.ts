@@ -87,6 +87,26 @@ export class OrderSDMEntity extends BaseSDM {
         }
     }
 
+     /**
+    * @method SDK
+    * */
+   async updateOrder(payload) {
+    try {
+        let data = {
+            name: "UpdateOrder",
+            req: payload
+        }
+        let res = await this.requestData(data.name, data.req)
+        if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+            return res.UpdateOrderResult
+        else
+            return Promise.reject(JSON.stringify(res))
+    } catch (error) {
+        consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
+        return Promise.reject(error)
+    }
+}
+
     /**
     * @method SDK
     * */
@@ -130,7 +150,7 @@ export class OrderSDMEntity extends BaseSDM {
                     cardNumber: payload.transaction.paymentDetails.paymentInfo,
                     cardCCV: "123",
                     cardExpire: payload.transaction.paymentDetails.expiryYear,
-                    refNumber: payload.transaction.transaction[0].id,
+                    refNumber: payload.transaction.transactions[0].id,
                     refCountry: payload.transaction.paymentDetails.cardCountry,
                     refGateway: "noonpay",
                 }

@@ -54,7 +54,7 @@ message IGetPaymentStatusRes {
     required string currency = 11;
     required string channel = 12;
     required IPaymentDetails paymentDetails = 13;
-    repeated ITransaction transaction = 14;
+    repeated ITransaction transactions = 14;
 }
 
 message IPaymentDetails {
@@ -88,6 +88,7 @@ message ICapturePaymentReq {
     required int64 noonpayOrderId = 1;
     required string orderId = 2;
     required string storeCode = 3;
+    required double amount = 4;
 }
 
 message ICapturePaymentRes { }

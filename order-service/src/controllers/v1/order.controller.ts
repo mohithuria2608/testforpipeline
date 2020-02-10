@@ -107,6 +107,9 @@ export class OrderController {
             let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
             console.log("amount", typeof amount, JSON.stringify(amount))
             if (payload.paymentMethodId != 0) {
+                /**
+                 * @todo : noonpay order id = cms order id
+                 */
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order._id.toString(),
                     amount: amount[0].amount,

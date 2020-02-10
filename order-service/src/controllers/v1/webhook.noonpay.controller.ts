@@ -34,8 +34,8 @@ export class WebhookNoonpayController {
                     $addToSet: {
                         transLogs: status
                     },
-                    "payment.transactionId": status.transaction[0].id,
-                    "payment.status": status.transaction[0].type
+                    "payment.transactionId": status.transactions[0].id,
+                    "payment.status": status.transactions[0].type
                 }
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                 // if (status.paymentStatus == "AUTHORIZED") {

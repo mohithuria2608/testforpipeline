@@ -119,11 +119,12 @@ export class OrderClass extends BaseEntity {
                 }
             })
             let order = {
-                AddressID: 10084693,// payload.address.sdmAddressRef,
+                AddressID: 10512054,// 10084693,// payload.address.sdmAddressRef,
+                CityID: 17, //not mandatory
                 AreaID: 16,// 538,// payload.address.sdmAddressRef,
                 BackupStoreID: -1,//2,// payload.address.sdmAddressRef,
                 ConceptID: 3,// payload.address.sdmAddressRef,
-                CustomerID: 7323013,//payload.address.sdmAddressRef,
+                CustomerID: 7694143,// 7323013,//payload.address.sdmAddressRef,
                 Entries: this.createCEntries(payload.items),
                 OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
                 OrderType: 0,
@@ -333,8 +334,8 @@ export class OrderClass extends BaseEntity {
                                     })
                                     this.updateOneEntityMdb({ _id: order._id }, {
                                         status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                        "payment.transactionId": status.transaction[1].id,
-                                        "payment.status": status.transaction[1].type,
+                                        "payment.transactionId": status.transactions[0].id,
+                                        "payment.status": status.transactions[0].type,
                                         $addToSet: {
                                             transLogs: status
                                         },

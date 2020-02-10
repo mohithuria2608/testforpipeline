@@ -3690,6 +3690,11 @@ export const start = (async () => {
 
     await bootstrap(server)
 
+
+
+    // let sdmOrder = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39784941 })
+
+
     // await SDM.OrderSDME.getOrderDetail({})
 
   } catch (error) {

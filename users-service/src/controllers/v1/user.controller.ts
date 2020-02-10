@@ -186,7 +186,7 @@ export class UserController {
     /**
     * @method POST
     * @param {string} socialKey : social id
-    * @param {string} medium : Social Platform type : FB, GOOGLE
+    * @param {string} medium : Social Platform type : FB, GOOGLE, APPLE
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
