@@ -16,7 +16,6 @@ export class MiscController {
             return {
                 otpDigits: 4,
                 blobBaseUrl: config.get("blobBaseUrl"),
-                blobHomeUrl: "http://40.123.207.192/media/homepage/",
                 locationVicinity: 100,
                 paymentSuccessUrl: redirectUrl + "payment/success",
                 paymentFailureUrl: redirectUrl + "payment/failure",
