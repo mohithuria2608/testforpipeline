@@ -516,69 +516,6 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    // async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
-    //     try {
-    //         let promo: IPromotionGrpcRequest.IValidatePromotionRes
-    //         let subtotal = 0
-    //         let grandtotal = 0
-    //         let tax = 0.05
-    //         if (payload.items && payload.items.length > 0) {
-    //             payload.items.map(item => {
-    //                 grandtotal = grandtotal + item.sellingPrice
-    //             })
-    //         }
-    //         tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
-    //         subtotal = grandtotal - tax
-
-    //         console.log("grandtotal", grandtotal)
-    //         console.log("subtotal", subtotal)
-    //         console.log("tax", tax)
-
-
-    //         let discountAmnt = 0
-    //         let couponCode = ""
-    //         if (payload.couponCode && payload.items && payload.items.length > 0) {
-    //             couponCode = payload.couponCode
-    //             promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-    //             if (promo && promo.isValid) {
-    //                 if (promo.promotionType == "by_percent") {
-    //                     discountAmnt = ((grandtotal * (promo.discountAmount / 100)) <= promo.maxDiscountAmt) ? (grandtotal * (promo.discountAmount / 100)) : promo.maxDiscountAmt
-    //                 } else {
-    //                     delete payload['couponCode']
-    //                 }
-    //             } else
-    //                 delete payload['couponCode']
-    //         } else
-    //             delete payload['couponCode']
-
-    //         console.log("discountAmnt", discountAmnt)
-
-    //         if (discountAmnt > 0)
-    //             grandtotal = grandtotal - discountAmnt
-    //         let cmsres = {
-    //             cms_cart_id: 5,
-    //             currency_code: "AED",
-    //             cart_items: payload.items,
-    //             subtotal: subtotal,
-    //             grandtotal: grandtotal + 6, //add shipping charges
-    //             tax: [{
-    //                 tax_name: "VAT",
-    //                 amount: tax,
-    //             }],
-    //             not_available: [],
-    //             is_price_changed: false,
-    //             coupon_code: couponCode,
-    //             discount_amount: discountAmnt,
-    //             success: true,
-    //             promo: promo
-    //         }
-    //         return cmsres
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
-    //         return Promise.reject(error)
-    //     }
-    // }
-
     async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
         try {
             let prevCart: ICartRequest.ICartData
