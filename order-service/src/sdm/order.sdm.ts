@@ -12,61 +12,37 @@ export class OrderSDMEntity extends BaseSDM {
     }
 
     // {
-    //     "licenseCode": "AmericanaWeb",
-    //     "conceptID": "3",
-    //     "order": {
-    //         "AddressID": "10084693",
-    //         "AreaID": "538",
-    //         "BackupStoreID": "2",
-    //         "ConceptID": "3",
-    //         "CustomerID": "7323013",
-    //         "Entries": {
-    //             "CEntry": [
-    //                 {
-    //                     "ItemID": "110002",
-    //                     "Level": "0",
-    //                     "ModCode": "NONE",
-    //                     "Name": "Kids Chicken Meal",
-    //                     "OrdrMode": "OM_SAVED",
-    //                     "Price": "13",
-    //                     "Status": "NOTAPPLIED"
-    //                 },
-    //                 {
-    //                     "ItemID": "110002",
-    //                     "Level": "0",
-    //                     "ModCode": "NONE",
-    //                     "Name": "Kids Chicken Meal",
-    //                     "OrdrMode": "OM_SAVED",
-    //                     "Price": "13",
-    //                     "Status": "NOTAPPLIED"
-    //                 },
-    //                 {
-    //                     "ItemID": "110002",
-    //                     "Level": "0",
-    //                     "ModCode": "NONE",
-    //                     "Name": "Kids Chicken Meal",
-    //                     "OrdrMode": "OM_SAVED",
-    //                     "Price": "13",
-    //                     "Status": "NOTAPPLIED"
-    //                 }
-    //             ]
+    //     "CEntry": [
+    //         {
+    //             "ItemID": "110002",
+    //             "Level": "0",
+    //             "ModCode": "NONE",
+    //             "Name": "Kids Chicken Meal",
+    //             "OrdrMode": "OM_SAVED",
+    //             "Price": "13",
+    //             "Status": "NOTAPPLIED"
     //         },
-    //         "OrderMode": "1",
-    //         "OriginalStoreID": "65",
-    //         "PaidOnline": "0",
-    //         "ServiceCharge": "0.25",
-    //         "Source": "4",
-    //         "Status": "0",
-    //         "StoreID": "65",
-    //         "SubTotal": "2.75",
-    //         "Total": "3.0",
-    //         "ValidateStore": "1"
-    //     },
-    //     "autoApprove": "true",
-    //     "useBackupStoreIfAvailable": "true",
-    //     "creditCardPaymentbool": "false",
-    //     "menuTemplateID": "17"
+    //         {
+    //             "ItemID": "110002",
+    //             "Level": "0",
+    //             "ModCode": "NONE",
+    //             "Name": "Kids Chicken Meal",
+    //             "OrdrMode": "OM_SAVED",
+    //             "Price": "13",
+    //             "Status": "NOTAPPLIED"
+    //         },
+    //         {
+    //             "ItemID": "110002",
+    //             "Level": "0",
+    //             "ModCode": "NONE",
+    //             "Name": "Kids Chicken Meal",
+    //             "OrdrMode": "OM_SAVED",
+    //             "Price": "13",
+    //             "Status": "NOTAPPLIED"
+    //         }
+    //     ]
     // }
+
     /**
     * @method SDK
     * */
@@ -74,7 +50,16 @@ export class OrderSDMEntity extends BaseSDM {
         try {
             let data = {
                 name: "UpdateOrder",
-                req: payload
+                req: {
+                    "licenseCode": "AmericanaWeb",
+                    "conceptID": "3",
+                    "order": payload,
+                    "autoApprove": "true",
+                    "useBackupStoreIfAvailable": "true",
+                    "creditCardPaymentbool": "false",
+                    "menuTemplateID": "17"
+                }
+                // payload
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
@@ -87,25 +72,25 @@ export class OrderSDMEntity extends BaseSDM {
         }
     }
 
-     /**
-    * @method SDK
-    * */
-   async updateOrder(payload) {
-    try {
-        let data = {
-            name: "UpdateOrder",
-            req: payload
+    /**
+   * @method SDK
+   * */
+    async updateOrder(payload) {
+        try {
+            let data = {
+                name: "UpdateOrder",
+                req: payload
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.UpdateOrderResult
+            else
+                return Promise.reject(JSON.stringify(res))
+        } catch (error) {
+            consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
+            return Promise.reject(error)
         }
-        let res = await this.requestData(data.name, data.req)
-        if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
-            return res.UpdateOrderResult
-        else
-            return Promise.reject(JSON.stringify(res))
-    } catch (error) {
-        consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
-        return Promise.reject(error)
     }
-}
 
     /**
     * @method SDK
