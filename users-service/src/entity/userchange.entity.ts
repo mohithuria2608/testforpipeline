@@ -177,6 +177,8 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.deleteUserId)
                 dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+            if (payload.emailVerified != undefined)
+                dataToUpdateUserchange['emailVerified'] = payload.emailVerified
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,

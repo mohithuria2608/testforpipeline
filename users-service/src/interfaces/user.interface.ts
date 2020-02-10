@@ -12,6 +12,7 @@ declare namespace IUserRequest {
         sdmUserRef?: number,
         cmsUserRef?: number,
         phnVerified?: number,
+        emailVerified?: number,
         name?: string,
         socialKey?: string,
         medium?: string,

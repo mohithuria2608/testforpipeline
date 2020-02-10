@@ -101,6 +101,7 @@ export class OrderController {
                 cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
                 cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
             }
+            cartData['orderType'] = payload.orderType
             ENTITY.OrderE.syncOrder(cartData)
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
             let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })

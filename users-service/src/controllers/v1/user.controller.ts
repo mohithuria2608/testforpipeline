@@ -304,6 +304,7 @@ export class UserController {
                         profileStep: 1,
                         brand: headers.brand,
                         country: headers.country,
+                        emailVerified: 1,
                     }
                     if (checkUser && checkUser.length > 0) {
                         userchangePayload['id'] = checkUser[0].id
@@ -319,13 +320,15 @@ export class UserController {
                     userData['cCode'] = payload.cCode
                     userData['profileStep'] = 1
                     userData['phnVerified'] = 0
+                    userData['emailVerified'] = 1
                     return formatUserData(userData, headers, auth.isGuest)
                 } else {
                     let userUpdate: IUserRequest.IUserData = {
                         id: userData.id,
                         name: payload.name,
                         email: payload.email,
-                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
+                        emailVerified: 1,
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     let userSync: IKafkaGrpcRequest.IKafkaBody = {

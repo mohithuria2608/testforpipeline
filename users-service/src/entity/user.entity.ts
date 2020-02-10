@@ -34,6 +34,7 @@ export class UserEntity extends BaseEntity {
         brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         email: Joi.string().email().lowercase().trim().required(),
+        emailVerified: Joi.number().valid(0, 1).required(),
         fullPhnNo: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
@@ -125,6 +126,8 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cmsUserRef'] = payload.cmsUserRef
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
+            if (payload.emailVerified != undefined)
+                userUpdate['emailVerified'] = payload.emailVerified
             if (payload.name)
                 userUpdate['name'] = payload.name
             if (payload.socialKey)
@@ -138,7 +141,6 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-
 
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {

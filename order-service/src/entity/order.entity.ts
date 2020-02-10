@@ -43,6 +43,63 @@ export class OrderClass extends BaseEntity {
         }
     }
 
+    createCEntries(items) {
+        try {
+            let Entries = {
+                "CEntry": [
+                    {
+                        "ItemID": "110002",
+                        "Level": "0",
+                        "ModCode": "NONE",
+                        "Name": "Kids Chicken Meal",
+                        "OrdrMode": "OM_SAVED",
+                        "Price": "13",
+                        "Status": "NOTAPPLIED"
+                    },
+                    {
+                        "ItemID": "110002",
+                        "Level": "0",
+                        "ModCode": "NONE",
+                        "Name": "Kids Chicken Meal",
+                        "OrdrMode": "OM_SAVED",
+                        "Price": "13",
+                        "Status": "NOTAPPLIED"
+                    },
+                    {
+                        "ItemID": "110002",
+                        "Level": "0",
+                        "ModCode": "NONE",
+                        "Name": "Kids Chicken Meal",
+                        "OrdrMode": "OM_SAVED",
+                        "Price": "13",
+                        "Status": "NOTAPPLIED"
+                    }
+                ]
+            }
+
+            items.forEach(item => {
+                if (item.typeId == "simple" && item.originalTypeId == "simple") {
+                    Entries.CEntry.push({
+                        ItemID: item.id,
+                        Level: '0',
+                        ModCode: "NONE",
+                        Name: item.name,
+                        OrdrMode: "OM_SAVED",
+                        Price: item.specialPrice,
+                        Status: "NOTAPPLIED",
+                    })
+                }
+                else {
+
+                }
+            })
+            return Entries
+        } catch (error) {
+            consolelog(process.cwd(), "createCEntries", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
     /**
     * @method GRPC
     * @description : Create order on SDM
@@ -63,54 +120,29 @@ export class OrderClass extends BaseEntity {
             })
             let order = {
                 AddressID: 10084693,// payload.address.sdmAddressRef,
-                AreaID: 538,// payload.address.sdmAddressRef,
-                BackupStoreID: 2,// payload.address.sdmAddressRef,
+                AreaID: 16,// 538,// payload.address.sdmAddressRef,
+                BackupStoreID: -1,//2,// payload.address.sdmAddressRef,
                 ConceptID: 3,// payload.address.sdmAddressRef,
                 CustomerID: 7323013,//payload.address.sdmAddressRef,
-                Entries: {
-                    "CEntry": [
-                        {
-                            "ItemID": "110002",
-                            "Level": "0",
-                            "ModCode": "NONE",
-                            "Name": "Kids Chicken Meal",
-                            "OrdrMode": "OM_SAVED",
-                            "Price": "13",
-                            "Status": "NOTAPPLIED"
-                        },
-                        {
-                            "ItemID": "110002",
-                            "Level": "0",
-                            "ModCode": "NONE",
-                            "Name": "Kids Chicken Meal",
-                            "OrdrMode": "OM_SAVED",
-                            "Price": "13",
-                            "Status": "NOTAPPLIED"
-                        },
-                        {
-                            "ItemID": "110002",
-                            "Level": "0",
-                            "ModCode": "NONE",
-                            "Name": "Kids Chicken Meal",
-                            "OrdrMode": "OM_SAVED",
-                            "Price": "13",
-                            "Status": "NOTAPPLIED"
-                        }
-                    ]
-                },
-                OrderMode: 1,
-                OriginalStoreID: 65,// payload.store.sdmStoreRef,
+                Entries: this.createCEntries(payload.items),
+                OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
+                OrderType: 0,
+                OriginalStoreID: 1219,// 65,// payload.store.sdmStoreRef,
                 PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
                 PaymentMethod: (payload['paymentMethodId'] == 0) ? "Cash" : "Credit",
                 ServiceCharge: "0.25", //@todo : ask from Nusrat
                 Source: 4,
                 Status: 0,
-                StoreID: 65,// payload.store.sdmStoreRef,
+                StoreID: 1219,// 65,// payload.store.sdmStoreRef,
                 SubTotal: "2.75",// subtotal.amount,
                 Total: "3.0",// total.amount,
                 ValidateStore: 0,
-                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? false : true,
-                isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1
+
+                // OrderID:
+                // creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? false : true,
+                // isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1,
+                // ProvinceID:,
+                // StreetID:,
             }
             let entries = {}
 
@@ -255,7 +287,7 @@ export class OrderClass extends BaseEntity {
                             }
                             else if (Constant.DATABASE.STATUS.ORDER.PENDING.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
                                 consolelog(process.cwd(), "STATE : 4", sdmOrder.Status, true)
-                                if (sdmOrder.Status == 0 && order.payment && order.payment.status == "AUTHORIZATION" && (order.paymentMethodAddedOnSdm == 0)) {
+                                if (sdmOrder.Status == 96 && order.payment && order.payment.status == "AUTHORIZATION" && (order.paymentMethodAddedOnSdm == 0)) {
                                     consolelog(process.cwd(), "STATE : 5", sdmOrder.Status, true)
                                     /**
                                     * @description : add payment object to sdm

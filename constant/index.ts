@@ -302,7 +302,7 @@ export const DATABASE = {
             PENDING: {
                 MONGO: "PENDING",
                 CMS: "",
-                SDM: [0, 1] //@description : ((open + isSuspended) = 0)/(open = 1)
+                SDM: [0, 1, 96] //@description : ((Suspended = 96)/(open = 1)
             },
             CONFIRMED: {
                 MONGO: "CONFIRMED",
