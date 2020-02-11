@@ -201,6 +201,7 @@ export class OrderClass extends BaseEntity {
                 userId: cartData.userId,
                 orderId: cartData.orderId,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
+                sdmOrderStatus: -1,
                 items: cartData.items,
                 amount: cartData.amount,
                 address: {
@@ -229,6 +230,7 @@ export class OrderClass extends BaseEntity {
                 transLogs: [],
                 createdAt: new Date().getTime(),
                 updatedAt: 0,
+                trackUntil: 0,
                 isActive: 1,
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0,
