@@ -77,20 +77,392 @@ export class OrderClass extends BaseEntity {
                 ]
             }
 
-            items.forEach(item => {
-                if (item.typeId == "simple" && item.originalTypeId == "simple") {
-                    Entries.CEntry.push({
-                        ItemID: item.id,
-                        Level: '0',
-                        ModCode: "NONE",
-                        Name: item.name,
-                        OrdrMode: "OM_SAVED",
-                        Price: item.specialPrice,
-                        Status: "NOTAPPLIED",
-                    })
-                }
-                else {
+            let Entries_ = {
+                CEntry: []
+            }
+            items.forEach(product => {
+                let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
 
+                if (product.originalTypeId == "simple") {
+                    if (product.typeId == "simple") {
+                        // "name": "Fresh Orange Juice"
+                        Entries_.CEntry.push({
+                            ItemID: product.sdmId,
+                            Level: 0,
+                            ModCode: "NONE",
+                            Name: product.name,
+                            OrdrMode: "OM_SAVED",
+                            Price: product.specialPrice,
+                            Status: "NOTAPPLIED",
+                        })
+                    } else if (product.typeId == "bundle") {
+                        // "name": "Mighty Original",
+                        let obj = {
+                            DealID: 0,
+                            Entries: {
+                                CEntry: []
+                            },
+                            ID: 0,
+                            ItemID: product.sdmId,
+                            ModCode: "NONE",
+                            Name: product.name,
+                            QCComponent: -1,
+                            QCInstanceID: instanceId,
+                            QCLevel: 0,
+                            QCProID: product.promoId,
+                        }
+                        if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                            product.bundleProductOptions.forEach(bpo => {
+                                if (bpo && bpo.productLinks.length > 0) {
+                                    bpo.productLinks.forEach(pl => {
+                                        if (pl.selected == 1) {
+                                            if (pl.subOptions && pl.subOptions.length > 0) {
+                                                pl.subOptions.forEach(so => {
+                                                    if (so.selected == 1) {
+                                                        if (so.title == "None") { }
+                                                        else if (so.title == "Regular") {
+                                                            obj.Entries.CEntry.push({
+                                                                ID: 0,
+                                                                ItemID: so.sdmId,
+                                                                ModCode: "WITH",
+                                                                ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                                                Name: so.name,
+                                                                OrdrMode: "OM_SAVED",
+                                                                Weight: 0,
+                                                            })
+                                                        } else if (so.title == "Extra") {
+                                                            obj.Entries.CEntry.push({
+                                                                ID: 0,
+                                                                ItemID: so.sdmId,
+                                                                ModCode: "WITH",
+                                                                ModgroupID: pl.modGroupId,
+                                                                Name: so.name,
+                                                                OrdrMode: "OM_SAVED",
+                                                                Weight: 0,
+                                                            }, {
+                                                                ID: 0,
+                                                                ItemID: so.sdmId,
+                                                                ModCode: "WITH",
+                                                                ModgroupID: pl.modGroupId,
+                                                                Name: so.name,
+                                                                OrdrMode: "OM_SAVED",
+                                                                Weight: 0,
+                                                            })
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                        Entries_.CEntry.push(obj)
+                    }
+                }
+                else if (product.originalTypeId == "configurable") {
+                    // "name": "Pepsi",
+                    if (product.items && product.items.length > 0) {
+                        product.items.forEach(i => {
+                            if (i['sku'] == product.selectedItem) {
+                                Entries_.CEntry.push({
+                                    ItemID: 600002,// i.sdmId,
+                                    Level: 0,
+                                    ModCode: "NONE",
+                                    Name: i.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Price: i.specialPrice,
+                                    Status: "NOTAPPLIED",
+
+
+
+                                    // DealID: 0,
+                                    // ID: 0,
+                                    // ItemID: i.sdmId,
+                                    // ModCode: "NONE",
+                                    // Name: i.name,
+                                    // QCComponent: -1,
+                                    // QCInstanceID: instanceId,
+                                    // QCLevel: 0,
+                                    // QCProID: product.promoId,
+                                })
+                            }
+                        })
+                    }
+                }
+                else if (product.originalTypeId == "bundle") {
+                    if (product.typeId == "bundle") {
+                        // "name": "Super Mega Deal",
+                        if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                            product.bundleProductOptions.forEach(bpo => {
+                                if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                    bpo.productLinks.forEach(pl => {
+                                        if (pl.selected == 1) {
+                                            if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                let obj = {
+                                                    DealID: 0,
+                                                    Entries: {
+                                                        CEntry: []
+                                                    },
+                                                    ID: 0,
+                                                    ItemID: pl.sdmId,
+                                                    ModCode: "NONE",
+                                                    Name: pl.name,
+                                                    QCComponent: pl.compId,
+                                                    QCInstanceID: instanceId,
+                                                    QCLevel: 0,
+                                                    QCProID: product.promoId,
+                                                }
+                                                product.bundleProductOptions.forEach(plbpo => {
+                                                    if (plbpo.position == pl.dependentSteps[0]) {
+                                                        if (plbpo.type == "stepper") {
+                                                            plbpo.productLinks.forEach(plbpopl => {
+                                                                for (let i = 0; i < plbpopl.selectionQty; i++) {
+                                                                    obj.Entries.CEntry.push({
+                                                                        DealID: 0,
+                                                                        ID: 0,
+                                                                        ItemID: plbpopl.sdmId,
+                                                                        ModCode: "NONE",
+                                                                        Name: plbpopl.name,
+                                                                        QCComponent: plbpopl.compId,
+                                                                        QCInstanceID: instanceId,
+                                                                        QCLevel: 0,
+                                                                        QCProID: product.promoId,
+                                                                    })
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+                                                })
+                                                Entries_.CEntry.push(obj)
+                                            } else {
+                                                for (let i = 0; i < pl.selectionQty; i++) {
+                                                    Entries_.CEntry.push({
+                                                        DealID: 0,
+                                                        ID: 0,
+                                                        ItemID: pl.sdmId,
+                                                        ModCode: "NONE",
+                                                        Name: pl.name,
+                                                        QCComponent: 0,
+                                                        QCInstanceID: instanceId,
+                                                        QCLevel: 0,
+                                                        QCProID: product.promoId,
+                                                    })
+                                                }
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                }
+                else if (product.originalTypeId == "bundle_group") {
+                    if (product.typeId == "bundle_group") {
+                        // "name": "Twister Meal",   "name": "Mighty Twist",
+                        if (product.items && product.items.length > 0) {
+                            product.items.forEach(i => {
+                                if (i['sku'] == product.selectedItem) {
+                                    if (i.bundleProductOptions && i.bundleProductOptions.length > 0) {
+                                        let positionIndex = i.bundleProductOptions[0].position
+                                        i.bundleProductOptions.forEach(bpo => {
+                                            let QCComponent = bpo.compId
+                                            if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                                if (bpo.ingredient == 0) {
+                                                    bpo.productLinks.forEach(pl => {
+                                                        if (pl.selected == 1) {
+                                                            if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                                let obj = {
+                                                                    DealID: 0,
+                                                                    Entries: {
+                                                                        CEntry: []
+                                                                    },
+                                                                    ID: 0,
+                                                                    ItemID: pl.sdmId,
+                                                                    ModCode: "NONE",
+                                                                    Name: pl.name,
+                                                                    QCComponent: QCComponent,
+                                                                    QCInstanceID: instanceId,
+                                                                    QCLevel: 0,
+                                                                    QCProID: i.promoId,
+                                                                }
+                                                                let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
+                                                                console.log("dependentSteps", dependentSteps)
+
+                                                                if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
+                                                                    /**
+                                                                     * @description (ingredient == 1) :  "name": "Twister Meal"
+                                                                     * @description (isModifier == 1) :  "name": "Mighty Twist"
+                                                                     */
+                                                                    if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
+                                                                        dependentSteps.productLinks.forEach(dspl => {
+                                                                            let ItemID = 0
+                                                                            if (dspl.subOptions && dspl.subOptions.length > 0) {
+                                                                                dspl.subOptions.forEach(dsplso => {
+                                                                                    if (dsplso.selected == 1)
+                                                                                        ItemID = dsplso.sdmId
+                                                                                })
+                                                                            }
+                                                                            obj.Entries.CEntry.push({
+                                                                                ID: 0,
+                                                                                ItemID: ItemID,
+                                                                                ModCode: "WITH",
+                                                                                ModgroupID: dspl.modGroupId,
+                                                                                Name: dspl.name,
+                                                                                OrdrMode: "OM_SAVED",
+                                                                                Weight: 0
+                                                                            })
+                                                                        })
+                                                                    }
+                                                                    Entries_.CEntry.push(obj)
+                                                                } else if (dependentSteps['type'] == "stepper") {
+                                                                    /**
+                                                                     * @description (type == "stepper") : "name": "Dinner Meal", 
+                                                                     */
+                                                                    dependentSteps.productLinks.forEach(dspl => {
+                                                                        if (dspl.selectionQty > 0) {
+                                                                            let count = dspl.selectionQty
+                                                                            while (count != 0) {
+                                                                                Entries_.CEntry.push({
+                                                                                    DealID: 0,
+                                                                                    ID: 0,
+                                                                                    ItemID: dspl.sdmId,
+                                                                                    ModCode: "NONE",
+                                                                                    Name: dspl.name,
+                                                                                    QCComponent: QCComponent,
+                                                                                    QCInstanceID: instanceId,
+                                                                                    QCLevel: 0,
+                                                                                    QCProID: i.promoId,
+                                                                                })
+                                                                                count = count - 1
+                                                                            }
+                                                                        }
+                                                                    })
+                                                                }
+                                                            } else {
+                                                                let count = pl.selectionQty
+                                                                while (count != 0) {
+                                                                    Entries_.CEntry.push({
+                                                                        DealID: 0,
+                                                                        ID: 0,
+                                                                        ItemID: pl.sdmId,
+                                                                        ModCode: "NONE",
+                                                                        Name: pl.name,
+                                                                        QCComponent: QCComponent,
+                                                                        QCInstanceID: instanceId,
+                                                                        QCLevel: 0,
+                                                                        QCProID: i.promoId,
+                                                                    })
+                                                                    count = count - 1
+                                                                }
+                                                            }
+                                                        }
+                                                    })
+                                                } else {
+                                                    /**
+                                                     * @description : if the product does not have dependentstep value but actually is dependent on the next product in the array
+                                                     */
+                                                    let lastProductAddedInCentry = {
+                                                        DealID: Entries_.CEntry[Entries_.CEntry.length - 1].DealID,
+                                                        Entries: {
+                                                            CEntry: []
+                                                        },
+                                                        ID: Entries_.CEntry[Entries_.CEntry.length - 1].ID,
+                                                        ItemID: Entries_.CEntry[Entries_.CEntry.length - 1].ItemID,
+                                                        ModCode: Entries_.CEntry[Entries_.CEntry.length - 1].ModCode,
+                                                        Name: Entries_.CEntry[Entries_.CEntry.length - 1].Name,
+                                                        QCComponent: Entries_.CEntry[Entries_.CEntry.length - 1].QCComponent,
+                                                        QCInstanceID: Entries_.CEntry[Entries_.CEntry.length - 1].QCInstanceID,
+                                                        QCLevel: Entries_.CEntry[Entries_.CEntry.length - 1].QCLevel,
+                                                        QCProID: Entries_.CEntry[Entries_.CEntry.length - 1].QCProID,
+                                                    }
+                                                    if (bpo.productLinks && bpo.productLinks.length > 0) {
+                                                        bpo.productLinks.forEach(bpopl => {
+                                                            let ItemID = 0
+                                                            if (bpopl.subOptions && bpopl.subOptions.length > 0) {
+                                                                bpopl.subOptions.forEach(bpoplso => {
+                                                                    if (bpoplso.selected == 1)
+                                                                        ItemID = bpoplso.sdmId
+                                                                })
+                                                            }
+                                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                                                ID: 0,
+                                                                ItemID: ItemID,
+                                                                ModCode: "WITH",
+                                                                ModgroupID: bpopl.modGroupId,
+                                                                Name: bpopl.name,
+                                                                OrdrMode: "OM_SAVED",
+                                                                Weight: 0
+                                                            })
+                                                        })
+                                                    }
+                                                    Entries_.CEntry[Entries_.CEntry.length - 1] = { ...lastProductAddedInCentry }
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    }
+                    else if (product.typeId == "bundle") {
+                        // "name": "Bucket 15 Pcs",
+                        if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                            let positionIndex = product.bundleProductOptions[0].position
+                            product.bundleProductOptions.forEach(bpo => {
+                                let QCComponent = bpo.compId
+                                if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                    bpo.productLinks.forEach(pl => {
+                                        if (pl.selected == 1) {
+                                            if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
+                                                console.log("dependentSteps", dependentSteps)
+                                                if (dependentSteps.position == pl.dependentSteps[0]) {
+                                                    if (dependentSteps.type == "stepper") {
+                                                        dependentSteps.productLinks.forEach(dspl => {
+                                                            if (dspl.selectionQty > 0) {
+                                                                let count = dspl.selectionQty
+                                                                while (count != 0) {
+                                                                    Entries_.CEntry.push({
+                                                                        DealID: 0,
+                                                                        ID: 0,
+                                                                        ItemID: dspl.sdmId,
+                                                                        ModCode: "NONE",
+                                                                        Name: dspl.name,
+                                                                        QCComponent: QCComponent,
+                                                                        QCInstanceID: instanceId,
+                                                                        QCLevel: 0,
+                                                                        QCProID: product.promoId,
+                                                                    })
+                                                                    count = count - 1
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            } else {
+                                                let count = pl.selectionQty
+                                                while (count != 0) {
+                                                    Entries_.CEntry.push({
+                                                        DealID: 0,
+                                                        ID: 0,
+                                                        ItemID: pl.sdmId,
+                                                        ModCode: "NONE",
+                                                        Name: pl.name,
+                                                        QCComponent: QCComponent,
+                                                        QCInstanceID: instanceId,
+                                                        QCLevel: 0,
+                                                        QCProID: product.promoId,
+                                                    })
+                                                    count = count - 1
+                                                }
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
                 }
             })
             return Entries
