@@ -442,6 +442,12 @@ export class CartClass extends BaseEntity {
                                                 if (bundle_option[pl['option_id']] == null)
                                                     bundle_option[pl['option_id']] = {}
                                                 bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                                selection_configurable_option[pl['selection_id']] = ""
+                                                pl['subOptions'].forEach(plso => {
+                                                    if (plso['selected'] == 1) {
+                                                        selection_configurable_option[pl['selection_id']] = plso['id']
+                                                    }
+                                                })
                                             } else if (pl['selected'] == 1) {
                                                 console.log("22222222222222222", pl['option_id'], pl['selection_id'])
                                                 bundle_option[pl['option_id']] = pl['selection_id']
@@ -505,7 +511,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             let req = await this.createCartReqForCms(payload)
             let cmsCart = await CMS.CartCMSE.createCart(req)
