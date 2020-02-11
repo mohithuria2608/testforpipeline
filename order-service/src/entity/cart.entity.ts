@@ -428,6 +428,7 @@ export class CartClass extends BaseEntity {
                 }
                 else if (sitem['originalTypeId'] == 'bundle_group') {
                     let bundle_option = {};
+                    let jugadCounter = 0
                     let selection_configurable_option = {};
                     let item = 0
                     sitem['items'].forEach(i => {
@@ -438,10 +439,13 @@ export class CartClass extends BaseEntity {
                                     bpo['productLinks'].forEach(pl => {
                                         if (pl['selected'] == 1) {
                                             if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                                console.log("11111111111")
-                                                if (bundle_option[pl['option_id']] == null)
-                                                    bundle_option[pl['option_id']] = {}
-                                                bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                                if (jugadCounter == 0) {
+                                                    if (bundle_option[pl['option_id']] == null)
+                                                        bundle_option[pl['option_id']] = {}
+                                                    bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                                    jugadCounter = jugadCounter + 1
+                                                }
+
                                                 selection_configurable_option[pl['selection_id']] = ""
                                                 pl['subOptions'].forEach(plso => {
                                                     if (plso['selected'] == 1) {
@@ -449,11 +453,10 @@ export class CartClass extends BaseEntity {
                                                     }
                                                 })
                                             } else if (pl['selected'] == 1) {
-                                                console.log("22222222222222222", pl['option_id'], pl['selection_id'])
                                                 bundle_option[pl['option_id']] = pl['selection_id']
                                             }
                                         }
-                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
+                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
                                             console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
                                             if (i['bundleProductOptions'] && i['bundleProductOptions'].length > 0) {
                                                 i['bundleProductOptions'].forEach(bpo2 => {
