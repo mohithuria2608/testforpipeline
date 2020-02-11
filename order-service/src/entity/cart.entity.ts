@@ -595,27 +595,18 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             dataToUpdate['amount'] = amount
-            // if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
-            //     curItems.forEach(obj => {
-            //         console.log("1", obj.id)
-            //         let parsedData = {}
-            //         if (obj['originalTypeId'] == "bundle_group") {
-            //             obj['items'].map()
-            //         } else {
-            //             cmsCart.cart_items.forEach(elem => {
-            //                 if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
-            //                     parsedData[obj.id] = true
-            //                     dataToUpdate['items'].push(obj)
-            //                 }
-            //             })
-            //         }
-            //         if (parsedData[obj.id] == undefined)
-            //             dataToUpdate['notAvailable'].push(obj)
-            //     })
-            // } else {
-            //     dataToUpdate['notAvailable'] = curItems
-            // }
-            dataToUpdate['items'] = curItems
+            if (cmsCart.not_available && cmsCart.not_available.length > 0) {
+                curItems.forEach(obj => {
+                    console.log("1", obj.id)
+                    if (cmsCart.not_available.indexOf(obj.id) == -1) {
+                        dataToUpdate['items'].push(obj)
+                    } else {
+                        dataToUpdate['notAvailable'].push(obj)
+                    }
+                })
+            } else {
+                dataToUpdate['items'] = curItems
+            }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
