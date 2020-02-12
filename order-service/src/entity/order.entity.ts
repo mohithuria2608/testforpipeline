@@ -593,7 +593,7 @@ export class OrderClass extends BaseEntity {
                 payment: {},
                 transLogs: [],
                 createdAt: new Date().getTime(),
-                updatedAt: 0,
+                updatedAt: new Date().getTime(),
                 trackUntil: 0,
                 isActive: 1,
                 changePaymentMode: 0,
