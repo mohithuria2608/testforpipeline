@@ -611,7 +611,7 @@ export class CartClass extends BaseEntity {
                 action: "add"
             }
             if (cmsCart.grandtotal > 0) {
-                delivery.amount = 6
+                delivery.amount = 6.5
             }
             amount.push(delivery)
 
