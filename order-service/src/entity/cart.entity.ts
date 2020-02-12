@@ -459,7 +459,7 @@ export class CartClass extends BaseEntity {
                                 item = i['id']
                                 i['bundleProductOptions'].forEach(bpo => {
                                     if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-                                        bpo['productLinks'].forEach(pl => {
+                                        bpo['productLinks'].map(pl => {
                                             if (pl['selected'] == 1 && !alreadyAddedInBundleOption[pl['id']]) {
                                                 if (pl['subOptions'] && pl['subOptions'].length > 0) {
                                                     if (bundle_option[pl['option_id']] == null)
@@ -541,20 +541,6 @@ export class CartClass extends BaseEntity {
             let req = await this.createCartReqForCms(payload)
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
-
-            // return {
-            //     "cart_items": [],
-            //     "cms_cart_id": "121",
-            //     "currency_code": "USD",
-            //     "subtotal": 0,
-            //     "grandtotal": 0,
-            //     "tax": [],
-            //     "not_available": [],
-            //     "is_price_changed": false,
-            //     "coupon_code": "",
-            //     "discount_amount": 0,
-            //     "success": true
-            // }
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
             return Promise.reject(error)

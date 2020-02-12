@@ -57,3 +57,6 @@ Kfcapptestuser3
 
 # install aerospike prerequisite 
 * sudo apt-get install g++ libssl1.0.0 libssl-dev libz-dev
+
+# POS store 3333
+Store ID: 1240   Store Name: KFC-Test APPArea ID: 1786   Area Name: TEST-APPCity ID: 17          City Name: Abu Dhabi
