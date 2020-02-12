@@ -237,6 +237,7 @@ export const DATABASE = {
         },
 
         ACTIVITY_LOG: {
+            SDM_REQUEST: "SDM_REQUEST",
             REQUEST: "REQUEST",
             ERROR: "ERROR",
             INFO: "INFO",

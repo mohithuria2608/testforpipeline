@@ -1,9 +1,11 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog } from '../utils'
 import * as  _ from 'lodash';
+import { kafkaService } from '../grpc/client';
 
 export class OrderSDMEntity extends BaseSDM {
 
@@ -50,17 +52,37 @@ export class OrderSDMEntity extends BaseSDM {
         try {
             let data = {
                 name: "UpdateOrder",
-                req: {
-                    "licenseCode": "AmericanaWeb",
-                    "conceptID": "3",
-                    "order": payload,
-                    "autoApprove": "true",
-                    "useBackupStoreIfAvailable": "true",
-                    "creditCardPaymentbool": "false",
-                    "menuTemplateID": "17"
-                }
-                // payload
+                req: payload
+                // {
+                //     "licenseCode": "AmericanaWeb",
+                //     "conceptID": "3",
+                //     "order": payload,
+                //     "autoApprove": "true",
+                //     "useBackupStoreIfAvailable": "true",
+                //     "creditCardPaymentbool": "false",
+                //     "menuTemplateID": "17"
+                // }
             }
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
+                        info: {
+                            request: {
+                                body: data.req
+                            }
+                        },
+                        description: "",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                }
+            })
+
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
