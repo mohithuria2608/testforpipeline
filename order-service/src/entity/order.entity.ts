@@ -45,39 +45,39 @@ export class OrderClass extends BaseEntity {
 
     createCEntries(items) {
         try {
-            let Entries = {
-                "CEntry": [
-                    {
-                        "ItemID": "110002",
-                        "Level": "0",
-                        "ModCode": "NONE",
-                        "Name": "Kids Chicken Meal",
-                        "OrdrMode": "OM_SAVED",
-                        "Price": "13",
-                        "Status": "NOTAPPLIED"
-                    },
-                    {
-                        "ItemID": "110002",
-                        "Level": "0",
-                        "ModCode": "NONE",
-                        "Name": "Kids Chicken Meal",
-                        "OrdrMode": "OM_SAVED",
-                        "Price": "13",
-                        "Status": "NOTAPPLIED"
-                    },
-                    {
-                        "ItemID": "110002",
-                        "Level": "0",
-                        "ModCode": "NONE",
-                        "Name": "Kids Chicken Meal",
-                        "OrdrMode": "OM_SAVED",
-                        "Price": "13",
-                        "Status": "NOTAPPLIED"
-                    }
-                ]
-            }
+            // let Entries = {
+            //     "CEntry": [
+            //         {
+            //             "ItemID": "110002",
+            //             "Level": "0",
+            //             "ModCode": "NONE",
+            //             "Name": "Kids Chicken Meal",
+            //             "OrdrMode": "OM_SAVED",
+            //             "Price": "13",
+            //             "Status": "NOTAPPLIED"
+            //         },
+            //         {
+            //             "ItemID": "110002",
+            //             "Level": "0",
+            //             "ModCode": "NONE",
+            //             "Name": "Kids Chicken Meal",
+            //             "OrdrMode": "OM_SAVED",
+            //             "Price": "13",
+            //             "Status": "NOTAPPLIED"
+            //         },
+            //         {
+            //             "ItemID": "110002",
+            //             "Level": "0",
+            //             "ModCode": "NONE",
+            //             "Name": "Kids Chicken Meal",
+            //             "OrdrMode": "OM_SAVED",
+            //             "Price": "13",
+            //             "Status": "NOTAPPLIED"
+            //         }
+            //     ]
+            // }
 
-            let Entries_ = {
+            let Entries = {
                 CEntry: []
             }
             items.forEach(product => {
@@ -86,7 +86,7 @@ export class OrderClass extends BaseEntity {
                 if (product.originalTypeId == "simple") {
                     if (product.typeId == "simple") {
                         // "name": "Fresh Orange Juice"
-                        Entries_.CEntry.push({
+                        Entries.CEntry.push({
                             ItemID: product.sdmId,
                             Level: 0,
                             ModCode: "NONE",
@@ -157,7 +157,7 @@ export class OrderClass extends BaseEntity {
                                 }
                             })
                         }
-                        Entries_.CEntry.push(obj)
+                        Entries.CEntry.push(obj)
                     }
                 }
                 else if (product.originalTypeId == "configurable") {
@@ -165,7 +165,7 @@ export class OrderClass extends BaseEntity {
                     if (product.items && product.items.length > 0) {
                         product.items.forEach(i => {
                             if (i['sku'] == product.selectedItem) {
-                                Entries_.CEntry.push({
+                                Entries.CEntry.push({
                                     ItemID: 600002,// i.sdmId,
                                     Level: 0,
                                     ModCode: "NONE",
@@ -234,10 +234,10 @@ export class OrderClass extends BaseEntity {
                                                         }
                                                     }
                                                 })
-                                                Entries_.CEntry.push(obj)
+                                                Entries.CEntry.push(obj)
                                             } else {
                                                 for (let i = 0; i < pl.selectionQty; i++) {
-                                                    Entries_.CEntry.push({
+                                                    Entries.CEntry.push({
                                                         DealID: 0,
                                                         ID: 0,
                                                         ItemID: pl.sdmId,
@@ -314,7 +314,7 @@ export class OrderClass extends BaseEntity {
                                                                             })
                                                                         })
                                                                     }
-                                                                    Entries_.CEntry.push(obj)
+                                                                    Entries.CEntry.push(obj)
                                                                 } else if (dependentSteps['type'] == "stepper") {
                                                                     /**
                                                                      * @description (type == "stepper") : "name": "Dinner Meal", 
@@ -323,7 +323,7 @@ export class OrderClass extends BaseEntity {
                                                                         if (dspl.selectionQty > 0) {
                                                                             let count = dspl.selectionQty
                                                                             while (count != 0) {
-                                                                                Entries_.CEntry.push({
+                                                                                Entries.CEntry.push({
                                                                                     DealID: 0,
                                                                                     ID: 0,
                                                                                     ItemID: dspl.sdmId,
@@ -342,7 +342,7 @@ export class OrderClass extends BaseEntity {
                                                             } else {
                                                                 let count = pl.selectionQty
                                                                 while (count != 0) {
-                                                                    Entries_.CEntry.push({
+                                                                    Entries.CEntry.push({
                                                                         DealID: 0,
                                                                         ID: 0,
                                                                         ItemID: pl.sdmId,
@@ -363,18 +363,18 @@ export class OrderClass extends BaseEntity {
                                                      * @description : if the product does not have dependentstep value but actually is dependent on the next product in the array
                                                      */
                                                     let lastProductAddedInCentry = {
-                                                        DealID: Entries_.CEntry[Entries_.CEntry.length - 1].DealID,
+                                                        DealID: Entries.CEntry[Entries.CEntry.length - 1].DealID,
                                                         Entries: {
                                                             CEntry: []
                                                         },
-                                                        ID: Entries_.CEntry[Entries_.CEntry.length - 1].ID,
-                                                        ItemID: Entries_.CEntry[Entries_.CEntry.length - 1].ItemID,
-                                                        ModCode: Entries_.CEntry[Entries_.CEntry.length - 1].ModCode,
-                                                        Name: Entries_.CEntry[Entries_.CEntry.length - 1].Name,
-                                                        QCComponent: Entries_.CEntry[Entries_.CEntry.length - 1].QCComponent,
-                                                        QCInstanceID: Entries_.CEntry[Entries_.CEntry.length - 1].QCInstanceID,
-                                                        QCLevel: Entries_.CEntry[Entries_.CEntry.length - 1].QCLevel,
-                                                        QCProID: Entries_.CEntry[Entries_.CEntry.length - 1].QCProID,
+                                                        ID: Entries.CEntry[Entries.CEntry.length - 1].ID,
+                                                        ItemID: Entries.CEntry[Entries.CEntry.length - 1].ItemID,
+                                                        ModCode: Entries.CEntry[Entries.CEntry.length - 1].ModCode,
+                                                        Name: Entries.CEntry[Entries.CEntry.length - 1].Name,
+                                                        QCComponent: Entries.CEntry[Entries.CEntry.length - 1].QCComponent,
+                                                        QCInstanceID: Entries.CEntry[Entries.CEntry.length - 1].QCInstanceID,
+                                                        QCLevel: Entries.CEntry[Entries.CEntry.length - 1].QCLevel,
+                                                        QCProID: Entries.CEntry[Entries.CEntry.length - 1].QCProID,
                                                     }
                                                     if (bpo.productLinks && bpo.productLinks.length > 0) {
                                                         bpo.productLinks.forEach(bpopl => {
@@ -396,7 +396,7 @@ export class OrderClass extends BaseEntity {
                                                             })
                                                         })
                                                     }
-                                                    Entries_.CEntry[Entries_.CEntry.length - 1] = { ...lastProductAddedInCentry }
+                                                    Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
                                                 }
                                             }
                                         })
@@ -423,7 +423,7 @@ export class OrderClass extends BaseEntity {
                                                             if (dspl.selectionQty > 0) {
                                                                 let count = dspl.selectionQty
                                                                 while (count != 0) {
-                                                                    Entries_.CEntry.push({
+                                                                    Entries.CEntry.push({
                                                                         DealID: 0,
                                                                         ID: 0,
                                                                         ItemID: dspl.sdmId,
@@ -443,7 +443,7 @@ export class OrderClass extends BaseEntity {
                                             } else {
                                                 let count = pl.selectionQty
                                                 while (count != 0) {
-                                                    Entries_.CEntry.push({
+                                                    Entries.CEntry.push({
                                                         DealID: 0,
                                                         ID: 0,
                                                         ItemID: pl.sdmId,
