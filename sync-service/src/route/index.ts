@@ -10,6 +10,7 @@ import cmsLocationRoutes from './v1/cms.location.route'
 import cmsPromotionRoutes from './v1/cms.promotion.route'
 import cmsUserRoutes from './v1/cms.user.route'
 import sdmMenuRoutes from './v1/sdm.menu.route';
+import sdmLocationRoutes from './v1/sdm.location.route';
 
 const version1 = "/v1"
 
@@ -20,6 +21,7 @@ const children = [
   { routes: cmsMenuRoutes, prefix: version1 + '/menu' },
   { routes: cmsLocationRoutes, prefix: version1 + '/location' },
   { routes: cmsPromotionRoutes, prefix: version1 + '/promotion' },
+  { routes: sdmLocationRoutes, prefix: version1 + '/sdm/location' },
   { routes: sdmMenuRoutes, prefix: version1 + '/sdm/menu' },
   { routes: cmsUserRoutes, prefix: version1 + '/user' },
 ]

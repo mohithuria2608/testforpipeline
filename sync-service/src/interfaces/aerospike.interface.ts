@@ -88,7 +88,8 @@ declare namespace IAerospike {
         ttl?: number,
         create?: boolean,
         replace?: boolean,
-        update?: boolean
+        update?: boolean,
+        createOrReplace?: boolean
     }
 
     interface ListOperation {
@@ -110,6 +111,6 @@ declare namespace IAerospike {
     }
     interface Truncate {
         set: string,
-        before_nanos: number
+        before_nanos?: number
     }
 }

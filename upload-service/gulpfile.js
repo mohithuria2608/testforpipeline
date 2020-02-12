@@ -64,7 +64,7 @@ gulp.task('server', function () {
 			}
 		}, function () {
 			console.log('upload pm2 started');
-			pm2.streamLogs('menu', 0);
+			pm2.streamLogs('upload', 0);
 		});
 	});
 });

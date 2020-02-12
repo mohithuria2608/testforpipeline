@@ -21,6 +21,13 @@ export class MenuEntity extends BaseEntity {
             return Promise.reject(error)
         }
     }
+
+    /**
+     * formats menu for sync with aerospike 
+     */
+    async formatMenu(menuData) {
+        return JSON.stringify(menuData).replace(/"not dependent"/g, "");
+    }
 }
 
 export const MenuE = new MenuEntity()

@@ -17,7 +17,7 @@ export class CmsMenuController {
                 set: ENTITY.MenuE.set,
                 as: {
                     create: true,
-                    argv: JSON.stringify(payload)
+                    argv: await ENTITY.MenuE.formatMenu(payload.data)
                 }
             }
             if (payload.action == "update") {

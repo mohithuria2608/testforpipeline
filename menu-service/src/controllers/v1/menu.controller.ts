@@ -3,6 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import { uploadService } from '../../grpc/client';
 
 export class MenuController {
     constructor() { }
@@ -64,15 +65,10 @@ export class MenuController {
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)
-            if (data.type == "menu") {
-                if (payload.as.create || payload.as.update || payload.as.get) {
-                    if (payload.as.create) {
-
-                    }
-                    if (payload.as.update) {
-
-                    }
-                }
+            console.log("\n", payload, typeof payload.as, data[0]);
+            if (payload.set == "menu") {
+                await ENTITY.MenuE.postMenu(data[0]);
+                uploadService.uploadMenuToBlob({ name: `temp_kfc_uae_1_${data[0].language}.json`, json: JSON.stringify(data[0]) })
             }
             if (data.type == "upsell") {
                 if (payload.as.create || payload.as.update || payload.as.get) {

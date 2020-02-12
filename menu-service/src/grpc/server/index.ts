@@ -31,7 +31,6 @@ server.addService(menuProto.MenuService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-
             let res = await menuController.syncFromKafka(call.request)
             callback(null, res)
         } catch (error) {

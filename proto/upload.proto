@@ -2,10 +2,21 @@ syntax = "proto3";
 
 service UploadService {
     rpc ProduceMessage (IProduceMessage) returns (IProduceMessageRes) {}
+    rpc UploadJSON (UploadJSONReq) returns (UploadJSONRes) {}
 }
 
 message IProduceMessage {
     required IIProduceMessageData data = 1;
+}
+
+message UploadJSONReq {
+    required string name = 1;
+    required string json = 2;
+}
+
+message UploadJSONRes {
+    required bool success = 1;
+    required string url = 2;
 }
 
 message IIProduceMessageData {
