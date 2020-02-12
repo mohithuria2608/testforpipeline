@@ -451,7 +451,6 @@ export class CartClass extends BaseEntity {
                 else if (sitem['originalTypeId'] == 'bundle_group') {
                     if (sitem['typeId'] == "bundle_group") {
                         let bundle_option = {};
-                        // let jugadCounter = 0
                         let alreadyAddedInBundleOption = {}
                         let selection_configurable_option = {};
                         let item = 0
@@ -463,12 +462,9 @@ export class CartClass extends BaseEntity {
                                         bpo['productLinks'].forEach(pl => {
                                             if (pl['selected'] == 1 && !alreadyAddedInBundleOption[pl['id']]) {
                                                 if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                                    // if (jugadCounter == 0) {
                                                     if (bundle_option[pl['option_id']] == null)
                                                         bundle_option[pl['option_id']] = {}
                                                     bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-                                                    // jugadCounter = jugadCounter + 1
-                                                    // }
 
                                                     selection_configurable_option[pl['selection_id']] = ""
                                                     pl['subOptions'].forEach(plso => {
@@ -476,8 +472,9 @@ export class CartClass extends BaseEntity {
                                                             selection_configurable_option[pl['selection_id']] = plso['id']
                                                         }
                                                     })
+                                                } else {
+                                                    bundle_option[pl['option_id']] = pl['selection_id']
                                                 }
-                                                bundle_option[pl['option_id']] = pl['selection_id']
                                                 alreadyAddedInBundleOption[pl['id']] = true
                                             }
                                             if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
