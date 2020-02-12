@@ -77,7 +77,7 @@ export class GuestController {
                 isGuest: payload.isGuest,
                 brand: headers.brand,
                 country: headers.country,
-                profileStep: 1
+                // profileStep: 1
             }
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
@@ -94,7 +94,7 @@ export class GuestController {
             userData['phnNo'] = payload.phnNo
             userData['cCode'] = payload.cCode
             userData['phnVerified'] = 0
-            userData['profileStep'] = 1
+            userData['profileStep'] = 0
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", JSON.stringify(error), false)
