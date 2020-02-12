@@ -494,7 +494,7 @@ export class OrderClass extends BaseEntity {
                 AddressID: 10512054,// 10084693,// payload.address.sdmAddressRef,
                 CityID: 17, //not mandatory
                 AreaID: 16,// 538,// payload.address.sdmAddressRef,
-                BackupStoreID: -1,//2,// payload.address.sdmAddressRef,
+                BackupStoreID: -1,
                 ConceptID: 3,// payload.address.sdmAddressRef,
                 CustomerID: 7694143,// 7323013,//payload.address.sdmAddressRef,
                 Entries: this.createCEntries(payload.items),
@@ -503,23 +503,15 @@ export class OrderClass extends BaseEntity {
                 OriginalStoreID: 1219,// 65,// payload.store.sdmStoreRef,
                 PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
                 PaymentMethod: (payload['paymentMethodId'] == 0) ? "Cash" : "Credit",
-                ServiceCharge: "0.25", //@todo : ask from Nusrat
-                Source: 4,
+                ServiceCharge: 6.5,
+                Source: 2, //or 22 configurable
                 Status: 0,
                 StoreID: 1219,// 65,// payload.store.sdmStoreRef,
                 SubTotal: "2.75",// subtotal.amount,
                 Total: "3.0",// total.amount,
                 ValidateStore: 0,
-
-                // OrderID:
-                // creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? false : true,
-                // isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1,
-                // ProvinceID:,
-                // StreetID:,
             }
-            let entries = {}
 
-            // order['Entries'] = entries
             /**
              * @step 1 :create order on sdm 
              * @step 2 :update mongo order using payload.cartId sdmOrderRef
