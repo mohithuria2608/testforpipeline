@@ -410,7 +410,7 @@ export class CartClass extends BaseEntity {
                                                             bundle_option[dspl['option_id']] = {}
                                                         bundle_option[dspl['option_id']][dspl['id']] = dspl['selection_id']
 
-                                                        if (dspl.selectionQty > 0 ) {
+                                                        if (dspl.selectionQty > 0) {
                                                             selection_configurable_option[pl['selection_id']] = dspl['id']
                                                         }
                                                     })
@@ -543,6 +543,20 @@ export class CartClass extends BaseEntity {
             let req = await this.createCartReqForCms(payload)
             let cmsCart = await CMS.CartCMSE.createCart(req)
             return cmsCart
+
+            // return {
+            //     "cart_items": [],
+            //     "cms_cart_id": "121",
+            //     "currency_code": "USD",
+            //     "subtotal": 0,
+            //     "grandtotal": 0,
+            //     "tax": [],
+            //     "not_available": [],
+            //     "is_price_changed": false,
+            //     "coupon_code": "",
+            //     "discount_amount": 0,
+            //     "success": true
+            // }
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
             return Promise.reject(error)
