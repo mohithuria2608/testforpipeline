@@ -77,7 +77,7 @@ export class GuestController {
                 isGuest: payload.isGuest,
                 brand: headers.brand,
                 country: headers.country,
-                // profileStep: 1
+                profileStep: 1
             }
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
