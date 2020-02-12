@@ -1987,7 +1987,7 @@ export const start = (async () => {
       "menuUpdatedAt": 1579911326000,
       "paymentMethodId": 0
     }
-    let a = await ENTITY.CartE.createCartOnCMS(cI)
+    // let a = await ENTITY.CartE.createCartOnCMS(cI)
 
 
 
