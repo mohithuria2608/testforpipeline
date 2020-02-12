@@ -602,27 +602,18 @@ export class CartClass extends BaseEntity {
                     action: "add"
                 })
             }
-            if (cmsCart.grandtotal > 0) {
-                let delivery = {
-                    type: "SHIPPING",
-                    name: "Delivery",
-                    code: "DELIVERY",
-                    amount: 6,
-                    sequence: 4,
-                    action: "add"
-                }
-                amount.push(delivery)
-            } else {
-                let delivery = {
-                    type: "SHIPPING",
-                    name: "Delivery",
-                    code: "DELIVERY",
-                    amount: 0,
-                    sequence: 4,
-                    action: "add"
-                }
-                amount.push(delivery)
+            let delivery = {
+                type: "SHIPPING",
+                name: "Delivery",
+                code: "DELIVERY",
+                amount: 0,
+                sequence: 4,
+                action: "add"
             }
+            if (cmsCart.grandtotal > 0) {
+                delivery.amount = 6
+            }
+            amount.push(delivery)
 
             amount.push({
                 type: "TOTAL",
