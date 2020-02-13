@@ -67,7 +67,7 @@ export class GuestController {
 
             if (payload.addressId && payload.addressType) {
                 let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
-                    userId: userData.id,
+                    userId: auth.id,
                     bin: payload.addressType,
                     addressId: payload.addressId
                 })
