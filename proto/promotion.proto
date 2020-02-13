@@ -55,7 +55,7 @@ message IValidatePromotionReq {
 }
 
 message IValidatePromotionRes {
-    optional int32 cmsCouponRef = 1;
+    optional int32 couponId = 1;
     optional string couponCode = 2;
     optional string promotionType = 3;
     optional int32 discountAmount = 4;

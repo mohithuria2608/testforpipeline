@@ -9,8 +9,8 @@ export class PromotionClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
-            bin: 'cmsCouponRef',
-            index: 'idx_' + this.set + '_' + 'cmsCouponRef',
+            bin: 'couponId',
+            index: 'idx_' + this.set + '_' + 'couponId',
             type: "NUMERIC"
         },
         {
@@ -26,7 +26,7 @@ export class PromotionClass extends BaseEntity {
 
     public promotionSchema = Joi.object().keys({
         id: Joi.number().required().description("pk"),
-        cmsCouponRef: Joi.string().trim().required().description("sk"),
+        couponId: Joi.string().trim().required().description("sk"),
         couponCode: Joi.string().trim().required().description("sk"),
         promotionType: Joi.string().trim().required(),
         discountAmount: Joi.number().required(),
@@ -54,7 +54,7 @@ export class PromotionClass extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.cmsCouponRef,
+                key: data.couponId,
                 ...options
             }
             await Aerospike.put(putArg)
@@ -89,13 +89,13 @@ export class PromotionClass extends BaseEntity {
 
     /**
      * @method GRPC/INTERNAL
-     * @param {number=} cmsCouponRef
+     * @param {number=} couponId
      * @param {string=} couponCode
      * @param {number=} page
      */
     async getPromotion(payload: IPromotionRequest.IGetPromotion): Promise<IPromotionRequest.IPromoData[]> {
         try {
-            if (payload.couponCode || payload.cmsCouponRef) {
+            if (payload.couponCode || payload.couponId) {
                 let queryArg: IAerospike.Query
                 if (payload.couponCode) {
                     queryArg = {
@@ -106,11 +106,11 @@ export class PromotionClass extends BaseEntity {
                         set: this.set,
                         background: false,
                     }
-                } else if (payload.cmsCouponRef) {
+                } else if (payload.couponId) {
                     queryArg = {
                         equal: {
-                            bin: "cmsCouponRef",
-                            value: payload.cmsCouponRef
+                            bin: "couponId",
+                            value: payload.couponId
                         },
                         set: this.set,
                         background: false,
@@ -141,7 +141,7 @@ export const PromotionE = new PromotionClass()
  * promotion model
  *
  *  {
-        "cmsCouponRef": "1",
+        "couponId": "1",
         "couponCode": "KFC 10",
         "promotionType": "by_percent",
         "discountAmount": "10.0000",
@@ -161,7 +161,7 @@ export const PromotionE = new PromotionClass()
     }
 
     id: Joi.number().required().description("pk"),
-    cmsCouponRef: Joi.string().trim().required().description("sk"),
+    couponId: Joi.string().trim().required().description("sk"),
     couponCode: Joi.string().trim().required().description("sk"),
     promotionType: Joi.string().trim().required(),
     discountAmount: Joi.number().required(),
