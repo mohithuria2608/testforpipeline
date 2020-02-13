@@ -38,7 +38,7 @@ export class WebhookNoonpayController {
                     "payment.status": status.transactions[0].type
                 }
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                if (status.paymentStatus == "AUTHORIZED") {
+                if (order.payment.status == "AUTHORIZATION") {
                     /**
                      * @description update order on sdm with payment object
                      */

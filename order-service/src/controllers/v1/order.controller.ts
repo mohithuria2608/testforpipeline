@@ -56,14 +56,17 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let order: IOrderRequest.IOrderData
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (hashObj(getCurrentCart.items) == hashObj(payload.items))
-                retry = true
+            if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
+                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId }, {}, { lean: true })
+                if (order && order._id)
+                    retry = true
+            }
 
             let newCartId = ""
             let noonpayRedirectionUrl = ""
-            let order: IOrderRequest.IOrderData
             if (!retry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
@@ -110,12 +113,9 @@ export class OrderController {
                     cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 }
                 cartData['orderType'] = payload.orderType
-                ENTITY.OrderE.syncOrder(cartData)
                 order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
-            } else {
-                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId }, {}, { lean: true })
+                ENTITY.OrderE.syncOrder(order)
             }
-
             let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
             console.log("amount", typeof amount, JSON.stringify(amount))
             if (payload.paymentMethodId != 0) {
@@ -172,6 +172,8 @@ export class OrderController {
                 }
             }
         } catch (error) {
+            consolelog(process.cwd(), "postOrder", error, false)
+
             consolelog(process.cwd(), "postOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }

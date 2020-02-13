@@ -15,7 +15,7 @@ export class OrderClass extends BaseEntity {
     * @method INTERNAL
     * @description Sync order request in KAFKA for creating order on SDM
     */
-    async syncOrder(payload: ICartRequest.ICartData) {
+    async syncOrder(payload: IOrderRequest.IOrderData) {
         try {
             let sdmOrderChange = {
                 set: this.set,
@@ -476,7 +476,7 @@ export class OrderClass extends BaseEntity {
     * @method GRPC
     * @description : Create order on SDM
     * */
-    async createSdmOrder(payload: ICartRequest.ICartData) {
+    async createSdmOrder(payload: IOrderRequest.IOrderData) {
         try {
             let total
             payload.amount.filter(elem => {
@@ -491,7 +491,7 @@ export class OrderClass extends BaseEntity {
                 }
             })
             let order = {
-                AddressID: 10512054,// 10084693,// payload.address.sdmAddressRef,
+                AddressID: payload.address.sdmAddressRef,//10512054
                 CityID: 17, //not mandatory
                 AreaID: 16,// 538,// payload.address.sdmAddressRef,
                 BackupStoreID: -1,
