@@ -51,6 +51,7 @@ export class GuestController {
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let address
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
@@ -63,6 +64,19 @@ export class GuestController {
                 background: false,
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+
+            if (payload.addressId && payload.addressType) {
+                let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
+                    userId: userData.id,
+                    bin: payload.addressType,
+                    addressId: payload.addressId
+                })
+                if (oldAdd && oldAdd.id)
+                    address = oldAdd
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
+            }
+
             let userchangePayload = {
                 username: username,
                 fullPhnNo: fullPhnNo,
@@ -79,6 +93,8 @@ export class GuestController {
                 country: headers.country,
                 profileStep: 1
             }
+            if (address && address.id)
+                userchangePayload['address'] = address
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
                 userchangePayload['deleteUserId'] = auth.id

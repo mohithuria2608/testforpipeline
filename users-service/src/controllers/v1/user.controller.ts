@@ -155,6 +155,9 @@ export class UserController {
                     userUpdate['country'] = userchange[0].country
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
+                if (userchange[0].address && userchange[0].address.id) {
+
+                }
                 userData = await ENTITY.UserE.buildUser(userUpdate)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
