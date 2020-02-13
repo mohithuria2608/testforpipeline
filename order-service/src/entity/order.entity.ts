@@ -525,7 +525,7 @@ export class OrderClass extends BaseEntity {
                 if (order && order._id) {
                     this.getSdmOrder({
                         sdmOrderRef: order.sdmOrderRef,
-                        timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
+                        timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
                         status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                     })
                 }

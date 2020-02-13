@@ -9,10 +9,6 @@ import { JOI_CMS_HEADERS } from './common.joi.validator'
 export default (router: Router) => {
     router
         .post('/',
-            ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {

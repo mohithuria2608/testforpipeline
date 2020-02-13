@@ -74,7 +74,7 @@ export class MenuClass extends BaseEntity {
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'menu',
-                    func: Constant.UDF.MENU.get_menu,
+                    func: Constant.DATABASE.UDF.MENU.get_menu,
                     args: [payload.language],
                     forEach: true
                 },

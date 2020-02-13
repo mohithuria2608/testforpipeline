@@ -35,8 +35,8 @@ export class UserCMSEntity extends BaseCMS {
             const headers = {};
             const form = formObj;
             const options = {
-                method: Constant.CMS.END_POINTS.CREATE_USER.METHOD,
-                url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.CREATE_USER.URL,
+                method: Constant.DATABASE.CMS.END_POINTS.CREATE_USER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.CREATE_USER.URL,
             }
             let cmsRes = await this.request(options, headers, form)
             return cmsRes

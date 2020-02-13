@@ -27,7 +27,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.CMS.USER.MAX_RETRY.CREATE : Constant.KAFKA.CMS.USER.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.CMS_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -37,7 +37,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.SDM.USER.MAX_RETRY.CREATE : Constant.KAFKA.SDM.USER.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.SDM_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -47,7 +47,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.KAFKA.AS.USER.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -63,7 +63,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.CMS_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -73,7 +73,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.SDM_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -83,7 +83,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -99,7 +99,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_UPSELL
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
@@ -115,7 +115,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.as.create ? Constant.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
                         topic = Constant.KAFKA_TOPIC.AS_PROMOTION
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }

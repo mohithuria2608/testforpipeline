@@ -11,19 +11,6 @@ export enum SET_NAME {
     LOCATION = "location"
 };
 
-export const UDF = {
-    USER: {
-        check_social_key: "check_social_key",
-    },
-    MENU: {
-        get_menu: "get_menu"
-    },
-    UPSELL: {
-        get_upsell: "get_upsell"
-    },
-};
-
-
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
 
@@ -49,31 +36,6 @@ export enum KAFKA_TOPIC {
 export enum MIDDLEWARE {
     AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
-};
-
-export const CMS = {
-    GLOBAL_VAR: {
-        AUTH_TOKEN: 'cms-auth-token',
-        AUTH_API_HIT: 'cms-auth-hit-time'
-    },
-    END_POINTS: {
-        GENERAL_CONFIG: {
-            METHOD: "GET",
-            URL: "americanaconfig/"
-        },
-        CREATE_USER: {
-            METHOD: "POST",
-            URL: "createuser"
-        },
-        CREATE_CART: {
-            METHOD: "POST",
-            URL: "customcart/create-validate-cart"
-        },
-        CREATE_ORDER: {
-            METHOD: "POST",
-            URL: "custom-order/create-order"
-        }
-    }
 };
 
 export const KAFKA = {
@@ -214,7 +176,132 @@ export const DATABASE = {
         AR: 'Ar'
     },
 
+    UDF: {
+        USER: {
+            check_social_key: "check_social_key",
+        },
+        MENU: {
+            get_menu: "get_menu"
+        },
+        UPSELL: {
+            get_upsell: "get_upsell"
+        },
+    },
+
+    CMS: {
+        END_POINTS: {
+            GENERAL_CONFIG: {
+                METHOD: "GET",
+                URL: "americanaconfig/"
+            },
+            CREATE_USER: {
+                METHOD: "POST",
+                URL: "createuser"
+            },
+            CREATE_CART: {
+                METHOD: "POST",
+                URL: "customcart/create-validate-cart"
+            },
+            CREATE_ORDER: {
+                METHOD: "POST",
+                URL: "custom-order/create-order"
+            }
+        }
+    },
+
+    KAFKA: {
+        SDM: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            UPSELL: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            ORDER: {
+                INTERVAL: {
+                    GET_STATUS: 10000
+                }
+            }
+        },
+        CMS: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            UPSELL: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            }
+        },
+        AS: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            UPSELL: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            }
+        }
+    },
+
     TYPE: {
+        CONFIG: {
+            GENERAL: "general",
+            PAYMENT: "payment",
+            SHIPMENT: "shipment"
+        },
+
         TOKEN: {
             CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
@@ -284,12 +371,6 @@ export const DATABASE = {
         STATUS: {
             INACTIVE: 0,
             ACTIVE: 1
-        },
-
-        SYNC_CONFIG: {
-            PAYMENT: "payment",
-            GENERAL: "general",
-            SHIPMENT: "shipment",
         },
 
         SYNC_ACTION: {

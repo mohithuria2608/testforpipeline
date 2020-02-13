@@ -210,7 +210,7 @@ export class UserController {
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
-                    func: Constant.UDF.USER.check_social_key,
+                    func: Constant.DATABASE.UDF.USER.check_social_key,
                     args: [headers.brand, headers.country, payload.medium, payload.socialKey],
                     forEach: true
                 },
