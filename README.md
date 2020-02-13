@@ -65,3 +65,4 @@ Area ID: 1786
 Area Name: TEST-APP
 City ID: 17          
 City Name: Abu Dhabi
+54.5459175,24.4078804

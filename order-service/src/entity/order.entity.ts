@@ -478,12 +478,12 @@ export class OrderClass extends BaseEntity {
                 }
             })
             let order = {
-                AddressID: payload.address.sdmAddressRef,//10512054
+                AddressID: 10512054,// payload.address.sdmAddressRef,//
                 CityID: 17, //not mandatory
                 AreaID: 16, // payload.address.sdmAddressRef,
                 BackupStoreID: -1,
-                ConceptID: 3,// payload.address.sdmAddressRef,
-                CustomerID: 7694143,// 7323013,//payload.address.sdmAddressRef,
+                ConceptID: 3,
+                CustomerID: 7694143,// 7323013,
                 Entries: this.createCEntries(payload.items),
                 OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
                 OrderType: 0,
@@ -491,7 +491,7 @@ export class OrderClass extends BaseEntity {
                 PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
                 PaymentMethod: (payload['paymentMethodId'] == 0) ? "Cash" : "Credit",
                 ServiceCharge: 6.5,
-                Source: 2, //or 22 configurable
+                Source: 2,
                 Status: 0,
                 StoreID: 1219,// 65,// payload.store.sdmStoreRef,
                 SubTotal: subtotal.amount,
