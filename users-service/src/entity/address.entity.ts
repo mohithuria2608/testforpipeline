@@ -93,7 +93,9 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            let sdmAddress = await this.addAddressOnSdm(userData, bin, addressData, store)
+            let sdmAddress = {}
+            if (userData && userData.phnNo && userData.phnNo != "")
+                sdmAddress = await this.addAddressOnSdm(userData, bin, addressData, store)
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let deliveryAddress = {
                 id: id,
@@ -106,7 +108,7 @@ export class AddressEntity extends BaseEntity {
                 addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
-                sdmAddressRef: (sdmAddress && sdmAddress.ADDR_ID) ? parseInt(sdmAddress.ADDR_ID) : 0,
+                sdmAddressRef: (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
                 cmsAddressRef: 0,
                 sdmStoreRef: store.storeId
             };
