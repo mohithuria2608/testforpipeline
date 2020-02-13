@@ -353,11 +353,11 @@ export class CartClass extends BaseEntity {
                 }
                 else if (sitem['originalTypeId'] == 'configurable') {
                     let super_attribute = {};
-                    let price = null;
+                    // let price = null;
                     if (sitem['items'] && sitem['items'].length > 0) {
                         sitem['items'].map(i => {
                             if (parseInt(i['sku']) == sitem['selectedItem']) {
-                                price = i['sellingPrice']
+                                // price = i['sellingPrice']
                                 if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
                                     sitem['configurableProductOptions'].map(co => {
                                         let value = null
@@ -377,7 +377,7 @@ export class CartClass extends BaseEntity {
                     cart.push({
                         product_id: sitem.id,
                         qty: sitem.qty ? sitem.qty : 1,
-                        price: price,
+                        price: sitem.sellingPrice,
                         type_id: sitem['typeId'],
                         super_attribute: super_attribute
                     })
