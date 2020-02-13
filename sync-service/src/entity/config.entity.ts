@@ -46,7 +46,7 @@ export class ConfigEntity extends BaseEntity {
     //       "title": "Cash On Delivery",
     //       "code": "cashondelivery"
     //     },
-    // "free_shipping": {
+    //    "free_shipping": {
     //     "status": "1",
     //     "title": "Free Shipping",
     //     "min_order_total": null,
@@ -63,22 +63,25 @@ export class ConfigEntity extends BaseEntity {
 
     public configSchema = Joi.object().keys({
         id: Joi.string().required().description("pk"),
-        type: Joi.string().required().valid("general", "payment", "shipment").description("sk"),
-        storeCode: Joi.string().required(),
-        storeId: Joi.number().required(),
-        noonPayConfig: Joi.object().keys({
-            brandCode: Joi.string().required(),
-            countryCode: Joi.string().required(),
-            paymentMethods: Joi.array().items(
+        type: Joi.string().required().valid(
+            Constant.DATABASE.TYPE.CONFIG.GENERAL,
+            Constant.DATABASE.TYPE.CONFIG.PAYMENT,
+            Constant.DATABASE.TYPE.CONFIG.SHIPMENT).description("sk"),
+        store_code: Joi.string().required(),
+        store_id: Joi.number().required(),
+        noon_pay_config: Joi.object().keys({
+            brand_code: Joi.string().required(),
+            country_code: Joi.string().required(),
+            payment_methods: Joi.array().items(
                 Joi.object().keys({
                     id: Joi.string().required(),
                     name: Joi.string().required(),
-                    orderCategory: Joi.string().required(),
+                    order_category: Joi.string().required(),
                 })),
             code: Joi.string().required(),
             status: Joi.string().required(),
         }),
-        codInfo: Joi.object().keys({
+        cod_info: Joi.object().keys({
             code: Joi.string().required(),
             status: Joi.string().required(),
         }),
@@ -119,17 +122,8 @@ export class ConfigEntity extends BaseEntity {
                     return configData[0]
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
-            } else if (payload.cmsStoreRef) {
-                let getArg: IAerospike.Get = {
-                    set: this.set,
-                    key: payload.cmsStoreRef
-                }
-                let configData = await Aerospike.get(getArg)
-                if (configData && configData.id) {
-                    return configData
-                } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "getConfig", JSON.stringify(error), false)
             return Promise.reject(error)
