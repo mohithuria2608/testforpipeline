@@ -2,17 +2,15 @@ declare namespace IHomeRequest {
 
     interface Home {
         id: number,
-        sequence?: number,
-        widgetType?: string,
-        title?: string,
-        status?: number,
-        ctaAction?: ctaAction
-        media?: media[],
-        products?: products[],
-        mediaUrl?: string,
-        content?: string,
-        action?: action,
-        extension?: string
+        language: string,
+        sequence: number,
+        widgetType: string,
+        title: string,
+        status: number,
+        ctaAction: ctaAction
+        media: media[],
+        products: products[],
+        content: string
     }
 
     interface ctaAction {
@@ -22,35 +20,26 @@ declare namespace IHomeRequest {
         delimeters?: string,
     }
     interface media {
-        sequence?: number,
-        mediaUrl?: string,
-        mediaType?: string,
-        extension?: string,
-        theme?: string,
-        bgColorCode?: string,
-        action?: {
-            id?: number,
-            type?: string,
-            delimeters?: string
-        }
+        sequence: number,
+        mediaUrl: string,
+        mediaType: string,
+        extension: string,
+        theme: string,
+        bgColorCode: string,
+        action: action
     }
     interface products {
-        sequence?: number,
-        extension?: string,
-        action?: {
-            id?: number,
-            type?: string,
-            delimeters?: string
-        }
+        sequence: number,
+        action: action
     }
 
     interface action {
-        id?: number,
-        type?: string,
-        delimeters?: string
+        id: number,
+        type: string,
+        delimeters: string
     }
 
-    interface IFetchHome{
+    interface IFetchHome {
         language: string
     }
 }

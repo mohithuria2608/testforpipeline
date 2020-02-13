@@ -61,7 +61,7 @@ class AerospikeClass {
                         resolve({})
                     }
                 } catch (error) {
-                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", error, false)
+                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", JSON.stringify(error), false)
                     reject(error)
                 }
             } else reject(Error('Client already initialized'))
@@ -80,7 +80,7 @@ class AerospikeClass {
                 }
                 else reject('Client not initialized');
             } catch (error) {
-                consolelog(process.cwd(), "bootstrap index error ", error, false)
+                consolelog(process.cwd(), "bootstrap index error ", JSON.stringify(error), false)
                 reject(error)
             }
         })
@@ -351,6 +351,21 @@ class AerospikeClass {
             consolelog(process.cwd(), 'Query result:', JSON.stringify(result), false)
             return result
         }
+    }
+
+    
+    async exists(argv: IAerospike.Exists) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let record = await this.client.exists(key)
+                    resolve(record)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
 
     async  udfRegister(argv) {

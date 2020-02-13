@@ -1,8 +1,6 @@
 declare namespace IOrderCMSRequest {
 
-    interface ICreateOrderCms {
-    }
-
-    interface ICreateOrderCmsRes {
+    interface ICreateOrderCms extends ICartCMSRequest.ICreateCartCms {
+        address_id?: number,
     }
 }

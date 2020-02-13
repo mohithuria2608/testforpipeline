@@ -21,7 +21,7 @@ export class HomeController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "bootstrapHome", error, false)
+            consolelog(process.cwd(), "bootstrapHome", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -33,7 +33,7 @@ export class HomeController {
         try {
             return await ENTITY.HomeE.getHome({ language: headers.language })
         } catch (error) {
-            consolelog(process.cwd(), "fetchHome", error, false)
+            consolelog(process.cwd(), "fetchHome", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -55,7 +55,7 @@ export class HomeController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

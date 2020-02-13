@@ -37,7 +37,7 @@ export class UserController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -95,7 +95,7 @@ export class UserController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "loginSendOtp", error, false)
+            consolelog(process.cwd(), "loginSendOtp", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -155,6 +155,9 @@ export class UserController {
                     userUpdate['country'] = userchange[0].country
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
+                if (userchange[0].address && userchange[0].address.id) {
+
+                }
                 userData = await ENTITY.UserE.buildUser(userUpdate)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
@@ -186,7 +189,7 @@ export class UserController {
     /**
     * @method POST
     * @param {string} socialKey : social id
-    * @param {string} medium : Social Platform type : FB, GOOGLE
+    * @param {string} medium : Social Platform type : FB, GOOGLE, APPLE
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
@@ -256,7 +259,7 @@ export class UserController {
             )
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, 0) }
         } catch (error) {
-            consolelog(process.cwd(), "socialAuthValidate", error, false)
+            consolelog(process.cwd(), "socialAuthValidate", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -304,6 +307,7 @@ export class UserController {
                         profileStep: 1,
                         brand: headers.brand,
                         country: headers.country,
+                        emailVerified: 1,
                     }
                     if (checkUser && checkUser.length > 0) {
                         userchangePayload['id'] = checkUser[0].id
@@ -319,13 +323,15 @@ export class UserController {
                     userData['cCode'] = payload.cCode
                     userData['profileStep'] = 1
                     userData['phnVerified'] = 0
+                    userData['emailVerified'] = 1
                     return formatUserData(userData, headers, auth.isGuest)
                 } else {
                     let userUpdate: IUserRequest.IUserData = {
                         id: userData.id,
                         name: payload.name,
                         email: payload.email,
-                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
+                        emailVerified: 1,
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     let userSync: IKafkaGrpcRequest.IKafkaBody = {
@@ -346,7 +352,7 @@ export class UserController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.USER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "profileUpdate", error, false)
+            consolelog(process.cwd(), "profileUpdate", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -404,7 +410,7 @@ export class UserController {
             }
             return formatUserData(user, headers, auth.isGuest)
         } catch (error) {
-            consolelog(process.cwd(), "editProfile", error, false)
+            consolelog(process.cwd(), "editProfile", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

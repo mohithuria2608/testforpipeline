@@ -76,7 +76,7 @@ export class DeeplinkController {
 
             return res
         } catch (error) {
-            consolelog(process.cwd(), "deepLinkMapper", error, false)
+            consolelog(process.cwd(), "deepLinkMapper", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

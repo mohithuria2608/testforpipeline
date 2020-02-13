@@ -25,7 +25,7 @@ server.addService(logProto.LogService.service, {
             let res: {} = await logController.log(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

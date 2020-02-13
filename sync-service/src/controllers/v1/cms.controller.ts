@@ -22,7 +22,7 @@ export class CmsController {
             )
             return { accessToken: tokens.accessToken }
         } catch (error) {
-            consolelog(process.cwd(), "auth", error, false)
+            consolelog(process.cwd(), "auth", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

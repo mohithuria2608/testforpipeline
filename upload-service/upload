@@ -1,0 +1,10 @@
+WARNING: NODE_APP_INSTANCE value of '3' did not match any instance config file names.
+WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
+Method handler ProduceMessage for /UploadService/ProduceMessage expected but not provided
+{"level":"info","message":"upload-service--------------Grpc upload Server running at--------------localhost:50061","timestamp":"2020-02-06T11:19:08.479Z"}
+{"level":"info","message":"upload-service--------------Connection established from upload service to auth service--------------127.0.0.1:50051","timestamp":"2020-02-06T11:19:08.635Z"}
+WARNING: NODE_APP_INSTANCE value of '4' did not match any instance config file names.
+WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
+Method handler ProduceMessage for /UploadService/ProduceMessage expected but not provided
+{"level":"info","message":"upload-service--------------Grpc upload Server running at--------------localhost:50061","timestamp":"2020-02-06T11:22:12.897Z"}
+{"level":"info","message":"upload-service--------------Connection established from upload service to auth service--------------127.0.0.1:50051","timestamp":"2020-02-06T11:22:13.002Z"}

@@ -1,0 +1,8 @@
+WARNING: NODE_APP_INSTANCE value of '0' did not match any instance config file names.
+WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
+{"level":"info","message":"payment-service--------------GRPC server running at--------------localhost:50060","timestamp":"2020-02-06T11:18:29.277Z"}
+{"level":"info","message":"payment-service--------------Aerospike Client Connected--------------","timestamp":"2020-02-06T11:18:29.441Z"}
+WARNING: NODE_APP_INSTANCE value of '0' did not match any instance config file names.
+WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
+{"level":"info","message":"payment-service--------------GRPC server running at--------------localhost:50060","timestamp":"2020-02-06T11:21:41.209Z"}
+{"level":"info","message":"payment-service--------------Aerospike Client Connected--------------","timestamp":"2020-02-06T11:21:41.286Z"}

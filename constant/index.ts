@@ -67,8 +67,8 @@ export const CMS = {
         },
         CREATE_ORDER: {
             METHOD: "POST",
-            URL: "customcart/create-validate-cart"
-        },
+            URL: "custom-order/create-order"
+        }
     }
 };
 
@@ -100,7 +100,7 @@ export const KAFKA = {
         },
         ORDER: {
             INTERVAL: {
-                GET_STATUS: 10
+                GET_STATUS: 10000
             }
         }
     },
@@ -183,6 +183,7 @@ export const SERVER = {
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     CMS_AUTH_EXP: (10 * 60 * 1000),
+    TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     DISPLAY_COLOR: true,
     ANDROID_SCHEME_HOST: "https://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
@@ -236,6 +237,7 @@ export const DATABASE = {
         },
 
         ACTIVITY_LOG: {
+            SDM_REQUEST: "SDM_REQUEST",
             REQUEST: "REQUEST",
             ERROR: "ERROR",
             INFO: "INFO",
@@ -302,47 +304,47 @@ export const DATABASE = {
             PENDING: {
                 MONGO: "PENDING",
                 CMS: "",
-                SDM: "OPEN + SUSPENDED"
-            },
-            PLACED: {
-                MONGO: "PLACED",
-                CMS: "",
-                SDM: "OPEN"
+                SDM: [0, 1, 96] //@description : ((Suspended = 96)/(open = 1)
             },
             CONFIRMED: {
                 MONGO: "CONFIRMED",
                 CMS: "",
-                SDM: "IN_KITCHEN"
+                SDM: [2] //@description : in kitchen
             },
             BEING_PREPARED: {
                 MONGO: "BEING_PREPARED",
                 CMS: "",
-                SDM: "IN_KITCHEN"
+                SDM: [2] //@description : in kitchen
             },
             READY: {
                 MONGO: "READY",
                 CMS: "",
-                SDM: "READY"
+                SDM: [8] //@description : ready
             },
             ON_THE_WAY: {
                 MONGO: "ON_THE_WAY",
                 CMS: "",
-                SDM: "ASSIGNED / ENROUTE"
+                SDM: [16, 32] //@description : assigned/shipped
+            },
+            DELIVERED: {
+                MONGO: "DELIVERED",
+                CMS: "",
+                SDM: [64, 128, 2048] //@description : delivered
             },
             CLOSED: {
                 MONGO: "",
                 CMS: "",
-                SDM: "CLOSED"
+                SDM: []
             },
             CANCELED: {
-                MONGO: "",
+                MONGO: "CANCELED",
                 CMS: "",
-                SDM: "CANCELED"
+                SDM: [512, 256, 1024, 4096, 8192] //@description : cancelled
             },
             FAILURE: {
-                MONGO: "",
+                MONGO: "FAILURE",
                 CMS: "",
-                SDM: "FAILURE"
+                SDM: []
             },
         }
     }
@@ -672,7 +674,14 @@ export const STATUS_MSG = {
                 httpCode: 500,
                 message: 'Invalid token type provided',
                 type: 'INVALID_TOKEN_TYPE'
-            }
+            },
+
+            CREATE_ORDER_ERROR: {
+                statusCode: 500,
+                httpCode: 500,
+                type: 'CREATE_ORDER_ERROR',
+                message: 'Error while creating order on SDM'
+            },
         },
         E501: {
             TOKENIZATION_ERROR: {

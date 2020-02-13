@@ -342,7 +342,7 @@ export class PaymentClass extends BaseEntity {
             }
             return availablePaymentMethods;
         } catch (error) {
-            consolelog(process.cwd(), 'Get Payment Methods', error, false);
+            consolelog(process.cwd(), 'Get Payment Methods', JSON.stringify(error), false);
             if (error && !error.name) {
                 error.name = 'PaymentError';
             }
@@ -356,7 +356,7 @@ export class PaymentClass extends BaseEntity {
     public async initiatePayment(payload: IPaymentGrpcRequest.IInitiatePayment) {
         const { error, value } = PaymentClass.INITIATE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment INITIATE Validation error', error, false);
+            consolelog(process.cwd(), 'Payment INITIATE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         // get payment method details
@@ -512,7 +512,7 @@ export class PaymentClass extends BaseEntity {
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER INITIATE STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER INITIATE STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -547,11 +547,11 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter authorization transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : []
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER AUTHORIZATION STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER AUTHORIZATION STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -588,11 +588,11 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter void transaction(reverse) details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER REVERSE STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER REVERSE STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -631,11 +631,11 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter capture transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } })) : []
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER CAPTURE STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER CAPTURE STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -676,11 +676,11 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter refund transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } })) : []
             }
             return result;
         } catch (error) {
-            consolelog(process.cwd(), 'Payment ORDER REFUND STATUS', error, false);
+            consolelog(process.cwd(), 'Payment ORDER REFUND STATUS', JSON.stringify(error), false);
             return Promise.reject(error);
         }
     }
@@ -692,7 +692,7 @@ export class PaymentClass extends BaseEntity {
     public async capturePayment(payload: IPaymentGrpcRequest.ICapturePayment) {
         const { error, value } = PaymentClass.CAPTURE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment CAPTURE Validation error', error, false);
+            consolelog(process.cwd(), 'Payment CAPTURE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         const config = await this.getNoonpayConfig(payload.storeCode);
@@ -736,7 +736,7 @@ export class PaymentClass extends BaseEntity {
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
-                transaction: response.result.transaction // capture payment transaction
+                transactions: [response.result.transaction] // capture payment transaction
             };
             // TODO: Update Payment status
             // To be done at order service
@@ -765,7 +765,7 @@ export class PaymentClass extends BaseEntity {
     public async reversePayment(payload: IPaymentGrpcRequest.IReversePayment) {
         const { error, value } = PaymentClass.REVERSE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment REVERSE Validation error', error, false);
+            consolelog(process.cwd(), 'Payment REVERSE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         const config = await this.getNoonpayConfig(payload.storeCode);
@@ -803,7 +803,7 @@ export class PaymentClass extends BaseEntity {
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
-                transaction: response.result.transaction // reverse payment transaction
+                transactions: [response.result.transaction] // reverse payment transaction
             };
             // TODO: Update Payment status
             // To be done at order service
@@ -832,7 +832,7 @@ export class PaymentClass extends BaseEntity {
     public async refundPayment(payload: IPaymentGrpcRequest.IRefundPayment) {
         const { error, value } = PaymentClass.REFUND_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
-            consolelog(process.cwd(), 'Payment REFUND Validation error', error, false);
+            consolelog(process.cwd(), 'Payment REFUND Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
         const config = await this.getNoonpayConfig(payload.storeCode);
@@ -875,7 +875,7 @@ export class PaymentClass extends BaseEntity {
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
-                transaction: response.result.transaction // refund payment transaction
+                transactions: [response.result.transaction] // refund payment transaction
             };
             // TODO: Update Payment status
             // To be done at order service

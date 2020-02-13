@@ -29,7 +29,7 @@ export class CmsLocationController {
             kafkaService.kafkaSync(upsellChange);
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "postStoresList", error, false)
+            consolelog(process.cwd(), "postStoresList", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

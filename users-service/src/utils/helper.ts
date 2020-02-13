@@ -36,8 +36,8 @@ export let grpcSendError = function (error) {
 }
 
 export let sendError = function (error) {
-    consolelog(process.cwd(), "In error handler type of ", typeof error, false)
-    consolelog(process.cwd(), "In error handler direct ", error, false)
+    consolelog(process.cwd(), "In error handler type of ", typeof JSON.stringify(error), false)
+    consolelog(process.cwd(), "In error handler direct ", JSON.stringify(error), false)
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
 
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
@@ -178,9 +178,15 @@ export let sendError = function (error) {
             if (error.hasOwnProperty('type'))
                 customError['type'] = error.type
         }
+        else if (error.hasOwnProperty('statusCode') && error.hasOwnProperty('httpCode') && error.hasOwnProperty('payload')) {
+            customError.message = error.payload.message
+            customError.statusCode = error.payload.statusCode
+            customError.httpCode = error.payload.httpCode
+            customError.type = error.payload.type
+        }
         else {
             consolelog(process.cwd(), "Unhandled error type 2", JSON.stringify(error), true)
-            customError.message = error
+            customError.message = JSON.stringify(error)
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
@@ -292,7 +298,7 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
         delete userObj['cmsUserRef']
         return userObj
     } catch (error) {
-        consolelog(process.cwd(), 'formatUserData', error, false)
+        consolelog(process.cwd(), 'formatUserData', JSON.stringify(error), false)
         return Promise.reject(error)
     }
 }

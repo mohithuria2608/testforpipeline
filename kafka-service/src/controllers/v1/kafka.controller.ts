@@ -16,7 +16,6 @@ export class KafkaController {
     * */
     async kafkaSync(payload: IKafkaRequest.IKafkaBody) {
         try {
-            consolelog(process.cwd(), "produce data to sync with persistent systems in KAFKA service", JSON.stringify(payload), true)
             switch (payload.set) {
                 case Constant.SET_NAME.USER: {
                     let messages = null;
@@ -181,7 +180,7 @@ export class KafkaController {
             }
             return { data: 'succes' };
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -200,7 +199,7 @@ export class KafkaController {
             });
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "produceToFailureTopic", error, false)
+            consolelog(process.cwd(), "produceToFailureTopic", JSON.stringify(error), false)
             return Promise.reject(error)
         }
 

@@ -20,11 +20,10 @@ export const server = new grpc.Server()
 server.addService(kafkaProto.KafkaService.service, {
     kafkaSync: async (call: IKafkaRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "kafkaSync ", JSON.stringify(call.request), true)
             let res: {} = await kafkaController.kafkaSync(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "kafkaSync", error, false)
+            consolelog(process.cwd(), "kafkaSync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
