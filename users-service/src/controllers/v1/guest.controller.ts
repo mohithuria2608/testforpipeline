@@ -68,11 +68,9 @@ export class GuestController {
             if (payload.addressId && payload.addressType) {
                 let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
                     userId: auth.id,
-                    bin: payload.addressType,
+                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
                     addressId: payload.addressId
                 })
-                console.log("oldAdd", JSON.stringify(oldAdd))
-
                 if (oldAdd && oldAdd.id)
                     address = oldAdd
                 else

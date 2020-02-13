@@ -65,8 +65,6 @@ export class AddressEntity extends BaseEntity {
                 index: 0
             }
             let listaddress = await Aerospike.listOperations(listGetArg)
-            console.log("listaddress", JSON.stringify(listaddress))
-            console.log("payload", JSON.stringify(payload))
             if (listaddress && listaddress.bins && listaddress.bins[payload.bin] && listaddress.bins[payload.bin].length > 0) {
                 listaddress = listaddress.bins[payload.bin]
             } else
