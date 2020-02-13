@@ -11758,5 +11758,17 @@
         "name_en": "Al Abrab",
         "name_ar": "الأبرب",
         "storeId": 84
+    },
+    {
+        "id": "ca42eba0-1c31-11ea-964e-c13f240dc3c6",
+        "cityId": 17,
+        "districtId": 1006,
+        "streetId": 364,
+        "areaId": 1786,
+        "provinceId": 7,
+        "countryId": -1,
+        "name_en": "TEST-APP",
+        "name_ar": "الأبرب",
+        "storeId": 1240
     }
 ]

@@ -59,4 +59,9 @@ Kfcapptestuser3
 * sudo apt-get install g++ libssl1.0.0 libssl-dev libz-dev
 
 # POS store 3333
-Store ID: 1240   Store Name: KFC-Test APPArea ID: 1786   Area Name: TEST-APPCity ID: 17          City Name: Abu Dhabi
+Store ID: 1240   
+Store Name: KFC-Test APP 
+Area ID: 1786   
+Area Name: TEST-APP
+City ID: 17          
+City Name: Abu Dhabi
