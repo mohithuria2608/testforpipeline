@@ -3,6 +3,7 @@ import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService } from '../../grpc/client';
+import { addressController } from '../../controllers';
 
 export class UserController {
     constructor() { }
@@ -155,10 +156,8 @@ export class UserController {
                     userUpdate['country'] = userchange[0].country
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
-                if (userchange[0].address && userchange[0].address.id) {
-
-                }
                 userData = await ENTITY.UserE.buildUser(userUpdate)
+
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -179,6 +178,18 @@ export class UserController {
                 payload.isGuest,
                 session.sessionTime
             )
+            if (userchange[0].address && userchange[0].address.id) {
+                await addressController.syncOldAddress(userData, {
+                    addressId: userchange[0].id,
+                    sdmStoreRef: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.sdmStoreRef : undefined,
+                    lat: userchange[0].address.lat,
+                    lng: userchange[0].address.lng,
+                    bldgName: userchange[0].address.bldgName,
+                    description: userchange[0].address.description,
+                    flatNum: userchange[0].address.flatNum,
+                    tag: userchange[0].address.tag
+                });
+            }
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, payload.isGuest) }
         } catch (error) {
             consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(error), false)

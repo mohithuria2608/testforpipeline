@@ -22,6 +22,7 @@ declare namespace IAddressRequest {
     }
 
     interface IRegisterAddress {
+        addressId?: string,
         storeId?: number,
         lat?: number,
         lng?: number,
@@ -41,6 +42,16 @@ declare namespace IAddressRequest {
         tag?: string,
     }
 
+    interface ISyncOldAddress {
+        addressId: string,
+        sdmStoreRef?: number,
+        lat?: number,
+        lng?: number,
+        bldgName?: string,
+        description?: string,
+        flatNum?: string,
+        tag?: string
+    }
     interface IFetchAddress {
         userId: string,
         addressId?: string,
