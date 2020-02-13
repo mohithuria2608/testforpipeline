@@ -12,10 +12,10 @@ declare namespace IUserSDMRequest {
             CUST_FIRSTNAME: string,// "nusrattest",
             CUST_LASTNAME: string,// "user",
             CUST_NATID: number,
-            CUST_NOTIFICATION_MOBILE: number,// 525454090,
-            CUST_PHONEAREACODE: number,//52
-            CUST_PHONELOOKUP: number,// 525454090,
-            CUST_PHONENUMBER: number,// 5454090,
+            CUST_NOTIFICATION_MOBILE: string,// 525454090,
+            CUST_PHONEAREACODE: string,//52
+            CUST_PHONELOOKUP: string,// 525454090,
+            CUST_PHONENUMBER: string,// 5454090,
             CUST_PHONETYPE: number,
             PASSWORD: string,
             USERNAME: string,

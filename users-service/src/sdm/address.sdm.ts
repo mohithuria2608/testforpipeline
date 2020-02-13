@@ -5,7 +5,7 @@ import { BaseSDM } from './base.sdm'
 import { consolelog } from '../utils'
 import * as  _ from 'lodash';
 
-export class UserSDMEntity extends BaseSDM {
+export class AddressSDMEntity extends BaseSDM {
 
     constructor() {
         super()
@@ -14,14 +14,11 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async createAddress(payload: IUserRequest.IUserData) {
+    async createAddress(payload: IAddressSDMRequest.ICreateAddress) {
         try {
-            let data: IAddressSDMRequest.ICreateAddressReq = {
+            let data = {
                 name: "RegisterAddressByID",
-                req: {
-                    customerRegistrationID: "",
-                    address: {}
-                }
+                req: payload
             }
             let res = await this.requestData(data.name, data.req)
             return res
@@ -32,4 +29,4 @@ export class UserSDMEntity extends BaseSDM {
     }
 }
 
-export const UserSDME = new UserSDMEntity()
+export const AddressSDME = new AddressSDMEntity()

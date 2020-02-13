@@ -313,7 +313,7 @@ export class CartClass extends BaseEntity {
                         cart.push({
                             product_id: sitem.id,
                             qty: sitem.qty ? sitem.qty : 1,
-                            price: sitem.finalPrice,
+                            price: sitem.sellingPrice,
                             type_id: sitem['originalTypeId']
                         })
                     } else {
@@ -321,7 +321,7 @@ export class CartClass extends BaseEntity {
                         product['product_id'] = sitem['id']
                         product['qty'] = sitem['qty']
                         product['type_id'] = sitem['originalTypeId']
-                        product['price'] = sitem['finalPrice']
+                        product['price'] = sitem['sellingPrice']
                         let option = {}
                         if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
                             sitem['bundleProductOptions'].forEach(bpo => {
@@ -357,7 +357,7 @@ export class CartClass extends BaseEntity {
                     if (sitem['items'] && sitem['items'].length > 0) {
                         sitem['items'].map(i => {
                             if (parseInt(i['sku']) == sitem['selectedItem']) {
-                                price = i['finalPrice']
+                                price = i['sellingPrice']
                                 if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
                                     sitem['configurableProductOptions'].map(co => {
                                         let value = null
@@ -442,7 +442,7 @@ export class CartClass extends BaseEntity {
                     cart.push({
                         product_id: sitem.id,
                         qty: sitem.qty,
-                        price: sitem.finalPrice,
+                        price: sitem.sellingPrice,
                         type_id: sitem['typeId'],
                         bundle_option: bundle_option,
                         selection_configurable_option: selection_configurable_option,
@@ -505,7 +505,7 @@ export class CartClass extends BaseEntity {
                         cart.push({
                             product_id: item,
                             qty: sitem.qty,
-                            price: sitem.finalPrice,
+                            price: sitem.sellingPrice,
                             type_id: "bundle",// sitem['typeId'],
                             bundle_option: bundle_option,
                             selection_configurable_option: selection_configurable_option,

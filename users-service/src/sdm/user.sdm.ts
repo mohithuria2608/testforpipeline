@@ -27,10 +27,10 @@ export class UserSDMEntity extends BaseSDM {
                         CUST_FIRSTNAME: payload.name,// "nusrattest",
                         CUST_LASTNAME: payload.name,// "user",
                         CUST_NATID: -1,
-                        CUST_NOTIFICATION_MOBILE: parseInt((payload.cCode + payload.phnNo).replace('+', '')),// 525454090,
-                        CUST_PHONEAREACODE: parseInt(payload.cCode.replace('+', '')),//52
-                        CUST_PHONELOOKUP: parseInt((payload.cCode + payload.phnNo).replace('+', '')),// 525454090,
-                        CUST_PHONENUMBER: parseInt(payload.phnNo),// 5454090,
+                        CUST_NOTIFICATION_MOBILE: (payload.cCode + payload.phnNo).replace('+', ''),// 525454090,
+                        CUST_PHONEAREACODE:payload.cCode.replace('+', ''),//52
+                        CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),// 525454090,
+                        CUST_PHONENUMBER: payload.phnNo,// 5454090,
                         CUST_PHONETYPE: 2,
                         PASSWORD: payload.password,
                         USERNAME: payload.email,

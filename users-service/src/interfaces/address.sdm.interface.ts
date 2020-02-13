@@ -1,12 +1,8 @@
 
 declare namespace IAddressSDMRequest {
-    interface ICreateAddressReq {
-        name: string,
-        req: ICreateAddress
-    }
 
-    interface ICreateAddress {
-        customerRegistrationID: string,
+    interface ICreateAddress extends ICommonRequest.ISDM {
+        customerRegistrationID: number,
         address: {
         }
     }
