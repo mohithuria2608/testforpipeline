@@ -306,8 +306,10 @@ export class CartClass extends BaseEntity {
 
     async createCartReqForCms(payload: ICartRequest.IValidateCart) {
         try {
+            let sellingPrice = 0
             let cart = []
             payload.items.map(sitem => {
+                sellingPrice = sellingPrice + sitem.sellingPrice
                 if (sitem['originalTypeId'] == 'simple') {
                     if (sitem['type_id'] == 'simple') {
                         cart.push({
@@ -529,7 +531,7 @@ export class CartClass extends BaseEntity {
                 req['coupon_code'] = payload.couponCode
             else
                 req['coupon_code'] = ""
-            return req
+            return { req: req, sellingPrice: sellingPrice }
         } catch (error) {
             consolelog(process.cwd(), "createCartReqForCms", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -539,7 +541,19 @@ export class CartClass extends BaseEntity {
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             let req = await this.createCartReqForCms(payload)
-            let cmsCart = await CMS.CartCMSE.createCart(req)
+            let cmsCart = await CMS.CartCMSE.createCart(req.req)
+            /**
+             * @description Temporary
+             */
+            let subTotal = Math.round((((req.sellingPrice * 100) / 105) + Number.EPSILON) * 100) / 100
+            let tax = req.sellingPrice - subTotal
+            let grandTotal = req.sellingPrice + cmsCart['discount_amount']
+            cmsCart['subtotal'] = subTotal
+            cmsCart['tax'] = [{
+                tax_name: "VAT@5%",
+                amount: tax,
+            }]
+            cmsCart['grandtotal'] = grandTotal
             return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
