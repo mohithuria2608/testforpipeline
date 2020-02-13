@@ -71,6 +71,8 @@ export class GuestController {
                     bin: payload.addressType,
                     addressId: payload.addressId
                 })
+                console.log("oldAdd", JSON.stringify(oldAdd))
+
                 if (oldAdd && oldAdd.id)
                     address = oldAdd
                 else
