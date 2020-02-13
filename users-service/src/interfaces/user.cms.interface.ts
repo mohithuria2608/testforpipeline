@@ -1,19 +1,14 @@
 
 declare namespace IUserCMSRequest {
 
-    interface IHeader {}
-    
-    interface ICreateUser {
-        customer: ICustomer,
-        password: string
-    }
+    interface IHeader { }
 
-    interface ICustomer {
-        firstname: string,
-        lastname: string,
-        email: string,
-        store_id: number,
-        website_id: number,
-        addresses: any,
+    interface ICreateUser {
+        email: string
+        phone: string
+        websiteId: string
+        firstname: string
+        lastname: string
+        password: string
     }
 }

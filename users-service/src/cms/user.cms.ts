@@ -1,4 +1,5 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
@@ -12,36 +13,33 @@ export class UserCMSEntity extends BaseCMS {
     async createCostomer(payload: IUserRequest.IUserData): Promise<any> {
         try {
             let formObj: IUserCMSRequest.ICreateUser = {
-                customer: {
-                    firstname: payload.name,
-                    lastname: payload.name,
-                    email: payload.email,
-                    store_id: 1,// payload.storeId,
-                    website_id: 1,//payload.websiteId,
-                    addresses: []
-                },
-                password: payload.password
+                "email": payload.email,
+                "phone": payload.fullPhnNo,
+                "websiteId": "1",
+                "firstname": payload.name,
+                "lastname": payload.name,
+                "password": "123456",
+                // "country_id": "en",
+                // "zip": "201301",
+                // "city": "noida",
+                // "state": "up",
+                // "street": "b-25 noida",
+                // "latitude": "89.000333",
+                // "longitude": "32.334343",
+                // "description": "description",
+                // "address_is": "1",
+                // "address_type": "dsds",
+                // "use_in_reg": "1",
+                // "alternate_phone": "9876543200"
             }
-
-            // let authApiLastHit = global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] ? global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] : 0
-            // let auth = global[Constant.CMS.GLOBAL_VAR.AUTH_TOKEN]
-            // if (authApiLastHit + Constant.SERVER.CMS_AUTH_EXP < new Date().getTime()) {
-            //     let authapi = await this.auth()
-            //     global[Constant.CMS.GLOBAL_VAR.AUTH_TOKEN] = authapi
-            //     auth = global[Constant.CMS.GLOBAL_VAR.AUTH_TOKEN]
-            // }
-
-            // consolelog(process.cwd(), "auth", auth, false)
-
-            // const headers = {};
-            // headers['Authorization'] = "bearer" + auth
-            // const form = formObj;
-            // const options = {
-            //     method: Constant.CMS.END_POINTS.AUTH.METHOD,
-            //     url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.AUTH.URL,
-            // }
-            // let cmsRes = await this.request(options, headers, form)
-            // return cmsRes
+            const headers = {};
+            const form = formObj;
+            const options = {
+                method: Constant.CMS.END_POINTS.CREATE_USER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.CREATE_USER.URL,
+            }
+            let cmsRes = await this.request(options, headers, form)
+            return cmsRes
         } catch (error) {
             consolelog(process.cwd(), 'createCostomer', JSON.stringify(error), false)
             return Promise.reject(error)

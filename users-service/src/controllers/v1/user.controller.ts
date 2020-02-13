@@ -14,8 +14,8 @@ export class UserController {
      */
     async syncUser(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
 
                 }
@@ -25,12 +25,14 @@ export class UserController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
+                let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create)
                     ENTITY.UserE.createUserOnCms(data)
                 if (payload.cms.update)
                     ENTITY.UserE.updateUserOnCms(data)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
+                let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
                     ENTITY.UserE.createUserOnSdm(data)
                 if (payload.sdm.update)
@@ -38,7 +40,7 @@ export class UserController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
+            consolelog(process.cwd(), "syncFromKafka", error, false)
             return Promise.reject(error)
         }
     }
@@ -356,7 +358,7 @@ export class UserController {
                             argv: JSON.stringify(userData)
                         },
                     }
-                    kafkaService.kafkaSync(userSync)
+                    // kafkaService.kafkaSync(userSync)
                     return formatUserData(userData, headers, auth.isGuest)
                 }
             } else {
@@ -412,7 +414,6 @@ export class UserController {
                 await ENTITY.UserchangeE.buildUserchange(userData.id, userchangePayload)
             }
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
-            // ENTITY.UserE.syncUser(user)
             if (payload.cCode && payload.phnNo) {
                 user['fullPhnNo'] = payload.cCode + payload.phnNo
                 user['phnNo'] = payload.phnNo

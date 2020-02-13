@@ -61,6 +61,10 @@ export const CMS = {
             METHOD: "GET",
             URL: "americanaconfig/"
         },
+        CREATE_USER: {
+            METHOD: "POST",
+            URL: "createuser"
+        },
         CREATE_CART: {
             METHOD: "POST",
             URL: "customcart/create-validate-cart"
