@@ -17,22 +17,22 @@ class KafkaProducer {
 
         this.producer.on('ready', () => {
             this.producer.createTopics([
-                Constant.KAFKA_TOPIC.FAIL_Q,
-                Constant.KAFKA_TOPIC.SDM_MENU,
-                Constant.KAFKA_TOPIC.CMS_MENU,
-                Constant.KAFKA_TOPIC.AS_MENU,
-                Constant.KAFKA_TOPIC.AS_UPSELL,
-                Constant.KAFKA_TOPIC.SDM_USER,
-                Constant.KAFKA_TOPIC.CMS_USER,
-                Constant.KAFKA_TOPIC.AS_USER,
-                Constant.KAFKA_TOPIC.AS_PROMOTION,
-                Constant.KAFKA_TOPIC.SDM_ORDER,
-                Constant.KAFKA_TOPIC.AS_CONFIG,
-                Constant.KAFKA_TOPIC.M_LOGGER,
-                Constant.KAFKA_TOPIC.AS_LOCATION,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
+                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
             ], (error, data) => {
                 if (error) {
-                    consolelog(process.cwd(), 'Err in creating topics', JSON.stringify(error), false);
+                    consolelog(process.cwd(), 'Err in creating topics', error, false);
                 } else {
                     consolelog(process.cwd(), 'kafka topics created successfully', data, true);
                 }
