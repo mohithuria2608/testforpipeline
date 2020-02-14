@@ -27,7 +27,7 @@ export class BaseCMS {
                 params['body'] = parameter
                 params['json'] = true
             }
-            consolelog(process.cwd(), "In request manager options", JSON.stringify(params), true)
+            // consolelog(process.cwd(), "In request manager options", JSON.stringify(params), true)
 
             rp(params)
                 .then(function (body) {

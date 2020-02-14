@@ -404,8 +404,6 @@ export class CartClass extends BaseEntity {
                                         }
 
                                         if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                            console.log(" positionIndex", positionIndex, (positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1))
-                                            console.log(" bpo", sitem['bundleProductOptions'][1])
                                             let dependentSteps = sitem['bundleProductOptions'][(positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1)]
                                             if (dependentSteps.isDependent == 1) {
                                                 if (dependentSteps['productLinks'] && dependentSteps['productLinks'].length > 0) {
@@ -422,23 +420,6 @@ export class CartClass extends BaseEntity {
                                             }
                                         }
                                     }
-                                    // if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
-                                    //     console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
-                                    //     if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
-                                    //         sitem['bundleProductOptions'].forEach(bpo2 => {
-                                    //             if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                    //                 if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
-                                    //                     bpo2['productLinks'].forEach(pl2 => {
-                                    //                         if (pl2['selected'] == 1)
-                                    //                             selection_configurable_option[pl['selection_id']] = pl2['id']
-                                    //                         else
-                                    //                             selection_configurable_option[pl['selection_id']] = ""
-                                    //                     })
-                                    //                 }
-                                    //             }
-                                    //         })
-                                    //     }
-                                    // }
                                 })
                             }
                         }
@@ -482,7 +463,6 @@ export class CartClass extends BaseEntity {
                                                 alreadyAddedInBundleOption[pl['id']] = true
                                             }
                                             if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                                console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
                                                 if (i['bundleProductOptions'] && i['bundleProductOptions'].length > 0) {
                                                     i['bundleProductOptions'].forEach(bpo2 => {
                                                         if (bpo2['position'] == pl['dependentSteps'][0]) {
@@ -503,9 +483,6 @@ export class CartClass extends BaseEntity {
                                 })
                             }
                         })
-                        console.log("bundle_option", bundle_option)
-                        console.log("selection_configurable_option", selection_configurable_option)
-
                         cart.push({
                             product_id: item,
                             qty: sitem.qty,
@@ -520,8 +497,6 @@ export class CartClass extends BaseEntity {
                     return Promise.reject("Unhandled  products")
                 }
             })
-
-            console.log("cart", JSON.stringify(cart))
 
             let req = {
                 cms_user_id: 12, //userData.cmsUserRef,
@@ -643,7 +618,6 @@ export class CartClass extends BaseEntity {
             dataToUpdate['amount'] = amount
             if (cmsCart.not_available && cmsCart.not_available.length > 0) {
                 curItems.forEach(obj => {
-                    console.log("1", obj.id)
                     if (cmsCart.not_available.indexOf(obj.id) == -1) {
                         dataToUpdate['items'].push(obj)
                     } else {
