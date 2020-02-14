@@ -38,92 +38,6 @@ export enum MIDDLEWARE {
     ACTIVITY_LOG = "activity_log"
 };
 
-export const KAFKA = {
-    SDM: {
-        USER: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        MENU: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        PROMOTION: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        UPSELL: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        ORDER: {
-            INTERVAL: {
-                GET_STATUS: 10000
-            }
-        }
-    },
-    CMS: {
-        USER: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        MENU: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        PROMOTION: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        UPSELL: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        }
-    },
-    AS: {
-        USER: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        MENU: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        PROMOTION: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        UPSELL: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        }
-    }
-};
-
 export const SERVER = {
     ENV: {
         default: 0,
@@ -197,6 +111,10 @@ export const DATABASE = {
             CREATE_USER: {
                 METHOD: "POST",
                 URL: "createuser"
+            },
+            UPDATE_USER: {
+                METHOD: "POST",
+                URL: "updateuser"
             },
             CREATE_CART: {
                 METHOD: "POST",

@@ -543,19 +543,19 @@ export class CartClass extends BaseEntity {
             let req = await this.createCartReqForCms(payload)
             consolelog(process.cwd(), "test", JSON.stringify(req), true)
             let cmsCart = await CMS.CartCMSE.createCart(req.req)
-            cmsCart['is_price_changed'] = false
-            /**
-             * @description Temporary
-             */
-            let subTotal = Math.round((((req.sellingPrice * 100) / 105) + Number.EPSILON) * 100) / 100
-            let tax = req.sellingPrice - subTotal
-            let grandTotal = req.sellingPrice + cmsCart['discount_amount']
-            cmsCart['subtotal'] = subTotal
-            cmsCart['tax'] = [{
-                tax_name: "VAT@5%",
-                amount: tax,
-            }]
-            cmsCart['grandtotal'] = grandTotal
+            // cmsCart['is_price_changed'] = false
+            // /**
+            //  * @description Temporary
+            //  */
+            // let subTotal = Math.round((((req.sellingPrice * 100) / 105) + Number.EPSILON) * 100) / 100
+            // let tax = req.sellingPrice - subTotal
+            // let grandTotal = req.sellingPrice + cmsCart['discount_amount']
+            // cmsCart['subtotal'] = subTotal
+            // cmsCart['tax'] = [{
+            //     tax_name: "VAT@5%",
+            //     amount: tax,
+            // }]
+            // cmsCart['grandtotal'] = grandTotal
             return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)

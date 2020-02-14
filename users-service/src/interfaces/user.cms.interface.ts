@@ -11,4 +11,14 @@ declare namespace IUserCMSRequest {
         lastname: string
         password: string
     }
+
+    interface IUpdateUser {
+        customerId: number,
+        websiteId: string,
+        email?: string,
+        phone?: string,
+        firstName?: string,
+        lastName?: string,
+        alternatePhone?: string
+    }
 }

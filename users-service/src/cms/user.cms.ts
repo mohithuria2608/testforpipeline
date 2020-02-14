@@ -19,18 +19,6 @@ export class UserCMSEntity extends BaseCMS {
                 "firstname": payload.name,
                 "lastname": payload.name,
                 "password": "123456",
-                // "country_id": "en",
-                // "zip": "201301",
-                // "city": "noida",
-                // "state": "up",
-                // "street": "b-25 noida",
-                // "latitude": "89.000333",
-                // "longitude": "32.334343",
-                // "description": "description",
-                // "address_is": "1",
-                // "address_type": "dsds",
-                // "use_in_reg": "1",
-                // "alternate_phone": "9876543200"
             }
             const headers = {};
             const form = formObj;
@@ -46,9 +34,29 @@ export class UserCMSEntity extends BaseCMS {
         }
     }
 
-    async updateCostomer(payload) {
+    async updateCostomer(payload: IUserRequest.IUserData): Promise<any> {
         try {
-            return {}
+            let formObj: IUserCMSRequest.IUpdateUser = {
+                "customerId": payload.cmsUserRef,
+                "websiteId": "1",
+                "alternatePhone": ""
+            }
+            if (payload.email)
+                formObj['email'] = payload.email
+            if (payload.fullPhnNo)
+                formObj['phone'] = payload.fullPhnNo
+            if (payload.name) {
+                formObj['firstName'] = payload.name
+                formObj['lastName'] = payload.name
+            }
+            const headers = {};
+            const form = formObj;
+            const options = {
+                method: Constant.DATABASE.CMS.END_POINTS.UPDATE_USER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.UPDATE_USER.URL,
+            }
+            let cmsRes = await this.request(options, headers, form)
+            return cmsRes
         } catch (error) {
             consolelog(process.cwd(), 'updateCostomer', JSON.stringify(error), false)
             return Promise.reject(error)
