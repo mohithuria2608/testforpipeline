@@ -543,6 +543,7 @@ export class CartClass extends BaseEntity {
             let req = await this.createCartReqForCms(payload)
             consolelog(process.cwd(), "test", JSON.stringify(req), true)
             let cmsCart = await CMS.CartCMSE.createCart(req.req)
+            cmsCart['is_price_changed'] = false
             /**
              * @description Temporary
              */
