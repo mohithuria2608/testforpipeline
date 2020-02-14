@@ -194,7 +194,7 @@
         "sender": "support@americana.com"
     },
     "kafka": {
-        "url": "localhost:9093"
+        "url": "20.46.146.2:9093"
     },
     "aerospike": {
         "hosts": "localhost:3000",
