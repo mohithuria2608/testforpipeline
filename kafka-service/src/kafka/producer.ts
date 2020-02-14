@@ -17,18 +17,18 @@ class KafkaProducer {
 
         this.producer.on('ready', () => {
             this.producer.createTopics([
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
-                // process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
             ], (error, data) => {
                 if (error) {
