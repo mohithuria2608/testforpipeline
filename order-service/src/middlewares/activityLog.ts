@@ -43,7 +43,7 @@ export default (opts?): Middleware => {
                 }
             }
             // consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
-            // kafkaService.kafkaSync(dataToSave)
+            kafkaService.kafkaSync(dataToSave)
         })
 
         await next()
