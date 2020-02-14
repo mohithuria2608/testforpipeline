@@ -190,7 +190,7 @@
         "source": ""
     },
     "kafka": {
-        "url": "localhost:9093"
+        "url": "20.46.146.2:9092"
     },
     "aerospike": {
         "hosts": "40.123.193.221:3000",

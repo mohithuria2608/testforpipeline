@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsPromotionConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_PROMOTION, Constant.KAFKA_TOPIC.AS_PROMOTION);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION);
     }
 
     handleMessage() {

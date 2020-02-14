@@ -28,7 +28,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.CMS_USER
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
@@ -38,7 +38,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.SDM_USER
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
@@ -48,7 +48,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.AS_USER
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -64,7 +64,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.CMS_MENU
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
@@ -74,7 +74,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.SDM_MENU
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
@@ -84,7 +84,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.AS_MENU
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -100,7 +100,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.AS_UPSELL
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -116,7 +116,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
-                        topic = Constant.KAFKA_TOPIC.AS_PROMOTION
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -130,7 +130,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        topic = Constant.KAFKA_TOPIC.SDM_ORDER
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -144,7 +144,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        topic = Constant.KAFKA_TOPIC.AS_CONFIG
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -158,7 +158,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.cms
-                        topic = Constant.KAFKA_TOPIC.M_LOGGER
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -172,7 +172,7 @@ export class KafkaController {
                         delete messages.mdb
                         delete messages.sdm
                         delete messages.cms
-                        topic = Constant.KAFKA_TOPIC.AS_LOCATION;
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION;
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
@@ -194,7 +194,7 @@ export class KafkaController {
             consolelog(process.cwd(), "produce data in failed KAFKA q", payload, true)
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
-                topic: Constant.KAFKA_TOPIC.FAIL_Q,
+                topic: process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
                 partition: 0,
             });
             return {}

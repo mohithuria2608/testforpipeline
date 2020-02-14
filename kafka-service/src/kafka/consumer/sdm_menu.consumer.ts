@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class SdmMenuConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_MENU, Constant.KAFKA_TOPIC.SDM_MENU);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU);
     }
 
     handleMessage() {

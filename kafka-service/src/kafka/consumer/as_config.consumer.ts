@@ -4,10 +4,11 @@ import { consolelog } from "../../utils"
 import { syncService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
 class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_CONFIG, Constant.KAFKA_TOPIC.AS_CONFIG);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG);
     }
 
     handleMessage() {

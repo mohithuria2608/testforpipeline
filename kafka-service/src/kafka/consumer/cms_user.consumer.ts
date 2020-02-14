@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class CmsUserConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.CMS_USER, Constant.KAFKA_TOPIC.CMS_USER);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER);
     }
 
     handleMessage() {

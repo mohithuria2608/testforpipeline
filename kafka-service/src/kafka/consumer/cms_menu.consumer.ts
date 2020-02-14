@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class CmsMenuConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.CMS_MENU, Constant.KAFKA_TOPIC.CMS_MENU);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU);
     }
 
     handleMessage() {

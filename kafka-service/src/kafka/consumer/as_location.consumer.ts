@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_LOCATION, 'client');
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION, 'client');
     }
 
     handleMessage() {
