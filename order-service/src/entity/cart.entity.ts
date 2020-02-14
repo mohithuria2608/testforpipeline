@@ -312,6 +312,8 @@ export class CartClass extends BaseEntity {
                 sellingPrice = sellingPrice + (sitem.sellingPrice * sitem.qty)
                 if (sitem['originalTypeId'] == 'simple') {
                     if (sitem['type_id'] == 'simple') {
+                        if (sitem.id == 0)
+                            console.log("sitem>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", sitem)
                         cart.push({
                             product_id: sitem.id,
                             qty: sitem.qty ? sitem.qty : 1,
@@ -541,7 +543,6 @@ export class CartClass extends BaseEntity {
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             let req = await this.createCartReqForCms(payload)
-            consolelog(process.cwd(), "test", JSON.stringify(req), true)
             let cmsCart = await CMS.CartCMSE.createCart(req.req)
             // cmsCart['is_price_changed'] = false
             // /**

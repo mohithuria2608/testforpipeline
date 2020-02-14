@@ -6,6 +6,7 @@ import middleware from './middlewares'
 import route from './route'
 import * as SDM from './sdm';
 import * as ENTITY from './entity';
+import * as CMS from './cms';
 
 const app = new Koa()
 
@@ -614,7 +615,798 @@ export const start = (async () => {
 
 
 
-
+    // await CMS.CartCMSE.createCart({
+    //   "cms_user_id": 17,
+    //   "website_id": 1,
+    //   "category_id": 20,
+    //   "cart_items": [
+    //     {
+    //       "product_id": 1730,
+    //       "qty": 7,
+    //       "price": 227.5,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1442": {
+    //           "1719": 11225,
+    //           "1723": 11226,
+    //           "1727": 11227
+    //         },
+    //         "1443": 11235,
+    //         "1444": 11239,
+    //         "1445": 11243,
+    //         "1617": 12279
+    //       },
+    //       "selection_configurable_option": {
+    //         "11225": 1716,
+    //         "11226": 1720,
+    //         "11227": 1724,
+    //         "11234": 1723,
+    //         "11235": 1723,
+    //         "12279": 1727
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1601,
+    //       "qty": 2,
+    //       "type_id": "simple",
+    //       "price": 19,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1600,
+    //       "qty": 2,
+    //       "type_id": "simple",
+    //       "price": 25,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1599,
+    //       "qty": 1,
+    //       "type_id": "simple",
+    //       "price": 13,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1717,
+    //       "qty": 3,
+    //       "type_id": "simple",
+    //       "price": 2,
+    //       "final_price": true
+    //     },
+    //     {
+    //       "product_id": 0,
+    //       "qty": 3,
+    //       "type_id": "simple",
+    //       "price": 0,
+    //       "final_price": true
+    //     },
+    //     {
+    //       "product_id": 1725,
+    //       "qty": 3,
+    //       "type_id": "simple",
+    //       "price": 0,
+    //       "final_price": true
+    //     },
+    //     {
+    //       "product_id": 1659,
+    //       "qty": 3,
+    //       "type_id": "simple",
+    //       "price": 60,
+    //       "option": {
+    //         "55": 164,
+    //         "56": 167,
+    //         "57": 170
+    //       }
+    //     },
+    //     {
+    //       "product_id": 36,
+    //       "qty": 1,
+    //       "price": 100,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1604": 12218,
+    //         "1605": 12220,
+    //         "1606": 12222,
+    //         "1607": 12230,
+    //         "1608": 12236
+    //       },
+    //       "selection_configurable_option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 36,
+    //       "qty": 2,
+    //       "price": 200,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1604": 12218,
+    //         "1605": 12220,
+    //         "1606": 12222,
+    //         "1607": 12230,
+    //         "1608": 12236
+    //       },
+    //       "selection_configurable_option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1761,
+    //       "qty": 1,
+    //       "price": 29,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1569": 12003,
+    //         "1570": {
+    //           "1719": 12005
+    //         },
+    //         "1571": 12011
+    //       },
+    //       "selection_configurable_option": {
+    //         "12003": "",
+    //         "12004": "",
+    //         "12005": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1761,
+    //       "qty": 4,
+    //       "price": 116,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1569": 12003,
+    //         "1570": {
+    //           "1719": 12005
+    //         },
+    //         "1571": 12011
+    //       },
+    //       "selection_configurable_option": {
+    //         "12003": "",
+    //         "12004": "",
+    //         "12005": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1763,
+    //       "qty": 1,
+    //       "price": 37,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1575": 12033,
+    //         "1576": 12035,
+    //         "1577": {
+    //           "1719": 12037
+    //         },
+    //         "1578": 12043,
+    //         "1579": 12050,
+    //         "1580": 12056
+    //       },
+    //       "selection_configurable_option": {
+    //         "12035": "",
+    //         "12036": "",
+    //         "12037": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1763,
+    //       "qty": 5,
+    //       "price": 185,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1575": 12033,
+    //         "1576": 12035,
+    //         "1577": {
+    //           "1719": 12037
+    //         },
+    //         "1578": 12043,
+    //         "1579": 12050,
+    //         "1580": 12056
+    //       },
+    //       "selection_configurable_option": {
+    //         "12035": "",
+    //         "12036": "",
+    //         "12037": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1677,
+    //       "qty": 1,
+    //       "type_id": "simple",
+    //       "price": 20,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1677,
+    //       "qty": 3,
+    //       "type_id": "simple",
+    //       "price": 60,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1677,
+    //       "qty": 7,
+    //       "type_id": "simple",
+    //       "price": 140,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1728,
+    //       "qty": 1,
+    //       "price": 49,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1436": 11190,
+    //         "1437": 11193
+    //       },
+    //       "selection_configurable_option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1728,
+    //       "qty": 2,
+    //       "price": 98,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1436": 11190,
+    //         "1437": 11193
+    //       },
+    //       "selection_configurable_option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1728,
+    //       "qty": 5,
+    //       "price": 245,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1436": 11190,
+    //         "1437": 11193
+    //       },
+    //       "selection_configurable_option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1730,
+    //       "qty": 1,
+    //       "price": 38.5,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1442": {
+    //           "1719": 11225,
+    //           "1723": 11226,
+    //           "1727": 11227
+    //         },
+    //         "1443": 11235,
+    //         "1444": 11239,
+    //         "1445": 11243,
+    //         "1617": 12279
+    //       },
+    //       "selection_configurable_option": {
+    //         "11225": 1717,
+    //         "11226": 1721,
+    //         "11227": 1725,
+    //         "11234": 1723,
+    //         "11235": 1723,
+    //         "12279": 1727
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1753,
+    //       "qty": 1,
+    //       "price": 35,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1531": {
+    //           "1719": 11769
+    //         },
+    //         "1532": 11778,
+    //         "1533": 11780,
+    //         "1534": 11782,
+    //         "1535": 11789,
+    //         "1536": 11797,
+    //         "1645": 12335
+    //       },
+    //       "selection_configurable_option": {
+    //         "11769": 1716,
+    //         "12335": ""
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1753,
+    //       "qty": 2,
+    //       "price": 70,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1531": {
+    //           "1719": 11769
+    //         },
+    //         "1532": 11778,
+    //         "1533": 11780,
+    //         "1534": 11782,
+    //         "1535": 11789,
+    //         "1536": 11797,
+    //         "1645": 12335
+    //       },
+    //       "selection_configurable_option": {
+    //         "11769": 1716,
+    //         "12335": ""
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1739,
+    //       "qty": 1,
+    //       "price": 27,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1474": 11433,
+    //         "1475": {
+    //           "1719": 11435
+    //         },
+    //         "1476": 11441,
+    //         "1477": 11448
+    //       },
+    //       "selection_configurable_option": {
+    //         "11433": "",
+    //         "11434": "",
+    //         "11435": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1739,
+    //       "qty": 2,
+    //       "price": 54,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1474": 11433,
+    //         "1475": {
+    //           "1719": 11435
+    //         },
+    //         "1476": 11441,
+    //         "1477": 11448
+    //       },
+    //       "selection_configurable_option": {
+    //         "11433": "",
+    //         "11434": "",
+    //         "11435": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1658,
+    //       "qty": 2,
+    //       "type_id": "simple",
+    //       "price": 36,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1731,
+    //       "qty": 1,
+    //       "price": 28,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1446": 11251,
+    //         "1447": 11254,
+    //         "1448": 11261,
+    //         "1449": 11267,
+    //         "1629": 12298
+    //       },
+    //       "selection_configurable_option": {
+    //         "12297": ""
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1747,
+    //       "qty": 1,
+    //       "price": 31,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1506": 11617,
+    //         "1507": 11620,
+    //         "1508": 11627,
+    //         "1509": 11633,
+    //         "1642": 12326
+    //       },
+    //       "selection_configurable_option": {
+    //         "12324": ""
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1747,
+    //       "qty": 2,
+    //       "price": 62,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1506": 11617,
+    //         "1507": 11620,
+    //         "1508": 11627,
+    //         "1509": 11633,
+    //         "1642": 12326
+    //       },
+    //       "selection_configurable_option": {
+    //         "12324": ""
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1731,
+    //       "qty": 2,
+    //       "price": 56,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1446": 11251,
+    //         "1447": 11254,
+    //         "1448": 11261,
+    //         "1449": 11267,
+    //         "1629": 12298
+    //       },
+    //       "selection_configurable_option": {
+    //         "12297": ""
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1700,
+    //       "qty": 1,
+    //       "price": 9,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1700,
+    //       "qty": 2,
+    //       "price": 18,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1699,
+    //       "qty": 1,
+    //       "price": 9,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1699,
+    //       "qty": 3,
+    //       "price": 27,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1708,
+    //       "qty": 1,
+    //       "price": 9.5,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1708,
+    //       "qty": 2,
+    //       "price": 19,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1708,
+    //       "qty": 4,
+    //       "price": 38,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1708,
+    //       "qty": 8,
+    //       "price": 76,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1708,
+    //       "qty": 9,
+    //       "price": 85.5,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1708,
+    //       "qty": 10,
+    //       "price": 95,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1702,
+    //       "qty": 15,
+    //       "price": 127.5,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1706,
+    //       "qty": 1,
+    //       "price": 7.5,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1706,
+    //       "qty": 2,
+    //       "price": 15,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1706,
+    //       "qty": 3,
+    //       "price": 22.5,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1703,
+    //       "qty": 1,
+    //       "price": 11,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "165": 16307
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1703,
+    //       "qty": 2,
+    //       "price": 22,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "165": 16307
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1705,
+    //       "qty": 1,
+    //       "price": 10,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1705,
+    //       "qty": 2,
+    //       "price": 20,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1705,
+    //       "qty": 3,
+    //       "price": 30,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16285
+    //       }
+    //     },
+    //     {
+    //       "product_id": 35,
+    //       "qty": 1,
+    //       "price": 135,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1599": 12180,
+    //         "1600": 12182,
+    //         "1601": 12184,
+    //         "1602": 12198,
+    //         "1603": 12212
+    //       },
+    //       "selection_configurable_option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1768,
+    //       "qty": 1,
+    //       "price": 135,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1599": {
+    //           "1644": 12180,
+    //           "1645": 12181
+    //         },
+    //         "1601": 12184,
+    //         "1602": 12198,
+    //         "1603": 12212,
+    //         "1633": 12305
+    //       },
+    //       "selection_configurable_option": {
+    //         "12305": 1645
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1697,
+    //       "qty": 1,
+    //       "price": 9,
+    //       "type_id": "configurable",
+    //       "super_attribute": {
+    //         "144": 16287
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1733,
+    //       "qty": 1,
+    //       "price": 18,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1454": 11301,
+    //         "1455": {
+    //           "1719": 11303
+    //         },
+    //         "1456": 11309,
+    //         "1457": 11316
+    //       },
+    //       "selection_configurable_option": {
+    //         "11301": "",
+    //         "11302": "",
+    //         "11303": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1733,
+    //       "qty": 2,
+    //       "price": 36,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1454": 11301,
+    //         "1455": {
+    //           "1719": 11303
+    //         },
+    //         "1456": 11309,
+    //         "1457": 11316
+    //       },
+    //       "selection_configurable_option": {
+    //         "11301": "",
+    //         "11302": "",
+    //         "11303": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1733,
+    //       "qty": 3,
+    //       "price": 54,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1454": 11301,
+    //         "1455": {
+    //           "1719": 11303
+    //         },
+    //         "1456": 11309,
+    //         "1457": 11316
+    //       },
+    //       "selection_configurable_option": {
+    //         "11301": "",
+    //         "11302": "",
+    //         "11303": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1733,
+    //       "qty": 4,
+    //       "price": 72,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1454": 11301,
+    //         "1455": {
+    //           "1719": 11303
+    //         },
+    //         "1456": 11309,
+    //         "1457": 11316
+    //       },
+    //       "selection_configurable_option": {
+    //         "11301": "",
+    //         "11302": "",
+    //         "11303": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1733,
+    //       "qty": 7,
+    //       "price": 126,
+    //       "type_id": "bundle",
+    //       "bundle_option": {
+    //         "1454": 11301,
+    //         "1455": {
+    //           "1719": 11303
+    //         },
+    //         "1456": 11309,
+    //         "1457": 11316
+    //       },
+    //       "selection_configurable_option": {
+    //         "11301": "",
+    //         "11302": "",
+    //         "11303": 1716
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1649,
+    //       "qty": 1,
+    //       "type_id": "simple",
+    //       "price": 9,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1649,
+    //       "qty": 2,
+    //       "type_id": "simple",
+    //       "price": 18,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1648,
+    //       "qty": 1,
+    //       "type_id": "simple",
+    //       "price": 9,
+    //       "option": {
+            
+    //       }
+    //     },
+    //     {
+    //       "product_id": 1648,
+    //       "qty": 1,
+    //       "type_id": "simple",
+    //       "price": 9,
+    //       "option": {
+            
+    //       }
+    //     }
+    //   ],
+    //   "coupon_code": "KFCTEST10"
+    // })
 
 
 
