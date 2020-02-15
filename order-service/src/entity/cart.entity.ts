@@ -30,7 +30,7 @@ export class CartClass extends BaseEntity {
     ]
 
     constructor() {
-        super('cart')
+        super(Constant.SET_NAME.CART)
     }
 
     public cartSchema = Joi.object().keys({
@@ -494,7 +494,7 @@ export class CartClass extends BaseEntity {
                     }
                 }
                 else {
-                    return Promise.reject("Unhandled  products")
+                    return Promise.reject(JSON.stringify(sitem))
                 }
             })
 

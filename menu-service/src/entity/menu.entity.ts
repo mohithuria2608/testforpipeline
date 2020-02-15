@@ -21,7 +21,7 @@ export class MenuClass extends BaseEntity {
         }
     ]
     constructor() {
-        super('menu')
+        super(Constant.SET_NAME.MENU)
     }
 
 

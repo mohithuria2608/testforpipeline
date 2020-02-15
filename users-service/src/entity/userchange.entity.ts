@@ -22,7 +22,7 @@ export class UserchangeEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('userchange')
+        super(Constant.SET_NAME.USERCHANGE)
     }
 
     public userchangeSchema = Joi.object().keys({

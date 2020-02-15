@@ -23,6 +23,7 @@ message IAerospike {
     optional bool reset = 3;
     optional bool get = 4;
     required string argv = 5;
+    optional string q = 7;
 }
 
 message ICms {

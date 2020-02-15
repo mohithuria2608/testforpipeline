@@ -14,7 +14,7 @@ export class SoapManagerClass {
     constructor() { }
 
     /** initializes client for soap request */
-    async initClient() {
+    async init() {
         return new Promise((resolve, reject) => {
             soap.createClient(this.baseSOAPUrl, (err, client) => {
                 if (err) { reject(err); }

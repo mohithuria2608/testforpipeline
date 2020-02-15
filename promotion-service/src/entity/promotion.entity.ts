@@ -21,7 +21,7 @@ export class PromotionClass extends BaseEntity {
         },
     ]
     constructor() {
-        super('promotion')
+        super(Constant.SET_NAME.PROMOTION)
     }
 
     public promotionSchema = Joi.object().keys({

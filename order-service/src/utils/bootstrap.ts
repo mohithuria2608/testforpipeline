@@ -8,7 +8,7 @@ export let bootstrap = async function (server) {
 
     await Aerospike.init();
 
-    await SDM.initClient()
+    await SDM.init()
 
     return
 }

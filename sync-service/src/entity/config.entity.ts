@@ -13,11 +13,17 @@ export class ConfigEntity extends BaseEntity {
             bin: 'type',
             index: 'idx_' + this.set + '_' + 'type',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'store_code',
+            index: 'idx_' + this.set + '_' + 'store_code',
+            type: "STRING"
         }
     ]
 
     constructor() {
-        super('config')
+        super(Constant.SET_NAME.CONFIG)
     }
 
     eg: {
@@ -103,12 +109,12 @@ export class ConfigEntity extends BaseEntity {
 
     /**
     * @method INTERNAL
-    * @param {string} cmsStoreRef : config id
-    * @param {string} type : config type
+    * @param {string=} store_code : store code
+    * @param {string=} type : config type
     * */
     async getConfig(payload: IConfigRequest.IFetchConfig) {
         try {
-            if (payload.type) {
+            if (payload.type && payload.type != "") {
                 let queryArg: IAerospike.Query = {
                     equal: {
                         bin: "type",
@@ -119,7 +125,22 @@ export class ConfigEntity extends BaseEntity {
                 }
                 let configData = await Aerospike.query(queryArg)
                 if (configData && configData.length > 0) {
-                    return configData[0]
+                    return configData
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
+            }
+            if (payload.store_code && payload.store_code != "") {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "store_code",
+                        value: payload.store_code
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let configData = await Aerospike.query(queryArg)
+                if (configData && configData.length > 0) {
+                    return configData
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             }

@@ -55,6 +55,11 @@ declare namespace ICommonRequest {
         createdAt: number
     }
 
+    interface IPingService {
+        set: string,
+        service: string[],
+        store_code: string
+    }
     interface ISDM {
         licenseCode: string,
         conceptID?: string,

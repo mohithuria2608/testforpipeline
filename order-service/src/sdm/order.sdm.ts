@@ -52,16 +52,17 @@ export class OrderSDMEntity extends BaseSDM {
         try {
             let data = {
                 name: "UpdateOrder",
-                req: payload
-                // {
-                //     "licenseCode": "AmericanaWeb",
-                //     "conceptID": "3",
-                //     "order": payload,
-                //     "autoApprove": "true",
-                //     "useBackupStoreIfAvailable": "true",
-                //     "creditCardPaymentbool": "false",
-                //     "menuTemplateID": "17"
-                // }
+                req:
+                //  payload
+                {
+                    "licenseCode": "AmericanaWeb",
+                    "conceptID": "3",
+                    "order": payload,
+                    "autoApprove": "true",
+                    "useBackupStoreIfAvailable": "true",
+                    "creditCardPaymentbool": "false",
+                    "menuTemplateID": "17"
+                }
             }
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOGGER,

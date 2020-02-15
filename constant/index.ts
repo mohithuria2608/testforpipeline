@@ -1,14 +1,40 @@
 
+export enum MICROSERVICE {
+    AUTH = "auth",
+    USER = "user",
+    MENU = "menu",
+    ORDER = "order",
+    PROMOTION = "promotion",
+    PAYMENT = "payment",
+    SYNC = "sync",
+    KAFKA = "kafka",
+    DEEPLINK = "deeplink",
+    HOME = "home",
+    LOG = "log",
+    NOTIFICATION = "notification",
+    UPLOAD = "upload",
+    LOCATION = "location"
+};
+
 export enum SET_NAME {
     USER = "user",
+    SESSION = "session",
+    USERCHANGE = "userchange",
     ADDRESS = "address",
+    HOME = "home",
     MENU = "menu",
     UPSELL = "upsell",
     PROMOTION = "promotion",
+    CART = "cart",
     ORDER = "order",
     CONFIG = "config",
+    COUNTRY = "country",
+    AREA = "area",
+    CITY = "city",
+    STORE = "store",
     LOGGER = "logger",
-    LOCATION = "location"
+    FAILQ = "failq",
+    PING_SERVICE = "ping-service"
 };
 
 export enum KAFKA_TOPIC {
@@ -18,7 +44,8 @@ export enum KAFKA_TOPIC {
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
     AS_UPSELL = "as_upsell",
-    AS_LOCATION = "as_location",
+
+    AS_STORE = "as_store",
 
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
@@ -30,7 +57,9 @@ export enum KAFKA_TOPIC {
 
     AS_CONFIG = 'as_config',
 
-    M_LOGGER = 'm_logger'
+    M_LOGGER = 'm_logger',
+
+    PING_SERVICE = 'ping_service',
 };
 
 export enum MIDDLEWARE {
@@ -72,6 +101,10 @@ export const SERVER = {
 };
 
 export const DATABASE = {
+    STORE_CODE: {
+        KSA_STORE: "ksa_store"
+    },
+
     BRAND: {
         KFC: 'KFC',
         PH: 'PH'
@@ -209,6 +242,12 @@ export const DATABASE = {
                     CREATE: 5,
                     UPDATE: 5,
                 }
+            },
+            CONFIG: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
             }
         }
     },
@@ -247,6 +286,7 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             SDM_REQUEST: "SDM_REQUEST",
+            FAIL_Q: "FAIL_Q",
             REQUEST: "REQUEST",
             ERROR: "ERROR",
             INFO: "INFO",

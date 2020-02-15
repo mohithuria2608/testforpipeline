@@ -9,7 +9,7 @@ import { OrderSDME } from '../sdm';
 
 export class OrderClass extends BaseEntity {
     constructor() {
-        super('order')
+        super(Constant.SET_NAME.ORDER)
     }
     /**
     * @method INTERNAL
@@ -614,7 +614,7 @@ export class OrderClass extends BaseEntity {
                          * @step 1 : update mongo order status wrt to sdmOrder status
                          */
                         if (sdmOrder && sdmOrder.OrderID &&
-                             ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus))) {
+                            ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus))) {
                             if (Constant.DATABASE.STATUS.ORDER.PENDING.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
                                 consolelog(process.cwd(), "STATE : 1", sdmOrder.Status, true)
                                 if (sdmOrder.Status == 96 && order.payment && order.payment.status == "AUTHORIZATION" && (order.paymentMethodAddedOnSdm == 0)) {

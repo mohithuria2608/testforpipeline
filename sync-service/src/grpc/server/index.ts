@@ -28,13 +28,13 @@ server.addService(syncProto.SyncService.service, {
             callback(grpcSendError(error))
         }
     },
-    getConfig: async (call: IConfigGrpcRequest.IGetConfigReq, callback) => {
+    fetchConfig: async (call: IConfigGrpcRequest.IFetchConfigReq, callback) => {
         try {
-            consolelog(process.cwd(), "getConfig", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "fetchConfig", JSON.stringify(call.request), true)
             let res = await cmsConfigController.getConfig(call.request)
-            callback(null, res)
+            callback(null, { config: JSON.stringify(res) })
         } catch (error) {
-            consolelog(process.cwd(), "getConfig", JSON.stringify(error), false)
+            consolelog(process.cwd(), "fetchConfig", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

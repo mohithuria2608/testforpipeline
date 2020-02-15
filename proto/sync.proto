@@ -1,7 +1,17 @@
 syntax = "proto3";
 
 service SyncService {
+    rpc FetchConfig (IFetchConfigReq) returns (IFetchConfigRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
+}
+
+message IFetchConfigReq {
+    optional string store_code = 1;
+    optional string type = 2;
+}
+
+message IFetchConfigRes {
+    required string config = 1;
 }
 
 message IKafkaReq {
@@ -11,6 +21,7 @@ message IKafkaReq {
     optional ISdm sdm = 4;
     optional IMdb mdb = 5;
     required int32 count = 6;
+    optional string q = 7;
 }
 
 message IAerospike {
@@ -46,5 +57,5 @@ message IMdb {
 }
 
 message IKafkaRes {
-    required string data = 1;
+    optional string data = 1;
 }

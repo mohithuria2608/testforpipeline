@@ -11,6 +11,7 @@ declare namespace IKafkaRequest {
         sdm?: IChangeSDM,
         mdb?: IChangeMongo
         count?: number,
+        q?: string
     }
 
     interface IChangeAerospike {

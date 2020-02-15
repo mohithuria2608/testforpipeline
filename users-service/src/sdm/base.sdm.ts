@@ -23,7 +23,7 @@ export class BaseSDM {
     }
 
     /** initializes client for soap request */
-    async initClient() {
+    async init() {
         try {
             if (!BaseSDM.client) {
                 let soapC = await this.soap.createClientAsync(this.baseSOAPUrl)

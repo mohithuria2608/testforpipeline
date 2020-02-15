@@ -6,7 +6,7 @@ import { consolelog } from '../utils'
 
 export class PromotionEntity extends BaseEntity {
     constructor() {
-        super('promotion')
+        super(Constant.SET_NAME.PROMOTION)
     }
 }
 

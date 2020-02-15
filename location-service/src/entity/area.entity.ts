@@ -1,5 +1,6 @@
 'use strict';
 import * as Joi from '@hapi/joi';
+import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
@@ -20,7 +21,7 @@ export class AreaEntity extends BaseEntity {
         }
     ]
     constructor() {
-        super('area')
+        super(Constant.SET_NAME.AREA)
     }
 
     public areaSchema = Joi.object().keys({

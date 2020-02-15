@@ -44,7 +44,7 @@ export class UpsellClass extends BaseEntity {
     })
 
     constructor() {
-        super('upsell')
+        super(Constant.SET_NAME.UPSELL)
     }
     /**
      * @method BOOTSTRAP

@@ -25,7 +25,7 @@ export class UserEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('user')
+        super(Constant.SET_NAME.USER)
     }
 
     public userSchema = Joi.object().keys({

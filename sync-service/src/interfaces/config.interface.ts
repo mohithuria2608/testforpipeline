@@ -1,6 +1,7 @@
 declare namespace IConfigRequest {
 
     interface IFetchConfig {
-        type?: string
+        type?: string,
+        store_code?: string
     }
 }

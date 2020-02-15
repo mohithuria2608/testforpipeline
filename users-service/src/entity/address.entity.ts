@@ -5,11 +5,10 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 import * as SDM from '../sdm';
-import { parse } from 'path';
 
 export class AddressEntity extends BaseEntity {
     constructor() {
-        super('address')
+        super(Constant.SET_NAME.ADDRESS)
     }
 
     public subSddressSchema = Joi.object().keys({
@@ -217,7 +216,7 @@ export class AddressEntity extends BaseEntity {
                 language: "En",
                 customerRegistrationID: 7694143,
                 address: {
-                    ADDR_AREAID: 16,
+                    ADDR_AREAID: 1786,//16,
                     ADDR_BLDGNAME: addressData.bldgName, //"Al Quoz Comm",
                     ADDR_BLDGNUM: addressData.bldgName,
                     ADDR_CITYID: 17,
@@ -251,7 +250,7 @@ export class AddressEntity extends BaseEntity {
                             PHONE_TYPE: 2,
                         }
                     },
-                    WADDR_AREAID: 16,
+                    WADDR_AREAID:1786,// 16,
                     WADDR_BUILD_NAME: addressData.bldgName,
                     WADDR_BUILD_NUM: addressData.bldgName,
                     WADDR_BUILD_TYPE: -1,

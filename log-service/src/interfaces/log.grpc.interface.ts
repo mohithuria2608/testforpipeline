@@ -10,6 +10,7 @@ declare namespace ILogGrpcRequest {
         sdm?: IChangeSDM
         mdb?: IChangeMongo
         count?: number,
+        q?: string
     }
     interface IChangeAerospike {
         create?: boolean,
