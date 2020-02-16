@@ -114,7 +114,7 @@ export class MiscController {
             return {}
         } catch (error) {
             consolelog(process.cwd(), "pingService", JSON.stringify(error), false)
-            return Promise.reject(error)
+            return {}
         }
     }
 }

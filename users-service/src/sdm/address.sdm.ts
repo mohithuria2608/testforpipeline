@@ -27,7 +27,7 @@ export class AddressSDMEntity extends BaseSDM {
                 return {}
             }
         } catch (error) {
-            consolelog(process.cwd(), 'createAddress', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'createAddress', error, false)
             return (error)
         }
     }

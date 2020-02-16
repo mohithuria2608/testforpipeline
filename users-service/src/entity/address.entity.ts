@@ -93,7 +93,7 @@ export class AddressEntity extends BaseEntity {
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
             let sdmAddress = {}
-            if (userData && userData.phnNo && userData.phnNo != "")
+            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                 sdmAddress = await this.addAddressOnSdm(userData, bin, addressData, store)
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let deliveryAddress = {
@@ -250,7 +250,7 @@ export class AddressEntity extends BaseEntity {
                             PHONE_TYPE: 2,
                         }
                     },
-                    WADDR_AREAID:1786,// 16,
+                    WADDR_AREAID: 1786,// 16,
                     WADDR_BUILD_NAME: addressData.bldgName,
                     WADDR_BUILD_NUM: addressData.bldgName,
                     WADDR_BUILD_TYPE: -1,

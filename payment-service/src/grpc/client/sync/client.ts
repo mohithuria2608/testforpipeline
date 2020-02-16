@@ -29,10 +29,10 @@ export class SyncService {
                 await syncServiceValidator.fetchConfigValidator(payload)
                 this.syncClient.fetchConfig({ store_code: payload.store_code }, (error, res) => {
                     if (!error) {
-                        consolelog(process.cwd(), "successfully fetched store", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully fetched config", JSON.stringify(res), false)
                         resolve(res.config)
                     } else {
-                        consolelog(process.cwd(), "Error in fetched store", JSON.stringify(error), false)
+                        consolelog(process.cwd(), "Error in fetched config", JSON.stringify(error), false)
                         reject(error)
                     }
                 })
