@@ -182,7 +182,7 @@ export class UserController {
             )
             if (userchange[0].address && userchange[0].address.id) {
                 await addressController.syncOldAddress(userData, {
-                    addressId: userchange[0].id,
+                    addressId: userchange[0].address.id,
                     sdmStoreRef: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.sdmStoreRef : undefined,
                     lat: userchange[0].address.lat,
                     lng: userchange[0].address.lng,
@@ -191,6 +191,7 @@ export class UserController {
                     flatNum: userchange[0].address.flatNum,
                     tag: userchange[0].address.tag
                 });
+                Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
             }
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, payload.isGuest) }
         } catch (error) {
