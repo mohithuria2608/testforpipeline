@@ -4,6 +4,7 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
+import { notificationService } from '../grpc/client';
 
 export class UserchangeEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -184,6 +185,15 @@ export class UserchangeEntity extends BaseEntity {
             if (payload.address)
                 dataToUpdateUserchange['address'] = payload.address
 
+
+            if (payload.otp && payload.otpExpAt && payload.otpVerified == 0) {
+                notificationService.sendSms({
+                    message: payload.otp.toString(),
+                    destination: payload.fullPhnNo.replace("+", ""),
+                    type: 0,
+                    dlr: 0,
+                })
+            }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,
                 set: this.set,

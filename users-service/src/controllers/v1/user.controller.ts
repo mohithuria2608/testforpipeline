@@ -2,7 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
-import { kafkaService } from '../../grpc/client';
+import { kafkaService, notificationService } from '../../grpc/client';
 import { addressController } from '../../controllers';
 
 export class UserController {
