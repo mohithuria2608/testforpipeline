@@ -1,131 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
-    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
-    xmlns:tns="http://tempuri.org/" 
-    xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
-    xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
-    <soap:Body>
-        <UpdateOrder xmlns="http://tempuri.org/">
-            <licenseCode>AmericanaWeb</licenseCode>
-            <language>en</language>
-            <conceptID>3</conceptID>
-            <order>
-                <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10512428</q247:AddressID>
-                <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
-                <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
-                <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7694206</q247:CustomerID>
-                <q247:DeliveryChargeID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">279</q247:DeliveryChargeID>
-                <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
-                <q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:ItemID>710001</q247:ItemID>
-                        <q247:Level>0</q247:Level>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Cheese Cake</q247:Name>
-                        <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                        <q247:Price>9.5</q247:Price>
-                        <q247:Status>NOTAPPLIED</q247:Status>
-                    </q247:CEntry>
-                </q247:Entries>
-                <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
-                <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:OrderMode>
-                <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
-                <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-                <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
-            </order>
-            <autoApprove>true</autoApprove>
-            <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
-            <orderNotes1>Test order notes 1</orderNotes1>
-            <orderNotes2>Test order notes 2</orderNotes2>
-            <creditCardPaymentbool>true</creditCardPaymentbool>
-            <isSuspended>true</isSuspended>
-            <menuTemplateID>17</menuTemplateID>
-        </UpdateOrder>
-    </soap:Body>
-</soap:Envelope>
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:tns="http://tempuri.org/" xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy"><soap:Body><UpdateOrder xmlns="http://tempuri.org/"><licenseCode>AmericanaWeb</licenseCode><language>en</language><conceptID>3</conceptID><order><q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10512428</q247:AddressID><q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID><q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID><q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7694206</q247:CustomerID><q247:DeliveryChargeID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">279</q247:DeliveryChargeID><q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID><q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK"><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry><q247:CEntry><q247:ItemID>710001</q247:ItemID><q247:Level>0</q247:Level><q247:ModCode>NONE</q247:ModCode><q247:Name>Cheese Cake</q247:Name><q247:OrdrMode>OM_SAVED</q247:OrdrMode><q247:Price>9.5</q247:Price><q247:Status>NOTAPPLIED</q247:Status></q247:CEntry></q247:Entries><q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID><q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:OrderMode><q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType><q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID><q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID></order><autoApprove>true</autoApprove><useBackupStoreIfAvailable>true</useBackupStoreIfAvailable><orderNotes1>Test order notes 1</orderNotes1><orderNotes2>Test order notes 2</orderNotes2><creditCardPaymentbool>true</creditCardPaymentbool><isSuspended>true</isSuspended><menuTemplateID>17</menuTemplateID></UpdateOrder></soap:Body></soap:Envelope>
 
 
-39785887
+order id : 
+
+39785893
+
+
+
+req : 
+
+<?xml version="1.0" encoding="utf-8"?><soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:tns="http://tempuri.org/" xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy"><soap:Body><ProcessCreditCardPayment xmlns="http://tempuri.org/"><licenseCode>AmericanaWeb</licenseCode><conceptID>3</conceptID><language>En</language><orderID>39785893</orderID><paymentType>2</paymentType><paymentSubType>1</paymentSubType><paymentTenderID>34</paymentTenderID><amount>3.0</amount><holderName>Test payment user</holderName><cardNumber>400000xxxxxx0002</cardNumber><cardCCV>123</cardCCV><cardExpire>2034</cardExpire><refNumber>5819387207606832304010</refNumber><refCountry>US</refCountry><refGateway>noonpay</refGateway></ProcessCreditCardPayment></soap:Body></soap:Envelope>
+
+
+res : 
+
+
+{"ProcessCreditCardPaymentResult":true,"SDKResult":{"ExternalCode":"0","ResultCode":"Success","ResultText":null}}

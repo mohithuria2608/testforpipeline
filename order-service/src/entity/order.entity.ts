@@ -574,8 +574,12 @@ export class OrderClass extends BaseEntity {
                         /**
                          * @step 1 : update mongo order status wrt to sdmOrder status
                          */
-                        if (sdmOrder && sdmOrder.OrderID &&
-                            ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus))) {
+                        if (
+                            sdmOrder && sdmOrder.OrderID &&
+                            (
+                                (parseInt(sdmOrder.Status) > order.sdmOrderStatus) ||
+                                (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus)
+                            )) {
                             if (Constant.DATABASE.STATUS.ORDER.PENDING.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
                                 consolelog(process.cwd(), "STATE : 1", sdmOrder.Status, true)
                                 if (sdmOrder.Status == 96 && order.payment && order.payment.status == "AUTHORIZATION" && (order.paymentMethodAddedOnSdm == 0)) {
@@ -609,7 +613,7 @@ export class OrderClass extends BaseEntity {
                             }
                             else if (Constant.DATABASE.STATUS.ORDER.CONFIRMED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
                                 consolelog(process.cwd(), "STATE : 5", sdmOrder.Status, true)
-                                if (order.payment.status == "AUTHORIZATION") {
+                                if (order.payment.paymentMethodId != 0 && order.payment.status == "AUTHORIZATION") {
                                     consolelog(process.cwd(), "STATE : 6", sdmOrder.Status, true)
                                     order = await this.updateOneEntityMdb({ _id: order._id }, {
                                         status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
@@ -636,6 +640,12 @@ export class OrderClass extends BaseEntity {
                                         },
                                         updatedAt: new Date().getTime()
                                     })
+                                } else if (order.payment.paymentMethodId == 0) {
+                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                        status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                        updatedAt: new Date().getTime(),
+                                        sdmOrderStatus: sdmOrder.Status
+                                    }, { new: true })
                                 }
                             }
                             else if (Constant.DATABASE.STATUS.ORDER.READY.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
