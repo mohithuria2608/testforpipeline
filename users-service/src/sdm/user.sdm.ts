@@ -39,7 +39,7 @@ export class UserSDMEntity extends BaseSDM {
                         WCUST_LASTNAME: payload.name,
                         WCUST_STATUS: 4, //2 means : active but not verified /// 4 means verified
                     },
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -63,7 +63,7 @@ export class UserSDMEntity extends BaseSDM {
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -88,7 +88,7 @@ export class UserSDMEntity extends BaseSDM {
                     language: "En",
                     customerUserName: payload.customerUserName,
                     customerPassword: payload.customerPassword,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -112,7 +112,7 @@ export class UserSDMEntity extends BaseSDM {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     email: payload.email,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -135,7 +135,7 @@ export class UserSDMEntity extends BaseSDM {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     email: payload.email,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -158,7 +158,7 @@ export class UserSDMEntity extends BaseSDM {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     customerID: payload.customerID,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -181,7 +181,7 @@ export class UserSDMEntity extends BaseSDM {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     mobileNo: payload.mobileNo,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -207,7 +207,7 @@ export class UserSDMEntity extends BaseSDM {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     phoneNo: payload.phoneNo,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)

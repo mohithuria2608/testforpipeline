@@ -23,7 +23,7 @@ export class OrderSDMEntity extends BaseSDM {
                 req: payload
                 // {
                 //     "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
-                //     "conceptID": "3",
+                // conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 //     "order": payload,
                 //     "autoApprove": "true",
                 //     "useBackupStoreIfAvailable": "true",
@@ -91,7 +91,7 @@ export class OrderSDMEntity extends BaseSDM {
                 name: "GetOrderDetails",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     language: "En",
                     orderID: payload.sdmOrderRef,
                     menuTemplateID: "17"
@@ -114,7 +114,7 @@ export class OrderSDMEntity extends BaseSDM {
                 name: "ProcessCreditCardPayment",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    conceptID: "3",
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     language: "En",
                     orderID: payload.sdmOrderRef,
                     paymentType: 2,
