@@ -13,7 +13,7 @@
         "ruleName": "Flat 10 % off on a minimum purchase of 10 AED",
         "shortDesc": "",
         "activeFlag": 1,
-        "posId": 793,
+        "posId": 7193,
         "maxDiscountAmt": 0,
         "isVisible": 1,
         "temsAndConds": "<html>  <head>  </head> <body> <p style='padding-left: 30px; text-align: left;'>Promo Code : KFCTEST10</p><p style='padding-left: 30px; text-align: left;'>Flat 10 % off on a minimum purchase of 10 AED</p><p style='padding-left: 30px; text-align: left;'>Max of 10% discount is applicable</p><p style='padding-left: 30px; text-align: left;'>Offer valid on all items</p><p style='padding-left: 30px; text-align: left;'>Offer valid on delivery and pick up</p><p style='padding-left: 30px; text-align: left;'>Offer valid till 29th Feb 2020</p></body> </html>"

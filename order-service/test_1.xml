@@ -1,82 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
-    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
-    xmlns:tns="http://tempuri.org/" 
-    xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
-    xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
-    <soap:Body>
-        <UpdateOrder xmlns="http://tempuri.org/">
-            <licenseCode>AmericanaWeb</licenseCode>
-            <language>en</language>
-            <conceptID>3</conceptID>
-            <order>
-                <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:AddressID>
-                <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
-                <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
-                <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:CustomerID>
-                <q247:DeliveryChargeID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">279</q247:DeliveryChargeID>
-                <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
-                <q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>310001</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Dinner Meal - Original</q247:Name>
-                        <q247:QCComponent>1</q247:QCComponent>
-                        <q247:QCInstanceID>181</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>39</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>510001</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Coleslaw Salad Small</q247:Name>
-                        <q247:QCComponent>2</q247:QCComponent>
-                        <q247:QCInstanceID>181</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>39</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>510050</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Medium Fries</q247:Name>
-                        <q247:QCComponent>3</q247:QCComponent>
-                        <q247:QCInstanceID>181</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>39</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>600003</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Pepsi Medium</q247:Name>
-                        <q247:QCComponent>4</q247:QCComponent>
-                        <q247:QCInstanceID>181</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>39</q247:QCProID>
-                    </q247:CEntry>
-                </q247:Entries>
-                <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
-                <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:OrderMode>
-                <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
-                <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-                <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
-            </order>
-            <autoApprove>true</autoApprove>
-            <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
-            <orderNotes1>Test order notes 1</orderNotes1>
-            <orderNotes2>Test order notes 2</orderNotes2>
-            <creditCardPaymentbool>false</creditCardPaymentbool>
-            <isSuspended>false</isSuspended>
-            <menuTemplateID>17</menuTemplateID>
-        </UpdateOrder>
-    </soap:Body>
-</soap:Envelope>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:tem="http://tempuri.org/" 
+    xmlns:sdm="http://schemas.datacontract.org/2004/07/SDM_SDK" 
+    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" 
+    xmlns:psor="PSOrderingDOM.Classes" 
+    xmlns:sys="http://schemas.datacontract.org/2004/07/System.Drawing">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <tem:UpdateOrder>
+            <tem:licenseCode>AmericanaWeb</tem:licenseCode>
+            <tem:conceptID>3</tem:conceptID>
+            <tem:order>
+                <sdm:AddressID>10512394</sdm:AddressID>
+                <sdm:Comps>
+                    <arr:KeyValueOfdecimalCCompkckD9yn_P>
+                        <arr:Key>7193</arr:Key>
+                        <arr:Value>
+                            <psor:Amount>10</psor:Amount>
+                            <psor:EnterAmount>10</psor:EnterAmount>
+                            <psor:Name>KFCTEST10</psor:Name>
+                        </arr:Value>
+                    </arr:KeyValueOfdecimalCCompkckD9yn_P>
+                </sdm:Comps>
+                <sdm:ConceptID>3</sdm:ConceptID>
+                <sdm:CountryID>1</sdm:CountryID>
+                <sdm:CustomerID>7694196</sdm:CustomerID>
+                <sdm:DeliveryChargeID>279</sdm:DeliveryChargeID>
+                <sdm:DistrictID>-1</sdm:DistrictID>
+                <!--for future order need to pass delivery time with slot with order type as 1-->
+                <!--<sdm:DueTime>2020-02-17T00:07:49</sdm:DueTime>-->
+                <sdm:Entries>
+
+                    <sdm:CEntry>
+                        <sdm:DealID>0</sdm:DealID>
+                        <sdm:ID>0</sdm:ID>
+                        <sdm:ItemID>600003</sdm:ItemID>
+                        <sdm:ModCode>NONE</sdm:ModCode>
+                        <sdm:Name>Pepsi Medium</sdm:Name>
+                    </sdm:CEntry>
+                    <sdm:CEntry>
+                        <sdm:DealID>0</sdm:DealID>
+                        <sdm:ID>0</sdm:ID>
+                        <sdm:ItemID>600003</sdm:ItemID>
+                        <sdm:ModCode>NONE</sdm:ModCode>
+                        <sdm:Name>Pepsi Medium</sdm:Name>
+                    </sdm:CEntry>
+                    <sdm:CEntry>
+                        <sdm:DealID>0</sdm:DealID>
+                        <sdm:ID>0</sdm:ID>
+                        <sdm:ItemID>600003</sdm:ItemID>
+                        <sdm:ModCode>NONE</sdm:ModCode>
+                        <sdm:Name>Pepsi Medium</sdm:Name>
+                    </sdm:CEntry>
+                </sdm:Entries>
+                <sdm:OrderID>0</sdm:OrderID>
+                <sdm:OrderMode>1</sdm:OrderMode>
+                <sdm:OrderType>0</sdm:OrderType>
+                <sdm:ProvinceID>7</sdm:ProvinceID>
+                <sdm:StreetID>315</sdm:StreetID>
+            </tem:order>
+            <tem:autoApprove>1</tem:autoApprove>
+            <tem:useBackupStoreIfAvailable>1</tem:useBackupStoreIfAvailable>
+            <tem:orderNotes1>Test</tem:orderNotes1>
+            <tem:orderNotes2>Orders</tem:orderNotes2>
+            <tem:creditCardPaymentbool>false</tem:creditCardPaymentbool>
+            <tem:isSuspended>0</tem:isSuspended>
+            <tem:menuTemplateID>17</tem:menuTemplateID>
+        </tem:UpdateOrder>
+    </soapenv:Body>
+</soapenv:Envelope>

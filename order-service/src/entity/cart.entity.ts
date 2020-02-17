@@ -564,7 +564,9 @@ export class CartClass extends BaseEntity {
                 sequence: 1,
                 action: "add"
             })
-            if (cmsCart.discount_amount != 0 && cmsCart.coupon_code && cmsCart.coupon_code != "") {
+            if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
+                if (cmsCart.coupon_code == "FREEDELIVERY")
+                    cmsCart.discount_amount = 6.5
                 amount.push({
                     type: "DISCOUNT",
                     name: "Discount",
@@ -606,6 +608,8 @@ export class CartClass extends BaseEntity {
             }
             if (cmsCart.grandtotal > 0) {
                 delivery.amount = 6.5
+                // if (cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY")
+                //     delivery.amount = 0
             }
             amount.push(delivery)
 
@@ -613,7 +617,7 @@ export class CartClass extends BaseEntity {
                 type: "TOTAL",
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal + delivery.amount,
+                amount: cmsCart.grandtotal + delivery.amount - ((cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY") ? 6.5 : 0),
                 sequence: 5,
                 action: "add"
             })
