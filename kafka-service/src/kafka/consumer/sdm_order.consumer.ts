@@ -30,11 +30,6 @@ class SdmOrderStatusConsumer extends BaseConsumer {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
             }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
-            }
             else
                 kafkaController.produceToFailureTopic(message)
             return {}

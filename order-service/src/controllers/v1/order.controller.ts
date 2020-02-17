@@ -102,28 +102,20 @@ export class OrderController {
                     items: payload.items
                 }
                 let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload)
-                console.log("cmsReq", typeof cmsReq, JSON.stringify(cmsReq))
-
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
 
                 let cartData: ICartRequest.ICartData
                 if (cmsOrder && cmsOrder['order_id']) {
                     cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-                    console.log("cartData22222222222", typeof cartData, JSON.stringify(cartData))
                     cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
                     cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
-                    console.log("cartData", typeof cartData, JSON.stringify(cartData))
-
                     cartData['promo'] = promo
                     return { cartValidate: cartData }
                 }
-                console.log("cartData.amount", typeof cartData.amount, JSON.stringify(cartData.amount))
-
                 cartData['orderType'] = payload.orderType
                 order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
             }
-            console.log("amount", typeof order.amount, JSON.stringify(order.amount))
 
             let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
             if (payload.paymentMethodId != 0) {

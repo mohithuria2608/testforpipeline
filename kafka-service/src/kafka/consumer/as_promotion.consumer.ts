@@ -22,18 +22,17 @@ class AsPromotionConsumer extends BaseConsumer {
     /** consumes the message and creates promotion on the promotion service */
     private async syncPromotion(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await promotionService.sync(message)
-            return res
+            if (message.count >= 0) {
+                let res = await promotionService.sync(message)
+                return res
+            }
+            else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "syncPromotion", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
-            }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

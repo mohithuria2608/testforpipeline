@@ -142,7 +142,7 @@ export class KafkaController {
                             if (payload.sdm.create)
                                 payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
                             else if (payload.sdm.get)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.GET
+                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.TOTAL_RETRY.GET
                         }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
                         messages['q'] = topic
