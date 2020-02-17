@@ -646,6 +646,14 @@ export class OrderClass extends BaseEntity {
                                         updatedAt: new Date().getTime(),
                                         sdmOrderStatus: sdmOrder.Status
                                     }, { new: true })
+
+                                    setTimeout(async () => {
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                            status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            sdmOrderStatus: sdmOrder.Status
+                                        }, { new: true })
+                                    }, 10000)
                                 }
                             }
                             else if (Constant.DATABASE.STATUS.ORDER.READY.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
