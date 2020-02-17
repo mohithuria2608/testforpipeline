@@ -62,7 +62,7 @@ declare namespace ICommonRequest {
     }
     interface ISDM {
         licenseCode: string,
-        conceptID?: string,
+        conceptID?: number,
         language: string,
     }
 }
