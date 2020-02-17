@@ -120,7 +120,7 @@ export class OrderSDMEntity extends BaseSDM {
                     paymentType: 2,
                     paymentSubType: 1,
                     paymentTenderID: 34,
-                    amount: "3.0",// payload.transaction.amount,
+                    amount: payload.transaction.amount,
                     holderName: "Test payment user",
                     cardNumber: payload.transaction.paymentDetails.paymentInfo,
                     cardCCV: "123",
