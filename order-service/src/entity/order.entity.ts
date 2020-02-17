@@ -649,7 +649,7 @@ export class OrderClass extends BaseEntity {
 
                                     setTimeout(async () => {
                                         order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                            status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                            status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
                                             updatedAt: new Date().getTime(),
                                             sdmOrderStatus: sdmOrder.Status
                                         }, { new: true })
