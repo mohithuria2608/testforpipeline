@@ -421,7 +421,7 @@ export class UserController {
                 dataToUpdate['name'] = payload.name
             if (payload.email)
                 dataToUpdate['email'] = payload.email
-            if (payload.cCode && payload.phnNo) {
+            if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
                 const fullPhnNo = payload.cCode + payload.phnNo;
                 const username = headers.brand + "_" + fullPhnNo;
                 let userchangePayload = {
