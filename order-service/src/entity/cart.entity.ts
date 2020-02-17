@@ -321,11 +321,11 @@ export class CartClass extends BaseEntity {
                             type_id: sitem['originalTypeId']
                         })
                     } else {
+                        let subPrice = 0
                         let product = {};
                         product['product_id'] = sitem['id']
                         product['qty'] = sitem['qty']
                         product['type_id'] = sitem['originalTypeId']
-                        product['price'] = sitem['sellingPrice']
                         let option = {}
                         if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
                             sitem['bundleProductOptions'].forEach(bpo => {
@@ -336,6 +336,7 @@ export class CartClass extends BaseEntity {
                                                 pl['subOptions'].map(so => {
                                                     if (so['selected'] == 1) {
                                                         option[pl['id']] = so['id']
+                                                        subPrice = subPrice + so['price']
                                                         cart.push({
                                                             product_id: so['product_id'],
                                                             qty: sitem['qty'],
@@ -351,6 +352,7 @@ export class CartClass extends BaseEntity {
                                 }
                             })
                         }
+                        product['price'] = sitem['sellingPrice'] - subPrice
                         product['option'] = option
                         cart.push(product)
                     }
