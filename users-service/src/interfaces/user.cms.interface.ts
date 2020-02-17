@@ -7,8 +7,8 @@ declare namespace IUserCMSRequest {
         email: string
         phone: string
         websiteId: string
-        firstname: string
-        lastname: string
+        firstName: string
+        lastName: string
         password: string
     }
 
@@ -20,5 +20,12 @@ declare namespace IUserCMSRequest {
         firstName?: string,
         lastName?: string,
         alternatePhone?: string
+    }
+
+    interface IGetUser {
+        // websiteId: string,
+        cmsUserRef?: number,
+        email?: string,
+        fullPhnNo?: string,
     }
 }

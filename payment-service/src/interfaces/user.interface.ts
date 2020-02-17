@@ -3,6 +3,7 @@ declare namespace IUserRequest {
     interface IUserData {
         id: string,
         sdmUserRef: number,
+        sdmCorpRef: number,
         cmsUserRef: number,
         // isGuest: number,
         name: string,

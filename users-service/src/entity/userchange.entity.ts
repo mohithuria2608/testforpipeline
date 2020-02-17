@@ -36,6 +36,7 @@ export class UserchangeEntity extends BaseEntity {
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
         sdmUserRef: Joi.number().required(),
+        sdmCorpRef: Joi.number().required(),
         cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
         name: Joi.string().trim().required(),

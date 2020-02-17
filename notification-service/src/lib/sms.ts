@@ -15,7 +15,8 @@ export class SmsCLass {
 
     singleSms(payload: ISmsRequest.ISingleSms) {
         try {
-            let url = `http://${this.host}:${this.port}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=${payload.type}&dlr=${payload.dlr}&destination=${payload.destination}&source=${this.source}&message=${payload.message}`
+            // https://sms.rmlconnect.net/bulksms/bulksms?dlr=1&destination=971503934048&message=06450631062D0628062700200645062706460648062C&username=Adigital&password=vSqKeZdc&source=KFC&type=2
+            let url = `http://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=${payload.type}&dlr=${payload.dlr}&destination=${payload.destination}&source=${this.source}&message=${payload.message}`
             let command = `curl -X GET ${url}`
             consolelog(process.cwd(), 'singleSms command:', command, true)
 

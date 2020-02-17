@@ -10,6 +10,7 @@ declare namespace IUserRequest {
         cCode?: string,
         phnNo?: string,
         sdmUserRef?: number,
+        sdmCorpRef?: number,
         cmsUserRef?: number,
         phnVerified?: number,
         emailVerified?: number,

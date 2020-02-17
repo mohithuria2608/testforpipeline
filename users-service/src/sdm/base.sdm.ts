@@ -7,7 +7,7 @@ export class BaseSDM {
     protected soap = require('soap');
     private baseSOAPUrl = 'https://sdkuatuae.americana.com.sa:1995/?wsdl';
     private static client;
-    private licenseCode = "AmericanaWeb"
+    private licenseCode = Constant.SERVER.SDM.LICENSE_CODE
     private conceptID = 3;
     static obj;
 

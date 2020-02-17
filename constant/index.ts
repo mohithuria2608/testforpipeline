@@ -82,6 +82,11 @@ export const SERVER = {
         INSTA_LINK: "",
         APP_ADDRESS: ""
     },
+    SDM: {
+        LICENSE_CODE: "AmericanaWeb",
+        CONCEPT_ID: 3,
+        MENU_TEMPLATE_ID: 17
+    },
     DEFAULT_USER_NAME: 'App User',
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
@@ -148,6 +153,10 @@ export const DATABASE = {
             UPDATE_USER: {
                 METHOD: "POST",
                 URL: "updateuser"
+            },
+            GET_USER: {
+                METHOD: "POST",
+                URL: "getuser"
             },
             CREATE_CART: {
                 METHOD: "POST",

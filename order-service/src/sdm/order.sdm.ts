@@ -13,38 +13,6 @@ export class OrderSDMEntity extends BaseSDM {
         super()
     }
 
-    // {
-    //     "CEntry": [
-    //         {
-    //             "ItemID": "110002",
-    //             "Level": "0",
-    //             "ModCode": "NONE",
-    //             "Name": "Kids Chicken Meal",
-    //             "OrdrMode": "OM_SAVED",
-    //             "Price": "13",
-    //             "Status": "NOTAPPLIED"
-    //         },
-    //         {
-    //             "ItemID": "110002",
-    //             "Level": "0",
-    //             "ModCode": "NONE",
-    //             "Name": "Kids Chicken Meal",
-    //             "OrdrMode": "OM_SAVED",
-    //             "Price": "13",
-    //             "Status": "NOTAPPLIED"
-    //         },
-    //         {
-    //             "ItemID": "110002",
-    //             "Level": "0",
-    //             "ModCode": "NONE",
-    //             "Name": "Kids Chicken Meal",
-    //             "OrdrMode": "OM_SAVED",
-    //             "Price": "13",
-    //             "Status": "NOTAPPLIED"
-    //         }
-    //     ]
-    // }
-
     /**
     * @method SDK
     * */
@@ -52,17 +20,16 @@ export class OrderSDMEntity extends BaseSDM {
         try {
             let data = {
                 name: "UpdateOrder",
-                req:
-                //  payload
-                {
-                    "licenseCode": "AmericanaWeb",
-                    "conceptID": "3",
-                    "order": payload,
-                    "autoApprove": "true",
-                    "useBackupStoreIfAvailable": "true",
-                    "creditCardPaymentbool": "false",
-                    "menuTemplateID": "17"
-                }
+                req: payload
+                // {
+                //     "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
+                //     "conceptID": "3",
+                //     "order": payload,
+                //     "autoApprove": "true",
+                //     "useBackupStoreIfAvailable": "true",
+                //     "creditCardPaymentbool": "false",
+                //     "menuTemplateID": "17"
+                // }
             }
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOGGER,
@@ -123,7 +90,7 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "GetOrderDetails",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     conceptID: "3",
                     language: "En",
                     orderID: payload.sdmOrderRef,
@@ -146,7 +113,7 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "ProcessCreditCardPayment",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     conceptID: "3",
                     language: "En",
                     orderID: payload.sdmOrderRef,

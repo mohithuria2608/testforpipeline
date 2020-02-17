@@ -14,37 +14,41 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async createCustomer(payload: IUserRequest.IUserData) {
+    async createCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     customer: {
                         CUST_CLASSID: -1,
-                        CUST_EMAIL: payload.email,// "nkhan1000@mailinator.com",
-                        CUST_FIRSTNAME: payload.name,// "nusrattest",
-                        CUST_LASTNAME: payload.name,// "user",
+                        CUST_EMAIL: payload.email,
+                        CUST_FIRSTNAME: payload.name,
+                        CUST_LASTNAME: payload.name,
                         CUST_NATID: -1,
-                        CUST_NOTIFICATION_MOBILE: (payload.cCode + payload.phnNo).replace('+', ''),// 525454090,
-                        CUST_PHONEAREACODE:payload.cCode.replace('+', ''),//52
-                        CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),// 525454090,
-                        CUST_PHONENUMBER: payload.phnNo,// 5454090,
+                        CUST_NOTIFICATION_MOBILE: (payload.cCode + payload.phnNo).replace('+', ''),
+                        CUST_PHONEAREACODE: payload.cCode.replace('+', ''),//52
+                        CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),
+                        CUST_PHONENUMBER: payload.phnNo,
                         CUST_PHONETYPE: 2,
                         PASSWORD: payload.password,
                         USERNAME: payload.email,
                         WCUST_FIRSTNAME: payload.name,
                         WCUST_IS_GUEST: false,
                         WCUST_LASTNAME: payload.name,
+                        WCUST_STATUS: 4, //2 means : active but not verified /// 4 means verified
                     },
                     conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            return res
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.RegisterCustomerResult
+            else
+                return Promise.reject(JSON.stringify(res))
         } catch (error) {
-            consolelog(process.cwd(), 'createCostomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'createCustomerOnSdm', error, false)
             return (error)
         }
     }
@@ -52,12 +56,12 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async updateCustomer(payload: IUserRequest.IUserData) {
+    async updateCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     conceptID: "3",
                 }
@@ -65,7 +69,7 @@ export class UserSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             return res
         } catch (error) {
-            consolelog(process.cwd(), 'updateCustomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'updateCustomerOnSdm', JSON.stringify(error), false)
             return (error)
         }
     }
@@ -80,7 +84,7 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByUserNameAndPswdReq = {
                 name: "GetCustomer",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     customerUserName: payload.customerUserName,
                     customerPassword: payload.customerPassword,
@@ -105,7 +109,7 @@ export class UserSDMEntity extends BaseSDM {
             const data = {
                 name: "GetCustomerByEmail",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     email: payload.email,
                     conceptID: "3",
@@ -128,7 +132,7 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByEmailReq = {
                 name: "GetCustomersByEmail",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     email: payload.email,
                     conceptID: "3",
@@ -151,7 +155,7 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByCustomerIdReq = {
                 name: "GetCustomerByID",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     customerID: payload.customerID,
                     conceptID: "3",
@@ -174,14 +178,17 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByMobileNoReq = {
                 name: "GetCustomerByMobile",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     mobileNo: payload.mobileNo,
                     conceptID: "3",
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            return res
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.GetCustomerByMobileResult
+            else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "getCustomerByMobile", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -197,7 +204,7 @@ export class UserSDMEntity extends BaseSDM {
             const data: IUserSDMRequest.IGetCustomerByPhoneNoReq = {
                 name: "GetCustomersByPhone",
                 req: {
-                    licenseCode: "AmericanaWeb",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
                     phoneNo: payload.phoneNo,
                     conceptID: "3",

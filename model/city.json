@@ -1,65 +1,65 @@
 [
     {
-        "id": "bccda374-1c31-11ea-964e-c13f240dc3c5",
-        "cityId": 19,
-        "countryId": 1,
-        "name_en": "Dubai",
-        "name_ar": "دبي"
-    },
-    {
-        "id": "bccd7c62-1c31-11ea-964e-c13f240dc3c5",
-        "cityId": 22,
-        "countryId": 1,
-        "name_en": "Ras Al Khaimah",
-        "name_ar": "رأس الخيمة"
-    },
-    {
-        "id": "bccda371-1c31-11ea-964e-c13f240dc3c5",
-        "cityId": 24,
-        "countryId": 1,
-        "name_en": "Sharjah",
-        "name_ar": "الشارقة"
-    },
-    {
-        "id": "bccda370-1c31-11ea-964e-c13f240dc3c5",
+        "id": "f2fa8060-5153-11ea-9af6-4f21b10cd3d9",
         "cityId": 23,
         "countryId": 1,
         "name_en": "Umm Al Quwain",
         "name_ar": "أم القيوين"
     },
     {
-        "id": "bccd7c60-1c31-11ea-964e-c13f240dc3c5",
-        "cityId": 20,
-        "countryId": 1,
-        "name_en": "Ajman",
-        "name_ar": "عجمان"
-    },
-    {
-        "id": "bccda372-1c31-11ea-964e-c13f240dc3c5",
-        "cityId": 17,
-        "countryId": 1,
-        "name_en": "Abu Dhabi",
-        "name_ar": "أبو ظبي"
-    },
-    {
-        "id": "bccd7c61-1c31-11ea-964e-c13f240dc3c5",
+        "id": "f2fa5950-5153-11ea-9af6-4f21b10cd3d9",
         "cityId": 21,
         "countryId": 1,
         "name_en": "Fujairah",
         "name_ar": "الفجيرة"
     },
     {
-        "id": "bccda375-1c31-11ea-964e-c13f240dc3c5",
+        "id": "f2fa8062-5153-11ea-9af6-4f21b10cd3d9",
+        "cityId": 17,
+        "countryId": 1,
+        "name_en": "Abu Dhabi",
+        "name_ar": "أبو ظبي"
+    },
+    {
+        "id": "f2faa770-5153-11ea-9af6-4f21b10cd3d9",
         "cityId": 25,
         "countryId": 1,
         "name_en": "Khor Fakkan",
         "name_ar": "خورفكان"
     },
     {
-        "id": "bccda373-1c31-11ea-964e-c13f240dc3c5",
+        "id": "f2fa8061-5153-11ea-9af6-4f21b10cd3d9",
+        "cityId": 24,
+        "countryId": 1,
+        "name_en": "Sharjah",
+        "name_ar": "الشارقة"
+    },
+    {
+        "id": "f2fa8063-5153-11ea-9af6-4f21b10cd3d9",
         "cityId": 18,
         "countryId": 1,
         "name_en": "Al Ain",
         "name_ar": "العين"
+    },
+    {
+        "id": "f2fa5951-5153-11ea-9af6-4f21b10cd3d9",
+        "cityId": 22,
+        "countryId": 1,
+        "name_en": "Ras Al Khaimah",
+        "name_ar": "رأس الخيمة"
+    },
+    {
+        "id": "f2fa8064-5153-11ea-9af6-4f21b10cd3d9",
+        "cityId": 19,
+        "countryId": 1,
+        "name_en": "Dubai",
+        "name_ar": "دبي"
+    },
+    {
+        "id": "f2fa3240-5153-11ea-9af6-4f21b10cd3d9",
+        "cityId": 20,
+        "countryId": 1,
+        "name_en": "Ajman",
+        "name_ar": "عجمان"
     }
 ]

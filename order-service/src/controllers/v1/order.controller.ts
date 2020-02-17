@@ -56,6 +56,7 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             let order: IOrderRequest.IOrderData
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
@@ -113,7 +114,7 @@ export class OrderController {
                     cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 }
                 cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
+                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
                 ENTITY.OrderE.syncOrder(order)
             }
             let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })

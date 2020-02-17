@@ -37,6 +37,9 @@ export class AddressEntity extends BaseEntity {
         sdmAddressRef: Joi.number(),
         cmsAddressRef: Joi.number(),
         sdmStoreRef: Joi.number().required(),
+        sdmCountryRef: Joi.number().required(),
+        sdmAreaRef: Joi.number().required(),
+        sdmCityRef: Joi.number().required(),
     })
 
     /**
@@ -109,7 +112,10 @@ export class AddressEntity extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 sdmAddressRef: (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
                 cmsAddressRef: 0,
-                sdmStoreRef: store.storeId
+                sdmCountryRef: 1, //store.countryId
+                sdmStoreRef: 1219,// store.storeId
+                sdmAreaRef: 16,// store.areaId
+                sdmCityRef: 17,// store.cityId
             };
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
                 let listAppendArg: IAerospike.ListOperation = {
@@ -212,19 +218,19 @@ export class AddressEntity extends BaseEntity {
     async addAddressOnSdm(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
             let addressSdmData = {
-                licenseCode: "AmericanaWeb",
+                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                 language: "En",
-                customerRegistrationID: 7694143,
+                customerRegistrationID: userData.sdmCorpRef,
                 address: {
-                    ADDR_AREAID: 1786,//16,
-                    ADDR_BLDGNAME: addressData.bldgName, //"Al Quoz Comm",
+                    ADDR_AREAID: 16,// 1786,
+                    ADDR_BLDGNAME: addressData.bldgName,
                     ADDR_BLDGNUM: addressData.bldgName,
                     ADDR_CITYID: 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
-                    ADDR_CUSTID: 7694143, //?
+                    ADDR_CUSTID: userData.sdmUserRef,
                     ADDR_DESC: addressData.description,
-                    ADDR_DISTRICTID: 1008,
+                    ADDR_DISTRICTID: 1008,// 1021,
                     ADDR_FLATNUM: addressData.flatNum,
                     ADDR_FLOOR: addressData.flatNum,
                     ADDR_MAPCODE: {
@@ -243,22 +249,22 @@ export class AddressEntity extends BaseEntity {
                         CC_CUSTOMER_PHONE: {
                             PHONE_AREACODE: userData.phnNo.slice(0, 2),
                             PHONE_COUNTRYCODE: userData.cCode.replace('+', ''),
-                            PHONE_CUSTID: 7694143,
+                            PHONE_CUSTID: userData.sdmUserRef,
                             PHONE_ISDEFAULT: 84,
                             PHONE_LOOKUP: userData.phnNo,
                             PHONE_NUMBER: userData.phnNo.slice(2),
                             PHONE_TYPE: 2,
                         }
                     },
-                    WADDR_AREAID: 1786,// 16,
+                    WADDR_AREAID: 16,// 1786,
                     WADDR_BUILD_NAME: addressData.bldgName,
                     WADDR_BUILD_NUM: addressData.bldgName,
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
-                    WADDR_CONCEPTID: 3,
+                    WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
                     WADDR_DIRECTIONS: addressData.description,
-                    WADDR_DISTRICTID: 1008,
+                    WADDR_DISTRICTID: 1008,// 1021,
                     WADDR_DISTRICT_TEXT: "Default",
                     WADDR_MNUID: 4,
                     WADDR_PROVINCEID: 7,

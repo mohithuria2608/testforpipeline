@@ -24,9 +24,11 @@ declare namespace ICartRequest {
     }
     interface IAddress {
         addressId: string,
-        sdmStoreRef: number,
         sdmAddressRef: number,
         cmsAddressRef: number,
+        sdmStoreRef: number,
+        sdmAreaRef: number,
+        sdmCityRef: number,
         tag: number,
         bldgName: string,
         description: string,

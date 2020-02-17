@@ -8,6 +8,7 @@ export interface Iorder extends Document {
     sdmOrderRef: number,
     cmsOrderRef: number,
     userId: string,
+    sdmUserRef: number,
     orderId: string,
     status: string,
     sdmOrderStatus: number,
@@ -31,6 +32,7 @@ const orderSchema = new Schema({
     sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true },
     userId: { type: String, required: true, index: true },
+    sdmUserRef: { type: Number, required: true },
     orderId: { type: String, required: true, index: true },
     status: {
         type: String, enum: [

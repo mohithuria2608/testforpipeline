@@ -4,6 +4,8 @@ import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService, notificationService } from '../../grpc/client';
 import { addressController } from '../../controllers';
+import * as CMS from '../../cms';
+import * as SDM from '../../sdm';
 
 export class UserController {
     constructor() { }
@@ -26,10 +28,10 @@ export class UserController {
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
                 let data = JSON.parse(payload.cms.argv)
-                if (payload.cms.create)
-                    ENTITY.UserE.createUserOnCms(data)
-                if (payload.cms.update)
-                    ENTITY.UserE.updateUserOnCms(data)
+                // if (payload.cms.create)
+                //     ENTITY.UserE.createUserOnCms(data)
+                // if (payload.cms.update)
+                //     ENTITY.UserE.updateUserOnCms(data)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
                 let data = JSON.parse(payload.sdm.argv)
@@ -73,6 +75,7 @@ export class UserController {
                 }
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchange)
             } else {
+                // let cmsUser = await CMS.UserCMSE.getCustomer({ fullPhnNo: fullPhnNo })
                 let tempUser: IUserRequest.IUserData = {
                     id: ENTITY.UserE.ObjectId().toString(),
                     cartId: ENTITY.UserE.ObjectId().toString(),
@@ -81,7 +84,36 @@ export class UserController {
                     brand: headers.brand,
                     country: headers.country,
                 }
+                // if (cmsUser && cmsUser.customer_id) {
+                //     tempUser['cmsUserRef'] = cmsUser.customer_id
+                //     tempUser['email'] = cmsUser.email
+                //     tempUser['name'] = cmsUser.firstName + " " + cmsUser.lastName
+                //     tempUser['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                //     if (cmsUser.address && cmsUser.address.length > 0) {
+                //         /**
+                //          * @todo : sync cms address on as
+                //          */
+                //     }
+                // } else {
+                //     let sdmUser = await SDM.UserSDME.getCustomerByMobile({ mobileNo: fullPhnNo.replace("+", "") })
+                //     if (sdmUser && sdmUser.CUST_ID) {
+                //         tempUser['sdmUserRef'] = sdmUser.CUST_ID
+                //         tempUser['sdmCorpRef'] = sdmUser.CUST_CORPID
+                //         tempUser['email'] = sdmUser.CUST_EMAIL
+                //         tempUser['name'] = sdmUser.CUST_FIRSTNAME + " " + cmsUser.CUST_LASTNAME
+                //         tempUser['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                //         if (cmsUser.Addresses && cmsUser.Addresses.length > 0) {
+                //             /**
+                //              * @todo : sync sdm address on as
+                //              */
+                //         }
+                //         /**
+                //          * @todo : create customer on cms 
+                //          */
+                //     }
+                // }
                 let user = await ENTITY.UserE.buildUser(tempUser)
+
                 let userchange: IUserchangeRequest.IUserchange = {
                     username: username,
                     fullPhnNo: fullPhnNo,
@@ -94,6 +126,7 @@ export class UserController {
                     otpVerified: 0,
                     isGuest: 0
                 }
+
                 await ENTITY.UserchangeE.buildUserchange(user.id, userchange)
             }
             return {}
@@ -359,7 +392,7 @@ export class UserController {
                             argv: JSON.stringify(userData)
                         },
                     }
-                    // kafkaService.kafkaSync(userSync)
+                    kafkaService.kafkaSync(userSync)
                     return formatUserData(userData, headers, auth.isGuest)
                 }
             } else {

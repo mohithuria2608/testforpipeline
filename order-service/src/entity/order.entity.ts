@@ -45,189 +45,122 @@ export class OrderClass extends BaseEntity {
 
     createCEntries(items) {
         try {
-            // let Entries = {
-            //     "CEntry": [
-            //         {
-            //             "ItemID": "110002",
-            //             "Level": "0",
-            //             "ModCode": "NONE",
-            //             "Name": "Kids Chicken Meal",
-            //             "OrdrMode": "OM_SAVED",
-            //             "Price": "13",
-            //             "Status": "NOTAPPLIED"
-            //         },
-            //         {
-            //             "ItemID": "110002",
-            //             "Level": "0",
-            //             "ModCode": "NONE",
-            //             "Name": "Kids Chicken Meal",
-            //             "OrdrMode": "OM_SAVED",
-            //             "Price": "13",
-            //             "Status": "NOTAPPLIED"
-            //         },
-            //         {
-            //             "ItemID": "110002",
-            //             "Level": "0",
-            //             "ModCode": "NONE",
-            //             "Name": "Kids Chicken Meal",
-            //             "OrdrMode": "OM_SAVED",
-            //             "Price": "13",
-            //             "Status": "NOTAPPLIED"
-            //         }
-            //     ]
-            // }
-
             let Entries = {
                 CEntry: []
             }
             items.forEach(product => {
                 let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-
-                if (product.originalTypeId == "simple") {
-                    if (product.typeId == "simple") {
-                        // "name": "Fresh Orange Juice"
-                        Entries.CEntry.push({
-                            ItemID: product.sdmId,
-                            Level: 0,
-                            ModCode: "NONE",
-                            Name: product.name,
-                            OrdrMode: "OM_SAVED",
-                            Price: product.specialPrice,
-                            Status: "NOTAPPLIED",
-                        })
-                    } else if (product.typeId == "bundle") {
-                        // "name": "Mighty Original",
-                        let obj = {
-                            DealID: 0,
-                            Entries: {
-                                CEntry: []
-                            },
-                            ID: 0,
-                            ItemID: product.sdmId,
-                            ModCode: "NONE",
-                            Name: product.name,
-                            QCComponent: -1,
-                            QCInstanceID: instanceId,
-                            QCLevel: 0,
-                            QCProID: product.promoId,
-                        }
-                        if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
-                            product.bundleProductOptions.forEach(bpo => {
-                                if (bpo && bpo.productLinks.length > 0) {
-                                    bpo.productLinks.forEach(pl => {
-                                        if (pl.selected == 1) {
-                                            if (pl.subOptions && pl.subOptions.length > 0) {
-                                                pl.subOptions.forEach(so => {
-                                                    if (so.selected == 1) {
-                                                        if (so.title == "None") { }
-                                                        else if (so.title == "Regular") {
-                                                            obj.Entries.CEntry.push({
-                                                                ID: 0,
-                                                                ItemID: so.sdmId,
-                                                                ModCode: "WITH",
-                                                                ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
-                                                                Name: so.name,
-                                                                OrdrMode: "OM_SAVED",
-                                                                Weight: 0,
-                                                            })
-                                                        } else if (so.title == "Extra") {
-                                                            obj.Entries.CEntry.push({
-                                                                ID: 0,
-                                                                ItemID: so.sdmId,
-                                                                ModCode: "WITH",
-                                                                ModgroupID: pl.modGroupId,
-                                                                Name: so.name,
-                                                                OrdrMode: "OM_SAVED",
-                                                                Weight: 0,
-                                                            }, {
-                                                                ID: 0,
-                                                                ItemID: so.sdmId,
-                                                                ModCode: "WITH",
-                                                                ModgroupID: pl.modGroupId,
-                                                                Name: so.name,
-                                                                OrdrMode: "OM_SAVED",
-                                                                Weight: 0,
-                                                            })
+                for (let i = 0; i < product.qty; i++) {
+                    if (product.originalTypeId == "simple") {
+                        if (product.typeId == "simple") {
+                            // "name": "Fresh Orange Juice"
+                            Entries.CEntry.push({
+                                ItemID: product.sdmId,
+                                Level: 0,
+                                ModCode: "NONE",
+                                Name: product.name,
+                                OrdrMode: "OM_SAVED",
+                                Price: product.specialPrice,
+                                Status: "NOTAPPLIED",
+                            })
+                        } else if (product.typeId == "bundle") {
+                            // "name": "Mighty Original",
+                            let obj = {
+                                DealID: 0,
+                                Entries: {
+                                    CEntry: []
+                                },
+                                ID: 0,
+                                ItemID: product.sdmId,
+                                ModCode: "NONE",
+                                Name: product.name,
+                                QCComponent: -1,
+                                QCInstanceID: instanceId,
+                                QCLevel: 0,
+                                QCProID: product.promoId,
+                            }
+                            if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                                product.bundleProductOptions.forEach(bpo => {
+                                    if (bpo && bpo.productLinks.length > 0) {
+                                        bpo.productLinks.forEach(pl => {
+                                            if (pl.selected == 1) {
+                                                if (pl.subOptions && pl.subOptions.length > 0) {
+                                                    pl.subOptions.forEach(so => {
+                                                        if (so.selected == 1) {
+                                                            if (so.title == "None") { }
+                                                            else if (so.title == "Regular") {
+                                                                obj.Entries.CEntry.push({
+                                                                    ID: 0,
+                                                                    ItemID: so.sdmId,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                                                    Name: so.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0,
+                                                                })
+                                                            } else if (so.title == "Extra") {
+                                                                obj.Entries.CEntry.push({
+                                                                    ID: 0,
+                                                                    ItemID: so.sdmId,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: pl.modGroupId,
+                                                                    Name: so.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0,
+                                                                }, {
+                                                                    ID: 0,
+                                                                    ItemID: so.sdmId,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: pl.modGroupId,
+                                                                    Name: so.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0,
+                                                                })
+                                                            }
                                                         }
-                                                    }
-                                                })
+                                                    })
+                                                }
                                             }
-                                        }
+                                        })
+                                    }
+                                })
+                            }
+                            Entries.CEntry.push(obj)
+                        }
+                    }
+                    else if (product.originalTypeId == "configurable") {
+                        // "name": "Pepsi",
+                        if (product.items && product.items.length > 0) {
+                            product.items.forEach(i => {
+                                if (i['sku'] == product.selectedItem) {
+                                    Entries.CEntry.push({
+                                        ItemID: 600002,// i.sdmId,
+                                        Level: 0,
+                                        ModCode: "NONE",
+                                        Name: i.name,
+                                        OrdrMode: "OM_SAVED",
+                                        Price: i.specialPrice,
+                                        Status: "NOTAPPLIED",
                                     })
                                 }
                             })
                         }
-                        Entries.CEntry.push(obj)
                     }
-                }
-                else if (product.originalTypeId == "configurable") {
-                    // "name": "Pepsi",
-                    if (product.items && product.items.length > 0) {
-                        product.items.forEach(i => {
-                            if (i['sku'] == product.selectedItem) {
-                                Entries.CEntry.push({
-                                    ItemID: 600002,// i.sdmId,
-                                    Level: 0,
-                                    ModCode: "NONE",
-                                    Name: i.name,
-                                    OrdrMode: "OM_SAVED",
-                                    Price: i.specialPrice,
-                                    Status: "NOTAPPLIED",
-                                })
-                            }
-                        })
-                    }
-                }
-                else if (product.originalTypeId == "bundle") {
-                    if (product.typeId == "bundle") {
-                        // "name": "Super Mega Deal",
-                        if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
-                            product.bundleProductOptions.forEach(bpo => {
-                                let QCComponent = bpo.compId
-                                if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
-                                    bpo.productLinks.forEach(pl => {
-                                        if (pl.selected == 1) {
-                                            if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-                                                let obj = {
-                                                    DealID: 0,
-                                                    Entries: {
-                                                        CEntry: []
-                                                    },
-                                                    ID: 0,
-                                                    ItemID: pl.sdmId,
-                                                    ModCode: "NONE",
-                                                    Name: pl.name,
-                                                    QCComponent: QCComponent,
-                                                    QCInstanceID: instanceId,
-                                                    QCLevel: 0,
-                                                    QCProID: product.promoId,
-                                                }
-                                                product.bundleProductOptions.forEach(plbpo => {
-                                                    if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
-                                                        if (plbpo.type == "stepper") {
-                                                            plbpo.productLinks.forEach(plbpopl => {
-                                                                for (let i = 0; i < plbpopl.selectionQty; i++) {
-                                                                    obj.Entries.CEntry.push({
-                                                                        DealID: 0,
-                                                                        ID: 0,
-                                                                        ItemID: plbpopl.sdmId,
-                                                                        ModCode: "NONE",
-                                                                        Name: plbpopl.name,
-                                                                        QCComponent: QCComponent,
-                                                                        QCInstanceID: instanceId,
-                                                                        QCLevel: 0,
-                                                                        QCProID: product.promoId,
-                                                                    })
-                                                                }
-                                                            })
-                                                        }
-                                                    }
-                                                })
-                                                Entries.CEntry.push(obj)
-                                            } else {
-                                                for (let i = 0; i < pl.selectionQty; i++) {
-                                                    Entries.CEntry.push({
+                    else if (product.originalTypeId == "bundle") {
+                        if (product.typeId == "bundle") {
+                            // "name": "Super Mega Deal",
+                            if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                                product.bundleProductOptions.forEach(bpo => {
+                                    let QCComponent = bpo.compId
+                                    if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                        bpo.productLinks.forEach(pl => {
+                                            if (pl.selected == 1) {
+                                                if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                    let obj = {
                                                         DealID: 0,
+                                                        Entries: {
+                                                            CEntry: []
+                                                        },
                                                         ID: 0,
                                                         ItemID: pl.sdmId,
                                                         ModCode: "NONE",
@@ -236,103 +169,71 @@ export class OrderClass extends BaseEntity {
                                                         QCInstanceID: instanceId,
                                                         QCLevel: 0,
                                                         QCProID: product.promoId,
-                                                    })
-                                                }
-                                            }
-                                        }
-                                    })
-                                }
-                            })
-                        }
-                    }
-                }
-                else if (product.originalTypeId == "bundle_group") {
-                    if (product.typeId == "bundle_group") {
-                        // "name": "Twister Meal",   "name": "Mighty Twist",
-                        if (product.items && product.items.length > 0) {
-                            product.items.forEach(i => {
-                                if (i['sku'] == product.selectedItem) {
-                                    if (i.bundleProductOptions && i.bundleProductOptions.length > 0) {
-                                        let positionIndex = i.bundleProductOptions[0].position
-                                        i.bundleProductOptions.forEach(bpo => {
-                                            let QCComponent = bpo.compId
-                                            if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
-                                                if (bpo.ingredient == 0) {
-                                                    bpo.productLinks.forEach(pl => {
-                                                        if (pl.selected == 1) {
-                                                            if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-                                                                let obj = {
-                                                                    DealID: 0,
-                                                                    Entries: {
-                                                                        CEntry: []
-                                                                    },
-                                                                    ID: 0,
-                                                                    ItemID: pl.sdmId,
-                                                                    ModCode: "NONE",
-                                                                    Name: pl.name,
-                                                                    QCComponent: QCComponent,
-                                                                    QCInstanceID: instanceId,
-                                                                    QCLevel: 0,
-                                                                    QCProID: i.promoId,
-                                                                }
-                                                                let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                                                                console.log("dependentSteps", dependentSteps)
-
-                                                                if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
-                                                                    /**
-                                                                     * @description (ingredient == 1) :  "name": "Twister Meal"
-                                                                     * @description (isModifier == 1) :  "name": "Mighty Twist"
-                                                                     */
-                                                                    if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
-                                                                        dependentSteps.productLinks.forEach(dspl => {
-                                                                            let ItemID = 0
-                                                                            if (dspl.subOptions && dspl.subOptions.length > 0) {
-                                                                                dspl.subOptions.forEach(dsplso => {
-                                                                                    if (dsplso.selected == 1)
-                                                                                        ItemID = dsplso.sdmId
-                                                                                })
-                                                                            }
-                                                                            obj.Entries.CEntry.push({
-                                                                                ID: 0,
-                                                                                ItemID: ItemID,
-                                                                                ModCode: "WITH",
-                                                                                ModgroupID: dspl.modGroupId,
-                                                                                Name: dspl.name,
-                                                                                OrdrMode: "OM_SAVED",
-                                                                                Weight: 0
-                                                                            })
+                                                    }
+                                                    product.bundleProductOptions.forEach(plbpo => {
+                                                        if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
+                                                            if (plbpo.type == "stepper") {
+                                                                plbpo.productLinks.forEach(plbpopl => {
+                                                                    for (let i = 0; i < plbpopl.selectionQty; i++) {
+                                                                        obj.Entries.CEntry.push({
+                                                                            DealID: 0,
+                                                                            ID: 0,
+                                                                            ItemID: plbpopl.sdmId,
+                                                                            ModCode: "NONE",
+                                                                            Name: plbpopl.name,
+                                                                            QCComponent: QCComponent,
+                                                                            QCInstanceID: instanceId,
+                                                                            QCLevel: 0,
+                                                                            QCProID: product.promoId,
                                                                         })
                                                                     }
-                                                                    Entries.CEntry.push(obj)
-                                                                } else if (dependentSteps['type'] == "stepper") {
-                                                                    /**
-                                                                     * @description (type == "stepper") : "name": "Dinner Meal", 
-                                                                     */
-                                                                    dependentSteps.productLinks.forEach(dspl => {
-                                                                        if (dspl.selectionQty > 0) {
-                                                                            let count = dspl.selectionQty
-                                                                            while (count != 0) {
-                                                                                Entries.CEntry.push({
-                                                                                    DealID: 0,
-                                                                                    ID: 0,
-                                                                                    ItemID: dspl.sdmId,
-                                                                                    ModCode: "NONE",
-                                                                                    Name: dspl.name,
-                                                                                    QCComponent: QCComponent,
-                                                                                    QCInstanceID: instanceId,
-                                                                                    QCLevel: 0,
-                                                                                    QCProID: i.promoId,
-                                                                                })
-                                                                                count = count - 1
-                                                                            }
-                                                                        }
-                                                                    })
-                                                                }
-                                                            } else {
-                                                                let count = pl.selectionQty
-                                                                while (count != 0) {
-                                                                    Entries.CEntry.push({
+                                                                })
+                                                            }
+                                                        }
+                                                    })
+                                                    Entries.CEntry.push(obj)
+                                                } else {
+                                                    for (let i = 0; i < pl.selectionQty; i++) {
+                                                        Entries.CEntry.push({
+                                                            DealID: 0,
+                                                            ID: 0,
+                                                            ItemID: pl.sdmId,
+                                                            ModCode: "NONE",
+                                                            Name: pl.name,
+                                                            QCComponent: QCComponent,
+                                                            QCInstanceID: instanceId,
+                                                            QCLevel: 0,
+                                                            QCProID: product.promoId,
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    else if (product.originalTypeId == "bundle_group") {
+                        if (product.typeId == "bundle_group") {
+                            // "name": "Twister Meal",   "name": "Mighty Twist",
+                            if (product.items && product.items.length > 0) {
+                                product.items.forEach(i => {
+                                    if (i['sku'] == product.selectedItem) {
+                                        if (i.bundleProductOptions && i.bundleProductOptions.length > 0) {
+                                            let positionIndex = i.bundleProductOptions[0].position
+                                            i.bundleProductOptions.forEach(bpo => {
+                                                let QCComponent = bpo.compId
+                                                if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                                    if (bpo.ingredient == 0) {
+                                                        bpo.productLinks.forEach(pl => {
+                                                            if (pl.selected == 1) {
+                                                                if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                                    let obj = {
                                                                         DealID: 0,
+                                                                        Entries: {
+                                                                            CEntry: []
+                                                                        },
                                                                         ID: 0,
                                                                         ItemID: pl.sdmId,
                                                                         ModCode: "NONE",
@@ -341,115 +242,183 @@ export class OrderClass extends BaseEntity {
                                                                         QCInstanceID: instanceId,
                                                                         QCLevel: 0,
                                                                         QCProID: i.promoId,
-                                                                    })
-                                                                    count = count - 1
+                                                                    }
+                                                                    let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
+                                                                    console.log("dependentSteps", dependentSteps)
+
+                                                                    if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
+                                                                        /**
+                                                                         * @description (ingredient == 1) :  "name": "Twister Meal"
+                                                                         * @description (isModifier == 1) :  "name": "Mighty Twist"
+                                                                         */
+                                                                        if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
+                                                                            dependentSteps.productLinks.forEach(dspl => {
+                                                                                let ItemID = 0
+                                                                                if (dspl.subOptions && dspl.subOptions.length > 0) {
+                                                                                    dspl.subOptions.forEach(dsplso => {
+                                                                                        if (dsplso.selected == 1)
+                                                                                            ItemID = dsplso.sdmId
+                                                                                    })
+                                                                                }
+                                                                                obj.Entries.CEntry.push({
+                                                                                    ID: 0,
+                                                                                    ItemID: ItemID,
+                                                                                    ModCode: "WITH",
+                                                                                    ModgroupID: dspl.modGroupId,
+                                                                                    Name: dspl.name,
+                                                                                    OrdrMode: "OM_SAVED",
+                                                                                    Weight: 0
+                                                                                })
+                                                                            })
+                                                                        }
+                                                                        Entries.CEntry.push(obj)
+                                                                    } else if (dependentSteps['type'] == "stepper") {
+                                                                        /**
+                                                                         * @description (type == "stepper") : "name": "Dinner Meal", 
+                                                                         */
+                                                                        dependentSteps.productLinks.forEach(dspl => {
+                                                                            if (dspl.selectionQty > 0) {
+                                                                                let count = dspl.selectionQty
+                                                                                while (count != 0) {
+                                                                                    Entries.CEntry.push({
+                                                                                        DealID: 0,
+                                                                                        ID: 0,
+                                                                                        ItemID: dspl.sdmId,
+                                                                                        ModCode: "NONE",
+                                                                                        Name: dspl.name,
+                                                                                        QCComponent: QCComponent,
+                                                                                        QCInstanceID: instanceId,
+                                                                                        QCLevel: 0,
+                                                                                        QCProID: i.promoId,
+                                                                                    })
+                                                                                    count = count - 1
+                                                                                }
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                } else {
+                                                                    let count = pl.selectionQty
+                                                                    while (count != 0) {
+                                                                        Entries.CEntry.push({
+                                                                            DealID: 0,
+                                                                            ID: 0,
+                                                                            ItemID: pl.sdmId,
+                                                                            ModCode: "NONE",
+                                                                            Name: pl.name,
+                                                                            QCComponent: QCComponent,
+                                                                            QCInstanceID: instanceId,
+                                                                            QCLevel: 0,
+                                                                            QCProID: i.promoId,
+                                                                        })
+                                                                        count = count - 1
+                                                                    }
                                                                 }
                                                             }
-                                                        }
-                                                    })
-                                                } else {
-                                                    /**
-                                                     * @description : if the product does not have dependentstep value but actually is dependent on the next product in the array
-                                                     */
-                                                    let lastProductAddedInCentry = {
-                                                        DealID: Entries.CEntry[Entries.CEntry.length - 1].DealID,
-                                                        Entries: {
-                                                            CEntry: []
-                                                        },
-                                                        ID: Entries.CEntry[Entries.CEntry.length - 1].ID,
-                                                        ItemID: Entries.CEntry[Entries.CEntry.length - 1].ItemID,
-                                                        ModCode: Entries.CEntry[Entries.CEntry.length - 1].ModCode,
-                                                        Name: Entries.CEntry[Entries.CEntry.length - 1].Name,
-                                                        QCComponent: Entries.CEntry[Entries.CEntry.length - 1].QCComponent,
-                                                        QCInstanceID: Entries.CEntry[Entries.CEntry.length - 1].QCInstanceID,
-                                                        QCLevel: Entries.CEntry[Entries.CEntry.length - 1].QCLevel,
-                                                        QCProID: Entries.CEntry[Entries.CEntry.length - 1].QCProID,
-                                                    }
-                                                    if (bpo.productLinks && bpo.productLinks.length > 0) {
-                                                        bpo.productLinks.forEach(bpopl => {
-                                                            let ItemID = 0
-                                                            if (bpopl.subOptions && bpopl.subOptions.length > 0) {
-                                                                bpopl.subOptions.forEach(bpoplso => {
-                                                                    if (bpoplso.selected == 1)
-                                                                        ItemID = bpoplso.sdmId
-                                                                })
-                                                            }
-                                                            lastProductAddedInCentry.Entries.CEntry.push({
-                                                                ID: 0,
-                                                                ItemID: ItemID,
-                                                                ModCode: "WITH",
-                                                                ModgroupID: bpopl.modGroupId,
-                                                                Name: bpopl.name,
-                                                                OrdrMode: "OM_SAVED",
-                                                                Weight: 0
-                                                            })
                                                         })
+                                                    } else {
+                                                        /**
+                                                         * @description : if the product does not have dependentstep value but actually is dependent on the next product in the array
+                                                         */
+                                                        let lastProductAddedInCentry = {
+                                                            DealID: Entries.CEntry[Entries.CEntry.length - 1].DealID,
+                                                            Entries: {
+                                                                CEntry: []
+                                                            },
+                                                            ID: Entries.CEntry[Entries.CEntry.length - 1].ID,
+                                                            ItemID: Entries.CEntry[Entries.CEntry.length - 1].ItemID,
+                                                            ModCode: Entries.CEntry[Entries.CEntry.length - 1].ModCode,
+                                                            Name: Entries.CEntry[Entries.CEntry.length - 1].Name,
+                                                            QCComponent: Entries.CEntry[Entries.CEntry.length - 1].QCComponent,
+                                                            QCInstanceID: Entries.CEntry[Entries.CEntry.length - 1].QCInstanceID,
+                                                            QCLevel: Entries.CEntry[Entries.CEntry.length - 1].QCLevel,
+                                                            QCProID: Entries.CEntry[Entries.CEntry.length - 1].QCProID,
+                                                        }
+                                                        if (bpo.productLinks && bpo.productLinks.length > 0) {
+                                                            bpo.productLinks.forEach(bpopl => {
+                                                                let ItemID = 0
+                                                                if (bpopl.subOptions && bpopl.subOptions.length > 0) {
+                                                                    bpopl.subOptions.forEach(bpoplso => {
+                                                                        if (bpoplso.selected == 1)
+                                                                            ItemID = bpoplso.sdmId
+                                                                    })
+                                                                }
+                                                                lastProductAddedInCentry.Entries.CEntry.push({
+                                                                    ID: 0,
+                                                                    ItemID: ItemID,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: bpopl.modGroupId,
+                                                                    Name: bpopl.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0
+                                                                })
+                                                            })
+                                                        }
+                                                        Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
                                                     }
-                                                    Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        else if (product.typeId == "bundle") {
+                            // "name": "Bucket 15 Pcs",
+                            if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                                let positionIndex = product.bundleProductOptions[0].position
+                                product.bundleProductOptions.forEach(bpo => {
+                                    let QCComponent = bpo.compId
+                                    if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                        bpo.productLinks.forEach(pl => {
+                                            if (pl.selected == 1) {
+                                                if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                    let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
+                                                    console.log("dependentSteps", dependentSteps)
+                                                    if (dependentSteps.position == pl.dependentSteps[0]) {
+                                                        if (dependentSteps.type == "stepper") {
+                                                            dependentSteps.productLinks.forEach(dspl => {
+                                                                if (dspl.selectionQty > 0) {
+                                                                    let count = dspl.selectionQty
+                                                                    while (count != 0) {
+                                                                        Entries.CEntry.push({
+                                                                            DealID: 0,
+                                                                            ID: 0,
+                                                                            ItemID: dspl.sdmId,
+                                                                            ModCode: "NONE",
+                                                                            Name: dspl.name,
+                                                                            QCComponent: QCComponent,
+                                                                            QCInstanceID: instanceId,
+                                                                            QCLevel: 0,
+                                                                            QCProID: product.promoId,
+                                                                        })
+                                                                        count = count - 1
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+                                                } else {
+                                                    let count = pl.selectionQty
+                                                    while (count != 0) {
+                                                        Entries.CEntry.push({
+                                                            DealID: 0,
+                                                            ID: 0,
+                                                            ItemID: pl.sdmId,
+                                                            ModCode: "NONE",
+                                                            Name: pl.name,
+                                                            QCComponent: QCComponent,
+                                                            QCInstanceID: instanceId,
+                                                            QCLevel: 0,
+                                                            QCProID: product.promoId,
+                                                        })
+                                                        count = count - 1
+                                                    }
                                                 }
                                             }
                                         })
                                     }
-                                }
-                            })
-                        }
-                    }
-                    else if (product.typeId == "bundle") {
-                        // "name": "Bucket 15 Pcs",
-                        if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
-                            let positionIndex = product.bundleProductOptions[0].position
-                            product.bundleProductOptions.forEach(bpo => {
-                                let QCComponent = bpo.compId
-                                if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
-                                    bpo.productLinks.forEach(pl => {
-                                        if (pl.selected == 1) {
-                                            if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-                                                let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                                                console.log("dependentSteps", dependentSteps)
-                                                if (dependentSteps.position == pl.dependentSteps[0]) {
-                                                    if (dependentSteps.type == "stepper") {
-                                                        dependentSteps.productLinks.forEach(dspl => {
-                                                            if (dspl.selectionQty > 0) {
-                                                                let count = dspl.selectionQty
-                                                                while (count != 0) {
-                                                                    Entries.CEntry.push({
-                                                                        DealID: 0,
-                                                                        ID: 0,
-                                                                        ItemID: dspl.sdmId,
-                                                                        ModCode: "NONE",
-                                                                        Name: dspl.name,
-                                                                        QCComponent: QCComponent,
-                                                                        QCInstanceID: instanceId,
-                                                                        QCLevel: 0,
-                                                                        QCProID: product.promoId,
-                                                                    })
-                                                                    count = count - 1
-                                                                }
-                                                            }
-                                                        })
-                                                    }
-                                                }
-                                            } else {
-                                                let count = pl.selectionQty
-                                                while (count != 0) {
-                                                    Entries.CEntry.push({
-                                                        DealID: 0,
-                                                        ID: 0,
-                                                        ItemID: pl.sdmId,
-                                                        ModCode: "NONE",
-                                                        Name: pl.name,
-                                                        QCComponent: QCComponent,
-                                                        QCInstanceID: instanceId,
-                                                        QCLevel: 0,
-                                                        QCProID: product.promoId,
-                                                    })
-                                                    count = count - 1
-                                                }
-                                            }
-                                        }
-                                    })
-                                }
-                            })
+                                })
+                            }
                         }
                     }
                 }
@@ -467,38 +436,23 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.IOrderData) {
         try {
-            let total
-            payload.amount.filter(elem => {
-                if (elem.code == "TOTAL") {
-                    return total = elem
-                }
-            })
-            let subtotal
-            payload.amount.filter(elem => {
-                if (elem.code == "SUB_TOTAL") {
-                    return subtotal = elem
-                }
-            })
             let order = {
-                AddressID: 10512054,// payload.address.sdmAddressRef,//
-                CityID: 17, //not mandatory
-                AreaID: 16, // payload.address.sdmAddressRef,
-                BackupStoreID: -1,
-                ConceptID: 3,
-                CustomerID: 7694143,// 7323013,
+                AddressID: payload.address.sdmAddressRef,
+                // AreaID: "",//payload.address.sdmAdreaRef
+                // CityID: "",//payload.address.sdmAdreaRef
+                ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                CountryID: 1,//payload.store.sdmCountryRef
+                CustomerID: payload.sdmUserRef,
+                // DateOfTrans: "",
+                DeliveryChargeID: 279,
+                DistrictID: -1,
+                // DueTime: "",
                 Entries: this.createCEntries(payload.items),
+                OrderID: 0,
                 OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
                 OrderType: 0,
-                OriginalStoreID: 1219,// 65,// payload.store.sdmStoreRef,
-                PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
-                PaymentMethod: (payload['paymentMethodId'] == 0) ? "Cash" : "Credit",
-                ServiceCharge: 6.5,
-                Source: 2,
-                Status: 0,
-                StoreID: 1219,// 65,// payload.store.sdmStoreRef,
-                SubTotal: subtotal.amount,
-                Total: total.amount,
-                ValidateStore: 0,
+                ProvinceID: 7,
+                StreetID: 315
             }
 
             /**
@@ -506,15 +460,16 @@ export class OrderClass extends BaseEntity {
              * @step 2 :update mongo order using payload.cartId sdmOrderRef
              */
             let data: IOrderSdmRequest.ICreateOrder = {
-                licenseCode: "AmericanaWeb",
-                conceptID: 3,
+                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                language: "en",
+                conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 order: order,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: "Test order notes 1",
+                orderNotes1: "Test order notes 1", //payload.cmsOrderRef
                 orderNotes2: "Test order notes 2",
-                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? 0 : 1,
-                isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1,
+                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? false : true,
+                isSuspended: (payload['paymentMethodId'] == 0) ? false : true,
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)
@@ -543,7 +498,7 @@ export class OrderClass extends BaseEntity {
     /**
     * @method INTERNAL
     * */
-    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore) {
+    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
         try {
             let orderData = {
                 orderType: orderType,
@@ -552,6 +507,7 @@ export class OrderClass extends BaseEntity {
                 sdmOrderRef: 0,
                 cmsOrderRef: cartData.cmsOrderRef,
                 userId: cartData.userId,
+                sdmUserRef: userData.sdmUserRef,
                 orderId: cartData.orderId,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
@@ -559,7 +515,6 @@ export class OrderClass extends BaseEntity {
                 amount: cartData.amount,
                 address: {
                     addressId: address.id,
-                    sdmStoreRef: address.sdmStoreRef,
                     sdmAddressRef: address.sdmAddressRef,
                     cmsAddressRef: address.cmsAddressRef,
                     tag: address.tag,
@@ -568,11 +523,17 @@ export class OrderClass extends BaseEntity {
                     flatNum: address.flatNum,
                     addressType: address.addressType,
                     lat: address.lat,
-                    lng: address.lng
+                    lng: address.lng,
+                    sdmCountryRef: address.sdmCountryRef,
+                    sdmAreaRef: address.sdmAreaRef,
+                    sdmCityRef: address.sdmCityRef,
+                    sdmStoreRef: address.sdmStoreRef
                 },
                 store: {
                     sdmStoreRef: store.storeId,
-                    areaId: store.areaId,
+                    sdmCountryRef: store.countryId,
+                    sdmAreaRef: store.areaId,
+                    sdmCityRef: store.cityId ? store.cityId : 17,
                     location: store.location,
                     address_en: store.address_en,
                     address_ar: store.address_ar,
