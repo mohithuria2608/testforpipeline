@@ -448,7 +448,7 @@ export class UserController {
                 await ENTITY.UserchangeE.buildUserchange(userData.id, userchangePayload)
             }
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
-            if (payload.cCode && payload.phnNo) {
+            if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
                 user['fullPhnNo'] = payload.cCode + payload.phnNo
                 user['phnNo'] = payload.phnNo
                 user['cCode'] = payload.cCode
