@@ -620,12 +620,19 @@ export class OrderClass extends BaseEntity {
                                                 }
                                             }
                                         }
+                                        else if (sdmOrder.Status == 0) {
+                                            consolelog(process.cwd(), "order step 9 :       ", parseInt(sdmOrder.Status), true)
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                updatedAt: new Date().getTime(),
+                                                sdmOrderStatus: sdmOrder.Status
+                                            }, { new: true })
+                                        }
                                     }
                                 }
                                 else if (parseInt(sdmOrder.Status) == 2) {
-                                    consolelog(process.cwd(), "order step 9 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), "order step 10 :       ", parseInt(sdmOrder.Status), true)
                                     if (order.payment.paymentMethodId == 0) {
-                                        consolelog(process.cwd(), "order step 10 :       ", parseInt(sdmOrder.Status), true)
+                                        consolelog(process.cwd(), "order step 11 :       ", parseInt(sdmOrder.Status), true)
                                         /**
                                         * @todo : remove recheck = false
                                         */
@@ -644,9 +651,9 @@ export class OrderClass extends BaseEntity {
                                             }, { new: true })
                                         }, 10000)
                                     } else {
-                                        consolelog(process.cwd(), "order step 11 :       ", parseInt(sdmOrder.Status), true)
+                                        consolelog(process.cwd(), "order step 12 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.status == "AUTHORIZATION") {
-                                            consolelog(process.cwd(), "order step 12 :       ", parseInt(sdmOrder.Status), true)
+                                            consolelog(process.cwd(), "order step 13 :       ", parseInt(sdmOrder.Status), true)
                                             /**
                                              * @todo : remove recheck = false
                                              */
@@ -680,7 +687,7 @@ export class OrderClass extends BaseEntity {
                                     }
                                 }
                                 else if (parseInt(sdmOrder.Status) == 8) {
-                                    consolelog(process.cwd(), "order step 13 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), "order step 14 :       ", parseInt(sdmOrder.Status), true)
                                     this.updateOneEntityMdb({ _id: order._id }, {
                                         status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
                                         updatedAt: new Date().getTime(),
@@ -688,7 +695,7 @@ export class OrderClass extends BaseEntity {
                                     })
                                 }
                                 else if (parseInt(sdmOrder.Status) == 16 || parseInt(sdmOrder.Status) == 32) {
-                                    consolelog(process.cwd(), "order step 14 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
                                     this.updateOneEntityMdb({ _id: order._id }, {
                                         status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
                                         updatedAt: new Date().getTime(),
@@ -696,7 +703,7 @@ export class OrderClass extends BaseEntity {
                                     })
                                 }
                                 else if (parseInt(sdmOrder.Status) == 64 || parseInt(sdmOrder.Status) == 128 || parseInt(sdmOrder.Status) == 2048) {
-                                    consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), "order step 16 :       ", parseInt(sdmOrder.Status), true)
                                     recheck = false
                                     this.updateOneEntityMdb({ _id: order._id }, {
                                         isActive: 0,
@@ -707,7 +714,7 @@ export class OrderClass extends BaseEntity {
                                     })
                                 }
                                 else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
-                                    consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), "order step 17:       ", parseInt(sdmOrder.Status), true)
                                     recheck = false
                                     this.updateOneEntityMdb({ _id: order._id }, {
                                         isActive: 0,
@@ -722,7 +729,7 @@ export class OrderClass extends BaseEntity {
                                 }
                             }
                         }
-                        console.log("recheck =              =>", recheck)
+                        console.log("recheck =              =>", parseInt(sdmOrder.Status), recheck)
                         if (recheck) {
                             let orderChange = {
                                 set: this.set,

@@ -119,6 +119,7 @@ export class OrderSDMEntity extends BaseSDM {
                     orderID: payload.sdmOrderRef,
                     paymentType: 2,
                     paymentSubType: 1,
+                    paymentStatus: 1,
                     paymentTenderID: 34,
                     amount: payload.transaction.amount,
                     holderName: "Test payment user",

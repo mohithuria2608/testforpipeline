@@ -1,70 +1,33 @@
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:tem="http://tempuri.org/" 
-    xmlns:sdm="http://schemas.datacontract.org/2004/07/SDM_SDK" 
-    xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" 
-    xmlns:psor="PSOrderingDOM.Classes" 
-    xmlns:sys="http://schemas.datacontract.org/2004/07/System.Drawing">
-    <soapenv:Header/>
-    <soapenv:Body>
-        <tem:UpdateOrder>
-            <tem:licenseCode>AmericanaWeb</tem:licenseCode>
-            <tem:conceptID>3</tem:conceptID>
-            <tem:order>
-                <sdm:AddressID>10512394</sdm:AddressID>
-                <sdm:Comps>
-                    <arr:KeyValueOfdecimalCCompkckD9yn_P>
-                        <arr:Key>7193</arr:Key>
-                        <arr:Value>
-                            <psor:Amount>10</psor:Amount>
-                            <psor:EnterAmount>10</psor:EnterAmount>
-                            <psor:Name>KFCTEST10</psor:Name>
-                        </arr:Value>
-                    </arr:KeyValueOfdecimalCCompkckD9yn_P>
-                </sdm:Comps>
-                <sdm:ConceptID>3</sdm:ConceptID>
-                <sdm:CountryID>1</sdm:CountryID>
-                <sdm:CustomerID>7694196</sdm:CustomerID>
-                <sdm:DeliveryChargeID>279</sdm:DeliveryChargeID>
-                <sdm:DistrictID>-1</sdm:DistrictID>
-                <!--for future order need to pass delivery time with slot with order type as 1-->
-                <!--<sdm:DueTime>2020-02-17T00:07:49</sdm:DueTime>-->
-                <sdm:Entries>
+39785972
 
-                    <sdm:CEntry>
-                        <sdm:DealID>0</sdm:DealID>
-                        <sdm:ID>0</sdm:ID>
-                        <sdm:ItemID>600003</sdm:ItemID>
-                        <sdm:ModCode>NONE</sdm:ModCode>
-                        <sdm:Name>Pepsi Medium</sdm:Name>
-                    </sdm:CEntry>
-                    <sdm:CEntry>
-                        <sdm:DealID>0</sdm:DealID>
-                        <sdm:ID>0</sdm:ID>
-                        <sdm:ItemID>600003</sdm:ItemID>
-                        <sdm:ModCode>NONE</sdm:ModCode>
-                        <sdm:Name>Pepsi Medium</sdm:Name>
-                    </sdm:CEntry>
-                    <sdm:CEntry>
-                        <sdm:DealID>0</sdm:DealID>
-                        <sdm:ID>0</sdm:ID>
-                        <sdm:ItemID>600003</sdm:ItemID>
-                        <sdm:ModCode>NONE</sdm:ModCode>
-                        <sdm:Name>Pepsi Medium</sdm:Name>
-                    </sdm:CEntry>
-                </sdm:Entries>
-                <sdm:OrderID>0</sdm:OrderID>
-                <sdm:OrderMode>1</sdm:OrderMode>
-                <sdm:OrderType>0</sdm:OrderType>
-                <sdm:ProvinceID>7</sdm:ProvinceID>
-                <sdm:StreetID>315</sdm:StreetID>
-            </tem:order>
-            <tem:autoApprove>1</tem:autoApprove>
-            <tem:useBackupStoreIfAvailable>1</tem:useBackupStoreIfAvailable>
-            <tem:orderNotes1>Test</tem:orderNotes1>
-            <tem:orderNotes2>Orders</tem:orderNotes2>
-            <tem:creditCardPaymentbool>false</tem:creditCardPaymentbool>
-            <tem:isSuspended>0</tem:isSuspended>
-            <tem:menuTemplateID>17</tem:menuTemplateID>
-        </tem:UpdateOrder>
-    </soapenv:Body>
-</soapenv:Envelope>
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
+    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
+    xmlns:tns="http://tempuri.org/" 
+    xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
+    xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+    <soap:Body>
+        <ProcessCreditCardPayment xmlns="http://tempuri.org/">
+            <licenseCode>AmericanaWeb</licenseCode>
+            <conceptID>3</conceptID>
+            <language>En</language>
+            <orderID>39785972</orderID>
+            <paymentType>2</paymentType>
+            <paymentSubType>1</paymentSubType>
+            <paymentStatus>1</paymentStatus>
+            <paymentTenderID>34</paymentTenderID>
+            <amount>44.5</amount>
+            <holderName>Test payment user</holderName>
+            <cardNumber>400000xxxxxx0002</cardNumber>
+            <cardCCV>123</cardCCV>
+            <cardExpire>2034</cardExpire>
+            <refNumber>5819647468036006304010</refNumber>
+            <refCountry>US</refCountry>
+            <refGateway>noonpay</refGateway>
+        </ProcessCreditCardPayment>
+    </soap:Body>
+</soap:Envelope>

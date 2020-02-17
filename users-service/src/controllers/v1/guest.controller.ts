@@ -48,6 +48,8 @@ export class GuestController {
     * @param {string} email : email
     * @param {string} name : name
     * @param {string} isGuest : number
+    * @param {string} addressId : number
+    * @param {string} addressType 
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
