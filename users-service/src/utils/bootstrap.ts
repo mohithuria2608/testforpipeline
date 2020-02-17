@@ -1,5 +1,5 @@
 import { Aerospike } from "../aerospike";
-import { SDM } from "../sdm";
+import { SDM } from '../sdm'
 import { configuration } from '../configuration';
 
 export let bootstrap = async function (server) {

@@ -21,6 +21,198 @@ export const start = (async () => {
 
     // let a: IMenuGrpcRequest.IFetchMenuRes
 
+    await ENTITY.CartE.createCartOnCMS({
+      "cartId": "5e4a672900904e2a464ca459",
+      "couponCode": "",
+      "curMenuId": 1,
+      "items": [
+        {
+          "qty": 1,
+          "id": 1673,
+          "position": 47,
+          "name": "Chicken Fillet Sandwich",
+          "description": "Chicken breast fillet, lettuce, sliced tomatoes & mayonnaise in a round bun",
+          "inSide": 0,
+          "finalPrice": 14,
+          "specialPrice": 14,
+          "sellingPrice": 14,
+          "catId": 34,
+          "promoId": -1,
+          "metaKeyword": [
+            "Chicken Fillet Sandwich"
+          ],
+          "bundleProductOptions": [
+            {
+              "qty": 1,
+              "position": 1,
+              "maximumQty": 0,
+              "minimumQty": 0,
+              "title": "Choose Your Condiments",
+              "name": "Choose Your Condiments",
+              "subtitle": "Choose Your Condiments",
+              "ingredient": 1,
+              "type": "checkbox",
+              "imageThumbnail": "/d/u/dummy-product.png",
+              "productLinks": [
+                {
+                  "position": 1,
+                  "option_id": 0,
+                  "selection_id": 0,
+                  "price": 0,
+                  "id": 52,
+                  "name": "American Cheese",
+                  "title": "American Cheese",
+                  "imageThumbnail": "/d/u/dummy-product.png",
+                  "selectionQty": 1,
+                  "subOptions": [
+                    {
+                      "option_id": 0,
+                      "selection_id": 0,
+                      "price": 2,
+                      "selected": 1,
+                      "product_id": 1717,
+                      "name": "Regular",
+                      "title": "Regular",
+                      "id": 155,
+                      "sku": 8100012,
+                      "sdmId": 8100012
+                    },
+                    {
+                      "option_id": 0,
+                      "selection_id": 0,
+                      "price": 4,
+                      "selected": 0,
+                      "product_id": 1718,
+                      "name": "Extra",
+                      "title": "Extra",
+                      "id": 156,
+                      "sku": 8100013,
+                      "sdmId": 8100013
+                    }
+                  ],
+                  "selected": 1,
+                  "sku": 810001,
+                  "sdmid": 810001,
+                  "is_modifier": 1,
+                  "default": 0,
+                  "modGroupId": 10028,
+                  "dependentSteps": []
+                },
+                {
+                  "position": 2,
+                  "option_id": 0,
+                  "selection_id": 0,
+                  "price": 0,
+                  "id": 53,
+                  "name": "Lettuce",
+                  "title": "Lettuce",
+                  "imageThumbnail": "/d/u/dummy-product.png",
+                  "selectionQty": 1,
+                  "subOptions": [
+                    {
+                      "option_id": 0,
+                      "selection_id": 0,
+                      "price": 0,
+                      "selected": 1,
+                      "product_id": 0,
+                      "name": "Regular",
+                      "title": "Regular",
+                      "id": 158,
+                      "sku": 8117012,
+                      "sdmId": 8117012
+                    },
+                    {
+                      "option_id": 0,
+                      "selection_id": 0,
+                      "price": 0,
+                      "selected": 0,
+                      "product_id": 1727,
+                      "name": "Extra",
+                      "title": "Extra",
+                      "id": 159,
+                      "sku": 811703,
+                      "sdmId": 811703
+                    }
+                  ],
+                  "selected": 1,
+                  "sku": 811701,
+                  "sdmid": 811701,
+                  "is_modifier": 1,
+                  "default": 0,
+                  "modGroupId": 10027,
+                  "dependentSteps": []
+                },
+                {
+                  "position": 3,
+                  "option_id": 0,
+                  "selection_id": 0,
+                  "price": 0,
+                  "id": 54,
+                  "name": "Tomato",
+                  "title": "Tomato",
+                  "imageThumbnail": "/d/u/dummy-product.png",
+                  "selectionQty": 1,
+                  "subOptions": [
+                    {
+                      "option_id": 0,
+                      "selection_id": 0,
+                      "price": 0,
+                      "selected": 1,
+                      "product_id": 1725,
+                      "name": "Regular",
+                      "title": "Regular",
+                      "id": 161,
+                      "sku": 8117032,
+                      "sdmId": 8117032
+                    },
+                    {
+                      "option_id": 0,
+                      "selection_id": 0,
+                      "price": 0,
+                      "selected": 0,
+                      "product_id": 1726,
+                      "name": "Extra",
+                      "title": "Extra",
+                      "id": 162,
+                      "sku": 8117033,
+                      "sdmId": 8117033
+                    }
+                  ],
+                  "selected": 1,
+                  "sku": 811703,
+                  "sdmid": 811703,
+                  "is_modifier": 1,
+                  "default": 0,
+                  "modGroupId": 10027,
+                  "dependentSteps": []
+                }
+              ],
+              "isDependent": 0
+            }
+          ],
+          "selectedItem": 0,
+          "configurableProductOptions": [],
+          "typeId": "bundle",
+          "originalTypeId": "simple",
+          "items": [],
+          "sku": 110004,
+          "sdmId": 110004,
+          "imageSmall": "/imagestemp/itm110004.png",
+          "imageThumbnail": "/imagestemp/itm110004.png",
+          "image": "/imagestemp/itm110004.png",
+          "taxClassId": 2,
+          "virtualGroup": 16298,
+          "visibility": 4,
+          "associative": 0
+        }
+      ],
+      "lat": 0,
+      "lng": 0,
+      "menuUpdatedAt": 1579911326000
+    })
+
+
+
     let stock: any = [{
       "qty": 2,
       "associative": 0,

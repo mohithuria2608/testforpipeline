@@ -468,8 +468,8 @@ export class OrderClass extends BaseEntity {
                 useBackupStoreIfAvailable: true,
                 orderNotes1: "Test order notes 1", //payload.cmsOrderRef
                 orderNotes2: "Test order notes 2",
-                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? false : true,
-                isSuspended: (payload['paymentMethodId'] == 0) ? false : true,
+                creditCardPaymentbool: (payload['payment']['paymentMethodId'] == 0) ? false : true,
+                isSuspended: (payload['payment']['paymentMethodId'] == 0) ? false : true,
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)

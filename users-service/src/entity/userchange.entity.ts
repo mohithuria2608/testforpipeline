@@ -187,12 +187,12 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['address'] = payload.address
 
 
-            if (payload.otp && payload.otpExpAt && payload.otpVerified == 0) {
+            if (payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
                     message: payload.otp.toString(),
                     destination: payload.fullPhnNo.replace("+", ""),
                     type: 0,
-                    dlr: 0,
+                    dlr: 1,
                 })
             }
             let putArg: IAerospike.Put = {

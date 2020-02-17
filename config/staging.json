@@ -182,7 +182,7 @@
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
     "sms": {
-        "host": "smpp.rmlconnect.net",
+        "host": "sms.rmlconnect.net",
         "port": "2345",
         "userName": "Adigital",
         "password": "vSqKeZdc",

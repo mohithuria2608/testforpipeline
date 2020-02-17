@@ -616,6 +616,8 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             dataToUpdate['amount'] = amount
+            console.log("amount", typeof amount, JSON.stringify(amount))
+
             if (cmsCart.not_available && cmsCart.not_available.length > 0) {
                 curItems.forEach(obj => {
                     if (cmsCart.not_available.indexOf(obj.id) == -1) {
