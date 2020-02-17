@@ -138,6 +138,12 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
+                        if (!payload.hasOwnProperty('count')) {
+                            if (payload.sdm.create)
+                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
+                            else if (payload.sdm.get)
+                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.GET
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });

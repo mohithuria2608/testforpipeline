@@ -21,7 +21,8 @@ class SdmOrderStatusConsumer extends BaseConsumer {
 
     private async sdmOrder(message: IKafkaRequest.IKafkaBody) {
         try {
-            await orderService.sync(message)
+            if (message.count >= 0)
+                await orderService.sync(message)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "sdmOrder", JSON.stringify(error), false);

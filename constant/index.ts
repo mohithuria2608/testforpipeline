@@ -196,6 +196,10 @@ export const DATABASE = {
                 }
             },
             ORDER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    GET: 10000,
+                },
                 INTERVAL: {
                     GET_STATUS: 10000
                 }
