@@ -192,7 +192,25 @@ export class UserController {
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
                 userData = await ENTITY.UserE.buildUser(userUpdate)
-
+                if (payload.isGuest == 1) {
+                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                        set: ENTITY.UserE.set
+                    }
+                    if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
+                        userSync['sdm'] = {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    }
+                    if (!userData.cmsUserRef || userData.cmsUserRef == 0) {
+                        userSync['cms'] = {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    }
+                    if (userSync.sdm || userSync.cms)
+                        kafkaService.kafkaSync(userSync)
+                }
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }

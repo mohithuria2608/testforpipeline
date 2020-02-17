@@ -21,6 +21,7 @@ export const start = (async () => {
 
     // let a: IMenuGrpcRequest.IFetchMenuRes
 
+
     let stock: any = [{
       "qty": 2,
       "associative": 0,

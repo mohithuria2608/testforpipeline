@@ -438,8 +438,8 @@ export class OrderClass extends BaseEntity {
         try {
             let order = {
                 AddressID: payload.address.sdmAddressRef,
-                // AreaID: "",//payload.address.sdmAdreaRef
-                // CityID: "",//payload.address.sdmAdreaRef
+                // AreaID: "",//payload.address.sdmAreaRef
+                // CityID: "",//payload.address.sdmAreaRef
                 ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 CountryID: 1,//payload.store.sdmCountryRef
                 CustomerID: payload.sdmUserRef,
