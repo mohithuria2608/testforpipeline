@@ -25,7 +25,7 @@ server.addService(homeProto.HomeService.service, {
             let res = await homeController.syncFromKafka(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sync", error, false)
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

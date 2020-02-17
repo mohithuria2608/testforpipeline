@@ -36,11 +36,12 @@ export class BaseCMS {
                 })
                 .catch(function (error) {
                     consolelog(process.cwd(), "In request manager err", error.message, true)
-                    if (error.statusCode || error.error || error.message) {
-                        reject(error.message)
-                    }
-                    else
-                        reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                    reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                    // if (error.statusCode || error.error || error.message) {
+                    //     reject(error.message)
+                    // }
+                    // else
+                    //     reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
                 })
         })
     }
@@ -62,7 +63,7 @@ export class BaseCMS {
 
     //         return cmsRes
     //     } catch (error) {
-    //         consolelog(process.cwd(), 'auth', error, false)
+    //         consolelog(process.cwd(), 'auth', JSON.stringify(error), false)
     //         return (error)
     //     }
     // }

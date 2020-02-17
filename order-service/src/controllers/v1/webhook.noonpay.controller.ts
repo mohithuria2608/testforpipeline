@@ -15,7 +15,7 @@ export class WebhookNoonpayController {
      * @param {string} orderReference :eg : 281226369065
      * @param {string} orderId :eg : 281226369065
      * */
-    async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
+    async authorizePayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
             let redirectUrl = config.get("server.order.url")
             let order = await ENTITY.OrderE.getOneEntityMdb({
@@ -34,14 +34,15 @@ export class WebhookNoonpayController {
                     $addToSet: {
                         transLogs: status
                     },
-                    paymentStatus: status.paymentStatus
+                    "payment.transactionId": status.transactions[0].id,
+                    "payment.status": status.transactions[0].type
                 }
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                 // if (status.paymentStatus == "AUTHORIZED") {
-                    /**
-                     * @description update order on sdm with payment object
-                     */
-                    redirectUrl = redirectUrl + "payment/success"
+                /**
+                 * @description update order on sdm with payment object
+                 */
+                redirectUrl = redirectUrl + "payment/success"
                 // } else {
                 //     redirectUrl = redirectUrl + "payment/failure"
                 // }
@@ -51,7 +52,7 @@ export class WebhookNoonpayController {
             }
 
         } catch (error) {
-            consolelog(process.cwd(), "processPayment", error, false)
+            consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

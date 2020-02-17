@@ -2,6 +2,7 @@ declare namespace IOrderRequest {
 
     interface IOrderData {
         _id: string,
+        orderType: string,
         cartId: string,
         cmsCartRef: number,
         sdmOrderRef: number,
@@ -15,7 +16,6 @@ declare namespace IOrderRequest {
         address: IAddress,
         store: IStore,
         amount: IAmount[],
-        isPreviousOrder: boolean,
     }
 
     interface IAddress {
@@ -57,6 +57,7 @@ declare namespace IOrderRequest {
     }
 
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
+        isActive: number
     }
 
     interface IOrderDetail {
@@ -73,7 +74,6 @@ declare namespace IOrderRequest {
     }
 
     interface IGetSdmOrder {
-        cartId: string,
         sdmOrderRef: number,
         status?: string,
         timeInterval: number

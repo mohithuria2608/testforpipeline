@@ -24,10 +24,15 @@ class AsLocationConsumer extends BaseConsumer {
             let res = await locationService.syncStores(message)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "syncStores", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "syncStores", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

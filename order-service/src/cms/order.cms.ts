@@ -1,6 +1,5 @@
 'use strict';
 import * as config from "config"
-import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
 import { consolelog } from '../utils'
@@ -10,7 +9,7 @@ export class OrderCMSEntity extends BaseCMS {
         super()
     }
 
-    async createOrder(formObj: IOrderCMSRequest.ICreateOrderCms): Promise<IOrderCMSRequest.ICreateOrderCmsRes> {
+    async createOrder(formObj: IOrderCMSRequest.ICreateOrderCms): Promise<ICartCMSRequest.ICmsCartRes> {
         try {
             const headers = {};
             const form = formObj;
@@ -22,7 +21,7 @@ export class OrderCMSEntity extends BaseCMS {
             let cmsRes = await this.request(options, headers, form)
             return cmsRes[0]
         } catch (error) {
-            consolelog(process.cwd(), 'createOrder', error, false)
+            consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

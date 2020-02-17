@@ -43,14 +43,8 @@ export class BaseSDM {
     async requestData(name: string, params: object): Promise<any> {
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
-                let req = {
-                    ...params,
-                    licenseCode: 'AmericanaWeb',
-                    conceptID: 3,
-                    requestID: 1,
-                }
-                consolelog(process.cwd(), "params", JSON.stringify(params), true)
-                BaseSDM.client[name]({param: req}, function (error, result) {
+                consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
+                BaseSDM.client[name](params, function (error, result) {
                     if (error) { reject(error); }
                     else {
                         consolelog(process.cwd(), "sdk response : ", JSON.stringify(result), true)

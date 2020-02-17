@@ -51,6 +51,7 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
+                        maxConnsPerNode: 1000
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
@@ -58,7 +59,7 @@ class AerospikeClass {
                         resolve({})
                     }
                 } catch (error) {
-                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", error, false)
+                    consolelog(process.cwd(), "ERROR IN AEROSPIKE", JSON.stringify(error), false)
                     reject(error)
                 }
             } else reject(Error('Client already initialized'))
@@ -77,7 +78,7 @@ class AerospikeClass {
                 }
                 else reject('Client not initialized');
             } catch (error) {
-                consolelog(process.cwd(), "bootstrap index error ", error, false)
+                consolelog(process.cwd(), "bootstrap index error ", JSON.stringify(error), false)
                 reject(error)
             }
         })
@@ -350,6 +351,20 @@ class AerospikeClass {
         }
     }
 
+    async exists(argv: IAerospike.Exists) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (this.client) {
+                    const key = new aerospike.Key(this.namespace, argv.set, argv.key)
+                    let record = await this.client.exists(key)
+                    resolve(record)
+                } else reject('Client not initialized');
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+    
     async  udfRegister(argv) {
         return new Promise(async (resolve, reject) => {
             try {

@@ -61,7 +61,6 @@ export class BaseConsumer {
         this.consumer.on('message', (message) => {
             try {
                 const parsedMessage = JSON.parse(message.value as string);
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.', parsedMessage)
                 this._onMessage.next(parsedMessage);
 
             } catch (error) {

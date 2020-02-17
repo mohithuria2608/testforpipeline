@@ -100,7 +100,7 @@ export class CmsConfigController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncConfigFromKafka", error, false)
+            consolelog(process.cwd(), "syncConfigFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -131,7 +131,7 @@ export class CmsConfigController {
             // kafkaService.kafkaSync(configChange)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "postConfig", error, false)
+            consolelog(process.cwd(), "postConfig", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -152,7 +152,7 @@ export class CmsConfigController {
             let config = await ENTITY.ConfigE.getConfig(data)
             return config
         } catch (error) {
-            consolelog(process.cwd(), "getConfig", error, false)
+            consolelog(process.cwd(), "getConfig", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

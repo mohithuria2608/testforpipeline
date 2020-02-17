@@ -20,7 +20,7 @@ export class UpsellController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "bootstrapUpsell", error, false)
+            consolelog(process.cwd(), "bootstrapUpsell", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -34,7 +34,7 @@ export class UpsellController {
             payload['language'] = headers.language
             return await ENTITY.UpsellE.getUpsellProducts(payload)
         } catch (error) {
-            consolelog(process.cwd(), "fetchUpsellProducts", error, false)
+            consolelog(process.cwd(), "fetchUpsellProducts", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

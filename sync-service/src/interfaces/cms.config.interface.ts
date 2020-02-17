@@ -38,6 +38,5 @@ declare namespace ICmsConfigRequest {
             price: number,
             code: string
         }
-
     }
 }

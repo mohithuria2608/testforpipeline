@@ -26,7 +26,7 @@ export class MiscUserController {
             let user = await ENTITY.UserE.getUser({ userId: authObj.id })
             return { accessToken: tokens.accessToken, response: formatUserData(user, headers, authObj.isGuest) }
         } catch (error) {
-            consolelog(process.cwd(), "refreshToken", error, false)
+            consolelog(process.cwd(), "refreshToken", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -37,7 +37,7 @@ export class MiscUserController {
             await ENTITY.SessionE.removeSession(headers, auth.id)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "logout", error, false)
+            consolelog(process.cwd(), "logout", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

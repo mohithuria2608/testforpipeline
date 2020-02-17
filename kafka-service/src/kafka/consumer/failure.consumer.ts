@@ -20,7 +20,7 @@ class FailConsumer extends BaseConsumer {
         try {
             consolelog(process.cwd(), "Data in fail queue", message, true)
         } catch (error) {
-            consolelog(process.cwd(), `handleFailReq`, error, false);
+            consolelog(process.cwd(), `handleFailReq`, JSON.stringify(error), false);
             return Promise.reject(error)
         }
     }

@@ -1,9 +1,10 @@
 import * as Constant from '../../constant'
 import { consolelog, cryptData } from '../../utils'
-import { userService, locationService, kafkaService, paymentService } from '../../grpc/client'
+import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { cartController } from './cart.controller';
+import { parse } from 'path'
 
 export class OrderController {
 
@@ -15,8 +16,8 @@ export class OrderController {
     */
     async syncOrderFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
 
                 }
@@ -28,11 +29,13 @@ export class OrderController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.cms.create) {
 
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
+                let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
                     ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
@@ -40,32 +43,20 @@ export class OrderController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", error, false)
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
     /**
      * @method POST
+     * @param {string} orderType
      * @param {string} addressId
      * @param {string} cartId
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let noonpayRedirectionUrl = ""
-            let postCartPayload: ICartRequest.IValidateCart = {
-                cartId: payload.cartId,
-                curMenuId: payload.curMenuId,
-                menuUpdatedAt: payload.menuUpdatedAt,
-                couponCode: payload.couponCode,
-                items: payload.items
-            }
-            let cartData: ICartRequest.ICartData = await cartController.validateCart(headers, postCartPayload, auth)
-            // if (cartData['isPriceChanged'] || cartData['invalidMenu'])
-            //     return { cartValidate: cartData }
-
-            consolelog(process.cwd(), "cartData", JSON.stringify(cartData), false)
-
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                 addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
@@ -77,27 +68,51 @@ export class OrderController {
             if (!getStore.hasOwnProperty("id"))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
 
-
+            let promo: IPromotionGrpcRequest.IValidatePromotionRes
+            if (payload.couponCode && payload.items && payload.items.length > 0) {
+                let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                if (!promo || (promo && !promo.isValid)) {
+                    delete payload['couponCode']
+                }
+            } else
+                delete payload['couponCode']
             /**
-             * @description step 1 create order on CMS synchronously
+             * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
              * @description step 2 create order on SDM async
              * @description step 3 create order on MONGO synchronously
              * @description step 4 inititate payment on Noonpay synchronously
              */
-            // let cmsOrder = await ENTITY.OrderE.createOrderOnCMS({})
+            let postCartPayload: ICartRequest.IValidateCart = {
+                cartId: payload.cartId,
+                curMenuId: payload.curMenuId,
+                menuUpdatedAt: payload.menuUpdatedAt,
+                couponCode: payload.couponCode,
+                items: payload.items
+            }
+            let cmsReq: IOrderCMSRequest.ICreateOrderCms = await ENTITY.CartE.createCartReqForCms(postCartPayload)
+            let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq, getAddress.cmsAddressRef)
+            let cartData: ICartRequest.ICartData
+            if (!cmsOrder['order_id']) {
+                cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
+                cartData['promo'] = promo
+                return { cartValidate: cartData }
+            }
+            else {
+                cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+                cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
+            }
+            cartData['orderType'] = payload.orderType
             ENTITY.OrderE.syncOrder(cartData)
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(cartData, getAddress, getStore)
-            let amount
-            order.amount.filter(elem => {
-                if (elem.code == "TOTAL") {
-                    return amount = elem
-                }
-            })
-            console.log("amount", typeof amount, amount)
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
+            let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
+            console.log("amount", typeof amount, JSON.stringify(amount))
             if (payload.paymentMethodId != 0) {
+                /**
+                 * @todo : noonpay order id = cms order id
+                 */
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order._id.toString(),
-                    amount: amount.amount,
+                    amount: amount[0].amount,
                     storeCode: "kfc_uae_store",
                     paymentMethodId: 1,
                     channel: "Mobile",
@@ -110,15 +125,15 @@ export class OrderController {
                     },
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
-                        amount: amount.amount,
-                        name: "Card"
+                        amount: amount[0].amount,
+                        name: "Card",
                     }
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
-                        amount: amount.amount,
+                        amount: amount[0].amount,
                         name: "Cash On Delivery"
                     }
                 })
@@ -127,7 +142,7 @@ export class OrderController {
              * @description : update user with new cart
              */
             let newCartId = ENTITY.OrderE.ObjectId().toString()
-            ENTITY.CartE.assignNewCart(newCartId, auth.id)
+            ENTITY.CartE.assignNewCart(cartData.cartId, newCartId, auth.id)
             let asUserChange = {
                 set: Constant.SET_NAME.USER,
                 as: {
@@ -136,14 +151,6 @@ export class OrderController {
                 }
             }
             await userService.sync(asUserChange)
-            // Aerospike.remove({ set: ENTITY.CartE.set, key: payload.cartId })
-
-            ENTITY.OrderE.getSdmOrder({
-                cartId: payload.cartId,
-                sdmOrderRef: 0,
-                timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
-                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
-            })
             return {
                 orderPlaced: {
                     newCartId: newCartId,
@@ -152,7 +159,7 @@ export class OrderController {
                 }
             }
         } catch (error) {
-            consolelog(process.cwd(), "postOrder", error, false)
+            consolelog(process.cwd(), "postOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -165,7 +172,7 @@ export class OrderController {
         try {
             return await ENTITY.OrderE.getOrderHistory(payload, auth)
         } catch (error) {
-            consolelog(process.cwd(), "orderHistory", error, false)
+            consolelog(process.cwd(), "orderHistory", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -183,7 +190,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "orderDetail", error, false)
+            consolelog(process.cwd(), "orderDetail", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -194,39 +201,46 @@ export class OrderController {
      * */
     async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1, orderId: 1 })
             if (order && order._id) {
+                order['nextPing'] = 15
+                order['unit'] = "second"
                 return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "orderStatusPing", error, false)
+            consolelog(process.cwd(), "orderStatusPing", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
     /**
      * @method GET
-     * @param {string} cCode
-     * @param {string} phnNo
+     * @param {string=} cCode
+     * @param {string=} phnNo
      * @param {number} orderId
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
-            if (userData.id == undefined || userData.id == null || userData.id == "")
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            let userData: IUserRequest.IUserData
+            if (payload.cCode && payload.phnNo) {
+                userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+                if (userData.id == undefined || userData.id == null || userData.id == "")
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            }
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
             if (order && order._id) {
-                if (userData.id != order.userId)
+                if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
+                order['nextPing'] = 15
+                order['unit'] = "second"
                 return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
         } catch (error) {
-            consolelog(process.cwd(), "trackOrder", error, false)
+            consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -240,7 +240,7 @@ export class CartClass extends BaseEntity {
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
         } catch (error) {
-            consolelog(process.cwd(), "getCart", error, false)
+            consolelog(process.cwd(), "getCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -271,7 +271,7 @@ export class CartClass extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "createDefaultCart", error, false)
+            consolelog(process.cwd(), "createDefaultCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -284,22 +284,27 @@ export class CartClass extends BaseEntity {
             await Aerospike.operationsOnMap({ set: this.set, key: payload.cartId }, op)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", error, false)
+            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async assignNewCart(cartId: string, userId: string) {
+    async assignNewCart(oldCartId: string, cartId: string, userId: string) {
         try {
+            consolelog(process.cwd(), "assignNewCart111111111111111111", "error", false)
+
             await this.createDefaultCart({ userId: userId, cartId: cartId })
+            await Aerospike.remove({ set: this.set, key: oldCartId })
+            consolelog(process.cwd(), "assignNewCart1111111111111111112222222222222222", oldCartId, false)
+
             return
         } catch (error) {
-            consolelog(process.cwd(), "assignNewCart", error, false)
+            consolelog(process.cwd(), "assignNewCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart) {
         try {
             let cart = []
             payload.items.map(sitem => {
@@ -308,7 +313,7 @@ export class CartClass extends BaseEntity {
                         cart.push({
                             product_id: sitem.id,
                             qty: sitem.qty ? sitem.qty : 1,
-                            price: sitem.finalPrice,
+                            price: sitem.sellingPrice,
                             type_id: sitem['originalTypeId']
                         })
                     } else {
@@ -316,7 +321,7 @@ export class CartClass extends BaseEntity {
                         product['product_id'] = sitem['id']
                         product['qty'] = sitem['qty']
                         product['type_id'] = sitem['originalTypeId']
-                        product['price'] = sitem['finalPrice']
+                        product['price'] = sitem['sellingPrice']
                         let option = {}
                         if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
                             sitem['bundleProductOptions'].forEach(bpo => {
@@ -352,7 +357,7 @@ export class CartClass extends BaseEntity {
                     if (sitem['items'] && sitem['items'].length > 0) {
                         sitem['items'].map(i => {
                             if (parseInt(i['sku']) == sitem['selectedItem']) {
-                                price = i['finalPrice']
+                                price = i['sellingPrice']
                                 if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
                                     sitem['configurableProductOptions'].map(co => {
                                         let value = null
@@ -377,178 +382,170 @@ export class CartClass extends BaseEntity {
                         super_attribute: super_attribute
                     })
                 }
-                else if (sitem['originalTypeId'] == 'bundle') {
+                else if (sitem['originalTypeId'] == 'bundle' || sitem['typeId'] == 'bundle') {
+                    let positionIndex = sitem.bundleProductOptions[0].position
                     let bundle_option = {};
                     let selection_configurable_option = {};
                     sitem['bundleProductOptions'].forEach(bpo => {
-                        if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-                            bpo['productLinks'].forEach(pl => {
-                                if (pl['selected'] == 1) {
-                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                        if (bundle_option[pl['option_id']] == null)
-                                            bundle_option[pl['option_id']] = {}
-                                        bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-                                    } else {
-                                        bundle_option[pl['option_id']] = pl['selection_id']
-                                    }
-                                }
-                                if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
-                                    console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
-                                    if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
-                                        sitem['bundleProductOptions'].forEach(bpo2 => {
-                                            if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                                if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
-                                                    bpo2['productLinks'].forEach(pl2 => {
-                                                        if (pl2['selected'] == 1)
-                                                            selection_configurable_option[pl['selection_id']] = pl2['id']
-                                                        else
-                                                            selection_configurable_option[pl['selection_id']] = ""
+                        if (bpo['isDependent'] == 0) {
+                            if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                                bpo['productLinks'].forEach(pl => {
+                                    if (pl['selected'] == 1) {
+                                        if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                            if (bundle_option[pl['option_id']] == null)
+                                                bundle_option[pl['option_id']] = {}
+                                            bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                        } else {
+                                            bundle_option[pl['option_id']] = pl['selection_id']
+                                        }
+
+                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
+                                            console.log(" positionIndex", positionIndex, (positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1))
+                                            console.log(" bpo", sitem['bundleProductOptions'][1])
+                                            let dependentSteps = sitem['bundleProductOptions'][(positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1)]
+                                            if (dependentSteps.isDependent == 1) {
+                                                if (dependentSteps['productLinks'] && dependentSteps['productLinks'].length > 0) {
+                                                    dependentSteps['productLinks'].forEach(dspl => {
+                                                        if (!bundle_option.hasOwnProperty(dspl['option_id']))
+                                                            bundle_option[dspl['option_id']] = {}
+                                                        bundle_option[dspl['option_id']][dspl['id']] = dspl['selection_id']
+
+                                                        if (dspl.selectionQty > 0) {
+                                                            selection_configurable_option[pl['selection_id']] = dspl['id']
+                                                        }
                                                     })
                                                 }
                                             }
-                                        })
+                                        }
                                     }
-                                }
-                            })
+                                    // if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
+                                    //     console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
+                                    //     if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
+                                    //         sitem['bundleProductOptions'].forEach(bpo2 => {
+                                    //             if (bpo2['position'] == pl['dependentSteps'][0]) {
+                                    //                 if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
+                                    //                     bpo2['productLinks'].forEach(pl2 => {
+                                    //                         if (pl2['selected'] == 1)
+                                    //                             selection_configurable_option[pl['selection_id']] = pl2['id']
+                                    //                         else
+                                    //                             selection_configurable_option[pl['selection_id']] = ""
+                                    //                     })
+                                    //                 }
+                                    //             }
+                                    //         })
+                                    //     }
+                                    // }
+                                })
+                            }
                         }
                     })
                     cart.push({
                         product_id: sitem.id,
                         qty: sitem.qty,
-                        price: sitem.finalPrice,
+                        price: sitem.sellingPrice,
                         type_id: sitem['typeId'],
                         bundle_option: bundle_option,
                         selection_configurable_option: selection_configurable_option,
                     })
                 }
                 else if (sitem['originalTypeId'] == 'bundle_group') {
-                    let bundle_option = {};
-                    let selection_configurable_option = {};
-                    sitem['items'].forEach(bpo => {
-                        if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
-                            bpo['productLinks'].forEach(pl => {
-                                if (pl['selected'] == 1) {
-                                    if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                        if (bundle_option[pl['option_id']] == null)
-                                            bundle_option[pl['option_id']] = {}
-                                        bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-                                    } else {
-                                        bundle_option[pl['option_id']] = pl['selection_id']
-                                    }
-                                }
-                                if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
-                                    console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
-                                    if (sitem['items'] && sitem['items'].length > 0) {
-                                        sitem['items'].forEach(bpo2 => {
-                                            if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                                if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
-                                                    bpo2['productLinks'].forEach(pl2 => {
-                                                        if (pl2['selected'] == 1)
-                                                            selection_configurable_option[pl['selection_id']] = pl2['id']
-                                                        else
-                                                            selection_configurable_option[pl['selection_id']] = ""
+                    if (sitem['typeId'] == "bundle_group") {
+                        let bundle_option = {};
+                        let alreadyAddedInBundleOption = {}
+                        let selection_configurable_option = {};
+                        let item = 0
+                        sitem['items'].forEach(i => {
+                            if (sitem['selectedItem'] == i['sku']) {
+                                item = i['id']
+                                i['bundleProductOptions'].forEach(bpo => {
+                                    if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
+                                        bpo['productLinks'].map(pl => {
+                                            if (pl['selected'] == 1 && !alreadyAddedInBundleOption[pl['id']]) {
+                                                if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                                    if (bundle_option[pl['option_id']] == null)
+                                                        bundle_option[pl['option_id']] = {}
+                                                    bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+
+                                                    selection_configurable_option[pl['selection_id']] = ""
+                                                    pl['subOptions'].forEach(plso => {
+                                                        if (plso['selected'] == 1) {
+                                                            selection_configurable_option[pl['selection_id']] = plso['id']
+                                                        }
+                                                    })
+                                                } else {
+                                                    bundle_option[pl['option_id']] = pl['selection_id']
+                                                }
+                                                alreadyAddedInBundleOption[pl['id']] = true
+                                            }
+                                            if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
+                                                console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
+                                                if (i['bundleProductOptions'] && i['bundleProductOptions'].length > 0) {
+                                                    i['bundleProductOptions'].forEach(bpo2 => {
+                                                        if (bpo2['position'] == pl['dependentSteps'][0]) {
+                                                            if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
+                                                                bpo2['productLinks'].forEach(pl2 => {
+                                                                    if (pl2['selected'] == 1)
+                                                                        selection_configurable_option[pl['selection_id']] = pl2['id']
+                                                                    else
+                                                                        selection_configurable_option[pl['selection_id']] = ""
+                                                                })
+                                                            }
+                                                        }
                                                     })
                                                 }
                                             }
                                         })
                                     }
-                                }
-                            })
-                        }
-                    })
-                    cart.push({
-                        product_id: sitem.id,
-                        qty: sitem.qty,
-                        price: sitem.finalPrice,
-                        type_id: sitem['typeId'],
-                        bundle_option: bundle_option,
-                        selection_configurable_option: selection_configurable_option,
-                    })
+                                })
+                            }
+                        })
+                        console.log("bundle_option", bundle_option)
+                        console.log("selection_configurable_option", selection_configurable_option)
+
+                        cart.push({
+                            product_id: item,
+                            qty: sitem.qty,
+                            price: sitem.sellingPrice,
+                            type_id: "bundle",// sitem['typeId'],
+                            bundle_option: bundle_option,
+                            selection_configurable_option: selection_configurable_option,
+                        })
+                    }
                 }
                 else {
                     return Promise.reject("Unhandled  products")
                 }
             })
-            let req: ICartCMSRequest.ICreateCartCms = {
-                cms_user_id: 7, //userData.cmsUserRef,
+
+            console.log("cart", JSON.stringify(cart))
+
+            let req = {
+                cms_user_id: 12, //userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart,
+                cart_items: cart
             }
             if (payload.couponCode)
                 req['coupon_code'] = payload.couponCode
             else
                 req['coupon_code'] = ""
-            let cmsCart = await CMS.CartCMSE.createCart(req)
-            return cmsCart
+            return req
         } catch (error) {
-            consolelog(process.cwd(), "createCartOnCMS", error, false)
+            consolelog(process.cwd(), "createCartReqForCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    // async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
-    //     try {
-    //         let promo: IPromotionGrpcRequest.IValidatePromotionRes
-    //         let subtotal = 0
-    //         let grandtotal = 0
-    //         let tax = 0.05
-    //         if (payload.items && payload.items.length > 0) {
-    //             payload.items.map(item => {
-    //                 grandtotal = grandtotal + item.sellingPrice
-    //             })
-    //         }
-    //         tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
-    //         subtotal = grandtotal - tax
-
-    //         console.log("grandtotal", grandtotal)
-    //         console.log("subtotal", subtotal)
-    //         console.log("tax", tax)
-
-
-    //         let discountAmnt = 0
-    //         let couponCode = ""
-    //         if (payload.couponCode && payload.items && payload.items.length > 0) {
-    //             couponCode = payload.couponCode
-    //             promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-    //             if (promo && promo.isValid) {
-    //                 if (promo.promotionType == "by_percent") {
-    //                     discountAmnt = ((grandtotal * (promo.discountAmount / 100)) <= promo.maxDiscountAmt) ? (grandtotal * (promo.discountAmount / 100)) : promo.maxDiscountAmt
-    //                 } else {
-    //                     delete payload['couponCode']
-    //                 }
-    //             } else
-    //                 delete payload['couponCode']
-    //         } else
-    //             delete payload['couponCode']
-
-    //         console.log("discountAmnt", discountAmnt)
-
-    //         if (discountAmnt > 0)
-    //             grandtotal = grandtotal - discountAmnt
-    //         let cmsres = {
-    //             cms_cart_id: 5,
-    //             currency_code: "AED",
-    //             cart_items: payload.items,
-    //             subtotal: subtotal,
-    //             grandtotal: grandtotal + 6, //add shipping charges
-    //             tax: [{
-    //                 tax_name: "VAT",
-    //                 amount: tax,
-    //             }],
-    //             not_available: [],
-    //             is_price_changed: false,
-    //             coupon_code: couponCode,
-    //             discount_amount: discountAmnt,
-    //             success: true,
-    //             promo: promo
-    //         }
-    //         return cmsres
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "createCartOnCMS", error, false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
+        try {
+            let req = await this.createCartReqForCms(payload)
+            let cmsCart = await CMS.CartCMSE.createCart(req)
+            return cmsCart
+        } catch (error) {
+            consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 
     async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
         try {
@@ -609,11 +606,15 @@ export class CartClass extends BaseEntity {
                 type: "SHIPPING",
                 name: "Delivery",
                 code: "DELIVERY",
-                amount: 6,
+                amount: 0,
                 sequence: 4,
                 action: "add"
             }
+            if (cmsCart.grandtotal > 0) {
+                delivery.amount = 6.5
+            }
             amount.push(delivery)
+
             amount.push({
                 type: "TOTAL",
                 name: "Total",
@@ -623,22 +624,17 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             dataToUpdate['amount'] = amount
-            if (cmsCart.cart_items && cmsCart.cart_items.length > 0) {
+            if (cmsCart.not_available && cmsCart.not_available.length > 0) {
                 curItems.forEach(obj => {
                     console.log("1", obj.id)
-                    let parsedData = {}
-                    cmsCart.cart_items.forEach(elem => {
-                        console.log("2", elem.product_id)
-                        if (obj.id == elem.product_id && (parsedData[obj.id] == undefined)) {
-                            parsedData[obj.id] = true
-                            dataToUpdate['items'].push(obj)
-                        }
-                    })
-                    if (parsedData[obj.id] == undefined)
+                    if (cmsCart.not_available.indexOf(obj.id) == -1) {
+                        dataToUpdate['items'].push(obj)
+                    } else {
                         dataToUpdate['notAvailable'].push(obj)
+                    }
                 })
             } else {
-                dataToUpdate['notAvailable'] = curItems
+                dataToUpdate['items'] = curItems
             }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,

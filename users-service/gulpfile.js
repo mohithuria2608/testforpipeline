@@ -1,22 +1,20 @@
 const gulp = require("gulp");
-const pm2 = require('pm2');
 const ts = require("gulp-typescript");
 const del = require("del");
 const tsProject = ts.createProject("tsconfig.json");
-const tslint = require("gulp-tslint");
-const runSequence = require('run-sequence');
-const spawn = require('child_process').spawn;
+const pm2 = require('pm2');
 
-const NODE_ENV = process.NODE_ENV ? process.NODE_ENV : "default"
 const outputFolder = "dist";
+
 const logFolder = "log";
 const protoFolder = "proto";
 const configFolder = "config";
 const luaFolder = "lua";
 const constantFolder = "constant";
+const modelFolder = "model";
 
 gulp.task("clean", function () {
-	return del([outputFolder, logFolder, protoFolder, configFolder, luaFolder, constantFolder]);
+	return del([outputFolder, logFolder, protoFolder, configFolder, luaFolder, constantFolder, modelFolder]);
 });
 
 
@@ -62,6 +60,11 @@ gulp.task("copyLua", function () {
 	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
 });
 
+/**
+  * @todo add "lint" after "clean"
+  */
+gulp.task('default', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
+
 
 gulp.task('server', function () {
 	pm2.connect(true, function () {
@@ -78,13 +81,5 @@ gulp.task('server', function () {
 	});
 });
 
-// gulp.task('server', function () {
-// 	const env = Object.create(process.env);
-// 	env.NODE_ENV = 'default';
-// 	return spawn('node', ['dist/app.js'], { env: env, stdio: 'inherit' });
-// })
 
-/**
-  * @todo add "lint" after "clean"
-  */
-gulp.task('default', gulp.series("clean", "copyConstant", "compile", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "server"));
+gulp.task('one', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "server"));

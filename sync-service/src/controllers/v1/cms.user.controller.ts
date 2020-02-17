@@ -27,7 +27,7 @@ export class CmsUserController {
             kafkaService.kafkaSync(userChange)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "postUser", error, false)
+            consolelog(process.cwd(), "postUser", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -79,7 +79,7 @@ export class UserchangeEntity extends BaseEntity {
                 return {}
             }
         } catch (error) {
-            consolelog(process.cwd(), "getUserchange", error, false)
+            consolelog(process.cwd(), "getUserchange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -112,7 +112,7 @@ export class UserchangeEntity extends BaseEntity {
             Aerospike.remove({ set: this.set, key: curUserchnage.id })
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "validateOtpOnPhnChange", error, false)
+            consolelog(process.cwd(), "validateOtpOnPhnChange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -177,6 +177,12 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.deleteUserId)
                 dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+            if (payload.emailVerified != undefined)
+                dataToUpdateUserchange['emailVerified'] = payload.emailVerified
+            if (payload.profileStep != undefined)
+                dataToUpdateUserchange['profileStep'] = payload.profileStep
+            if (payload.address)
+                dataToUpdateUserchange['address'] = payload.address
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,
@@ -195,7 +201,7 @@ export class UserchangeEntity extends BaseEntity {
             let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: dataToUpdateUserchange['id'] })
             return getUserchange
         } catch (error) {
-            consolelog(process.cwd(), "createUserchange", error, false)
+            consolelog(process.cwd(), "createUserchange", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

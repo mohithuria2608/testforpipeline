@@ -43,7 +43,7 @@ export class UserCMSEntity extends BaseCMS {
             // let cmsRes = await this.request(options, headers, form)
             // return cmsRes
         } catch (error) {
-            consolelog(process.cwd(), 'createCostomer', error, false)
+            consolelog(process.cwd(), 'createCostomer', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -52,7 +52,7 @@ export class UserCMSEntity extends BaseCMS {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), 'updateCostomer', error, false)
+            consolelog(process.cwd(), 'updateCostomer', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -23,7 +23,7 @@ server.addService(authProto.AuthService.service, {
             let res: IAuthGrpcRequest.IToken = await authController.createToken(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(),"createToken", error, false)
+            consolelog(process.cwd(),"createToken", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

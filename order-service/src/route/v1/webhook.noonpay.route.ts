@@ -23,7 +23,7 @@ export default (router: Router) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IWebhookNoonpayRequest.IOrderProcessPayment = ctx.request.query;
-                    let res = await webhookNoonpayController.processPayment(headers, payload);
+                    let res = await webhookNoonpayController.authorizePayment(headers, payload);
                     ctx.redirect(res)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse

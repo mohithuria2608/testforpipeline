@@ -36,7 +36,7 @@ export class PaymentController {
             ]
             await ENTITY.PaymentE.getPaymentMethods(storeCode);
         } catch (error) {
-            consolelog(process.cwd(), "getPaymentMethods", error, false)
+            consolelog(process.cwd(), "getPaymentMethods", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -54,7 +54,7 @@ export class PaymentController {
         try {
             return await ENTITY.PaymentE.initiatePayment(payload);
         } catch (error) {
-            consolelog(process.cwd(), "initiatePayment", error, false)
+            consolelog(process.cwd(), "initiatePayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -106,7 +106,7 @@ export class PaymentController {
         try {
             return await ENTITY.PaymentE.capturePayment(payload);
         } catch (error) {
-            consolelog(process.cwd(), "capturePayment", error, false)
+            consolelog(process.cwd(), "capturePayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -120,7 +120,7 @@ export class PaymentController {
         try {
             return await ENTITY.PaymentE.reversePayment(payload);
         } catch (error) {
-            consolelog(process.cwd(), "reversePayment", error, false)
+            consolelog(process.cwd(), "reversePayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -136,7 +136,7 @@ export class PaymentController {
         try {
             return await ENTITY.PaymentE.refundPayment(payload);
         } catch (error) {
-            consolelog(process.cwd(), "refundPayment", error, false)
+            consolelog(process.cwd(), "refundPayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

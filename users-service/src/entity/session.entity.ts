@@ -59,7 +59,7 @@ export class SessionEntity extends BaseEntity {
                 return {}
             }
         } catch (error) {
-            consolelog(process.cwd(), "getSession", error, false)
+            consolelog(process.cwd(), "getSession", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -110,7 +110,7 @@ export class SessionEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return session
         } catch (error) {
-            consolelog(process.cwd(), "buildSession", error, false)
+            consolelog(process.cwd(), "buildSession", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -129,7 +129,7 @@ export class SessionEntity extends BaseEntity {
             await Aerospike.remove(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "removeSession", error, false)
+            consolelog(process.cwd(), "removeSession", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -160,7 +160,7 @@ export class SessionEntity extends BaseEntity {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "removeAllSession", error, false)
+            consolelog(process.cwd(), "removeAllSession", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -191,7 +191,7 @@ export class SessionEntity extends BaseEntity {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "removeAllSession", error, false)
+            consolelog(process.cwd(), "removeAllSession", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

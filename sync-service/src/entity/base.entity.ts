@@ -14,7 +14,7 @@ export class BaseEntity {
         try {
             return authService.createToken(dataToSend)
         } catch (error) {
-            consolelog(process.cwd(), "createToken", error, false)
+            consolelog(process.cwd(), "createToken", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

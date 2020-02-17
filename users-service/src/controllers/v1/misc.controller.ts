@@ -26,13 +26,15 @@ export class MiscController {
                         defaultCCode: '+971',
                         phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
                         phnLength: 9,
-                        customerCare: "666666666"
+                        customerCare: "666666666",
+                        supportEmail: "kfc_uae@ag.com",
+                        cashondelivery: 0,
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
             }
         } catch (error) {
-            consolelog(process.cwd(), "configuration", error, false)
+            consolelog(process.cwd(), "configuration", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -72,7 +74,7 @@ export class MiscController {
                 }
             ]
         } catch (error) {
-            consolelog(process.cwd(), "faq", error, false)
+            consolelog(process.cwd(), "faq", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -85,7 +87,7 @@ export class MiscController {
         try {
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "privacyPolicy", error, false)
+            consolelog(process.cwd(), "privacyPolicy", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

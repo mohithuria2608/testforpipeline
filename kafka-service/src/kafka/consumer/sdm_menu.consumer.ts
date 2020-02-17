@@ -24,10 +24,15 @@ class SdmMenuConsumer extends BaseConsumer {
             let res = await menuService.sync(message)
             return res
         } catch (error) {
-            consolelog(process.cwd(), "syncMenu", error, false);
-            if (message.count != 0) {
+            consolelog(process.cwd(), "syncMenu", JSON.stringify(error), false);
+            if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

@@ -17,7 +17,7 @@ export class BaseEntity {
             let data = await this.DAOManager.saveData(this.set, saveData)
             return data
         } catch (error) {
-            consolelog(process.cwd(), 'Base entity createOneEntityMdb', error, false)
+            consolelog(process.cwd(), 'Base entity createOneEntityMdb', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -32,7 +32,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findOne(this.set, criteria, projection, option)
             return data
         } catch (error) {
-            consolelog(process.cwd(), 'Base entity getOneEntityMdb', error, false)
+            consolelog(process.cwd(), 'Base entity getOneEntityMdb', JSON.stringify(error), false)
             return Promise.reject(error)
         }
 
@@ -45,7 +45,7 @@ export class BaseEntity {
             let data = await this.DAOManager.getData(this.set, criteria, projection, option)
             return data
         } catch (error) {
-            consolelog(process.cwd(), 'Base entity getMultipleMdb', error, false)
+            consolelog(process.cwd(), 'Base entity getMultipleMdb', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -57,7 +57,7 @@ export class BaseEntity {
             let data = await this.DAOManager.findAndUpdate(this.set, criteria, dataToUpdate, option)
             return data
         } catch (error) {
-            consolelog(process.cwd(), 'Base entity updateOneEntityMdb', error, false)
+            consolelog(process.cwd(), 'Base entity updateOneEntityMdb', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -69,7 +69,7 @@ export class BaseEntity {
             let data = await this.DAOManager.aggregateData(this.set, pipeline, option)
             return data
         } catch (error) {
-            consolelog(process.cwd(), 'Base entity aggregateMdb', error, false)
+            consolelog(process.cwd(), 'Base entity aggregateMdb', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -78,7 +78,7 @@ export class BaseEntity {
         try {
             return await locationService.validateCoordinate({ lat, lng })
         } catch (error) {
-            consolelog(process.cwd(), "validateCoordinate", error, false)
+            consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
