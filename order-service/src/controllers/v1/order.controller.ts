@@ -108,7 +108,7 @@ export class OrderController {
                     couponCode: payload.couponCode,
                     items: payload.items
                 }
-                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload)
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
 
                 let cartData: ICartRequest.ICartData

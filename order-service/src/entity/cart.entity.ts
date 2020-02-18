@@ -304,7 +304,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
             let sellingPrice = 0
             let cart = []
@@ -501,7 +501,7 @@ export class CartClass extends BaseEntity {
             })
 
             let req = {
-                cms_user_id: 12, //userData.cmsUserRef,
+                cms_user_id: userData.cmsUserRef,//12
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart
@@ -519,7 +519,7 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-            let req = await this.createCartReqForCms(payload)
+            let req = await this.createCartReqForCms(payload, userData)
             let cmsCart = await CMS.CartCMSE.createCart(req.req)
             // cmsCart['is_price_changed'] = false
             // /**
