@@ -19,8 +19,8 @@ export class UserCMSEntity extends BaseCMS {
                 "firstName": payload.name,
                 "lastName": payload.name,
                 "password": payload.password,
-                "sdm_user_ref": payload.sdmUserRef,
-                "sdm_corp_ref": payload.sdmCorpRef
+                "sdm_user_ref": payload.sdmUserRef ? payload.sdmUserRef : 0,
+                "sdm_corp_ref": payload.sdmCorpRef ? payload.sdmCorpRef : 0
             }
             const headers = {};
             const form = formObj;
