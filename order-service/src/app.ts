@@ -4029,7 +4029,7 @@ export const start = (async () => {
       }
     })
 
-    console.log("Entries", JSON.stringify(Entries))
+    // console.log("Entries", JSON.stringify(Entries))
 
     await bootstrap(server)
 
