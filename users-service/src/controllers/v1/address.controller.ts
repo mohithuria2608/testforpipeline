@@ -61,6 +61,7 @@ export class AddressController {
     * */
     async syncOldAddress(userData: IUserRequest.IUserData, payload: IAddressRequest.ISyncOldAddress) {
         try {
+            userData = await ENTITY.UserE.getUser({ userId: userData.id })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
             if (payload.sdmStoreRef) {

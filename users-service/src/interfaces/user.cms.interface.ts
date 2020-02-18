@@ -10,8 +10,8 @@ declare namespace IUserCMSRequest {
         firstName: string
         lastName: string
         password: string,
-        sdmUserRef: number
-        sdmCorpRef: number
+        sdmUserRef?: number
+        sdmCorpRef?: number
     }
 
     interface IUpdateUser {

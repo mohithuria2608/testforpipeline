@@ -501,7 +501,7 @@ export class CartClass extends BaseEntity {
             })
 
             let req = {
-                cms_user_id: userData.cmsUserRef,//12
+                cms_user_id: userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart

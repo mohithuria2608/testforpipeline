@@ -214,6 +214,8 @@ export class UserController {
                 session.sessionTime
             )
             if (userchange[0].address && userchange[0].address.id) {
+                if (payload.isGuest == 1)
+                    Aerospike.remove({ key: userData.id, set: ENTITY.AddressE.set })
                 await addressController.syncOldAddress(userData, {
                     addressId: userchange[0].address.id,
                     sdmStoreRef: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.sdmStoreRef : undefined,
@@ -224,7 +226,9 @@ export class UserController {
                     flatNum: userchange[0].address.flatNum,
                     tag: userchange[0].address.tag
                 });
-                Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
+                consolelog(process.cwd(), "11111111111111111111", deleteUserId, false)
+                if (deleteUserId && deleteUserId != "")
+                    Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
             }
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, payload.isGuest) }
         } catch (error) {
@@ -494,8 +498,10 @@ export class UserController {
                     }
                     kafkaService.kafkaSync(userSync)
                 } else {
-                    userData = await ENTITY.UserE.createUserOnSdm(userData)
-                    userData = await ENTITY.UserE.createUserOnCms(userData)
+                    let sdmUser = await ENTITY.UserE.createUserOnSdm(userData)
+                    userData['sdmUserRef'] = sdmUser['CUST_ID']
+                    userData['sdmCorpRef'] = sdmUser['CUST_CORPID']
+                    await ENTITY.UserE.createUserOnCms(userData)
                 }
             }
             return userData

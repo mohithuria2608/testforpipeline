@@ -117,6 +117,8 @@ export class AddressEntity extends BaseEntity {
                 sdmAreaRef: 16,// store.areaId
                 sdmCityRef: 17,// store.cityId
             };
+            consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
+
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,

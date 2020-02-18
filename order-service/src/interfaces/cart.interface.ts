@@ -39,8 +39,8 @@ declare namespace ICartRequest {
     }
 
     interface IStore {
-        sdmStoreRef: 28,
-        areaId: 520,
+        sdmStoreRef: number,
+        areaId: number,
         location: {
             description: string,
             latitude: number
