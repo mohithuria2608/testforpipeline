@@ -20,7 +20,8 @@ message IAerospike {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message ICms {
@@ -28,7 +29,8 @@ message ICms {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message ISdm {
@@ -36,7 +38,8 @@ message ISdm {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message IMdb {
@@ -44,7 +47,8 @@ message IMdb {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message IKafkaRes {

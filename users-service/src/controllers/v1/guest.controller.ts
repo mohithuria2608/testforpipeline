@@ -2,6 +2,8 @@ import * as Constant from '../../constant'
 import { formatUserData, consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import * as CMS from '../../cms';
+import * as SDM from '../../sdm';
 
 export class GuestController {
 
@@ -12,7 +14,7 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            let userCreate: IUserRequest.IUserData = {
+            let tempUser: IUserRequest.IUserData = {
                 id: ENTITY.UserE.ObjectId().toString(),
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 brand: headers.brand,
@@ -20,7 +22,7 @@ export class GuestController {
                 cartId: ENTITY.UserE.ObjectId().toString(),
                 phnVerified: 0,
             }
-            let userData = await ENTITY.UserE.buildUser(userCreate)
+            let userData = await ENTITY.UserE.buildUser(tempUser)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 1,
                 userId: userData.id
@@ -102,6 +104,24 @@ export class GuestController {
                 userchangePayload['deleteUserId'] = auth.id
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
+                let cmsUser = await CMS.UserCMSE.getCustomer({ fullPhnNo: fullPhnNo })
+                if (cmsUser && cmsUser.customer_id) {
+                    userchangePayload['cmsUserRef'] = cmsUser.customer_id
+                    userchangePayload['email'] = cmsUser.email
+                    userchangePayload['name'] = cmsUser.firstName + " " + cmsUser.lastName
+                    userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    if (cmsUser.sdmUserRef)
+                        userchangePayload['sdmUserRef'] = cmsUser.sdmUserRef
+                    if (cmsUser.sdmCorpRef)
+                        userchangePayload['sdmCorpRef'] = cmsUser.sdmCorpRef
+                    if (cmsUser.address && cmsUser.address.length > 0) {
+                        /**
+                         * @todo : sync cms address on as
+                         */
+                    }
+                } else {
+                    userchangePayload['syncUserOnCms'] = 1
+                }
                 userchangePayload['id'] = auth.id
                 userchangePayload['deleteUserId'] = ""
                 await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)

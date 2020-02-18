@@ -21,6 +21,8 @@ declare namespace IUserRequest {
         password?: string,
         cartId?: string,
         createdAt?: number,
+        syncUserOnCms?: number
+        syncUserOnSdm?: number
     }
     interface IPhone {
         cCode: string,

@@ -54,6 +54,7 @@ export class UserServiceValidator {
                         update: Joi.boolean(),
                         reset: Joi.boolean(),
                         get: Joi.boolean(),
+                        sync: Joi.boolean(),
                         argv: Joi.string()
                     }),
                     cms: Joi.object().keys({
@@ -61,6 +62,7 @@ export class UserServiceValidator {
                         update: Joi.boolean(),
                         reset: Joi.boolean(),
                         get: Joi.boolean(),
+                        sync: Joi.boolean(),
                         argv: Joi.string()
                     }),
                     sdm: Joi.object().keys({
@@ -68,6 +70,7 @@ export class UserServiceValidator {
                         update: Joi.boolean(),
                         reset: Joi.boolean(),
                         get: Joi.boolean(),
+                        sync: Joi.boolean(),
                         argv: Joi.string()
                     }),
                     mdb: Joi.object().keys({
@@ -75,6 +78,7 @@ export class UserServiceValidator {
                         update: Joi.boolean(),
                         reset: Joi.boolean(),
                         get: Joi.boolean(),
+                        sync: Joi.boolean(),
                         argv: Joi.string()
                     }),
                     count: Joi.number(),

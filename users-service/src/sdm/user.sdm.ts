@@ -63,11 +63,32 @@ export class UserSDMEntity extends BaseSDM {
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     language: "En",
-                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    customer: {
+                        CUST_CLASSID: -1,
+                        CUST_EMAIL: payload.email,
+                        CUST_FIRSTNAME: payload.name,
+                        CUST_ID: payload.sdmUserRef,
+                        CUST_LASTNAME: payload.name,
+                        CUST_NATID: -1,
+                        CUST_NOTIFICATION_MOBILE: (payload.cCode + payload.phnNo).replace('+', ''),
+                        CUST_PHONEAREACODE: payload.cCode.replace('+', ''),//52
+                        CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),
+                        CUST_PHONENUMBER: payload.phnNo,
+                        CUST_PHONETYPE: 2,
+                        PASSWORD: payload.password,
+                        USERNAME: payload.email,
+                        WCUST_FIRSTNAME: payload.name,
+                        WCUST_IS_GUEST: false,
+                        WCUST_LASTNAME: payload.name,
+                        WCUST_STATUS: 4, //2 means : active but not verified /// 4 means verified
+                    }
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            return res
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.UpdateCustomerResult
+            else
+                return Promise.reject(JSON.stringify(res))
         } catch (error) {
             consolelog(process.cwd(), 'updateCustomerOnSdm', JSON.stringify(error), false)
             return (error)
@@ -105,7 +126,6 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async getCustomerByEmail(payload) {
         try {
-            // : IUserSDMRequest.IGetCustomerByEmailReq
             const data = {
                 name: "GetCustomerByEmail",
                 req: {
@@ -116,7 +136,10 @@ export class UserSDMEntity extends BaseSDM {
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            return res
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.GetCustomerByEmailResult
+            else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "getCustomerByEmail", JSON.stringify(error), false)
             return Promise.reject(error)

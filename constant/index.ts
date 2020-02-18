@@ -175,6 +175,8 @@ export const DATABASE = {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
                 }
             },
             MENU: {
@@ -212,6 +214,7 @@ export const DATABASE = {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
                 }
             },
             MENU: {

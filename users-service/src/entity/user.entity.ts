@@ -56,6 +56,8 @@ export class UserEntity extends BaseEntity {
         password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
+        syncUserOnCms: Joi.number().required(),
+        syncUserOnSdm: Joi.number().required(),
     });
 
     /**
@@ -139,12 +141,15 @@ export class UserEntity extends BaseEntity {
                 userUpdate['medium'] = payload.medium
             if (payload.profileStep != undefined)
                 userUpdate['profileStep'] = payload.profileStep
-            userUpdate['password'] = "Password1"
             if (payload.cartId)
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-
+            if (payload.syncUserOnCms != undefined)
+                userUpdate['syncUserOnCms'] = payload.syncUserOnCms
+            if (payload.syncUserOnSdm != undefined)
+                userUpdate['syncUserOnSdm'] = payload.syncUserOnSdm
+            userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
                 isCreate = false
@@ -229,7 +234,8 @@ export class UserEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: {
                     sdmUserRef: parseInt(res.CUST_ID.toString()),
-                    sdmCorpRef: parseInt(res.CUST_CORPID.toString())
+                    sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
+                    syncUserOnSdm: 0,
                 },
                 set: this.set,
                 key: payload.id,
@@ -265,13 +271,18 @@ export class UserEntity extends BaseEntity {
         try {
             let res = await CMS.UserCMSE.createCustomer(payload)
             consolelog(process.cwd(), "createUserOnCms", res, false)
-            let putArg: IAerospike.Put = {
-                bins: { cmsUserRef: parseInt(res.id.toString()) },
-                set: this.set,
-                key: payload.id,
-                update: true,
+            if (res && res.customer_id) {
+                let putArg: IAerospike.Put = {
+                    bins: {
+                        cmsUserRef: parseInt(res.customer_id.toString()),
+                        syncUserOnCms: 0,
+                    },
+                    set: this.set,
+                    key: payload.id,
+                    update: true,
+                }
+                await Aerospike.put(putArg)
             }
-            await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)

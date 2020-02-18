@@ -633,10 +633,6 @@ export class OrderClass extends BaseEntity {
                                     consolelog(process.cwd(), "order step 10 :       ", parseInt(sdmOrder.Status), true)
                                     if (order.payment.paymentMethodId == 0) {
                                         consolelog(process.cwd(), "order step 11 :       ", parseInt(sdmOrder.Status), true)
-                                        /**
-                                        * @todo : remove recheck = false
-                                        */
-                                        recheck = false
                                         order = await this.updateOneEntityMdb({ _id: order._id }, {
                                             status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                             updatedAt: new Date().getTime(),
@@ -654,10 +650,6 @@ export class OrderClass extends BaseEntity {
                                         consolelog(process.cwd(), "order step 12 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.status == "AUTHORIZATION") {
                                             consolelog(process.cwd(), "order step 13 :       ", parseInt(sdmOrder.Status), true)
-                                            /**
-                                             * @todo : remove recheck = false
-                                             */
-                                            recheck = false
                                             order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                 status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                 updatedAt: new Date().getTime(),

@@ -19,6 +19,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -27,6 +28,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -35,6 +37,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -43,6 +46,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 }

@@ -19,7 +19,9 @@ export class UserCMSEntity extends BaseCMS {
                 "websiteId": "1",
                 "firstName": payload.name,
                 "lastName": payload.name,
-                "password": "123456",
+                "password": payload.password,
+                "sdmUserRef": payload.sdmUserRef,
+                "sdmCorpRef": payload.sdmCorpRef
             }
             const headers = {};
             const form = formObj;
@@ -29,8 +31,8 @@ export class UserCMSEntity extends BaseCMS {
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
-                if (cmsRes[0]['success'] == 'true')
-                    cmsRes[0]
+                if (cmsRes[0]['success'])
+                    return cmsRes[0]
                 else
                     return Promise.reject(cmsRes[0]['error_message'])
             } else
@@ -56,6 +58,10 @@ export class UserCMSEntity extends BaseCMS {
                 formObj['firstName'] = payload.name
                 formObj['lastName'] = payload.name
             }
+            if (payload.sdmUserRef)
+                formObj['sdmUserRef'] = payload.sdmUserRef
+            if (payload.sdmCorpRef)
+                formObj['sdmCorpRef'] = payload.sdmCorpRef
             const headers = {};
             const form = formObj;
             const options = {
@@ -65,7 +71,7 @@ export class UserCMSEntity extends BaseCMS {
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
                 if (cmsRes[0]['success'])
-                    cmsRes[0]
+                    return cmsRes[0]
                 else
                     return Promise.reject(cmsRes[0]['error_message'])
             } else
@@ -102,7 +108,7 @@ export class UserCMSEntity extends BaseCMS {
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
                 if (cmsRes[0]['success'])
-                    cmsRes[0]
+                    return cmsRes[0]
                 else
                     return {}
             } else
