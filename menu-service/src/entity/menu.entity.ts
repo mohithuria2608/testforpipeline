@@ -21,7 +21,7 @@ export class MenuClass extends BaseEntity {
         }
     ]
     constructor() {
-        super('menu')
+        super(Constant.SET_NAME.MENU)
     }
 
 
@@ -52,12 +52,11 @@ export class MenuClass extends BaseEntity {
      * */
     async postMenu(data) {
         try {
-            
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
                 key: data.id,
-                create: true,
+                createOrReplace: true,
             }
             await Aerospike.put(putArg)
             return {}
@@ -75,7 +74,7 @@ export class MenuClass extends BaseEntity {
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'menu',
-                    func: Constant.UDF.MENU.get_menu,
+                    func: Constant.DATABASE.UDF.MENU.get_menu,
                     args: [payload.language],
                     forEach: true
                 },

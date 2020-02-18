@@ -4,18 +4,22 @@
  * @created 2019-12-04 13:15:20
 */
 
+import * as mime from "mime";
 import { BlobServiceClient, StorageSharedKeyCredential } from "@azure/storage-blob";
 
 class BlobStorageClass {
 
     private client;
     private container;
+    private containerName;
+    private baseUrl = `https://bloobstorage.blob.core.windows.net`;
     private basePath: string;
 
     constructor(containerName: string, basePath: string) {
         const credentails = new StorageSharedKeyCredential("bloobstorage", "2JnjQ7U6rC4mFobPG6oq2ycUM/tr7zGmGH3GieJ+F3QEHxG6+XSPH3mPnYs3JlAB1TJoLT8KoJcrrlJsp7FP3A==");
-        this.client = new BlobServiceClient(`https://bloobstorage.blob.core.windows.net`, credentails);
+        this.client = new BlobServiceClient(this.baseUrl, credentails);
         this.container = this.client.getContainerClient(containerName);
+        this.containerName = containerName;
         this.basePath = basePath;
     }
 
@@ -25,9 +29,15 @@ class BlobStorageClass {
      * @param data - content of the file
      */
     async upload(name: string, data: any) {
+        const contentType = mime.getType(name);
         const blockBlobClient = this.container.getBlockBlobClient(`${this.basePath}${name}`);
-        const uploadBlobResponse = await blockBlobClient.upload(data, data.length);
-        console.log(`Upload block blob ${this.basePath}${name} successfully -> `, uploadBlobResponse.requestId);
+        const uploadBlobResponse = await blockBlobClient.upload(data, data.length,
+            { blobHTTPHeaders: { blobContentType: contentType } }
+        );
+        return {
+            success: true,
+            url: `${this.baseUrl}/${this.containerName}/${this.basePath}${name}`
+        }
     }
 }
 

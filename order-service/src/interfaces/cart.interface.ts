@@ -13,6 +13,7 @@ declare namespace ICartRequest {
         items?: any,
         address?: IAddress,
         amount?: IAmount[],
+        store?: IStore
     }
 
     interface IAmount {
@@ -25,8 +26,30 @@ declare namespace ICartRequest {
         addressId: string,
         sdmAddressRef: number,
         cmsAddressRef: number,
-        areaId: number,
-        storeId: number,
+        sdmStoreRef: number,
+        sdmAreaRef: number,
+        sdmCityRef: number,
+        tag: number,
+        bldgName: string,
+        description: string,
+        flatNum: string,
+        addressType: string,
+        lat: number,
+        lng: number,
+    }
+
+    interface IStore {
+        sdmStoreRef: 28,
+        areaId: 520,
+        location: {
+            description: string,
+            latitude: number
+            longitude: number
+        },
+        address_en: string,
+        address_ar: string,
+        name_en: string,
+        name_ar: string,
     }
     interface IValidateCart extends ICommonRequest.ICordinatesOpt {
         cartId: string,

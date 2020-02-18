@@ -19,6 +19,9 @@ declare namespace IUserGrpcRequest {
         updatedAt: number,
         sdmAddressRef: number,
         cmsAddressRef: number,
+        sdmCountryRef: number,
         sdmStoreRef: number,
+        sdmAreaRef: number,
+        sdmCityRef: number,
     }
 }

@@ -1,0 +1,33 @@
+39785972
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
+    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
+    xmlns:tns="http://tempuri.org/" 
+    xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
+    xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+    <soap:Body>
+        <ProcessCreditCardPayment xmlns="http://tempuri.org/">
+            <licenseCode>AmericanaWeb</licenseCode>
+            <conceptID>3</conceptID>
+            <language>En</language>
+            <orderID>39785972</orderID>
+            <paymentType>2</paymentType>
+            <paymentSubType>1</paymentSubType>
+            <paymentStatus>1</paymentStatus>
+            <paymentTenderID>34</paymentTenderID>
+            <amount>44.5</amount>
+            <holderName>Test payment user</holderName>
+            <cardNumber>400000xxxxxx0002</cardNumber>
+            <cardCCV>123</cardCCV>
+            <cardExpire>2034</cardExpire>
+            <refNumber>5819647468036006304010</refNumber>
+            <refCountry>US</refCountry>
+            <refGateway>noonpay</refGateway>
+        </ProcessCreditCardPayment>
+    </soap:Body>
+</soap:Envelope>

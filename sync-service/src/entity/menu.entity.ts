@@ -7,7 +7,7 @@ import { consolelog } from '../utils'
 
 export class MenuEntity extends BaseEntity {
     constructor() {
-        super('menu')
+        super(Constant.SET_NAME.MENU)
     }
 
     /**
@@ -20,6 +20,13 @@ export class MenuEntity extends BaseEntity {
             consolelog(process.cwd(), "fetchMenuFromSDM", JSON.stringify(error), false)
             return Promise.reject(error)
         }
+    }
+
+    /**
+     * formats menu for sync with aerospike 
+     */
+    async formatMenu(menuData) {
+        return JSON.stringify(menuData).replace(/"not dependent"/g, "");
     }
 }
 

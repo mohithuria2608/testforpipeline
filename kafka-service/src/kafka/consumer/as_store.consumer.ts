@@ -4,16 +4,16 @@ import { consolelog } from "../../utils"
 import { locationService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-class AsLocationConsumer extends BaseConsumer {
+class AsStoreConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_LOCATION, 'client');
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE);
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_location", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_store", JSON.stringify(message), true)
                 this.syncStores(message);
                 return null;
             })
@@ -29,11 +29,6 @@ class AsLocationConsumer extends BaseConsumer {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
             }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
-            }
             else
                 kafkaController.produceToFailureTopic(message)
             return {}
@@ -42,4 +37,4 @@ class AsLocationConsumer extends BaseConsumer {
 }
 
 
-export const as_locationConsumerE = new AsLocationConsumer();
+export const as_storeConsumerE = new AsStoreConsumer();

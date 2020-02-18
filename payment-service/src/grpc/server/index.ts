@@ -1,6 +1,8 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity';
+import {  miscController } from '../../controllers';
+import * as Constant from '../../constant'
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -44,7 +46,7 @@ server.addService(paymentProto.PaymentService.service, {
             let res: IPaymentGrpcRequest.IGetPaymentStatusRes;
             switch (call.request.paymentStatus) {
                 case ENTITY.PaymentClass.STATUS.ORDER.INITIATED:
-                    res =  (await ENTITY.PaymentE.getInitiateStatus(call.request)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
+                    res = (await ENTITY.PaymentE.getInitiateStatus(call.request)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
                 case ENTITY.PaymentClass.STATUS.ORDER.AUTHORIZED:
                     res = await ENTITY.PaymentE.getAuthorizationStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
@@ -98,7 +100,23 @@ server.addService(paymentProto.PaymentService.service, {
             callback(grpcSendError(error));
         }
     },
-
+    sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
+        try {
+            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
+            let data = call.request
+            let res: any
+            switch (data.set) {
+                case Constant.SET_NAME.PING_SERVICE: {
+                    res = await miscController.pingService(data)
+                    break;
+                }
+            }
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    }
 })
 
 server.bind(config.get("grpc.payment.server"), grpc.ServerCredentials.createInsecure())

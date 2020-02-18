@@ -19,6 +19,8 @@ declare namespace ICartCMSRequest {
         bundle_option?: any,
         selection_configurable_option?: any,
         bundle_super_attribute?: any,
+        option?: any
+        final_price?: boolean
     }
 
     interface ICmsCartRes {
@@ -33,6 +35,7 @@ declare namespace ICartCMSRequest {
         coupon_code: string,
         discount_amount: number,
         success: boolean,
+        order_id?: string
     }
 
     interface ITax {

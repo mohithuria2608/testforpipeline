@@ -41,7 +41,8 @@ export class SyncServiceValidator {
                         get: Joi.boolean(),
                         argv: Joi.string()
                     }),
-                    count: Joi.number()
+                    count: Joi.number(),
+                    q: Joi.string()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

@@ -13,72 +13,81 @@ export class ConfigEntity extends BaseEntity {
             bin: 'type',
             index: 'idx_' + this.set + '_' + 'type',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'store_code',
+            index: 'idx_' + this.set + '_' + 'store_code',
+            type: "STRING"
         }
     ]
 
     constructor() {
-        super('config')
+        super(Constant.SET_NAME.CONFIG)
     }
 
-    // {
-    //     "store_code": "ksa_store",
-    //     "store_id": "ksa_store",
-    //     "noon_pay_config": {
-    //       "brand_code": "ksa",
-    //       "country_code": "us",
-    //       "payment_methods": [
-    //         {
-    //           "id": "1",
-    //           "name": "phla method",
-    //           "order_category": "SC"
-    //         },
-    //         {
-    //           "id": "3",
-    //           "name": "Teesra  Method",
-    //           "order_category": "General"
-    //         }
-    //       ],
-    //       "code": "noonpay",
-    //       "status": "1"
-    //     },
-    //     "cod_info": {
-    //       "status": "1",
-    //       "title": "Cash On Delivery",
-    //       "code": "cashondelivery"
-    //     },
-    // "free_shipping": {
-    //     "status": "1",
-    //     "title": "Free Shipping",
-    //     "min_order_total": null,
-    //     "price": 0,
-    //     "code": "freeshipping"
-    //   },
-    //   "flat_rate": {
-    //     "status": "1",
-    //     "title": "Flat Rate",
-    //     "price": 5,
-    //     "code": "freeshipping"
-    //   }
-    //   }
+    eg: {
+        "store_code": "ksa_store",
+        "store_id": "ksa_store",
+        "noon_pay_config": {
+            "brand_code": "ksa",
+            "country_code": "us",
+            "payment_methods": [
+                {
+                    "id": "1",
+                    "name": "phla method",
+                    "order_category": "SC"
+                },
+                {
+                    "id": "3",
+                    "name": "Teesra  Method",
+                    "order_category": "General"
+                }
+            ],
+            "code": "noonpay",
+            "status": "1"
+        },
+        "cod_info": {
+            "status": "1",
+            "title": "Cash On Delivery",
+            "code": "cashondelivery"
+        },
+        "free_shipping": {
+            "status": "1",
+            "title": "Free Shipping",
+            "min_order_total": null,
+            "price": 0,
+            "code": "freeshipping"
+        },
+        "flat_rate": {
+            "status": "1",
+            "title": "Flat Rate",
+            "price": 5,
+            "code": "freeshipping"
+        }
+    }
 
     public configSchema = Joi.object().keys({
         id: Joi.string().required().description("pk"),
-        type: Joi.string().required().valid("general", "payment", "shipment").description("sk"),
-        storeCode: Joi.string().required(),
-        storeId: Joi.number().required(),
-        noonPayConfig: Joi.object().keys({
-            brandCode: Joi.string().required(),
-            countryCode: Joi.string().required(),
-            paymentMethods: Joi.array().items(
+        type: Joi.string().required().valid(
+            Constant.DATABASE.TYPE.CONFIG.GENERAL,
+            Constant.DATABASE.TYPE.CONFIG.PAYMENT,
+            Constant.DATABASE.TYPE.CONFIG.SHIPMENT).description("sk"),
+        store_code: Joi.string().required(),
+        store_id: Joi.number().required(),
+        noon_pay_config: Joi.object().keys({
+            brand_code: Joi.string().required(),
+            country_code: Joi.string().required(),
+            payment_methods: Joi.array().items(
                 Joi.object().keys({
                     id: Joi.string().required(),
                     name: Joi.string().required(),
-                    orderCategory: Joi.string().required(),
+                    order_category: Joi.string().required(),
                 })),
             code: Joi.string().required(),
             status: Joi.string().required(),
         }),
-        codInfo: Joi.object().keys({
+        cod_info: Joi.object().keys({
             code: Joi.string().required(),
             status: Joi.string().required(),
         }),
@@ -100,12 +109,12 @@ export class ConfigEntity extends BaseEntity {
 
     /**
     * @method INTERNAL
-    * @param {string} cmsStoreRef : config id
-    * @param {string} type : config type
+    * @param {string=} store_code : store code
+    * @param {string=} type : config type
     * */
     async getConfig(payload: IConfigRequest.IFetchConfig) {
         try {
-            if (payload.type) {
+            if (payload.type && payload.type != "") {
                 let queryArg: IAerospike.Query = {
                     equal: {
                         bin: "type",
@@ -116,20 +125,26 @@ export class ConfigEntity extends BaseEntity {
                 }
                 let configData = await Aerospike.query(queryArg)
                 if (configData && configData.length > 0) {
-                    return configData[0]
-                } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
-            } else if (payload.cmsStoreRef) {
-                let getArg: IAerospike.Get = {
-                    set: this.set,
-                    key: payload.cmsStoreRef
-                }
-                let configData = await Aerospike.get(getArg)
-                if (configData && configData.id) {
                     return configData
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             }
+            if (payload.store_code && payload.store_code != "") {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "store_code",
+                        value: payload.store_code
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let configData = await Aerospike.query(queryArg)
+                if (configData && configData.length > 0) {
+                    return configData
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
+            }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "getConfig", JSON.stringify(error), false)
             return Promise.reject(error)

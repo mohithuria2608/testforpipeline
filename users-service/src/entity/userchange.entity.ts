@@ -4,6 +4,7 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
+import { notificationService } from '../grpc/client';
 
 export class UserchangeEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -22,7 +23,7 @@ export class UserchangeEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('userchange')
+        super(Constant.SET_NAME.USERCHANGE)
     }
 
     public userchangeSchema = Joi.object().keys({
@@ -35,6 +36,7 @@ export class UserchangeEntity extends BaseEntity {
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
         sdmUserRef: Joi.number().required(),
+        sdmCorpRef: Joi.number().required(),
         cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
         name: Joi.string().trim().required(),
@@ -177,7 +179,22 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.deleteUserId)
                 dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+            if (payload.emailVerified != undefined)
+                dataToUpdateUserchange['emailVerified'] = payload.emailVerified
+            if (payload.profileStep != undefined)
+                dataToUpdateUserchange['profileStep'] = payload.profileStep
+            if (payload.address)
+                dataToUpdateUserchange['address'] = payload.address
 
+
+            if (payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
+                notificationService.sendSms({
+                    message: payload.otp.toString(),
+                    destination: payload.fullPhnNo.replace("+", ""),
+                    type: 0,
+                    dlr: 1,
+                })
+            }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,
                 set: this.set,

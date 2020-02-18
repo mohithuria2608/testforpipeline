@@ -1,9 +1,11 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog } from '../utils'
 import * as  _ from 'lodash';
+import { kafkaService } from '../grpc/client';
 
 export class OrderSDMEntity extends BaseSDM {
 
@@ -18,63 +20,37 @@ export class OrderSDMEntity extends BaseSDM {
         try {
             let data = {
                 name: "UpdateOrder",
-                req: {
-                    "licenseCode": "AmericanaWeb",
-                    "conceptID": "3",
-                    "order": {
-                        "AddressID": "10084693",
-                        "AreaID": "538",
-                        "BackupStoreID": "2",
-                        "ConceptID": "3",
-                        "CustomerID": "7323013",
-                        "Entries": {
-                            "CEntry": [
-                                {
-                                    "ItemID": "110002",
-                                    "Level": "0",
-                                    "ModCode": "NONE",
-                                    "Name": "Kids Chicken Meal",
-                                    "OrdrMode": "OM_SAVED",
-                                    "Price": "13",
-                                    "Status": "NOTAPPLIED"
-                                },
-                                {
-                                    "ItemID": "110002",
-                                    "Level": "0",
-                                    "ModCode": "NONE",
-                                    "Name": "Kids Chicken Meal",
-                                    "OrdrMode": "OM_SAVED",
-                                    "Price": "13",
-                                    "Status": "NOTAPPLIED"
-                                },
-                                {
-                                    "ItemID": "110002",
-                                    "Level": "0",
-                                    "ModCode": "NONE",
-                                    "Name": "Kids Chicken Meal",
-                                    "OrdrMode": "OM_SAVED",
-                                    "Price": "13",
-                                    "Status": "NOTAPPLIED"
-                                }
-                            ]
-                        },
-                        "OrderMode": "1",
-                        "OriginalStoreID": "65",
-                        "PaidOnline": "0",
-                        "ServiceCharge": "0.25",
-                        "Source": "4",
-                        "Status": "0",
-                        "StoreID": "65",
-                        "SubTotal": "2.75",
-                        "Total": "3.0",
-                        "ValidateStore": "1"
-                    },
-                    "autoApprove": "true",
-                    "useBackupStoreIfAvailable": "true",
-                    "creditCardPaymentbool": "false",
-                    "menuTemplateID": "17"
-                }
+                req: payload
+                // {
+                //     "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
+                // conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                //     "order": payload,
+                //     "autoApprove": "true",
+                //     "useBackupStoreIfAvailable": "true",
+                //     "creditCardPaymentbool": "false",
+                //     "menuTemplateID": "17"
+                // }
             }
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
+                        info: {
+                            request: {
+                                body: data.req
+                            }
+                        },
+                        description: "",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                }
+            })
+
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
@@ -87,6 +63,26 @@ export class OrderSDMEntity extends BaseSDM {
     }
 
     /**
+   * @method SDK
+   * */
+    async updateOrder(payload) {
+        try {
+            let data = {
+                name: "UpdateOrder",
+                req: payload
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.UpdateOrderResult
+            else
+                return Promise.reject(JSON.stringify(res))
+        } catch (error) {
+            consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
     * @method SDK
     * */
     async getOrderDetail(payload: IOrderSdmRequest.IOrderDetail) {
@@ -94,8 +90,8 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "GetOrderDetails",
                 req: {
-                    licenseCode: "AmericanaWeb",
-                    conceptID: "3",
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     language: "En",
                     orderID: payload.sdmOrderRef,
                     menuTemplateID: "17"
@@ -106,6 +102,41 @@ export class OrderSDMEntity extends BaseSDM {
                 return res.GetOrderDetailsResult
             else
                 return {}
+        } catch (error) {
+            consolelog(process.cwd(), 'getOrderDetail', JSON.stringify(error), false)
+            return (error)
+        }
+    }
+
+    async processCreditCardOnSdm(payload: IOrderSdmRequest.IProcessCreditCardOnSdm) {
+        try {
+            let data = {
+                name: "ProcessCreditCardPayment",
+                req: {
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    language: "En",
+                    orderID: payload.sdmOrderRef,
+                    paymentType: 2,
+                    paymentSubType: 1,
+                    paymentStatus: 1,
+                    paymentTenderID: 34,
+                    amount: payload.transaction.amount,
+                    holderName: "Test payment user",
+                    cardNumber: payload.transaction.paymentDetails.paymentInfo,
+                    cardCCV: "123",
+                    cardExpire: payload.transaction.paymentDetails.expiryYear,
+                    refNumber: payload.transaction.transactions[0].id,
+                    refCountry: payload.transaction.paymentDetails.cardCountry,
+                    refGateway: "noonpay",
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.ProcessCreditCardPaymentResult
+            else {
+                return false
+            }
         } catch (error) {
             consolelog(process.cwd(), 'getOrderDetail', JSON.stringify(error), false)
             return (error)

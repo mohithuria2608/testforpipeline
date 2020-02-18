@@ -1,6 +1,5 @@
-import * as Constant from '../../constant'
 import { consolelog, readFile, deleteFile } from '../../utils'
-import { UploadBlob, ProductBlob } from "../../lib";
+import { UploadBlob, ProductBlob, ModelBlob } from "../../lib";
 
 export class UploadController {
     constructor() { }
@@ -20,7 +19,21 @@ export class UploadController {
             await deleteFile(image.path);
             return true;
         } catch (error) {
-            consolelog(process.cwd(),"uploadImage", JSON.stringify(error), false)
+            consolelog(process.cwd(), "uploadImage", error, false)
+            return Promise.reject(error);
+        }
+    }
+
+    /**
+    * @method post
+    * */
+    async uploadJSON(payload) {
+        try {
+            let uploadStatus = await ModelBlob.upload(payload.name, payload.json);
+            console.log("File Uploaded to -> ", uploadStatus.url);
+            return uploadStatus;
+        } catch (error) {
+            consolelog(process.cwd(), "uploadJSON", error, false)
             return Promise.reject(error);
         }
     }

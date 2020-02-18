@@ -1,7 +1,7 @@
 import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { paymentService } from '../../grpc/client'
+import { paymentService, userService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 
 export class WebhookNoonpayController {
@@ -15,7 +15,7 @@ export class WebhookNoonpayController {
      * @param {string} orderReference :eg : 281226369065
      * @param {string} orderId :eg : 281226369065
      * */
-    async processPayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
+    async authorizePayment(headers: ICommonRequest.IHeaders, payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
         try {
             let redirectUrl = config.get("server.order.url")
             let order = await ENTITY.OrderE.getOneEntityMdb({
@@ -34,25 +34,38 @@ export class WebhookNoonpayController {
                     $addToSet: {
                         transLogs: status
                     },
-                    "payment.transactionId": status.transaction[0].id,
-                    "payment.status": status.transaction[0].type
+                    "payment.transactionId": status.transactions[0].id,
+                    "payment.status": status.transactions[0].type
                 }
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                // if (status.paymentStatus == "AUTHORIZED") {
-                /**
-                 * @description update order on sdm with payment object
-                 */
-                redirectUrl = redirectUrl + "payment/success"
-                // } else {
-                //     redirectUrl = redirectUrl + "payment/failure"
-                // }
+                if (order.payment.status == "AUTHORIZATION") {
+                    /**
+                     * @description update order on sdm with payment object
+                     */
+                    /**
+                    * @description : update user with new cart
+                    */
+                    let newCartId = ENTITY.OrderE.ObjectId().toString()
+                    ENTITY.CartE.assignNewCart(order.cartId, newCartId, order.userId)
+                    let asUserChange = {
+                        set: Constant.SET_NAME.USER,
+                        as: {
+                            update: true,
+                            argv: JSON.stringify({ userId: order.userId, cartId: newCartId })
+                        }
+                    }
+                    await userService.sync(asUserChange)
+                    redirectUrl = redirectUrl + "payment/success?newCartId=" + newCartId
+                } else {
+                    redirectUrl = redirectUrl + "payment/failure"
+                }
                 return redirectUrl
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
 
         } catch (error) {
-            consolelog(process.cwd(), "processPayment", JSON.stringify(error), false)
+            consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

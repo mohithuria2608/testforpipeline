@@ -41,4 +41,9 @@ declare namespace ICommonRequest {
         },
         createdAt: number
     }
+    interface IPingService {
+        set: string,
+        service: string[],
+        store_code: string
+    }
 }

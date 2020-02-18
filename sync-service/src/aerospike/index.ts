@@ -105,6 +105,9 @@ class AerospikeClass {
         if (argv.update) {
             policy['exists'] = aerospike.policy.exists.UPDATE
         }
+        if (argv.createOrReplace) {
+            policy['exists'] = aerospike.policy.exists.CREATE_OR_REPLACE
+        }
         return policy
     }
 
@@ -449,6 +452,7 @@ class AerospikeClass {
         return new Promise(async (resolve, reject) => {
             try {
                 if (this.client) {
+                    if (!argv.before_nanos) argv.before_nanos = 0;
                     await this.client.truncate(this.namespace, argv.set, argv.before_nanos)
                     resolve()
                 } else reject('Client not initialized');

@@ -1,5 +1,6 @@
 'use strict';
 import * as Joi from '@hapi/joi';
+import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
@@ -14,7 +15,7 @@ export class CityEntity extends BaseEntity {
         }
     ]
     constructor() {
-        super('city')
+        super(Constant.SET_NAME.CITY)
     }
     
     public citySchema = Joi.object().keys({

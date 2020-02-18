@@ -1,4 +1,5 @@
 'use strict'
+const hash = require('object-hash');
 import * as config from 'config'
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
@@ -242,6 +243,11 @@ export let sendSuccess = function (successMsg, data) {
 export let authorizationHeaderObj = Joi.object({
     authorization: Joi.string().required().description("bearer space accessToken")
 }).unknown()
+
+
+export let hashObj = function (data: any) {
+    return hash(data)
+}
 
 export let cryptData = async function (stringToCrypt: string) {
     let hmac = crypto.createHmac('sha256', config.get('cryptoSecret'));

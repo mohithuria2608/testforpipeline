@@ -9,7 +9,7 @@ export class SessionEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
 
     constructor() {
-        super('session')
+        super(Constant.SET_NAME.SESSION)
     }
 
     /**

@@ -7,7 +7,7 @@ export class BaseSDM {
     protected soap = require('soap');
     private baseSOAPUrl = 'https://sdkuatuae.americana.com.sa:1995/?wsdl';
     private static client;
-    private licenseCode = "AmericanaWeb"
+    private licenseCode = Constant.SERVER.SDM.LICENSE_CODE
     private conceptID = 3;
     static obj;
 
@@ -23,7 +23,7 @@ export class BaseSDM {
     }
 
     /** initializes client for soap request */
-    async initClient() {
+    async init() {
         try {
             if (!BaseSDM.client) {
                 let soapC = await this.soap.createClientAsync(this.baseSOAPUrl)
@@ -43,11 +43,7 @@ export class BaseSDM {
     async requestData(name: string, params: object): Promise<any> {
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
-                // params['licenseCode'] = "AmericanaWeb"
-                // params['conceptID'] = "3"
-                // params['requestID'] = "1"
-                // params['language'] = "En"
-                consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
+                consolelog(process.cwd(), `SDM request on : ${name}   ::`, `   ${JSON.stringify(params)}`, true)
                 BaseSDM.client[name](params, function (error, result) {
                     if (error) { reject(error); }
                     else {

@@ -1,62 +1,117 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
 import { consolelog } from '../utils'
+import { rejects } from "assert";
 
 export class UserCMSEntity extends BaseCMS {
     constructor() {
         super()
     }
 
-    async createCostomer(payload: IUserRequest.IUserData): Promise<any> {
+    async createCustomer(payload: IUserRequest.IUserData): Promise<any> {
         try {
             let formObj: IUserCMSRequest.ICreateUser = {
-                customer: {
-                    firstname: payload.name,
-                    lastname: payload.name,
-                    email: payload.email,
-                    store_id: 1,// payload.storeId,
-                    website_id: 1,//payload.websiteId,
-                    addresses: []
-                },
-                password: payload.password
+                "email": payload.email,
+                "phone": payload.fullPhnNo,
+                "websiteId": "1",
+                "firstName": payload.name,
+                "lastName": payload.name,
+                "password": "123456",
             }
-
-            // let authApiLastHit = global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] ? global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] : 0
-            // let auth = global[Constant.CMS.GLOBAL_VAR.AUTH_TOKEN]
-            // if (authApiLastHit + Constant.SERVER.CMS_AUTH_EXP < new Date().getTime()) {
-            //     let authapi = await this.auth()
-            //     global[Constant.CMS.GLOBAL_VAR.AUTH_TOKEN] = authapi
-            //     auth = global[Constant.CMS.GLOBAL_VAR.AUTH_TOKEN]
-            // }
-
-            // consolelog(process.cwd(), "auth", auth, false)
-
-            // const headers = {};
-            // headers['Authorization'] = "bearer" + auth
-            // const form = formObj;
-            // const options = {
-            //     method: Constant.CMS.END_POINTS.AUTH.METHOD,
-            //     url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.AUTH.URL,
-            // }
-            // let cmsRes = await this.request(options, headers, form)
-            // return cmsRes
+            const headers = {};
+            const form = formObj;
+            const options = {
+                method: Constant.DATABASE.CMS.END_POINTS.CREATE_USER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.CREATE_USER.URL,
+            }
+            let cmsRes = await this.request(options, headers, form)
+            if (cmsRes && cmsRes.length > 0) {
+                if (cmsRes[0]['success'] == 'true')
+                    cmsRes[0]
+                else
+                    return Promise.reject(cmsRes[0]['error_message'])
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
-            consolelog(process.cwd(), 'createCostomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'createCustomer', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async updateCostomer(payload) {
+    async updateCustomer(payload: IUserRequest.IUserData): Promise<any> {
         try {
-            return {}
+            let formObj: IUserCMSRequest.IUpdateUser = {
+                "customerId": payload.cmsUserRef,
+                "websiteId": "1",
+                "alternatePhone": ""
+            }
+            if (payload.email)
+                formObj['email'] = payload.email
+            if (payload.fullPhnNo)
+                formObj['phone'] = payload.fullPhnNo
+            if (payload.name) {
+                formObj['firstName'] = payload.name
+                formObj['lastName'] = payload.name
+            }
+            const headers = {};
+            const form = formObj;
+            const options = {
+                method: Constant.DATABASE.CMS.END_POINTS.UPDATE_USER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.UPDATE_USER.URL,
+            }
+            let cmsRes = await this.request(options, headers, form)
+            if (cmsRes && cmsRes.length > 0) {
+                if (cmsRes[0]['success'])
+                    cmsRes[0]
+                else
+                    return Promise.reject(cmsRes[0]['error_message'])
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
-            consolelog(process.cwd(), 'updateCostomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'updateCustomer', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
+    async getCustomer(payload: IUserCMSRequest.IGetUser): Promise<any> {
+        try {
+            let formObj = {
+                "websiteId": "1",
+            }
+            if (payload.cmsUserRef)
+                formObj['customerId'] = payload.cmsUserRef
+            else
+                formObj['customerId'] = ""
+            if (payload.email)
+                formObj['email'] = payload.email
+            else
+                formObj['email'] = ""
+            if (payload.fullPhnNo)
+                formObj['phone'] = payload.fullPhnNo
+            else
+                formObj['phone'] = ""
+            const headers = {};
+            const form = formObj;
+            const options = {
+                method: Constant.DATABASE.CMS.END_POINTS.GET_USER.METHOD,
+                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.GET_USER.URL,
+            }
+            let cmsRes = await this.request(options, headers, form)
+            if (cmsRes && cmsRes.length > 0) {
+                if (cmsRes[0]['success'])
+                    cmsRes[0]
+                else
+                    return {}
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+        } catch (error) {
+            consolelog(process.cwd(), 'getCustomer', JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const UserCMSE = new UserCMSEntity()

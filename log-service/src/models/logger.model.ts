@@ -15,9 +15,11 @@ const loggerSchema = new Schema({
     type: {
         type: String, enum: [
             Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
+            Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR
-        ]
+        ],
+        index: true
     },
     info: { type: Schema.Types.Mixed },
     description: { type: String },

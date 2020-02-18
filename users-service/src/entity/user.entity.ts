@@ -25,7 +25,7 @@ export class UserEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('user')
+        super(Constant.SET_NAME.USER)
     }
 
     public userSchema = Joi.object().keys({
@@ -34,10 +34,12 @@ export class UserEntity extends BaseEntity {
         brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
         country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
         email: Joi.string().email().lowercase().trim().required(),
+        emailVerified: Joi.number().valid(0, 1).required(),
         fullPhnNo: Joi.string().trim().required().description("sk"),
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
         sdmUserRef: Joi.number().required(),
+        sdmCorpRef: Joi.number().required(),
         cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
         name: Joi.string().trim().required(),
@@ -121,10 +123,14 @@ export class UserEntity extends BaseEntity {
                 userUpdate['phnNo'] = payload.phnNo
             if (payload.sdmUserRef)
                 userUpdate['sdmUserRef'] = payload.sdmUserRef
+            if (payload.sdmCorpRef)
+                userUpdate['sdmCorpRef'] = payload.sdmCorpRef
             if (payload.cmsUserRef)
                 userUpdate['cmsUserRef'] = payload.cmsUserRef
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
+            if (payload.emailVerified != undefined)
+                userUpdate['emailVerified'] = payload.emailVerified
             if (payload.name)
                 userUpdate['name'] = payload.name
             if (payload.socialKey)
@@ -138,7 +144,6 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-
 
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
@@ -220,10 +225,11 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
-            let res = await SDM.UserSDME.createCustomer(payload)
+            let res = await SDM.UserSDME.createCustomerOnSdm(payload)
             let putArg: IAerospike.Put = {
                 bins: {
-                    sdmUserRef: parseInt(res.id.toString())
+                    sdmUserRef: parseInt(res.CUST_ID.toString()),
+                    sdmCorpRef: parseInt(res.CUST_CORPID.toString())
                 },
                 set: this.set,
                 key: payload.id,
@@ -243,7 +249,7 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnSdm(payload: IUserRequest.IUserData) {
         try {
-            let res = await SDM.UserSDME.updateCustomer(payload)
+            let res = await SDM.UserSDME.updateCustomerOnSdm(payload)
             return res
         } catch (error) {
             consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
@@ -257,7 +263,7 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.createCostomer(payload)
+            let res = await CMS.UserCMSE.createCustomer(payload)
             consolelog(process.cwd(), "createUserOnCms", res, false)
             let putArg: IAerospike.Put = {
                 bins: { cmsUserRef: parseInt(res.id.toString()) },
@@ -279,7 +285,7 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.updateCostomer(payload)
+            let res = await CMS.UserCMSE.updateCustomer(payload)
             consolelog(process.cwd(), "updateUserOnCms", res, false)
             return {}
         } catch (error) {

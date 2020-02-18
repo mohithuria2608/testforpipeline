@@ -13,6 +13,7 @@ declare namespace IStoreGrpcRequest {
         countryId: number,
         provinceId: number,
         areaId: number,
+        cityId: number,
         streetId: number,
         districtId: number,
         mapId: number,

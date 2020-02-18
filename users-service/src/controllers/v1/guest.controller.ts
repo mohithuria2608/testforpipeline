@@ -48,9 +48,12 @@ export class GuestController {
     * @param {string} email : email
     * @param {string} name : name
     * @param {string} isGuest : number
+    * @param {string} addressId : number
+    * @param {string} addressType 
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let address
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
@@ -63,6 +66,19 @@ export class GuestController {
                 background: false,
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+
+            if (payload.addressId && payload.addressType) {
+                let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
+                    userId: auth.id,
+                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
+                    addressId: payload.addressId
+                })
+                if (oldAdd && oldAdd.id)
+                    address = oldAdd
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
+            }
+
             let userchangePayload = {
                 username: username,
                 fullPhnNo: fullPhnNo,
@@ -79,6 +95,8 @@ export class GuestController {
                 country: headers.country,
                 profileStep: 1
             }
+            if (address && address.id)
+                userchangePayload['address'] = address
             if (checkUser && checkUser.length > 0) {
                 userchangePayload['id'] = checkUser[0].id
                 userchangePayload['deleteUserId'] = auth.id
@@ -94,7 +112,7 @@ export class GuestController {
             userData['phnNo'] = payload.phnNo
             userData['cCode'] = payload.cCode
             userData['phnVerified'] = 0
-            userData['profileStep'] = 1
+            userData['profileStep'] = 0
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", JSON.stringify(error), false)

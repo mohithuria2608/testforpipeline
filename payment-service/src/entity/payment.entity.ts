@@ -547,7 +547,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter authorization transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -588,7 +588,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter void transaction(reverse) details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -631,7 +631,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter capture transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -676,7 +676,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter refund transaction details
-                transaction: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -736,7 +736,7 @@ export class PaymentClass extends BaseEntity {
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
-                transaction: response.result.transaction // capture payment transaction
+                transactions: [response.result.transaction] // capture payment transaction
             };
             // TODO: Update Payment status
             // To be done at order service
@@ -803,7 +803,7 @@ export class PaymentClass extends BaseEntity {
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
-                transaction: response.result.transaction // reverse payment transaction
+                transactions: [response.result.transaction] // reverse payment transaction
             };
             // TODO: Update Payment status
             // To be done at order service
@@ -875,7 +875,7 @@ export class PaymentClass extends BaseEntity {
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
-                transaction: response.result.transaction // refund payment transaction
+                transactions: [response.result.transaction] // refund payment transaction
             };
             // TODO: Update Payment status
             // To be done at order service

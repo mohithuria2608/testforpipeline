@@ -50,7 +50,7 @@ declare namespace IPaymentGrpcRequest {
         totalRefundedAmount: number;
         totalReversedAmount: number;
         paymentDetails: IPaymentDetail;
-        transaction?: ITransaction[];
+        transactions?: ITransaction[];
     }
 
     interface IPaymentDetail {

@@ -93,7 +93,8 @@ declare namespace IAerospike {
         ttl?: number,
         create?: boolean,
         replace?: boolean,
-        update?: boolean
+        update?: boolean,
+        createOrReplace?: boolean
     }
 
     interface ListOperation {

@@ -5,7 +5,7 @@ import { consolelog } from '../utils'
 
 export class UserEntity extends BaseEntity {
     constructor() {
-        super('user')
+        super(Constant.SET_NAME.USER)
     }
 }
 

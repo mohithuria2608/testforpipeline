@@ -8,6 +8,8 @@ declare namespace IGuestRequest {
         phnNo: string,
         email: string,
         name: string,
-        isGuest: number
+        isGuest: number,
+        addressId?: string,
+        addressType?: string
     }
 }

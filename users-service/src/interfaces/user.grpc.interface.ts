@@ -39,9 +39,9 @@ declare namespace IUserGrpcRequest {
         id: string
         sdmAddressRef: number,
         cmsAddressRef: number,
-        countryId: number,
-        areaId: number,
-        storeId: number,
+        sdmStoreRef: number,
+        sdmAreaRef: number,
+        sdmCityRef: number,
         tag: string,
         bldgName: string,
         description: string,
