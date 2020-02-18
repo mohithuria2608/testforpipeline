@@ -4,14 +4,13 @@ import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
 import { consolelog } from '../utils'
-import { rejects } from "assert";
 
 export class UserCMSEntity extends BaseCMS {
     constructor() {
         super()
     }
 
-    async createCustomer(payload: IUserRequest.IUserData): Promise<any> {
+    async createCustomerOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
             let formObj: IUserCMSRequest.ICreateUser = {
                 "email": payload.email,
@@ -38,12 +37,12 @@ export class UserCMSEntity extends BaseCMS {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
-            consolelog(process.cwd(), 'createCustomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'createCustomerOnCms', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async updateCustomer(payload: IUserRequest.IUserData): Promise<any> {
+    async updateCustomerOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
             let formObj: IUserCMSRequest.IUpdateUser = {
                 "customerId": payload.cmsUserRef,
@@ -77,12 +76,12 @@ export class UserCMSEntity extends BaseCMS {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
-            consolelog(process.cwd(), 'updateCustomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'updateCustomerOnCms', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async getCustomer(payload: IUserCMSRequest.IGetUser): Promise<any> {
+    async getCustomerFromCms(payload: IUserCMSRequest.IGetUser): Promise<any> {
         try {
             let formObj = {
                 "websiteId": "1",
@@ -114,7 +113,7 @@ export class UserCMSEntity extends BaseCMS {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
-            consolelog(process.cwd(), 'getCustomer', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'getCustomerFromCms', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -134,7 +134,7 @@ export class OrderClass extends BaseEntity {
                             product.items.forEach(i => {
                                 if (i['sku'] == product.selectedItem) {
                                     Entries.CEntry.push({
-                                        ItemID: 600002,// i.sdmId,
+                                        ItemID: i.sdmId,
                                         Level: 0,
                                         ModCode: "NONE",
                                         Name: i.name,
@@ -501,6 +501,10 @@ export class OrderClass extends BaseEntity {
     * */
     async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
         try {
+            let amount = cartData.amount
+            if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+                amount = amount.filter(obj => { return obj.type != "TAX" })
+            }
             let orderData = {
                 orderType: orderType,
                 cartId: cartData.cartId,
@@ -513,7 +517,7 @@ export class OrderClass extends BaseEntity {
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: cartData.items,
-                amount: cartData.amount,
+                amount: amount,
                 address: {
                     addressId: address.id,
                     sdmAddressRef: address.sdmAddressRef,
@@ -581,9 +585,6 @@ export class OrderClass extends BaseEntity {
                                     consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
                                     if (order.payment.paymentMethodId == 0) {
                                         consolelog(process.cwd(), "order step 2 :       ", parseInt(sdmOrder.Status), true)
-                                        /**
-                                         * @todo : nothing
-                                         */
                                     } else {
                                         consolelog(process.cwd(), "order step 3 :       ", parseInt(sdmOrder.Status), true)
                                         if (sdmOrder.Status == 96) {
@@ -685,14 +686,18 @@ export class OrderClass extends BaseEntity {
                                         updatedAt: new Date().getTime(),
                                         sdmOrderStatus: sdmOrder.Status
                                     })
+                                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                                        recheck = false
                                 }
                                 else if (parseInt(sdmOrder.Status) == 16 || parseInt(sdmOrder.Status) == 32) {
                                     consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
-                                    this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
-                                        updatedAt: new Date().getTime(),
-                                        sdmOrderStatus: sdmOrder.Status
-                                    })
+                                    if (parseInt(sdmOrder.Status) == 32) {
+                                        this.updateOneEntityMdb({ _id: order._id }, {
+                                            status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            sdmOrderStatus: sdmOrder.Status
+                                        })
+                                    }
                                 }
                                 else if (parseInt(sdmOrder.Status) == 64 || parseInt(sdmOrder.Status) == 128 || parseInt(sdmOrder.Status) == 2048) {
                                     consolelog(process.cwd(), "order step 16 :       ", parseInt(sdmOrder.Status), true)

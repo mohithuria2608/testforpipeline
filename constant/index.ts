@@ -414,6 +414,13 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            MINIMUM_CART_VALUE_VIOLATION:{
+                statusCode: 400,
+                httpCode: 400,
+                type: 'MINIMUM_CART_VALUE_VIOLATION',
+                message: 'Minimum cart value not met'
+            },
+
             INVALID_PROMO: {
                 statusCode: 400,
                 httpCode: 400,

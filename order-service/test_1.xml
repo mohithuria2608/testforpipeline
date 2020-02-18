@@ -1,7 +1,3 @@
-39785972
-
-
-
 <?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -11,23 +7,77 @@
     xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
     xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
     <soap:Body>
-        <ProcessCreditCardPayment xmlns="http://tempuri.org/">
+        <UpdateOrder xmlns="http://tempuri.org/">
             <licenseCode>AmericanaWeb</licenseCode>
             <conceptID>3</conceptID>
-            <language>En</language>
-            <orderID>39785972</orderID>
-            <paymentType>2</paymentType>
-            <paymentSubType>1</paymentSubType>
-            <paymentStatus>1</paymentStatus>
-            <paymentTenderID>34</paymentTenderID>
-            <amount>44.5</amount>
-            <holderName>Test payment user</holderName>
-            <cardNumber>400000xxxxxx0002</cardNumber>
-            <cardCCV>123</cardCCV>
-            <cardExpire>2034</cardExpire>
-            <refNumber>5819647468036006304010</refNumber>
-            <refCountry>US</refCountry>
-            <refGateway>noonpay</refGateway>
-        </ProcessCreditCardPayment>
+            <order>
+                <licenseCode>AmericanaWeb</licenseCode>
+                <language>en</language>
+                <conceptID>3</conceptID>
+                <order>
+                    <AddressID>10512559</AddressID>
+                    <ConceptID>3</ConceptID>
+                    <CountryID>1</CountryID>
+                    <CustomerID>7694266</CustomerID>
+                    <DeliveryChargeID>279</DeliveryChargeID>
+                    <DistrictID>-1</DistrictID>
+                    <Entries>
+                        <CEntry>
+                            <ItemID>710001</ItemID>
+                            <Level>0</Level>
+                            <ModCode>NONE</ModCode>
+                            <Name>Cheese Cake</Name>
+                            <OrdrMode>OM_SAVED</OrdrMode>
+                            <Price>9.5</Price>
+                            <Status>NOTAPPLIED</Status>
+                        </CEntry>
+                        <CEntry>
+                            <ItemID>710001</ItemID>
+                            <Level>0</Level>
+                            <ModCode>NONE</ModCode>
+                            <Name>Cheese Cake</Name>
+                            <OrdrMode>OM_SAVED</OrdrMode>
+                            <Price>9.5</Price>
+                            <Status>NOTAPPLIED</Status>
+                        </CEntry>
+                        <CEntry>
+                            <ItemID>710001</ItemID>
+                            <Level>0</Level>
+                            <ModCode>NONE</ModCode>
+                            <Name>Cheese Cake</Name>
+                            <OrdrMode>OM_SAVED</OrdrMode>
+                            <Price>9.5</Price>
+                            <Status>NOTAPPLIED</Status>
+                        </CEntry>
+                        <CEntry>
+                            <ItemID>710001</ItemID>
+                            <Level>0</Level>
+                            <ModCode>NONE</ModCode>
+                            <Name>Cheese Cake</Name>
+                            <OrdrMode>OM_SAVED</OrdrMode>
+                            <Price>9.5</Price>
+                            <Status>NOTAPPLIED</Status>
+                        </CEntry>
+                    </Entries>
+                    <OrderID>0</OrderID>
+                    <OrderMode>2</OrderMode>
+                    <OrderType>0</OrderType>
+                    <ProvinceID>7</ProvinceID>
+                    <StoreID>1219</StoreID>
+                    <StreetID>315</StreetID>
+                </order>
+                <autoApprove>true</autoApprove>
+                <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
+                <orderNotes1>Test order notes 1</orderNotes1>
+                <orderNotes2>Test order notes 2</orderNotes2>
+                <creditCardPaymentbool>true</creditCardPaymentbool>
+                <isSuspended>true</isSuspended>
+                <menuTemplateID>17</menuTemplateID>
+            </order>
+            <autoApprove>true</autoApprove>
+            <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
+            <creditCardPaymentbool>false</creditCardPaymentbool>
+            <menuTemplateID>17</menuTemplateID>
+        </UpdateOrder>
     </soap:Body>
 </soap:Envelope>

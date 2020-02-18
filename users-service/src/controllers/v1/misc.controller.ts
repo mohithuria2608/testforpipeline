@@ -20,6 +20,7 @@ export class MiscController {
                 locationVicinity: 100,
                 paymentSuccessUrl: redirectUrl + "payment/success",
                 paymentFailureUrl: redirectUrl + "payment/failure",
+
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
@@ -30,6 +31,7 @@ export class MiscController {
                         customerCare: "666666666",
                         supportEmail: "kfc_uae@ag.com",
                         cashondelivery: 0,
+                        minOrderAmount: 23.5,
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR

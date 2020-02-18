@@ -104,17 +104,17 @@ export class GuestController {
                 userchangePayload['deleteUserId'] = auth.id
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
-                let cmsUser = await CMS.UserCMSE.getCustomer({ fullPhnNo: fullPhnNo })
-                if (cmsUser && cmsUser.customer_id) {
-                    userchangePayload['cmsUserRef'] = cmsUser.customer_id
-                    userchangePayload['email'] = cmsUser.email
-                    userchangePayload['name'] = cmsUser.firstName + " " + cmsUser.lastName
+                let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
+                    userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
+                    userchangePayload['email'] = cmsUserByPhoneNo.email
+                    userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                    if (cmsUser.sdmUserRef)
-                        userchangePayload['sdmUserRef'] = cmsUser.sdmUserRef
-                    if (cmsUser.sdmCorpRef)
-                        userchangePayload['sdmCorpRef'] = cmsUser.sdmCorpRef
-                    if (cmsUser.address && cmsUser.address.length > 0) {
+                    if (cmsUserByPhoneNo.sdmUserRef)
+                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdmUserRef
+                    if (cmsUserByPhoneNo.sdmCorpRef)
+                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdmCorpRef
+                    if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
                         /**
                          * @todo : sync cms address on as
                          */

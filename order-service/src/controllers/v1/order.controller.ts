@@ -50,9 +50,16 @@ export class OrderController {
 
     /**
      * @method POST
-     * @param {string} orderType
      * @param {string} addressId
+     * @param {string} orderType
+     * @param {string} paymentMethodId
      * @param {string} cartId
+     * @param {string} curMenuId
+     * @param {string} menuUpdatedAt
+     * @param {string} lat
+     * @param {string} lng
+     * @param {string} couponCode
+     * @param {string} items
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -116,14 +123,15 @@ export class OrderController {
                 cartData['orderType'] = payload.orderType
                 order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
             }
-
-            let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
+            // let subTotal = order.amount.filter(elem => { return elem.type == "SUB_TOTAL" })
+            // let tax = order.amount.filter(elem => { return elem.type == "TAX" })
+            let amount = order.amount.filter(elem => { return elem.type == "TOTAL" })
+            // if ((subTotal[0].amount + tax[0].amount) < 23.5) {
+            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MINIMUM_CART_VALUE_VIOLATION)
+            // }
             if (payload.paymentMethodId != 0) {
-                /**
-                 * @todo : noonpay order id = cms order id
-                 */
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                    orderId: order._id.toString(),
+                    orderId: order.cmsOrderRef.toString(),
                     amount: amount[0].amount,
                     storeCode: "kfc_uae_store",
                     paymentMethodId: 1,

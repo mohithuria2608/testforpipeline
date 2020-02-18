@@ -21,15 +21,6 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "UpdateOrder",
                 req: payload
-                // {
-                //     "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
-                // conceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                //     "order": payload,
-                //     "autoApprove": "true",
-                //     "useBackupStoreIfAvailable": "true",
-                //     "creditCardPaymentbool": "false",
-                //     "menuTemplateID": "17"
-                // }
             }
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOGGER,
@@ -122,12 +113,12 @@ export class OrderSDMEntity extends BaseSDM {
                     paymentStatus: 1,
                     paymentTenderID: 34,
                     amount: payload.transaction.amount,
-                    holderName: "Test payment user",
-                    cardNumber: payload.transaction.paymentDetails.paymentInfo,
-                    cardCCV: "123",
-                    cardExpire: payload.transaction.paymentDetails.expiryYear,
+                    // holderName: "",// "Test payment user",
+                    // cardNumber: "",// payload.transaction.paymentDetails.paymentInfo,
+                    // cardCCV: "",// "123",
+                    // cardExpire: "",// payload.transaction.paymentDetails.expiryYear,
                     refNumber: payload.transaction.transactions[0].id,
-                    refCountry: payload.transaction.paymentDetails.cardCountry,
+                    // refCountry: "",// payload.transaction.paymentDetails.cardCountry,
                     refGateway: "noonpay",
                 }
             }
@@ -138,7 +129,7 @@ export class OrderSDMEntity extends BaseSDM {
                 return false
             }
         } catch (error) {
-            consolelog(process.cwd(), 'getOrderDetail', JSON.stringify(error), false)
+            consolelog(process.cwd(), 'processCreditCardOnSdm', JSON.stringify(error), false)
             return (error)
         }
     }

@@ -269,7 +269,7 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.createCustomer(payload)
+            let res = await CMS.UserCMSE.createCustomerOnCms(payload)
             consolelog(process.cwd(), "createUserOnCms", res, false)
             if (res && res.customer_id) {
                 let putArg: IAerospike.Put = {
@@ -296,7 +296,7 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.updateCustomer(payload)
+            let res = await CMS.UserCMSE.updateCustomerOnCms(payload)
             consolelog(process.cwd(), "updateUserOnCms", res, false)
             return {}
         } catch (error) {
