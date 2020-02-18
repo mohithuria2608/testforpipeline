@@ -110,10 +110,10 @@ export class GuestController {
                     userchangePayload['email'] = cmsUserByPhoneNo.email
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                    if (cmsUserByPhoneNo.sdmUserRef)
-                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdmUserRef
-                    if (cmsUserByPhoneNo.sdmCorpRef)
-                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdmCorpRef
+                    if (cmsUserByPhoneNo.sdm_user_ref)
+                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
+                    if (cmsUserByPhoneNo.sdm_corp_ref)
+                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
                     if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
                         /**
                          * @todo : sync cms address on as

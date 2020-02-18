@@ -92,10 +92,10 @@ export class UserController {
                 let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                 if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
                     userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
-                    if (cmsUserByPhoneNo.sdmUserRef)
-                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdmUserRef
-                    if (cmsUserByPhoneNo.sdmCorpRef)
-                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdmCorpRef
+                    if (cmsUserByPhoneNo.sdm_user_ref)
+                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
+                    if (cmsUserByPhoneNo.sdm_corp_ref)
+                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
                     userchangePayload['email'] = cmsUserByPhoneNo.email
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
@@ -371,10 +371,10 @@ export class UserController {
                             userchangePayload['email'] = cmsUserByPhoneNo.email
                             userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                             userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                            if (cmsUserByPhoneNo.sdmUserRef)
-                                userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdmUserRef
-                            if (cmsUserByPhoneNo.sdmCorpRef)
-                                userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdmCorpRef
+                            if (cmsUserByPhoneNo.sdm_user_ref)
+                                userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
+                            if (cmsUserByPhoneNo.sdm_corp_ref)
+                                userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
                             if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
                                 /**
                                  * @todo : sync cms address on as
@@ -432,10 +432,10 @@ export class UserController {
             let cmsUserByEmail = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
             if (cmsUserByEmail && cmsUserByEmail.customer_id) {
                 dataToUpdateAs['cmsUserRef'] = cmsUserByEmail.customer_id
-                if (cmsUserByEmail.sdmUserRef)
-                    dataToUpdateAs['sdmUserRef'] = cmsUserByEmail.sdmUserRef
-                if (cmsUserByEmail.sdmCorpRef)
-                    dataToUpdateAs['sdmCorpRef'] = cmsUserByEmail.sdmCorpRef
+                if (cmsUserByEmail.sdm_user_ref)
+                    dataToUpdateAs['sdmUserRef'] = cmsUserByEmail.sdm_user_ref
+                if (cmsUserByEmail.sdm_corp_ref)
+                    dataToUpdateAs['sdmCorpRef'] = cmsUserByEmail.sdm_corp_ref
                 if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
                     /**
                      * @todo : sync cms address on as
