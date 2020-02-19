@@ -28,7 +28,7 @@ export class StoreEntity extends BaseEntity {
         }
     ]
     constructor() {
-        super('store')
+        super(Constant.SET_NAME.STORE)
     }
 
     public storeSchema = Joi.object().keys({

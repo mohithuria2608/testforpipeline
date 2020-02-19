@@ -1,7 +1,8 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity'
-import { userController } from '../../controllers';
+import { userController, miscController } from '../../controllers';
+import * as Constant from '../../constant'
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -42,7 +43,18 @@ server.addService(userProto.UserService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res: {} = await userController.syncUser(call.request)
+            let data = call.request
+            let res: any
+            switch (data.set) {
+                case Constant.SET_NAME.USER: {
+                    res = await userController.syncUser(data)
+                    break;
+                }
+                case Constant.SET_NAME.PING_SERVICE: {
+                    res = await miscController.pingService(data)
+                    break;
+                }
+            }
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)

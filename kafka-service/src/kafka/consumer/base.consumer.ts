@@ -11,7 +11,7 @@ export class BaseConsumer {
     private topic: string;
 
     private _onMessage: Subject<any> = new Subject();
-    constructor(topic: Constant.KAFKA_TOPIC, groupId?: string) {
+    constructor(topic: string, groupId?: string) {
         this.topic = topic;
         this.initConsumer(groupId);
         this.handleMessages();

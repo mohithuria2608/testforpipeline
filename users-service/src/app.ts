@@ -6,8 +6,6 @@ import middleware from './middlewares'
 import route from './route'
 import { event } from './lib'
 import * as SDM from './sdm';
-import * as Constant from './constant';
-import * as ENTITY from './entity';
 
 const app = new Koa()
 
@@ -32,7 +30,6 @@ export const start = (async () => {
     // });
     await bootstrap(server)
 
-    ENTITY.AddressE.addAddressOnSdm()
   } catch (error) {
     console.error(error)
   }

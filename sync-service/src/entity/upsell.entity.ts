@@ -8,7 +8,7 @@ export class UpsellClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
 
     constructor() {
-        super('upsell')
+        super(Constant.SET_NAME.UPSELL)
     }
 }
 

@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
+import { orderService } from '../../grpc/client';
 
 export class PaymentController {
 
@@ -13,27 +14,48 @@ export class PaymentController {
      */
     public async getPaymentMethods(headers: ICommonRequest.IHeaders, payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let cart = await orderService.getCart({ cartId: payload.cartId })
+            let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             let storeCode = "kfc_uae_store"
-            return [
-                {
-                    "id": 1,
-                    "name": "Card",
-                    "image": "",
-                    default: 0
-                },
-                {
-                    "id": 2,
-                    "name": "Visa Checkout",
-                    "image": "",
-                    default: 0
-                },
-                {
-                    "id": 0,
-                    "name": "Cash On Delivery",
-                    "image": "",
-                    default: 1
-                }
-            ]
+            if (amount[0].amount < Constant.SERVER.MIN_COD_CART_VALUE) {
+                return [
+                    {
+                        "id": 1,
+                        "name": "Card",
+                        "image": "",
+                        default: 0
+                    },
+                    {
+                        "id": 2,
+                        "name": "Visa Checkout",
+                        "image": "",
+                        default: 0
+                    }
+                ]
+            } else {
+                return [
+                    {
+                        "id": 1,
+                        "name": "Card",
+                        "image": "",
+                        default: 0
+                    },
+                    {
+                        "id": 2,
+                        "name": "Visa Checkout",
+                        "image": "",
+                        default: 0
+                    },
+                    {
+                        "id": 0,
+                        "name": "Cash On Delivery",
+                        "image": "",
+                        default: 1
+                    }
+                ]
+
+            }
+
             await ENTITY.PaymentE.getPaymentMethods(storeCode);
         } catch (error) {
             consolelog(process.cwd(), "getPaymentMethods", JSON.stringify(error), false)

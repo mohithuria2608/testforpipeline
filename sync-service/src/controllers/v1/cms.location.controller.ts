@@ -9,13 +9,13 @@ export class CmsLocationController {
 
     /**
      * @method POST
-     * @description syncs upsell products
+     * @description syncs stores
      * @param {any} data
     */
     async postStoresList(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
             payload['type'] = "location"
-            let upsellChange = {
+            let storeChange = {
                 set: ENTITY.LocationE.set,
                 as: {
                     create: true,
@@ -23,10 +23,10 @@ export class CmsLocationController {
                 }
             }
             if (payload.action == "update") {
-                upsellChange['as']['update'] = true
-                delete upsellChange['as']['create']
+                storeChange['as']['update'] = true
+                delete storeChange['as']['create']
             }
-            kafkaService.kafkaSync(upsellChange);
+            kafkaService.kafkaSync(storeChange);
             return {}
         } catch (error) {
             consolelog(process.cwd(), "postStoresList", JSON.stringify(error), false)

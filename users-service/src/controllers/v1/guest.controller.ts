@@ -2,6 +2,8 @@ import * as Constant from '../../constant'
 import { formatUserData, consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
+import * as CMS from '../../cms';
+import * as SDM from '../../sdm';
 
 export class GuestController {
 
@@ -12,7 +14,7 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            let userCreate: IUserRequest.IUserData = {
+            let tempUser: IUserRequest.IUserData = {
                 id: ENTITY.UserE.ObjectId().toString(),
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 brand: headers.brand,
@@ -20,7 +22,7 @@ export class GuestController {
                 cartId: ENTITY.UserE.ObjectId().toString(),
                 phnVerified: 0,
             }
-            let userData = await ENTITY.UserE.buildUser(userCreate)
+            let userData = await ENTITY.UserE.buildUser(tempUser)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 1,
                 userId: userData.id
@@ -48,6 +50,8 @@ export class GuestController {
     * @param {string} email : email
     * @param {string} name : name
     * @param {string} isGuest : number
+    * @param {string} addressId : number
+    * @param {string} addressType 
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -67,8 +71,8 @@ export class GuestController {
 
             if (payload.addressId && payload.addressType) {
                 let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
-                    userId: userData.id,
-                    bin: payload.addressType,
+                    userId: auth.id,
+                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
                     addressId: payload.addressId
                 })
                 if (oldAdd && oldAdd.id)
@@ -91,7 +95,8 @@ export class GuestController {
                 isGuest: payload.isGuest,
                 brand: headers.brand,
                 country: headers.country,
-                profileStep: 1
+                profileStep: 1,
+
             }
             if (address && address.id)
                 userchangePayload['address'] = address
@@ -100,8 +105,28 @@ export class GuestController {
                 userchangePayload['deleteUserId'] = auth.id
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
-                userchangePayload['id'] = auth.id
-                userchangePayload['deleteUserId'] = ""
+                let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
+                    userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
+                    userchangePayload['email'] = cmsUserByPhoneNo.email
+                    userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
+                    userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    if (cmsUserByPhoneNo.sdm_user_ref)
+                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
+                    if (cmsUserByPhoneNo.sdm_corp_ref)
+                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
+                    if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
+                        /**
+                         * @todo : sync cms address on as
+                         */
+                    }
+                } else {
+                    userchangePayload['syncUserOnCms'] = 1
+                    userchangePayload['sdmUserRef'] = 0
+                    userchangePayload['sdmCorpRef'] = 0
+                    userchangePayload['cmsUserRef'] = 0
+                }
+                console.log("userchangePayload", userchangePayload)
                 await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
             }
             userData['name'] = payload.name

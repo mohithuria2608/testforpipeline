@@ -6,7 +6,7 @@ declare namespace IUserchangeRequest {
         otpExpAt?: number,
         otpVerified?: number,
         deleteUserId?: string,
-        address?: any
+        address?: IAddressRequest.IAddress
     }
 
     interface IGetUserchange {

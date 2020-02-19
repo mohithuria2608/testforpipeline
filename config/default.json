@@ -182,19 +182,19 @@
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
     "sms": {
-        "host": "smpp.rmlconnect.net",
+        "host": "sms.rmlconnect.net",
         "port": "2345",
         "userName": "Adigital",
         "password": "vSqKeZdc",
         "endPoint": "bulksms/bulksms",
-        "source": ""
+        "source": "KFC"
     },
     "email": {
         "sgKey": "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",
         "sender": "support@americana.com"
     },
     "kafka": {
-        "url": "localhost:9093"
+        "url": "localhost:9092"
     },
     "aerospike": {
         "hosts": "localhost:3000",

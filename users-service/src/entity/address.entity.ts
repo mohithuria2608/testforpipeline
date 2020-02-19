@@ -8,7 +8,7 @@ import * as SDM from '../sdm';
 
 export class AddressEntity extends BaseEntity {
     constructor() {
-        super('address')
+        super(Constant.SET_NAME.ADDRESS)
     }
 
     public subSddressSchema = Joi.object().keys({
@@ -37,6 +37,9 @@ export class AddressEntity extends BaseEntity {
         sdmAddressRef: Joi.number(),
         cmsAddressRef: Joi.number(),
         sdmStoreRef: Joi.number().required(),
+        sdmCountryRef: Joi.number().required(),
+        sdmAreaRef: Joi.number().required(),
+        sdmCityRef: Joi.number().required(),
     })
 
     /**
@@ -92,7 +95,10 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            const id = this.ObjectId().toString();
+            let sdmAddress = {}
+            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
+                sdmAddress = await this.addAddressOnSdm(userData, bin, addressData, store)
+            const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let deliveryAddress = {
                 id: id,
                 lat: addressData.lat,
@@ -104,10 +110,15 @@ export class AddressEntity extends BaseEntity {
                 addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
-                sdmAddressRef: 0,
+                sdmAddressRef: (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
                 cmsAddressRef: 0,
-                sdmStoreRef: store.storeId
+                sdmCountryRef: 1, //store.countryId
+                sdmStoreRef: 1219,// store.storeId
+                sdmAreaRef: 16,// store.areaId
+                sdmCityRef: 17,// store.cityId
             };
+            consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
+
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,
@@ -138,6 +149,7 @@ export class AddressEntity extends BaseEntity {
                 consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
                 await Aerospike.put(putArg)
             }
+
             return deliveryAddress
         } catch (error) {
             consolelog(process.cwd(), "addAddress", JSON.stringify(error), false)
@@ -205,72 +217,65 @@ export class AddressEntity extends BaseEntity {
    * @method SDM
    * @description Add address on SDM
    * */
-    async addAddressOnSdm() {
+    async addAddressOnSdm(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
             let addressSdmData = {
-                licenseCode: "AmericanaWeb",
+                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                 language: "En",
-                customerRegistrationID: 7694143,
+                customerRegistrationID: userData.sdmCorpRef,
                 address: {
-                    ADDR_AREAID: 16,
-                    ADDR_BLDGNAME: "Al Quoz Comm",
-                    ADDR_BLDGNUM: 12,
+                    ADDR_AREAID: 16,// 1786,
+                    ADDR_BLDGNAME: addressData.bldgName,
+                    ADDR_BLDGNUM: addressData.bldgName,
                     ADDR_CITYID: 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
-                    ADDR_CUSTID: 7694143, //?
-                    ADDR_DESC: ".",
-                    ADDR_DISTRICTID: 1008,
-                    ADDR_FLATNUM: ".",
-                    ADDR_FLOOR: ".",
+                    ADDR_CUSTID: userData.sdmUserRef,
+                    ADDR_DESC: addressData.description,
+                    ADDR_DISTRICTID: 1008,// 1021,
+                    ADDR_FLATNUM: addressData.flatNum,
+                    ADDR_FLOOR: addressData.flatNum,
                     ADDR_MAPCODE: {
-                        X: 0,
-                        Y: 0
+                        X: addressData.lat,
+                        Y: addressData.lng
                     },
-                    ADDR_PHONEAREACODE: 50,
-                    ADDR_PHONECOUNTRYCODE: 971,
-                    ADDR_PHONEEXTENTION: "",
-                    ADDR_PHONELOOKUP: 507783149,
-                    ADDR_PHONENUMBER: 7783149,
+                    ADDR_PHONEAREACODE: userData.phnNo.slice(0, 2),
+                    ADDR_PHONECOUNTRYCODE: userData.cCode.replace('+', ''),
+                    ADDR_PHONELOOKUP: userData.phnNo,
+                    ADDR_PHONENUMBER: userData.phnNo.slice(2),
                     ADDR_PHONETYPE: 2,
                     ADDR_PROVINCEID: 7,
-                    ADDR_SKETCH: "Al Quoz Comm",
+                    ADDR_SKETCH: addressData.description,
                     ADDR_STREETID: 1,
-                    // Phones: {
-                    //     CC_CUSTOMER_PHONE: {
-                    //         PHONE_AREACODE: 50,
-                    //         PHONE_COUNTRYCODE: 971,
-                    //         PHONE_CUSTID: 7694143,
-                    //         PHONE_EXT: "",
-                    //         PHONE_ISDEFAULT: 84,
-                    //         PHONE_LOOKUP: 507783149,
-                    //         PHONE_NUMBER: 7783149,
-                    //         PHONE_TYPE: 2,
-                    //     }
-
-                    // },
-                    WADDR_AREAID: 16,
-                    WADDR_AREA_TEXT: "",
-                    WADDR_BUILD_NAME: "Al Quoz Comm",
-                    WADDR_BUILD_NUM: 12,
+                    Phones: {
+                        CC_CUSTOMER_PHONE: {
+                            PHONE_AREACODE: userData.phnNo.slice(0, 2),
+                            PHONE_COUNTRYCODE: userData.cCode.replace('+', ''),
+                            PHONE_CUSTID: userData.sdmUserRef,
+                            PHONE_ISDEFAULT: 84,
+                            PHONE_LOOKUP: userData.phnNo,
+                            PHONE_NUMBER: userData.phnNo.slice(2),
+                            PHONE_TYPE: 2,
+                        }
+                    },
+                    WADDR_AREAID: 16,// 1786,
+                    WADDR_BUILD_NAME: addressData.bldgName,
+                    WADDR_BUILD_NUM: addressData.bldgName,
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
-                    WADDR_CONCEPTID: 5,
+                    WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
-                    WADDR_DIRECTIONS: "Al Quoz Comm",
-                    WADDR_DISTRICTID: 1008,
+                    WADDR_DIRECTIONS: addressData.description,
+                    WADDR_DISTRICTID: 1008,// 1021,
                     WADDR_DISTRICT_TEXT: "Default",
                     WADDR_MNUID: 4,
-                    WADDR_NAME: "",
                     WADDR_PROVINCEID: 7,
                     WADDR_STATUS: 2,
-                    WADDR_STREETID: "",
-                    WADDR_STREET_TEXT: 1,
+                    WADDR_STREETID: 1,
                     WADDR_TYPE: 1,
                 }
             }
-            SDM.AddressSDME.createAddress(addressSdmData)
-            return {}
+            return await SDM.AddressSDME.createAddress(addressSdmData)
         } catch (error) {
             consolelog(process.cwd(), "addAddressOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -15,7 +15,7 @@ export class HomeClass extends BaseEntity {
         }
     ]
     constructor() {
-        super('home')
+        super(Constant.SET_NAME.HOME)
     }
 
     public homeSchema = Joi.object().keys({

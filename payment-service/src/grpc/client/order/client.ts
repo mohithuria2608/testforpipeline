@@ -30,7 +30,7 @@ export class OrderService {
                 this.orderClient.getCart(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully received cart", JSON.stringify(res.cart), false)
-                        resolve(res.cart)
+                        resolve(JSON.parse(res.cart))
                     } else {
                         consolelog(process.cwd(), "Error in receiveing cart", JSON.stringify(error), false)
                         reject(error)

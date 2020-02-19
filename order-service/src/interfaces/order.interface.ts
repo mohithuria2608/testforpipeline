@@ -8,6 +8,7 @@ declare namespace IOrderRequest {
         sdmOrderRef: number,
         cmsOrderRef: number,
         userId: string,
+        sdmUserRef: number,
         orderId: string,
         status: string,
         createdAt: number,
@@ -22,8 +23,10 @@ declare namespace IOrderRequest {
         addressId: string,
         sdmAddressRef: number,
         cmsAddressRef: number,
-        areaId: number,
-        storeId: number,
+        sdmCountryRef: number,
+        sdmStoreRef: number,
+        sdmAreaRef: number,
+        sdmCityRef: number,
         tag: string,
         bldgName: string,
         description: string,
@@ -43,11 +46,14 @@ declare namespace IOrderRequest {
 
     interface IStore {
         sdmStoreRef: number,
-        lat: number,
-        lng: number,
-        address: string,
+        sdmCountryRef: number,
+        sdmAreaRef: number,
+        sdmCityRef: number,
+        location: any,
+        address_en: string,
+        address_ar: string,
         name_en: string,
-        name_ar: string,
+        name_ar: string
     }
 
     interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination, ICartRequest.IValidateCart {

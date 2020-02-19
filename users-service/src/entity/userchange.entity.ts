@@ -4,6 +4,7 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
+import { notificationService } from '../grpc/client';
 
 export class UserchangeEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -22,7 +23,7 @@ export class UserchangeEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('userchange')
+        super(Constant.SET_NAME.USERCHANGE)
     }
 
     public userchangeSchema = Joi.object().keys({
@@ -35,6 +36,7 @@ export class UserchangeEntity extends BaseEntity {
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
         sdmUserRef: Joi.number().required(),
+        sdmCorpRef: Joi.number().required(),
         cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
         name: Joi.string().trim().required(),
@@ -52,6 +54,8 @@ export class UserchangeEntity extends BaseEntity {
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
 
+        syncUserOnCms: Joi.number().required(),
+        syncUserOnSdm: Joi.number().required(),
         /**
          * @description extra validator keys
          */
@@ -183,7 +187,24 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['profileStep'] = payload.profileStep
             if (payload.address)
                 dataToUpdateUserchange['address'] = payload.address
-
+            if (payload.cmsUserRef != undefined)
+                dataToUpdateUserchange['cmsUserRef'] = payload.cmsUserRef
+            if (payload.sdmUserRef != undefined)
+                dataToUpdateUserchange['sdmUserRef'] = payload.sdmUserRef
+            if (payload.sdmCorpRef != undefined)
+                dataToUpdateUserchange['sdmCorpRef'] = payload.sdmCorpRef
+            if (payload.syncUserOnCms != undefined)
+                dataToUpdateUserchange['syncUserOnCms'] = payload.syncUserOnCms
+            if (payload.syncUserOnSdm != undefined)
+                dataToUpdateUserchange['syncUserOnSdm'] = payload.syncUserOnSdm
+            if (payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
+                notificationService.sendSms({
+                    message: payload.otp.toString(),
+                    destination: payload.fullPhnNo.replace("+", ""),
+                    type: 0,
+                    dlr: 1,
+                })
+            }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,
                 set: this.set,

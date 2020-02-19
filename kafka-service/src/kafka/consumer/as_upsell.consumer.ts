@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class AsUpsellConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.AS_UPSELL, Constant.KAFKA_TOPIC.AS_UPSELL);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL);
     }
 
     handleMessage() {
@@ -21,18 +21,17 @@ class AsUpsellConsumer extends BaseConsumer {
 
     private async syncUpsell(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await menuService.sync(message)
-            return res
+            if (message.count >= 0) {
+                let res = await menuService.sync(message)
+                return res
+            }
+            else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
-            }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)

@@ -9,12 +9,14 @@ declare namespace IKafkaGrpcRequest {
         sdm?: IChangeSDM
         mdb?: IChangeMongo
         count?: number,
+        q?: string
     }
     interface IChangeAerospike {
         create?: boolean,
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     interface IChangeCMS {
@@ -22,6 +24,7 @@ declare namespace IKafkaGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     interface IChangeSDM {
@@ -29,6 +32,7 @@ declare namespace IKafkaGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     interface IChangeMongo {
@@ -36,6 +40,7 @@ declare namespace IKafkaGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 }

@@ -1,5 +1,5 @@
 declare namespace IConfigGrpcRequest {
-    interface IGetConfigReq {
+    interface IFetchConfigReq {
         request: IConfigRequest.IFetchConfig
     }
 }

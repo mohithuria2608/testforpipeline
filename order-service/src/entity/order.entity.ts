@@ -9,13 +9,13 @@ import { OrderSDME } from '../sdm';
 
 export class OrderClass extends BaseEntity {
     constructor() {
-        super('order')
+        super(Constant.SET_NAME.ORDER)
     }
     /**
     * @method INTERNAL
     * @description Sync order request in KAFKA for creating order on SDM
     */
-    async syncOrder(payload: ICartRequest.ICartData) {
+    async syncOrder(payload: IOrderRequest.IOrderData) {
         try {
             let sdmOrderChange = {
                 set: this.set,
@@ -46,425 +46,383 @@ export class OrderClass extends BaseEntity {
     createCEntries(items) {
         try {
             let Entries = {
-                "CEntry": [
-                    {
-                        "ItemID": "110002",
-                        "Level": "0",
-                        "ModCode": "NONE",
-                        "Name": "Kids Chicken Meal",
-                        "OrdrMode": "OM_SAVED",
-                        "Price": "13",
-                        "Status": "NOTAPPLIED"
-                    },
-                    {
-                        "ItemID": "110002",
-                        "Level": "0",
-                        "ModCode": "NONE",
-                        "Name": "Kids Chicken Meal",
-                        "OrdrMode": "OM_SAVED",
-                        "Price": "13",
-                        "Status": "NOTAPPLIED"
-                    },
-                    {
-                        "ItemID": "110002",
-                        "Level": "0",
-                        "ModCode": "NONE",
-                        "Name": "Kids Chicken Meal",
-                        "OrdrMode": "OM_SAVED",
-                        "Price": "13",
-                        "Status": "NOTAPPLIED"
-                    }
-                ]
+                CEntry: []
             }
+            items.forEach(product => {
+                let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+                for (let i = 0; i < product.qty; i++) {
+                    if (product.originalTypeId == "simple") {
+                        if (product.typeId == "simple") {
+                            // "name": "Fresh Orange Juice"
+                            Entries.CEntry.push({
+                                ItemID: product.sdmId,
+                                Level: 0,
+                                ModCode: "NONE",
+                                Name: product.name,
+                                OrdrMode: "OM_SAVED",
+                                Price: product.specialPrice,
+                                Status: "NOTAPPLIED",
+                            })
+                        } else if (product.typeId == "bundle") {
+                            // "name": "Mighty Original",
+                            let obj = {
+                                DealID: 0,
+                                Entries: {
+                                    CEntry: []
+                                },
+                                ID: 0,
+                                ItemID: product.sdmId,
+                                ModCode: "NONE",
+                                Name: product.name,
+                                QCComponent: -1,
+                                QCInstanceID: instanceId,
+                                QCLevel: 0,
+                                QCProID: product.promoId,
+                            }
+                            if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                                product.bundleProductOptions.forEach(bpo => {
+                                    if (bpo && bpo.productLinks.length > 0) {
+                                        bpo.productLinks.forEach(pl => {
+                                            if (pl.selected == 1) {
+                                                if (pl.subOptions && pl.subOptions.length > 0) {
+                                                    pl.subOptions.forEach(so => {
+                                                        if (so.selected == 1) {
+                                                            if (so.title == "None") { }
+                                                            else if (so.title == "Regular") {
+                                                                obj.Entries.CEntry.push({
+                                                                    ID: 0,
+                                                                    ItemID: so.sdmId,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                                                    Name: so.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0,
+                                                                })
+                                                            } else if (so.title == "Extra") {
+                                                                obj.Entries.CEntry.push({
+                                                                    ID: 0,
+                                                                    ItemID: so.sdmId,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: pl.modGroupId,
+                                                                    Name: so.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0,
+                                                                }, {
+                                                                    ID: 0,
+                                                                    ItemID: so.sdmId,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: pl.modGroupId,
+                                                                    Name: so.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0,
+                                                                })
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                            Entries.CEntry.push(obj)
+                        }
+                    }
+                    else if (product.originalTypeId == "configurable") {
+                        // "name": "Pepsi",
+                        if (product.items && product.items.length > 0) {
+                            product.items.forEach(i => {
+                                if (i['sku'] == product.selectedItem) {
+                                    Entries.CEntry.push({
+                                        ItemID: i.sdmId,
+                                        Level: 0,
+                                        ModCode: "NONE",
+                                        Name: i.name,
+                                        OrdrMode: "OM_SAVED",
+                                        Price: i.specialPrice,
+                                        Status: "NOTAPPLIED",
+                                    })
+                                }
+                            })
+                        }
+                    }
+                    else if (product.originalTypeId == "bundle") {
+                        if (product.typeId == "bundle") {
+                            // "name": "Super Mega Deal",
+                            if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                                product.bundleProductOptions.forEach(bpo => {
+                                    let QCComponent = bpo.compId
+                                    if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                        bpo.productLinks.forEach(pl => {
+                                            if (pl.selected == 1) {
+                                                if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                    let obj = {
+                                                        DealID: 0,
+                                                        Entries: {
+                                                            CEntry: []
+                                                        },
+                                                        ID: 0,
+                                                        ItemID: pl.sdmId,
+                                                        ModCode: "NONE",
+                                                        Name: pl.name,
+                                                        QCComponent: QCComponent,
+                                                        QCInstanceID: instanceId,
+                                                        QCLevel: 0,
+                                                        QCProID: product.promoId,
+                                                    }
+                                                    product.bundleProductOptions.forEach(plbpo => {
+                                                        if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
+                                                            if (plbpo.type == "stepper") {
+                                                                plbpo.productLinks.forEach(plbpopl => {
+                                                                    for (let i = 0; i < plbpopl.selectionQty; i++) {
+                                                                        obj.Entries.CEntry.push({
+                                                                            DealID: 0,
+                                                                            ID: 0,
+                                                                            ItemID: plbpopl.sdmId,
+                                                                            ModCode: "NONE",
+                                                                            Name: plbpopl.name,
+                                                                            QCComponent: QCComponent,
+                                                                            QCInstanceID: instanceId,
+                                                                            QCLevel: 0,
+                                                                            QCProID: product.promoId,
+                                                                        })
+                                                                    }
+                                                                })
+                                                            }
+                                                        }
+                                                    })
+                                                    Entries.CEntry.push(obj)
+                                                } else {
+                                                    for (let i = 0; i < pl.selectionQty; i++) {
+                                                        Entries.CEntry.push({
+                                                            DealID: 0,
+                                                            ID: 0,
+                                                            ItemID: pl.sdmId,
+                                                            ModCode: "NONE",
+                                                            Name: pl.name,
+                                                            QCComponent: QCComponent,
+                                                            QCInstanceID: instanceId,
+                                                            QCLevel: 0,
+                                                            QCProID: product.promoId,
+                                                        })
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    else if (product.originalTypeId == "bundle_group") {
+                        if (product.typeId == "bundle_group") {
+                            // "name": "Twister Meal",   "name": "Mighty Twist",
+                            if (product.items && product.items.length > 0) {
+                                product.items.forEach(i => {
+                                    if (i['sku'] == product.selectedItem) {
+                                        if (i.bundleProductOptions && i.bundleProductOptions.length > 0) {
+                                            let positionIndex = i.bundleProductOptions[0].position
+                                            i.bundleProductOptions.forEach(bpo => {
+                                                let QCComponent = bpo.compId
+                                                if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                                    if (bpo.ingredient == 0) {
+                                                        bpo.productLinks.forEach(pl => {
+                                                            if (pl.selected == 1) {
+                                                                if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                                    let obj = {
+                                                                        DealID: 0,
+                                                                        Entries: {
+                                                                            CEntry: []
+                                                                        },
+                                                                        ID: 0,
+                                                                        ItemID: pl.sdmId,
+                                                                        ModCode: "NONE",
+                                                                        Name: pl.name,
+                                                                        QCComponent: QCComponent,
+                                                                        QCInstanceID: instanceId,
+                                                                        QCLevel: 0,
+                                                                        QCProID: i.promoId,
+                                                                    }
+                                                                    let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
+                                                                    console.log("dependentSteps", dependentSteps)
 
-            // let Entries = {
-            //     CEntry: []
-            // }
-            // items.forEach(product => {
-            //     let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-
-            //     if (product.originalTypeId == "simple") {
-            //         if (product.typeId == "simple") {
-            //             // "name": "Fresh Orange Juice"
-            //             Entries.CEntry.push({
-            //                 ItemID: product.sdmId,
-            //                 Level: 0,
-            //                 ModCode: "NONE",
-            //                 Name: product.name,
-            //                 OrdrMode: "OM_SAVED",
-            //                 Price: product.specialPrice,
-            //                 Status: "NOTAPPLIED",
-            //             })
-            //         } else if (product.typeId == "bundle") {
-            //             // "name": "Mighty Original",
-            //             let obj = {
-            //                 DealID: 0,
-            //                 Entries: {
-            //                     CEntry: []
-            //                 },
-            //                 ID: 0,
-            //                 ItemID: product.sdmId,
-            //                 ModCode: "NONE",
-            //                 Name: product.name,
-            //                 QCComponent: -1,
-            //                 QCInstanceID: instanceId,
-            //                 QCLevel: 0,
-            //                 QCProID: product.promoId,
-            //             }
-            //             if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
-            //                 product.bundleProductOptions.forEach(bpo => {
-            //                     if (bpo && bpo.productLinks.length > 0) {
-            //                         bpo.productLinks.forEach(pl => {
-            //                             if (pl.selected == 1) {
-            //                                 if (pl.subOptions && pl.subOptions.length > 0) {
-            //                                     pl.subOptions.forEach(so => {
-            //                                         if (so.selected == 1) {
-            //                                             if (so.title == "None") { }
-            //                                             else if (so.title == "Regular") {
-            //                                                 obj.Entries.CEntry.push({
-            //                                                     ID: 0,
-            //                                                     ItemID: so.sdmId,
-            //                                                     ModCode: "WITH",
-            //                                                     ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
-            //                                                     Name: so.name,
-            //                                                     OrdrMode: "OM_SAVED",
-            //                                                     Weight: 0,
-            //                                                 })
-            //                                             } else if (so.title == "Extra") {
-            //                                                 obj.Entries.CEntry.push({
-            //                                                     ID: 0,
-            //                                                     ItemID: so.sdmId,
-            //                                                     ModCode: "WITH",
-            //                                                     ModgroupID: pl.modGroupId,
-            //                                                     Name: so.name,
-            //                                                     OrdrMode: "OM_SAVED",
-            //                                                     Weight: 0,
-            //                                                 }, {
-            //                                                     ID: 0,
-            //                                                     ItemID: so.sdmId,
-            //                                                     ModCode: "WITH",
-            //                                                     ModgroupID: pl.modGroupId,
-            //                                                     Name: so.name,
-            //                                                     OrdrMode: "OM_SAVED",
-            //                                                     Weight: 0,
-            //                                                 })
-            //                                             }
-            //                                         }
-            //                                     })
-            //                                 }
-            //                             }
-            //                         })
-            //                     }
-            //                 })
-            //             }
-            //             Entries.CEntry.push(obj)
-            //         }
-            //     }
-            //     else if (product.originalTypeId == "configurable") {
-            //         // "name": "Pepsi",
-            //         if (product.items && product.items.length > 0) {
-            //             product.items.forEach(i => {
-            //                 if (i['sku'] == product.selectedItem) {
-            //                     Entries.CEntry.push({
-            //                         ItemID: 600002,// i.sdmId,
-            //                         Level: 0,
-            //                         ModCode: "NONE",
-            //                         Name: i.name,
-            //                         OrdrMode: "OM_SAVED",
-            //                         Price: i.specialPrice,
-            //                         Status: "NOTAPPLIED",
-
-
-
-            //                         // DealID: 0,
-            //                         // ID: 0,
-            //                         // ItemID: i.sdmId,
-            //                         // ModCode: "NONE",
-            //                         // Name: i.name,
-            //                         // QCComponent: -1,
-            //                         // QCInstanceID: instanceId,
-            //                         // QCLevel: 0,
-            //                         // QCProID: product.promoId,
-            //                     })
-            //                 }
-            //             })
-            //         }
-            //     }
-            //     else if (product.originalTypeId == "bundle") {
-            //         if (product.typeId == "bundle") {
-            //             // "name": "Super Mega Deal",
-            //             if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
-            //                 product.bundleProductOptions.forEach(bpo => {
-            //                     if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
-            //                         bpo.productLinks.forEach(pl => {
-            //                             if (pl.selected == 1) {
-            //                                 if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-            //                                     let obj = {
-            //                                         DealID: 0,
-            //                                         Entries: {
-            //                                             CEntry: []
-            //                                         },
-            //                                         ID: 0,
-            //                                         ItemID: pl.sdmId,
-            //                                         ModCode: "NONE",
-            //                                         Name: pl.name,
-            //                                         QCComponent: pl.compId,
-            //                                         QCInstanceID: instanceId,
-            //                                         QCLevel: 0,
-            //                                         QCProID: product.promoId,
-            //                                     }
-            //                                     product.bundleProductOptions.forEach(plbpo => {
-            //                                         if (plbpo.position == pl.dependentSteps[0]) {
-            //                                             if (plbpo.type == "stepper") {
-            //                                                 plbpo.productLinks.forEach(plbpopl => {
-            //                                                     for (let i = 0; i < plbpopl.selectionQty; i++) {
-            //                                                         obj.Entries.CEntry.push({
-            //                                                             DealID: 0,
-            //                                                             ID: 0,
-            //                                                             ItemID: plbpopl.sdmId,
-            //                                                             ModCode: "NONE",
-            //                                                             Name: plbpopl.name,
-            //                                                             QCComponent: plbpopl.compId,
-            //                                                             QCInstanceID: instanceId,
-            //                                                             QCLevel: 0,
-            //                                                             QCProID: product.promoId,
-            //                                                         })
-            //                                                     }
-            //                                                 })
-            //                                             }
-            //                                         }
-            //                                     })
-            //                                     Entries.CEntry.push(obj)
-            //                                 } else {
-            //                                     for (let i = 0; i < pl.selectionQty; i++) {
-            //                                         Entries.CEntry.push({
-            //                                             DealID: 0,
-            //                                             ID: 0,
-            //                                             ItemID: pl.sdmId,
-            //                                             ModCode: "NONE",
-            //                                             Name: pl.name,
-            //                                             QCComponent: 0,
-            //                                             QCInstanceID: instanceId,
-            //                                             QCLevel: 0,
-            //                                             QCProID: product.promoId,
-            //                                         })
-            //                                     }
-            //                                 }
-            //                             }
-            //                         })
-            //                     }
-            //                 })
-            //             }
-            //         }
-            //     }
-            //     else if (product.originalTypeId == "bundle_group") {
-            //         if (product.typeId == "bundle_group") {
-            //             // "name": "Twister Meal",   "name": "Mighty Twist",
-            //             if (product.items && product.items.length > 0) {
-            //                 product.items.forEach(i => {
-            //                     if (i['sku'] == product.selectedItem) {
-            //                         if (i.bundleProductOptions && i.bundleProductOptions.length > 0) {
-            //                             let positionIndex = i.bundleProductOptions[0].position
-            //                             i.bundleProductOptions.forEach(bpo => {
-            //                                 let QCComponent = bpo.compId
-            //                                 if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
-            //                                     if (bpo.ingredient == 0) {
-            //                                         bpo.productLinks.forEach(pl => {
-            //                                             if (pl.selected == 1) {
-            //                                                 if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-            //                                                     let obj = {
-            //                                                         DealID: 0,
-            //                                                         Entries: {
-            //                                                             CEntry: []
-            //                                                         },
-            //                                                         ID: 0,
-            //                                                         ItemID: pl.sdmId,
-            //                                                         ModCode: "NONE",
-            //                                                         Name: pl.name,
-            //                                                         QCComponent: QCComponent,
-            //                                                         QCInstanceID: instanceId,
-            //                                                         QCLevel: 0,
-            //                                                         QCProID: i.promoId,
-            //                                                     }
-            //                                                     let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-            //                                                     console.log("dependentSteps", dependentSteps)
-
-            //                                                     if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
-            //                                                         /**
-            //                                                          * @description (ingredient == 1) :  "name": "Twister Meal"
-            //                                                          * @description (isModifier == 1) :  "name": "Mighty Twist"
-            //                                                          */
-            //                                                         if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
-            //                                                             dependentSteps.productLinks.forEach(dspl => {
-            //                                                                 let ItemID = 0
-            //                                                                 if (dspl.subOptions && dspl.subOptions.length > 0) {
-            //                                                                     dspl.subOptions.forEach(dsplso => {
-            //                                                                         if (dsplso.selected == 1)
-            //                                                                             ItemID = dsplso.sdmId
-            //                                                                     })
-            //                                                                 }
-            //                                                                 obj.Entries.CEntry.push({
-            //                                                                     ID: 0,
-            //                                                                     ItemID: ItemID,
-            //                                                                     ModCode: "WITH",
-            //                                                                     ModgroupID: dspl.modGroupId,
-            //                                                                     Name: dspl.name,
-            //                                                                     OrdrMode: "OM_SAVED",
-            //                                                                     Weight: 0
-            //                                                                 })
-            //                                                             })
-            //                                                         }
-            //                                                         Entries.CEntry.push(obj)
-            //                                                     } else if (dependentSteps['type'] == "stepper") {
-            //                                                         /**
-            //                                                          * @description (type == "stepper") : "name": "Dinner Meal", 
-            //                                                          */
-            //                                                         dependentSteps.productLinks.forEach(dspl => {
-            //                                                             if (dspl.selectionQty > 0) {
-            //                                                                 let count = dspl.selectionQty
-            //                                                                 while (count != 0) {
-            //                                                                     Entries.CEntry.push({
-            //                                                                         DealID: 0,
-            //                                                                         ID: 0,
-            //                                                                         ItemID: dspl.sdmId,
-            //                                                                         ModCode: "NONE",
-            //                                                                         Name: dspl.name,
-            //                                                                         QCComponent: QCComponent,
-            //                                                                         QCInstanceID: instanceId,
-            //                                                                         QCLevel: 0,
-            //                                                                         QCProID: i.promoId,
-            //                                                                     })
-            //                                                                     count = count - 1
-            //                                                                 }
-            //                                                             }
-            //                                                         })
-            //                                                     }
-            //                                                 } else {
-            //                                                     let count = pl.selectionQty
-            //                                                     while (count != 0) {
-            //                                                         Entries.CEntry.push({
-            //                                                             DealID: 0,
-            //                                                             ID: 0,
-            //                                                             ItemID: pl.sdmId,
-            //                                                             ModCode: "NONE",
-            //                                                             Name: pl.name,
-            //                                                             QCComponent: QCComponent,
-            //                                                             QCInstanceID: instanceId,
-            //                                                             QCLevel: 0,
-            //                                                             QCProID: i.promoId,
-            //                                                         })
-            //                                                         count = count - 1
-            //                                                     }
-            //                                                 }
-            //                                             }
-            //                                         })
-            //                                     } else {
-            //                                         /**
-            //                                          * @description : if the product does not have dependentstep value but actually is dependent on the next product in the array
-            //                                          */
-            //                                         let lastProductAddedInCentry = {
-            //                                             DealID: Entries.CEntry[Entries.CEntry.length - 1].DealID,
-            //                                             Entries: {
-            //                                                 CEntry: []
-            //                                             },
-            //                                             ID: Entries.CEntry[Entries.CEntry.length - 1].ID,
-            //                                             ItemID: Entries.CEntry[Entries.CEntry.length - 1].ItemID,
-            //                                             ModCode: Entries.CEntry[Entries.CEntry.length - 1].ModCode,
-            //                                             Name: Entries.CEntry[Entries.CEntry.length - 1].Name,
-            //                                             QCComponent: Entries.CEntry[Entries.CEntry.length - 1].QCComponent,
-            //                                             QCInstanceID: Entries.CEntry[Entries.CEntry.length - 1].QCInstanceID,
-            //                                             QCLevel: Entries.CEntry[Entries.CEntry.length - 1].QCLevel,
-            //                                             QCProID: Entries.CEntry[Entries.CEntry.length - 1].QCProID,
-            //                                         }
-            //                                         if (bpo.productLinks && bpo.productLinks.length > 0) {
-            //                                             bpo.productLinks.forEach(bpopl => {
-            //                                                 let ItemID = 0
-            //                                                 if (bpopl.subOptions && bpopl.subOptions.length > 0) {
-            //                                                     bpopl.subOptions.forEach(bpoplso => {
-            //                                                         if (bpoplso.selected == 1)
-            //                                                             ItemID = bpoplso.sdmId
-            //                                                     })
-            //                                                 }
-            //                                                 lastProductAddedInCentry.Entries.CEntry.push({
-            //                                                     ID: 0,
-            //                                                     ItemID: ItemID,
-            //                                                     ModCode: "WITH",
-            //                                                     ModgroupID: bpopl.modGroupId,
-            //                                                     Name: bpopl.name,
-            //                                                     OrdrMode: "OM_SAVED",
-            //                                                     Weight: 0
-            //                                                 })
-            //                                             })
-            //                                         }
-            //                                         Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
-            //                                     }
-            //                                 }
-            //                             })
-            //                         }
-            //                     }
-            //                 })
-            //             }
-            //         }
-            //         else if (product.typeId == "bundle") {
-            //             // "name": "Bucket 15 Pcs",
-            //             if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
-            //                 let positionIndex = product.bundleProductOptions[0].position
-            //                 product.bundleProductOptions.forEach(bpo => {
-            //                     let QCComponent = bpo.compId
-            //                     if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
-            //                         bpo.productLinks.forEach(pl => {
-            //                             if (pl.selected == 1) {
-            //                                 if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-            //                                     let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-            //                                     console.log("dependentSteps", dependentSteps)
-            //                                     if (dependentSteps.position == pl.dependentSteps[0]) {
-            //                                         if (dependentSteps.type == "stepper") {
-            //                                             dependentSteps.productLinks.forEach(dspl => {
-            //                                                 if (dspl.selectionQty > 0) {
-            //                                                     let count = dspl.selectionQty
-            //                                                     while (count != 0) {
-            //                                                         Entries.CEntry.push({
-            //                                                             DealID: 0,
-            //                                                             ID: 0,
-            //                                                             ItemID: dspl.sdmId,
-            //                                                             ModCode: "NONE",
-            //                                                             Name: dspl.name,
-            //                                                             QCComponent: QCComponent,
-            //                                                             QCInstanceID: instanceId,
-            //                                                             QCLevel: 0,
-            //                                                             QCProID: product.promoId,
-            //                                                         })
-            //                                                         count = count - 1
-            //                                                     }
-            //                                                 }
-            //                                             })
-            //                                         }
-            //                                     }
-            //                                 } else {
-            //                                     let count = pl.selectionQty
-            //                                     while (count != 0) {
-            //                                         Entries.CEntry.push({
-            //                                             DealID: 0,
-            //                                             ID: 0,
-            //                                             ItemID: pl.sdmId,
-            //                                             ModCode: "NONE",
-            //                                             Name: pl.name,
-            //                                             QCComponent: QCComponent,
-            //                                             QCInstanceID: instanceId,
-            //                                             QCLevel: 0,
-            //                                             QCProID: product.promoId,
-            //                                         })
-            //                                         count = count - 1
-            //                                     }
-            //                                 }
-            //                             }
-            //                         })
-            //                     }
-            //                 })
-            //             }
-            //         }
-            //     }
-            // })
+                                                                    if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
+                                                                        /**
+                                                                         * @description (ingredient == 1) :  "name": "Twister Meal"
+                                                                         * @description (isModifier == 1) :  "name": "Mighty Twist"
+                                                                         */
+                                                                        if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
+                                                                            dependentSteps.productLinks.forEach(dspl => {
+                                                                                let ItemID = 0
+                                                                                if (dspl.subOptions && dspl.subOptions.length > 0) {
+                                                                                    dspl.subOptions.forEach(dsplso => {
+                                                                                        if (dsplso.selected == 1)
+                                                                                            ItemID = dsplso.sdmId
+                                                                                    })
+                                                                                }
+                                                                                obj.Entries.CEntry.push({
+                                                                                    ID: 0,
+                                                                                    ItemID: ItemID,
+                                                                                    ModCode: "WITH",
+                                                                                    ModgroupID: dspl.modGroupId,
+                                                                                    Name: dspl.name,
+                                                                                    OrdrMode: "OM_SAVED",
+                                                                                    Weight: 0
+                                                                                })
+                                                                            })
+                                                                        }
+                                                                        Entries.CEntry.push(obj)
+                                                                    } else if (dependentSteps['type'] == "stepper") {
+                                                                        /**
+                                                                         * @description (type == "stepper") : "name": "Dinner Meal", 
+                                                                         */
+                                                                        dependentSteps.productLinks.forEach(dspl => {
+                                                                            if (dspl.selectionQty > 0) {
+                                                                                let count = dspl.selectionQty
+                                                                                while (count != 0) {
+                                                                                    Entries.CEntry.push({
+                                                                                        DealID: 0,
+                                                                                        ID: 0,
+                                                                                        ItemID: dspl.sdmId,
+                                                                                        ModCode: "NONE",
+                                                                                        Name: dspl.name,
+                                                                                        QCComponent: QCComponent,
+                                                                                        QCInstanceID: instanceId,
+                                                                                        QCLevel: 0,
+                                                                                        QCProID: i.promoId,
+                                                                                    })
+                                                                                    count = count - 1
+                                                                                }
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                } else {
+                                                                    let count = pl.selectionQty
+                                                                    while (count != 0) {
+                                                                        Entries.CEntry.push({
+                                                                            DealID: 0,
+                                                                            ID: 0,
+                                                                            ItemID: pl.sdmId,
+                                                                            ModCode: "NONE",
+                                                                            Name: pl.name,
+                                                                            QCComponent: QCComponent,
+                                                                            QCInstanceID: instanceId,
+                                                                            QCLevel: 0,
+                                                                            QCProID: i.promoId,
+                                                                        })
+                                                                        count = count - 1
+                                                                    }
+                                                                }
+                                                            }
+                                                        })
+                                                    } else {
+                                                        /**
+                                                         * @description : if the product does not have dependentstep value but actually is dependent on the next product in the array
+                                                         */
+                                                        let lastProductAddedInCentry = {
+                                                            DealID: Entries.CEntry[Entries.CEntry.length - 1].DealID,
+                                                            Entries: {
+                                                                CEntry: []
+                                                            },
+                                                            ID: Entries.CEntry[Entries.CEntry.length - 1].ID,
+                                                            ItemID: Entries.CEntry[Entries.CEntry.length - 1].ItemID,
+                                                            ModCode: Entries.CEntry[Entries.CEntry.length - 1].ModCode,
+                                                            Name: Entries.CEntry[Entries.CEntry.length - 1].Name,
+                                                            QCComponent: Entries.CEntry[Entries.CEntry.length - 1].QCComponent,
+                                                            QCInstanceID: Entries.CEntry[Entries.CEntry.length - 1].QCInstanceID,
+                                                            QCLevel: Entries.CEntry[Entries.CEntry.length - 1].QCLevel,
+                                                            QCProID: Entries.CEntry[Entries.CEntry.length - 1].QCProID,
+                                                        }
+                                                        if (bpo.productLinks && bpo.productLinks.length > 0) {
+                                                            bpo.productLinks.forEach(bpopl => {
+                                                                let ItemID = 0
+                                                                if (bpopl.subOptions && bpopl.subOptions.length > 0) {
+                                                                    bpopl.subOptions.forEach(bpoplso => {
+                                                                        if (bpoplso.selected == 1)
+                                                                            ItemID = bpoplso.sdmId
+                                                                    })
+                                                                }
+                                                                lastProductAddedInCentry.Entries.CEntry.push({
+                                                                    ID: 0,
+                                                                    ItemID: ItemID,
+                                                                    ModCode: "WITH",
+                                                                    ModgroupID: bpopl.modGroupId,
+                                                                    Name: bpopl.name,
+                                                                    OrdrMode: "OM_SAVED",
+                                                                    Weight: 0
+                                                                })
+                                                            })
+                                                        }
+                                                        Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                        else if (product.typeId == "bundle") {
+                            // "name": "Bucket 15 Pcs",
+                            if (product.bundleProductOptions && product.bundleProductOptions.length > 0) {
+                                let positionIndex = product.bundleProductOptions[0].position
+                                product.bundleProductOptions.forEach(bpo => {
+                                    let QCComponent = bpo.compId
+                                    if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
+                                        bpo.productLinks.forEach(pl => {
+                                            if (pl.selected == 1) {
+                                                if (pl.dependentSteps && pl.dependentSteps.length > 0) {
+                                                    let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
+                                                    console.log("dependentSteps", dependentSteps)
+                                                    if (dependentSteps.position == pl.dependentSteps[0]) {
+                                                        if (dependentSteps.type == "stepper") {
+                                                            dependentSteps.productLinks.forEach(dspl => {
+                                                                if (dspl.selectionQty > 0) {
+                                                                    let count = dspl.selectionQty
+                                                                    while (count != 0) {
+                                                                        Entries.CEntry.push({
+                                                                            DealID: 0,
+                                                                            ID: 0,
+                                                                            ItemID: dspl.sdmId,
+                                                                            ModCode: "NONE",
+                                                                            Name: dspl.name,
+                                                                            QCComponent: QCComponent,
+                                                                            QCInstanceID: instanceId,
+                                                                            QCLevel: 0,
+                                                                            QCProID: product.promoId,
+                                                                        })
+                                                                        count = count - 1
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+                                                } else {
+                                                    let count = pl.selectionQty
+                                                    while (count != 0) {
+                                                        Entries.CEntry.push({
+                                                            DealID: 0,
+                                                            ID: 0,
+                                                            ItemID: pl.sdmId,
+                                                            ModCode: "NONE",
+                                                            Name: pl.name,
+                                                            QCComponent: QCComponent,
+                                                            QCInstanceID: instanceId,
+                                                            QCLevel: 0,
+                                                            QCProID: product.promoId,
+                                                        })
+                                                        count = count - 1
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    }
+                }
+            })
             return Entries
         } catch (error) {
             consolelog(process.cwd(), "createCEntries", JSON.stringify(error), false)
@@ -476,40 +434,26 @@ export class OrderClass extends BaseEntity {
     * @method GRPC
     * @description : Create order on SDM
     * */
-    async createSdmOrder(payload: ICartRequest.ICartData) {
+    async createSdmOrder(payload: IOrderRequest.IOrderData) {
         try {
-            let total
-            payload.amount.filter(elem => {
-                if (elem.code == "TOTAL") {
-                    return total = elem
-                }
-            })
-            let subtotal
-            payload.amount.filter(elem => {
-                if (elem.code == "SUB_TOTAL") {
-                    return subtotal = elem
-                }
-            })
             let order = {
-                AddressID: 10512054,// 10084693,// payload.address.sdmAddressRef,
-                CityID: 17, //not mandatory
-                AreaID: 16,// 538,// payload.address.sdmAddressRef,
-                BackupStoreID: -1,
-                ConceptID: 3,// payload.address.sdmAddressRef,
-                CustomerID: 7694143,// 7323013,//payload.address.sdmAddressRef,
+                AddressID: payload.address.sdmAddressRef,
+                // AreaID: "",//payload.address.sdmAreaRef
+                // CityID: "",//payload.address.sdmAreaRef
+                ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                CountryID: 1,//payload.store.sdmCountryRef
+                CustomerID: payload.sdmUserRef,
+                // DateOfTrans: "",
+                DeliveryChargeID: 279,
+                DistrictID: -1,
+                // DueTime: "",
                 Entries: this.createCEntries(payload.items),
+                OrderID: 0,
                 OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
                 OrderType: 0,
-                OriginalStoreID: 1219,// 65,// payload.store.sdmStoreRef,
-                PaidOnline: (payload['paymentMethodId'] == 0) ? 0 : 1,
-                PaymentMethod: (payload['paymentMethodId'] == 0) ? "Cash" : "Credit",
-                ServiceCharge: 6.5,
-                Source: 2, //or 22 configurable
-                Status: 0,
-                StoreID: 1219,// 65,// payload.store.sdmStoreRef,
-                SubTotal: subtotal.amount,
-                Total: total.amount,
-                ValidateStore: 0,
+                ProvinceID: 7,
+                StoreID: payload.address.sdmStoreRef,
+                StreetID: 315
             }
 
             /**
@@ -517,15 +461,16 @@ export class OrderClass extends BaseEntity {
              * @step 2 :update mongo order using payload.cartId sdmOrderRef
              */
             let data: IOrderSdmRequest.ICreateOrder = {
-                licenseCode: "AmericanaWeb",
-                conceptID: 3,
+                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                language: "en",
+                conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 order: order,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: "Test order notes 1",
+                orderNotes1: "Test order notes 1", //payload.cmsOrderRef
                 orderNotes2: "Test order notes 2",
-                creditCardPaymentbool: (payload['paymentMethodId'] == 0) ? 0 : 1,
-                isSuspended: (payload['paymentMethodId'] == 0) ? 0 : 1,
+                creditCardPaymentbool: (payload['payment']['paymentMethodId'] == 0) ? false : true,
+                isSuspended: (payload['payment']['paymentMethodId'] == 0) ? false : true,
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)
@@ -538,7 +483,7 @@ export class OrderClass extends BaseEntity {
                 if (order && order._id) {
                     this.getSdmOrder({
                         sdmOrderRef: order.sdmOrderRef,
-                        timeInterval: Constant.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
+                        timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
                         status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                     })
                 }
@@ -554,8 +499,12 @@ export class OrderClass extends BaseEntity {
     /**
     * @method INTERNAL
     * */
-    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore) {
+    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
         try {
+            let amount = cartData.amount
+            if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
+            }
             let orderData = {
                 orderType: orderType,
                 cartId: cartData.cartId,
@@ -563,14 +512,14 @@ export class OrderClass extends BaseEntity {
                 sdmOrderRef: 0,
                 cmsOrderRef: cartData.cmsOrderRef,
                 userId: cartData.userId,
+                sdmUserRef: userData.sdmUserRef,
                 orderId: cartData.orderId,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: cartData.items,
-                amount: cartData.amount,
+                amount: amount,
                 address: {
                     addressId: address.id,
-                    sdmStoreRef: address.sdmStoreRef,
                     sdmAddressRef: address.sdmAddressRef,
                     cmsAddressRef: address.cmsAddressRef,
                     tag: address.tag,
@@ -579,11 +528,17 @@ export class OrderClass extends BaseEntity {
                     flatNum: address.flatNum,
                     addressType: address.addressType,
                     lat: address.lat,
-                    lng: address.lng
+                    lng: address.lng,
+                    sdmCountryRef: address.sdmCountryRef,
+                    sdmAreaRef: address.sdmAreaRef,
+                    sdmCityRef: address.sdmCityRef,
+                    sdmStoreRef: address.sdmStoreRef
                 },
                 store: {
                     sdmStoreRef: store.storeId,
-                    areaId: store.areaId,
+                    sdmCountryRef: store.countryId,
+                    sdmAreaRef: store.areaId,
+                    sdmCityRef: store.cityId ? store.cityId : 17,
                     location: store.location,
                     address_en: store.address_en,
                     address_ar: store.address_ar,
@@ -615,8 +570,8 @@ export class OrderClass extends BaseEntity {
     * */
     async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
         try {
-            let recheck = true
             setTimeout(async () => {
+                let recheck = true
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, amount: 0 })
                 if (order && order._id) {
                     if (order.sdmOrderRef && order.sdmOrderRef != 0) {
@@ -624,139 +579,161 @@ export class OrderClass extends BaseEntity {
                         /**
                          * @step 1 : update mongo order status wrt to sdmOrder status
                          */
-                        if (sdmOrder && sdmOrder.OrderID && (parseInt(sdmOrder.Status) > order.sdmOrderStatus)) {
-                            if (Constant.DATABASE.STATUS.ORDER.PENDING.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 1", sdmOrder.Status, true)
-                                if (sdmOrder.Status == 96 && order.payment && order.payment.status == "AUTHORIZATION" && (order.paymentMethodAddedOnSdm == 0)) {
-                                    consolelog(process.cwd(), "STATE : 2", sdmOrder.Status, true)
-                                    /**
-                                    * @description : add payment object to sdm
-                                    */
-                                    let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({ sdmOrderRef: order.sdmOrderRef, transaction: order.transLogs[1] })
-                                    if (paymentObjAdded) {
-                                        consolelog(process.cwd(), "STATE : 3", sdmOrder.Status, true)
-                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                            paymentMethodAddedOnSdm: 1,
-                                            updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status
-                                        }, { new: true })
-                                    }
-                                    else {
-                                        consolelog(process.cwd(), "STATE : 4", sdmOrder.Status, true)
-                                        /**
-                                        * @description : in case of failure while adding payment object
-                                        */
-                                        recheck = false
-                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                            changePaymentMode: true,
-                                            updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status
-                                        }, { new: true })
+                        if (sdmOrder && sdmOrder.OrderID) {
+                            if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
+                                if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
+                                    consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
+                                    if (order.payment.paymentMethodId == 0) {
+                                        consolelog(process.cwd(), "order step 2 :       ", parseInt(sdmOrder.Status), true)
+                                    } else {
+                                        consolelog(process.cwd(), "order step 3 :       ", parseInt(sdmOrder.Status), true)
+                                        if (sdmOrder.Status == 96) {
+                                            consolelog(process.cwd(), "order step 4 :       ", parseInt(sdmOrder.Status), true)
+                                            if (order.payment && order.payment.status == "AUTHORIZATION") {
+                                                consolelog(process.cwd(), "order step 5 :       ", parseInt(sdmOrder.Status), true)
+                                                if (order.paymentMethodAddedOnSdm == 0) {
+                                                    consolelog(process.cwd(), "order step 6 :       ", parseInt(sdmOrder.Status), true)
+                                                    /**
+                                                    * @description : add payment object to sdm
+                                                    */
+                                                    let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({ sdmOrderRef: order.sdmOrderRef, transaction: order.transLogs[1] })
+                                                    if (paymentObjAdded) {
+                                                        consolelog(process.cwd(), "order step 7 :       ", parseInt(sdmOrder.Status), true)
+                                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                            paymentMethodAddedOnSdm: 1,
+                                                            updatedAt: new Date().getTime(),
+                                                            sdmOrderStatus: sdmOrder.Status
+                                                        }, { new: true })
+                                                    }
+                                                    else {
+                                                        consolelog(process.cwd(), "order step 8 :       ", parseInt(sdmOrder.Status), true)
+                                                        /**
+                                                        * @description : in case of failure while adding payment object
+                                                        */
+                                                        recheck = false
+                                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                                            changePaymentMode: true,
+                                                            updatedAt: new Date().getTime(),
+                                                            sdmOrderStatus: sdmOrder.Status
+                                                        }, { new: true })
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else if (sdmOrder.Status == 0) {
+                                            consolelog(process.cwd(), "order step 9 :       ", parseInt(sdmOrder.Status), true)
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                updatedAt: new Date().getTime(),
+                                                sdmOrderStatus: sdmOrder.Status
+                                            }, { new: true })
+                                        }
                                     }
                                 }
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.CONFIRMED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 5", sdmOrder.Status, true)
-                                if (order.payment.status == "AUTHORIZATION") {
-                                    consolelog(process.cwd(), "STATE : 6", sdmOrder.Status, true)
-                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                else if (parseInt(sdmOrder.Status) == 2) {
+                                    consolelog(process.cwd(), "order step 10 :       ", parseInt(sdmOrder.Status), true)
+                                    if (order.payment.paymentMethodId == 0) {
+                                        consolelog(process.cwd(), "order step 11 :       ", parseInt(sdmOrder.Status), true)
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                            status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            sdmOrderStatus: sdmOrder.Status
+                                        }, { new: true })
+
+                                        setTimeout(async () => {
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                                updatedAt: new Date().getTime(),
+                                                sdmOrderStatus: sdmOrder.Status
+                                            }, { new: true })
+                                        }, 10000)
+                                    } else {
+                                        consolelog(process.cwd(), "order step 12 :       ", parseInt(sdmOrder.Status), true)
+                                        if (order.payment.status == "AUTHORIZATION") {
+                                            consolelog(process.cwd(), "order step 13 :       ", parseInt(sdmOrder.Status), true)
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                                updatedAt: new Date().getTime(),
+                                                sdmOrderStatus: sdmOrder.Status
+                                            }, { new: true })
+                                            await paymentService.capturePayment({
+                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                orderId: order.transLogs[1].orderId,
+                                                amount: order.transLogs[1].amount,
+                                                storeCode: "kfc_uae_store"
+                                            })
+                                            let status = await paymentService.getPaymentStatus({
+                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                storeCode: "kfc_uae_store",
+                                                paymentStatus: "CAPTURED",
+                                            })
+                                            this.updateOneEntityMdb({ _id: order._id }, {
+                                                status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                                "payment.transactionId": status.transactions[0].id,
+                                                "payment.status": status.transactions[0].type,
+                                                $addToSet: {
+                                                    transLogs: status
+                                                },
+                                                updatedAt: new Date().getTime()
+                                            })
+                                        }
+                                    }
+                                }
+                                else if (parseInt(sdmOrder.Status) == 8) {
+                                    consolelog(process.cwd(), "order step 14 :       ", parseInt(sdmOrder.Status), true)
+                                    this.updateOneEntityMdb({ _id: order._id }, {
+                                        status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
                                         updatedAt: new Date().getTime(),
                                         sdmOrderStatus: sdmOrder.Status
-                                    }, { new: true })
-                                    await paymentService.capturePayment({
-                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                        orderId: order.transLogs[1].orderId,
-                                        amount: order.transLogs[1].amount,
-                                        storeCode: "kfc_uae_store"
                                     })
-                                    let status = await paymentService.getPaymentStatus({
-                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                        storeCode: "kfc_uae_store",
-                                        paymentStatus: "CAPTURED",
-                                    })
+                                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                                        recheck = false
+                                }
+                                else if (parseInt(sdmOrder.Status) == 16 || parseInt(sdmOrder.Status) == 32) {
+                                    consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
+                                    if (parseInt(sdmOrder.Status) == 32) {
+                                        this.updateOneEntityMdb({ _id: order._id }, {
+                                            status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            sdmOrderStatus: sdmOrder.Status
+                                        })
+                                    }
+                                }
+                                else if (parseInt(sdmOrder.Status) == 64 || parseInt(sdmOrder.Status) == 128 || parseInt(sdmOrder.Status) == 2048) {
+                                    consolelog(process.cwd(), "order step 16 :       ", parseInt(sdmOrder.Status), true)
+                                    recheck = false
                                     this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                        "payment.transactionId": status.transactions[0].id,
-                                        "payment.status": status.transactions[0].type,
-                                        $addToSet: {
-                                            transLogs: status
-                                        },
-                                        updatedAt: new Date().getTime()
+                                        isActive: 0,
+                                        status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
+                                        updatedAt: new Date().getTime(),
+                                        trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
+                                        sdmOrderStatus: sdmOrder.Status
                                     })
                                 }
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.READY.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 7", sdmOrder.Status, true)
-                                this.updateOneEntityMdb({ _id: order._id }, {
-                                    status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status
-                                })
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 8", sdmOrder.Status, true)
-                                this.updateOneEntityMdb({ _id: order._id }, {
-                                    status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status
-                                })
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.DELIVERED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 9", sdmOrder.Status, true)
-                                recheck = false
-                                this.updateOneEntityMdb({ _id: order._id }, {
-                                    isActive: 0,
-                                    status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
-                                    updatedAt: new Date().getTime(),
-                                    trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
-                                    sdmOrderStatus: sdmOrder.Status
-                                })
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.CLOSED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 10", sdmOrder.Status, true)
-                                recheck = false
-                                this.updateOneEntityMdb({ _id: order._id }, {
-                                    isActive: 0,
-                                    status: Constant.DATABASE.STATUS.ORDER.CLOSED.MONGO,
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status
-                                })
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.CANCELED.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 11", sdmOrder.Status, true)
-                                recheck = false
-                                this.updateOneEntityMdb({ _id: order._id }, {
-                                    isActive: 0,
-                                    status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status
-                                })
-                            }
-                            else if (Constant.DATABASE.STATUS.ORDER.FAILURE.SDM.indexOf(parseInt(sdmOrder.Status)) >= 0) {
-                                consolelog(process.cwd(), "STATE : 12", sdmOrder.Status, true)
-                                recheck = false
-                                this.updateOneEntityMdb({ _id: order._id }, {
-                                    isActive: 0,
-                                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status
-                                })
-                            }
-                            else {
-                                recheck = false
-                                consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
+                                    consolelog(process.cwd(), "order step 17:       ", parseInt(sdmOrder.Status), true)
+                                    recheck = false
+                                    this.updateOneEntityMdb({ _id: order._id }, {
+                                        isActive: 0,
+                                        status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
+                                        updatedAt: new Date().getTime(),
+                                        sdmOrderStatus: sdmOrder.Status
+                                    })
+                                }
+                                else {
+                                    recheck = false
+                                    consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                }
                             }
                         }
+                        console.log("recheck =              =>", parseInt(sdmOrder.Status), recheck)
                         if (recheck) {
                             let orderChange = {
                                 set: this.set,
                                 sdm: {
                                     get: true,
                                     argv: JSON.stringify(payload)
-                                },
-                                count: -1
+                                }
                             }
                             kafkaService.kafkaSync(orderChange)
                         }

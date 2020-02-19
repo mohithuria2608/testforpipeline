@@ -1,7 +1,7 @@
 declare namespace IPromotionRequest {
 
     interface IPromoData {
-        cmsCouponRef: string,
+        couponId: string,
         couponCode: string,
         promotionType: string,
         discountAmount: string,
@@ -20,7 +20,7 @@ declare namespace IPromotionRequest {
         termsAndConditions: string,
     }
     interface IGetPromotion extends ICommonRequest.IPagination {
-        cmsCouponRef?: string,
+        couponId?: string,
         couponCode?: string
     }
 

@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class SdmUserConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.SDM_USER, Constant.KAFKA_TOPIC.SDM_USER);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER);
     }
 
     handleMessage() {
@@ -21,18 +21,17 @@ class SdmUserConsumer extends BaseConsumer {
 
     private async syncUser(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await userService.sync(message)
-            return res
+            if (message.count >= 0) {
+                let res = await userService.sync(message)
+                return res
+            }
+            else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "syncUser", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
-            }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
             }
             else
                 kafkaController.produceToFailureTopic(message)
