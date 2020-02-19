@@ -197,6 +197,7 @@ export class UserController {
                     userUpdate['syncUserOnSdm'] = 1
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
+                console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
             } else {
