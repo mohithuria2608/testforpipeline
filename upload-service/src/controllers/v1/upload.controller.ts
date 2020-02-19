@@ -1,5 +1,5 @@
 import { consolelog, readFile, deleteFile } from '../../utils'
-import { UploadBlob, ProductBlob, ModelBlob } from "../../lib";
+import { UploadBlob, ProductBlob, EnvModelBlob } from "../../lib";
 
 export class UploadController {
     constructor() { }
@@ -29,7 +29,7 @@ export class UploadController {
     * */
     async uploadJSON(payload) {
         try {
-            let uploadStatus = await ModelBlob.upload(payload.name, payload.json);
+            let uploadStatus = await EnvModelBlob.upload(payload.name, payload.json);
             console.log("File Uploaded to -> ", uploadStatus.url);
             return uploadStatus;
         } catch (error) {
