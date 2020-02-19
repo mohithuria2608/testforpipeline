@@ -183,11 +183,11 @@ export class UserController {
                     userUpdate['brand'] = userchange[0].brand
                 if (userchange[0].country)
                     userUpdate['country'] = userchange[0].country
-                if (userchange[0].sdmUserRef)
+                if (userchange[0].sdmUserRef != undefined)
                     userUpdate['sdmUserRef'] = userchange[0].sdmUserRef
-                if (userchange[0].sdmCorpRef)
+                if (userchange[0].sdmCorpRef != undefined)
                     userUpdate['sdmCorpRef'] = userchange[0].sdmCorpRef
-                if (userchange[0].cmsUserRef)
+                if (userchange[0].cmsUserRef != undefined)
                     userUpdate['cmsUserRef'] = userchange[0].cmsUserRef
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
