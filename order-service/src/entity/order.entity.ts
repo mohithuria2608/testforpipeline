@@ -503,7 +503,7 @@ export class OrderClass extends BaseEntity {
         try {
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
-                amount = amount.filter(obj => { return obj.type != "TAX" })
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
             }
             let orderData = {
                 orderType: orderType,

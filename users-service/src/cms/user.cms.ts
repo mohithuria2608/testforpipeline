@@ -57,9 +57,9 @@ export class UserCMSEntity extends BaseCMS {
                 formObj['firstName'] = payload.name
                 formObj['lastName'] = payload.name
             }
-            if (payload.sdmUserRef)
+            if (payload.sdmUserRef != undefined)
                 formObj['sdmUserRef'] = payload.sdmUserRef
-            if (payload.sdmCorpRef)
+            if (payload.sdmCorpRef != undefined)
                 formObj['sdmCorpRef'] = payload.sdmCorpRef
             const headers = {};
             const form = formObj;

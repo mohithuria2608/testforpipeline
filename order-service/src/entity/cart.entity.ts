@@ -557,7 +557,7 @@ export class CartClass extends BaseEntity {
 
             let amount = []
             amount.push({
-                type: "SUB_TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 name: "Sub Total",
                 code: "SUB_TOTAL",
                 amount: cmsCart.subtotal,
@@ -568,7 +568,7 @@ export class CartClass extends BaseEntity {
                 if (cmsCart.coupon_code == "FREEDELIVERY")
                     cmsCart.discount_amount = 6.5
                 amount.push({
-                    type: "DISCOUNT",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
                     name: "Discount",
                     code: cmsCart.coupon_code,
                     amount: cmsCart.discount_amount,
@@ -581,7 +581,7 @@ export class CartClass extends BaseEntity {
             }
             if (cmsCart.tax && cmsCart.tax.length > 0) {
                 amount.push({
-                    type: "TAX",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: cmsCart.tax[0].tax_name,
                     code: cmsCart.tax[0].tax_name,
                     amount: cmsCart.tax[0].amount,
@@ -590,7 +590,7 @@ export class CartClass extends BaseEntity {
                 })
             } else {
                 amount.push({
-                    type: "TAX",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: "VAT",
                     code: "VAT",
                     amount: 0,
@@ -599,7 +599,7 @@ export class CartClass extends BaseEntity {
                 })
             }
             let delivery = {
-                type: "SHIPPING",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                 name: "Delivery",
                 code: "DELIVERY",
                 amount: 0,
@@ -614,7 +614,7 @@ export class CartClass extends BaseEntity {
             amount.push(delivery)
 
             amount.push({
-                type: "TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
                 amount: cmsCart.grandtotal + delivery.amount - ((cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY") ? 6.5 : 0),

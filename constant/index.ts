@@ -98,6 +98,7 @@ export const SERVER = {
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
+    MIN_COD_CART_VALUE: 300,//AED
     DISPLAY_COLOR: true,
     ANDROID_SCHEME_HOST: "https://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
@@ -353,6 +354,15 @@ export const DATABASE = {
             CREATE: "create",
             UPDATE: "update",
             RESET: "reset",
+        },
+
+        CART_AMOUNT: {
+            SUB_TOTAL: "SUB_TOTAL",
+            DISCOUNT: "DISCOUNT",
+            TAX: "TAX",
+            SHIPPING: "SHIPPING",
+            TOTAL: "TOTAL",
+
         }
     },
 
@@ -414,7 +424,7 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
-            MINIMUM_CART_VALUE_VIOLATION:{
+            MINIMUM_CART_VALUE_VIOLATION: {
                 statusCode: 400,
                 httpCode: 400,
                 type: 'MINIMUM_CART_VALUE_VIOLATION',
