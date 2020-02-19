@@ -87,7 +87,12 @@ export class UserController {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
-                    isGuest: 0
+                    isGuest: 0,
+                    sdmUserRef: 0,
+                    sdmCorpRef: 0,
+                    cmsUserRef: 0,
+                    syncUserOnCms: 0,
+                    syncUserOnSdm: 0,
                 }
                 let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                 if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
