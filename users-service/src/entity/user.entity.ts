@@ -123,11 +123,11 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cCode'] = payload.cCode
             if (payload.phnNo)
                 userUpdate['phnNo'] = payload.phnNo
-            if (payload.sdmUserRef)
+            if (payload.sdmUserRef != undefined)
                 userUpdate['sdmUserRef'] = payload.sdmUserRef
-            if (payload.sdmCorpRef)
+            if (payload.sdmCorpRef != undefined)
                 userUpdate['sdmCorpRef'] = payload.sdmCorpRef
-            if (payload.cmsUserRef)
+            if (payload.cmsUserRef != undefined)
                 userUpdate['cmsUserRef'] = payload.cmsUserRef
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
