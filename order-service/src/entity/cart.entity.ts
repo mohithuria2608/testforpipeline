@@ -304,7 +304,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?) {
         try {
             let sellingPrice = 0
             let cart = []
@@ -398,9 +398,9 @@ export class CartClass extends BaseEntity {
                                 bpo['productLinks'].forEach(pl => {
                                     if (pl['selected'] == 1) {
                                         if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                            if (bundle_option[pl['option_id']] == null)
-                                                bundle_option[pl['option_id']] = {}
-                                            bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                            // if (bundle_option[pl['option_id']] == null)
+                                            //     bundle_option[pl['option_id']] = {}
+                                            // bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
                                         } else {
                                             bundle_option[pl['option_id']] = pl['selection_id']
                                         }
@@ -448,7 +448,14 @@ export class CartClass extends BaseEntity {
                                     if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
                                         bpo['productLinks'].map(pl => {
                                             if (pl['selected'] == 1 && !alreadyAddedInBundleOption[pl['id']]) {
+                                                // if (!bundle_option[pl['option_id']])
+                                                //     bundle_option[pl['option_id']] = {}
                                                 if (pl['subOptions'] && pl['subOptions'].length > 0) {
+                                                    // pl['subOptions'].forEach(plso => {
+                                                    //     if (plso['selected'] == 1) {
+                                                    //         bundle_option[pl['option_id']][plso['id']] = plso['selection_id']
+                                                    //     }
+                                                    // })
                                                     if (bundle_option[pl['option_id']] == null)
                                                         bundle_option[pl['option_id']] = {}
                                                     bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
@@ -499,9 +506,9 @@ export class CartClass extends BaseEntity {
                     return Promise.reject(JSON.stringify(sitem))
                 }
             })
-
+            console.log(JSON.stringify(cart))
             let req = {
-                cms_user_id: userData.cmsUserRef,
+                cms_user_id: 1,//userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart
@@ -521,19 +528,6 @@ export class CartClass extends BaseEntity {
         try {
             let req = await this.createCartReqForCms(payload, userData)
             let cmsCart = await CMS.CartCMSE.createCart(req.req)
-            // cmsCart['is_price_changed'] = false
-            // /**
-            //  * @description Temporary
-            //  */
-            // let subTotal = Math.round((((req.sellingPrice * 100) / 105) + Number.EPSILON) * 100) / 100
-            // let tax = req.sellingPrice - subTotal
-            // let grandTotal = req.sellingPrice + cmsCart['discount_amount']
-            // cmsCart['subtotal'] = subTotal
-            // cmsCart['tax'] = [{
-            //     tax_name: "VAT@5%",
-            //     amount: tax,
-            // }]
-            // cmsCart['grandtotal'] = grandTotal
             return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
