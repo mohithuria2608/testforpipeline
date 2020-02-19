@@ -95,7 +95,8 @@ export class GuestController {
                 isGuest: payload.isGuest,
                 brand: headers.brand,
                 country: headers.country,
-                profileStep: 1
+                profileStep: 1,
+
             }
             if (address && address.id)
                 userchangePayload['address'] = address
@@ -121,9 +122,11 @@ export class GuestController {
                     }
                 } else {
                     userchangePayload['syncUserOnCms'] = 1
+                    userchangePayload['sdmUserRef'] = 0
+                    userchangePayload['sdmCorpRef'] = 0
+                    userchangePayload['cmsUserRef'] = 0
                 }
-                userchangePayload['id'] = auth.id
-                userchangePayload['deleteUserId'] = ""
+                console.log("userchangePayload", userchangePayload)
                 await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
             }
             userData['name'] = payload.name

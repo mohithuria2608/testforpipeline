@@ -187,11 +187,11 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['profileStep'] = payload.profileStep
             if (payload.address)
                 dataToUpdateUserchange['address'] = payload.address
-            if (payload.cmsUserRef)
+            if (payload.cmsUserRef != undefined)
                 dataToUpdateUserchange['cmsUserRef'] = payload.cmsUserRef
-            if (payload.sdmUserRef)
+            if (payload.sdmUserRef != undefined)
                 dataToUpdateUserchange['sdmUserRef'] = payload.sdmUserRef
-            if (payload.sdmCorpRef)
+            if (payload.sdmCorpRef != undefined)
                 dataToUpdateUserchange['sdmCorpRef'] = payload.sdmCorpRef
             if (payload.syncUserOnCms != undefined)
                 dataToUpdateUserchange['syncUserOnCms'] = payload.syncUserOnCms
