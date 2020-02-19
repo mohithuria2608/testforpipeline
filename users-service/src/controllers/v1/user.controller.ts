@@ -195,7 +195,11 @@ export class UserController {
                     userUpdate['syncUserOnCms'] = 1
                 if (userchange[0].syncUserOnSdm != undefined)
                     userUpdate['syncUserOnSdm'] = 1
+                    
+                consolelog(process.cwd(), "userUpdate", userUpdate, false)
                 userData = await ENTITY.UserE.buildUser(userUpdate)
+                consolelog(process.cwd(), "userData", userData, false)
+
                 if (userData.sdmUserRef == 0 || userData.cmsUserRef == 0)
                     await this.validateUserOnSdm(userData, false)
             } else {
@@ -231,7 +235,6 @@ export class UserController {
                     flatNum: userchange[0].address.flatNum,
                     tag: userchange[0].address.tag
                 });
-                consolelog(process.cwd(), "11111111111111111111", deleteUserId, false)
                 if (deleteUserId && deleteUserId != "")
                     Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
             }
