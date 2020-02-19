@@ -51,6 +51,10 @@ export enum KAFKA_TOPIC {
     CMS_USER = "cms_user",
     AS_USER = "as_user",
 
+    CMS_ADDRESS = "cms_address",
+    SDM_ADDRESS = "sdm_address",
+    AS_ADDRESS = "as_address",
+
     AS_PROMOTION = 'as_promotion',
 
     SDM_ORDER = 'sdm_order',
@@ -180,6 +184,14 @@ export const DATABASE = {
                     SYNC: 5,
                 }
             },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                }
+            },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
@@ -218,6 +230,14 @@ export const DATABASE = {
                     GET: 5,
                 }
             },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                }
+            },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
@@ -242,6 +262,14 @@ export const DATABASE = {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
                 }
             },
             MENU: {

@@ -121,7 +121,6 @@ export class GuestController {
                          */
                     }
                 } else {
-                    userchangePayload['syncUserOnCms'] = 1
                     userchangePayload['sdmUserRef'] = 0
                     userchangePayload['sdmCorpRef'] = 0
                     userchangePayload['cmsUserRef'] = 0

@@ -1,9 +1,41 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client'
 
 export class AddressController {
     constructor() { }
+
+    /**
+     * @description sync address to cms and sdm coming from KAFKA
+     * @param {IKafkaGrpcRequest.IKafkaBody} payload 
+     */
+    async syncAddress(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.sync)) {
+                let data = JSON.parse(payload.as.argv)
+                if (payload.as.create) {
+
+                }
+            }
+            if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
+                let data = JSON.parse(payload.cms.argv)
+                if (payload.cms.create) {
+
+                }
+            }
+            if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
+                let data = JSON.parse(payload.sdm.argv)
+                if (payload.sdm.create) {
+
+                }
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncAddress", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 
     /**
     * @method POST
@@ -41,7 +73,9 @@ export class AddressController {
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
-            return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            kafkaService.sync()
+            return addressData
         } catch (error) {
             consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)
             return Promise.reject(error)

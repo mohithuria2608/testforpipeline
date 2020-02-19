@@ -91,8 +91,6 @@ export class UserController {
                     sdmUserRef: 0,
                     sdmCorpRef: 0,
                     cmsUserRef: 0,
-                    syncUserOnCms: 0,
-                    syncUserOnSdm: 0,
                 }
                 let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                 if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
@@ -109,8 +107,6 @@ export class UserController {
                          * @todo : sync cms address on as
                          */
                     }
-                } else {
-                    userchangePayload['syncUserOnCms'] = 1
                 }
                 let tempUser: IUserRequest.IUserData = {
                     id: ENTITY.UserE.ObjectId().toString(),
@@ -191,10 +187,6 @@ export class UserController {
                     userUpdate['cmsUserRef'] = userchange[0].cmsUserRef
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
-                if (userchange[0].syncUserOnCms != undefined)
-                    userUpdate['syncUserOnCms'] = 1
-                if (userchange[0].syncUserOnSdm != undefined)
-                    userUpdate['syncUserOnSdm'] = 1
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 console.log("userData", userData)
@@ -386,8 +378,6 @@ export class UserController {
                                  * @todo : sync cms address on as
                                  */
                             }
-                        } else {
-                            userchangePayload['syncUserOnCms'] = 1
                         }
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
@@ -430,87 +420,100 @@ export class UserController {
     async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean) {
         try {
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
-            let updateUserOnSdm = false
-            let updateUserOnCms = false
-            let dataToUpdateAs = {
-                id: userData.id
+            let updateOnSdm = false
+            let updateOnCms = false
+            let createOnSdm = false
+            let createOnCms = false
+            let updateAs = {}
+            if (userData.cmsUserRef == 0) {
+                let cmsUserByEmail = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
+                if (cmsUserByEmail && cmsUserByEmail.customer_id) {
+                    updateOnCms = true
+                    updateAs['cmsUserRef'] = cmsUserByEmail.customer_id
+                    if (cmsUserByEmail.sdm_user_ref)
+                        updateAs['sdmUserRef'] = cmsUserByEmail.sdm_user_ref
+                    if (cmsUserByEmail.sdm_corp_ref)
+                        updateAs['sdmCorpRef'] = cmsUserByEmail.sdm_corp_ref
+                    if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
+                        /**
+                         * @todo : sync cms address on as
+                         */
+                        userData.cmsAddress = cmsUserByEmail.address.slice(0, 6)
+                    }
+                } else
+                    createOnCms = true
             }
-            let cmsUserByEmail = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
-            if (cmsUserByEmail && cmsUserByEmail.customer_id) {
-                dataToUpdateAs['cmsUserRef'] = cmsUserByEmail.customer_id
-                if (cmsUserByEmail.sdm_user_ref)
-                    dataToUpdateAs['sdmUserRef'] = cmsUserByEmail.sdm_user_ref
-                if (cmsUserByEmail.sdm_corp_ref)
-                    dataToUpdateAs['sdmCorpRef'] = cmsUserByEmail.sdm_corp_ref
-                if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
-                    /**
-                     * @todo : sync cms address on as
-                     */
-                }
-                updateUserOnCms = true
-                updateUserOnSdm = true
-            }
-            if (!updateUserOnSdm) {
+            if (userData.sdmUserRef == 0) {
                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                    if (sdmUserByEmail.CUST_PHONELOOKUP != userData.fullPhnNo.replace("+", "")) {
-                        updateUserOnSdm = true
+                    updateOnSdm = true
+                    updateAs['sdmUserRef'] = sdmUserByEmail.CUST_ID
+                    updateAs['sdmCorpRef'] = sdmUserByEmail.CUST_CORPID
+                    if (sdmUserByEmail.Addresses && sdmUserByEmail.Addresses.CC_ADDRESS && sdmUserByEmail.Addresses.CC_ADDRESS.length > 0) {
+                        /**
+                         * @todo : sync sdm address on cms and as
+                         */
+                        userData.sdmAddresses = sdmUserByEmail.Addresses.CC_ADDRESS.slice((sdmUserByEmail.Addresses.CC_ADDRESS.length - 6) < 0 ? 0 : sdmUserByEmail.Addresses.CC_ADDRESS.length - 6, sdmUserByEmail.Addresses.CC_ADDRESS.length)
                     }
-                    dataToUpdateAs['sdmUserRef'] = sdmUserByEmail.CUST_ID
-                    dataToUpdateAs['sdmCorpRef'] = sdmUserByEmail.CUST_CORPID
+                } else
+                    createOnSdm = true
+            }
+            if (createOnSdm) {
+                if (async) {
+                    kafkaService.kafkaSync({
+                        set: ENTITY.UserE.set,
+                        sdm: {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    })
                 } else {
-                    dataToUpdateAs['syncUserOnSdm'] = 1
+                    userData = await ENTITY.UserE.createUserOnSdm(userData)
                 }
             }
-            userData = await ENTITY.UserE.buildUser(dataToUpdateAs)
-            if (updateUserOnSdm || updateUserOnCms) {
+            if (createOnCms) {
                 if (async) {
-                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
-                        set: ENTITY.UserE.set
-                    }
-                    if (updateUserOnSdm && userData.sdmUserRef != 0) {
-                        userSync['sdm'] = {
-                            update: true,
-                            argv: JSON.stringify(userData)
-                        }
-                    }
-                    if (updateUserOnCms && userData.cmsUserRef != 0) {
-                        userSync['cms'] = {
-                            update: true,
-                            argv: JSON.stringify(userData)
-                        }
-                    }
-                    kafkaService.kafkaSync(userSync)
-                } else {
-                    if (updateUserOnSdm)
-                        await SDM.UserSDME.updateCustomerOnSdm(userData)
-                    if (updateUserOnCms)
-                        await CMS.UserCMSE.updateCustomerOnCms(userData)
-                }
-            } else {
-                if (async) {
-                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                    kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         cms: {
                             create: true,
                             argv: JSON.stringify(userData)
                         }
-                    }
-                    if (userData.syncUserOnSdm) {
-                        userSync['sdm'] = {
-                            create: true,
+                    })
+                } else {
+                    userData = await ENTITY.UserE.createUserOnCms(userData)
+                }
+            }
+            if (updateAs && Object.keys(updateAs).length > 0) {
+                updateAs['id'] = userData.id
+                userData = await ENTITY.UserE.buildUser(updateAs)
+            }
+
+            if (updateOnSdm) {
+                if (async) {
+                    kafkaService.kafkaSync({
+                        set: ENTITY.UserE.set,
+                        sdm: {
+                            update: true,
                             argv: JSON.stringify(userData)
                         }
-                    }
-                    kafkaService.kafkaSync(userSync)
+                    })
                 } else {
-                    if (userData.sdmUserRef == 0) {
-                        let sdmUser = await ENTITY.UserE.createUserOnSdm(userData)
-                        userData['sdmUserRef'] = sdmUser['CUST_ID']
-                        userData['sdmCorpRef'] = sdmUser['CUST_CORPID']
-                    }
-                    if (userData.cmsUserRef == 0)
-                        await ENTITY.UserE.createUserOnCms(userData)
+                    await SDM.UserSDME.updateCustomerOnSdm(userData)
+                }
+            }
+
+            if (updateOnCms) {
+                if (async) {
+                    kafkaService.kafkaSync({
+                        set: ENTITY.UserE.set,
+                        cms: {
+                            update: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    })
+                } else {
+                    await CMS.UserCMSE.updateCustomerOnCms(userData)
                 }
             }
             return userData

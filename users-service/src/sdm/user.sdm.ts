@@ -88,7 +88,7 @@ export class UserSDMEntity extends BaseSDM {
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateCustomerResult
             else
-                return Promise.reject(JSON.stringify(res))
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'updateCustomerOnSdm', JSON.stringify(error), false)
             return (error)

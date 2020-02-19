@@ -508,7 +508,7 @@ export class CartClass extends BaseEntity {
             })
             console.log(JSON.stringify(cart))
             let req = {
-                cms_user_id: 1,//userData.cmsUserRef,
+                cms_user_id: userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart
