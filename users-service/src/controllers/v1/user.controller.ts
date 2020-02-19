@@ -191,7 +191,7 @@ export class UserController {
                 if (userchange[0].syncUserOnSdm != undefined)
                     userUpdate['syncUserOnSdm'] = 1
                 userData = await ENTITY.UserE.buildUser(userUpdate)
-                if ((payload.isGuest == 1 || userchange[0].socialKey) && (userchange[0].syncUserOnCms == 1 || userchange[0].syncUserOnSdm == 1))
+                if (userData.sdmUserRef == 0 || userData.cmsUserRef == 0)
                     await this.validateUserOnSdm(userData, false)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
@@ -462,13 +462,13 @@ export class UserController {
                     let userSync: IKafkaGrpcRequest.IKafkaBody = {
                         set: ENTITY.UserE.set
                     }
-                    if (updateUserOnSdm) {
+                    if (updateUserOnSdm && userData.sdmUserRef != 0) {
                         userSync['sdm'] = {
                             update: true,
                             argv: JSON.stringify(userData)
                         }
                     }
-                    if (updateUserOnCms) {
+                    if (updateUserOnCms && userData.cmsUserRef != 0) {
                         userSync['cms'] = {
                             update: true,
                             argv: JSON.stringify(userData)
@@ -498,10 +498,13 @@ export class UserController {
                     }
                     kafkaService.kafkaSync(userSync)
                 } else {
-                    let sdmUser = await ENTITY.UserE.createUserOnSdm(userData)
-                    userData['sdmUserRef'] = sdmUser['CUST_ID']
-                    userData['sdmCorpRef'] = sdmUser['CUST_CORPID']
-                    await ENTITY.UserE.createUserOnCms(userData)
+                    if (userData.sdmUserRef == 0) {
+                        let sdmUser = await ENTITY.UserE.createUserOnSdm(userData)
+                        userData['sdmUserRef'] = sdmUser['CUST_ID']
+                        userData['sdmCorpRef'] = sdmUser['CUST_CORPID']
+                    }
+                    if (userData.cmsUserRef == 0)
+                        await ENTITY.UserE.createUserOnCms(userData)
                 }
             }
             return userData
