@@ -197,7 +197,7 @@ export class UserController {
                     userUpdate['syncUserOnSdm'] = 1
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
-                if (userData.sdmUserRef == 0 || userData.cmsUserRef == 0)
+                if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
