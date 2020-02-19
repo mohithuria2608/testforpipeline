@@ -27,13 +27,18 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.mdb
-                        if (payload.cms.create)
-                            payload['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE
-                        else if (payload.cms.get)
-                            payload['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.GET
-                        else if (payload.cms.update)
-                            payload['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE
-
+                        if (messages.count == 0) {
+                            if (payload.cms.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE
+                            else if (payload.cms.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.GET
+                            else if (payload.cms.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -43,15 +48,19 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count')) {
+                        if (messages.count == 0) {
                             if (payload.sdm.create)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE
                             else if (payload.sdm.get)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.GET
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.GET
                             else if (payload.sdm.update)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE
                             else if (payload.sdm.sync)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.SYNC
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.SYNC
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
                         }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER
                         messages['q'] = topic
@@ -62,8 +71,12 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
+                        }
+                        else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -79,13 +92,18 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.mdb
-                        if (payload.cms.create)
-                            payload['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE
-                        else if (payload.cms.get)
-                            payload['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.GET
-                        else if (payload.cms.update)
-                            payload['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE
-
+                        if (payload.count == 0) {
+                            if (payload.cms.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE
+                            else if (payload.cms.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.GET
+                            else if (payload.cms.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_ADDRESS
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -95,14 +113,19 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count')) {
-                            if (payload.sdm.create)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE
-                            else if (payload.sdm.get)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.GET
-                            else if (payload.sdm.update)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            // if (payload.sdm.create)
+                            //     messages['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE
+                            // else if (payload.sdm.get)
+                            //     messages['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.GET
+                            // else if (payload.sdm.update)
+                            //     messages['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE
+                            // else
+                            messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
                         }
+                        console.log("payload['count']", payload.sdm.create, messages['count'])
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -112,13 +135,17 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count')){
+                        if (payload.count == 0) {
                             if (payload.as.create)
-                                payload['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                payload['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.GET
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.GET
                             else if (payload.as.update)
-                                payload['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
                         }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS
                         messages['q'] = topic
@@ -135,8 +162,11 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -146,8 +176,11 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -157,8 +190,11 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -174,8 +210,11 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -191,8 +230,11 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -208,11 +250,13 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count')) {
+                        if (payload.count = 0) {
                             if (payload.sdm.create)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
-                            else if (payload.sdm.get)
-                                payload['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.TOTAL_RETRY.GET
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
                         }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
                         messages['q'] = topic
@@ -229,8 +273,11 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         delete messages.mdb
-                        if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE
+                        if (payload.count == 0) {
+                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE
+                        } else if (payload.count < 0) {
+                            break;
+                        }
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -246,6 +293,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.cms
+                        messages['count'] = 1
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -261,6 +309,7 @@ export class KafkaController {
                         delete messages.mdb
                         delete messages.sdm
                         delete messages.cms
+                        messages['count'] = 1
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE;
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -276,6 +325,7 @@ export class KafkaController {
                         delete messages.mdb
                         delete messages.sdm
                         delete messages.cms
+                        messages['count'] = 1
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE;
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });

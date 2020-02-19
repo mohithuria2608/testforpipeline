@@ -211,9 +211,6 @@ export const DATABASE = {
                 }
             },
             ORDER: {
-                TOTAL_RETRY: {
-                    GET: 10000,
-                },
                 MAX_RETRY: {
                     CREATE: 5,
                 },

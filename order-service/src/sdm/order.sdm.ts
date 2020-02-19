@@ -46,7 +46,7 @@ export class OrderSDMEntity extends BaseSDM {
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
             else
-                return Promise.reject(JSON.stringify(res))
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
             return Promise.reject(error)
@@ -66,7 +66,7 @@ export class OrderSDMEntity extends BaseSDM {
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
             else
-                return Promise.reject(JSON.stringify(res))
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
             return Promise.reject(error)

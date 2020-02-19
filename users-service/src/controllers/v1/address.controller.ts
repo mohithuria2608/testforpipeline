@@ -15,19 +15,68 @@ export class AddressController {
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.sync)) {
                 let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
-
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
-                let data = JSON.parse(payload.cms.argv)
+                let data = JSON.parse(payload.sdm.argv)
+                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
+                userData.asAddress = data.asAddress
                 if (payload.cms.create) {
-
+                    if (userData.cmsUserRef)
+                        await ENTITY.AddressE.addAddressOnCms(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            cms: {
+                                create: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
+                }
+                if (payload.cms.update) {
+                    if (userData.cmsUserRef)
+                        await ENTITY.AddressE.updateAddressOnCms(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            cms: {
+                                update: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
+                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
+                userData.asAddress = data.asAddress
                 if (payload.sdm.create) {
-
+                    if (userData.sdmUserRef)
+                        await ENTITY.AddressE.addAddressOnSdm(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            sdm: {
+                                create: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
+                }
+                if (payload.sdm.update) {
+                    if (userData.sdmUserRef)
+                        await ENTITY.AddressE.updateAddressOnSdm(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            sdm: {
+                                update: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
                 }
             }
             return {}
@@ -74,7 +123,21 @@ export class AddressController {
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
             let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
-            kafkaService.sync()
+            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
+                userData.asAddress = [addressData]
+                kafkaService.kafkaSync({
+                    set: ENTITY.AddressE.set,
+                    // cms: {
+                    //     create: true,
+                    //     argv: JSON.stringify(userData)
+                    // },
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    }
+                })
+            }
+
             return addressData
         } catch (error) {
             consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)

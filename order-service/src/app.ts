@@ -701,9 +701,7 @@ export const start = (async () => {
       "creditCardPaymentbool": "false",
       "menuTemplateID": "17"
     }
-    let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: orderPlaced })
-
+    // let orderPlaced = await SDM.OrderSDME.createOrder(order)
   } catch (error) {
     console.error(error)
   }

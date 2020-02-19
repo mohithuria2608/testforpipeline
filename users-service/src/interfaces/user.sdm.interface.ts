@@ -52,45 +52,4 @@ declare namespace IUserSDMRequest {
             WCUST_STATUS: number
         }
     }
-
-    interface IGetCustomerByUserNameAndPswdReq {
-        name: string,
-        req: IGetCustomerByUserNameAndPswd
-    }
-    interface IGetCustomerByUserNameAndPswd extends ICommonRequest.ISDM {
-        customerUserName: string,
-        customerPassword: string
-    }
-
-    interface IGetCustomerByEmailReq {
-        name: string,
-        req: IGetCustomerByEmail
-    }
-    interface IGetCustomerByEmail extends ICommonRequest.ISDM {
-        email: string
-    }
-
-    interface IGetCustomerByCustomerIdReq {
-        name: string,
-        req: IGetCustomerByCustomerId
-    }
-    interface IGetCustomerByCustomerId extends ICommonRequest.ISDM {
-        customerID: number
-    }
-
-    interface IGetCustomerByMobileNoReq {
-        name: string,
-        req: IGetCustomerByMobileNo
-    }
-    interface IGetCustomerByMobileNo extends ICommonRequest.ISDM {
-        mobileNo: number
-    }
-
-    interface IGetCustomerByPhoneNoReq {
-        name: string,
-        req: IGetCustomerByPhoneNo
-    }
-    interface IGetCustomerByPhoneNo extends ICommonRequest.ISDM {
-        phoneNo: number
-    }
 }

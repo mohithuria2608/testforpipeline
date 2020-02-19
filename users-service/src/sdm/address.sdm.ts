@@ -21,11 +21,10 @@ export class AddressSDMEntity extends BaseSDM {
                 req: payload
             }
             let res = await this.requestData(data.name, data.req)
-            if (res && res.RegisterAddressByIDResult && res.RegisterAddressByIDResult.ADDR_ID)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.RegisterAddressByIDResult
-            else {
-                return {}
-            }
+            else 
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'createAddress', error, false)
             return (error)

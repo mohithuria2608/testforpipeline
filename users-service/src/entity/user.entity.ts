@@ -226,31 +226,27 @@ export class UserEntity extends BaseEntity {
     async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
             let res = await SDM.UserSDME.createCustomerOnSdm(payload)
-            if (res && res.CUST_ID) {
-                let putArg: IAerospike.Put = {
-                    bins: {
-                        sdmUserRef: parseInt(res.CUST_ID.toString()),
-                        sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
-                    },
-                    set: this.set,
-                    key: payload.id,
-                    update: true,
-                }
-                await Aerospike.put(putArg)
-                let user = await this.getUser({ userId: payload.id })
-                if (user.cmsUserRef != 0) {
-                    kafkaService.kafkaSync({
-                        set: this.set,
-                        cms: {
-                            update: true,
-                            argv: JSON.stringify(user)
-                        }
-                    })
-                }
-                return user
-            } else {
-                return {}
+            let putArg: IAerospike.Put = {
+                bins: {
+                    sdmUserRef: parseInt(res.CUST_ID.toString()),
+                    sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
+                },
+                set: this.set,
+                key: payload.id,
+                update: true,
             }
+            await Aerospike.put(putArg)
+            let user = await this.getUser({ userId: payload.id })
+            if (user.cmsUserRef != 0) {
+                kafkaService.kafkaSync({
+                    set: this.set,
+                    cms: {
+                        update: true,
+                        argv: JSON.stringify(user)
+                    }
+                })
+            }
+            return user
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)

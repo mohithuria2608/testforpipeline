@@ -11,7 +11,7 @@ message IKafkaReq {
     optional ICms cms = 3;
     optional ISdm sdm = 4;
     optional IMdb mdb = 5;
-    required int32 count = 6;
+    optional int32 count = 6;
     optional string q = 7;
 }
 
