@@ -1,5 +1,6 @@
 [
     {
+        "id": "shipment_main_website_store",
         "store_code": "main_website_store",
         "store_id": "1",
         "free_shipping": {
@@ -17,6 +18,7 @@
         }
     },
     {
+        "id": "payment_main_website_store",
         "store_code": "main_website_store",
         "store_id": "1",
         "noon_pay_config": {

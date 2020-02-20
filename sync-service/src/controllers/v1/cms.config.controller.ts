@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -7,6 +8,25 @@ import { kafkaService } from '../../grpc/client'
 export class CmsConfigController {
 
     constructor() { }
+
+    /**
+    * @method BOOTSTRAP
+    * @description : Post bulk configuration data
+    * */
+    async bootstrapConfiguration() {
+        try {
+            await Aerospike.truncate({ set: ENTITY.ConfigE.set, before_nanos: 0 })
+            let rawdata = fs.readFileSync(__dirname + '/../../../model/configuration.json', 'utf-8');
+            let config = JSON.parse(rawdata);
+            for (const iterator of config) {
+                ENTITY.ConfigE.postConfiguration(iterator)
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapConfiguration", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 
     /**
     * @method GRPC
@@ -22,7 +42,7 @@ export class CmsConfigController {
                                 let store_code = data.data['store_code']
                                 data.data.map(async config => {
                                     let dataToSave = {
-                                        id: data.type + "_" + config.store_id,
+                                        id: data.type + "_" + config.store_code,
                                         type: data.type,
                                     }
                                     if (config.store_code)
@@ -37,8 +57,7 @@ export class CmsConfigController {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
                                         key: dataToSave['id'],
-                                        ttl: 0,
-                                        replace: true,
+                                        createOrReplace: true,
                                     }
                                     await Aerospike.put(putArg)
                                 })
@@ -76,7 +95,7 @@ export class CmsConfigController {
                                 data.data.map(async config => {
                                     console.log("config", config)
                                     let dataToSave = {
-                                        id: data.type + "_" + config.store_id,
+                                        id: data.type + "_" + config.store_code,
                                         type: data.type
                                     }
                                     if (config.store_code)
@@ -129,7 +148,7 @@ export class CmsConfigController {
                                 let store_code = data.data['store_code']
                                 data.data.map(async config => {
                                     let dataToSave = {
-                                        id: data.type + "_" + config.store_id,
+                                        id: data.type + "_" + config.store_code,
                                         type: data.type,
                                     }
                                     if (config.store_code)
@@ -144,8 +163,7 @@ export class CmsConfigController {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
                                         key: dataToSave['id'],
-                                        ttl: 0,
-                                        replace: true,
+                                        createOrReplace: true,
                                     }
                                     await Aerospike.put(putArg)
                                 })
@@ -189,9 +207,6 @@ export class CmsConfigController {
      */
     async postConfig(headers: ICommonRequest.IHeaders, payload: ICmsConfigRequest.ICmsConfig) {
         try {
-            // payload.data = payload.data.filter(elem => {
-            //     return elem['store_code'] == Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-            // })
             let configChange: IKafkaGrpcRequest.IKafkaBody = {
                 set: ENTITY.ConfigE.set,
                 as: {
