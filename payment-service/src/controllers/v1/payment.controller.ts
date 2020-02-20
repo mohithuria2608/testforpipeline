@@ -25,7 +25,7 @@ export class PaymentController {
                         "id": 1,
                         "name": "Card",
                         "image": "",
-                        default: 0
+                        default: 1
                     },
                     {
                         "id": 2,
