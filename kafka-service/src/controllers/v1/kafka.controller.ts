@@ -191,7 +191,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            messages['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         } else if (payload.count < 0) {
                             break;
                         }

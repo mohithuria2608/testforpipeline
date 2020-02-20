@@ -666,12 +666,12 @@ export class OrderClass extends BaseEntity {
                                                 noonpayOrderId: order.transLogs[1].noonpayOrderId,
                                                 orderId: order.transLogs[1].orderId,
                                                 amount: order.transLogs[1].amount,
-                                                storeCode: "kfc_uae_store"
+                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                                             })
                                             let status = await paymentService.getPaymentStatus({
                                                 noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                storeCode: "kfc_uae_store",
-                                                paymentStatus: "CAPTURED",
+                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                             })
                                             this.updateOneEntityMdb({ _id: order._id }, {
                                                 status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,

@@ -27,8 +27,8 @@ export class WebhookNoonpayController {
                  */
                 let status = await paymentService.getPaymentStatus({
                     noonpayOrderId: payload.orderId,
-                    storeCode: "kfc_uae_store",
-                    paymentStatus: "AUTHORIZED",
+                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                    paymentStatus:Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
                 })
                 let dataToUpdateOrder = {
                     $addToSet: {

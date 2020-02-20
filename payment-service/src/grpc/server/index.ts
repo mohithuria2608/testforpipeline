@@ -45,19 +45,19 @@ server.addService(paymentProto.PaymentService.service, {
             consolelog(process.cwd(), "getPaymentStatus", JSON.stringify(call.request), true);
             let res: IPaymentGrpcRequest.IGetPaymentStatusRes;
             switch (call.request.paymentStatus) {
-                case ENTITY.PaymentClass.STATUS.ORDER.INITIATED:
+                case Constant.DATABASE.STATUS.PAYMENT.INITIATED:
                     res = (await ENTITY.PaymentE.getInitiateStatus(call.request)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.AUTHORIZED:
+                case Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED:
                     res = await ENTITY.PaymentE.getAuthorizationStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.CANCELLED:
+                case Constant.DATABASE.STATUS.PAYMENT.CANCELLED:
                     res = await ENTITY.PaymentE.getReverseStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.CAPTURED:
+                case Constant.DATABASE.STATUS.PAYMENT.CAPTURED:
                     res = await ENTITY.PaymentE.getCaptureStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.REFUNDED:
+                case Constant.DATABASE.STATUS.PAYMENT.REFUNDED:
                     res = await ENTITY.PaymentE.getRefundStatus(call.request) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
                 default:
