@@ -15,10 +15,9 @@ pipeline {
         Payment_image="americana.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
         Notification_image="americana.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
         Log_image="americana.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
-<<<<<<< HEAD
+        Home_image="americana.azurecr.io/home"+ ":Home-service_${env.BUILD_NUMBER}"
 
-=======
->>>>>>> qa
+
 
     }
     agent any
@@ -64,6 +63,7 @@ pipeline {
                     PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile .")
                     NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile .")
                     LogImage=docker.build(registry + "/log"+ ":Log-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/log-service/Dockerfile .")
+                    HomeImage=docker.build(registry + "/home"+ ":Home-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/home-service/Dockerfile .")
 
 
                 }
@@ -86,6 +86,7 @@ pipeline {
                         PaymentImage.push()
                         NotificationImage.push()
                         LogImage.push()
+                        HomeImage.push()
                     }
                 }
             }
