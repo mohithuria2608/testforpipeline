@@ -17,7 +17,9 @@ export class PaymentController {
             let cart = await orderService.getCart({ cartId: payload.cartId })
             let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             let storeCode = "kfc_uae_store"
-            if (amount[0].amount < Constant.SERVER.MIN_COD_CART_VALUE) {
+            if (amount[0].amount > 23) {
+                return []
+            } else if (amount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE) {
                 return [
                     {
                         "id": 1,
@@ -32,7 +34,8 @@ export class PaymentController {
                         default: 0
                     }
                 ]
-            } else {
+            }
+            else {
                 return [
                     {
                         "id": 1,
