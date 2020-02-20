@@ -44,7 +44,7 @@ export class UpsellClass extends BaseEntity {
     })
 
     constructor() {
-        super('upsell')
+        super(Constant.SET_NAME.UPSELL)
     }
     /**
      * @method BOOTSTRAP
@@ -73,7 +73,7 @@ export class UpsellClass extends BaseEntity {
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'upsell',
-                    func: Constant.UDF.UPSELL.get_upsell,
+                    func: Constant.DATABASE.UDF.UPSELL.get_upsell,
                     args: [payload.language],
                     forEach: true
                 },

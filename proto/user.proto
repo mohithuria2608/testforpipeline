@@ -15,6 +15,7 @@ message IKafkaReq {
     optional ISdm sdm = 4;
     optional IMdb mdb = 5;
     required int32 count = 6;
+    optional string q = 7;
 }
 
 message IAerospike {
@@ -23,6 +24,7 @@ message IAerospike {
     optional bool reset = 3;
     optional bool get = 4;
     required string argv = 5;
+    optional string q = 7;
 }
 
 message ICms {
@@ -30,7 +32,8 @@ message ICms {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message ISdm {
@@ -38,7 +41,8 @@ message ISdm {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message IMdb {
@@ -46,7 +50,8 @@ message IMdb {
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
-    required string argv = 5;
+    optional bool sync = 5;
+    optional string argv = 6;
 }
 
 message IKafkaRes {
@@ -116,4 +121,7 @@ message IFetchAddressRes {
     required string addressType = 9;
     required double lat = 10;
     required double lng = 11;
+    required int32 sdmCityRef = 12;
+    required int32 sdmAreaRef = 13;
+    required int32 sdmCountryRef = 14;
 }

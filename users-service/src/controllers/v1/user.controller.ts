@@ -2,7 +2,10 @@ import * as Constant from '../../constant'
 import { consolelog, formatUserData } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
-import { kafkaService } from '../../grpc/client';
+import { kafkaService, notificationService } from '../../grpc/client';
+import { addressController } from '../../controllers';
+import * as CMS from '../../cms';
+import * as SDM from '../../sdm';
 
 export class UserController {
     constructor() { }
@@ -13,8 +16,8 @@ export class UserController {
      */
     async syncUser(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
-            if (payload.as && (payload.as.create || payload.as.update || payload.as.get)) {
+            if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.sync)) {
+                let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
 
                 }
@@ -23,21 +26,25 @@ export class UserController {
                     ENTITY.UserE.buildUser(data)
                 }
             }
-            if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
+            if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
+                let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create)
                     ENTITY.UserE.createUserOnCms(data)
                 if (payload.cms.update)
                     ENTITY.UserE.updateUserOnCms(data)
             }
-            if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
+            if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
+                let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
                     ENTITY.UserE.createUserOnSdm(data)
                 if (payload.sdm.update)
                     ENTITY.UserE.updateUserOnSdm(data)
+                if (payload.sdm.sync)
+                    this.validateUserOnSdm(data, true)
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
+            consolelog(process.cwd(), "syncFromKafka", error, false)
             return Promise.reject(error)
         }
     }
@@ -61,25 +68,16 @@ export class UserController {
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             if (checkUser && checkUser.length > 0) {
-                let userchange: IUserchangeRequest.IUserchange = {
+                let userchangePayload: IUserchangeRequest.IUserchange = {
                     fullPhnNo: fullPhnNo,
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0
                 }
-                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchange)
+                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
-                let tempUser: IUserRequest.IUserData = {
-                    id: ENTITY.UserE.ObjectId().toString(),
-                    cartId: ENTITY.UserE.ObjectId().toString(),
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-                    phnVerified: 0,
-                    brand: headers.brand,
-                    country: headers.country,
-                }
-                let user = await ENTITY.UserE.buildUser(tempUser)
-                let userchange: IUserchangeRequest.IUserchange = {
+                let userchangePayload: IUserchangeRequest.IUserchange = {
                     username: username,
                     fullPhnNo: fullPhnNo,
                     cCode: payload.cCode,
@@ -89,9 +87,41 @@ export class UserController {
                     otp: Constant.SERVER.BY_PASS_OTP,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
-                    isGuest: 0
+                    isGuest: 0,
+                    sdmUserRef: 0,
+                    sdmCorpRef: 0,
+                    cmsUserRef: 0,
+                    syncUserOnCms: 0,
+                    syncUserOnSdm: 0,
                 }
-                await ENTITY.UserchangeE.buildUserchange(user.id, userchange)
+                let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
+                    userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
+                    if (cmsUserByPhoneNo.sdm_user_ref)
+                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
+                    if (cmsUserByPhoneNo.sdm_corp_ref)
+                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
+                    userchangePayload['email'] = cmsUserByPhoneNo.email
+                    userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
+                    userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                    if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
+                        /**
+                         * @todo : sync cms address on as
+                         */
+                    }
+                } else {
+                    userchangePayload['syncUserOnCms'] = 1
+                }
+                let tempUser: IUserRequest.IUserData = {
+                    id: ENTITY.UserE.ObjectId().toString(),
+                    cartId: ENTITY.UserE.ObjectId().toString(),
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    phnVerified: 0,
+                    brand: headers.brand,
+                    country: headers.country,
+                }
+                let user = await ENTITY.UserE.buildUser(tempUser)
+                await ENTITY.UserchangeE.buildUserchange(user.id, userchangePayload)
             }
             return {}
         } catch (error) {
@@ -153,12 +183,23 @@ export class UserController {
                     userUpdate['brand'] = userchange[0].brand
                 if (userchange[0].country)
                     userUpdate['country'] = userchange[0].country
+                if (userchange[0].sdmUserRef != undefined)
+                    userUpdate['sdmUserRef'] = userchange[0].sdmUserRef
+                if (userchange[0].sdmCorpRef != undefined)
+                    userUpdate['sdmCorpRef'] = userchange[0].sdmCorpRef
+                if (userchange[0].cmsUserRef != undefined)
+                    userUpdate['cmsUserRef'] = userchange[0].cmsUserRef
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
-                if (userchange[0].address && userchange[0].address.id) {
+                if (userchange[0].syncUserOnCms != undefined)
+                    userUpdate['syncUserOnCms'] = 1
+                if (userchange[0].syncUserOnSdm != undefined)
+                    userUpdate['syncUserOnSdm'] = 1
 
-                }
                 userData = await ENTITY.UserE.buildUser(userUpdate)
+                console.log("userData", userData)
+                if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
+                    await this.validateUserOnSdm(userData, false)
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -179,6 +220,22 @@ export class UserController {
                 payload.isGuest,
                 session.sessionTime
             )
+            if (userchange[0].address && userchange[0].address.id) {
+                if (payload.isGuest == 1)
+                    Aerospike.remove({ key: userData.id, set: ENTITY.AddressE.set })
+                await addressController.syncOldAddress(userData, {
+                    addressId: userchange[0].address.id,
+                    sdmStoreRef: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.sdmStoreRef : undefined,
+                    lat: userchange[0].address.lat,
+                    lng: userchange[0].address.lng,
+                    bldgName: userchange[0].address.bldgName,
+                    description: userchange[0].address.description,
+                    flatNum: userchange[0].address.flatNum,
+                    tag: userchange[0].address.tag
+                });
+                if (deleteUserId && deleteUserId != "")
+                    Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
+            }
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, payload.isGuest) }
         } catch (error) {
             consolelog(process.cwd(), "loginVerifyOtp", JSON.stringify(error), false)
@@ -197,7 +254,7 @@ export class UserController {
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
-                    func: Constant.UDF.USER.check_social_key,
+                    func: Constant.DATABASE.UDF.USER.check_social_key,
                     args: [headers.brand, headers.country, payload.medium, payload.socialKey],
                     forEach: true
                 },
@@ -314,6 +371,24 @@ export class UserController {
                         userchangePayload['deleteUserId'] = auth.id
                         await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
                     } else {
+                        let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                        if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
+                            userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
+                            userchangePayload['email'] = cmsUserByPhoneNo.email
+                            userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
+                            userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                            if (cmsUserByPhoneNo.sdm_user_ref)
+                                userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
+                            if (cmsUserByPhoneNo.sdm_corp_ref)
+                                userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
+                            if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
+                                /**
+                                 * @todo : sync cms address on as
+                                 */
+                            }
+                        } else {
+                            userchangePayload['syncUserOnCms'] = 1
+                        }
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
                         await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
@@ -334,18 +409,13 @@ export class UserController {
                         emailVerified: 1,
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
-                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                    kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
-                            create: true,
+                            sync: true,
                             argv: JSON.stringify(userData)
-                        },
-                        cms: {
-                            create: true,
-                            argv: JSON.stringify(userData)
-                        },
-                    }
-                    kafkaService.kafkaSync(userSync)
+                        }
+                    })
                     return formatUserData(userData, headers, auth.isGuest)
                 }
             } else {
@@ -353,6 +423,99 @@ export class UserController {
             }
         } catch (error) {
             consolelog(process.cwd(), "profileUpdate", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean) {
+        try {
+            consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
+            let updateUserOnSdm = false
+            let updateUserOnCms = false
+            let dataToUpdateAs = {
+                id: userData.id
+            }
+            let cmsUserByEmail = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
+            if (cmsUserByEmail && cmsUserByEmail.customer_id) {
+                dataToUpdateAs['cmsUserRef'] = cmsUserByEmail.customer_id
+                if (cmsUserByEmail.sdm_user_ref)
+                    dataToUpdateAs['sdmUserRef'] = cmsUserByEmail.sdm_user_ref
+                if (cmsUserByEmail.sdm_corp_ref)
+                    dataToUpdateAs['sdmCorpRef'] = cmsUserByEmail.sdm_corp_ref
+                if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
+                    /**
+                     * @todo : sync cms address on as
+                     */
+                }
+                updateUserOnCms = true
+                updateUserOnSdm = true
+            }
+            if (!updateUserOnSdm) {
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                    if (sdmUserByEmail.CUST_PHONELOOKUP != userData.fullPhnNo.replace("+", "")) {
+                        updateUserOnSdm = true
+                    }
+                    dataToUpdateAs['sdmUserRef'] = sdmUserByEmail.CUST_ID
+                    dataToUpdateAs['sdmCorpRef'] = sdmUserByEmail.CUST_CORPID
+                } else {
+                    dataToUpdateAs['syncUserOnSdm'] = 1
+                }
+            }
+            userData = await ENTITY.UserE.buildUser(dataToUpdateAs)
+            if (updateUserOnSdm || updateUserOnCms) {
+                if (async) {
+                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                        set: ENTITY.UserE.set
+                    }
+                    if (updateUserOnSdm && userData.sdmUserRef != 0) {
+                        userSync['sdm'] = {
+                            update: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    }
+                    if (updateUserOnCms && userData.cmsUserRef != 0) {
+                        userSync['cms'] = {
+                            update: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    }
+                    kafkaService.kafkaSync(userSync)
+                } else {
+                    if (updateUserOnSdm)
+                        await SDM.UserSDME.updateCustomerOnSdm(userData)
+                    if (updateUserOnCms)
+                        await CMS.UserCMSE.updateCustomerOnCms(userData)
+                }
+            } else {
+                if (async) {
+                    let userSync: IKafkaGrpcRequest.IKafkaBody = {
+                        set: ENTITY.UserE.set,
+                        cms: {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    }
+                    if (userData.syncUserOnSdm) {
+                        userSync['sdm'] = {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        }
+                    }
+                    kafkaService.kafkaSync(userSync)
+                } else {
+                    if (userData.sdmUserRef == 0) {
+                        let sdmUser = await ENTITY.UserE.createUserOnSdm(userData)
+                        userData['sdmUserRef'] = sdmUser['CUST_ID']
+                        userData['sdmCorpRef'] = sdmUser['CUST_CORPID']
+                    }
+                    if (userData.cmsUserRef == 0)
+                        await ENTITY.UserE.createUserOnCms(userData)
+                }
+            }
+            return userData
+        } catch (error) {
+            consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -374,7 +537,7 @@ export class UserController {
                 dataToUpdate['name'] = payload.name
             if (payload.email)
                 dataToUpdate['email'] = payload.email
-            if (payload.cCode && payload.phnNo) {
+            if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
                 const fullPhnNo = payload.cCode + payload.phnNo;
                 const username = headers.brand + "_" + fullPhnNo;
                 let userchangePayload = {
@@ -401,8 +564,7 @@ export class UserController {
                 await ENTITY.UserchangeE.buildUserchange(userData.id, userchangePayload)
             }
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
-            // ENTITY.UserE.syncUser(user)
-            if (payload.cCode && payload.phnNo) {
+            if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
                 user['fullPhnNo'] = payload.cCode + payload.phnNo
                 user['phnNo'] = payload.phnNo
                 user['cCode'] = payload.cCode

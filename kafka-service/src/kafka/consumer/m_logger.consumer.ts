@@ -6,7 +6,7 @@ import { logService } from "../../grpc/client"
 class MLoggerConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.M_LOGGER, Constant.KAFKA_TOPIC.M_LOGGER);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER);
     }
 
     handleMessage() {

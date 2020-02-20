@@ -7,7 +7,7 @@ import { consolelog } from '../utils'
 
 export class MenuEntity extends BaseEntity {
     constructor() {
-        super('menu')
+        super(Constant.SET_NAME.MENU)
     }
 
     /**

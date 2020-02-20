@@ -30,7 +30,7 @@ export class CartClass extends BaseEntity {
     ]
 
     constructor() {
-        super('cart')
+        super(Constant.SET_NAME.CART)
     }
 
     public cartSchema = Joi.object().keys({
@@ -304,12 +304,16 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
+            let sellingPrice = 0
             let cart = []
             payload.items.map(sitem => {
+                sellingPrice = sellingPrice + (sitem.sellingPrice * sitem.qty)
                 if (sitem['originalTypeId'] == 'simple') {
                     if (sitem['type_id'] == 'simple') {
+                        if (sitem.id == 0)
+                            console.log("sitem>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", sitem)
                         cart.push({
                             product_id: sitem.id,
                             qty: sitem.qty ? sitem.qty : 1,
@@ -317,11 +321,11 @@ export class CartClass extends BaseEntity {
                             type_id: sitem['originalTypeId']
                         })
                     } else {
+                        let subPrice = 0
                         let product = {};
                         product['product_id'] = sitem['id']
                         product['qty'] = sitem['qty']
                         product['type_id'] = sitem['originalTypeId']
-                        product['price'] = sitem['sellingPrice']
                         let option = {}
                         if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
                             sitem['bundleProductOptions'].forEach(bpo => {
@@ -332,6 +336,7 @@ export class CartClass extends BaseEntity {
                                                 pl['subOptions'].map(so => {
                                                     if (so['selected'] == 1) {
                                                         option[pl['id']] = so['id']
+                                                        subPrice = subPrice + so['price']
                                                         cart.push({
                                                             product_id: so['product_id'],
                                                             qty: sitem['qty'],
@@ -347,17 +352,18 @@ export class CartClass extends BaseEntity {
                                 }
                             })
                         }
+                        product['price'] = sitem['sellingPrice'] - subPrice
                         product['option'] = option
                         cart.push(product)
                     }
                 }
                 else if (sitem['originalTypeId'] == 'configurable') {
                     let super_attribute = {};
-                    let price = null;
+                    // let price = null;
                     if (sitem['items'] && sitem['items'].length > 0) {
                         sitem['items'].map(i => {
                             if (parseInt(i['sku']) == sitem['selectedItem']) {
-                                price = i['sellingPrice']
+                                // price = i['sellingPrice']
                                 if (sitem['configurableProductOptions'] && sitem['configurableProductOptions'].length > 0) {
                                     sitem['configurableProductOptions'].map(co => {
                                         let value = null
@@ -377,7 +383,7 @@ export class CartClass extends BaseEntity {
                     cart.push({
                         product_id: sitem.id,
                         qty: sitem.qty ? sitem.qty : 1,
-                        price: price,
+                        price: sitem.sellingPrice,
                         type_id: sitem['typeId'],
                         super_attribute: super_attribute
                     })
@@ -400,8 +406,6 @@ export class CartClass extends BaseEntity {
                                         }
 
                                         if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                            console.log(" positionIndex", positionIndex, (positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1))
-                                            console.log(" bpo", sitem['bundleProductOptions'][1])
                                             let dependentSteps = sitem['bundleProductOptions'][(positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1)]
                                             if (dependentSteps.isDependent == 1) {
                                                 if (dependentSteps['productLinks'] && dependentSteps['productLinks'].length > 0) {
@@ -418,23 +422,6 @@ export class CartClass extends BaseEntity {
                                             }
                                         }
                                     }
-                                    // if (pl['dependentSteps'] && pl['dependentSteps'].length > 0 && (typeof pl['dependentSteps'][0] == 'number')) {
-                                    //     console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
-                                    //     if (sitem['bundleProductOptions'] && sitem['bundleProductOptions'].length > 0) {
-                                    //         sitem['bundleProductOptions'].forEach(bpo2 => {
-                                    //             if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                    //                 if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
-                                    //                     bpo2['productLinks'].forEach(pl2 => {
-                                    //                         if (pl2['selected'] == 1)
-                                    //                             selection_configurable_option[pl['selection_id']] = pl2['id']
-                                    //                         else
-                                    //                             selection_configurable_option[pl['selection_id']] = ""
-                                    //                     })
-                                    //                 }
-                                    //             }
-                                    //         })
-                                    //     }
-                                    // }
                                 })
                             }
                         }
@@ -478,7 +465,6 @@ export class CartClass extends BaseEntity {
                                                 alreadyAddedInBundleOption[pl['id']] = true
                                             }
                                             if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                                console.log("pl['dependentSteps']", pl['dependentSteps'], typeof pl['dependentSteps'][0])
                                                 if (i['bundleProductOptions'] && i['bundleProductOptions'].length > 0) {
                                                     i['bundleProductOptions'].forEach(bpo2 => {
                                                         if (bpo2['position'] == pl['dependentSteps'][0]) {
@@ -499,9 +485,6 @@ export class CartClass extends BaseEntity {
                                 })
                             }
                         })
-                        console.log("bundle_option", bundle_option)
-                        console.log("selection_configurable_option", selection_configurable_option)
-
                         cart.push({
                             product_id: item,
                             qty: sitem.qty,
@@ -513,14 +496,12 @@ export class CartClass extends BaseEntity {
                     }
                 }
                 else {
-                    return Promise.reject("Unhandled  products")
+                    return Promise.reject(JSON.stringify(sitem))
                 }
             })
 
-            console.log("cart", JSON.stringify(cart))
-
             let req = {
-                cms_user_id: 12, //userData.cmsUserRef,
+                cms_user_id: userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart
@@ -529,7 +510,7 @@ export class CartClass extends BaseEntity {
                 req['coupon_code'] = payload.couponCode
             else
                 req['coupon_code'] = ""
-            return req
+            return { req: req, sellingPrice: sellingPrice }
         } catch (error) {
             consolelog(process.cwd(), "createCartReqForCms", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -538,8 +519,21 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-            let req = await this.createCartReqForCms(payload)
-            let cmsCart = await CMS.CartCMSE.createCart(req)
+            let req = await this.createCartReqForCms(payload, userData)
+            let cmsCart = await CMS.CartCMSE.createCart(req.req)
+            // cmsCart['is_price_changed'] = false
+            // /**
+            //  * @description Temporary
+            //  */
+            // let subTotal = Math.round((((req.sellingPrice * 100) / 105) + Number.EPSILON) * 100) / 100
+            // let tax = req.sellingPrice - subTotal
+            // let grandTotal = req.sellingPrice + cmsCart['discount_amount']
+            // cmsCart['subtotal'] = subTotal
+            // cmsCart['tax'] = [{
+            //     tax_name: "VAT@5%",
+            //     amount: tax,
+            // }]
+            // cmsCart['grandtotal'] = grandTotal
             return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
@@ -563,16 +557,18 @@ export class CartClass extends BaseEntity {
 
             let amount = []
             amount.push({
-                type: "SUB_TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 name: "Sub Total",
                 code: "SUB_TOTAL",
                 amount: cmsCart.subtotal,
                 sequence: 1,
                 action: "add"
             })
-            if (cmsCart.discount_amount != 0 && cmsCart.coupon_code && cmsCart.coupon_code != "") {
+            if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
+                if (cmsCart.coupon_code == "FREEDELIVERY")
+                    cmsCart.discount_amount = 6.5
                 amount.push({
-                    type: "DISCOUNT",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
                     name: "Discount",
                     code: cmsCart.coupon_code,
                     amount: cmsCart.discount_amount,
@@ -585,7 +581,7 @@ export class CartClass extends BaseEntity {
             }
             if (cmsCart.tax && cmsCart.tax.length > 0) {
                 amount.push({
-                    type: "TAX",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: cmsCart.tax[0].tax_name,
                     code: cmsCart.tax[0].tax_name,
                     amount: cmsCart.tax[0].amount,
@@ -594,7 +590,7 @@ export class CartClass extends BaseEntity {
                 })
             } else {
                 amount.push({
-                    type: "TAX",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: "VAT",
                     code: "VAT",
                     amount: 0,
@@ -603,7 +599,7 @@ export class CartClass extends BaseEntity {
                 })
             }
             let delivery = {
-                type: "SHIPPING",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                 name: "Delivery",
                 code: "DELIVERY",
                 amount: 0,
@@ -612,21 +608,24 @@ export class CartClass extends BaseEntity {
             }
             if (cmsCart.grandtotal > 0) {
                 delivery.amount = 6.5
+                // if (cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY")
+                //     delivery.amount = 0
             }
             amount.push(delivery)
 
             amount.push({
-                type: "TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal + delivery.amount,
+                amount: cmsCart.grandtotal + delivery.amount - ((cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY") ? 6.5 : 0),
                 sequence: 5,
                 action: "add"
             })
             dataToUpdate['amount'] = amount
+            console.log("amount", typeof amount, JSON.stringify(amount))
+
             if (cmsCart.not_available && cmsCart.not_available.length > 0) {
                 curItems.forEach(obj => {
-                    console.log("1", obj.id)
                     if (cmsCart.not_available.indexOf(obj.id) == -1) {
                         dataToUpdate['items'].push(obj)
                     } else {

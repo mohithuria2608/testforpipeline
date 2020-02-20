@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog, cryptData } from '../../utils'
+import { consolelog, hashObj } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
@@ -50,68 +50,88 @@ export class OrderController {
 
     /**
      * @method POST
-     * @param {string} orderType
      * @param {string} addressId
+     * @param {string} orderType
+     * @param {string} paymentMethodId
      * @param {string} cartId
+     * @param {string} curMenuId
+     * @param {string} menuUpdatedAt
+     * @param {string} lat
+     * @param {string} lng
+     * @param {string} couponCode
+     * @param {string} items
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            let order: IOrderRequest.IOrderData
+            let retry = false
+            let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
+                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId }, {}, { lean: true })
+                if (order && order._id)
+                    retry = true
+            }
+
+            let newCartId = ""
             let noonpayRedirectionUrl = ""
-            let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
-                addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
-            if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
+            if (!retry) {
+                let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                    addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
-            let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
-            if (!getStore.hasOwnProperty("id"))
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
+                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
+                if (!getStore.hasOwnProperty("id"))
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
 
-            let promo: IPromotionGrpcRequest.IValidatePromotionRes
-            if (payload.couponCode && payload.items && payload.items.length > 0) {
-                let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                if (!promo || (promo && !promo.isValid)) {
+                let promo: IPromotionGrpcRequest.IValidatePromotionRes
+                if (payload.couponCode && payload.items && payload.items.length > 0) {
+                    let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                    if (!promo || (promo && !promo.isValid)) {
+                        delete payload['couponCode']
+                    }
+                } else
                     delete payload['couponCode']
-                }
-            } else
-                delete payload['couponCode']
-            /**
-             * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
-             * @description step 2 create order on SDM async
-             * @description step 3 create order on MONGO synchronously
-             * @description step 4 inititate payment on Noonpay synchronously
-             */
-            let postCartPayload: ICartRequest.IValidateCart = {
-                cartId: payload.cartId,
-                curMenuId: payload.curMenuId,
-                menuUpdatedAt: payload.menuUpdatedAt,
-                couponCode: payload.couponCode,
-                items: payload.items
-            }
-            let cmsReq: IOrderCMSRequest.ICreateOrderCms = await ENTITY.CartE.createCartReqForCms(postCartPayload)
-            let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq, getAddress.cmsAddressRef)
-            let cartData: ICartRequest.ICartData
-            if (!cmsOrder['order_id']) {
-                cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
-                cartData['promo'] = promo
-                return { cartValidate: cartData }
-            }
-            else {
-                cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-                cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
-            }
-            cartData['orderType'] = payload.orderType
-            ENTITY.OrderE.syncOrder(cartData)
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore)
-            let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
-            console.log("amount", typeof amount, JSON.stringify(amount))
-            if (payload.paymentMethodId != 0) {
                 /**
-                 * @todo : noonpay order id = cms order id
+                 * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
+                 * @description step 2 create order on SDM async
+                 * @description step 3 create order on MONGO synchronously
+                 * @description step 4 inititate payment on Noonpay synchronously
                  */
+                let postCartPayload: ICartRequest.IValidateCart = {
+                    cartId: payload.cartId,
+                    curMenuId: payload.curMenuId,
+                    menuUpdatedAt: payload.menuUpdatedAt,
+                    couponCode: payload.couponCode,
+                    items: payload.items
+                }
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
+                let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
+
+                let cartData: ICartRequest.ICartData
+                if (cmsOrder && cmsOrder['order_id']) {
+                    cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+                    cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
+                } else {
+                    cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
+                    cartData['promo'] = promo
+                    return { cartValidate: cartData }
+                }
+                cartData['orderType'] = payload.orderType
+                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
+            }
+            // let subTotal = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL.SUB_TOTAL })
+            // let tax = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
+            let amount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+            // if ((subTotal[0].amount + tax[0].amount) < 23.5) {
+            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MINIMUM_CART_VALUE_VIOLATION)
+            // }
+            if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                    orderId: order._id.toString(),
+                    orderId: order.cmsOrderRef.toString(),
                     amount: amount[0].amount,
                     storeCode: "kfc_uae_store",
                     paymentMethodId: 1,
@@ -137,20 +157,22 @@ export class OrderController {
                         name: "Cash On Delivery"
                     }
                 })
-            }
-            /**
-             * @description : update user with new cart
-             */
-            let newCartId = ENTITY.OrderE.ObjectId().toString()
-            ENTITY.CartE.assignNewCart(cartData.cartId, newCartId, auth.id)
-            let asUserChange = {
-                set: Constant.SET_NAME.USER,
-                as: {
-                    update: true,
-                    argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
+                /**
+                * @description : update user with new cart in case of Cash On Delivery
+                */
+                newCartId = ENTITY.OrderE.ObjectId().toString()
+                ENTITY.CartE.assignNewCart(order.cartId, newCartId, auth.id)
+                let asUserChange = {
+                    set: Constant.SET_NAME.USER,
+                    as: {
+                        update: true,
+                        argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
+                    }
                 }
+                await userService.sync(asUserChange)
             }
-            await userService.sync(asUserChange)
+            ENTITY.OrderE.syncOrder(order)
+
             return {
                 orderPlaced: {
                     newCartId: newCartId,
@@ -159,6 +181,8 @@ export class OrderController {
                 }
             }
         } catch (error) {
+            consolelog(process.cwd(), "postOrder", error, false)
+
             consolelog(process.cwd(), "postOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
@@ -232,7 +256,7 @@ export class OrderController {
             if (order && order._id) {
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
+                order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
                 order['nextPing'] = 15
                 order['unit'] = "second"
                 return order

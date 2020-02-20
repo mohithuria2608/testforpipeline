@@ -6,7 +6,7 @@ import { cms_menuConsumerE } from './cms_menu.consumer';
 import { sdm_menuConsumerE } from './sdm_menu.consumer';
 import { as_menuConsumerE } from './as_menu.consumer';
 
-import { as_locationConsumerE } from './as_location.consumer';
+import { as_storeConsumerE } from './as_store.consumer';
 
 import { as_upsellConsumerE } from './as_upsell.consumer';
 
@@ -21,6 +21,7 @@ import { sdm_orderConsumerE } from './sdm_order.consumer';
 import { m_loggerE } from './m_logger.consumer';
 import { cms_locationConsumerE } from './cms_location.consumer';
 
+import { ping_serviceE } from './ping_service.consumer';
 
 
 
@@ -37,8 +38,9 @@ export function initConsumers() {
     sdm_menuConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
 
-    as_locationConsumerE.handleMessage();
+    // as_locationConsumerE.handleMessage();
     cms_locationConsumerE.handleMessage();
+    as_storeConsumerE.handleMessage();
 
     as_upsellConsumerE.handleMessage();
 
@@ -49,4 +51,6 @@ export function initConsumers() {
     sdm_orderConsumerE.handleMessage();
 
     m_loggerE.handleMessage();
+
+    ping_serviceE.handleMessage();
 }

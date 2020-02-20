@@ -25,7 +25,7 @@ export class UserEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('user')
+        super(Constant.SET_NAME.USER)
     }
 
     public userSchema = Joi.object().keys({
@@ -39,6 +39,7 @@ export class UserEntity extends BaseEntity {
         cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
         phnNo: Joi.string().trim().required(),
         sdmUserRef: Joi.number().required(),
+        sdmCorpRef: Joi.number().required(),
         cmsUserRef: Joi.number().required(),
         phnVerified: Joi.number().valid(0, 1).required(),
         name: Joi.string().trim().required(),
@@ -55,6 +56,8 @@ export class UserEntity extends BaseEntity {
         password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
+        syncUserOnCms: Joi.number().required(),
+        syncUserOnSdm: Joi.number().required(),
     });
 
     /**
@@ -120,9 +123,11 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cCode'] = payload.cCode
             if (payload.phnNo)
                 userUpdate['phnNo'] = payload.phnNo
-            if (payload.sdmUserRef)
+            if (payload.sdmUserRef != undefined)
                 userUpdate['sdmUserRef'] = payload.sdmUserRef
-            if (payload.cmsUserRef)
+            if (payload.sdmCorpRef != undefined)
+                userUpdate['sdmCorpRef'] = payload.sdmCorpRef
+            if (payload.cmsUserRef != undefined)
                 userUpdate['cmsUserRef'] = payload.cmsUserRef
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
@@ -136,12 +141,15 @@ export class UserEntity extends BaseEntity {
                 userUpdate['medium'] = payload.medium
             if (payload.profileStep != undefined)
                 userUpdate['profileStep'] = payload.profileStep
-            userUpdate['password'] = "Password1"
             if (payload.cartId)
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-
+            if (payload.syncUserOnCms != undefined)
+                userUpdate['syncUserOnCms'] = payload.syncUserOnCms
+            if (payload.syncUserOnSdm != undefined)
+                userUpdate['syncUserOnSdm'] = payload.syncUserOnSdm
+            userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
                 isCreate = false
@@ -222,10 +230,12 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
-            let res = await SDM.UserSDME.createCustomer(payload)
+            let res = await SDM.UserSDME.createCustomerOnSdm(payload)
             let putArg: IAerospike.Put = {
                 bins: {
-                    sdmUserRef: parseInt(res.id.toString())
+                    sdmUserRef: parseInt(res.CUST_ID.toString()),
+                    sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
+                    syncUserOnSdm: 0,
                 },
                 set: this.set,
                 key: payload.id,
@@ -245,7 +255,7 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnSdm(payload: IUserRequest.IUserData) {
         try {
-            let res = await SDM.UserSDME.updateCustomer(payload)
+            let res = await SDM.UserSDME.updateCustomerOnSdm(payload)
             return res
         } catch (error) {
             consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
@@ -259,15 +269,20 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.createCostomer(payload)
+            let res = await CMS.UserCMSE.createCustomerOnCms(payload)
             consolelog(process.cwd(), "createUserOnCms", res, false)
-            let putArg: IAerospike.Put = {
-                bins: { cmsUserRef: parseInt(res.id.toString()) },
-                set: this.set,
-                key: payload.id,
-                update: true,
+            if (res && res.customer_id) {
+                let putArg: IAerospike.Put = {
+                    bins: {
+                        cmsUserRef: parseInt(res.customer_id.toString()),
+                        syncUserOnCms: 0,
+                    },
+                    set: this.set,
+                    key: payload.id,
+                    update: true,
+                }
+                await Aerospike.put(putArg)
             }
-            await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
@@ -281,7 +296,7 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.updateCostomer(payload)
+            let res = await CMS.UserCMSE.updateCustomerOnCms(payload)
             consolelog(process.cwd(), "updateUserOnCms", res, false)
             return {}
         } catch (error) {

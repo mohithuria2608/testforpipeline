@@ -7,6 +7,7 @@ declare namespace ICmsConfigRequest {
     }
 
     interface ICmsConfigData {
+        id: number,
         store_code: string,
         store_id: string,
         noon_pay_config: {

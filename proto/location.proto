@@ -70,6 +70,7 @@ message IStore {
     required IGeoFence geoFence = 19;
     required ILocation location = 20;
     required int32 storeId = 21;
+    required int32 cityId = 22;
 }
 
 message IService {

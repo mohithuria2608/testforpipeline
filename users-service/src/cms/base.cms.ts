@@ -45,26 +45,4 @@ export class BaseCMS {
                 })
         })
     }
-
-    // async auth() {
-    //     try {
-    //         const headers = {};
-    //         const form = {
-    //             "username": config.get("cms.auth.username"),
-    //             "password": config.get("cms.auth.password")
-    //         }
-    //         const options = {
-    //              method: Constant.CMS.END_POINTS.AUTH.METHOD,
-    //              url: config.get("cms.baseUrl") + Constant.CMS.END_POINTS.AUTH.URL,
-    //         }
-    //         let cmsRes = await this.request(options, headers, form)
-    //         global[Constant.CMS.GLOBAL_VAR.AUTH_API_HIT] = new Date().getTime();
-    //         consolelog(process.cwd(), 'cmsRes', cmsRes, false)
-
-    //         return cmsRes
-    //     } catch (error) {
-    //         consolelog(process.cwd(), 'auth', JSON.stringify(error), false)
-    //         return (error)
-    //     }
-    // }
 }

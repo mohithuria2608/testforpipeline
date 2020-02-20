@@ -3,7 +3,7 @@
  * @description defines methods for soap manager lib
  * @created 2020-02-09 19:43:44
 */
-
+import * as Constant from '../constant';
 const soap = require('soap');
 
 export class SoapManagerClass {
@@ -14,7 +14,7 @@ export class SoapManagerClass {
     constructor() { }
 
     /** initializes client for soap request */
-    async initClient() {
+    async init() {
         return new Promise((resolve, reject) => {
             soap.createClient(this.baseSOAPUrl, (err, client) => {
                 if (err) { reject(err); }
@@ -47,8 +47,8 @@ export class SoapManagerClass {
 export const SoapManager = new SoapManagerClass();
 
 export const commonParams = {
-    licenseCode: 'AmericanaWeb',
+    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
     language: 'En',
-    conceptID: 3,
+    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
     menuTemplateID: 17
 }

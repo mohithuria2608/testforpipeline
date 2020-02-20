@@ -10,7 +10,21 @@ export class LogController {
         try {
             consolelog(process.cwd(), 'JSON.parse(payload.mdb.argv)', payload.mdb.argv, false)
             let data: ICommonRequest.IActivityLogger = JSON.parse(payload.mdb.argv)
-            ENTITY.LoggerE.createOneEntity(data)
+
+            switch (data['type']) {
+                case Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
+                    Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
+                    Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
+                    Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR: {
+                        ENTITY.LoggerE.createOneEntity(data)
+                        break;
+                    }
+                case Constant.DATABASE.TYPE.ACTIVITY_LOG.FAIL_Q: {
+                    ENTITY.FailQE.createOneEntity(data)
+                    break;
+                }
+            }
+
 
             return {}
         } catch (error) {

@@ -10,12 +10,14 @@ declare namespace ILogGrpcRequest {
         sdm?: IChangeSDM
         mdb?: IChangeMongo
         count?: number,
+        q?: string
     }
     interface IChangeAerospike {
         create?: boolean,
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     interface IChangeCMS {
@@ -23,6 +25,7 @@ declare namespace ILogGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     interface IChangeSDM {
@@ -30,6 +33,7 @@ declare namespace ILogGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -38,6 +42,7 @@ declare namespace ILogGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 }

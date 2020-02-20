@@ -177,20 +177,20 @@
     "blobBaseUrl": {
         "product": "http://40.123.207.192/media/catalog/product/",
         "home": "http://40.123.207.192/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/staging/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
     "sms": {
-        "host": "smpp.rmlconnect.net",
+        "host": "sms.rmlconnect.net",
         "port": "2345",
         "userName": "Adigital",
         "password": "vSqKeZdc",
         "endPoint": "bulksms/bulksms",
-        "source": ""
+        "source": "KFC"
     },
     "kafka": {
-        "url": "localhost:9093"
+        "url": "20.46.146.2:9092"
     },
     "aerospike": {
         "hosts": "40.123.193.221:3000",

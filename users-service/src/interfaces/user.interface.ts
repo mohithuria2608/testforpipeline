@@ -10,6 +10,7 @@ declare namespace IUserRequest {
         cCode?: string,
         phnNo?: string,
         sdmUserRef?: number,
+        sdmCorpRef?: number,
         cmsUserRef?: number,
         phnVerified?: number,
         emailVerified?: number,
@@ -20,6 +21,8 @@ declare namespace IUserRequest {
         password?: string,
         cartId?: string,
         createdAt?: number,
+        syncUserOnCms?: number
+        syncUserOnSdm?: number
     }
     interface IPhone {
         cCode: string,

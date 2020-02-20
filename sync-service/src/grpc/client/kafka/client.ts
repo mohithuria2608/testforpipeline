@@ -26,9 +26,8 @@ export class KafkaService {
     async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                consolelog(process.cwd(), "payload", JSON.stringify(payload), false)
-
                 await kafkaServiceValidator.kafkaValidator(payload)
+                console.log("payload", payload)
                 this.kafkaClient.kafkaSync(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully produced config data on kafka for syncing", JSON.stringify(res), false)

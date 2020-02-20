@@ -1,3 +1,4 @@
 declare type SetNames =
-    'logger'
+    'logger' |
+    'failq'
 

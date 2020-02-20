@@ -24,7 +24,7 @@ export class SessionEntity extends BaseEntity {
     ]
 
     constructor() {
-        super('session')
+        super(Constant.SET_NAME.SESSION)
     }
 
     public sessionSchema = Joi.object().keys({

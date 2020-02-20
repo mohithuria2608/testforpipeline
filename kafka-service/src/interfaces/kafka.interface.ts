@@ -11,6 +11,7 @@ declare namespace IKafkaRequest {
         sdm?: IChangeSDM,
         mdb?: IChangeMongo
         count?: number,
+        q?: string
     }
 
     interface IChangeAerospike {
@@ -18,6 +19,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -26,6 +28,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -34,6 +37,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -42,6 +46,7 @@ declare namespace IKafkaRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 }

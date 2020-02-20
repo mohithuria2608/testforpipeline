@@ -1,28 +1,41 @@
 
-export enum SET_NAME {
+export enum MICROSERVICE {
+    AUTH = "auth",
     USER = "user",
-    ADDRESS = "address",
     MENU = "menu",
-    UPSELL = "upsell",
-    PROMOTION = "promotion",
     ORDER = "order",
-    CONFIG = "config",
-    LOGGER = "logger",
+    PROMOTION = "promotion",
+    PAYMENT = "payment",
+    SYNC = "sync",
+    KAFKA = "kafka",
+    DEEPLINK = "deeplink",
+    HOME = "home",
+    LOG = "log",
+    NOTIFICATION = "notification",
+    UPLOAD = "upload",
     LOCATION = "location"
 };
 
-export const UDF = {
-    USER: {
-        check_social_key: "check_social_key",
-    },
-    MENU: {
-        get_menu: "get_menu"
-    },
-    UPSELL: {
-        get_upsell: "get_upsell"
-    },
+export enum SET_NAME {
+    USER = "user",
+    SESSION = "session",
+    USERCHANGE = "userchange",
+    ADDRESS = "address",
+    HOME = "home",
+    MENU = "menu",
+    UPSELL = "upsell",
+    PROMOTION = "promotion",
+    CART = "cart",
+    ORDER = "order",
+    CONFIG = "config",
+    COUNTRY = "country",
+    AREA = "area",
+    CITY = "city",
+    STORE = "store",
+    LOGGER = "logger",
+    FAILQ = "failq",
+    PING_SERVICE = "ping-service"
 };
-
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
@@ -34,6 +47,7 @@ export enum KAFKA_TOPIC {
 
     AS_LOCATION = "as_location",
     CMS_LOCATION = "cms_location",
+    AS_STORE = "as_store",
 
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",
@@ -45,119 +59,14 @@ export enum KAFKA_TOPIC {
 
     AS_CONFIG = 'as_config',
 
-    M_LOGGER = 'm_logger'
+    M_LOGGER = 'm_logger',
+
+    PING_SERVICE = 'ping_service',
 };
 
 export enum MIDDLEWARE {
     AUTH = "auth",
     ACTIVITY_LOG = "activity_log"
-};
-
-export const CMS = {
-    GLOBAL_VAR: {
-        AUTH_TOKEN: 'cms-auth-token',
-        AUTH_API_HIT: 'cms-auth-hit-time'
-    },
-    END_POINTS: {
-        GENERAL_CONFIG: {
-            METHOD: "GET",
-            URL: "americanaconfig/"
-        },
-        CREATE_CART: {
-            METHOD: "POST",
-            URL: "customcart/create-validate-cart"
-        },
-        CREATE_ORDER: {
-            METHOD: "POST",
-            URL: "custom-order/create-order"
-        }
-    }
-};
-
-export const KAFKA = {
-    SDM: {
-        USER: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        MENU: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        PROMOTION: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        UPSELL: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        ORDER: {
-            INTERVAL: {
-                GET_STATUS: 10000
-            }
-        }
-    },
-    CMS: {
-        USER: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        MENU: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        PROMOTION: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        UPSELL: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        }
-    },
-    AS: {
-        USER: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        MENU: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        PROMOTION: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        },
-        UPSELL: {
-            MAX_RETRY: {
-                CREATE: 5,
-                UPDATE: 5,
-            }
-        }
-    }
 };
 
 export const SERVER = {
@@ -175,6 +84,11 @@ export const SERVER = {
         INSTA_LINK: "",
         APP_ADDRESS: ""
     },
+    SDM: {
+        LICENSE_CODE: "AmericanaWeb",
+        CONCEPT_ID: 3,
+        MENU_TEMPLATE_ID: 17
+    },
     DEFAULT_USER_NAME: 'App User',
     INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
     INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
@@ -186,6 +100,7 @@ export const SERVER = {
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
+    MIN_COD_CART_VALUE: 300,//AED
     DISPLAY_COLOR: true,
     ANDROID_SCHEME_HOST: "https://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
@@ -194,6 +109,10 @@ export const SERVER = {
 };
 
 export const DATABASE = {
+    STORE_CODE: {
+        KSA_STORE: "ksa_store"
+    },
+
     BRAND: {
         KFC: 'KFC',
         PH: 'PH'
@@ -212,7 +131,155 @@ export const DATABASE = {
         AR: 'Ar'
     },
 
+    UDF: {
+        USER: {
+            check_social_key: "check_social_key",
+        },
+        MENU: {
+            get_menu: "get_menu"
+        },
+        UPSELL: {
+            get_upsell: "get_upsell"
+        },
+    },
+
+    CMS: {
+        END_POINTS: {
+            GENERAL_CONFIG: {
+                METHOD: "GET",
+                URL: "americanaconfig/"
+            },
+            CREATE_USER: {
+                METHOD: "POST",
+                URL: "createuser"
+            },
+            UPDATE_USER: {
+                METHOD: "POST",
+                URL: "updateuser"
+            },
+            GET_USER: {
+                METHOD: "POST",
+                URL: "getuser"
+            },
+            CREATE_CART: {
+                METHOD: "POST",
+                URL: "customcart/create-validate-cart"
+            },
+            CREATE_ORDER: {
+                METHOD: "POST",
+                URL: "custom-order/create-order"
+            }
+        }
+    },
+
+    KAFKA: {
+        SDM: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            UPSELL: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            ORDER: {
+                TOTAL_RETRY: {
+                    GET: 10000,
+                },
+                MAX_RETRY: {
+                    CREATE: 5,
+                },
+                INTERVAL: {
+                    GET_STATUS: 10000
+                }
+            }
+        },
+        CMS: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            UPSELL: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            }
+        },
+        AS: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            UPSELL: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            },
+            CONFIG: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                }
+            }
+        }
+    },
+
     TYPE: {
+        CONFIG: {
+            GENERAL: "general",
+            PAYMENT: "payment",
+            SHIPMENT: "shipment"
+        },
+
         TOKEN: {
             CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
@@ -240,6 +307,7 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             SDM_REQUEST: "SDM_REQUEST",
+            FAIL_Q: "FAIL_Q",
             REQUEST: "REQUEST",
             ERROR: "ERROR",
             INFO: "INFO",
@@ -284,16 +352,19 @@ export const DATABASE = {
             ACTIVE: 1
         },
 
-        SYNC_CONFIG: {
-            PAYMENT: "payment",
-            GENERAL: "general",
-            SHIPMENT: "shipment",
-        },
-
         SYNC_ACTION: {
             CREATE: "create",
             UPDATE: "update",
             RESET: "reset",
+        },
+
+        CART_AMOUNT: {
+            SUB_TOTAL: "SUB_TOTAL",
+            DISCOUNT: "DISCOUNT",
+            TAX: "TAX",
+            SHIPPING: "SHIPPING",
+            TOTAL: "TOTAL",
+
         }
     },
 
@@ -355,6 +426,13 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            MINIMUM_CART_VALUE_VIOLATION: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'MINIMUM_CART_VALUE_VIOLATION',
+                message: 'Minimum cart value not met'
+            },
+
             INVALID_PROMO: {
                 statusCode: 400,
                 httpCode: 400,

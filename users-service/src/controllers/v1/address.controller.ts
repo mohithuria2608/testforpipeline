@@ -49,6 +49,50 @@ export class AddressController {
     }
 
     /**
+    * @method INTERNAL
+    * @description Sync old address
+    * @param {string} sdmStoreRef
+    * @param {number} lat
+    * @param {number} lng
+    * @param {string} bldgName
+    * @param {string} description
+    * @param {string} flatNum
+    * @param {string} tag
+    * */
+    async syncOldAddress(userData: IUserRequest.IUserData, payload: IAddressRequest.ISyncOldAddress) {
+        try {
+            userData = await ENTITY.UserE.getUser({ userId: userData.id })
+            let type = ""
+            let store: IStoreGrpcRequest.IStore[]
+            if (payload.sdmStoreRef) {
+                store = await ENTITY.UserE.fetchStore(payload.sdmStoreRef)
+                if (store && store.length) {
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                    payload['lat'] = store[0].location.latitude
+                    payload['lng'] = store[0].location.longitude
+                    payload['bldgName'] = ""
+                    payload['description'] = ""
+                    payload['flatNum'] = ""
+                    payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+            } else if (payload.lat && payload.lng) {
+                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.length) {
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+            } else
+                return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+
+            return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+        } catch (error) {
+            consolelog(process.cwd(), "syncOldAddress", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
     * @method POST
     * @description Update user address by addressId
     * @param {string} addressId
