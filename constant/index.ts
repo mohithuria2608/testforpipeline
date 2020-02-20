@@ -31,7 +31,9 @@ export enum KAFKA_TOPIC {
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
     AS_UPSELL = "as_upsell",
+
     AS_LOCATION = "as_location",
+    CMS_LOCATION = "cms_location",
 
     SDM_USER = "sdm_user",
     CMS_USER = "cms_user",

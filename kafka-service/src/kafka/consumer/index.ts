@@ -19,6 +19,7 @@ import { as_promotionConsumerE } from './as_promotion.consumer';
 import { sdm_orderConsumerE } from './sdm_order.consumer';
 
 import { m_loggerE } from './m_logger.consumer';
+import { cms_locationConsumerE } from './cms_location.consumer';
 
 
 
@@ -37,6 +38,7 @@ export function initConsumers() {
     cms_menuConsumerE.handleMessage();
 
     as_locationConsumerE.handleMessage();
+    cms_locationConsumerE.handleMessage();
 
     as_upsellConsumerE.handleMessage();
 

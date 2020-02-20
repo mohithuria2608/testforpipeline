@@ -51,7 +51,18 @@ server.addService(locationProto.LocationService.service, {
             consolelog(process.cwd(), "syncStore", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
-    }
+    },
+
+    PostLocationDataToCMS: async (call: IStoreGrpcRequest.ISyncStoresReq, callback) => {
+        try {
+            consolelog(process.cwd(), "grpc syncStore", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IStore[] = await storeController.syncStores(call.request);
+            callback(null, { store: true })
+        } catch (error) {
+            consolelog(process.cwd(), "syncStore", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
 })
 
 server.bind(config.get("grpc.location.server"), grpc.ServerCredentials.createInsecure())
