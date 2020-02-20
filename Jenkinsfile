@@ -15,6 +15,9 @@ pipeline {
         Payment_image="americana.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
         Notification_image="americana.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
         Log_image="americana.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
+        Home_image="americana.azurecr.io/home"+ ":Home-service_${env.BUILD_NUMBER}"
+
+
 
     }
     agent any
@@ -22,7 +25,7 @@ pipeline {
     stages{
     	stage('Email'){
                 steps{
-                    emailext body: "<body><p><font size='+2'><b>Build Status: </b>Started <br> <b>Build Job: </b> ${env.JOB_NAME} <br><b> Build Number: </b> ${env.BUILD_NUMBER} </font> <br><br> <font size='+1'>More info at:  ${env.BUILD_URL}</font></p></body>", subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com, abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
+                    emailext body: "<body><p><font size='+2'><b>Build Status: </b>Started <br> <b>Build Job: </b> ${env.JOB_NAME} <br><b> Build Number: </b> ${env.BUILD_NUMBER} </font> <br><br> <font size='+1'>More info at:  ${env.BUILD_URL}</font></p></body>", subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com'
             
                 }
         }
@@ -60,6 +63,7 @@ pipeline {
                     PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile .")
                     NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile .")
                     LogImage=docker.build(registry + "/log"+ ":Log-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/log-service/Dockerfile .")
+                    HomeImage=docker.build(registry + "/home"+ ":Home-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/home-service/Dockerfile .")
 
 
                 }
@@ -82,6 +86,7 @@ pipeline {
                         PaymentImage.push()
                         NotificationImage.push()
                         LogImage.push()
+                        HomeImage.push()
                     }
                 }
             }
@@ -100,7 +105,7 @@ pipeline {
     post{
         always{
             emailext attachLog: true,
-            body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br><font size='+1'> To Check SonarQube Vulnerability test report: http://ec2-18-205-104-25.compute-1.amazonaws.com/dashboard/index/Americana_Backend <br><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com, abhishek.pathak@appinventiv.com,saurabh.agarwal@appinventiv.com'
+            body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br><font size='+1'> To Check SonarQube Vulnerability test report: http://ec2-18-205-104-25.compute-1.amazonaws.com/dashboard/index/Americana_Backend <br><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com'
         }
     }
 }

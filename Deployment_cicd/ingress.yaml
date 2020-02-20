@@ -69,3 +69,7 @@ spec:
         backend:
           serviceName: log-service
           servicePort: 4012
+      - path: /home-service/(.*)
+        backend:
+          serviceName: home-service
+          servicePort: 4013
