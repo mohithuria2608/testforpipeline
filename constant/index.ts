@@ -190,6 +190,7 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             ADDRESS: {
@@ -198,29 +199,43 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ORDER: {
                 MAX_RETRY: {
                     CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 },
                 INTERVAL: {
                     GET_STATUS: 10000
@@ -233,6 +248,8 @@ export const DATABASE = {
                     CREATE: 5,
                     UPDATE: 5,
                     GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ADDRESS: {
@@ -241,24 +258,34 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             }
         },
@@ -267,6 +294,9 @@ export const DATABASE = {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ADDRESS: {
@@ -275,30 +305,43 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             CONFIG: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             }
         }

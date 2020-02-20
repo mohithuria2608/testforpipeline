@@ -189,6 +189,9 @@ export class CmsConfigController {
      */
     async postConfig(headers: ICommonRequest.IHeaders, payload: ICmsConfigRequest.ICmsConfig) {
         try {
+            // payload.data = payload.data.filter(elem => {
+            //     return elem['store_code'] == Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+            // })
             let configChange: IKafkaGrpcRequest.IKafkaBody = {
                 set: ENTITY.ConfigE.set,
                 as: {
