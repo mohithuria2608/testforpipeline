@@ -1,11 +1,11 @@
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import { promotionService } from "../../grpc/client"
+import { userService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION
 
-class AsPromotionConsumer extends BaseConsumer {
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS
+class AsAddressConsumer extends BaseConsumer {
 
     constructor() {
         super(topic, topic);
@@ -14,23 +14,22 @@ class AsPromotionConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_promotion", JSON.stringify(message), true)
-                this.syncPromotion(message);
-                return null;
+                consolelog(process.cwd(), "consumer as_address", JSON.stringify(message), true)
+                this.syncAddress(message);
+                return null
             })
     }
 
-    /** consumes the message and creates promotion on the promotion service */
-    private async syncPromotion(message: IKafkaRequest.IKafkaBody) {
+    private async syncAddress(message: IKafkaRequest.IKafkaBody) {
         try {
             if (message.count > 0) {
-                let res = await promotionService.sync(message)
+                let res = await userService.sync(message)
                 return res
             }
             else
                 return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncPromotion", JSON.stringify(error), false);
+            consolelog(process.cwd(), "syncAddress", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
                 if (message.count == 0)
@@ -42,9 +41,7 @@ class AsPromotionConsumer extends BaseConsumer {
             return {}
         }
     }
-
-
 }
 
 
-export const as_promotionConsumerE = new AsPromotionConsumer();
+export const as_addressConsumerE = new AsAddressConsumer();

@@ -6,6 +6,7 @@ import { consolelog } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
+import { kafkaService } from '../grpc/client';
 
 
 export class UserEntity extends BaseEntity {
@@ -55,7 +56,7 @@ export class UserEntity extends BaseEntity {
         ).required(),
         password: Joi.string(),
         cartId: Joi.string().required(),
-        createdAt: Joi.number().required(),
+        createdAt: Joi.number().required()
     });
 
     /**
@@ -121,11 +122,11 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cCode'] = payload.cCode
             if (payload.phnNo)
                 userUpdate['phnNo'] = payload.phnNo
-            if (payload.sdmUserRef)
+            if (payload.sdmUserRef != undefined)
                 userUpdate['sdmUserRef'] = payload.sdmUserRef
-            if (payload.sdmCorpRef)
+            if (payload.sdmCorpRef != undefined)
                 userUpdate['sdmCorpRef'] = payload.sdmCorpRef
-            if (payload.cmsUserRef)
+            if (payload.cmsUserRef != undefined)
                 userUpdate['cmsUserRef'] = payload.cmsUserRef
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
@@ -139,12 +140,11 @@ export class UserEntity extends BaseEntity {
                 userUpdate['medium'] = payload.medium
             if (payload.profileStep != undefined)
                 userUpdate['profileStep'] = payload.profileStep
-            userUpdate['password'] = "Password1"
             if (payload.cartId)
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
-
+            userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
                 isCreate = false
@@ -229,14 +229,24 @@ export class UserEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: {
                     sdmUserRef: parseInt(res.CUST_ID.toString()),
-                    sdmCorpRef: parseInt(res.CUST_CORPID.toString())
+                    sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
                 },
                 set: this.set,
                 key: payload.id,
                 update: true,
             }
             await Aerospike.put(putArg)
-            return res
+            let user = await this.getUser({ userId: payload.id })
+            if (user.cmsUserRef != 0) {
+                kafkaService.kafkaSync({
+                    set: this.set,
+                    cms: {
+                        update: true,
+                        argv: JSON.stringify(user)
+                    }
+                })
+            }
+            return user
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -263,15 +273,19 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.createCustomer(payload)
-            consolelog(process.cwd(), "createUserOnCms", res, false)
-            let putArg: IAerospike.Put = {
-                bins: { cmsUserRef: parseInt(res.id.toString()) },
-                set: this.set,
-                key: payload.id,
-                update: true,
+            let res = await CMS.UserCMSE.createCustomerOnCms(payload)
+            if (res && res.customer_id) {
+                let putArg: IAerospike.Put = {
+                    bins: {
+                        cmsUserRef: parseInt(res.customer_id.toString()),
+                    },
+                    set: this.set,
+                    key: payload.id,
+                    update: true,
+                }
+                await Aerospike.put(putArg)
+                return await this.getUser({ userId: payload.id })
             }
-            await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
@@ -285,7 +299,7 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.updateCustomer(payload)
+            let res = await CMS.UserCMSE.updateCustomerOnCms(payload)
             consolelog(process.cwd(), "updateUserOnCms", res, false)
             return {}
         } catch (error) {

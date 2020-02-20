@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { sendSuccess } from '../../utils'
 import * as ENTITY from '../../entity'
+import { orderService } from '../../grpc/client';
 
 export class PaymentController {
 
@@ -13,27 +14,55 @@ export class PaymentController {
      */
     public async getPaymentMethods(headers: ICommonRequest.IHeaders, payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let storeCode = "kfc_uae_store"
-            return [
-                {
-                    "id": 1,
-                    "name": "Card",
-                    "image": "",
-                    default: 0
-                },
-                {
-                    "id": 2,
-                    "name": "Visa Checkout",
-                    "image": "",
-                    default: 0
-                },
-                {
-                    "id": 0,
-                    "name": "Cash On Delivery",
-                    "image": "",
-                    default: 1
-                }
-            ]
+            let cart = await orderService.getCart({ cartId: payload.cartId })
+            let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+            let storeCode = Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+            if (amount[0].amount < Constant.SERVER.MIN_CART_VALUE) {
+                console.log("1")
+                return []
+            }
+            else if (amount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE) {
+                console.log("2")
+
+                return [
+                    {
+                        "id": 1,
+                        "name": "Card",
+                        "image": "",
+                        default: 1
+                    },
+                    {
+                        "id": 2,
+                        "name": "Visa Checkout",
+                        "image": "",
+                        default: 0
+                    }
+                ]
+            }
+            else {
+                console.log("3")
+                return [
+                    {
+                        "id": 1,
+                        "name": "Card",
+                        "image": "",
+                        default: 0
+                    },
+                    {
+                        "id": 2,
+                        "name": "Visa Checkout",
+                        "image": "",
+                        default: 0
+                    },
+                    {
+                        "id": 0,
+                        "name": "Cash On Delivery",
+                        "image": "",
+                        default: 1
+                    }
+                ]
+
+            }
             await ENTITY.PaymentE.getPaymentMethods(storeCode);
         } catch (error) {
             consolelog(process.cwd(), "getPaymentMethods", JSON.stringify(error), false)
@@ -69,19 +98,19 @@ export class PaymentController {
         try {
             let res: IPaymentGrpcRequest.IGetPaymentStatusRes;
             switch (payload.paymentStatus) {
-                case ENTITY.PaymentClass.STATUS.ORDER.INITIATED:
+                case Constant.DATABASE.STATUS.PAYMENT.INITIATED:
                     res = (await ENTITY.PaymentE.getInitiateStatus(payload)) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.AUTHORIZED:
+                case Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED:
                     res = await ENTITY.PaymentE.getAuthorizationStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.CANCELLED:
+                case Constant.DATABASE.STATUS.PAYMENT.CANCELLED:
                     res = await ENTITY.PaymentE.getReverseStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.CAPTURED:
+                case Constant.DATABASE.STATUS.PAYMENT.CAPTURED:
                     res = await ENTITY.PaymentE.getCaptureStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
-                case ENTITY.PaymentClass.STATUS.ORDER.REFUNDED:
+                case Constant.DATABASE.STATUS.PAYMENT.REFUNDED:
                     res = await ENTITY.PaymentE.getRefundStatus(payload) as IPaymentGrpcRequest.IGetPaymentStatusRes;
                     break;
                 default:

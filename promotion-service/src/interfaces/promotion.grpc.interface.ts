@@ -18,6 +18,7 @@ declare namespace IPromotionGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -26,6 +27,7 @@ declare namespace IPromotionGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
 
@@ -34,6 +36,7 @@ declare namespace IPromotionGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     interface IChangeMongo {
@@ -41,6 +44,7 @@ declare namespace IPromotionGrpcRequest {
         update?: boolean,
         reset?: boolean,
         get?: boolean,
+        sync?: boolean,
         argv: string
     }
     

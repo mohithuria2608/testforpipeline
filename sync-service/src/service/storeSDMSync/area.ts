@@ -10,7 +10,7 @@ export default async function () {
         list = await listData.GetStoresAreaListResult.CC_STORE_AREA;
 
     // reset the sync collection
-    await Aerospike.truncate({set:'sync_area'});
+    await Aerospike.truncate({ set: 'sync_area' });
 
     let batchSize = 50;
     let totalRecords = list.length;
@@ -31,7 +31,7 @@ async function getAreaDetail(areaId: number, storeId: number) {
         singleData: any = await SoapManager.requestData('GetArea', params),
         single = await singleData.GetAreaResult;
 
-    if (single.AREA_CITYID) {
+    if (single && single.AREA_CITYID) {
         return {
             success: true,
             data: {

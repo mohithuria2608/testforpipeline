@@ -5,6 +5,7 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 import * as SDM from '../sdm';
+import { kafkaService } from '../grpc/client'
 
 export class AddressEntity extends BaseEntity {
     constructor() {
@@ -95,9 +96,6 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            let sdmAddress = {}
-            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
-                sdmAddress = await this.addAddressOnSdm(userData, bin, addressData, store)
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let deliveryAddress = {
                 id: id,
@@ -110,13 +108,15 @@ export class AddressEntity extends BaseEntity {
                 addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
-                sdmAddressRef: (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
+                sdmAddressRef: 0,// (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
                 cmsAddressRef: 0,
                 sdmCountryRef: 1, //store.countryId
                 sdmStoreRef: 1219,// store.storeId
                 sdmAreaRef: 16,// store.areaId
                 sdmCityRef: 17,// store.cityId
             };
+            consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
+
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,
@@ -165,9 +165,16 @@ export class AddressEntity extends BaseEntity {
     async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
             let listaddress = await this.getAddress({ userId: userData.id, bin: bin })
+            let sdmAddressRef = addressUpdate.sdmAddressRef ? addressUpdate.sdmAddressRef : 0
+            let cmsAddressRef = addressUpdate.cmsAddressRef ? addressUpdate.cmsAddressRef : 0
             let index = listaddress.findIndex(x => x.id === addressUpdate.addressId);
             if (index < 0) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
+            } else {
+                if (listaddress[index].sdmAddressRef)
+                    sdmAddressRef = listaddress[index].sdmAddressRef
+                if (listaddress[index].cmsAddressRef)
+                    cmsAddressRef = listaddress[index].cmsAddressRef
             }
             let listRemoveByIndexArg: IAerospike.ListOperation = {
                 order: true,
@@ -193,6 +200,8 @@ export class AddressEntity extends BaseEntity {
                 bins['flatNum'] = addressUpdate.flatNum
             if (addressUpdate.tag)
                 bins['tag'] = addressUpdate.tag
+            bins['sdmAddressRef'] = sdmAddressRef
+            bins['cmsAddressRef'] = cmsAddressRef
 
             bins['updatedAt'] = new Date().getTime()
             let listAppendArg: IAerospike.ListOperation = {
@@ -215,27 +224,28 @@ export class AddressEntity extends BaseEntity {
    * @method SDM
    * @description Add address on SDM
    * */
-    async addAddressOnSdm(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
+    async addAddressOnSdm(userData: IUserRequest.IUserData) {
         try {
+            consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                 language: "En",
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
                     ADDR_AREAID: 16,// 1786,
-                    ADDR_BLDGNAME: addressData.bldgName,
-                    ADDR_BLDGNUM: addressData.bldgName,
+                    ADDR_BLDGNAME: userData.asAddress.bldgName,
+                    ADDR_BLDGNUM: userData.asAddress.bldgName,
                     ADDR_CITYID: 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
                     ADDR_CUSTID: userData.sdmUserRef,
-                    ADDR_DESC: addressData.description,
+                    ADDR_DESC: userData.asAddress.description,
                     ADDR_DISTRICTID: 1008,// 1021,
-                    ADDR_FLATNUM: addressData.flatNum,
-                    ADDR_FLOOR: addressData.flatNum,
+                    ADDR_FLATNUM: userData.asAddress.flatNum,
+                    ADDR_FLOOR: userData.asAddress.flatNum,
                     ADDR_MAPCODE: {
-                        X: addressData.lat,
-                        Y: addressData.lng
+                        X: userData.asAddress.lat,
+                        Y: userData.asAddress.lng
                     },
                     ADDR_PHONEAREACODE: userData.phnNo.slice(0, 2),
                     ADDR_PHONECOUNTRYCODE: userData.cCode.replace('+', ''),
@@ -243,7 +253,7 @@ export class AddressEntity extends BaseEntity {
                     ADDR_PHONENUMBER: userData.phnNo.slice(2),
                     ADDR_PHONETYPE: 2,
                     ADDR_PROVINCEID: 7,
-                    ADDR_SKETCH: addressData.description,
+                    ADDR_SKETCH: userData.asAddress.description,
                     ADDR_STREETID: 1,
                     Phones: {
                         CC_CUSTOMER_PHONE: {
@@ -257,13 +267,13 @@ export class AddressEntity extends BaseEntity {
                         }
                     },
                     WADDR_AREAID: 16,// 1786,
-                    WADDR_BUILD_NAME: addressData.bldgName,
-                    WADDR_BUILD_NUM: addressData.bldgName,
+                    WADDR_BUILD_NAME: userData.asAddress.bldgName,
+                    WADDR_BUILD_NUM: userData.asAddress.bldgName,
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
                     WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
-                    WADDR_DIRECTIONS: addressData.description,
+                    WADDR_DIRECTIONS: userData.asAddress.description,
                     WADDR_DISTRICTID: 1008,// 1021,
                     WADDR_DISTRICT_TEXT: "Default",
                     WADDR_MNUID: 4,
@@ -273,9 +283,65 @@ export class AddressEntity extends BaseEntity {
                     WADDR_TYPE: 1,
                 }
             }
-            return await SDM.AddressSDME.createAddress(addressSdmData)
+
+            let sdmAdd = await SDM.AddressSDME.createAddress(addressSdmData)
+            let bin = userData.asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            let asAddr = await this.updateAddress({ addressId: userData.asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
+            if (asAddr.cmsAddressRef) {
+                userData.asAddress = [asAddr]
+                kafkaService.kafkaSync({
+                    set: this.set,
+                    cms: {
+                        update: true,
+                        argv: JSON.stringify(userData)
+                    }
+                })
+            }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "addAddressOnSdm", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method SDM
+    * @description Add address on SDM
+    * */
+    async updateAddressOnSdm(userData: IUserRequest.IUserData) {
+        try {
+            consolelog(process.cwd(), "going to update adddress on sdm", JSON.stringify(userData.asAddress), false)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateAddressOnSdm", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method SDM
+     * @description Add address on SDM
+     * */
+    async addAddressOnCms(userData: IUserRequest.IUserData) {
+        try {
+            consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(userData.asAddress), false)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "addAddressOnCms", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method SDM
+    * @description Add address on SDM
+    * */
+    async updateAddressOnCms(userData: IUserRequest.IUserData) {
+        try {
+            consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData.asAddress), false)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateAddressOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

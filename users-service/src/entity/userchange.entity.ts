@@ -53,7 +53,6 @@ export class UserchangeEntity extends BaseEntity {
         password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
-
         /**
          * @description extra validator keys
          */
@@ -185,8 +184,12 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['profileStep'] = payload.profileStep
             if (payload.address)
                 dataToUpdateUserchange['address'] = payload.address
-
-
+            if (payload.cmsUserRef != undefined)
+                dataToUpdateUserchange['cmsUserRef'] = payload.cmsUserRef
+            if (payload.sdmUserRef != undefined)
+                dataToUpdateUserchange['sdmUserRef'] = payload.sdmUserRef
+            if (payload.sdmCorpRef != undefined)
+                dataToUpdateUserchange['sdmCorpRef'] = payload.sdmCorpRef
             if (payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
                     message: payload.otp.toString(),

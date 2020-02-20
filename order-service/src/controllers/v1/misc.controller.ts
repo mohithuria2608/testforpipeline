@@ -19,7 +19,7 @@ export class MiscController {
                 consolelog(process.cwd(), "Pinged by  :::", set, true)
                 switch (set) {
                     case Constant.SET_NAME.CONFIG: {
-                        let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.KSA_STORE })
+                        let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE })
                         consolelog(process.cwd(), "config", JSON.stringify(config), true)
                         break;
                     }

@@ -9,7 +9,9 @@ declare namespace IUserCMSRequest {
         websiteId: string
         firstName: string
         lastName: string
-        password: string
+        password: string,
+        sdm_user_ref?: number
+        sdm_corp_ref?: number
     }
 
     interface IUpdateUser {

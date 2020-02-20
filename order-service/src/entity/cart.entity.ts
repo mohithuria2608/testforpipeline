@@ -291,8 +291,6 @@ export class CartClass extends BaseEntity {
 
     async assignNewCart(oldCartId: string, cartId: string, userId: string) {
         try {
-            consolelog(process.cwd(), "assignNewCart111111111111111111", "error", false)
-
             await this.createDefaultCart({ userId: userId, cartId: cartId })
             await Aerospike.remove({ set: this.set, key: oldCartId })
             consolelog(process.cwd(), "assignNewCart1111111111111111112222222222222222", oldCartId, false)
@@ -304,7 +302,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             let sellingPrice = 0
             let cart = []
@@ -389,37 +387,22 @@ export class CartClass extends BaseEntity {
                     })
                 }
                 else if (sitem['originalTypeId'] == 'bundle' || sitem['typeId'] == 'bundle') {
-                    let positionIndex = sitem.bundleProductOptions[0].position
                     let bundle_option = {};
-                    let selection_configurable_option = {};
                     sitem['bundleProductOptions'].forEach(bpo => {
                         if (bpo['isDependent'] == 0) {
                             if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
                                 bpo['productLinks'].forEach(pl => {
                                     if (pl['selected'] == 1) {
+                                        if (!bundle_option[pl['option_id']])
+                                            bundle_option[pl['option_id']] = {}
                                         if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                            if (bundle_option[pl['option_id']] == null)
-                                                bundle_option[pl['option_id']] = {}
-                                            bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                            pl['subOptions'].forEach(plso => {
+                                                if (plso['selected'] == 1) {
+                                                    bundle_option[pl['option_id']][plso['id']] = plso['selection_id']
+                                                }
+                                            })
                                         } else {
                                             bundle_option[pl['option_id']] = pl['selection_id']
-                                        }
-
-                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                            let dependentSteps = sitem['bundleProductOptions'][(positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1)]
-                                            if (dependentSteps.isDependent == 1) {
-                                                if (dependentSteps['productLinks'] && dependentSteps['productLinks'].length > 0) {
-                                                    dependentSteps['productLinks'].forEach(dspl => {
-                                                        if (!bundle_option.hasOwnProperty(dspl['option_id']))
-                                                            bundle_option[dspl['option_id']] = {}
-                                                        bundle_option[dspl['option_id']][dspl['id']] = dspl['selection_id']
-
-                                                        if (dspl.selectionQty > 0) {
-                                                            selection_configurable_option[pl['selection_id']] = dspl['id']
-                                                        }
-                                                    })
-                                                }
-                                            }
                                         }
                                     }
                                 })
@@ -431,15 +414,12 @@ export class CartClass extends BaseEntity {
                         qty: sitem.qty,
                         price: sitem.sellingPrice,
                         type_id: sitem['typeId'],
-                        bundle_option: bundle_option,
-                        selection_configurable_option: selection_configurable_option,
+                        bundle_option: bundle_option
                     })
                 }
                 else if (sitem['originalTypeId'] == 'bundle_group') {
                     if (sitem['typeId'] == "bundle_group") {
                         let bundle_option = {};
-                        let alreadyAddedInBundleOption = {}
-                        let selection_configurable_option = {};
                         let item = 0
                         sitem['items'].forEach(i => {
                             if (sitem['selectedItem'] == i['sku']) {
@@ -447,37 +427,17 @@ export class CartClass extends BaseEntity {
                                 i['bundleProductOptions'].forEach(bpo => {
                                     if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
                                         bpo['productLinks'].map(pl => {
-                                            if (pl['selected'] == 1 && !alreadyAddedInBundleOption[pl['id']]) {
+                                            if (pl['selected'] == 1) {
+                                                if (!bundle_option[pl['option_id']])
+                                                    bundle_option[pl['option_id']] = {}
                                                 if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                                    if (bundle_option[pl['option_id']] == null)
-                                                        bundle_option[pl['option_id']] = {}
-                                                    bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-
-                                                    selection_configurable_option[pl['selection_id']] = ""
                                                     pl['subOptions'].forEach(plso => {
                                                         if (plso['selected'] == 1) {
-                                                            selection_configurable_option[pl['selection_id']] = plso['id']
+                                                            bundle_option[pl['option_id']][plso['id']] = plso['selection_id']
                                                         }
                                                     })
                                                 } else {
                                                     bundle_option[pl['option_id']] = pl['selection_id']
-                                                }
-                                                alreadyAddedInBundleOption[pl['id']] = true
-                                            }
-                                            if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                                if (i['bundleProductOptions'] && i['bundleProductOptions'].length > 0) {
-                                                    i['bundleProductOptions'].forEach(bpo2 => {
-                                                        if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                                            if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
-                                                                bpo2['productLinks'].forEach(pl2 => {
-                                                                    if (pl2['selected'] == 1)
-                                                                        selection_configurable_option[pl['selection_id']] = pl2['id']
-                                                                    else
-                                                                        selection_configurable_option[pl['selection_id']] = ""
-                                                                })
-                                                            }
-                                                        }
-                                                    })
                                                 }
                                             }
                                         })
@@ -489,9 +449,8 @@ export class CartClass extends BaseEntity {
                             product_id: item,
                             qty: sitem.qty,
                             price: sitem.sellingPrice,
-                            type_id: "bundle",// sitem['typeId'],
+                            type_id: "bundle",
                             bundle_option: bundle_option,
-                            selection_configurable_option: selection_configurable_option,
                         })
                     }
                 }
@@ -499,9 +458,9 @@ export class CartClass extends BaseEntity {
                     return Promise.reject(JSON.stringify(sitem))
                 }
             })
-
+            console.log(JSON.stringify(cart))
             let req = {
-                cms_user_id: 12, //userData.cmsUserRef,
+                cms_user_id: userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart
@@ -519,21 +478,8 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-            let req = await this.createCartReqForCms(payload)
+            let req = await this.createCartReqForCms(payload, userData)
             let cmsCart = await CMS.CartCMSE.createCart(req.req)
-            // cmsCart['is_price_changed'] = false
-            // /**
-            //  * @description Temporary
-            //  */
-            // let subTotal = Math.round((((req.sellingPrice * 100) / 105) + Number.EPSILON) * 100) / 100
-            // let tax = req.sellingPrice - subTotal
-            // let grandTotal = req.sellingPrice + cmsCart['discount_amount']
-            // cmsCart['subtotal'] = subTotal
-            // cmsCart['tax'] = [{
-            //     tax_name: "VAT@5%",
-            //     amount: tax,
-            // }]
-            // cmsCart['grandtotal'] = grandTotal
             return cmsCart
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
@@ -557,7 +503,7 @@ export class CartClass extends BaseEntity {
 
             let amount = []
             amount.push({
-                type: "SUB_TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 name: "Sub Total",
                 code: "SUB_TOTAL",
                 amount: cmsCart.subtotal,
@@ -568,7 +514,7 @@ export class CartClass extends BaseEntity {
                 if (cmsCart.coupon_code == "FREEDELIVERY")
                     cmsCart.discount_amount = 6.5
                 amount.push({
-                    type: "DISCOUNT",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
                     name: "Discount",
                     code: cmsCart.coupon_code,
                     amount: cmsCart.discount_amount,
@@ -581,7 +527,7 @@ export class CartClass extends BaseEntity {
             }
             if (cmsCart.tax && cmsCart.tax.length > 0) {
                 amount.push({
-                    type: "TAX",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: cmsCart.tax[0].tax_name,
                     code: cmsCart.tax[0].tax_name,
                     amount: cmsCart.tax[0].amount,
@@ -590,7 +536,7 @@ export class CartClass extends BaseEntity {
                 })
             } else {
                 amount.push({
-                    type: "TAX",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: "VAT",
                     code: "VAT",
                     amount: 0,
@@ -599,7 +545,7 @@ export class CartClass extends BaseEntity {
                 })
             }
             let delivery = {
-                type: "SHIPPING",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                 name: "Delivery",
                 code: "DELIVERY",
                 amount: 0,
@@ -614,7 +560,7 @@ export class CartClass extends BaseEntity {
             amount.push(delivery)
 
             amount.push({
-                type: "TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
                 amount: cmsCart.grandtotal + delivery.amount - ((cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY") ? 6.5 : 0),

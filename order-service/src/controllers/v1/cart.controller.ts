@@ -10,6 +10,7 @@ export class CartController {
 
     /**
      * @method POST
+     * @param {string} cartId :cartId
      * @param {string} curMenuId :current menu id
      * @param {number} menuUpdatedAt :current menu id
      * @param {number=} lat :latitude

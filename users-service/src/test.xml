@@ -1,0 +1,31 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:sdm="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:UpdateCustomer>
+         <!--Optional:-->
+         <tem:licenseCode>AmericanaWeb</tem:licenseCode>
+         <!--Optional:-->
+         <tem:requestID>1</tem:requestID>
+         <!--Optional:-->
+         <tem:language>En</tem:language>
+         <!--Optional:-->
+         <tem:customer>
+            <sdm:CUST_EMAIL>kuchbhinaya@gmail.com</sdm:CUST_EMAIL>
+            <sdm:CUST_FIRSTNAME>ANkit</sdm:CUST_FIRSTNAME>
+            <sdm:CUST_ID>7694177</sdm:CUST_ID>
+            <sdm:CUST_LASTNAME>kumar</sdm:CUST_LASTNAME>
+            <sdm:CUST_NATID>-1</sdm:CUST_NATID>
+            <sdm:CUST_NOTIFICATION_MOBILE>971748407963</sdm:CUST_NOTIFICATION_MOBILE>
+            <sdm:CUST_PHONEAREACODE>97</sdm:CUST_PHONEAREACODE>
+            <sdm:CUST_PHONENUMBER>1748407963</sdm:CUST_PHONENUMBER>
+            <sdm:CUST_PHONETYPE>2</sdm:CUST_PHONETYPE>
+            <sdm:PASSWORD>123456</sdm:PASSWORD>
+            <sdm:USERNAME>kuchbhinaya@gmail.com</sdm:USERNAME>
+            <sdm:WCUST_FIRSTNAME>kuchbhinaya@gmail.com</sdm:WCUST_FIRSTNAME>
+            <sdm:WCUST_IS_GUEST>kuchbhinaya@gmail.com</sdm:WCUST_IS_GUEST>
+            <sdm:WCUST_LASTNAME>kuchbhinaya@gmail.com</sdm:WCUST_LASTNAME>
+            <sdm:WCUST_STATUS>kuchbhinaya@gmail.com</sdm:WCUST_STATUS>
+         </tem:customer>
+      </tem:UpdateCustomer>
+   </soapenv:Body>
+</soapenv:Envelope>

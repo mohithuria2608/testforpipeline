@@ -1,6 +1,6 @@
 declare namespace IUserRequest {
 
-    interface IUserData {
+    interface IUserData extends TempAddressArray {
         id?: string,
         username?: string,
         brand?: string,
@@ -21,6 +21,12 @@ declare namespace IUserRequest {
         password?: string,
         cartId?: string,
         createdAt?: number,
+    }
+
+    interface TempAddressArray {
+        asAddress?: any,
+        cmsAddress?: any,
+        sdmAddresses?: any
     }
     interface IPhone {
         cCode: string,

@@ -175,9 +175,9 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.123.207.192/media/catalog/product/",
-        "home": "http://40.123.207.192/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
+        "product": "http://40.123.205.1/media/catalog/product/",
+        "home": "http://40.123.205.1/media/homepage/",
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
@@ -208,6 +208,6 @@
             "username": "shashi.bhushan@appinventiv.com",
             "password": "shashi@123"
         },
-        "baseUrl": "http://40.123.207.192/rest/V1/"
+        "baseUrl": "http://40.123.205.1/rest/V1/"
     }
 }

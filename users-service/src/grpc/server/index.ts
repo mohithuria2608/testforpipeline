@@ -1,7 +1,7 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity'
-import { userController, miscController } from '../../controllers';
+import { userController, miscController, addressController } from '../../controllers';
 import * as Constant from '../../constant'
 
 const grpc = require('grpc')
@@ -48,6 +48,10 @@ server.addService(userProto.UserService.service, {
             switch (data.set) {
                 case Constant.SET_NAME.USER: {
                     res = await userController.syncUser(data)
+                    break;
+                }
+                case Constant.SET_NAME.ADDRESS: {
+                    res = await addressController.syncAddress(data)
                     break;
                 }
                 case Constant.SET_NAME.PING_SERVICE: {

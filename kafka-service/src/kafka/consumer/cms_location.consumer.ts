@@ -3,36 +3,38 @@ import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { locationService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE
 
-class AsStoreConsumer extends BaseConsumer {
+class CMSLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, topic);
+        super(Constant.KAFKA_TOPIC.CMS_LOCATION, 'client');
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_store", JSON.stringify(message), true)
-                this.syncStores(message);
+                consolelog(process.cwd(), "consumer cms_location", JSON.stringify(message), true)
+                this.postLocationDataToCMS(message);
                 return null;
             })
     }
 
-    private async syncStores(message: IKafkaRequest.IKafkaBody) {
+    private async postLocationDataToCMS(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await locationService.syncStores(message)
+            let res = await locationService.postLocationDataToCMS(message)
             return res
         } catch (error) {
             consolelog(process.cwd(), "syncStores", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                if (message.count == 0)
-                    kafkaController.produceToFailureTopic(message)
-                else
-                    kafkaController.kafkaSync(message)
-            } else
+                kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
+            }
+            else
                 kafkaController.produceToFailureTopic(message)
             return {}
         }
@@ -40,4 +42,4 @@ class AsStoreConsumer extends BaseConsumer {
 }
 
 
-export const as_storeConsumerE = new AsStoreConsumer();
+export const cms_locationConsumerE = new CMSLocationConsumer();

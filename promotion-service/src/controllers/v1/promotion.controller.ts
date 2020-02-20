@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
-import { userService, orderService } from '../../grpc/client';
+import { userService } from '../../grpc/client';
 import { Aerospike } from '../../aerospike'
 
 export class PromotionController {

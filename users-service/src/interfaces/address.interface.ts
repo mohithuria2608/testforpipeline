@@ -43,6 +43,9 @@ declare namespace IAddressRequest {
         description?: string,
         flatNum?: string,
         tag?: string,
+
+        sdmAddressRef?: number,
+        cmsAddressRef?: number,
     }
 
     interface ISyncOldAddress {

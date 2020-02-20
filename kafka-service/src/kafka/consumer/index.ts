@@ -14,11 +14,16 @@ import { sdm_userConsumerE } from './sdm_user.consumer';
 import { cms_userConsumerE } from './cms_user.consumer';
 import { as_userConsumerE } from './as_user.consumer';
 
+import { sdm_addressConsumerE } from './sdm_address.consumer';
+import { cms_addressConsumerE } from './cms_address.consumer';
+import { as_addressConsumerE } from './as_address.consumer';
+
 import { as_promotionConsumerE } from './as_promotion.consumer';
 
 import { sdm_orderConsumerE } from './sdm_order.consumer';
 
 import { m_loggerE } from './m_logger.consumer';
+import { cms_locationConsumerE } from './cms_location.consumer';
 
 import { ping_serviceE } from './ping_service.consumer';
 
@@ -33,15 +38,19 @@ export function initConsumers() {
     sdm_userConsumerE.handleMessage();
     cms_userConsumerE.handleMessage();
 
+    sdm_addressConsumerE.handleMessage();
+    cms_addressConsumerE.handleMessage();
+    as_addressConsumerE.handleMessage();
+
     as_menuConsumerE.handleMessage();
     sdm_menuConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
 
+    // as_locationConsumerE.handleMessage();
+    cms_locationConsumerE.handleMessage();
     as_storeConsumerE.handleMessage();
 
     as_upsellConsumerE.handleMessage();
-
-    as_promotionConsumerE.handleMessage();
 
     as_promotionConsumerE.handleMessage();
 

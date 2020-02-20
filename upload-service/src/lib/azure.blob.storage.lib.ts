@@ -5,6 +5,7 @@
 */
 
 import * as mime from "mime";
+import * as config from "config";
 import { BlobServiceClient, StorageSharedKeyCredential } from "@azure/storage-blob";
 
 class BlobStorageClass {
@@ -43,6 +44,7 @@ class BlobStorageClass {
 
 export const ProductBlob = new BlobStorageClass("americana", "products/");
 export const ModelBlob = new BlobStorageClass("americana", "models/");
+export const EnvModelBlob = new BlobStorageClass("americana", `${config.get('env')}\/`);
 export const TestBlob = new BlobStorageClass("americana", "test/");
 export const UploadBlob = new BlobStorageClass("americana", "uploads/");
 

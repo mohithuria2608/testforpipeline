@@ -68,7 +68,7 @@ export class MenuController {
             console.log("\n", payload, typeof payload.as, data[0]);
             if (payload.set == "menu") {
                 await ENTITY.MenuE.postMenu(data[0]);
-                uploadService.uploadMenuToBlob({ name: `temp_kfc_uae_1_${data[0].language}.json`, json: JSON.stringify(data[0]) })
+                uploadService.uploadMenuToBlob({ name: `kfc_uae_1_${data[0].language}.json`, json: JSON.stringify(data[0]) })
             }
             if (data.type == "upsell") {
                 if (payload.as.create || payload.as.update || payload.as.get) {

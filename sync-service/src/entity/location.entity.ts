@@ -17,8 +17,8 @@ export class LocationClass extends BaseEntity {
      */
     async fetchLocationFromSDM(payload) {
         try {
-            let syncData = await startLocationSequence();
-            return { success: true, data: syncData };
+            await startLocationSequence();
+            return { success: true, data: 'location_sync' };
         } catch (error) {
             consolelog(process.cwd(), "fetchLocationFromSDM", error, false)
             return Promise.reject(error)

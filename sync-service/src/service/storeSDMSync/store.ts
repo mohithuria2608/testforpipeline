@@ -24,7 +24,7 @@ export default async function () {
                         id: generateRandomString(16),
                         storeId: store.STR_ID,
                         ...areaDetail,
-                        menuId: parseInt(store.STR_MENU_ID),
+                        menuId: parseInt(store.STR_WEB_MNUID),
                         areaId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID),
                         streetId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_STREETID),
                         districtId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_DISTRICTID),
@@ -62,7 +62,7 @@ export default async function () {
             // } else {
             //     let saveData = {
             //         id: Generator(),
-            //         storeId: parseInt(store.STR_ID),
+            //         storeId: parseInt(store.STR_WEB_MNUID),
             //         // ...areaDetail,
             //         menuId: parseInt(store.STR_MENU_ID),
             //         areaId: parseInt(store.STR_MENU_ID),

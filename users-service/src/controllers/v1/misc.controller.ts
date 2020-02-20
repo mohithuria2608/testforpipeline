@@ -20,6 +20,7 @@ export class MiscController {
                 locationVicinity: 100,
                 paymentSuccessUrl: redirectUrl + "payment/success",
                 paymentFailureUrl: redirectUrl + "payment/failure",
+
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
@@ -30,6 +31,7 @@ export class MiscController {
                         customerCare: "666666666",
                         supportEmail: "kfc_uae@ag.com",
                         cashondelivery: 0,
+                        minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
@@ -105,7 +107,7 @@ export class MiscController {
                 consolelog(process.cwd(), "Pinged by  :::", set, true)
                 switch (set) {
                     case Constant.SET_NAME.CONFIG: {
-                        let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.KSA_STORE })
+                        let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE })
                         consolelog(process.cwd(), "config", JSON.stringify(config), true)
                         break;
                     }

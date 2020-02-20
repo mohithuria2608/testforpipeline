@@ -134,7 +134,7 @@ export class OrderClass extends BaseEntity {
                             product.items.forEach(i => {
                                 if (i['sku'] == product.selectedItem) {
                                     Entries.CEntry.push({
-                                        ItemID: 600002,// i.sdmId,
+                                        ItemID: i.sdmId,
                                         Level: 0,
                                         ModCode: "NONE",
                                         Name: i.name,
@@ -501,6 +501,10 @@ export class OrderClass extends BaseEntity {
     * */
     async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
         try {
+            let amount = cartData.amount
+            if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
+            }
             let orderData = {
                 orderType: orderType,
                 cartId: cartData.cartId,
@@ -513,7 +517,7 @@ export class OrderClass extends BaseEntity {
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: cartData.items,
-                amount: cartData.amount,
+                amount: amount,
                 address: {
                     addressId: address.id,
                     sdmAddressRef: address.sdmAddressRef,
@@ -570,175 +574,176 @@ export class OrderClass extends BaseEntity {
                 let recheck = true
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, amount: 0 })
                 if (order && order._id) {
-                    if (order.sdmOrderRef && order.sdmOrderRef != 0) {
-                        let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
-                        /**
-                         * @step 1 : update mongo order status wrt to sdmOrder status
-                         */
-                        if (sdmOrder && sdmOrder.OrderID) {
-                            if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
-                                if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
-                                    consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
-                                    if (order.payment.paymentMethodId == 0) {
-                                        consolelog(process.cwd(), "order step 2 :       ", parseInt(sdmOrder.Status), true)
-                                        /**
-                                         * @todo : nothing
-                                         */
-                                    } else {
-                                        consolelog(process.cwd(), "order step 3 :       ", parseInt(sdmOrder.Status), true)
-                                        if (sdmOrder.Status == 96) {
-                                            consolelog(process.cwd(), "order step 4 :       ", parseInt(sdmOrder.Status), true)
-                                            if (order.payment && order.payment.status == "AUTHORIZATION") {
-                                                consolelog(process.cwd(), "order step 5 :       ", parseInt(sdmOrder.Status), true)
-                                                if (order.paymentMethodAddedOnSdm == 0) {
-                                                    consolelog(process.cwd(), "order step 6 :       ", parseInt(sdmOrder.Status), true)
-                                                    /**
-                                                    * @description : add payment object to sdm
-                                                    */
-                                                    let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({ sdmOrderRef: order.sdmOrderRef, transaction: order.transLogs[1] })
-                                                    if (paymentObjAdded) {
-                                                        consolelog(process.cwd(), "order step 7 :       ", parseInt(sdmOrder.Status), true)
-                                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                            paymentMethodAddedOnSdm: 1,
-                                                            updatedAt: new Date().getTime(),
-                                                            sdmOrderStatus: sdmOrder.Status
-                                                        }, { new: true })
-                                                    }
-                                                    else {
-                                                        consolelog(process.cwd(), "order step 8 :       ", parseInt(sdmOrder.Status), true)
+                    /**
+                     * @todo : just for development
+                     */
+                    if ((order.createdAt + (30 * 60 * 60 * 1000)) > new Date().getTime())
+                        recheck = false
+
+                    if (recheck) {
+                        if (order.sdmOrderRef && order.sdmOrderRef != 0) {
+                            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
+                            /**
+                             * @step 1 : update mongo order status wrt to sdmOrder status
+                             */
+                            if (sdmOrder && sdmOrder.OrderID) {
+                                if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
+                                    if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
+                                        consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
+                                        if (order.payment.paymentMethodId == 0) {
+                                            consolelog(process.cwd(), "order step 2 :       ", parseInt(sdmOrder.Status), true)
+                                        } else {
+                                            consolelog(process.cwd(), "order step 3 :       ", parseInt(sdmOrder.Status), true)
+                                            if (sdmOrder.Status == 96) {
+                                                consolelog(process.cwd(), "order step 4 :       ", parseInt(sdmOrder.Status), true)
+                                                if (order.payment && order.payment.status == "AUTHORIZATION") {
+                                                    consolelog(process.cwd(), "order step 5 :       ", parseInt(sdmOrder.Status), true)
+                                                    if (order.paymentMethodAddedOnSdm == 0) {
+                                                        consolelog(process.cwd(), "order step 6 :       ", parseInt(sdmOrder.Status), true)
                                                         /**
-                                                        * @description : in case of failure while adding payment object
+                                                        * @description : add payment object to sdm
                                                         */
-                                                        recheck = false
-                                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                                            changePaymentMode: true,
-                                                            updatedAt: new Date().getTime(),
-                                                            sdmOrderStatus: sdmOrder.Status
-                                                        }, { new: true })
+                                                        let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({ sdmOrderRef: order.sdmOrderRef, transaction: order.transLogs[1] })
+                                                        if (paymentObjAdded) {
+                                                            consolelog(process.cwd(), "order step 7 :       ", parseInt(sdmOrder.Status), true)
+                                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                                paymentMethodAddedOnSdm: 1,
+                                                                updatedAt: new Date().getTime(),
+                                                                sdmOrderStatus: sdmOrder.Status
+                                                            }, { new: true })
+                                                        }
+                                                        else {
+                                                            consolelog(process.cwd(), "order step 8 :       ", parseInt(sdmOrder.Status), true)
+                                                            /**
+                                                            * @description : in case of failure while adding payment object
+                                                            */
+                                                            recheck = false
+                                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                                status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                                                changePaymentMode: true,
+                                                                updatedAt: new Date().getTime(),
+                                                                sdmOrderStatus: sdmOrder.Status
+                                                            }, { new: true })
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if (sdmOrder.Status == 0) {
-                                            consolelog(process.cwd(), "order step 9 :       ", parseInt(sdmOrder.Status), true)
-                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                updatedAt: new Date().getTime(),
-                                                sdmOrderStatus: sdmOrder.Status
-                                            }, { new: true })
+                                            else if (sdmOrder.Status == 0) {
+                                                consolelog(process.cwd(), "order step 9 :       ", parseInt(sdmOrder.Status), true)
+                                                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                    updatedAt: new Date().getTime(),
+                                                    sdmOrderStatus: sdmOrder.Status
+                                                }, { new: true })
+                                            }
                                         }
                                     }
-                                }
-                                else if (parseInt(sdmOrder.Status) == 2) {
-                                    consolelog(process.cwd(), "order step 10 :       ", parseInt(sdmOrder.Status), true)
-                                    if (order.payment.paymentMethodId == 0) {
-                                        consolelog(process.cwd(), "order step 11 :       ", parseInt(sdmOrder.Status), true)
-                                        /**
-                                        * @todo : remove recheck = false
-                                        */
-                                        recheck = false
-                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                            status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
-                                            updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status
-                                        }, { new: true })
-
-                                        setTimeout(async () => {
-                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                                updatedAt: new Date().getTime(),
-                                                sdmOrderStatus: sdmOrder.Status
-                                            }, { new: true })
-                                        }, 10000)
-                                    } else {
-                                        consolelog(process.cwd(), "order step 12 :       ", parseInt(sdmOrder.Status), true)
-                                        if (order.payment.status == "AUTHORIZATION") {
-                                            consolelog(process.cwd(), "order step 13 :       ", parseInt(sdmOrder.Status), true)
-                                            /**
-                                             * @todo : remove recheck = false
-                                             */
-                                            recheck = false
+                                    else if (parseInt(sdmOrder.Status) == 2) {
+                                        consolelog(process.cwd(), "order step 10 :       ", parseInt(sdmOrder.Status), true)
+                                        if (order.payment.paymentMethodId == 0) {
+                                            consolelog(process.cwd(), "order step 11 :       ", parseInt(sdmOrder.Status), true)
                                             order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                 status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                 updatedAt: new Date().getTime(),
                                                 sdmOrderStatus: sdmOrder.Status
                                             }, { new: true })
-                                            await paymentService.capturePayment({
-                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                orderId: order.transLogs[1].orderId,
-                                                amount: order.transLogs[1].amount,
-                                                storeCode: "kfc_uae_store"
-                                            })
-                                            let status = await paymentService.getPaymentStatus({
-                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                storeCode: "kfc_uae_store",
-                                                paymentStatus: "CAPTURED",
-                                            })
+
+                                            setTimeout(async () => {
+                                                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                    status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                                    updatedAt: new Date().getTime(),
+                                                    sdmOrderStatus: sdmOrder.Status
+                                                }, { new: true })
+                                            }, 10000)
+                                        } else {
+                                            consolelog(process.cwd(), "order step 12 :       ", parseInt(sdmOrder.Status), true)
+                                            if (order.payment.status == "AUTHORIZATION") {
+                                                consolelog(process.cwd(), "order step 13 :       ", parseInt(sdmOrder.Status), true)
+                                                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                    status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                                    updatedAt: new Date().getTime(),
+                                                    sdmOrderStatus: sdmOrder.Status
+                                                }, { new: true })
+                                                await paymentService.capturePayment({
+                                                    noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                    orderId: order.transLogs[1].orderId,
+                                                    amount: order.transLogs[1].amount,
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                                })
+                                                let status = await paymentService.getPaymentStatus({
+                                                    noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                })
+                                                this.updateOneEntityMdb({ _id: order._id }, {
+                                                    status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                                    "payment.transactionId": status.transactions[0].id,
+                                                    "payment.status": status.transactions[0].type,
+                                                    $addToSet: {
+                                                        transLogs: status
+                                                    },
+                                                    updatedAt: new Date().getTime()
+                                                })
+                                            }
+                                        }
+                                    }
+                                    else if (parseInt(sdmOrder.Status) == 8) {
+                                        consolelog(process.cwd(), "order step 14 :       ", parseInt(sdmOrder.Status), true)
+                                        this.updateOneEntityMdb({ _id: order._id }, {
+                                            status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            sdmOrderStatus: sdmOrder.Status
+                                        })
+                                        if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                                            recheck = false
+                                    }
+                                    else if (parseInt(sdmOrder.Status) == 16 || parseInt(sdmOrder.Status) == 32) {
+                                        consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
+                                        if (parseInt(sdmOrder.Status) == 32) {
                                             this.updateOneEntityMdb({ _id: order._id }, {
-                                                status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                                "payment.transactionId": status.transactions[0].id,
-                                                "payment.status": status.transactions[0].type,
-                                                $addToSet: {
-                                                    transLogs: status
-                                                },
-                                                updatedAt: new Date().getTime()
+                                                status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
+                                                updatedAt: new Date().getTime(),
+                                                sdmOrderStatus: sdmOrder.Status
                                             })
                                         }
                                     }
-                                }
-                                else if (parseInt(sdmOrder.Status) == 8) {
-                                    consolelog(process.cwd(), "order step 14 :       ", parseInt(sdmOrder.Status), true)
-                                    this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
-                                        updatedAt: new Date().getTime(),
-                                        sdmOrderStatus: sdmOrder.Status
-                                    })
-                                }
-                                else if (parseInt(sdmOrder.Status) == 16 || parseInt(sdmOrder.Status) == 32) {
-                                    consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
-                                    this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
-                                        updatedAt: new Date().getTime(),
-                                        sdmOrderStatus: sdmOrder.Status
-                                    })
-                                }
-                                else if (parseInt(sdmOrder.Status) == 64 || parseInt(sdmOrder.Status) == 128 || parseInt(sdmOrder.Status) == 2048) {
-                                    consolelog(process.cwd(), "order step 16 :       ", parseInt(sdmOrder.Status), true)
-                                    recheck = false
-                                    this.updateOneEntityMdb({ _id: order._id }, {
-                                        isActive: 0,
-                                        status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
-                                        updatedAt: new Date().getTime(),
-                                        trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
-                                        sdmOrderStatus: sdmOrder.Status
-                                    })
-                                }
-                                else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
-                                    consolelog(process.cwd(), "order step 17:       ", parseInt(sdmOrder.Status), true)
-                                    recheck = false
-                                    this.updateOneEntityMdb({ _id: order._id }, {
-                                        isActive: 0,
-                                        status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
-                                        updatedAt: new Date().getTime(),
-                                        sdmOrderStatus: sdmOrder.Status
-                                    })
-                                }
-                                else {
-                                    recheck = false
-                                    consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                    else if (parseInt(sdmOrder.Status) == 64 || parseInt(sdmOrder.Status) == 128 || parseInt(sdmOrder.Status) == 2048) {
+                                        consolelog(process.cwd(), "order step 16 :       ", parseInt(sdmOrder.Status), true)
+                                        recheck = false
+                                        this.updateOneEntityMdb({ _id: order._id }, {
+                                            isActive: 0,
+                                            status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
+                                            sdmOrderStatus: sdmOrder.Status
+                                        })
+                                    }
+                                    else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
+                                        consolelog(process.cwd(), "order step 17:       ", parseInt(sdmOrder.Status), true)
+                                        recheck = false
+                                        this.updateOneEntityMdb({ _id: order._id }, {
+                                            isActive: 0,
+                                            status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
+                                            updatedAt: new Date().getTime(),
+                                            sdmOrderStatus: sdmOrder.Status
+                                        })
+                                    }
+                                    else {
+                                        recheck = false
+                                        consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                    }
                                 }
                             }
-                        }
-                        console.log("recheck =              =>", parseInt(sdmOrder.Status), recheck)
-                        if (recheck) {
-                            let orderChange = {
-                                set: this.set,
-                                sdm: {
-                                    get: true,
-                                    argv: JSON.stringify(payload)
+                            console.log("recheck =              =>", parseInt(sdmOrder.Status), recheck)
+                            if (recheck) {
+                                let orderChange = {
+                                    set: this.set,
+                                    sdm: {
+                                        get: true,
+                                        argv: JSON.stringify(payload)
+                                    }
                                 }
+                                kafkaService.kafkaSync(orderChange)
                             }
-                            kafkaService.kafkaSync(orderChange)
                         }
                     }
                 }

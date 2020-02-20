@@ -16,7 +16,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
-                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),//@todo : Country specific regex
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
                 }
             }),
             async (ctx) => {

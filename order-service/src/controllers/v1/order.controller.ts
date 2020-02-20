@@ -50,9 +50,16 @@ export class OrderController {
 
     /**
      * @method POST
-     * @param {string} orderType
      * @param {string} addressId
+     * @param {string} orderType
+     * @param {string} paymentMethodId
      * @param {string} cartId
+     * @param {string} curMenuId
+     * @param {string} menuUpdatedAt
+     * @param {string} lat
+     * @param {string} lng
+     * @param {string} couponCode
+     * @param {string} items
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -65,7 +72,11 @@ export class OrderController {
                 if (order && order._id)
                     retry = true
             }
-
+            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
+            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             let newCartId = ""
             let noonpayRedirectionUrl = ""
             if (!retry) {
@@ -101,7 +112,7 @@ export class OrderController {
                     couponCode: payload.couponCode,
                     items: payload.items
                 }
-                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload)
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
 
                 let cartData: ICartRequest.ICartData
@@ -116,16 +127,12 @@ export class OrderController {
                 cartData['orderType'] = payload.orderType
                 order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
             }
-
-            let amount = order.amount.filter(elem => { return elem.code == "TOTAL" })
+            // let totalAmount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (payload.paymentMethodId != 0) {
-                /**
-                 * @todo : noonpay order id = cms order id
-                 */
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                    orderId: order._id.toString(),
-                    amount: amount[0].amount,
-                    storeCode: "kfc_uae_store",
+                    orderId: order.cmsOrderRef.toString(),
+                    amount: totalAmount[0].amount,
+                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                     paymentMethodId: 1,
                     channel: "Mobile",
                     locale: "en",
@@ -137,16 +144,16 @@ export class OrderController {
                     },
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
-                        amount: amount[0].amount,
-                        name: "Card",
+                        amount: totalAmount[0].amount,
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD
                     }
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
-                        amount: amount[0].amount,
-                        name: "Cash On Delivery"
+                        amount: totalAmount[0].amount,
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
                 /**
@@ -248,7 +255,7 @@ export class OrderController {
             if (order && order._id) {
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                order.amount.filter(obj => { return obj.code == "TOTAL" })[0]
+                order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
                 order['nextPing'] = 15
                 order['unit'] = "second"
                 return order

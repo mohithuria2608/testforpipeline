@@ -3,17 +3,18 @@ import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { kafkaController } from '../../controllers'
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q
 
 class FailConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q);
+        super(topic, topic);
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                consolelog(process.cwd(), "consumer failed_messages", message, true)
+                consolelog(process.cwd(), "consumer fail_q", message, true)
                 this.handleFailReq(message);
             })
     }

@@ -5,12 +5,12 @@ import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
 import { consolelog } from '../utils'
 
-export class UserCMSEntity extends BaseCMS {
+export class AddressCMSEntity extends BaseCMS {
     constructor() {
         super()
     }
 
-    async createCustomerOnCms(payload: IUserRequest.IUserData): Promise<any> {
+    async createAddressOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
             let formObj: IUserCMSRequest.ICreateUser = {
                 "email": payload.email,
@@ -119,4 +119,4 @@ export class UserCMSEntity extends BaseCMS {
     }
 }
 
-export const UserCMSE = new UserCMSEntity()
+export const AddressCMSE = new AddressCMSEntity()
