@@ -1,6 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client';
 
 export class SdmLocationController {
 
@@ -14,9 +15,8 @@ export class SdmLocationController {
         try {
             let syncLocation = await ENTITY.LocationE.fetchLocationFromSDM(payload);
             if (syncLocation.success) {
-                // send back request to CMS
-                console.log("SUCCESS");
-            } else console.log("Failed");
+                kafkaService.kafkaSync({ set: 'location', cms: { create: true, argv: JSON.stringify(syncLocation) } })
+            }
         } catch (error) {
             consolelog(process.cwd(), "postMenu", error, false)
             return Promise.reject(error)

@@ -387,10 +387,18 @@ export class KafkaController {
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
+                    if (payload.cms && payload.cms.create) {
+                        messages = { ...payload }
+                        delete messages.mdb
+                        delete messages.sdm
+                        delete messages.as
+                        topic = Constant.KAFKA_TOPIC.CMS_LOCATION;
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
                     break;
                 }
             }
-            return { data: 'succes' };
+            return { data: 'success' };
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             return Promise.reject(error)
