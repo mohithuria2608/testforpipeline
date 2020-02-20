@@ -177,7 +177,7 @@
     "blobBaseUrl": {
         "product": "http://40.123.205.1/media/catalog/product/",
         "home": "http://40.123.205.1/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",

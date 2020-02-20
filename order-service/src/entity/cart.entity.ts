@@ -304,7 +304,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?) {
+    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             let sellingPrice = 0
             let cart = []
