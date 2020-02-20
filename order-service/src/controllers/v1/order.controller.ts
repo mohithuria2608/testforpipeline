@@ -123,12 +123,7 @@ export class OrderController {
                 cartData['orderType'] = payload.orderType
                 order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
             }
-            // let subTotal = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL.SUB_TOTAL })
-            // let tax = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
             let amount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
-            // if ((subTotal[0].amount + tax[0].amount) < 23.5) {
-            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MINIMUM_CART_VALUE_VIOLATION)
-            // }
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order.cmsOrderRef.toString(),

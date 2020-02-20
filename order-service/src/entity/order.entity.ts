@@ -574,6 +574,12 @@ export class OrderClass extends BaseEntity {
                 let recheck = true
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, amount: 0 })
                 if (order && order._id) {
+                    /**
+                     * @todo : just for development
+                     */
+                    if ((order.createdAt + (30 * 60 * 60 * 1000)) > new Date().getTime())
+                        recheck = false
+
                     if (order.sdmOrderRef && order.sdmOrderRef != 0) {
                         let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
                         /**
