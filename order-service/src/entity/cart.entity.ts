@@ -389,37 +389,22 @@ export class CartClass extends BaseEntity {
                     })
                 }
                 else if (sitem['originalTypeId'] == 'bundle' || sitem['typeId'] == 'bundle') {
-                    let positionIndex = sitem.bundleProductOptions[0].position
                     let bundle_option = {};
-                    let selection_configurable_option = {};
                     sitem['bundleProductOptions'].forEach(bpo => {
                         if (bpo['isDependent'] == 0) {
                             if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
                                 bpo['productLinks'].forEach(pl => {
                                     if (pl['selected'] == 1) {
+                                        if (!bundle_option[pl['option_id']])
+                                            bundle_option[pl['option_id']] = {}
                                         if (pl['subOptions'] && pl['subOptions'].length > 0) {
-                                            // if (bundle_option[pl['option_id']] == null)
-                                            //     bundle_option[pl['option_id']] = {}
-                                            // bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
+                                            pl['subOptions'].forEach(plso => {
+                                                if (plso['selected'] == 1) {
+                                                    bundle_option[pl['option_id']][plso['id']] = plso['selection_id']
+                                                }
+                                            })
                                         } else {
                                             bundle_option[pl['option_id']] = pl['selection_id']
-                                        }
-
-                                        if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                            let dependentSteps = sitem['bundleProductOptions'][(positionIndex == 0) ? pl['dependentSteps'][0] : (pl['dependentSteps'][0] - 1)]
-                                            if (dependentSteps.isDependent == 1) {
-                                                if (dependentSteps['productLinks'] && dependentSteps['productLinks'].length > 0) {
-                                                    dependentSteps['productLinks'].forEach(dspl => {
-                                                        if (!bundle_option.hasOwnProperty(dspl['option_id']))
-                                                            bundle_option[dspl['option_id']] = {}
-                                                        bundle_option[dspl['option_id']][dspl['id']] = dspl['selection_id']
-
-                                                        if (dspl.selectionQty > 0) {
-                                                            selection_configurable_option[pl['selection_id']] = dspl['id']
-                                                        }
-                                                    })
-                                                }
-                                            }
                                         }
                                     }
                                 })
@@ -431,15 +416,12 @@ export class CartClass extends BaseEntity {
                         qty: sitem.qty,
                         price: sitem.sellingPrice,
                         type_id: sitem['typeId'],
-                        bundle_option: bundle_option,
-                        selection_configurable_option: selection_configurable_option,
+                        bundle_option: bundle_option
                     })
                 }
                 else if (sitem['originalTypeId'] == 'bundle_group') {
                     if (sitem['typeId'] == "bundle_group") {
                         let bundle_option = {};
-                        let alreadyAddedInBundleOption = {}
-                        // let selection_configurable_option = {};
                         let item = 0
                         sitem['items'].forEach(i => {
                             if (sitem['selectedItem'] == i['sku']) {
@@ -447,7 +429,7 @@ export class CartClass extends BaseEntity {
                                 i['bundleProductOptions'].forEach(bpo => {
                                     if (bpo['productLinks'] && bpo['productLinks'].length > 0) {
                                         bpo['productLinks'].map(pl => {
-                                            if (pl['selected'] == 1 ) {
+                                            if (pl['selected'] == 1) {
                                                 if (!bundle_option[pl['option_id']])
                                                     bundle_option[pl['option_id']] = {}
                                                 if (pl['subOptions'] && pl['subOptions'].length > 0) {
@@ -456,37 +438,10 @@ export class CartClass extends BaseEntity {
                                                             bundle_option[pl['option_id']][plso['id']] = plso['selection_id']
                                                         }
                                                     })
-                                                    // if (bundle_option[pl['option_id']] == null)
-                                                    //     bundle_option[pl['option_id']] = {}
-                                                    // bundle_option[pl['option_id']][pl['id']] = pl['selection_id']
-
-                                                    // selection_configurable_option[pl['selection_id']] = ""
-                                                    // pl['subOptions'].forEach(plso => {
-                                                    //     if (plso['selected'] == 1) {
-                                                    //         selection_configurable_option[pl['selection_id']] = plso['id']
-                                                    //     }
-                                                    // })
                                                 } else {
                                                     bundle_option[pl['option_id']] = pl['selection_id']
                                                 }
-                                                // alreadyAddedInBundleOption[pl['id']] = true
                                             }
-                                            // if (pl['dependentSteps'] && pl['dependentSteps'].length > 0) {
-                                            //     if (i['bundleProductOptions'] && i['bundleProductOptions'].length > 0) {
-                                            //         i['bundleProductOptions'].forEach(bpo2 => {
-                                            //             if (bpo2['position'] == pl['dependentSteps'][0]) {
-                                            //                 if (bpo2['productLinks'] && bpo2['productLinks'].length > 0) {
-                                            //                     bpo2['productLinks'].forEach(pl2 => {
-                                            //                         if (pl2['selected'] == 1)
-                                            //                             selection_configurable_option[pl['selection_id']] = pl2['id']
-                                            //                         else
-                                            //                             selection_configurable_option[pl['selection_id']] = ""
-                                            //                     })
-                                            //                 }
-                                            //             }
-                                            //         })
-                                            //     }
-                                            // }
                                         })
                                     }
                                 })
@@ -496,9 +451,8 @@ export class CartClass extends BaseEntity {
                             product_id: item,
                             qty: sitem.qty,
                             price: sitem.sellingPrice,
-                            type_id: "bundle",// sitem['typeId'],
+                            type_id: "bundle",
                             bundle_option: bundle_option,
-                            // selection_configurable_option: selection_configurable_option,
                         })
                     }
                 }
