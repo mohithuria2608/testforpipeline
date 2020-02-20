@@ -20,6 +20,8 @@ template=`echo "$template" | sed "s@{{Log_image}}@$Log_image@g"`
 template=`echo "$template" | sed "s@{{Home_image}}@$Home_image@g"`
 
 
+
+
 # apply the yml with the substituted value
 echo "$template" | kubectl apply -f -
 
