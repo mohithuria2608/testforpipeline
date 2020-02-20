@@ -45,6 +45,8 @@ export enum KAFKA_TOPIC {
     AS_MENU = "as_menu",
     AS_UPSELL = "as_upsell",
 
+    AS_LOCATION = "as_location",
+    CMS_LOCATION = "cms_location",
     AS_STORE = "as_store",
 
     SDM_USER = "sdm_user",
@@ -103,6 +105,9 @@ export const SERVER = {
     CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     MIN_COD_CART_VALUE: 300,//AED
+    MIN_CART_VALUE: 23,//AED
+    PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
+    PAYMENT_API_KEY_PREFIX: "Key_",
     DISPLAY_COLOR: true,
     ANDROID_SCHEME_HOST: "https://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
@@ -112,7 +117,7 @@ export const SERVER = {
 
 export const DATABASE = {
     STORE_CODE: {
-        KSA_STORE: "ksa_store"
+        MAIN_WEB_STORE: "main_website_store"
     },
 
     BRAND: {
@@ -131,6 +136,11 @@ export const DATABASE = {
     LANGUAGE: {
         EN: 'En',
         AR: 'Ar'
+    },
+
+    PAYMENT_LOCALE: {
+        EN: 'en',
+        AR: 'ar'
     },
 
     UDF: {
@@ -182,6 +192,7 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             ADDRESS: {
@@ -190,29 +201,43 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ORDER: {
                 MAX_RETRY: {
                     CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 },
                 INTERVAL: {
                     GET_STATUS: 10000
@@ -225,6 +250,8 @@ export const DATABASE = {
                     CREATE: 5,
                     UPDATE: 5,
                     GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ADDRESS: {
@@ -233,24 +260,34 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             }
         },
@@ -259,6 +296,9 @@ export const DATABASE = {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ADDRESS: {
@@ -267,36 +307,59 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             CONFIG: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             }
         }
     },
 
     TYPE: {
+        PAYMENT_ACTION_HINTS: {
+            STATUS_USING_NOONPAY_ID: 'GET_PAYMENT_STATUS_USING_NOONPAY_ID',
+            SYNC_CONFIGURATION: 'SYNC_PAYMENT_CONFIGURATION'
+        },
+
+        PAYMENT_METHOD: {
+            CARD: "Card",
+            COD: "Cash On Delivery"
+        },
+
         CONFIG: {
             GENERAL: "general",
             PAYMENT: "payment",
@@ -442,18 +505,53 @@ export const DATABASE = {
                 CMS: "",
                 SDM: []
             },
+        },
+
+        PAYMENT: {
+            INITIATED: 'INITIATED',
+            AUTHORIZED: 'AUTHORIZED',
+            CANCELLED: 'CANCELLED', // Reverse payment
+            CAPTURED: 'CAPTURED',
+            REFUNDED: 'REFUNDED',
+            EXPIRED: 'EXPIRED',
+            FAILED: 'FAILED',
+        },
+
+        TRANSACTION: {
+            AUTHORIZATION: 'AUTHORIZATION',
+            VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
+            CAPTURE: 'CAPTURE',
+            REFUND: 'REFUND'
         }
+    },
+
+    ACTION: {
+        TRANSACTION: {
+            INITIATE: 'INITIATE',
+            AUTHORIZE: 'AUTHORIZE',
+            CAPTURE: 'CAPTURE',
+            SALE: 'SALE',
+            REVERSE: 'REVERSE',
+            REFUND: 'REFUND'
+        },
     }
 };
 
 export const STATUS_MSG = {
     ERROR: {
         E400: {
-            MINIMUM_CART_VALUE_VIOLATION: {
+            MIN_CART_VALUE_VOILATION: {
                 statusCode: 400,
                 httpCode: 400,
-                type: 'MINIMUM_CART_VALUE_VIOLATION',
-                message: 'Minimum cart value not met'
+                type: 'MIN_CART_VALUE_VOILATION',
+                message: 'Minimum cart voilation'
+            },
+
+            MAX_COD_CART_VALUE_VOILATION: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'MAX_COD_CART_VALUE_VOILATION',
+                message: 'Maximum cod cart voilation'
             },
 
             INVALID_PROMO: {
@@ -962,5 +1060,65 @@ export const STATUS_MSG = {
             DUPLICATE_INDEX: 200,
             DATA_NOT_FOUND: 2,
         }
+    },
+    NOONPAY_ERROR: {
+        default: {
+            statusCode: 6000,
+            httpCode: 400,
+            message: 'Unknown error', // associate noonpay returned message
+            type: 'UNHANDLED_ERROR',
+            actionHint: ''
+        },
+        1500: {
+            statusCode: 1500,
+            httpCode: 401,
+            message: 'Payment authorization error',
+            type: 'CONFIGURATION_ERROR',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION
+        },
+        19001: {
+            statusCode: 6001,
+            httpCode: 409,
+            message: 'No payment transaction found for the provided order id',
+            type: 'INVALID_ORDER_ID',
+            actionHint: ''
+        },
+        19004: {
+            statusCode: 6004,
+            httpCode: 400,
+            message: 'Invalid data provided',
+            type: 'INVALID_DATA_PROVIDED',
+            actionHint: '',
+            useNoonPayMessage: true
+        },
+        19019: {
+            statusCode: 6019,
+            httpCode: 422,
+            message: 'The requested operation can not be processed.',
+            type: 'OPERATION_ERROR',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID,
+            useNoonPayMessage: true
+        },
+        19066: {
+            statusCode: 6066,
+            httpCode: 422,
+            message: 'Insufficient funds for the requested operation.',
+            type: 'OPERATION_ERROR',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
+        },
+        19077: {
+            statusCode: 6077,
+            httpCode: 400,
+            message: 'Invalid Capture transaction id',
+            type: 'INVALID_CAPTURE_TRANSACTION_ID',
+            actionHint: ''
+        },
+        19085: {
+            statusCode: 6085,
+            httpCode: 400,
+            message: 'Multiple payments were initiated for the given order, use noonpay order id to get the status',
+            type: 'MULTIPLE_PAYMENTS_INITIATED',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
+        },
     }
 };

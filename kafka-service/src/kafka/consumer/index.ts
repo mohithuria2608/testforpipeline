@@ -23,6 +23,7 @@ import { as_promotionConsumerE } from './as_promotion.consumer';
 import { sdm_orderConsumerE } from './sdm_order.consumer';
 
 import { m_loggerE } from './m_logger.consumer';
+import { cms_locationConsumerE } from './cms_location.consumer';
 
 import { ping_serviceE } from './ping_service.consumer';
 
@@ -45,6 +46,8 @@ export function initConsumers() {
     sdm_menuConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
 
+    // as_locationConsumerE.handleMessage();
+    cms_locationConsumerE.handleMessage();
     as_storeConsumerE.handleMessage();
 
     as_upsellConsumerE.handleMessage();

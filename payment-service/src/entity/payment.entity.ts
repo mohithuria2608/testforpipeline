@@ -13,7 +13,7 @@ import { cloneObject } from '../utils/helper';
  */
 const PAYMENT_CONFIG = Object.freeze({
     // cms store code
-    kfc_uae_store: {
+    main_website_store: {
         /** 
          * NOTE: 1. Currently this info is coming inside noon_pay_config from CMS
          * 2. Keys are coming '_' separated
@@ -71,103 +71,8 @@ const PAYMENT_CONFIG = Object.freeze({
  */
 export class PaymentClass extends BaseEntity {
 
-    private static readonly API_KEY_PREFIX = 'Key_';
-    private static readonly PAYMENT_OPTIONS = Object.freeze({
-        ACTIONS: {
-            INITIATE: 'INITIATE',
-            AUTHORIZE: 'AUTHORIZE',
-            CAPTURE: 'CAPTURE',
-            SALE: 'SALE',
-            REVERSE: 'REVERSE',
-            REFUND: 'REFUND'
-        },
-        LOCALE: {
-            EN: 'en',
-            AR: 'ar'
-        },
-        API_TIMEOUT: 3 * 1000 // 1 sec
-    });
-    public static readonly STATUS = Object.freeze({
-        ORDER: {
-            INITIATED: 'INITIATED',
-            AUTHORIZED: 'AUTHORIZED',
-            CANCELLED: 'CANCELLED', // Reverse payment
-            CAPTURED: 'CAPTURED',
-            REFUNDED: 'REFUNDED',
-            EXPIRED: 'EXPIRED',
-            FAILED: 'FAILED'
-        },
-        TRANSACTION: {
-            AUTHORIZATION: 'AUTHORIZATION',
-            VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
-            CAPTURE: 'CAPTURE',
-            REFUND: 'REFUND'
-        }
-    });
-    private static readonly PAYMENT_ACTION_HINTS = Object.freeze({
-        STATUS_USING_NOONPAY_ID: 'GET_PAYMENT_STATUS_USING_NOONPAY_ID',
-        SYNC_CONFIGURATION: 'SYNC_PAYMENT_CONFIGURATION'
-    });
-    private static readonly NOONPAY_ERRORS = Object.freeze({
-        default: {
-            statusCode: 6000,
-            httpCode: 400,
-            message: 'Unknown error', // associate noonpay returned message
-            type: 'UNHANDLED_ERROR',
-            actionHint: ''
-        },
-        1500: {
-            statusCode: 1500,
-            httpCode: 401,
-            message: 'Payment authorization error',
-            type: 'CONFIGURATION_ERROR',
-            actionHint: PaymentClass.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION
-        },
-        19001: {
-            statusCode: 6001,
-            httpCode: 409,
-            message: 'No payment transaction found for the provided order id',
-            type: 'INVALID_ORDER_ID',
-            actionHint: ''
-        },
-        19004: {
-            statusCode: 6004,
-            httpCode: 400,
-            message: 'Invalid data provided',
-            type: 'INVALID_DATA_PROVIDED',
-            actionHint: '',
-            useNoonPayMessage: true
-        },
-        19019: {
-            statusCode: 6019,
-            httpCode: 422,
-            message: 'The requested operation can not be processed.',
-            type: 'OPERATION_ERROR',
-            actionHint: PaymentClass.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID,
-            useNoonPayMessage: true
-        },
-        19066: {
-            statusCode: 6066,
-            httpCode: 422,
-            message: 'Insufficient funds for the requested operation.',
-            type: 'OPERATION_ERROR',
-            actionHint: PaymentClass.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
-        },
-        19077: {
-            statusCode: 6077,
-            httpCode: 400,
-            message: 'Invalid Capture transaction id',
-            type: 'INVALID_CAPTURE_TRANSACTION_ID',
-            actionHint: ''
-        },
-        19085: {
-            statusCode: 6085,
-            httpCode: 400,
-            message: 'Multiple payments were initiated for the given order, use noonpay order id to get the status',
-            type: 'MULTIPLE_PAYMENTS_INITIATED',
-            actionHint: PaymentClass.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
-        },
-    });
+    private static readonly API_KEY_PREFIX = Constant.SERVER.PAYMENT_API_KEY_PREFIX;
+
     private static readonly CUSTOM_ERRORS = Object.freeze({
         default: {
             statusCode: 7000,
@@ -232,7 +137,7 @@ export class PaymentClass extends BaseEntity {
         amount: Joi.number().required().greater(0),
         paymentMethodId: Joi.number().integer().required().description('User selected payment method id of noonpay payment methods'),
         channel: Joi.string().trim().required().valid('Mobile', 'Web'),
-        locale: Joi.string().trim().lowercase().optional().valid(PaymentClass.PAYMENT_OPTIONS.LOCALE.EN, PaymentClass.PAYMENT_OPTIONS.LOCALE.AR),
+        locale: Joi.string().trim().lowercase().optional().valid(Constant.DATABASE.PAYMENT_LOCALE.EN, Constant.DATABASE.PAYMENT_LOCALE.AR),
     });
 
     private static readonly CAPTURE_PAYMENT_REQUEST_SCHEMA = Joi.object({
@@ -304,14 +209,14 @@ export class PaymentClass extends BaseEntity {
      */
     private getErrorObject(nonzeroResponse: any) {
         let err: ICommonRequest.IError;
-        if (PaymentClass.NOONPAY_ERRORS[nonzeroResponse.resultCode]) {
-            err = cloneObject(PaymentClass.NOONPAY_ERRORS[nonzeroResponse.resultCode]);
+        if (Constant.STATUS_MSG.NOONPAY_ERROR[nonzeroResponse.resultCode]) {
+            err = cloneObject(Constant.STATUS_MSG.NOONPAY_ERROR[nonzeroResponse.resultCode]);
             if (err.useNoonPayMessage) {
                 err.message = nonzeroResponse.message;
                 delete err.useNoonPayMessage;
             }
         } else {
-            err = cloneObject(PaymentClass.NOONPAY_ERRORS.default);
+            err = cloneObject(Constant.STATUS_MSG.NOONPAY_ERROR.default);
             err.message = nonzeroResponse.message;
         }
         err.name = 'PaymentError';
@@ -366,7 +271,7 @@ export class PaymentClass extends BaseEntity {
         const apiKey = this.getNoonPayAPIKey(config);
 
         let initiatePayload = {
-            apiOperation: PaymentClass.PAYMENT_OPTIONS.ACTIONS.INITIATE,
+            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.INITIATE,
             order: {
                 name: 'Order from KFC App', // TODO: Confirm what needs to be sent here ?
                 amount: payload.amount,
@@ -377,8 +282,8 @@ export class PaymentClass extends BaseEntity {
             },
             configuration: {
                 returnUrl: this.getReturnUrl(),
-                locale: payload.locale || PaymentClass.PAYMENT_OPTIONS.LOCALE.EN, // default english
-                paymentAction: PaymentClass.PAYMENT_OPTIONS.ACTIONS.AUTHORIZE,
+                locale: payload.locale || Constant.DATABASE.PAYMENT_LOCALE.EN, // default english
+                paymentAction: Constant.DATABASE.ACTION.TRANSACTION.AUTHORIZE,
                 initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString()
             }
         };
@@ -390,7 +295,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: PaymentClass.PAYMENT_OPTIONS.API_TIMEOUT
+                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
 
             console.log('--Payment INITIATE');
@@ -445,7 +350,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: PaymentClass.PAYMENT_OPTIONS.API_TIMEOUT
+                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
             // EXPECTED: In case of using CMS order id, response might contain contain multiple transaction, pick the recent one
             // ACTUAL: Get Error code 19085
@@ -526,9 +431,9 @@ export class PaymentClass extends BaseEntity {
         }
         try {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
-            if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
+            if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -547,7 +452,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter authorization transaction details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : []
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -565,11 +470,11 @@ export class PaymentClass extends BaseEntity {
         }
         try {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
-            if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
+            if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_CANCELLATION;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -588,7 +493,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter void transaction(reverse) details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -606,13 +511,13 @@ export class PaymentClass extends BaseEntity {
         }
         try {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
-            if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
+            if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CANCELLED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.CANCELLED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -631,7 +536,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter capture transaction details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.CAPTURE) { return t; } })) : []
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.CAPTURE) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -649,15 +554,15 @@ export class PaymentClass extends BaseEntity {
         }
         try {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
-            if (response.paymentStatus === PaymentClass.STATUS.ORDER.INITIATED) {
+            if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.EXPIRED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CANCELLED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.CANCELLED) {
                 throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.AUTHORIZED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
-            } else if (response.paymentStatus === PaymentClass.STATUS.ORDER.CAPTURED) {
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.CAPTURED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
@@ -676,7 +581,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter refund transaction details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === PaymentClass.STATUS.TRANSACTION.REFUND) { return t; } })) : []
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.REFUND) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -699,7 +604,7 @@ export class PaymentClass extends BaseEntity {
         const apiKey = this.getNoonPayAPIKey(config);
 
         let capturePayload = {
-            apiOperation: PaymentClass.PAYMENT_OPTIONS.ACTIONS.CAPTURE,
+            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.CAPTURE,
             order: {
                 id: payload.noonpayOrderId
             },
@@ -718,7 +623,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: PaymentClass.PAYMENT_OPTIONS.API_TIMEOUT
+                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
             console.log('--Payment CAPTURE');
             let result = {
@@ -772,7 +677,7 @@ export class PaymentClass extends BaseEntity {
         const apiKey = this.getNoonPayAPIKey(config);
 
         let reversePayload = {
-            apiOperation: PaymentClass.PAYMENT_OPTIONS.ACTIONS.REVERSE,
+            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.REVERSE,
             order: {
                 id: payload.noonpayOrderId
             }
@@ -785,7 +690,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: PaymentClass.PAYMENT_OPTIONS.API_TIMEOUT
+                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
             console.log('--Payment REVERSE');
             let result = {
@@ -839,7 +744,7 @@ export class PaymentClass extends BaseEntity {
         const apiKey = this.getNoonPayAPIKey(config);
 
         let refundPayload = {
-            apiOperation: PaymentClass.PAYMENT_OPTIONS.ACTIONS.REFUND,
+            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.REFUND,
             order: {
                 id: payload.noonpayOrderId
             },
@@ -857,7 +762,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: PaymentClass.PAYMENT_OPTIONS.API_TIMEOUT
+                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
             console.log('--Payment REFUND');
             let result = {

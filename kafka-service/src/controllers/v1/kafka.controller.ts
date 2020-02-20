@@ -72,6 +72,18 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
+                            if (payload.as.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE
+                            else if (payload.as.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.GET
+                            else if (payload.as.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
+                            else if (payload.as.sync)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC
+                            else
+                                messages['count'] = 1
+
+
                             messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
                         }
                         else if (payload.count < 0) {
@@ -163,7 +175,14 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
+                            if (payload.cms.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE
+                            else if (payload.cms.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.GET
+                            else if (payload.cms.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
@@ -177,7 +196,14 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
+                            if (payload.sdm.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE
+                            else if (payload.sdm.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.GET
+                            else if (payload.sdm.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
@@ -191,7 +217,14 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            if (payload.as.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE
+                            else if (payload.as.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.GET
+                            else if (payload.as.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
@@ -211,7 +244,14 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
+                            if (payload.as.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE
+                            else if (payload.as.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.GET
+                            else if (payload.as.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
@@ -231,7 +271,14 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                            if (payload.as.create)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE
+                            else if (payload.as.get)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.GET
+                            else if (payload.as.update)
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                            else
+                                messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
@@ -274,7 +321,17 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (payload.count == 0) {
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE
+                            if (payload.as.create) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE
+                            }
+                            else if (payload.as.reset) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.RESET
+                            }
+                            else if (payload.as.update) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE
+                            }
+                            else
+                                messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
@@ -330,10 +387,18 @@ export class KafkaController {
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
+                    if (payload.cms && payload.cms.create) {
+                        messages = { ...payload }
+                        delete messages.mdb
+                        delete messages.sdm
+                        delete messages.as
+                        topic = Constant.KAFKA_TOPIC.CMS_LOCATION;
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
                     break;
                 }
             }
-            return { data: 'succes' };
+            return { data: 'success' };
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             return Promise.reject(error)

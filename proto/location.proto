@@ -4,6 +4,7 @@ service LocationService {
     rpc FetchStore (IFetchStoreReq) returns (IFetchStoreRes) {}
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
     rpc SyncStores (ISyncStoresReq) returns (ISyncStoresRes) {}
+    rpc PostLocationDataToCMS (IPostLocationDataToCMSReq) returns (IPostLocationDataToCMSRes) {}
 }
 
 message IFetchStoreReq {
@@ -27,6 +28,14 @@ message ISyncStoresRes {
 }
 
 message IFetchStoreRes {
+    required IStore store = 1;
+}
+
+message IPostLocationDataToCMSRes {
+    required bool store = 1;
+}
+
+message IPostLocationDataToCMSReq {
     required IStore store = 1;
 }
 
