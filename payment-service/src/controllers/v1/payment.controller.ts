@@ -19,7 +19,7 @@ export class PaymentController {
             console.log("amount", amount)
 
             let storeCode = "kfc_uae_store"
-            if (amount[0].amount > 23) {
+            if (amount[0].amount < 23) {
                 console.log("1")
                 return []
             }
