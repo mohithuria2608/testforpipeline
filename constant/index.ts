@@ -173,6 +173,14 @@ export const DATABASE = {
                 METHOD: "POST",
                 URL: "getuser"
             },
+            CREATE_ADDRESS: {
+                METHOD: "POST",
+                URL: "createaddress"
+            },
+            UPDATE_ADDRESS: {
+                METHOD: "POST",
+                URL: "updateaddress"
+            },
             CREATE_CART: {
                 METHOD: "POST",
                 URL: "customcart/create-validate-cart"

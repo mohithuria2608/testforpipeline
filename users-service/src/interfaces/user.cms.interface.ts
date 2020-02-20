@@ -25,7 +25,6 @@ declare namespace IUserCMSRequest {
     }
 
     interface IGetUser {
-        // websiteId: string,
         cmsUserRef?: number,
         email?: string,
         fullPhnNo?: string,

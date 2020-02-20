@@ -5,6 +5,7 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 import * as SDM from '../sdm';
+import * as CMS from "../cms";
 import { kafkaService } from '../grpc/client'
 
 export class AddressEntity extends BaseEntity {
@@ -132,7 +133,7 @@ export class AddressEntity extends BaseEntity {
                 let dataToUpdate = {
                     pickup: [deliveryAddress]
                 }
-                let oldAdd: IAddressRequest.IAddressModel[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
+                let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
                 if (oldAdd && oldAdd.length > 0) {
                     if (deliveryAddress.sdmStoreRef == store.storeId) {
                         return oldAdd[0]
@@ -233,19 +234,19 @@ export class AddressEntity extends BaseEntity {
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
                     ADDR_AREAID: 16,// 1786,
-                    ADDR_BLDGNAME: userData.asAddress.bldgName,
-                    ADDR_BLDGNUM: userData.asAddress.bldgName,
+                    ADDR_BLDGNAME: userData.asAddress[0].bldgName,
+                    ADDR_BLDGNUM: userData.asAddress[0].bldgName,
                     ADDR_CITYID: 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
                     ADDR_CUSTID: userData.sdmUserRef,
-                    ADDR_DESC: userData.asAddress.description,
+                    ADDR_DESC: userData.asAddress[0].description,
                     ADDR_DISTRICTID: 1008,// 1021,
-                    ADDR_FLATNUM: userData.asAddress.flatNum,
-                    ADDR_FLOOR: userData.asAddress.flatNum,
+                    ADDR_FLATNUM: userData.asAddress[0].flatNum,
+                    ADDR_FLOOR: userData.asAddress[0].flatNum,
                     ADDR_MAPCODE: {
-                        X: userData.asAddress.lat,
-                        Y: userData.asAddress.lng
+                        X: userData.asAddress[0].lat,
+                        Y: userData.asAddress[0].lng
                     },
                     ADDR_PHONEAREACODE: userData.phnNo.slice(0, 2),
                     ADDR_PHONECOUNTRYCODE: userData.cCode.replace('+', ''),
@@ -253,7 +254,7 @@ export class AddressEntity extends BaseEntity {
                     ADDR_PHONENUMBER: userData.phnNo.slice(2),
                     ADDR_PHONETYPE: 2,
                     ADDR_PROVINCEID: 7,
-                    ADDR_SKETCH: userData.asAddress.description,
+                    ADDR_SKETCH: userData.asAddress[0].description,
                     ADDR_STREETID: 1,
                     Phones: {
                         CC_CUSTOMER_PHONE: {
@@ -267,13 +268,13 @@ export class AddressEntity extends BaseEntity {
                         }
                     },
                     WADDR_AREAID: 16,// 1786,
-                    WADDR_BUILD_NAME: userData.asAddress.bldgName,
-                    WADDR_BUILD_NUM: userData.asAddress.bldgName,
+                    WADDR_BUILD_NAME: userData.asAddress[0].bldgName,
+                    WADDR_BUILD_NUM: userData.asAddress[0].bldgName,
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
                     WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
-                    WADDR_DIRECTIONS: userData.asAddress.description,
+                    WADDR_DIRECTIONS: userData.asAddress[0].description,
                     WADDR_DISTRICTID: 1008,// 1021,
                     WADDR_DISTRICT_TEXT: "Default",
                     WADDR_MNUID: 4,
@@ -325,6 +326,24 @@ export class AddressEntity extends BaseEntity {
     async addAddressOnCms(userData: IUserRequest.IUserData) {
         try {
             consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(userData.asAddress), false)
+            let res = await CMS.AddressCMSE.createAddresssOnCms(userData)
+            if (res && res.customer_id) {
+                if (res.address_ids && res.address_ids.length > 0) {
+                    for (const iterator of res.address_ids) {
+                        let updateAddressOnAs: IAddressRequest.IUpdateAddress = {
+                            addressId: iterator.id,
+                            cmsAddressRef: parseInt(iterator.address_id),
+                        }
+                        let bin = ""
+                        userData.asAddress.forEach(obj => {
+                            if (obj.id == iterator.id)
+                                bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                        })
+                        if (bin != "")
+                            await this.updateAddress(updateAddressOnAs, bin, userData, false)
+                    }
+                }
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "addAddressOnCms", JSON.stringify(error), false)

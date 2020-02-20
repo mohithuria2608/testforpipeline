@@ -18,7 +18,7 @@ export class AddressController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
-                let data = JSON.parse(payload.sdm.argv)
+                let data = JSON.parse(payload.cms.argv)
                 let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
                 userData.asAddress = data.asAddress
                 if (payload.cms.create) {
@@ -127,10 +127,10 @@ export class AddressController {
                 userData.asAddress = [addressData]
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
-                    // cms: {
-                    //     create: true,
-                    //     argv: JSON.stringify(userData)
-                    // },
+                    cms: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    },
                     sdm: {
                         create: true,
                         argv: JSON.stringify(userData)
@@ -222,7 +222,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let address: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
+            let address: IAddressRequest.IAddress[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
             return address
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)

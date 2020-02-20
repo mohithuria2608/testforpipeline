@@ -24,7 +24,7 @@ declare namespace IUserRequest {
     }
 
     interface TempAddressArray {
-        asAddress?: any,
+        asAddress?: IAddressRequest.IAddress[],
         cmsAddress?: any,
         sdmAddresses?: any
     }

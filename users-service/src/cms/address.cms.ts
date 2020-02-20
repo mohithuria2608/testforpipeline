@@ -12,21 +12,36 @@ export class AddressCMSEntity extends BaseCMS {
 
     async createAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
-            let formObj: IUserCMSRequest.ICreateUser = {
-                "email": payload.email,
-                "phone": payload.fullPhnNo,
-                "websiteId": "1",
-                "firstName": payload.name,
-                "lastName": payload.name,
-                "password": payload.password,
-                "sdm_user_ref": payload.sdmUserRef ? payload.sdmUserRef : 0,
-                "sdm_corp_ref": payload.sdmCorpRef ? payload.sdmCorpRef : 0
+            let address = []
+            payload.asAddress.map(obj => {
+                address.push({
+                    "id": obj.id,
+                    "firstname": payload.name,
+                    "lastname": payload.name,
+                    "password": payload.password,
+                    "country_id": Constant.DATABASE.COUNTRY.UAE,
+                    "zip": obj.description,
+                    "city": obj.description,
+                    "state": obj.description,
+                    "street": obj.description,
+                    "latitude": obj.lat,
+                    "longitude": obj.lng,
+                    "description": obj.description,
+                    "address_is": 1,
+                    "address_type": obj.addressType,
+                    "telephone": payload.fullPhnNo
+                })
+            })
+            let formObj: IAddressCMSRequest.ICreateAddress = {
+                "customerId": payload.cmsUserRef,
+                "websiteId": 1,
+                "address": address
             }
             const headers = {};
             const form = formObj;
             const options = {
-                method: Constant.DATABASE.CMS.END_POINTS.CREATE_USER.METHOD,
-                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.CREATE_USER.URL,
+                method: Constant.DATABASE.CMS.END_POINTS.CREATE_ADDRESS.METHOD,
+                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.CREATE_ADDRESS.URL,
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
