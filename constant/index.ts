@@ -103,6 +103,7 @@ export const SERVER = {
     CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     MIN_COD_CART_VALUE: 300,//AED
+    MIN_CART_VALUE: 23,//AED
     DISPLAY_COLOR: true,
     ANDROID_SCHEME_HOST: "https://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
