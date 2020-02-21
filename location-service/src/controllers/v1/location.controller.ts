@@ -16,9 +16,22 @@ export class LocationController {
             let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
             if (store && store.length > 0) {
-                store[0]['isOnline'] = true
-                delete store[0]['geoFence']
-                return store[0]
+                let res = {
+                    menuId: store[0].menuId,
+                    store: {
+                        sdmStoreRef: store[0].storeId,
+                        sdmCountryRef: store[0].countryId,
+                        sdmAreaRef: store[0].areaId,
+                        sdmCityRef: store[0].cityId,
+                        location: store[0].location,
+                        address_en: store[0].address_en,
+                        address_ar: store[0].address_ar,
+                        name_en: store[0].name_en,
+                        name_ar: store[0].name_ar,
+                    },
+                    isOnline: true
+                }
+                return res
             }
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)

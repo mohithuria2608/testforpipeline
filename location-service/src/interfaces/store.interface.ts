@@ -3,6 +3,7 @@ declare namespace IStoreRequest {
     interface IStore {
         id: string,
         storeId: number,
+        cityId: number,
         countryId: number,
         provinceId: number,
         areaId: number,
