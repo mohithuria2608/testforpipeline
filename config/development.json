@@ -204,10 +204,6 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "auth": {
-            "username": "shashi.bhushan@appinventiv.com",
-            "password": "shashi@123"
-        },
         "baseUrl": "http://40.123.207.192/rest/V1/"
     }
 }
