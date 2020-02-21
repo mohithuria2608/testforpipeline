@@ -198,10 +198,10 @@
         "password": ""
     },
     "mongo": {
-        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",
-        "hosts": "54.176.239.44:2798",
-        "username": "americana_dbusr",
-        "password": "96fMUpk2PGzbu8Hn"
+        "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",
+        "hosts": "10.2.0.5",
+        "username": "americana_dbusr_uat",
+        "password": "AppInvDbUser"
     },
     "cms": {
         "baseUrl": "http://40.123.207.192/rest/V1/"
