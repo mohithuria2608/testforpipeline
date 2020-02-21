@@ -43,11 +43,11 @@
         },
         "upload": {
             "url": "http://americanauat.appskeeper.com/upload-service/",
-            "port": 4010
+            "port": 4011
         },
         "promotion": {
             "url": "http://americanauat.appskeeper.com/promotion-service/",
-            "port": 4011
+            "port": 4010
         },
         "log": {
             "url": "http://americanauat.appskeeper.com/log-service/",
