@@ -247,6 +247,8 @@ export class CartClass extends BaseEntity {
 
             if (!cartFound) {
                 let user = await userService.fetchUser({ cartId: payload.cartId })
+                console.log("validate cart 77777777777777777777777", cartFound)
+
                 if (user && user.id) {
                     if (user.cartId == payload.cartId) {
                         await this.createDefaultCart({
