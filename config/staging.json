@@ -100,7 +100,7 @@
             "client": "10.2.0.26:50060"
         },
         "promotion": {
-            "server": "localhost:50061",
+            "server": "0.0.0.0:50061",
             "client": "10.2.0.27:50061"
         },
         "upload": {

@@ -28,6 +28,16 @@ server.addService(uploadProto.UploadService.service, {
             consolelog(process.cwd(), "sync", error, false)
             callback(grpcSendError(error))
         }
+    },
+    ProduceMessage: async (call, callback) => {
+        try {
+            consolelog(process.cwd(), "ProduceMessage", JSON.stringify(call.request), true)
+
+            callback(null, {});
+        } catch (error) {
+            consolelog(process.cwd(), "sync", error, false)
+            callback(grpcSendError(error))
+        }
     }
 })
 

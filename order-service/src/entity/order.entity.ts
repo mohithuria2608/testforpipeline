@@ -577,7 +577,7 @@ export class OrderClass extends BaseEntity {
                     /**
                      * @todo : just for development
                      */
-                    if ((order.createdAt + (30 * 60 * 60 * 1000)) > new Date().getTime())
+                    if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime())
                         recheck = false
 
                     if (recheck) {
