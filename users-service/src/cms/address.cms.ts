@@ -29,7 +29,15 @@ export class AddressCMSEntity extends BaseCMS {
                     "description": obj.description,
                     "address_is": 1,
                     "address_type": obj.addressType,
-                    "telephone": payload.fullPhnNo
+                    "telephone": payload.fullPhnNo,
+                    "bldg_name": obj.bldgName,
+                    "flat_num": obj.bldgName,
+                    "add_tag": obj.tag,
+                    "sdm_address_ref": obj.sdmAddressRef,
+                    "sdm_store_ref": obj.storeId,
+                    "sdm_country_ref": obj.countryId,
+                    "sdm_area_ref": obj.areaId,
+                    "sdm_city_ref": obj.cityId,
                 })
             })
             let formObj: IAddressCMSRequest.ICreateAddress = {

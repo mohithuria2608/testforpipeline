@@ -92,13 +92,13 @@ export class UserController {
                     sdmCorpRef: 0,
                     cmsUserRef: 0,
                 }
-                let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                 if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
-                    userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
-                    if (cmsUserByPhoneNo.sdm_user_ref)
-                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
-                    if (cmsUserByPhoneNo.sdm_corp_ref)
-                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
+                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customer_id)
+                    if (cmsUserByPhoneNo.SdmUserRef)
+                        userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
+                    if (cmsUserByPhoneNo.SdmCorpRef)
+                        userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                     userchangePayload['email'] = cmsUserByPhoneNo.email
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
@@ -106,6 +106,7 @@ export class UserController {
                         /**
                          * @todo : sync cms address on as
                          */
+
                     }
                 }
                 let tempUser: IUserRequest.IUserData = {
@@ -363,16 +364,16 @@ export class UserController {
                         userchangePayload['deleteUserId'] = auth.id
                         await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
                     } else {
-                        let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                        let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                         if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
-                            userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
+                            userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customer_id)
                             userchangePayload['email'] = cmsUserByPhoneNo.email
                             userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                             userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                            if (cmsUserByPhoneNo.sdm_user_ref)
-                                userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
-                            if (cmsUserByPhoneNo.sdm_corp_ref)
-                                userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
+                            if (cmsUserByPhoneNo.SdmUserRef)
+                                userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
+                            if (cmsUserByPhoneNo.SdmCorpRef)
+                                userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                             if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
                                 /**
                                  * @todo : sync cms address on as
@@ -426,14 +427,14 @@ export class UserController {
             let createOnCms = false
             let updateAs = {}
             if (userData.cmsUserRef == 0) {
-                let cmsUserByEmail = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
+                let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
                 if (cmsUserByEmail && cmsUserByEmail.customer_id) {
                     updateOnCms = true
-                    updateAs['cmsUserRef'] = cmsUserByEmail.customer_id
-                    if (cmsUserByEmail.sdm_user_ref)
-                        updateAs['sdmUserRef'] = cmsUserByEmail.sdm_user_ref
-                    if (cmsUserByEmail.sdm_corp_ref)
-                        updateAs['sdmCorpRef'] = cmsUserByEmail.sdm_corp_ref
+                    updateAs['cmsUserRef'] = parseInt(cmsUserByEmail.customer_id)
+                    if (cmsUserByEmail.SdmUserRef)
+                        updateAs['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
+                    if (cmsUserByEmail.SdmCorpRef)
+                        updateAs['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
                     if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
                         /**
                          * @todo : sync cms address on as
