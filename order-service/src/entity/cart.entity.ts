@@ -218,6 +218,8 @@ export class CartClass extends BaseEntity {
                     key: payload.cartId
                 }
                 let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
+                console.log("validate cart 444444444444444444444", cart)
+
                 if (cart && cart.cartId) {
                     return cart
                 } else
@@ -233,11 +235,15 @@ export class CartClass extends BaseEntity {
                     background: false,
                 }
                 let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
+                console.log("validate cart 5555555555555555555555", cart)
+
                 if (cart && cart.length > 0) {
                     return cart[0]
                 } else
                     cartFound = false
             }
+
+            console.log("validate cart 666666666666666666666", cartFound)
 
             if (!cartFound) {
                 let user = await userService.fetchUser({ cartId: payload.cartId })
@@ -511,6 +517,8 @@ export class CartClass extends BaseEntity {
         try {
             let prevCart: ICartRequest.ICartData
             if (curItems == undefined) {
+                console.log("validate cart 33333333333333", cartId)
+
                 prevCart = await this.getCart({ cartId: cartId })
                 curItems = prevCart.items
             }
