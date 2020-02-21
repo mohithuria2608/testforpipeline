@@ -15,8 +15,10 @@ export class LocationController {
         try {
             let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
-            if (store && store.length > 0)
-                return { menuId: store[0].menuId }
+            if (store && store.length > 0) {
+                store[0]['isOnline'] = true
+                return store[0]
+            }
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
         } catch (error) {
@@ -40,7 +42,7 @@ export class LocationController {
             }
             // const promise = await Promise.all([,, ])
             const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
-            const area: IAreaRequest.IArea[] = await  ENTITY.AreaE.scanAerospike()
+            const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
             const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
 
             consolelog(process.cwd(), "city", city.length, true)
