@@ -34,7 +34,7 @@ export class OrderClass extends BaseEntity {
 
     async createOrderOnCMS(payload: IOrderCMSRequest.ICreateOrderCms, cmsAddressRef: number) {
         try {
-            payload['address_id'] = 7// cmsAddressRef
+            payload['address_id'] = cmsAddressRef
             let cmsOrder = await CMS.OrderCMSE.createOrder(payload)
             return cmsOrder
         } catch (error) {
