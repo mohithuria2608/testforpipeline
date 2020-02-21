@@ -1,75 +1,72 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ingress-nginx
+  name: ingress-nodeapp
+  namespace: nodeapp
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-    #kubernetes.io/ingress.class: nginx
-    #certmanager.k8s.io/cluster-issuer: letsencrypt-staging
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-hostname: localhost
+    appgw.ingress.kubernetes.io/backend-path-prefix: /
+    appgw.ingress.kubernetes.io/backend-protocol: http
+    
 spec:
-  #tls:
-  #- host: americana.appskeeper.com
-   # secretName: tls-secret
-  backend:
-    serviceName: default-http-backend
-    servicePort: 80
   rules:
-  - host: americana.appskeeper.com
-    http:
+  - host: americanauat.appskeeper.com
+  - http:
       paths:
-      - path: /auth-service/(.*)
-        backend:
+      - backend:
           serviceName: auth-service
           servicePort: 4000
-      - path: /user-service/(.*)
-        backend:
+        path: /auth-service/*
+      - backend:
           serviceName: user-service
           servicePort: 4001
-      - path: /menu-service/(.*)
-        backend:
+        path: /user-service/*
+      - backend:
           serviceName: menu-service
           servicePort: 4002
-      - path: /order-service/(.*)
-        backend:
+        path: /menu-service/*
+      - backend:
           serviceName: order-service
           servicePort: 4003
-      - path: /deeplink-service/(.*)
-        backend:
+        path: /order-service/*
+      - backend:
           serviceName: deeplink-service
           servicePort: 4005
-      - path: /kafka-service/(.*)
-        backend:
+        path: /deeplink-service/*
+      - backend:
           serviceName: kafka-service
           servicePort: 4006
-      - path: /sync-service/(.*)
-        backend:
+        path: /kafka-service/*
+      - backend:
           serviceName: sync-service
           servicePort: 4004
-      - path: /location-service/(.*)
-        backend:
+        path: /sync-service/*
+      - backend:
           serviceName: location-service
           servicePort: 4007
-      - path: /notification-service/(.*)
-        backend:
+        path: /location-service/*
+      - backend:
           serviceName: notification-service
           servicePort: 4008
-      - path: /payment-service/(.*)
-        backend:
+        path: /notification-service/*
+      - backend:
           serviceName: payment-service
           servicePort: 4009
-      - path: /promotion-service/(.*)
-        backend:
+        path: /payment-service/*
+      - backend:
           serviceName: promotion-service
           servicePort: 4010
-      - path: /upload-service/(.*)
-        backend:
+        path: /promotion-service/*
+      - backend:
           serviceName: upload-service
           servicePort: 4011
-      - path: /log-service/(.*)
-        backend:
+        path: /upload-service/*
+      - backend:
           serviceName: log-service
           servicePort: 4012
-      - path: /home-service/(.*)
-        backend:
+        path: /log-service/*
+      - backend:
           serviceName: home-service
           servicePort: 4013
+        path: /home-service/*

@@ -4,8 +4,9 @@ metadata:
   name: auth-service
   labels:
     app: auth-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -26,11 +27,16 @@ spec:
           name: api
         - containerPort: 50051
           name: grpc-auth
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: auth-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: auth-service
@@ -44,6 +50,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-auth
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -61,8 +70,9 @@ metadata:
   name: user-service
   labels:
     app: user-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -82,11 +92,16 @@ spec:
         - containerPort: 4001
         - containerPort: 50052
           name: grpc-user
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: user-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: user-service
@@ -100,6 +115,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-user
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -116,8 +134,9 @@ metadata:
   name: menu-service
   labels:
     app: menu-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -137,11 +156,16 @@ spec:
         - containerPort: 4002
         - containerPort: 50053
           name: grpc-menu
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: menu-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: menu-service
@@ -155,6 +179,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-menu
+  namespace: nodeapp
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -172,8 +199,9 @@ metadata:
   name: order-service
   labels:
     app: order-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -193,11 +221,16 @@ spec:
         - containerPort: 4003
         - containerPort: 50054
           name: grpc-order
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: order-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: order-service
@@ -211,6 +244,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-order
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -227,8 +263,9 @@ metadata:
   name: deeplink-service
   labels:
     app: deeplink-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -249,12 +286,16 @@ spec:
           name: api
         - containerPort: 50056
           name: grpc-deeplink
-
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: deeplink-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: deeplink-service
@@ -268,6 +309,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-deeplink
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -283,8 +327,9 @@ metadata:
   name: kafka-service
   labels:
     app: kafka-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -305,12 +350,16 @@ spec:
           name: api
         - containerPort: 50057
           name: grpc-kafka
-          
+      nodeSelector:
+        agentpool: amfuatnenp1          
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: kafka-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: kafka-service
@@ -324,6 +373,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-kafka
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -339,8 +391,9 @@ metadata:
   name: sync-service
   labels:
     app: sync-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -361,11 +414,16 @@ spec:
           name: api
         - containerPort: 50055
           name: grpc-sync
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: sync-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: sync-service
@@ -379,6 +437,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-sync
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -392,10 +453,12 @@ apiVersion: apps/v1
 kind: "Deployment"
 metadata:
   name: location-service
+  namespace: nodeapp
   labels:
     app: location-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -416,11 +479,16 @@ spec:
           name: api
         - containerPort: 50058
           name: grpc-location
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: location-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: location-service
@@ -434,6 +502,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-location
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -451,8 +522,9 @@ metadata:
   name: notification-service
   labels:
     app: notification-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -473,11 +545,16 @@ spec:
           name: api
         - containerPort: 50059
           name: grpc-location
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: notification-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: notification-service
@@ -491,6 +568,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-notification
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -507,8 +587,9 @@ metadata:
   name: payment-service
   labels:
     app: payment-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -529,11 +610,16 @@ spec:
           name: api
         - containerPort: 50060
           name: grpc-payment
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: payment-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: payment-service
@@ -547,6 +633,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-payment
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -563,8 +652,9 @@ metadata:
   name: promotion-service
   labels:
     app: promotion-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -585,11 +675,16 @@ spec:
           name: api
         - containerPort: 50061
           name: grpc-promotion
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: promotion-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: promotion-service
@@ -603,6 +698,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-promotion
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -618,8 +716,9 @@ metadata:
   name: upload-service
   labels:
     app: upload-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -640,11 +739,16 @@ spec:
           name: api
         - containerPort: 50062
           name: grpc-upload
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: upload-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: upload-service
@@ -658,6 +762,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-upload
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -674,8 +781,9 @@ metadata:
   name: log-service
   labels:
     app: log-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -696,11 +804,16 @@ spec:
           name: api
         - containerPort: 50063
           name: grpc-log
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: log-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: log-service
@@ -714,6 +827,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-log
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
@@ -722,7 +838,6 @@ spec:
   - protocol: TCP
     port: 50063
     targetPort: 50063
-    
 ---
 
 apiVersion: apps/v1
@@ -731,8 +846,9 @@ metadata:
   name: home-service
   labels:
     app: home-service
+  namespace: nodeapp
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
@@ -753,11 +869,16 @@ spec:
           name: api
         - containerPort: 50064
           name: grpc-auth
+      nodeSelector:
+        agentpool: amfuatnenp1
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: home-service
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: home-service
@@ -771,6 +892,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grpc-home
+  namespace: nodeapp
+  annotations: 
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   type: LoadBalancer
   selector:
