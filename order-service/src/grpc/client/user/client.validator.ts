@@ -15,6 +15,7 @@ export class UserServiceValidator {
                     userId: Joi.string(),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
                     phnNo: Joi.string().max(9),
+                    cartId: Joi.string()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
