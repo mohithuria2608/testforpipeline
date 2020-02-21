@@ -30,7 +30,8 @@ declare namespace IStoreRequest {
         address_en: string,
         address_ar: string,
         startTime: string,
-        endTime: string
+        endTime: string,
+        isOnline: boolean
     }
 
     interface IFetchStore {

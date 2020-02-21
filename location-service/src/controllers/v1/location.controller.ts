@@ -29,7 +29,7 @@ export class LocationController {
                         name_en: store[0].name_en,
                         name_ar: store[0].name_ar,
                     },
-                    isOnline: true
+                    isOnline: store[0].isOnline
                 }
                 return res
             }
