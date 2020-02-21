@@ -81,7 +81,7 @@ export class UserEntity extends BaseEntity {
                     return user
                 } else
                     return {}
-            } else {
+            } else if (payload.cCode || payload.phnNo) {
                 const fullPhnNo = payload.cCode + payload.phnNo;
                 let queryArg: IAerospike.Query = {
                     equal: {
@@ -97,6 +97,24 @@ export class UserEntity extends BaseEntity {
                 } else {
                     return {}
                 }
+            } else if (payload.cartId) {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "cartId",
+                        value: payload.cartId
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                if (checkUser && checkUser.length > 0) {
+                    return checkUser[0]
+                } else {
+                    return {}
+                }
+            }
+            else {
+                return {}
             }
         } catch (error) {
             consolelog(process.cwd(), "getUser", JSON.stringify(error), false)
