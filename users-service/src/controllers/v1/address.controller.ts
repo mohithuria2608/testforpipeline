@@ -22,7 +22,7 @@ export class AddressController {
                 let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
                 userData.asAddress = data.asAddress
                 if (payload.cms.create) {
-                    if (userData.cmsUserRef)
+                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.addAddressOnCms(userData)
                     else {
                         kafkaService.kafkaSync({
@@ -35,7 +35,7 @@ export class AddressController {
                     }
                 }
                 if (payload.cms.update) {
-                    if (userData.cmsUserRef)
+                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.updateAddressOnCms(userData)
                     else {
                         kafkaService.kafkaSync({
@@ -53,7 +53,7 @@ export class AddressController {
                 let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
                 userData.asAddress = data.asAddress
                 if (payload.sdm.create) {
-                    if (userData.sdmUserRef)
+                    if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.addAddressOnSdm(userData)
                     else {
                         kafkaService.kafkaSync({
@@ -66,7 +66,7 @@ export class AddressController {
                     }
                 }
                 if (payload.sdm.update) {
-                    if (userData.sdmUserRef)
+                    if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.updateAddressOnSdm(userData)
                     else {
                         kafkaService.kafkaSync({

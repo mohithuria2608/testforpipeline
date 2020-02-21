@@ -27,6 +27,7 @@ export class CartController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
 
             let checkCart = await Aerospike.exists({ set: ENTITY.CartE.set, key: payload.cartId })
+            console.log("checkCart", checkCart)
             if (!checkCart) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }

@@ -67,6 +67,7 @@ message IFetchUserReq {
     optional string userId = 1;
     optional string cCode = 2;
     optional string phnNo = 3;
+    optional string cartId = 4;
 }
 
 message ISession {

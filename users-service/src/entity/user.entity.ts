@@ -22,6 +22,12 @@ export class UserEntity extends BaseEntity {
             bin: 'fullPhnNo',
             index: 'idx_' + this.set + '_' + 'fullPhnNo',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'cartId',
+            index: 'idx_' + this.set + '_' + 'cartId',
+            type: "STRING"
         }
     ]
 

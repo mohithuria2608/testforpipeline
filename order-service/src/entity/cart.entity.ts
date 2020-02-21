@@ -5,7 +5,7 @@ import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
-import { promotionService } from '../grpc/client'
+import { promotionService, userService } from '../grpc/client'
 
 export class CartClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -211,6 +211,7 @@ export class CartClass extends BaseEntity {
     * */
     async getCart(payload: ICartRequest.IGetCart): Promise<ICartRequest.ICartData> {
         try {
+            let cartFound = true
             if (payload.cartId) {
                 let getArg: IAerospike.Get = {
                     set: this.set,
@@ -220,7 +221,7 @@ export class CartClass extends BaseEntity {
                 if (cart && cart.cartId) {
                     return cart
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+                    cartFound = false
             }
             else if (payload.cmsCartRef) {
                 let queryArg = {
@@ -234,6 +235,25 @@ export class CartClass extends BaseEntity {
                 let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
                 if (cart && cart.length > 0) {
                     return cart[0]
+                } else
+                    cartFound = false
+            }
+
+            if (!cartFound) {
+                let user = await userService.fetchUser({ cartId: payload.cartId })
+                if (user && user.id) {
+                    if (user.cartId == payload.cartId) {
+                        await this.createDefaultCart({
+                            cartId: payload.cartId,
+                            userId: user.id
+                        })
+                        let getArg: IAerospike.Get = {
+                            set: this.set,
+                            key: payload.cartId
+                        }
+                        return await Aerospike.get(getArg)
+                    } else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }
