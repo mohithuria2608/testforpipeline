@@ -26,11 +26,11 @@ export class CartController {
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
 
-            let checkCart = await Aerospike.exists({ set: ENTITY.CartE.set, key: payload.cartId })
-            console.log("checkCart", checkCart)
-            if (!checkCart) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
-            }
+            // let checkCart = await Aerospike.exists({ set: ENTITY.CartE.set, key: payload.cartId })
+            // console.log("checkCart", checkCart)
+            // if (!checkCart) {
+            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            // }
 
             let invalidMenu = false
             if (payload.lat && payload.lng) {
