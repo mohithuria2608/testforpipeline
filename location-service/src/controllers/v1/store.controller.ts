@@ -43,6 +43,7 @@ export class StoreController {
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
             if (store && store.length > 0) {
+                store[0]['isOnline'] = true
                 return store[0]
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
@@ -68,6 +69,7 @@ export class StoreController {
                 }
             }
             let res = await Aerospike.query(geoWithinArg)
+            res['isOnline'] = true
             return res
         } catch (error) {
             consolelog(process.cwd(), "validateCoords", JSON.stringify(error), false)

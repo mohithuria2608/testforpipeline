@@ -20,6 +20,7 @@ export class CartController {
      * */
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let storeOnline = true
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
@@ -34,8 +35,10 @@ export class CartController {
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.length > 0) {
-                    if (store[0].menuId != payload.curMenuId)
+                    if (store[0].menuId != payload.curMenuId) {
                         invalidMenu = true
+                        storeOnline = store[0].isOnline
+                    }
                 } else
                     invalidMenu = true
             } else {
@@ -62,6 +65,7 @@ export class CartController {
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
+            res['storeOnline'] = storeOnline
             return res
         } catch (error) {
             consolelog(process.cwd(), "postCart", JSON.stringify(error), false)

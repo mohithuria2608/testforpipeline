@@ -99,7 +99,7 @@ export const SERVER = {
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
     USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
-    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
+    OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     CMS_AUTH_EXP: (10 * 60 * 1000),

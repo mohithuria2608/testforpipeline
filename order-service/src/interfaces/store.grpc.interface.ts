@@ -37,6 +37,7 @@ declare namespace IStoreGrpcRequest {
         address_en: string,
         address_ar: string,
         startTime: string,
-        endTime: string
+        endTime: string,
+        isOnline: boolean
     }
 }
