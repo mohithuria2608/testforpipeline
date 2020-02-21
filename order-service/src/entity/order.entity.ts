@@ -89,33 +89,35 @@ export class OrderClass extends BaseEntity {
                                                         if (so.selected == 1) {
                                                             if (so.title == "None") { }
                                                             else if (so.title == "Regular") {
-                                                                obj.Entries.CEntry.push({
-                                                                    ID: 0,
-                                                                    ItemID: so.sdmId,
-                                                                    ModCode: "WITH",
-                                                                    ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
-                                                                    Name: so.name,
-                                                                    OrdrMode: "OM_SAVED",
-                                                                    Weight: 0,
-                                                                })
+                                                                if (so.sdmId)
+                                                                    obj.Entries.CEntry.push({
+                                                                        ID: 0,
+                                                                        ItemID: so.sdmId,
+                                                                        ModCode: "WITH",
+                                                                        ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                                                        Name: so.name,
+                                                                        OrdrMode: "OM_SAVED",
+                                                                        Weight: 0,
+                                                                    })
                                                             } else if (so.title == "Extra") {
-                                                                obj.Entries.CEntry.push({
-                                                                    ID: 0,
-                                                                    ItemID: so.sdmId,
-                                                                    ModCode: "WITH",
-                                                                    ModgroupID: pl.modGroupId,
-                                                                    Name: so.name,
-                                                                    OrdrMode: "OM_SAVED",
-                                                                    Weight: 0,
-                                                                }, {
-                                                                    ID: 0,
-                                                                    ItemID: so.sdmId,
-                                                                    ModCode: "WITH",
-                                                                    ModgroupID: pl.modGroupId,
-                                                                    Name: so.name,
-                                                                    OrdrMode: "OM_SAVED",
-                                                                    Weight: 0,
-                                                                })
+                                                                if (so.sdmId)
+                                                                    obj.Entries.CEntry.push({
+                                                                        ID: 0,
+                                                                        ItemID: so.sdmId,
+                                                                        ModCode: "WITH",
+                                                                        ModgroupID: pl.modGroupId,
+                                                                        Name: so.name,
+                                                                        OrdrMode: "OM_SAVED",
+                                                                        Weight: 0,
+                                                                    }, {
+                                                                        ID: 0,
+                                                                        ItemID: so.sdmId,
+                                                                        ModCode: "WITH",
+                                                                        ModgroupID: pl.modGroupId,
+                                                                        Name: so.name,
+                                                                        OrdrMode: "OM_SAVED",
+                                                                        Weight: 0,
+                                                                    })
                                                             }
                                                         }
                                                     })
@@ -134,7 +136,7 @@ export class OrderClass extends BaseEntity {
                             product.items.forEach(i => {
                                 if (i['sku'] == product.selectedItem) {
                                     Entries.CEntry.push({
-                                        ItemID: i.sdmId,
+                                        ItemID: 600002,// i.sdmId,
                                         Level: 0,
                                         ModCode: "NONE",
                                         Name: i.name,
@@ -174,6 +176,7 @@ export class OrderClass extends BaseEntity {
                                                         if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
                                                             if (plbpo.type == "stepper") {
                                                                 plbpo.productLinks.forEach(plbpopl => {
+                                                                    let instanceId2 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
                                                                     for (let i = 0; i < plbpopl.selectionQty; i++) {
                                                                         obj.Entries.CEntry.push({
                                                                             DealID: 0,
@@ -182,7 +185,7 @@ export class OrderClass extends BaseEntity {
                                                                             ModCode: "NONE",
                                                                             Name: plbpopl.name,
                                                                             QCComponent: QCComponent,
-                                                                            QCInstanceID: instanceId,
+                                                                            QCInstanceID: instanceId2,
                                                                             QCLevel: 0,
                                                                             QCProID: product.promoId,
                                                                         })
@@ -256,19 +259,22 @@ export class OrderClass extends BaseEntity {
                                                                                 let ItemID = 0
                                                                                 if (dspl.subOptions && dspl.subOptions.length > 0) {
                                                                                     dspl.subOptions.forEach(dsplso => {
+                                                                                        console.log("dsplso", dsplso)
+
                                                                                         if (dsplso.selected == 1)
                                                                                             ItemID = dsplso.sdmId
                                                                                     })
                                                                                 }
-                                                                                obj.Entries.CEntry.push({
-                                                                                    ID: 0,
-                                                                                    ItemID: ItemID,
-                                                                                    ModCode: "WITH",
-                                                                                    ModgroupID: dspl.modGroupId,
-                                                                                    Name: dspl.name,
-                                                                                    OrdrMode: "OM_SAVED",
-                                                                                    Weight: 0
-                                                                                })
+                                                                                if (ItemID)
+                                                                                    obj.Entries.CEntry.push({
+                                                                                        ID: 0,
+                                                                                        ItemID: ItemID,
+                                                                                        ModCode: "WITH",
+                                                                                        ModgroupID: dspl.modGroupId,
+                                                                                        Name: dspl.name,
+                                                                                        OrdrMode: "OM_SAVED",
+                                                                                        Weight: 0
+                                                                                    })
                                                                             })
                                                                         }
                                                                         Entries.CEntry.push(obj)
@@ -338,19 +344,21 @@ export class OrderClass extends BaseEntity {
                                                                 let ItemID = 0
                                                                 if (bpopl.subOptions && bpopl.subOptions.length > 0) {
                                                                     bpopl.subOptions.forEach(bpoplso => {
+                                                                        console.log("mongo", bpoplso)
                                                                         if (bpoplso.selected == 1)
                                                                             ItemID = bpoplso.sdmId
                                                                     })
                                                                 }
-                                                                lastProductAddedInCentry.Entries.CEntry.push({
-                                                                    ID: 0,
-                                                                    ItemID: ItemID,
-                                                                    ModCode: "WITH",
-                                                                    ModgroupID: bpopl.modGroupId,
-                                                                    Name: bpopl.name,
-                                                                    OrdrMode: "OM_SAVED",
-                                                                    Weight: 0
-                                                                })
+                                                                if (ItemID)
+                                                                    lastProductAddedInCentry.Entries.CEntry.push({
+                                                                        ID: 0,
+                                                                        ItemID: ItemID,
+                                                                        ModCode: "WITH",
+                                                                        ModgroupID: bpopl.modGroupId,
+                                                                        Name: bpopl.name,
+                                                                        OrdrMode: "OM_SAVED",
+                                                                        Weight: 0
+                                                                    })
                                                             })
                                                         }
                                                         Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
