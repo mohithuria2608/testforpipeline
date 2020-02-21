@@ -102,7 +102,7 @@ message IUserData {
     required string socialKey = 12;
     required string medium = 13;
     required int32 createdAt = 14;
-    required int32 cartId = 15;
+    optional int32 cartId = 15;
 }
 
 message IFetchAddressReq {
