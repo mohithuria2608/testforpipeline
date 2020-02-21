@@ -17,6 +17,7 @@ export class LocationController {
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
             if (store && store.length > 0) {
                 store[0]['isOnline'] = true
+                delete store[0]['geoFence']
                 return store[0]
             }
             else
