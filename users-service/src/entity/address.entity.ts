@@ -109,8 +109,8 @@ export class AddressEntity extends BaseEntity {
                 addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
-                sdmAddressRef: 0,// (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
-                cmsAddressRef: 0,
+                sdmAddressRef: addressData.sdmAddressRef ? addressData.sdmAddressRef : 0,
+                cmsAddressRef: addressData.cmsAddressRef ? addressData.cmsAddressRef : 0,
                 countryId: 1, //store.countryId
                 storeId: 1219,// store.storeId
                 areaId: 16,// store.areaId
@@ -186,8 +186,13 @@ export class AddressEntity extends BaseEntity {
                 index: index
             }
             await Aerospike.listOperations(listRemoveByIndexArg)
-            if (isDelete)
+            if (isDelete) {
+                let deleteAdd = listaddress[index]
+                if (deleteAdd.cmsAddressRef && deleteAdd.cmsAddressRef != 0)
+                    await CMS.AddressCMSE.deleteAddresssOnCms({ cmsUserRef: userData.cmsUserRef, cmsAddressRef: deleteAdd.cmsAddressRef })
                 return {}
+            }
+
             let bins = listaddress[index];
             if (addressUpdate.lat)
                 bins['lat'] = addressUpdate.lat
@@ -358,12 +363,52 @@ export class AddressEntity extends BaseEntity {
     async updateAddressOnCms(userData: IUserRequest.IUserData) {
         try {
             consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData.asAddress), false)
+            let res = await CMS.AddressCMSE.updateAddresssOnCms(userData)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "updateAddressOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
+
+    async createCmsAddOnAs(userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.IAddress[]) {
+        try {
+            for (const obj of cmsAddress) {
+                let bin = obj['address_type']
+                let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
+                if (store && store.length) {
+                    let add = {
+                        lat: parseFloat(obj.latitude),
+                        lng: parseFloat(obj.longitude),
+                        bldgName: obj.bldg_name,
+                        description: obj.description,
+                        flatNum: obj.flat_num,
+                        tag: obj.add_tag,
+                        addressType: bin,
+                        sdmAddressRef: parseInt(obj.sdm_address_ref),
+                        cmsAddressRef: 0,//obj.id,
+                    }
+                    this.addAddress(userData, bin, add, store[0])
+                }
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "createCmsAddOnAs", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async createSdmAddOnCmsAndAs(userData: IUserRequest.IUserData, sdmAddress) {
+        try {
+            for (const obj of sdmAddress) {
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "createSdmAddOnCmsAndAs", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
 }
 
 export const AddressE = new AddressEntity()

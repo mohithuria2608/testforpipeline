@@ -103,10 +103,7 @@ export class UserController {
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
                     if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                        /**
-                         * @todo : sync cms address on as
-                         */
-
+                        userchangePayload.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
                     }
                 }
                 let tempUser: IUserRequest.IUserData = {
@@ -190,6 +187,15 @@ export class UserController {
                     deleteUserId = userchange[0].deleteUserId
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
+                if (userchange[0].asAddress && userchange[0].asAddress.length > 0) {
+
+                }
+                if (userchange[0].cmsAddress && userchange[0].cmsAddress.length > 0) {
+                    // ENTITY.AddressE.createCmsAddOnAs(userData, userchange[0].cmsAddress)
+                }
+                if (userchange[0].sdmAddresses && userchange[0].sdmAddresses.length > 0) {
+                    // ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, userchange[0].cmsAddress)
+                }
                 console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
@@ -375,9 +381,7 @@ export class UserController {
                             if (cmsUserByPhoneNo.SdmCorpRef)
                                 userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                             if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                                /**
-                                 * @todo : sync cms address on as
-                                 */
+                                userchangePayload['cmsAddress'] = cmsUserByPhoneNo.address.slice(0, 6)
                             }
                         }
                         userchangePayload['id'] = auth.id
@@ -436,9 +440,6 @@ export class UserController {
                     if (cmsUserByEmail.SdmCorpRef)
                         updateAs['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
                     if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
-                        /**
-                         * @todo : sync cms address on as
-                         */
                         userData.cmsAddress = cmsUserByEmail.address.slice(0, 6)
                     }
                 } else

@@ -35,17 +35,17 @@ export class AddressController {
                     }
                 }
                 if (payload.cms.update) {
-                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
-                        await ENTITY.AddressE.updateAddressOnCms(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            cms: {
-                                update: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    // if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                    //     await ENTITY.AddressE.updateAddressOnCms(userData)
+                    // else {
+                    //     kafkaService.kafkaSync({
+                    //         set: ENTITY.AddressE.set,
+                    //         cms: {
+                    //             update: true,
+                    //             argv: JSON.stringify(userData)
+                    //         }
+                    //     })
+                    // }
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
@@ -208,7 +208,20 @@ export class AddressController {
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             }
-            return await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
+            let updatedAdd = await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
+
+            if (updatedAdd.cmsAddressRef && updatedAdd.cmsAddressRef != 0) {
+                userData['asAddress'] = [updatedAdd]
+                kafkaService.kafkaSync({
+                    set: ENTITY.AddressE.set,
+                    cms: {
+                        update: true,
+                        argv: JSON.stringify(userData)
+                    }
+                })
+            }
+
+            return updatedAdd
         } catch (error) {
             consolelog(process.cwd(), "updateAddressById", JSON.stringify(error), false)
             return Promise.reject(error)

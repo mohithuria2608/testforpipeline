@@ -25,7 +25,7 @@ class FailConsumer extends BaseConsumer {
             let data: ICommonRequest.IActivityLogger = {
                 type: Constant.DATABASE.TYPE.ACTIVITY_LOG.FAIL_Q,
                 info: {
-                    'request': message
+                    'request': message,
                 },
                 description: "",
                 options: {

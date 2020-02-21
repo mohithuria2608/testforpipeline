@@ -11,6 +11,7 @@ declare namespace IPromotionGrpcRequest {
         mdb?: IChangeMongo
         count?: number,
         q?: string
+        error?: string
     }
 
     interface IChangeAerospike {

@@ -177,6 +177,10 @@ export const DATABASE = {
                 METHOD: "POST",
                 URL: "createaddress"
             },
+            DELETE_ADDRESS: {
+                METHOD: "POST",
+                URL: "userdeleteaddress"
+            },
             UPDATE_ADDRESS: {
                 METHOD: "POST",
                 URL: "updateaddress"

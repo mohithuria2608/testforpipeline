@@ -32,7 +32,10 @@ declare namespace IAddressRequest {
         bldgName?: string,
         description?: string,
         flatNum?: string,
-        tag?: string
+        tag?: string,
+
+        sdmAddressRef?: number,
+        cmsAddressRef?: number,
     }
 
     interface IUpdateAddress {

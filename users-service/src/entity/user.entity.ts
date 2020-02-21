@@ -168,6 +168,15 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cartId'] = payload.cartId
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
+
+
+            if (payload.cmsAddress && payload.cmsAddress.length > 0)
+                userUpdate['cmsAddress'] = payload.cmsAddress
+            if (payload.asAddress && payload.asAddress.length > 0)
+                userUpdate['asAddress'] = payload.asAddress
+            if (payload.sdmAddresses && payload.sdmAddresses.length > 0)
+                userUpdate['sdmAddresses'] = payload.sdmAddresses
+                
             userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {

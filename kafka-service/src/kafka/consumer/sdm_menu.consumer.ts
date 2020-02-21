@@ -32,12 +32,16 @@ class SdmMenuConsumer extends BaseConsumer {
             consolelog(process.cwd(), "syncMenu", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                if (message.count == 0)
+                if (message.count == 0){
+                    message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
+                }
                 else
                     kafkaController.kafkaSync(message)
-            } else
+            } else{
+                message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
+            }
             return {}
         }
     }

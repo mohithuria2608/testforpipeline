@@ -58,11 +58,8 @@ Kfcapptestuser3
 # install aerospike prerequisite 
 * sudo apt-get install g++ libssl1.0.0 libssl-dev libz-dev
 
-# POS store 3333
-Store ID: 1240   
-Store Name: KFC-Test APP 
-Area ID: 1786   
-Area Name: TEST-APP
-City ID: 17          
-City Name: Abu Dhabi
-54.5459175,24.4078804
+# Code commit on UAT
+* URL : http://40.127.244.213:10004/americana/backend
+* git add .
+* git commit -m "update merge"
+* git push http://40.127.244.213:10004/americana/backend.git ${current branch name of current origin}:${target branch name of target origin}

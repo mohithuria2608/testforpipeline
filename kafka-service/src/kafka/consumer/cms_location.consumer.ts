@@ -34,8 +34,10 @@ class CMSLocationConsumer extends BaseConsumer {
                  * @description : ignore
                  */
             }
-            else
+            else{
+                message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
+            }
             return {}
         }
     }
