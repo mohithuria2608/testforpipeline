@@ -148,7 +148,7 @@ export class AddressController {
     /**
     * @method INTERNAL
     * @description Sync old address
-    * @param {string} sdmStoreRef
+    * @param {string} storeId
     * @param {number} lat
     * @param {number} lng
     * @param {string} bldgName
@@ -161,8 +161,8 @@ export class AddressController {
             userData = await ENTITY.UserE.getUser({ userId: userData.id })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
-            if (payload.sdmStoreRef) {
-                store = await ENTITY.UserE.fetchStore(payload.sdmStoreRef)
+            if (payload.storeId) {
+                store = await ENTITY.UserE.fetchStore(payload.storeId)
                 if (store && store.length) {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude

@@ -438,10 +438,10 @@ export class OrderClass extends BaseEntity {
         try {
             let order = {
                 AddressID: payload.address.sdmAddressRef,
-                // AreaID: "",//payload.address.sdmAreaRef
-                // CityID: "",//payload.address.sdmAreaRef
+                // AreaID: "",//payload.address.areaId
+                // CityID: "",//payload.address.areaId
                 ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                CountryID: 1,//payload.store.sdmCountryRef
+                CountryID: 1,//payload.store.countryId
                 CustomerID: payload.sdmUserRef,
                 // DateOfTrans: "",
                 DeliveryChargeID: 279,
@@ -452,7 +452,7 @@ export class OrderClass extends BaseEntity {
                 OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
                 OrderType: 0,
                 ProvinceID: 7,
-                StoreID: payload.address.sdmStoreRef,
+                StoreID: payload.address.storeId,
                 StreetID: 315
             }
 
@@ -529,16 +529,16 @@ export class OrderClass extends BaseEntity {
                     addressType: address.addressType,
                     lat: address.lat,
                     lng: address.lng,
-                    sdmCountryRef: address.sdmCountryRef,
-                    sdmAreaRef: address.sdmAreaRef,
-                    sdmCityRef: address.sdmCityRef,
-                    sdmStoreRef: address.sdmStoreRef
+                    countryId: address.countryId,
+                    areaId: address.areaId,
+                    cityId: address.cityId,
+                    storeId: address.storeId
                 },
                 store: {
-                    sdmStoreRef: store.storeId,
-                    sdmCountryRef: store.countryId,
-                    sdmAreaRef: store.areaId,
-                    sdmCityRef: store.cityId ? store.cityId : 17,
+                    storeId: store.storeId,
+                    countryId: store.countryId,
+                    areaId: store.areaId,
+                    cityId: store.cityId ? store.cityId : 17,
                     location: store.location,
                     address_en: store.address_en,
                     address_ar: store.address_ar,

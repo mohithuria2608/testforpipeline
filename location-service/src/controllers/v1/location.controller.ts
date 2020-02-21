@@ -19,10 +19,10 @@ export class LocationController {
                 let res = {
                     menuId: store[0].menuId,
                     store: {
-                        sdmStoreRef: store[0].storeId,
-                        sdmCountryRef: store[0].countryId,
-                        sdmAreaRef: store[0].areaId,
-                        sdmCityRef: store[0].cityId,
+                        storeId: store[0].storeId,
+                        countryId: store[0].countryId,
+                        areaId: store[0].areaId,
+                        cityId: store[0].cityId,
                         location: store[0].location,
                         address_en: store[0].address_en,
                         address_ar: store[0].address_ar,

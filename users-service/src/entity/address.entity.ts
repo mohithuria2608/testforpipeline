@@ -38,10 +38,10 @@ export class AddressEntity extends BaseEntity {
          */
         sdmAddressRef: Joi.number(),
         cmsAddressRef: Joi.number(),
-        sdmStoreRef: Joi.number().required(),
-        sdmCountryRef: Joi.number().required(),
-        sdmAreaRef: Joi.number().required(),
-        sdmCityRef: Joi.number().required(),
+        storeId: Joi.number().required(),
+        countryId: Joi.number().required(),
+        areaId: Joi.number().required(),
+        cityId: Joi.number().required(),
     })
 
     /**
@@ -111,10 +111,10 @@ export class AddressEntity extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 sdmAddressRef: 0,// (sdmAddress && sdmAddress['ADDR_ID']) ? parseInt(sdmAddress['ADDR_ID']) : 0,
                 cmsAddressRef: 0,
-                sdmCountryRef: 1, //store.countryId
-                sdmStoreRef: 1219,// store.storeId
-                sdmAreaRef: 16,// store.areaId
-                sdmCityRef: 17,// store.cityId
+                countryId: 1, //store.countryId
+                storeId: 1219,// store.storeId
+                areaId: 16,// store.areaId
+                cityId: 17,// store.cityId
             };
             consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
 
@@ -135,7 +135,7 @@ export class AddressEntity extends BaseEntity {
                 }
                 let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
                 if (oldAdd && oldAdd.length > 0) {
-                    if (deliveryAddress.sdmStoreRef == store.storeId) {
+                    if (deliveryAddress.storeId == store.storeId) {
                         return oldAdd[0]
                     }
                 }

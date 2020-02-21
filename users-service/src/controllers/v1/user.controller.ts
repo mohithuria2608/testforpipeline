@@ -217,7 +217,7 @@ export class UserController {
                     Aerospike.remove({ key: userData.id, set: ENTITY.AddressE.set })
                 await addressController.syncOldAddress(userData, {
                     addressId: userchange[0].address.id,
-                    sdmStoreRef: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.sdmStoreRef : undefined,
+                    storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.storeId : undefined,
                     lat: userchange[0].address.lat,
                     lng: userchange[0].address.lng,
                     bldgName: userchange[0].address.bldgName,

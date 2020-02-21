@@ -113,7 +113,7 @@ message IFetchAddressRes {
     required string id = 1;
     required int32 sdmAddressRef = 2;
     required int32 cmsAddressRef = 3;
-    required int32 sdmStoreRef = 4;
+    required int32 storeId = 4;
     required string tag = 5;
     required string bldgName = 6;
     required string description = 7;
@@ -121,7 +121,7 @@ message IFetchAddressRes {
     required string addressType = 9;
     required double lat = 10;
     required double lng = 11;
-    required int32 sdmCityRef = 12;
-    required int32 sdmAreaRef = 13;
-    required int32 sdmCountryRef = 14;
+    required int32 cityId = 12;
+    required int32 areaId = 13;
+    required int32 countryId = 14;
 }

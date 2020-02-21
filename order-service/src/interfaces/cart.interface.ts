@@ -26,9 +26,9 @@ declare namespace ICartRequest {
         addressId: string,
         sdmAddressRef: number,
         cmsAddressRef: number,
-        sdmStoreRef: number,
-        sdmAreaRef: number,
-        sdmCityRef: number,
+        storeId: number,
+        areaId: number,
+        cityId: number,
         tag: number,
         bldgName: string,
         description: string,
@@ -39,7 +39,7 @@ declare namespace ICartRequest {
     }
 
     interface IStore {
-        sdmStoreRef: number,
+        storeId: number,
         areaId: number,
         location: {
             description: string,

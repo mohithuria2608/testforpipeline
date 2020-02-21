@@ -63,7 +63,7 @@ export class CartClass extends BaseEntity {
             lng: Joi.number().required(),
         }),
         store: Joi.object().keys({
-            sdmStoreRef: Joi.number(),
+            storeId: Joi.number(),
             lat: Joi.number(),
             lng: Joi.number(),
             address: Joi.string(),

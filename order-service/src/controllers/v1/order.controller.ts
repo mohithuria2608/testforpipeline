@@ -87,7 +87,7 @@ export class OrderController {
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
-                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
+                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId })
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
                 else {
