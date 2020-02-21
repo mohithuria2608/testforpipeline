@@ -56,11 +56,11 @@ spec:
         path: /payment-service/*
       - backend:
           serviceName: promotion-service
-          servicePort: 4011
+          servicePort: 4010
         path: /promotion-service/*
       - backend:
           serviceName: upload-service
-          servicePort: 4010
+          servicePort: 4011
         path: /upload-service/*
       - backend:
           serviceName: log-service
