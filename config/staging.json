@@ -190,10 +190,10 @@
         "source": "KFC"
     },
     "kafka": {
-        "url": "20.46.146.2:9092"
+        "url": "10.2.4.4:9092,10.2.4.5:9092,10.2.4.6:9092"
     },
     "aerospike": {
-        "hosts": "40.123.193.221:3000",
+        "hosts": "aerospike.aerospikedb.svc.cluster.local:3000",
         "username": "aerospike-user",
         "password": "Server@@321123"
     },
@@ -204,10 +204,6 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "auth": {
-            "username": "shashi.bhushan@appinventiv.com",
-            "password": "shashi@123"
-        },
         "baseUrl": "http://40.123.207.192/rest/V1/"
     }
 }

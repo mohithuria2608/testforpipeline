@@ -6,7 +6,7 @@ import staticRoutes from './v1/static.route'
 const version1 = "/v1"
 
 const children = [
-  { routes: staticRoutes, prefix: version1 + '' }
+  { routes: staticRoutes, prefix: '' },
 ]
 
 export default function routes() {
