@@ -2,59 +2,59 @@
     "env": "staging",
     "server": {
         "auth": {
-            "url": "https://americana.appskeeper.com/auth-service/",
+            "url": "http://americanauat.appskeeper.com//auth-service/",
             "port": 4000
         },
         "user": {
-            "url": "https://americana.appskeeper.com/user-service/",
+            "url": "http://americanauat.appskeeper.com//user-service/",
             "port": 4001
         },
         "menu": {
-            "url": "https://americana.appskeeper.com/menu-service/",
+            "url": "http://americanauat.appskeeper.com//menu-service/",
             "port": 4002
         },
         "order": {
-            "url": "https://americana.appskeeper.com/order-service/",
+            "url": "http://americanauat.appskeeper.com//order-service/",
             "port": 4003
         },
         "sync": {
-            "url": "https://americana.appskeeper.com/sync-service/",
+            "url": "http://americanauat.appskeeper.com//sync-service/",
             "port": 4004
         },
         "deeplink": {
-            "url": "https://americana.appskeeper.com/deeplink-service/",
+            "url": "http://americanauat.appskeeper.com//deeplink-service/",
             "port": 4005
         },
         "kafka": {
-            "url": "https://americana.appskeeper.com/kafka-service/",
+            "url": "http://americanauat.appskeeper.com//kafka-service/",
             "port": 4006
         },
         "location": {
-            "url": "https://americana.appskeeper.com/location-service/",
+            "url": "http://americanauat.appskeeper.com//location-service/",
             "port": 4007
         },
         "notification": {
-            "url": "https://americana.appskeeper.com/notification-service/",
+            "url": "http://americanauat.appskeeper.com//notification-service/",
             "port": 4008
         },
         "payment": {
-            "url": "https://americana.appskeeper.com/payment-service/",
+            "url": "http://americanauat.appskeeper.com//payment-service/",
             "port": 4009
         },
         "upload": {
-            "url": "https://americana.appskeeper.com/upload-service/",
+            "url": "http://americanauat.appskeeper.com//upload-service/",
             "port": 4010
         },
         "promotion": {
-            "url": "https://americana.appskeeper.com/promotion-service/",
+            "url": "http://americanauat.appskeeper.com//promotion-service/",
             "port": 4011
         },
         "log": {
-            "url": "https://americana.appskeeper.com/log-service/",
+            "url": "http://americanauat.appskeeper.com//log-service/",
             "port": 4012
         },
         "home": {
-            "url": "https://americana.appskeeper.com/home-service/",
+            "url": "http://americanauat.appskeeper.com//home-service/",
             "port": 4013
         }
     },

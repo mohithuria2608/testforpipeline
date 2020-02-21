@@ -19,7 +19,7 @@ export class AddressCMSEntity extends BaseCMS {
                     "firstname": payload.name,
                     "lastname": payload.name,
                     "password": payload.password,
-                    "country_id": "AE",// Constant.DATABASE.COUNTRY.UAE,
+                    "country_id": "AE",// Constant.DATABASE.COUNTRY.UAE, // donot change
                     "zip": "00000",
                     "city": obj.description,
                     "state": obj.description,
