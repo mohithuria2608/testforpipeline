@@ -41,12 +41,12 @@
             "url": "https://americananode.appskeeper.com/payment-service/",
             "port": 4009
         },
-        "upload": {
-            "url": "https://americananode.appskeeper.com/upload-service/",
-            "port": 4010
-        },
         "promotion": {
             "url": "https://americananode.appskeeper.com/promotion-service/",
+            "port": 4010
+        },
+        "upload": {
+            "url": "https://americananode.appskeeper.com/upload-service/",
             "port": 4011
         },
         "log": {

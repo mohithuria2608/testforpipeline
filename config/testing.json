@@ -41,12 +41,12 @@
             "url": "http://americanaqa.appskeeper.com/payment-service/",
             "port": 4009
         },
-        "upload": {
-            "url": "http://americanaqa.appskeeper.com/upload-service/",
-            "port": 4010
-        },
         "promotion": {
             "url": "http://americanaqa.appskeeper.com/promotion-service/",
+            "port": 4010
+        },
+        "upload": {
+            "url": "http://americanaqa.appskeeper.com/upload-service/",
             "port": 4011
         },
         "log": {
@@ -99,11 +99,11 @@
             "server": "localhost:50060",
             "client": "127.0.0.1:50060"
         },
-        "upload": {
+        "promotion": {
             "server": "localhost:50061",
             "client": "127.0.0.1:50061"
         },
-        "promotion": {
+        "upload": {
             "server": "localhost:50062",
             "client": "127.0.0.1:50062"
         },
