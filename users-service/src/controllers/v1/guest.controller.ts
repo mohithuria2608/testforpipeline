@@ -116,9 +116,7 @@ export class GuestController {
                     if (cmsUserByPhoneNo.SdmCorpRef)
                         userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                     if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                        /**
-                         * @todo : sync cms address on as
-                         */
+                        userData.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
                     }
                 } else {
                     userchangePayload['sdmUserRef'] = 0

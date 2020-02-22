@@ -64,6 +64,9 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            if (userData.sdmUserRef && userData.sdmUserRef == 0) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
+            }
             let order: IOrderRequest.IOrderData
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })

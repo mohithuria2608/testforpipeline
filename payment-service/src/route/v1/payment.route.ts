@@ -101,7 +101,15 @@ export default (router: Router) => {
                     storeCode: Joi.string().trim().required(),
                     noonpayOrderId: Joi.number().integer().when('orderId', { is: null, then: Joi.required() }),
                     orderId: Joi.string().trim(),
-                    paymentStatus: Joi.string().trim().optional().valid('INITIATED', 'AUTHORIZED', 'CANCELLED', 'CAPTURED', 'REFUNDED')
+                    paymentStatus: Joi.string().trim().optional().valid(
+                        Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                        Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                        Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                        Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                        Constant.DATABASE.STATUS.PAYMENT.REFUNDED,
+                        Constant.DATABASE.STATUS.PAYMENT.EXPIRED,
+                        Constant.DATABASE.STATUS.PAYMENT.FAILED
+                    )
                 }
             }),
             async (ctx) => {

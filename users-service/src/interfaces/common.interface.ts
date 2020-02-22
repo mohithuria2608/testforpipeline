@@ -8,7 +8,8 @@ declare namespace ICommonRequest {
         devicemodel: string,
         devicetype: string,
         osversion: string,
-        deviceid: string
+        deviceid: string,
+        timezone: string,
     }
 
     interface AuthorizationObj {

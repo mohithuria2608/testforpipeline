@@ -13,14 +13,20 @@ Hands-on Microservices with TypeScript 3
 ## Sample code Usage:
 * clone the whole repository to disk.
 
-for non-docker examples (sections 1-3):
-* go into each service directory that has a package.json file in it, and install dependencies (npm install) there can be up to 4 such service directories in a single video code, but most have only one.
-* run gulp in songs & playlist directories
-* use run.sh to run the example, or run similar commands on mac cmdline.
+* for non-docker examples : 
+    * run all service : 
+        * local environment : sh local.sh
+        * development environment : sh dev.sh
+        * testing environment : sh qa.sh
+    * run individual service : 
+        * go into each service directory that has a package.json file in it, and install dependencies (npm install).
+        * local environment : gulp local
+        * development environment : gulp dev
+        * testing environment : gulp qa
 
-for dockerized examples (sections 4-5) build container images 
-* use build.bat or run the same commands on mac
-* use run.bat to run the example, or run similar commands on mac cmdline.
+* for dockerized examples build container images 
+    * use build.bat or run the same commands on mac
+    * use run.bat to run the example, or run similar commands on mac cmdline.
 
 .........................................................................................................................
 # VPN connection data
@@ -49,8 +55,6 @@ Kfcapptestuser3
 * 99eL78gctCEbaYVC
 * http://americanaqa.appskeeper.com/
 
-# protobuf any type for address 
-* https://github.com/protobufjs/protobuf.js/issues/1082
 
 # retry option for kafka
 * https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a

@@ -546,12 +546,30 @@ export const DATABASE = {
             REVERSE: 'REVERSE',
             REFUND: 'REFUND'
         },
+        CART_AMOUNT: {
+            ADD: "add",
+            SUBTRACT: "subtract"
+        }
     }
 };
 
 export const STATUS_MSG = {
     ERROR: {
         E400: {
+            USER_NOT_CREATED_ON_SDM: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'USER_NOT_CREATED_ON_SDM',
+                message: 'Some issue has occured. Please try after sometime'
+            },
+
+            USER_NOT_CREATED_ON_CMS:{
+                statusCode: 400,
+                httpCode: 400,
+                type: 'USER_NOT_CREATED_ON_CMS',
+                message: 'Some issue has occured. Please try after sometime'
+            },
+
             MIN_CART_VALUE_VOILATION: {
                 statusCode: 400,
                 httpCode: 400,
@@ -1132,5 +1150,8 @@ export const STATUS_MSG = {
             type: 'MULTIPLE_PAYMENTS_INITIATED',
             actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
         },
+    },
+    SDM_ORDER_VALIDATION: {
+        ORDER_AMOUNT_MISMATCH: "Order amount mismatch"
     }
 };

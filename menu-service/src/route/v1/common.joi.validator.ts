@@ -10,7 +10,7 @@ export const COMMON_HEADERS = {
     language: Joi.string().valid(
         Constant.DATABASE.LANGUAGE.AR,
         Constant.DATABASE.LANGUAGE.EN
-    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
+        ).default(Constant.DATABASE.LANGUAGE.EN).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
     brand: Joi.string().valid(
         Constant.DATABASE.BRAND.KFC,
         Constant.DATABASE.BRAND.PH
@@ -25,5 +25,6 @@ export const COMMON_HEADERS = {
         Constant.DATABASE.TYPE.DEVICE.IOS
     ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
     osversion: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
-    deviceid: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
+    deviceid: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+    timezone: Joi.string().trim().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
 }

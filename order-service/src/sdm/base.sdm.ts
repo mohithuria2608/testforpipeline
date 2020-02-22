@@ -1,14 +1,13 @@
 import * as config from "config"
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
+import { kafkaService } from '../grpc/client'
 
 export class BaseSDM {
 
     protected soap = require('soap');
-    private baseSOAPUrl = 'https://sdkuatuae.americana.com.sa:1995/?wsdl';
+    private baseSOAPUrl = config.get("sdm.baseUrl")
     private static client;
-    private licenseCode = Constant.SERVER.SDM.LICENSE_CODE
-    private conceptID = 3;
     static obj;
 
     constructor() {
@@ -43,8 +42,28 @@ export class BaseSDM {
     async requestData(name: string, params: object): Promise<any> {
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
-                consolelog(process.cwd(), `SDM request on : ${name}   ::`, `   ${JSON.stringify(params)}`, true)
+                consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
                 BaseSDM.client[name](params, function (error, result) {
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
+                                info: {
+                                    request: {
+                                        body: params
+                                    },
+                                    response: error ? error : result
+                                },
+                                description: name,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        }
+                    })
                     if (error) { reject(error); }
                     else {
                         consolelog(process.cwd(), "sdk response : ", JSON.stringify(result), true)

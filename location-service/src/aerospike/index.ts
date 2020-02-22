@@ -33,7 +33,7 @@ class AerospikeClass {
                         totalTimeout: 1000
                     }
                     let aerospikeConfig = {
-                        //@todo : check for pem file for auth
+                        
                         hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,

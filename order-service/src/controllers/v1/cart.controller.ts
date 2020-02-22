@@ -25,11 +25,11 @@ export class CartController {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-
+            if (userData.cmsUserRef && userData.cmsUserRef == 0) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
+            }
 
             let checkCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            // await Aerospike.exists({ set: ENTITY.CartE.set, key: payload.cartId })
-            console.log("checkCart", checkCart)
             if (!checkCart) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }
@@ -67,7 +67,6 @@ export class CartController {
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
             console.log("validate cart ", payload.cartId, payload.items.length)
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
-            console.log("validate cart 2222222222222", payload.cartId, payload.items.length)
 
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
