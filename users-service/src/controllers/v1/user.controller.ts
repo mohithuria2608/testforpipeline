@@ -23,24 +23,24 @@ export class UserController {
                 }
                 if (payload.as.update) {
                     data['id'] = data.userId
-                    ENTITY.UserE.buildUser(data)
+                    await ENTITY.UserE.buildUser(data)
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
                 let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create)
-                    ENTITY.UserE.createUserOnCms(data)
+                    await ENTITY.UserE.createUserOnCms(data)
                 if (payload.cms.update)
-                    ENTITY.UserE.updateUserOnCms(data)
+                    await ENTITY.UserE.updateUserOnCms(data)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
-                    ENTITY.UserE.createUserOnSdm(data)
+                    await ENTITY.UserE.createUserOnSdm(data)
                 if (payload.sdm.update)
-                    ENTITY.UserE.updateUserOnSdm(data)
+                    await ENTITY.UserE.updateUserOnSdm(data)
                 if (payload.sdm.sync)
-                    this.validateUserOnSdm(data, true)
+                    await this.validateUserOnSdm(data, true)
             }
             return {}
         } catch (error) {

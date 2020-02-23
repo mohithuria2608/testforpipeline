@@ -405,6 +405,7 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             SDM_REQUEST: "SDM_REQUEST",
+            CMS_REQUEST: "CMS_REQUEST",
             FAIL_Q: "FAIL_Q",
             REQUEST: "REQUEST",
             ERROR: "ERROR",

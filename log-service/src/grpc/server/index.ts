@@ -21,7 +21,6 @@ const server = new grpc.Server()
 server.addService(logProto.LogService.service, {
     sync: async (call: ILogGrpcRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
             let res: {} = await logController.log(call.request)
             callback(null, res)
         } catch (error) {

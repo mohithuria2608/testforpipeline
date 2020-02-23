@@ -63,17 +63,17 @@ gulp.task("copyLua", function () {
 gulp.task('default', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
 
 
-gulp.task('server', function () {
+gulp.task('local', function () {
 	pm2.connect(true, function () {
 		pm2.start({
-			name: 'log',
+			name: 'logs',
 			script: 'dist/app.js',
 			env: {
 				"NODE_ENV": "default"
 			}
 		}, function () {
 			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "local");
-			pm2.streamLogs('log', 0);
+			pm2.streamLogs('logs', 0);
 		});
 	});
 });
@@ -82,28 +82,28 @@ gulp.task('server', function () {
 gulp.task('dev', function () {
 	pm2.connect(true, function () {
 		pm2.start({
-			name: 'user',
+			name: 'logs',
 			script: 'dist/app.js',
 			env: {
 				"NODE_ENV": "development"
 			}
 		}, function () {
 			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "development");
-			pm2.streamLogs('user', 0);
+			pm2.streamLogs('logs', 0);
 		});
 	});
 });
 gulp.task('qa', function () {
 	pm2.connect(true, function () {
 		pm2.start({
-			name: 'user',
+			name: 'logs',
 			script: 'dist/app.js',
 			env: {
 				"NODE_ENV": "testing"
 			}
 		}, function () {
 			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "testing");
-			pm2.streamLogs('user', 0);
+			pm2.streamLogs('logs', 0);
 		});
 	});
 });

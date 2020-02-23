@@ -50,7 +50,7 @@ const orderSchema = new Schema({
     sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
     items: { type: Schema.Types.Mixed, required: true },
     amount: [{
-        sequence: 1,
+        sequence: { type: Number, },
         name: { type: String },
         code: { type: String },
         action: {

@@ -2,6 +2,7 @@ import * as config from "config"
 import * as rp from 'request-promise';
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
+import { kafkaService } from '../grpc/client'
 
 export class BaseCMS {
     constructor() {
@@ -12,36 +13,71 @@ export class BaseCMS {
             let params = {
                 method: options.method,
                 url: options.url,
-                headers: headers,
-                json: true
+                headers: headers
             }
             if (options.form) {
                 params['form'] = parameter
             }
             else if (options.formData) {
-                params[''] = parameter
+                params['formData'] = parameter
             }
             else if (options.qs) {
                 params['qs'] = parameter
             }
-            else {
+            else if (options.body) {
                 params['body'] = parameter
+                params['json'] = true
             }
             consolelog(process.cwd(), "In request manager options", JSON.stringify(params), true)
 
             rp(params)
                 .then(function (body) {
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: Constant.DATABASE.TYPE.ACTIVITY_LOG.CMS_REQUEST,
+                                info: {
+                                    request: {
+                                        body: params
+                                    },
+                                    response: body
+                                },
+                                description: options.url,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        }
+                    })
                     consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
                     resolve(body)
                 })
                 .catch(function (error) {
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: Constant.DATABASE.TYPE.ACTIVITY_LOG.CMS_REQUEST,
+                                info: {
+                                    request: {
+                                        body: params
+                                    },
+                                    response: error
+                                },
+                                description: options.url,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        }
+                    })
                     consolelog(process.cwd(), "In request manager err", error.message, true)
                     reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
-                    // if (error.statusCode || error.error || error.message) {
-                    //     reject(error.message)
-                    // }
-                    // else
-                    //     reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
                 })
         })
     }
