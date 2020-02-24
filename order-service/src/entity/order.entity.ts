@@ -595,8 +595,8 @@ export class OrderClass extends BaseEntity {
                             consolelog(process.cwd(), "SDM order status", sdmOrder.Status, true)
                             if (recheck && sdmOrder.Total) {
                                 consolelog(process.cwd(), "order step -4:       ", sdmOrder.ValidationRemarks, true)
-                                let amount = order.amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
-                                console.log("nnnnnnnnnnnnnnnnnnn", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
+                                let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+                                console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
 
                                 if (amount[0].amount != parseFloat(sdmOrder.Total)) {
                                     consolelog(process.cwd(), "order step -3:       ", sdmOrder.ValidationRemarks, true)
