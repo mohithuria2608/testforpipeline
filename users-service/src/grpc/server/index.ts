@@ -85,7 +85,7 @@ server.addService(userProto.UserService.service, {
             callback(grpcSendError(error))
         }
     },
-    creatAddressOnCms: async (call: IUserGrpcRequest.ICreatAddressOnCmsReq, callback) => {
+    createAddressOnCms: async (call: IUserGrpcRequest.ICreatAddressOnCmsReq, callback) => {
         try {
             consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.AddressE.addAddressOnCms(call.request)

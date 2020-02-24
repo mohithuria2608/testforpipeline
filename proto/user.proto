@@ -7,7 +7,7 @@ service UserService {
     rpc FetchUser (IFetchUserReq) returns (IUserData) {}
     rpc FetchAddress (IFetchAddressReq) returns (IFetchAddressRes) {}
     rpc CreatUserOnCms (IUserData) returns (IUserData) {}
-    rpc CreatAddressOnCms (ICreatAddressOnCmsReq) returns (ICreatAddressOnCmsRes) {}
+    rpc CreateAddressOnCms (ICreatAddressOnCmsReq) returns (ICreatAddressOnCmsRes) {}
 }
 
 message IKafkaReq {
@@ -106,6 +106,9 @@ message IUserData {
     required string medium = 13;
     required int32 createdAt = 14;
     optional string cartId = 15;
+    required string sdmCorpRef = 16;
+    required string fullPhnNo = 17;
+    required string password = 18;
 }
 
 message IFetchAddressReq {
@@ -146,9 +149,12 @@ message ICreatAddressOnCmsReq {
     required string medium = 13;
     required int32 createdAt = 14;
     optional string cartId = 15;
-    optional string asAddress = 16;
-    optional string cmsAddress = 17;
-    optional string sdmAddress = 18;
+    required string sdmCorpRef = 16;
+    required string fullPhnNo = 17;
+    required string password = 18;
+    optional string asAddress = 19;
+    optional string cmsAddress = 20;
+    optional string sdmAddress = 21;
 }
 
 message ICreatAddressOnCmsRes { }

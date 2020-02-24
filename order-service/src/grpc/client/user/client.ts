@@ -77,7 +77,6 @@ export class UserService {
     async createUserOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
-                await userServiceValidator.createUserOnCmsValidator(payload)
                 this.userClient.creatUserOnCms(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully created user on cms", JSON.stringify(res), false)
@@ -96,7 +95,6 @@ export class UserService {
     async creatAddressOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
-                await userServiceValidator.createAddressOnCmsValidator(payload)
                 this.userClient.createAddressOnCms(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully created address on cms", JSON.stringify(res), false)
