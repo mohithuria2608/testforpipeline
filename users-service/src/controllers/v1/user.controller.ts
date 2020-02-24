@@ -386,6 +386,9 @@ export class UserController {
                     if (checkUser && checkUser.length > 0) {
                         userchangePayload['id'] = checkUser[0].id
                         userchangePayload['deleteUserId'] = auth.id
+                        userchangePayload['sdmUserRef'] = checkUser[0].sdmUserRef
+                        userchangePayload['sdmCorpRef'] = checkUser[0].sdmCorpRef
+                        userchangePayload['cmsUserRef'] = checkUser[0].cmsUserRef
                         await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
                     } else {
                         let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
@@ -401,6 +404,10 @@ export class UserController {
                             if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
                                 userchangePayload['cmsAddress'] = cmsUserByPhoneNo.address.slice(0, 6)
                             }
+                        } else {
+                            userchangePayload['sdmUserRef'] = 0
+                            userchangePayload['sdmCorpRef'] = 0
+                            userchangePayload['cmsUserRef'] = 0
                         }
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
