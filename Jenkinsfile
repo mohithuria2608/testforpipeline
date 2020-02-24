@@ -98,7 +98,9 @@ pipeline {
                 }
             }
         }
-    }/*
+    }
+    //Testing
+    /*
     post{
         always{
             emailext attachLog: true,
