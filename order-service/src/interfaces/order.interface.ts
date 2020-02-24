@@ -17,6 +17,7 @@ declare namespace IOrderRequest {
         address: IAddress,
         store: IStore,
         amount: IAmount[],
+        promo: IPromotionGrpcRequest.IValidatePromotionRes
     }
 
     interface IAddress {

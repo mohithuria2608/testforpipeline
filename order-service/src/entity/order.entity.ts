@@ -444,8 +444,24 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.IOrderData) {
         try {
+            let Comps
+            if (payload.promo && payload.promo.couponId && payload.promo.couponCode && payload.promo.posId) {
+                let discountAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT })
+                Comps = {
+                    KeyValueOfdecimalCCompkckD9yn_P: {
+                        Key: payload.promo.posId,
+                        Value: {
+                            Amount: discountAmount[0].amount,
+                            CompID: payload.promo.posId,
+                            EnterAmount: discountAmount[0].amount,
+                            Name: payload.promo.couponCode
+                        }
+                    }
+                }
+            }
             let order = {
                 AddressID: payload.address.sdmAddressRef,
+                Comps: Comps,
                 // AreaID: "",//payload.address.areaId
                 // CityID: "",//payload.address.areaId
                 ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
@@ -511,7 +527,8 @@ export class OrderClass extends BaseEntity {
         cartData: ICartRequest.ICartData,
         address: IUserGrpcRequest.IFetchAddressRes,
         store: IStoreGrpcRequest.IStore,
-        userData: IUserRequest.IUserData) {
+        userData: IUserRequest.IUserData,
+        promo: IPromotionGrpcRequest.IValidatePromotionRes) {
         try {
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
@@ -565,6 +582,7 @@ export class OrderClass extends BaseEntity {
                 isActive: 1,
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0,
+                promo: promo ? promo : {}
             }
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order

@@ -129,9 +129,8 @@ export class OrderController {
                     return { cartValidate: cartData }
                 }
                 cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
+                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData, promo)
             }
-            // let totalAmount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order.cmsOrderRef.toString(),
