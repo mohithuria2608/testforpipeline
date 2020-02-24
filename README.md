@@ -4,7 +4,8 @@
 Hands-on Microservices with TypeScript 3 
 
 ## Sample prerequisites:
-* NodeJS 9.10 or higher 
+* NodeJS 10.17.0 or higher 
+* Aerospike 3.13.0 or higher
 * Typescript (npm i typescript -g)
 * Mocha (npm i mocha -g)
 * Docker (can use docker for windows/mac)
@@ -32,11 +33,10 @@ Hands-on Microservices with TypeScript 3
 # VPN connection data
 * vpn.americana-food.com
 * username : 
-Kfcapptestuser1
-Kfcapptestuser2 
-Kfcapptestuser3
+    Kfcapptestuser1
+    Kfcapptestuser2 
+    Kfcapptestuser3
 * password : kfc@pp01 
-
 
 # SDM Credentials
 * HOST = 192.168.204.72
@@ -55,7 +55,6 @@ Kfcapptestuser3
 * 99eL78gctCEbaYVC
 * http://americanaqa.appskeeper.com/
 
-
 # retry option for kafka
 * https://blog.pragmatists.com/retrying-consumer-architecture-in-the-apache-kafka-939ac4cb851a
 
@@ -67,3 +66,11 @@ Kfcapptestuser3
 * git add .
 * git commit -m "update merge"
 * git push http://40.127.244.213:10004/americana/backend.git ${current branch name of current origin}:${target branch name of target origin}
+
+# UAT ssh
+* ssh localadmin@13.74.15.162
+* Localadmin@2020
+* login to jenkins server :
+    * ssh localadmin@amfuatnejnkvm02
+    * kubectl get pods -n nodeapp
+    * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
