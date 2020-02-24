@@ -506,7 +506,12 @@ export class OrderClass extends BaseEntity {
     /**
     * @method INTERNAL
     * */
-    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
+    async createOrder(
+        orderType: string,
+        cartData: ICartRequest.ICartData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        store: IStoreGrpcRequest.IStore,
+        userData: IUserRequest.IUserData) {
         try {
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {

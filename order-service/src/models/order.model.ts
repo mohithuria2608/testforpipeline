@@ -112,7 +112,7 @@ const orderSchema = new Schema({
         name_ar: { type: String },
     },
     payment: {
-        paymentMethodId: { type: Number, required: true, enum: [0, 1] },
+        paymentMethodId: { type: Number, enum: [0, 1] },
         amount: { type: Number, default: 0 },
         name: {
             type: String, enum: [
@@ -130,9 +130,9 @@ const orderSchema = new Schema({
         }
     },
     transLogs: { type: Schema.Types.Mixed, required: true },
-    isActive: { type: Number, required: true, enum: [0, 1] },
-    changePaymentMode: { type: Number, required: true, enum: [0, 1] },
-    paymentMethodAddedOnSdm: { type: Number, required: true, enum: [0, 1] },
+    isActive: { type: Number, required: true, enum: [0, 1], default: 1  },
+    changePaymentMode: { type: Number, required: true, enum: [0, 1], default: 0 },
+    paymentMethodAddedOnSdm: { type: Number, required: true, enum: [0, 1], default: 0 },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true },
     trackUntil: { type: Number, required: true },
