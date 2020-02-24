@@ -376,30 +376,32 @@ export class AddressEntity extends BaseEntity {
     async createCmsAddOnAs(userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.ICmsAddress[]) {
         try {
             for (const obj of cmsAddress) {
-                let bin = obj['addressType']
-                let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
-                if (store && store.length) {
-                    let add = {
-                        lat: parseFloat(obj.latitude),
-                        lng: parseFloat(obj.longitude),
-                        bldgName: obj.bldgName,
-                        description: obj.description,
-                        flatNum: obj.flatNum,
-                        tag: obj.addTag,
-                        addressType: bin,
-                        sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
-                        cmsAddressRef: parseInt(obj.addressId),
-                    }
-                    let asAdd = await this.addAddress(userData, bin, add, store[0])
-                    if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
-                        userData.asAddress = [asAdd]
-                        kafkaService.kafkaSync({
-                            set: this.set,
-                            sdm: {
-                                create: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
+                if (obj.addressId) {
+                    let bin = obj['addressType']
+                    let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
+                    if (store && store.length) {
+                        let add = {
+                            lat: parseFloat(obj.latitude),
+                            lng: parseFloat(obj.longitude),
+                            bldgName: obj.bldgName,
+                            description: obj.description,
+                            flatNum: obj.flatNum,
+                            tag: obj.addTag,
+                            addressType: bin,
+                            sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
+                            cmsAddressRef: parseInt(obj.addressId),
+                        }
+                        let asAdd = await this.addAddress(userData, bin, add, store[0])
+                        if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
+                            userData.asAddress = [asAdd]
+                            kafkaService.kafkaSync({
+                                set: this.set,
+                                sdm: {
+                                    create: true,
+                                    argv: JSON.stringify(userData)
+                                }
+                            })
+                        }
                     }
                 }
             }
