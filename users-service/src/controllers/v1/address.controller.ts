@@ -154,7 +154,23 @@ export class AddressController {
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
-            return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
+                userData.asAddress = [addressData]
+                kafkaService.kafkaSync({
+                    set: ENTITY.AddressE.set,
+                    cms: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    },
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    }
+                })
+            }
+
+            return addressData
         } catch (error) {
             consolelog(process.cwd(), "syncOldAddress", JSON.stringify(error), false)
             return Promise.reject(error)
