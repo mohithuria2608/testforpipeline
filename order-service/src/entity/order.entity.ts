@@ -584,7 +584,7 @@ export class OrderClass extends BaseEntity {
         try {
             setTimeout(async () => {
                 let recheck = true
-                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0})
+                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0 })
                 if (order && order._id) {
                     if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime())
                         recheck = false
@@ -595,8 +595,10 @@ export class OrderClass extends BaseEntity {
                             consolelog(process.cwd(), "SDM order status", sdmOrder.Status, true)
                             if (recheck && sdmOrder.Total) {
                                 consolelog(process.cwd(), "order step -4:       ", sdmOrder.ValidationRemarks, true)
-                                let amount = order.amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0].amount
-                                if (amount != parseFloat(sdmOrder.Total)) {
+                                let amount = order.amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+                                console.log("nnnnnnnnnnnnnnnnnnn", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
+
+                                if (amount[0].amount != parseFloat(sdmOrder.Total)) {
                                     consolelog(process.cwd(), "order step -3:       ", sdmOrder.ValidationRemarks, true)
                                     recheck = false
                                     if (order.payment.paymentMethodId == 0) {
