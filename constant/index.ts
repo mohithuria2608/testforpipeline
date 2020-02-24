@@ -565,6 +565,13 @@ export const STATUS_MSG = {
                 message: 'Some issue has occured. Please try after sometime'
             },
 
+            USER_NOT_CREATED_ON_CMS: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'USER_NOT_CREATED_ON_CMS',
+                message: 'Some issue has occured. Please try after sometime'
+            },
+
             MIN_CART_VALUE_VOILATION: {
                 statusCode: 400,
                 httpCode: 400,

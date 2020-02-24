@@ -24,28 +24,14 @@ export class AddressController {
                 if (payload.cms.create) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.addAddressOnCms(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            cms: {
-                                create: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
                 if (payload.cms.update) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.updateAddressOnCms(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            cms: {
-                                update: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
@@ -55,28 +41,14 @@ export class AddressController {
                 if (payload.sdm.create) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.addAddressOnSdm(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            sdm: {
-                                create: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
                 if (payload.sdm.update) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.updateAddressOnSdm(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            sdm: {
-                                update: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
             }
             return {}
