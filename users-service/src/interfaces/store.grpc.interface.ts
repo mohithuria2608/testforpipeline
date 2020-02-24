@@ -1,7 +1,8 @@
 declare namespace IStoreGrpcRequest {
 
     interface IFetchStore {
-        storeId: number
+        storeId: number,
+        language: string,
     }
     interface IValidateCoordinateData extends ICommonRequest.ICordinatesOpt {
     }

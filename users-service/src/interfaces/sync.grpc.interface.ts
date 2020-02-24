@@ -38,4 +38,9 @@ declare namespace ISyncGrpcRequest {
             code: string
         }
     }
+
+    interface IFetchAppversion {
+        type?: string,
+        isActive?: number
+    }
 }

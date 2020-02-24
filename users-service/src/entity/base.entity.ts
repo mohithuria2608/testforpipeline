@@ -24,9 +24,9 @@ export class BaseEntity {
     /**
      * @description Validate latitude and longitude from location service
      */
-    async fetchStore(storeId: number): Promise<IStoreGrpcRequest.IStore[]> {
+    async fetchStore(storeId: number, language: string): Promise<IStoreGrpcRequest.IStore[]> {
         try {
-            let store = await locationService.fetchStore({ storeId })
+            let store = await locationService.fetchStore({ storeId, language })
             if (store && store.id)
                 return [store]
             else

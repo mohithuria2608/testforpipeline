@@ -16,10 +16,10 @@ export class AddressCMSEntity extends BaseCMS {
             payload.asAddress.map(obj => {
                 address.push({
                     "id": obj.id,
-                    "firstname": payload.name,
-                    "lastname": payload.name,
+                    "firstName": payload.name,
+                    "lastName": payload.name,
                     "password": payload.password,
-                    "country_id": "AE",// Constant.DATABASE.COUNTRY.UAE, // donot change
+                    "countryId": "AE",// Constant.DATABASE.COUNTRY.UAE, // donot change
                     "zip": "00000",
                     "city": obj.description,
                     "state": obj.description,
@@ -28,16 +28,16 @@ export class AddressCMSEntity extends BaseCMS {
                     "longitude": obj.lng,
                     "description": obj.description,
                     "address_is": 1,
-                    "address_type": obj.addressType,
+                    "addressType": obj.addressType,
                     "telephone": payload.fullPhnNo,
-                    "bldg_name": obj.bldgName,
-                    "flat_num": obj.bldgName,
-                    "add_tag": obj.tag,
-                    "sdm_address_ref": obj.sdmAddressRef,
-                    "sdm_store_ref": obj.storeId,
-                    "sdm_country_ref": obj.countryId,
-                    "sdm_area_ref": obj.areaId,
-                    "sdm_city_ref": obj.cityId,
+                    "bldgName": obj.bldgName,
+                    "flatNum": obj.bldgName,
+                    "addTag": obj.tag,
+                    "sdmAddressRef": obj.sdmAddressRef,
+                    "sdmStoreRef": obj.storeId,
+                    "sdmCountryRef": obj.countryId,
+                    "sdmAreaRef": obj.areaId,
+                    "sdmCityRef": obj.cityId,
                 })
             })
             let formObj: IAddressCMSRequest.ICreateAddress = {
@@ -50,6 +50,7 @@ export class AddressCMSEntity extends BaseCMS {
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.CREATE_ADDRESS.METHOD,
                 url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.CREATE_ADDRESS.URL,
+                body: true
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
@@ -71,10 +72,10 @@ export class AddressCMSEntity extends BaseCMS {
                 "customerId": payload.cmsUserRef.toString(),
                 "addressId": payload.asAddress[0].cmsAddressRef.toString(),
                 "websiteId": "1",
-                "firstname": payload.name,
-                "lastname": payload.name,
+                "firstName": payload.name,
+                "lastName": payload.name,
                 "password": payload.password,
-                "country_id": "AE", // donot change
+                "countryId": "AE", // donot change
                 "zip": "00000",
                 "city": payload.asAddress[0].description,
                 "state": payload.asAddress[0].description,
@@ -82,23 +83,24 @@ export class AddressCMSEntity extends BaseCMS {
                 "latitude": payload.asAddress[0].lat.toString(),
                 "longitude": payload.asAddress[0].lng.toString(),
                 "description": payload.asAddress[0].description,
-                "address_is": '1',
-                "address_type": payload.asAddress[0].addressType,
+                "addressIs": '1',
+                "addressType": payload.asAddress[0].addressType,
                 "telephone": payload.fullPhnNo,
-                "bldg_name": payload.asAddress[0].bldgName,
-                "flat_num": payload.asAddress[0].bldgName,
-                "add_tag": payload.asAddress[0].tag,
-                "sdm_address_ref": payload.asAddress[0].sdmAddressRef.toString(),
-                "sdm_store_ref": payload.asAddress[0].storeId.toString(),
-                "sdm_country_ref": payload.asAddress[0].countryId.toString(),
-                "sdm_area_ref": payload.asAddress[0].areaId.toString(),
-                "sdm_city_ref": payload.asAddress[0].cityId.toString()
+                "bldgName": payload.asAddress[0].bldgName,
+                "flatNum": payload.asAddress[0].bldgName,
+                "addTag": payload.asAddress[0].tag,
+                "sdmAddressRef": payload.asAddress[0].sdmAddressRef.toString(),
+                "sdmStoreRef": payload.asAddress[0].storeId.toString(),
+                "sdmCountryRef": payload.asAddress[0].countryId.toString(),
+                "sdmAreaRef": payload.asAddress[0].areaId.toString(),
+                "sdmCityRef": payload.asAddress[0].cityId.toString()
             }
             const headers = {};
             const form = formObj;
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.UPDATE_ADDRESS.METHOD,
                 url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.UPDATE_ADDRESS.URL,
+                body: true
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
@@ -126,6 +128,7 @@ export class AddressCMSEntity extends BaseCMS {
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.DELETE_ADDRESS.METHOD,
                 url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.DELETE_ADDRESS.URL,
+                body: true
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {

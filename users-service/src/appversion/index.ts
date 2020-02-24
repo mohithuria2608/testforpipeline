@@ -3,20 +3,19 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { syncService } from '../grpc/client';
 
-export class Configuration {
+export class Appversion {
 
     constructor() { }
 
     async init() {
         try {
-            let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE })
-            
+            let appversion = await syncService.fetchAppversion({ isActive: 1 })
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "bootstraping Config", JSON.stringify(error), false)
+            consolelog(process.cwd(), "init app version", JSON.stringify(error), false)
             return {}
         }
     }
 }
 
-export const configuration = new Configuration();
+export const appversion = new Appversion();

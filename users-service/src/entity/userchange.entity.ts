@@ -194,8 +194,8 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
                 dataToUpdateUserchange['asAddress'] = payload.asAddress
-            if (payload.sdmAddresses && payload.sdmAddresses.length > 0)
-                dataToUpdateUserchange['sdmAddresses'] = payload.sdmAddresses
+            if (payload.sdmAddress && payload.sdmAddress.length > 0)
+                dataToUpdateUserchange['sdmAddress'] = payload.sdmAddress
             if (payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
                     message: payload.otp.toString(),

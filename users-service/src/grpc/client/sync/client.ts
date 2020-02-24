@@ -41,6 +41,24 @@ export class SyncService {
             }
         })
     }
+    async fetchAppversion(payload: ISyncGrpcRequest.IFetchAppversion): Promise<ISyncGrpcRequest.IConfig> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await syncServiceValidator.fetchAppversionValidator(payload)
+                this.syncClient.fetchAppversion({ isActive: payload.isActive }, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully fetched app version", JSON.stringify(res), false)
+                        resolve(res.appversion)
+                    } else {
+                        consolelog(process.cwd(), "Error in fetching  app version", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const syncService = new SyncService();

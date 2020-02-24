@@ -6,3 +6,4 @@ export * from './v1/sdm.location.controller';
 export * from './v1/cms.promotion.controller';
 export * from './v1/cms.config.controller';
 export * from './v1/cms.location.controller';
+export * from './v1/cms.app.version.controller';

@@ -35,17 +35,17 @@ export class AddressController {
                     }
                 }
                 if (payload.cms.update) {
-                    // if (userData.cmsUserRef && userData.cmsUserRef != 0)
-                    //     await ENTITY.AddressE.updateAddressOnCms(userData)
-                    // else {
-                    //     kafkaService.kafkaSync({
-                    //         set: ENTITY.AddressE.set,
-                    //         cms: {
-                    //             update: true,
-                    //             argv: JSON.stringify(userData)
-                    //         }
-                    //     })
-                    // }
+                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                        await ENTITY.AddressE.updateAddressOnCms(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            cms: {
+                                update: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
@@ -102,7 +102,7 @@ export class AddressController {
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
             if (payload.storeId) {
-                store = await ENTITY.UserE.fetchStore(payload.storeId)
+                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.length) {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude
@@ -156,13 +156,13 @@ export class AddressController {
     * @param {string} flatNum
     * @param {string} tag
     * */
-    async syncOldAddress(userData: IUserRequest.IUserData, payload: IAddressRequest.ISyncOldAddress) {
+    async syncOldAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, payload: IAddressRequest.ISyncOldAddress) {
         try {
             userData = await ENTITY.UserE.getUser({ userId: userData.id })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
             if (payload.storeId) {
-                store = await ENTITY.UserE.fetchStore(payload.storeId)
+                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.length) {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude

@@ -296,9 +296,9 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
         delete userObj['password']
         delete userObj['sdmUserRef']
         delete userObj['cmsUserRef']
-        delete userObj['sdmAddresses']
-        delete userObj['cmsAddresses']
-        delete userObj['asAddresses']
+        delete userObj['sdmAddress']
+        delete userObj['cmsAddress']
+        delete userObj['asAddress']
         return userObj
     } catch (error) {
         consolelog(process.cwd(), 'formatUserData', JSON.stringify(error), false)

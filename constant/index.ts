@@ -33,6 +33,7 @@ export enum SET_NAME {
     CITY = "city",
     STORE = "store",
     LOGGER = "logger",
+    APP_VERSION = "appversion",
     FAILQ = "failq",
     PING_SERVICE = "ping-service"
 };
@@ -183,7 +184,7 @@ export const DATABASE = {
             },
             UPDATE_ADDRESS: {
                 METHOD: "POST",
-                URL: "updateaddress"
+                URL: "userupdateaddress"
             },
             CREATE_CART: {
                 METHOD: "POST",
@@ -397,7 +398,7 @@ export const DATABASE = {
             APPLE: "APPLE"
         },
 
-        VERSION_UPDATE: {
+        APP_VERSION: {
             FORCE: "FORCE",
             SKIP: "SKIP",
             NORMAL: "NORMAL"
@@ -561,13 +562,6 @@ export const STATUS_MSG = {
                 statusCode: 400,
                 httpCode: 400,
                 type: 'USER_NOT_CREATED_ON_SDM',
-                message: 'Some issue has occured. Please try after sometime'
-            },
-
-            USER_NOT_CREATED_ON_CMS:{
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_NOT_CREATED_ON_CMS',
                 message: 'Some issue has occured. Please try after sometime'
             },
 

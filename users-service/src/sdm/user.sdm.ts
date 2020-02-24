@@ -65,6 +65,7 @@ export class UserSDMEntity extends BaseSDM {
                     language: "En",
                     customer: {
                         CUST_CLASSID: -1,
+                        CUST_CORPID: payload.sdmCorpRef,
                         CUST_EMAIL: payload.email,
                         CUST_FIRSTNAME: payload.name,
                         CUST_ID: payload.sdmUserRef,

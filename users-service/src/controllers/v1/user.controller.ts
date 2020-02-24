@@ -93,8 +93,8 @@ export class UserController {
                     cmsUserRef: 0,
                 }
                 let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
-                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customer_id)
+                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
+                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
                     if (cmsUserByPhoneNo.SdmUserRef)
                         userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
                     if (cmsUserByPhoneNo.SdmCorpRef)
@@ -151,6 +151,9 @@ export class UserController {
                     id: userchange[0].id,
                     phnVerified: 1,
                 }
+                let asAddress = []
+                let cmsAddress = []
+                let sdmAddress = []
                 if (userchange[0].fullPhnNo)
                     userUpdate['fullPhnNo'] = userchange[0].fullPhnNo
                 if (userchange[0].username)
@@ -183,22 +186,35 @@ export class UserController {
                     userUpdate['sdmCorpRef'] = userchange[0].sdmCorpRef
                 if (userchange[0].cmsUserRef != undefined)
                     userUpdate['cmsUserRef'] = userchange[0].cmsUserRef
+                if (userchange[0].asAddress && userchange[0].asAddress.length > 0) {
+                    asAddress = userchange[0].asAddress
+                    userUpdate['asAddress'] = []
+                }
+                if (userchange[0].cmsAddress && userchange[0].cmsAddress.length > 0) {
+                    cmsAddress = userchange[0].cmsAddress
+                    userUpdate['cmsAddress'] = []
+                }
+                if (userchange[0].sdmAddress && userchange[0].sdmAddress.length > 0) {
+                    sdmAddress = userchange[0].sdmAddress
+                    userUpdate['sdmAddress'] = []
+                }
                 if (userchange[0].deleteUserId)
                     deleteUserId = userchange[0].deleteUserId
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
-                if (userchange[0].asAddress && userchange[0].asAddress.length > 0) {
-
-                }
-                if (userchange[0].cmsAddress && userchange[0].cmsAddress.length > 0) {
-                    // ENTITY.AddressE.createCmsAddOnAs(userData, userchange[0].cmsAddress)
-                }
-                if (userchange[0].sdmAddresses && userchange[0].sdmAddresses.length > 0) {
-                    // ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, userchange[0].cmsAddress)
-                }
+                
                 console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
+                if (asAddress && asAddress.length > 0) {
+
+                }
+                if (cmsAddress && cmsAddress.length > 0)
+                    ENTITY.AddressE.createCmsAddOnAs(userData, cmsAddress)
+
+                if (sdmAddress && sdmAddress.length > 0)
+                    ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
+
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -222,7 +238,7 @@ export class UserController {
             if (userchange[0].address && userchange[0].address.id) {
                 if (payload.isGuest == 1)
                     Aerospike.remove({ key: userData.id, set: ENTITY.AddressE.set })
-                await addressController.syncOldAddress(userData, {
+                await addressController.syncOldAddress(headers, userData, {
                     addressId: userchange[0].address.id,
                     storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.storeId : undefined,
                     lat: userchange[0].address.lat,
@@ -371,8 +387,8 @@ export class UserController {
                         await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
                     } else {
                         let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                        if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
-                            userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customer_id)
+                        if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
+                            userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
                             userchangePayload['email'] = cmsUserByPhoneNo.email
                             userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                             userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
@@ -404,6 +420,7 @@ export class UserController {
                         emailVerified: 1,
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
+                    console.log("hereeeeeeeeeeeeee", userData)
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
@@ -432,9 +449,9 @@ export class UserController {
             let updateAs = {}
             if (userData.cmsUserRef == 0) {
                 let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: userData.email })
-                if (cmsUserByEmail && cmsUserByEmail.customer_id) {
+                if (cmsUserByEmail && cmsUserByEmail.customerId) {
                     updateOnCms = true
-                    updateAs['cmsUserRef'] = parseInt(cmsUserByEmail.customer_id)
+                    updateAs['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
                     if (cmsUserByEmail.SdmUserRef)
                         updateAs['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
                     if (cmsUserByEmail.SdmCorpRef)
@@ -452,10 +469,7 @@ export class UserController {
                     updateAs['sdmUserRef'] = sdmUserByEmail.CUST_ID
                     updateAs['sdmCorpRef'] = sdmUserByEmail.CUST_CORPID
                     if (sdmUserByEmail.Addresses && sdmUserByEmail.Addresses.CC_ADDRESS && sdmUserByEmail.Addresses.CC_ADDRESS.length > 0) {
-                        /**
-                         * @todo : sync sdm address on cms and as
-                         */
-                        userData.sdmAddresses = sdmUserByEmail.Addresses.CC_ADDRESS.slice((sdmUserByEmail.Addresses.CC_ADDRESS.length - 6) < 0 ? 0 : sdmUserByEmail.Addresses.CC_ADDRESS.length - 6, sdmUserByEmail.Addresses.CC_ADDRESS.length)
+                        userData.sdmAddress = sdmUserByEmail.Addresses.CC_ADDRESS.slice((sdmUserByEmail.Addresses.CC_ADDRESS.length - 6) < 0 ? 0 : sdmUserByEmail.Addresses.CC_ADDRESS.length - 6, sdmUserByEmail.Addresses.CC_ADDRESS.length)
                     }
                 } else
                     createOnSdm = true

@@ -25,10 +25,6 @@ export class CartController {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            if (userData.cmsUserRef && userData.cmsUserRef == 0) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
-            }
-
             let checkCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             if (!checkCart) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)

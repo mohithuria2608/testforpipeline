@@ -106,8 +106,8 @@ export class GuestController {
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
                 let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
-                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customer_id)
+                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
+                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
                     userchangePayload['email'] = cmsUserByPhoneNo.email
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST

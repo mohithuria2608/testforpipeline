@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service SyncService {
     rpc FetchConfig (IFetchConfigReq) returns (IFetchConfigRes) {}
+    rpc FetchAppversion (IFetchAppversionReq) returns (IFetchAppversionRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
 
@@ -12,6 +13,15 @@ message IFetchConfigReq {
 
 message IFetchConfigRes {
     required string config = 1;
+}
+
+message IFetchAppversionReq {
+    optional string type = 1;
+    optional int32 isActive = 2;
+}
+
+message IFetchAppversionRes {
+    required string appversion = 1;
 }
 
 message IKafkaReq {

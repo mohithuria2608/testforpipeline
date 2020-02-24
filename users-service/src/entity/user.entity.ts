@@ -174,8 +174,8 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
                 userUpdate['asAddress'] = payload.asAddress
-            if (payload.sdmAddresses && payload.sdmAddresses.length > 0)
-                userUpdate['sdmAddresses'] = payload.sdmAddresses
+            if (payload.sdmAddress && payload.sdmAddress.length > 0)
+                userUpdate['sdmAddress'] = payload.sdmAddress
                 
             userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
@@ -307,10 +307,10 @@ export class UserEntity extends BaseEntity {
     async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
             let res = await CMS.UserCMSE.createCustomerOnCms(payload)
-            if (res && res.customer_id) {
+            if (res && res.customerId) {
                 let putArg: IAerospike.Put = {
                     bins: {
-                        cmsUserRef: parseInt(res.customer_id.toString()),
+                        cmsUserRef: parseInt(res.customerId.toString()),
                     },
                     set: this.set,
                     key: payload.id,

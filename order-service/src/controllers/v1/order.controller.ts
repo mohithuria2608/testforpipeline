@@ -2,9 +2,6 @@ import * as Constant from '../../constant'
 import { consolelog, hashObj } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../aerospike'
-import { cartController } from './cart.controller';
-import { parse } from 'path'
 
 export class OrderController {
 
@@ -90,7 +87,7 @@ export class OrderController {
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
-                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId })
+                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
                 else {

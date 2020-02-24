@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog,validatorErr } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class LocationServiceValidator {
@@ -12,7 +12,11 @@ export class LocationServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    storeId: Joi.number().required()
+                    storeId: Joi.number().required(),
+                    language: Joi.string().valid(
+                        Constant.DATABASE.LANGUAGE.AR,
+                        Constant.DATABASE.LANGUAGE.EN
+                    ).default(Constant.DATABASE.LANGUAGE.EN).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
