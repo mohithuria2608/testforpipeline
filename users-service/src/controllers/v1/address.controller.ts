@@ -128,9 +128,9 @@ export class AddressController {
     * @param {string} flatNum
     * @param {string} tag
     * */
-    async syncOldAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, payload: IAddressRequest.ISyncOldAddress) {
+    async syncOldAddress(headers: ICommonRequest.IHeaders, userId: string, payload: IAddressRequest.ISyncOldAddress) {
         try {
-            userData = await ENTITY.UserE.getUser({ userId: userData.id })
+            let userData = await ENTITY.UserE.getUser({ userId: userId })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
             if (payload.storeId) {

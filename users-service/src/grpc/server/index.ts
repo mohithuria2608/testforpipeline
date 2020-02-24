@@ -74,6 +74,26 @@ server.addService(userProto.UserService.service, {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
+    },
+    creatUserOnCms: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
+        try {
+            consolelog(process.cwd(), "creatUserOnCms", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.createUserOnCms(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "creatUserOnCms", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+    creatAddressOnCms: async (call: IUserGrpcRequest.ICreatAddressOnCmsReq, callback) => {
+        try {
+            consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.AddressE.addAddressOnCms(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
     }
 })
 

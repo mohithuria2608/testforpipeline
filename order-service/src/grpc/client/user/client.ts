@@ -73,6 +73,44 @@ export class UserService {
             }
         })
     }
+
+    async createUserOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await userServiceValidator.createUserOnCmsValidator(payload)
+                this.userClient.creatUserOnCms(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully created user on cms", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating user on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async creatAddressOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await userServiceValidator.createAddressOnCmsValidator(payload)
+                this.userClient.createAddressOnCms(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully created address on cms", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating address on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const userService = new UserService();

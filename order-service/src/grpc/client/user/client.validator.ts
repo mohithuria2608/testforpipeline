@@ -95,6 +95,67 @@ export class UserServiceValidator {
             }
         })
     }
+
+    async createUserOnCmsValidator(data: IUserRequest.IUserData) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                    id: Joi.string().required(),
+                    sdmUserRef: Joi.number().required(),
+                    cmsUserRef: Joi.number().required(),
+                    isGuest: Joi.boolean().required(),
+                    name: Joi.string().required(),
+                    cCode: Joi.string().required(),
+                    phnNo: Joi.string().required(),
+                    phnVerified: Joi.boolean().required(),
+                    email: Joi.string().required(),
+                    profileStep: Joi.number().required(),
+                    socialKey: Joi.string().required(),
+                    medium: Joi.string().required(),
+                    createdAt: Joi.number().required(),
+                    cartId: Joi.string().required()
+                });
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(error.message)
+                resolve({})
+            } catch (error) {
+                reject(validatorErr(error.message))
+            }
+        })
+    }
+
+    async createAddressOnCmsValidator(data: IUserRequest.IUserData) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                    id: Joi.string().required(),
+                    sdmUserRef: Joi.number().required(),
+                    cmsUserRef: Joi.number().required(),
+                    isGuest: Joi.boolean().required(),
+                    name: Joi.string().required(),
+                    cCode: Joi.string().required(),
+                    phnNo: Joi.string().required(),
+                    phnVerified: Joi.boolean().required(),
+                    email: Joi.string().required(),
+                    profileStep: Joi.number().required(),
+                    socialKey: Joi.string().required(),
+                    medium: Joi.string().required(),
+                    createdAt: Joi.number().required(),
+                    cartId: Joi.string().required(),
+                    asAddress: Joi.any(),
+                    cmsAddress: Joi.any(),
+                    sdmAddress: Joi.any(),
+                });
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(error.message)
+                resolve({})
+            } catch (error) {
+                reject(validatorErr(error.message))
+            }
+        })
+    }
 }
 
 

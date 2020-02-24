@@ -202,12 +202,11 @@ export class UserController {
                     deleteUserId = userchange[0].deleteUserId
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
-                
+
                 console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
                 if (asAddress && asAddress.length > 0) {
-
                 }
                 if (cmsAddress && cmsAddress.length > 0)
                     ENTITY.AddressE.createCmsAddOnAs(userData, cmsAddress)
@@ -217,10 +216,6 @@ export class UserController {
 
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-            }
-            if (deleteUserId && deleteUserId != "") {
-                await Aerospike.remove({ set: ENTITY.UserE.set, key: deleteUserId })
-                await ENTITY.SessionE.removeAllSessionRelatedToUserId(deleteUserId)
             }
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: payload.isGuest,
@@ -236,9 +231,13 @@ export class UserController {
                 session.sessionTime
             )
             if (userchange[0].address && userchange[0].address.id) {
-                if (payload.isGuest == 1)
-                    Aerospike.remove({ key: userData.id, set: ENTITY.AddressE.set })
-                await addressController.syncOldAddress(headers, userData, {
+                let bin = userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP ? Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP : Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                if (deleteUserId && deleteUserId != "") {
+                    let userDataToSend = await ENTITY.UserE.getUser({ userId: deleteUserId })
+                    await ENTITY.AddressE.updateAddress({ addressId: userchange[0].address.id }, bin, userDataToSend, true)
+                } else
+                    await ENTITY.AddressE.updateAddress({ addressId: userchange[0].address.id }, bin, userData, true)
+                await addressController.syncOldAddress(headers, userData.id, {
                     addressId: userchange[0].address.id,
                     storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.storeId : undefined,
                     lat: userchange[0].address.lat,
@@ -248,8 +247,11 @@ export class UserController {
                     flatNum: userchange[0].address.flatNum,
                     tag: userchange[0].address.tag
                 });
-                if (deleteUserId && deleteUserId != "")
-                    Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
+            }
+            if (deleteUserId && deleteUserId != "") {
+                await Aerospike.remove({ set: ENTITY.UserE.set, key: deleteUserId })
+                await ENTITY.SessionE.removeAllSessionRelatedToUserId(deleteUserId)
+                Aerospike.remove({ key: deleteUserId, set: ENTITY.AddressE.set })
             }
             return { accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, response: formatUserData(userData, headers, payload.isGuest) }
         } catch (error) {
