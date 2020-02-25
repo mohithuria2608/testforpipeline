@@ -238,6 +238,12 @@ export class AddressEntity extends BaseEntity {
         try {
             if (userData.asAddress && typeof userData.asAddress == 'string')
                 userData.asAddress = JSON.parse(userData.asAddress)
+            if (userData.asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) {
+                userData.asAddress[0].bldgName = ""
+                userData.asAddress[0].description = ""
+                userData.asAddress[0].flatNum = ""
+                userData.asAddress[0].addressType = "PICKUP"
+            }
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
