@@ -136,7 +136,7 @@ export class OrderClass extends BaseEntity {
                             product.items.forEach(i => {
                                 if (i['sku'] == product.selectedItem) {
                                     Entries.CEntry.push({
-                                        ItemID: 600002,// i.sdmId,
+                                        ItemID: i.sdmId,
                                         Level: 0,
                                         ModCode: "NONE",
                                         Name: i.name,

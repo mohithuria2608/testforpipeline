@@ -29,194 +29,547 @@ export const start = (async () => {
         "qty": 1,
         "associative": 0,
         "bundleProductOptions": [
+
+        ],
+        "catId": 36,
+        "configurableProductOptions": [
           {
-            "compId": 0,
-            "imageThumbnail": "/d/u/dummy-product.png",
-            "ingredient": 1,
-            "isDependent": 0,
-            "isModifier": 0,
-            "maximumQty": 0,
-            "minimumQty": 0,
-            "position": 1,
-            "productLinks": [
+            "id": 144,
+            "options": [
               {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 73,
-                "imageThumbnail": "/d/u/dummy-product.png",
-                "modGroupId": 10028,
-                "name": "American Cheese",
-                "option_id": 0,
+                "id": 16285,
+                "isSelected": 1,
                 "position": 1,
-                "price": 0,
-                "sdmId": 0,
-                "selected": 0,
-                "selection_id": 0,
-                "selectionQty": 1,
-                "sku": 810001,
-                "subOptions": [
-                  {
-                    "id": 218,
-                    "modGroupId": 0,
-                    "name": "Regular",
-                    "option_id": 0,
-                    "price": 2,
-                    "product_id": 1719,
-                    "sdmId": 810001,
-                    "selected": 1,
-                    "selection_id": 0,
-                    "sku": 810001,
-                    "title": "Regular"
-                  },
-                  {
-                    "id": 219,
-                    "modGroupId": 0,
-                    "name": "Extra",
-                    "option_id": 0,
-                    "price": 4,
-                    "product_id": 1719,
-                    "sdmId": 810001,
-                    "selected": 0,
-                    "selection_id": 0,
-                    "sku": 810001,
-                    "title": "Extra"
-                  }
-                ],
-                "title": "American Cheese"
+                "title": "Regular"
               },
               {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 74,
-                "imageThumbnail": "/d/u/dummy-product.png",
-                "modGroupId": 10027,
-                "name": "Lettuce",
-                "option_id": 0,
+                "id": 16287,
+                "isSelected": 0,
                 "position": 2,
-                "price": 0,
-                "sdmId": 0,
-                "selected": 1,
-                "selection_id": 0,
-                "selectionQty": 1,
-                "sku": 811701,
-                "subOptions": [
-                  {
-                    "id": 221,
-                    "modGroupId": 0,
-                    "name": "Regular",
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1723,
-                    "sdmId": 811701,
-                    "selected": 1,
-                    "selection_id": 0,
-                    "sku": 811701,
-                    "title": "Regular"
-                  },
-                  {
-                    "id": 222,
-                    "modGroupId": 0,
-                    "name": "Extra",
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1723,
-                    "sdmId": 811701,
-                    "selected": 0,
-                    "selection_id": 0,
-                    "sku": 811701,
-                    "title": "Extra"
-                  }
-                ],
-                "title": "Lettuce"
+                "title": "Medium"
               },
               {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 75,
-                "imageThumbnail": "/d/u/dummy-product.png",
-                "modGroupId": 10027,
-                "name": "Tomato",
-                "option_id": 0,
+                "id": 16286,
+                "isSelected": 0,
                 "position": 3,
-                "price": 0,
-                "sdmId": 0,
-                "selected": 0,
-                "selection_id": 0,
-                "selectionQty": 1,
-                "sku": 811703,
-                "subOptions": [
-                  {
-                    "id": 224,
-                    "modGroupId": 0,
-                    "name": "Regular",
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1727,
-                    "sdmId": 811703,
-                    "selected": 1,
-                    "selection_id": 0,
-                    "sku": 811703,
-                    "title": "Regular"
-                  },
-                  {
-                    "id": 225,
-                    "modGroupId": 0,
-                    "name": "Extra",
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1727,
-                    "sdmId": 811703,
-                    "selected": 0,
-                    "selection_id": 0,
-                    "sku": 811703,
-                    "title": "Extra"
-                  }
-                ],
-                "title": "Tomato"
+                "title": "Large"
+              },
+              {
+                "id": 16294,
+                "isSelected": 0,
+                "position": 4,
+                "title": "Family"
               }
             ],
-            "subtitle": "Choose Your Condiments",
-            "title": "Choose Your Condiments",
-            "type": "checkbox"
+            "position": 1,
+            "selIndex": 1,
+            "subtitle": "Choice of Size",
+            "title": "Choice of Size"
           }
         ],
-        "catId": 34,
-        "configurableProductOptions": [
-
-        ],
         "description": "",
-        "finalPrice": 20,
-        "id": 1676,
-        "image": "/imagestemp/itm110031.png",
-        "imageSmall": "/imagestemp/itm110031.png",
-        "imageThumbnail": "/imagestemp/itm110031.png",
+        "finalPrice": 9.5,
+        "id": 1708,
+        "image": "/v/r/vrg5000083.png",
+        "imageSmall": "/v/r/vrg5000083.png",
+        "imageThumbnail": "/v/r/vrg5000083.png",
         "inSide": 0,
+        "items": [
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 8.5,
+            "id": 1639,
+            "imageThumbnail": "/m/e/menupotatodipper.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Potato Dipper- Regular",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510071,
+            "sel1Value": 16285,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510071,
+            "specialPrice": 8.5,
+            "taxClassId": 0,
+            "title": "Potato Dipper- Regular",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 9.5,
+            "id": 1640,
+            "imageThumbnail": "/imagestemp/itm510072.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Medium Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510072,
+            "sel1Value": 16287,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510072,
+            "specialPrice": 9.5,
+            "taxClassId": 0,
+            "title": "Medium Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 10.5,
+            "id": 1641,
+            "imageThumbnail": "/imagestemp/itm510073.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Large Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510073,
+            "sel1Value": 16286,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510073,
+            "specialPrice": 10.5,
+            "taxClassId": 0,
+            "title": "Large Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 15,
+            "id": 1638,
+            "imageThumbnail": "/imagestemp/itm510074.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Family Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510074,
+            "sel1Value": 16294,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510074,
+            "specialPrice": 15,
+            "taxClassId": 0,
+            "title": "Family Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          }
+        ],
         "langMenuId": "En#1",
-        "langMenuIdCatId": "En#1#34",
-        "langMenuIdCatIdProductId": "En#1#34#1676",
-        "langMenuIdProductId": "En#1#1676",
+        "langMenuIdCatId": "En#1#36",
+        "langMenuIdCatIdProductId": "En#1#36#1708",
+        "langMenuIdProductId": "En#1#1708",
         "language": "En",
         "menuId": 1,
         "metaKeyword": [
-          "KENTUCKY BURGER ZINGER"
+          "Dipper Fries"
         ],
-        "name": "KENTUCKY BURGER ZINGER",
-        "originalTypeId": "simple",
-        "position": 6,
+        "name": "Dipper Fries",
+        "originalTypeId": "configurable",
+        "position": 1,
         "promoId": -1,
-        "sdmId": 110031,
-        "selectedItem": 0,
-        "sellingPrice": 20,
-        "sku": 110031,
-        "specialPrice": 20,
+        "sdmId": 5000083,
+        "selectedItem": 510071,
+        "sellingPrice": 8.5,
+        "sku": 5000083,
+        "specialPrice": 9.5,
         "taxClassId": 2,
-        "typeId": "bundle",
+        "typeId": "configurable",
+        "viewIdentifier": 0,
+        "virtualGroup": 16298,
+        "visibility": 4
+      },
+      {
+        "qty": 1,
+        "associative": 0,
+        "bundleProductOptions": [
+
+        ],
+        "catId": 36,
+        "configurableProductOptions": [
+          {
+            "id": 144,
+            "options": [
+              {
+                "id": 16285,
+                "isSelected": 0,
+                "position": 1,
+                "title": "Regular"
+              },
+              {
+                "id": 16287,
+                "isSelected": 1,
+                "position": 2,
+                "title": "Medium"
+              },
+              {
+                "id": 16286,
+                "isSelected": 0,
+                "position": 3,
+                "title": "Large"
+              },
+              {
+                "id": 16294,
+                "isSelected": 0,
+                "position": 4,
+                "title": "Family"
+              }
+            ],
+            "position": 1,
+            "selIndex": 1,
+            "subtitle": "Choice of Size",
+            "title": "Choice of Size"
+          }
+        ],
+        "description": "",
+        "finalPrice": 9.5,
+        "id": 1708,
+        "image": "/v/r/vrg5000083.png",
+        "imageSmall": "/v/r/vrg5000083.png",
+        "imageThumbnail": "/v/r/vrg5000083.png",
+        "inSide": 0,
+        "items": [
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 8.5,
+            "id": 1639,
+            "imageThumbnail": "/m/e/menupotatodipper.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Potato Dipper- Regular",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510071,
+            "sel1Value": 16285,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510071,
+            "specialPrice": 8.5,
+            "taxClassId": 0,
+            "title": "Potato Dipper- Regular",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 9.5,
+            "id": 1640,
+            "imageThumbnail": "/imagestemp/itm510072.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Medium Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510072,
+            "sel1Value": 16287,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510072,
+            "specialPrice": 9.5,
+            "taxClassId": 0,
+            "title": "Medium Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 10.5,
+            "id": 1641,
+            "imageThumbnail": "/imagestemp/itm510073.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Large Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510073,
+            "sel1Value": 16286,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510073,
+            "specialPrice": 10.5,
+            "taxClassId": 0,
+            "title": "Large Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 15,
+            "id": 1638,
+            "imageThumbnail": "/imagestemp/itm510074.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Family Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510074,
+            "sel1Value": 16294,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510074,
+            "specialPrice": 15,
+            "taxClassId": 0,
+            "title": "Family Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          }
+        ],
+        "langMenuId": "En#1",
+        "langMenuIdCatId": "En#1#36",
+        "langMenuIdCatIdProductId": "En#1#36#1708",
+        "langMenuIdProductId": "En#1#1708",
+        "language": "En",
+        "menuId": 1,
+        "metaKeyword": [
+          "Dipper Fries"
+        ],
+        "name": "Dipper Fries",
+        "originalTypeId": "configurable",
+        "position": 1,
+        "promoId": -1,
+        "sdmId": 5000083,
+        "selectedItem": 510072,
+        "sellingPrice": 9.5,
+        "sku": 5000083,
+        "specialPrice": 9.5,
+        "taxClassId": 2,
+        "typeId": "configurable",
+        "viewIdentifier": 0,
+        "virtualGroup": 16298,
+        "visibility": 4
+      },
+      {
+        "qty": 1,
+        "associative": 0,
+        "bundleProductOptions": [
+
+        ],
+        "catId": 36,
+        "configurableProductOptions": [
+          {
+            "id": 144,
+            "options": [
+              {
+                "id": 16285,
+                "isSelected": 0,
+                "position": 1,
+                "title": "Regular"
+              },
+              {
+                "id": 16287,
+                "isSelected": 0,
+                "position": 2,
+                "title": "Medium"
+              },
+              {
+                "id": 16286,
+                "isSelected": 1,
+                "position": 3,
+                "title": "Large"
+              },
+              {
+                "id": 16294,
+                "isSelected": 0,
+                "position": 4,
+                "title": "Family"
+              }
+            ],
+            "position": 1,
+            "selIndex": 1,
+            "subtitle": "Choice of Size",
+            "title": "Choice of Size"
+          }
+        ],
+        "description": "",
+        "finalPrice": 9.5,
+        "id": 1708,
+        "image": "/v/r/vrg5000083.png",
+        "imageSmall": "/v/r/vrg5000083.png",
+        "imageThumbnail": "/v/r/vrg5000083.png",
+        "inSide": 0,
+        "items": [
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 8.5,
+            "id": 1639,
+            "imageThumbnail": "/m/e/menupotatodipper.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Potato Dipper- Regular",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510071,
+            "sel1Value": 16285,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510071,
+            "specialPrice": 8.5,
+            "taxClassId": 0,
+            "title": "Potato Dipper- Regular",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 9.5,
+            "id": 1640,
+            "imageThumbnail": "/imagestemp/itm510072.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Medium Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510072,
+            "sel1Value": 16287,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510072,
+            "specialPrice": 9.5,
+            "taxClassId": 0,
+            "title": "Medium Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 10.5,
+            "id": 1641,
+            "imageThumbnail": "/imagestemp/itm510073.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Large Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510073,
+            "sel1Value": 16286,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510073,
+            "specialPrice": 10.5,
+            "taxClassId": 0,
+            "title": "Large Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          },
+          {
+            "associative": 0,
+            "catId": 0,
+            "description": "",
+            "finalPrice": 15,
+            "id": 1638,
+            "imageThumbnail": "/imagestemp/itm510074.png",
+            "inSide": 0,
+            "metaKeyword": [
+
+            ],
+            "name": "Family Dipper Fries",
+            "position": 0,
+            "promoId": 0,
+            "sdmId": 510074,
+            "sel1Value": 16294,
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 510074,
+            "specialPrice": 15,
+            "taxClassId": 0,
+            "title": "Family Dipper Fries",
+            "typeId": "simple",
+            "virtualGroup": 0,
+            "visibility": 0
+          }
+        ],
+        "langMenuId": "En#1",
+        "langMenuIdCatId": "En#1#36",
+        "langMenuIdCatIdProductId": "En#1#36#1708",
+        "langMenuIdProductId": "En#1#1708",
+        "language": "En",
+        "menuId": 1,
+        "metaKeyword": [
+          "Dipper Fries"
+        ],
+        "name": "Dipper Fries",
+        "originalTypeId": "configurable",
+        "position": 1,
+        "promoId": -1,
+        "sdmId": 5000083,
+        "selectedItem": 510073,
+        "sellingPrice": 10.5,
+        "sku": 5000083,
+        "specialPrice": 9.5,
+        "taxClassId": 2,
+        "typeId": "configurable",
         "viewIdentifier": 0,
         "virtualGroup": 16298,
         "visibility": 4
@@ -314,7 +667,7 @@ export const start = (async () => {
             product.items.forEach(i => {
               if (i['sku'] == product.selectedItem) {
                 Entries.CEntry.push({
-                  ItemID: 600002,// i.sdmId,
+                  ItemID: i.sdmId,
                   Level: 0,
                   ModCode: "NONE",
                   Name: i.name,
@@ -610,7 +963,7 @@ export const start = (async () => {
       }
     })
 
-    // console.log("Entries", JSON.stringify(Entries))
+    console.log("Entries", JSON.stringify(Entries))
 
     await bootstrap(server)
     //   <sdm:Comps>
@@ -629,17 +982,17 @@ export const start = (async () => {
       "conceptID": 3,
       "order": {
         "AddressID": "10512559",
-        "Comps": {
-          "KeyValueOfdecimalCCompkckD9yn_P": {
-            Key: 7193,
-            Value: {
-              Amount: "11",
-              CompID: 7193,
-              EnterAmount: "11",
-              Name: "10% W.F. Discount"
-            }
-          }
-        },
+        // "Comps": {
+        //   "KeyValueOfdecimalCCompkckD9yn_P": {
+        //     Key: 7193,
+        //     Value: {
+        //       Amount: "11",
+        //       CompID: 7193,
+        //       EnterAmount: "11",
+        //       Name: "10% W.F. Discount"
+        //     }
+        //   }
+        // },
         "ConceptID": "3",
         "CountryID": 1,
         "CustomerID": "7694266",
