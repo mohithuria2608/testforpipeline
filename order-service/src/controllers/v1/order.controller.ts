@@ -88,10 +88,11 @@ export class OrderController {
                 if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                     addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                 let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                console.log("gggggggggggggggggggg", typeof getAddress, typeof getAddress.cmsAddressRef, getAddress.cmsAddressRef, (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0))
+
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
                 else {
-                    console.log("gggggggggggggggggggg", typeof getAddress.cmsAddressRef, getAddress.cmsAddressRef, (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0))
                     let test = {
                         "id": "5e54aec8ffab8565fef7c29e",
                         "sdmAddressRef": 10512945,
