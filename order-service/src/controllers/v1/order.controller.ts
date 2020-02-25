@@ -88,27 +88,10 @@ export class OrderController {
                 if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                     addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                 let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
-                console.log("gggggggggggggggggggg", typeof getAddress, typeof getAddress.cmsAddressRef, getAddress.cmsAddressRef, (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0))
 
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
                 else {
-                    let test = {
-                        "id": "5e54aec8ffab8565fef7c29e",
-                        "sdmAddressRef": 10512945,
-                        "cmsAddressRef": 0,
-                        "storeId": 1219,
-                        "tag": "OTHER",
-                        "bldgName": "",
-                        "description": "",
-                        "flatNum": "",
-                        "addressType": "PICKUP",
-                        "lat": 24.4056857468405,
-                        "lng": 54.6030337619019,
-                        "cityId": 17,
-                        "areaId": 16,
-                        "countryId": 1
-                    }
                     if (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
                         await userService.creatAddressOnCms(userData)

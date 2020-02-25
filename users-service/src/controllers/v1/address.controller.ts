@@ -79,9 +79,9 @@ export class AddressController {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude
                     payload['lng'] = store[0].location.longitude
-                    payload['bldgName'] = ""
-                    payload['description'] = ""
-                    payload['flatNum'] = ""
+                    payload['bldgName'] = store[0].location.description
+                    payload['description'] = store[0].location.description
+                    payload['flatNum'] = store[0].location.description
                     payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
