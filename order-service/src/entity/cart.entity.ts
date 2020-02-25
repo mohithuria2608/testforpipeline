@@ -572,23 +572,15 @@ export class CartClass extends BaseEntity {
                 })
             }
             if (cmsCart.shipping && cmsCart.shipping.length > 0) {
-                amount.push({
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
-                    name: "Delivery",
-                    code: cmsCart.shipping[0].method_code,
-                    amount: cmsCart.shipping[0].price,
-                    sequence: 4,
-                    action: "add"
-                })
-            } else {
-                amount.push({
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
-                    name: "Delivery",
-                    code: cmsCart.shipping[0].method_code,
-                    amount: cmsCart.shipping[0].price,
-                    sequence: 4,
-                    action: "add"
-                })
+                if (cmsCart.shipping[0].price > 0)
+                    amount.push({
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
+                        name: "Delivery",
+                        code: cmsCart.shipping[0].method_code,
+                        amount: cmsCart.shipping[0].price,
+                        sequence: 4,
+                        action: "add"
+                    })
             }
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
