@@ -584,10 +584,15 @@ export class OrderClass extends BaseEntity {
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0,
             }
-            if (promo && promo != undefined && promo.posId == 7193 || promo.posId == 6830) {
-                orderData['promo'] = promo
+            if (promo) {
+                if (promo.posId == 7193 || promo.posId == 6830)
+                    orderData['promo'] = promo
+                else
+                    orderData['promo'] = {}
             } else
                 orderData['promo'] = {}
+            console.log("00000000000000000promo-----------------", orderData['promo'])
+
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order
         } catch (error) {
