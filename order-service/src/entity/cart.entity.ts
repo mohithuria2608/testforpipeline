@@ -517,10 +517,35 @@ export class CartClass extends BaseEntity {
 
     async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
         try {
+            let a = {
+                "cart_items": [
+                    {
+                        "product_id": "1728",
+                        "qty": 1,
+                        "price": 49,
+                        "type_id": "bundle"
+                    }
+                ],
+                "cms_cart_id": "1100",
+                "currency_code": "USD",
+                "subtotal": 49,
+                "grandtotal": 49,
+                "tax": [
+                    {
+                        "tax_name": "VAT@5%",
+                        "amount": 2.33
+                    }
+                ],
+                "not_available": [
+
+                ],
+                "is_price_changed": false,
+                "coupon_code": "",
+                "discount_amount": "",
+                "success": false
+            }
             let prevCart: ICartRequest.ICartData
             if (curItems == undefined) {
-                console.log("validate cart 33333333333333", cartId)
-
                 prevCart = await this.getCart({ cartId: cartId })
                 curItems = prevCart.items
             }
