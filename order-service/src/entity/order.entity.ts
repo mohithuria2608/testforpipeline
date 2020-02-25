@@ -499,6 +499,7 @@ export class OrderClass extends BaseEntity {
             let createOrder = await OrderSDME.createOrder(data)
             if (createOrder) {
                 let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                    orderId: createOrder,
                     sdmOrderRef: createOrder,
                     isActive: 1,
                     updatedAt: new Date().getTime()
@@ -542,7 +543,7 @@ export class OrderClass extends BaseEntity {
                 cmsOrderRef: cartData.cmsOrderRef,
                 userId: cartData.userId,
                 sdmUserRef: userData.sdmUserRef,
-                orderId: cartData.orderId,
+                orderId: 0,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: cartData.items,
