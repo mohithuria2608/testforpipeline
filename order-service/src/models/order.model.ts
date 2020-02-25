@@ -126,11 +126,12 @@ const orderSchema = new Schema({
                 Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION,
                 Constant.DATABASE.STATUS.TRANSACTION.CAPTURE,
                 Constant.DATABASE.STATUS.TRANSACTION.REFUND,
+                Constant.DATABASE.STATUS.TRANSACTION.FAILED,
             ]
         }
     },
     transLogs: { type: Schema.Types.Mixed, required: true },
-    isActive: { type: Number, required: true, enum: [0, 1], default: 1  },
+    isActive: { type: Number, required: true, enum: [0, 1], default: 1 },
     changePaymentMode: { type: Number, required: true, enum: [0, 1], default: 0 },
     paymentMethodAddedOnSdm: { type: Number, required: true, enum: [0, 1], default: 0 },
     createdAt: { type: Number, required: true },

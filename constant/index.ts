@@ -399,6 +399,7 @@ export const DATABASE = {
         },
 
         APP_VERSION: {
+            CURRENT: "CURRENT",
             FORCE: "FORCE",
             SKIP: "SKIP",
             NORMAL: "NORMAL"
@@ -535,7 +536,8 @@ export const DATABASE = {
             AUTHORIZATION: 'AUTHORIZATION',
             VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
             CAPTURE: 'CAPTURE',
-            REFUND: 'REFUND'
+            REFUND: 'REFUND',
+            FAILED: 'FAILED'
         }
     },
 

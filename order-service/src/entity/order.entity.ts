@@ -530,7 +530,6 @@ export class OrderClass extends BaseEntity {
         userData: IUserRequest.IUserData,
         promo: IPromotionGrpcRequest.IValidatePromotionRes) {
         try {
-            console.log("00000000000000000promo-----------------", promo)
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
@@ -591,7 +590,6 @@ export class OrderClass extends BaseEntity {
                     orderData['promo'] = {}
             } else
                 orderData['promo'] = {}
-            console.log("00000000000000000promo-----------------", orderData['promo'])
 
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order

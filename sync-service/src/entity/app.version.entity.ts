@@ -31,7 +31,9 @@ export class AppversionEntity extends BaseEntity {
         type: Joi.string().required().valid(
             Constant.DATABASE.TYPE.APP_VERSION.NORMAL,
             Constant.DATABASE.TYPE.APP_VERSION.SKIP,
-            Constant.DATABASE.TYPE.APP_VERSION.FORCE).description("sk"),
+            Constant.DATABASE.TYPE.APP_VERSION.FORCE,
+            Constant.DATABASE.TYPE.APP_VERSION.CURRENT).description("sk"),
+        appversion: Joi.string().required(),
         isActive: Joi.number().valid(0, 1).required(),
         createdAt: Joi.number(),
         updatedAt: Joi.number(),

@@ -1,5 +1,6 @@
 import * as config from "config"
 import * as Koa from 'koa'
+process.env.ALLOW_CONFIG_MUTATIONS = "true";
 import { bootstrap, consolelog } from './utils'
 require('./grpc/server')
 import middleware from './middlewares'
@@ -8,6 +9,7 @@ import { event } from './lib'
 import * as SDM from './sdm';
 
 const app = new Koa()
+
 
 
 app.use(middleware());
