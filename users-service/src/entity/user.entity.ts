@@ -176,7 +176,7 @@ export class UserEntity extends BaseEntity {
                 userUpdate['asAddress'] = payload.asAddress
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
                 userUpdate['sdmAddress'] = payload.sdmAddress
-                
+
             userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
@@ -259,6 +259,7 @@ export class UserEntity extends BaseEntity {
     async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
             let res = await SDM.UserSDME.createCustomerOnSdm(payload)
+
             let putArg: IAerospike.Put = {
                 bins: {
                     sdmUserRef: parseInt(res.CUST_ID.toString()),
@@ -270,6 +271,9 @@ export class UserEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
             let user = await this.getUser({ userId: payload.id })
+            if (user.socialKey) {
+                SDM.UserSDME.updateCustomerTokenOnSdm(user)
+            }
             if (user.cmsUserRef != 0) {
                 kafkaService.kafkaSync({
                     set: this.set,
@@ -279,6 +283,7 @@ export class UserEntity extends BaseEntity {
                     }
                 })
             }
+
             return user
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)

@@ -571,26 +571,30 @@ export class CartClass extends BaseEntity {
                     action: "add"
                 })
             }
-            let delivery = {
-                type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
-                name: "Delivery",
-                code: "DELIVERY",
-                amount: 0,
-                sequence: 4,
-                action: "add"
+            if (cmsCart.shipping && cmsCart.shipping.length > 0) {
+                amount.push({
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
+                    name: "Delivery",
+                    code: cmsCart.shipping[0].method_code,
+                    amount: cmsCart.shipping[0].price,
+                    sequence: 4,
+                    action: "add"
+                })
+            } else {
+                amount.push({
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
+                    name: "Delivery",
+                    code: cmsCart.shipping[0].method_code,
+                    amount: cmsCart.shipping[0].price,
+                    sequence: 4,
+                    action: "add"
+                })
             }
-            if (cmsCart.grandtotal > 0) {
-                delivery.amount = 6.5
-                // if (cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY")
-                //     delivery.amount = 0
-            }
-            amount.push(delivery)
-
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal + delivery.amount - ((cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY") ? 6.5 : 0),
+                amount: cmsCart.grandtotal + cmsCart.shipping[0].price,
                 sequence: 5,
                 action: "add"
             })

@@ -98,6 +98,31 @@ export class UserSDMEntity extends BaseSDM {
 
     /**
     * @method SDK
+    * */
+    async updateCustomerTokenOnSdm(payload: IUserRequest.IUserData) {
+        try {
+            let data: IUserSDMRequest.IUpdateCustomerTokenReq = {
+                name: "UpdateCustomerToken",
+                req: {
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                    language: "En",
+                    customerID: payload.sdmUserRef,
+                    token: payload.socialKey
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.UpdateCustomerTokenResult
+            else
+                return Promise.reject(res)
+        } catch (error) {
+            consolelog(process.cwd(), 'updateCustomerTokenOnSdm', JSON.stringify(error), false)
+            return (error)
+        }
+    }
+
+    /**
+    * @method SDK
     * @param {string} email : customer email
     * */
     async getCustomerByEmail(payload) {

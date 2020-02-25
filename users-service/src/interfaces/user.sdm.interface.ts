@@ -53,4 +53,14 @@ declare namespace IUserSDMRequest {
             WCUST_STATUS: number
         }
     }
+
+    interface IUpdateCustomerTokenReq {
+        name: string,
+        req: IUpdateCustomerToken,
+    }
+
+    interface IUpdateCustomerToken {
+        
+    }
+
 }

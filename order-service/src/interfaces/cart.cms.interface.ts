@@ -31,7 +31,7 @@ declare namespace ICartCMSRequest {
         subtotal: number,
         grandtotal: number,
         tax: ITax[]
-        shipping: IShipping
+        shipping: IShipping[]
         not_available: number[],
         is_price_changed: boolean,
         coupon_code: string,
@@ -46,6 +46,8 @@ declare namespace ICartCMSRequest {
     }
 
     interface IShipping {
-
+        method_name: string,
+        price: number,
+        method_code: string
     }
 }
