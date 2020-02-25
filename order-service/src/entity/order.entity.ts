@@ -524,6 +524,7 @@ export class OrderClass extends BaseEntity {
     * @method INTERNAL
     * */
     async createOrder(
+        headers: ICommonRequest.IHeaders,
         orderType: string,
         cartData: ICartRequest.ICartData,
         address: IUserGrpcRequest.IFetchAddressRes,
@@ -543,7 +544,7 @@ export class OrderClass extends BaseEntity {
                 cmsOrderRef: cartData.cmsOrderRef,
                 userId: cartData.userId,
                 sdmUserRef: userData.sdmUserRef,
-                orderId: 0,
+                country: headers.country,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: cartData.items,

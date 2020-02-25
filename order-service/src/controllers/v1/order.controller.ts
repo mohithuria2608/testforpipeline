@@ -147,7 +147,7 @@ export class OrderController {
                     return { cartValidate: cartData }
                 }
                 cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData, promo)
+                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, cartData, getAddress, getStore, userData, promo)
             }
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
@@ -227,7 +227,7 @@ export class OrderController {
      * */
     async orderDetail(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderDetail, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: parseInt(payload.orderId) }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { transLogs: 0 })
             if (order && order._id) {
                 return order
             } else {
@@ -245,7 +245,7 @@ export class OrderController {
      * */
     async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: parseInt(payload.orderId) }, { status: 1, orderId: 1 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1 })
             if (order && order._id) {
                 order['nextPing'] = 15
                 order['unit'] = "second"
@@ -266,13 +266,19 @@ export class OrderController {
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let sdmOrderRef = payload.orderId.split("-")
+            if (sdmOrderRef && sdmOrderRef.length > 0) {
+                if (sdmOrderRef[0] != headers.country)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
             let userData: IUserRequest.IUserData
             if (payload.cCode && payload.phnNo) {
                 userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
                 if (userData.id == undefined || userData.id == null || userData.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: parseInt(payload.orderId) }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: parseInt(sdmOrderRef[1]) }, { transLogs: 0 })
             if (order && order._id) {
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)

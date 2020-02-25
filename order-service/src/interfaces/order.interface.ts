@@ -9,7 +9,7 @@ declare namespace IOrderRequest {
         cmsOrderRef: number,
         userId: string,
         sdmUserRef: number,
-        orderId: string,
+        country: string,
         status: string,
         createdAt: number,
         updatedAt: number,

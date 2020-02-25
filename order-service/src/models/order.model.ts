@@ -9,7 +9,7 @@ export interface Iorder extends Document {
     cmsOrderRef: number,
     userId: string,
     sdmUserRef: number,
-    orderId: string,
+    country: string,
     status: string,
     sdmOrderStatus: number,
     items: any,
@@ -33,7 +33,11 @@ const orderSchema = new Schema({
     cmsOrderRef: { type: Number, required: true },
     userId: { type: String, required: true, index: true },
     sdmUserRef: { type: Number, required: true },
-    orderId: { type: String, required: true, index: true },
+    country: {
+        type: String, required: true, enum: [
+            Constant.DATABASE.COUNTRY.UAE
+        ]
+    },
     status: {
         type: String, enum: [
             Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
