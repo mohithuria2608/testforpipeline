@@ -87,7 +87,7 @@ export class SessionEntity extends BaseEntity {
                 sessionTime: sessionTime,
             }
             let checkSession = await this.getSession(headers.deviceid, payload.userId)
-            consolelog(process.cwd(), "session", JSON.stringify(session), false)
+            consolelog(process.cwd(), "checkSession", JSON.stringify(checkSession), false)
             if (checkSession && checkSession.id) {
                 session['id'] = checkSession.id
             } else {

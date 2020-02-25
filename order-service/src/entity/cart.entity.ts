@@ -601,9 +601,8 @@ export class CartClass extends BaseEntity {
                         dataToUpdate['notAvailable'].push(obj)
                     }
                 })
-            } else {
+            } else
                 dataToUpdate['items'] = curItems
-            }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,

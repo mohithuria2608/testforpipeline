@@ -15,7 +15,8 @@ export class MiscUserController {
             let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let sessionUpdate: ISessionRequest.ISession = {
                 sessionTime: sessionTime,
-                userId: authObj.id
+                userId: authObj.id,
+                isGuest: authObj.isGuest
             }
             await ENTITY.SessionE.buildSession(headers, sessionUpdate)
 
