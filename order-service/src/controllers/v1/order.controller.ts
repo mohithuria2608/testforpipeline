@@ -227,7 +227,7 @@ export class OrderController {
      * */
     async orderDetail(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderDetail, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: parseInt(payload.orderId) }, { transLogs: 0 })
             if (order && order._id) {
                 return order
             } else {
@@ -245,7 +245,7 @@ export class OrderController {
      * */
     async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1, orderId: 1 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: parseInt(payload.orderId) }, { status: 1, orderId: 1 })
             if (order && order._id) {
                 order['nextPing'] = 15
                 order['unit'] = "second"
@@ -272,7 +272,7 @@ export class OrderController {
                 if (userData.id == undefined || userData.id == null || userData.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: parseInt(payload.orderId) }, { transLogs: 0 })
             if (order && order._id) {
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
