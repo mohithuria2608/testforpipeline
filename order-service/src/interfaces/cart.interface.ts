@@ -52,6 +52,7 @@ declare namespace ICartRequest {
         name_ar: string,
     }
     interface IValidateCart extends ICommonRequest.ICordinatesOpt {
+        orderType: string
         cartId: string,
         curMenuId: number,
         menuUpdatedAt: number,

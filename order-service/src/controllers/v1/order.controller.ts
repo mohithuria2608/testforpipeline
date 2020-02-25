@@ -131,7 +131,8 @@ export class OrderController {
                     curMenuId: payload.curMenuId,
                     menuUpdatedAt: payload.menuUpdatedAt,
                     couponCode: payload.couponCode,
-                    items: payload.items
+                    items: payload.items,
+                    orderType: payload.orderType
                 }
                 let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)

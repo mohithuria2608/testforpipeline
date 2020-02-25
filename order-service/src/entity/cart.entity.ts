@@ -321,8 +321,6 @@ export class CartClass extends BaseEntity {
         try {
             await this.createDefaultCart({ userId: userId, cartId: cartId })
             await Aerospike.remove({ set: this.set, key: oldCartId })
-            consolelog(process.cwd(), "assignNewCart1111111111111111112222222222222222", oldCartId, false)
-
             return
         } catch (error) {
             consolelog(process.cwd(), "assignNewCart", JSON.stringify(error), false)
@@ -491,7 +489,8 @@ export class CartClass extends BaseEntity {
                 cms_user_id: userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart
+                cart_items: cart,
+                order_type: payload.orderType
             }
             if (payload.couponCode)
                 req['coupon_code'] = payload.couponCode

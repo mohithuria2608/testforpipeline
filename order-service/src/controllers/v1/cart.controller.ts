@@ -2,7 +2,6 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../aerospike'
 
 export class CartController {
 
@@ -20,6 +19,7 @@ export class CartController {
      * */
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
+            payload.orderType = payload.orderType ? payload.orderType : Constant.DATABASE.TYPE.ORDER.DELIVERY
             let storeOnline = true
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
@@ -61,10 +61,8 @@ export class CartController {
             } else
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
-            console.log("validate cart ",cmsValidatedCart, payload.cartId, payload.items.length)
-            
-            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
 
+            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
             res['storeOnline'] = storeOnline
