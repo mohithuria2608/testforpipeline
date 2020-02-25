@@ -91,7 +91,7 @@ export class OrderController {
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
                 else {
-                    console.log("gggggggggggggggggggg", typeof getAddress.cmsAddressRef, getAddress.cmsAddressRef)
+                    console.log("gggggggggggggggggggg", typeof getAddress.cmsAddressRef, getAddress.cmsAddressRef, (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0))
                     let test = {
                         "id": "5e54aec8ffab8565fef7c29e",
                         "sdmAddressRef": 10512945,
