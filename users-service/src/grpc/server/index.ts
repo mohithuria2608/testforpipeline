@@ -75,13 +75,13 @@ server.addService(userProto.UserService.service, {
             callback(grpcSendError(error))
         }
     },
-    creatUserOnCms: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
+    createUserOnCms: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
         try {
-            consolelog(process.cwd(), "creatUserOnCms", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.UserE.createUserOnCms(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "creatUserOnCms", JSON.stringify(error), false)
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
@@ -92,6 +92,26 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+    createUserOnSdm: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.createUserOnSdm(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+    createAddressOnSdm: async (call: IUserGrpcRequest.ICreatAddressOnSdmReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createAddressOnSdm", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.AddressE.addAddressOnSdm(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createAddressOnSdm", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

@@ -236,6 +236,8 @@ export class AddressEntity extends BaseEntity {
    * */
     async addAddressOnSdm(userData: IUserRequest.IUserData) {
         try {
+            if (userData.asAddress && typeof userData.asAddress == 'string')
+                userData.asAddress = JSON.parse(userData.asAddress)
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,

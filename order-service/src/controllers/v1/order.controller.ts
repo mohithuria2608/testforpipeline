@@ -62,7 +62,8 @@ export class OrderController {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.sdmUserRef && userData.sdmUserRef == 0) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
+                // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
+                userData = await userService.createUserOnSdm(userData)
             }
             if (userData.cmsUserRef != undefined && userData.cmsUserRef == 0) {
                 userData = await userService.createUserOnCms(userData)
@@ -89,11 +90,35 @@ export class OrderController {
                 let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
-                if (getAddress.cmsAddressRef != undefined && getAddress.cmsAddressRef == 0) {
-                    userData['asAddress'] = JSON.stringify([getAddress])
-                    await userService.creatAddressOnCms(userData)
-                    getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                else {
+                    let test = {
+                        "id": "5e54aec8ffab8565fef7c29e",
+                        "sdmAddressRef": 10512945,
+                        "cmsAddressRef": 0,
+                        "storeId": 1219,
+                        "tag": "OTHER",
+                        "bldgName": "",
+                        "description": "",
+                        "flatNum": "",
+                        "addressType": "PICKUP",
+                        "lat": 24.4056857468405,
+                        "lng": 54.6030337619019,
+                        "cityId": 17,
+                        "areaId": 16,
+                        "countryId": 1
+                    }
+                    if (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0) {
+                        userData['asAddress'] = JSON.stringify([getAddress])
+                        await userService.creatAddressOnCms(userData)
+                        getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                    }
+                    if (getAddress.sdmAddressRef != undefined && getAddress.sdmAddressRef == 0) {
+                        userData['asAddress'] = JSON.stringify([getAddress])
+                        await userService.creatAddressOnSdm(userData)
+                        getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                    }
                 }
+
                 let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
