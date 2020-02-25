@@ -18,7 +18,6 @@ export const start = (async () => {
   try {
     const port = config.get("server.order.port")
     const server = app.listen(port)
-
     // let a: IMenuGrpcRequest.IFetchMenuRes
 
     // await ENTITY.CartE.createCartOnCMS({}, { cmsUserRef: 12 })
