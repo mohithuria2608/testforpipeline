@@ -61,11 +61,11 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
-            if (userData.sdmUserRef && userData.sdmUserRef == 0) {
+            if (userData.sdmUserRef == undefined || userData.sdmUserRef == 0) {
                 // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 userData = await userService.createUserOnSdm(userData)
             }
-            if (userData.cmsUserRef != undefined && userData.cmsUserRef == 0) {
+            if (userData.cmsUserRef == undefined || userData.cmsUserRef == 0) {
                 userData = await userService.createUserOnCms(userData)
             }
             let order: IOrderRequest.IOrderData
@@ -112,7 +112,7 @@ export class OrderController {
                         await userService.creatAddressOnCms(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                     }
-                    if (getAddress.sdmAddressRef != undefined && getAddress.sdmAddressRef == 0) {
+                    if (getAddress.sdmAddressRef == undefined || getAddress.sdmAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
                         await userService.creatAddressOnSdm(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
