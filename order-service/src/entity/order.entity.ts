@@ -583,7 +583,7 @@ export class OrderClass extends BaseEntity {
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0,
             }
-            if (promo.posId == 7193 || promo.posId == 6830) {
+            if (promo && promo.posId == 7193 || promo.posId == 6830) {
                 orderData['promo'] = promo
             } else
                 orderData['promo'] = {}

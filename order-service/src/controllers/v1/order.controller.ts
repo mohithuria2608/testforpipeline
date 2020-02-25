@@ -142,7 +142,7 @@ export class OrderController {
                     cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
                     cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
-                    cartData['promo'] = promo
+                    cartData['promo'] = promo ? promo : {}
                     return { cartValidate: cartData }
                 }
                 cartData['orderType'] = payload.orderType
