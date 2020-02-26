@@ -423,3 +423,10 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
     else
         return statsObj
 }
+
+
+export let nameConstructor = function (name) {
+    let firstName = ""
+    let lastName = ""
+    return { firstName, lastName }
+}

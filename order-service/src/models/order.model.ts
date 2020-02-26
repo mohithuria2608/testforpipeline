@@ -13,6 +13,7 @@ export interface Iorder extends Document {
     status: string,
     sdmOrderStatus: number,
     items: any,
+    itemsHash: any
     amount: any,
     address: any,
     store: any,
@@ -53,6 +54,7 @@ const orderSchema = new Schema({
     },
     sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
     items: { type: Schema.Types.Mixed, required: true },
+    itemsHash: { type: String },
     amount: [{
         sequence: { type: Number, },
         name: { type: String },
@@ -141,7 +143,8 @@ const orderSchema = new Schema({
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true },
     trackUntil: { type: Number, required: true },
-    validationRemarks: { type: String }
+    validationRemarks: { type: String },
+
 });
 
 export let order = model<Iorder>('order', orderSchema)

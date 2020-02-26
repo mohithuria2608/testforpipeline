@@ -530,7 +530,8 @@ export class OrderClass extends BaseEntity {
         address: IUserGrpcRequest.IFetchAddressRes,
         store: IStoreGrpcRequest.IStore,
         userData: IUserRequest.IUserData,
-        promo: IPromotionGrpcRequest.IValidatePromotionRes) {
+        promo: IPromotionGrpcRequest.IValidatePromotionRes,
+        itemsHash: string) {
         try {
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
@@ -584,6 +585,7 @@ export class OrderClass extends BaseEntity {
                 isActive: 1,
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0,
+                itemsHash: itemsHash
             }
             if (promo) {
                 if (promo.posId == 7193 || promo.posId == 6830)

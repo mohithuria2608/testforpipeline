@@ -60,6 +60,7 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let itemsHash = hashObj(payload.items)
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.sdmUserRef == undefined || userData.sdmUserRef == 0) {
                 userData = await userService.createUserOnSdm(userData)
@@ -70,8 +71,12 @@ export class OrderController {
             let order: IOrderRequest.IOrderData
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
-                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO }, {}, { lean: true })
+            if (hashObj(getCurrentCart.items) == itemsHash) {
+                order = await ENTITY.OrderE.getOneEntityMdb({
+                    cartId: payload.cartId,
+                    status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
+                    itemsHash: itemsHash
+                }, {}, { lean: true, sort: { createdAt: -1 } })
                 if (order && order._id)
                     retry = true
             }
@@ -145,7 +150,7 @@ export class OrderController {
                     return { cartValidate: cartData }
                 }
                 cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, cartData, getAddress, getStore, userData, promo)
+                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, cartData, getAddress, getStore, userData, promo, itemsHash)
             }
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({

@@ -16,6 +16,7 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
+            
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {

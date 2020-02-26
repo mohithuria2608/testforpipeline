@@ -31,22 +31,13 @@ export const start = (async () => {
     //   createdAt: new Date().getTime()
     // });
 
-    // let ar1 = Object.keys(STATUS_MSG)
-    // ar1.map(obj => {
-    //   console.log("obj", obj)
-    //   let ar2 = Object.keys(STATUS_MSG[obj])
-    //   ar2.map(obj2 => {
-    //     console.log("obj2", obj2)
-    //     let ar3 = Object.keys(STATUS_MSG[obj][obj2])
-    //     ar3.map(obj3 => {
-    //       console.log("obj3", obj3)
-    //       STATUS_MSG[obj][obj2][obj3]['message_Ar'] = STATUS_MSG[obj][obj2][obj3]['message'] + " in arabic"
-    //       STATUS_MSG[obj][obj2][obj3]['message_En'] = STATUS_MSG[obj][obj2][obj3]['message']
-    //     })
-    //   })
-    // })
-    // console.log("STATUS_MSG", JSON.stringify(STATUS_MSG))
+    let a = "ankit"
+    let splitName = a.split(" ")
+    let firstName = splitName.length == 1 ? splitName[0] : splitName.join(" ")
+    let lastName = splitName.length > 1 ? splitName[splitName.length - 1] : "."
 
+    console.log("nameeeeeeeeeeeeeeeee firstName", firstName)
+    console.log("nameeeeeeeeeeeeeeeee lastName", lastName)
     await bootstrap(server)
 
   } catch (error) {

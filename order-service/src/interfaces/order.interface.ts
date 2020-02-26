@@ -14,6 +14,7 @@ declare namespace IOrderRequest {
         createdAt: number,
         updatedAt: number,
         items: any,
+        itemsHash: string
         address: IAddress,
         store: IStore,
         amount: IAmount[],
