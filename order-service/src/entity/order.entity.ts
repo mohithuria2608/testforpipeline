@@ -49,8 +49,8 @@ export class OrderClass extends BaseEntity {
                 CEntry: []
             }
             items.forEach(product => {
-                let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
                 for (let i = 0; i < product.qty; i++) {
+                    let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
                     if (product.originalTypeId == "simple") {
                         if (product.typeId == "simple") {
                             // "name": "Fresh Orange Juice"
