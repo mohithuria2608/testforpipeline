@@ -330,7 +330,11 @@ export class UserEntity extends BaseEntity {
                         set: this.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify(user)
+                            argv: JSON.stringify({
+                                cmsUserRef:user.cmsUserRef,
+                                sdmUserRef:user.sdmUserRef,
+                                sdmCorpRef:user.sdmCorpRef,
+                            })
                         }
                     })
                 }
