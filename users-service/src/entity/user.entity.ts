@@ -183,6 +183,7 @@ export class UserEntity extends BaseEntity {
                 isCreate = false
             } else {
                 isCreate = true
+                userUpdate.cartId = userUpdate.id
                 this.createDefaultCart(userUpdate.id)
             }
             let putArg: IAerospike.Put = {

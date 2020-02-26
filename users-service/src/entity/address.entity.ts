@@ -129,6 +129,7 @@ export class AddressEntity extends BaseEntity {
                 }
                 await Aerospike.listOperations(listAppendArg)
             } else {
+                deliveryAddress['description'] = store.location.description.substr(0, 10)
                 deliveryAddress['addressType'] = Constant.DATABASE.TYPE.ADDRESS.PICKUP
                 let dataToUpdate = {
                     pickup: [deliveryAddress]
