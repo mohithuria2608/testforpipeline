@@ -3,7 +3,7 @@ import * as Constant from '../constant';
 
 export interface Iorder extends Document {
     cartId: string,
-    cartUnique: any
+    cartUnique: string
     orderType: string,
     cmsCartRef: number,
     sdmOrderRef: number,

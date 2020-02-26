@@ -498,7 +498,7 @@ export class OrderClass extends BaseEntity {
             }
             let createOrder = await OrderSDME.createOrder(data)
             if (createOrder) {
-                let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
+                let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
                     orderId: createOrder,
                     sdmOrderRef: createOrder,
                     isActive: 1,
