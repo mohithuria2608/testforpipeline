@@ -1188,8 +1188,8 @@ export const STATUS_MSG = {
         }
     },
     FRONTEND_ERROR: {
-        VALIDATION: {
-            En: {
+        En: {
+            VALIDATION: {
                 INVALID_COUNTRY_CODE: "Your number belongs to another country",
                 INVALID_PHONE_NO: "Invalid phone number",
                 INVALID_EMAIL: "Please enter email address in a valid format",
@@ -1199,8 +1199,10 @@ export const STATUS_MSG = {
                 EMPTY_EMAIL: "Empty email",
                 EMPTY_OTP: "Empty otp",
                 EMPTY_NAME: "Empty name",
-            },
-            Ar: {
+            }
+        },
+        Ar: {
+            VALIDATION: {
                 INVALID_COUNTRY_CODE: "Your number belongs to another country in arabic",
                 INVALID_PHONE_NO: "Invalid phone number in arabic",
                 INVALID_EMAIL: "Please enter email address in a valid format in arabic",
