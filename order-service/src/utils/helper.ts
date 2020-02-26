@@ -233,25 +233,29 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     }
 }
 
-export let sendSuccess = function (successMsg, language: string = Constant.DATABASE.LANGUAGE.EN, data) {
+export let sendSuccess = function (successMsg, language, data) {
+    console.log("language", language)
+    console.log("successMsg", successMsg)
+    console.log("data", data)
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-
+    console.log("key", key)
     if (typeof data === 'object' && data.hasOwnProperty('password')) {
         delete data['password']
     }
     if (typeof data === 'object' && data.hasOwnProperty('statusCode') && data.hasOwnProperty('message')) {
         return {
             statusCode: data.statusCode,
-            message: data[`message_${key}`] ? data[`message_${key}`] : data.message,
+            message: data[key] ? data[key] : data.message,
             type: data.type,
             data: data.data || null
         }
 
-    } else if (successMsg != null && typeof successMsg === 'object' && successMsg.hasOwnProperty('statusCode') && successMsg.hasOwnProperty('message')) {
-        successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT[key]
+    }
+    else if (successMsg != null && typeof successMsg === 'object' && successMsg.hasOwnProperty('statusCode') && successMsg.hasOwnProperty('message')) {
+        successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT
         return {
             statusCode: successMsg.statusCode,
-            message: successMsg.message,
+            message: successMsg[key],
             data: data || null,
             type: (successMsg.type) ? successMsg.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type
         }
