@@ -213,17 +213,17 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
         customError.message_Ar = error
         customError.message_En = error
     }
-    customError.message = customError.message && customError.message.replace(/"/g, '')
-    customError.message = customError.message && customError.message.replace('[', '')
-    customError.message = customError.message && customError.message.replace(']', '')
+    customError.message = customError.message ? customError.message && customError.message.replace(/"/g, '') : ""
+    customError.message = customError.message ? customError.message && customError.message.replace('[', '') : ""
+    customError.message = customError.message ? customError.message && customError.message.replace(']', '') : ""
 
-    customError.message_Ar = customError.message && customError.message_Ar.replace(/"/g, '')
-    customError.message_Ar = customError.message && customError.message_Ar.replace('[', '')
-    customError.message_Ar = customError.message && customError.message_Ar.replace(']', '')
+    customError.message_Ar = customError.message_Ar ? customError.message_Ar && customError.message_Ar.replace(/"/g, '') : ""
+    customError.message_Ar = customError.message_Ar ? customError.message_Ar && customError.message_Ar.replace('[', '') : ""
+    customError.message_Ar = customError.message_Ar ? customError.message_Ar && customError.message_Ar.replace(']', '') : ""
 
-    customError.message_En = customError.message && customError.message_En.replace(/"/g, '')
-    customError.message_En = customError.message && customError.message_En.replace('[', '')
-    customError.message_En = customError.message && customError.message_En.replace(']', '')
+    customError.message_En = customError.message_En ? customError.message_En && customError.message_En.replace(/"/g, '') : ""
+    customError.message_En = customError.message_En ? customError.message_En && customError.message_En.replace('[', '') : ""
+    customError.message_En = customError.message_En ? customError.message_En && customError.message_En.replace(']', '') : ""
 
 
     return {
