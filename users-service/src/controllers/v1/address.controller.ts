@@ -224,9 +224,12 @@ export class AddressController {
     * */
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let address: IAddressRequest.IAddress[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
-            return address
+            if (auth.isGuest != undefined && auth.isGuest == 0) {
+                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+                let address: IAddressRequest.IAddress[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
+                return address
+            } else
+                return []
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
             return Promise.reject(error)
