@@ -481,7 +481,7 @@ export class OrderClass extends BaseEntity {
             }
             /**
              * @step 1 :create order on sdm 
-             * @step 2 :update mongo order using payload.cartId sdmOrderRef
+             * @step 2 :update mongo order using payload.cartUnique sdmOrderRef
              */
             let data: IOrderSdmRequest.ICreateOrder = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
