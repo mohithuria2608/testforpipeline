@@ -40,6 +40,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
 
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
+    let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
     if (error && error.code && error.details) {
         customError.message = error.details
         customError.message_Ar = error.details
@@ -178,8 +179,8 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
-            customError.message_Ar = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
-            customError.message_En = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+            customError.message_Ar = error.hasOwnProperty(key) ? error[key] : error['customMessage']
+            customError.message_En = error.hasOwnProperty(key) ? error[key] : error['customMessage']
             if (error.hasOwnProperty('statusCode'))
                 customError['statusCode'] = error.statusCode
             if (error.hasOwnProperty('httpCode'))
@@ -189,8 +190,8 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
         }
         else if (error.hasOwnProperty('statusCode') && error.hasOwnProperty('httpCode') && error.hasOwnProperty('payload')) {
             customError.message = error.payload.message
-            customError.message_Ar = error.message
-            customError.message_En = error.message
+            customError.message_Ar = error.payload[key]
+            customError.message_En = error.payload[key]
             customError.statusCode = error.payload.statusCode
             customError.httpCode = error.payload.httpCode
             customError.type = error.payload.type
