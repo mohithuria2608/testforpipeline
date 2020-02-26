@@ -323,7 +323,18 @@ export class UserEntity extends BaseEntity {
                     update: true,
                 }
                 await Aerospike.put(putArg)
-                return await this.getUser({ userId: payload.id })
+                let user = await this.getUser({ userId: payload.id })
+                console.log("user after getting cms id", user)
+                if (user.sdmUserRef && user.sdmCorpRef) {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        cms: {
+                            update: true,
+                            argv: JSON.stringify(user)
+                        }
+                    })
+                }
+                return user
             }
             return {}
         } catch (error) {
