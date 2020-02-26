@@ -497,6 +497,8 @@ export class CartClass extends BaseEntity {
                 curItems = prevCart.items
             }
             let dataToUpdate: ICartRequest.ICartData = {}
+            console.log("cmsCart", JSON.stringify(cmsCart))
+
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
