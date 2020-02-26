@@ -1032,7 +1032,7 @@ export const STATUS_MSG = {
                 "type": "OTP_VERIFIED",
                 "message": "Otp verified",
                 "message_Ar": "تم بنجاح",
-                "message_En": "Success"
+                "message_En": "Otp verified"
             },
             "RESET_SUCCESS": {
                 "statusCode": 200,
@@ -1117,9 +1117,9 @@ export const STATUS_MSG = {
             "DEFAULT": {
                 "statusCode": 200,
                 "httpCode": 200,
-                "message_Ar": "adfa in arabic",
-                "message_En": "adfa",
-                "message": "adfa",
+                "message_Ar": "بنجاح",
+                "message_En": "Success",
+                "message": "Success",
                 "type": "DEFAULT"
             },
             "ACCOUNT_DELETED": {
