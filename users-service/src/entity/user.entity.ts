@@ -274,6 +274,7 @@ export class UserEntity extends BaseEntity {
             if (user.socialKey) {
                 SDM.UserSDME.updateCustomerTokenOnSdm(user)
             }
+            console.log("user after getting sdm id", user)
             if (user.cmsUserRef != 0) {
                 kafkaService.kafkaSync({
                     set: this.set,
