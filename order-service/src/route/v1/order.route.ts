@@ -5,7 +5,6 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { orderController } from '../../controllers';
 import * as JOI from './common.joi.validator';
-import * as ENTITY from '../../entity'
 
 export default (router: Router) => {
     router
@@ -142,26 +141,6 @@ export default (router: Router) => {
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
-                }
-                catch (error) {
-                    throw error
-                }
-            })
-        .get('/test',
-            validate({
-                query: {
-                    orderId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER.message)),
-                    status: Joi.string().required()
-                }
-            }),
-            async (ctx) => {
-                try {
-                    await ENTITY.OrderE.updateOneEntityMdb({ orderId: ctx.request.query.orderId }, {
-                        status: ctx.request.query.status,
-                        updatedAt: new Date().getTime()
-                    })
-                    ctx.status = 200;
-                    ctx.body = {}
                 }
                 catch (error) {
                     throw error

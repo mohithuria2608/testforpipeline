@@ -2126,17 +2126,6 @@ export const start = (async () => {
     console.log("Entries", JSON.stringify(Entries))
 
     await bootstrap(server)
-    //   <sdm:Comps>
-    //   <arr:KeyValueOfdecimalCCompkckD9yn_P>
-    //   <arr:Key>7193</arr:Key>
-    //   <arr:Value>
-    //              <psor:Amount>{10 percent of the subtotal}</psor:Amount>
-    //              <psor:CompID>7193</psor:CompID>
-    //  <psor:EnterAmount>{10 percent of the subtotal}</psor:EnterAmount>
-    //              <psor:Name>10% W.F. Discount</psor:Name>
-    //    </arr:Value>
-    //    </arr:KeyValueOfdecimalCCompkckD9yn_P>
-    //    </sdm:Comps>
     let order = {
       "licenseCode": "AmericanaWeb",
       "conceptID": 3,
