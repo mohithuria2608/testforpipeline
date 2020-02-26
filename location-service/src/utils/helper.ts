@@ -7,9 +7,9 @@ import * as randomstring from 'randomstring';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
-export let grpcSendError = function (error) {
+export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)
-    error = sendError(error).payload
+    error = sendError(error, language).payload
     let grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL
     let grpcErrType = "INTERNAL"
     let message = error.message
@@ -35,7 +35,7 @@ export let grpcSendError = function (error) {
     return Constant.STATUS_MSG.GRPC_ERROR.ERROR(grpcErrCode, grpcErrType, message)
 }
 
-export let sendError = function (error) {
+export let sendError = function (error, language: string = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In error handler type of ", typeof JSON.stringify(error), false)
     consolelog(process.cwd(), "In error handler direct ", JSON.stringify(error), false)
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
@@ -43,6 +43,8 @@ export let sendError = function (error) {
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     if (error && error.code && error.details) {
         customError.message = error.details
+        customError.message_Ar = error.details
+        customError.message_En = error.details
         switch (error.code) {
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.CANCELLED: {
                 consolelog(process.cwd(), "Unhandled grpc error type CANCELLED", JSON.stringify(error), true)
@@ -150,6 +152,8 @@ export let sendError = function (error) {
     else if (typeof error == 'object') {
         if (error.name == "AerospikeError") {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+            customError.message_Ar = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+            customError.message_En = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.DB_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E500.DB_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.DB_ERROR.type
@@ -159,18 +163,24 @@ export let sendError = function (error) {
         }
         else if (error.name === 'ValidationError') {
             customError.message = error.message
+            customError.message_Ar = error.message
+            customError.message_En = error.message
             customError.statusCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
         }
         else if (error.name === 'PaymentError') {
             customError.message = error.message;
+            customError.message_Ar = error.message
+            customError.message_En = error.message
             customError.statusCode = error.statusCode;
             customError.httpCode = error.httpCode;
             customError.type = error.type;
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+            customError.message_Ar = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
+            customError.message_En = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
             if (error.hasOwnProperty('statusCode'))
                 customError['statusCode'] = error.statusCode
             if (error.hasOwnProperty('httpCode'))
@@ -180,6 +190,8 @@ export let sendError = function (error) {
         }
         else if (error.hasOwnProperty('statusCode') && error.hasOwnProperty('httpCode') && error.hasOwnProperty('payload')) {
             customError.message = error.payload.message
+            customError.message_Ar = error.message
+            customError.message_En = error.message
             customError.statusCode = error.payload.statusCode
             customError.httpCode = error.payload.httpCode
             customError.type = error.payload.type
@@ -187,6 +199,8 @@ export let sendError = function (error) {
         else {
             consolelog(process.cwd(), "Unhandled error type 2", JSON.stringify(error), true)
             customError.message = JSON.stringify(error)
+            customError.message_Ar = JSON.stringify(error)
+            customError.message_En = JSON.stringify(error)
             customError.statusCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.statusCode
             customError.httpCode = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.httpCode
             customError.type = Constant.STATUS_MSG.ERROR.E500.IMP_ERROR.type
@@ -194,33 +208,45 @@ export let sendError = function (error) {
     }
     else {
         customError.message = error
+        customError.message_Ar = error
+        customError.message_En = error
     }
     customError.message = customError.message && customError.message.replace(/"/g, '')
     customError.message = customError.message && customError.message.replace('[', '')
     customError.message = customError.message && customError.message.replace(']', '')
 
+    customError.message_Ar = customError.message && customError.message_Ar.replace(/"/g, '')
+    customError.message_Ar = customError.message && customError.message_Ar.replace('[', '')
+    customError.message_Ar = customError.message && customError.message_Ar.replace(']', '')
+
+    customError.message_En = customError.message && customError.message_En.replace(/"/g, '')
+    customError.message_En = customError.message && customError.message_En.replace('[', '')
+    customError.message_En = customError.message && customError.message_En.replace(']', '')
+
+
     return {
         statusCode: customError.statusCode,
         httpCode: customError.httpCode,
-        payload: customError,
+        payload: stsMsgI18(customError, language),
         headers: {}
     }
 }
+export let sendSuccess = function (successMsg, language: string = Constant.DATABASE.LANGUAGE.EN, data) {
+    let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
 
-export let sendSuccess = function (successMsg, data) {
     if (typeof data === 'object' && data.hasOwnProperty('password')) {
         delete data['password']
     }
     if (typeof data === 'object' && data.hasOwnProperty('statusCode') && data.hasOwnProperty('message')) {
         return {
             statusCode: data.statusCode,
-            message: data.message,
+            message: data[`message_${key}`] ? data[`message_${key}`] : data.message,
             type: data.type,
             data: data.data || null
         }
 
     } else if (successMsg != null && typeof successMsg === 'object' && successMsg.hasOwnProperty('statusCode') && successMsg.hasOwnProperty('message')) {
-        successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.message
+        successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT[key]
         return {
             statusCode: successMsg.statusCode,
             message: successMsg.message,
@@ -229,7 +255,7 @@ export let sendSuccess = function (successMsg, data) {
         }
 
     } else {
-        successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.message
+        successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT[key]
         return {
             statusCode: 200,
             message: successMsg,
@@ -359,4 +385,18 @@ export let validatorErr = function (error) {
         name: "ValidationError",
         message: error
     }
+}
+
+export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: string = Constant.DATABASE.LANGUAGE.EN, returnMsg?: boolean, returnErr?: boolean) {
+    let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
+    statsObj.message = statsObj[key];
+    delete statsObj.message_En;
+    delete statsObj.message_Ar;
+    if (returnMsg)
+        if (returnErr)
+            return statsObj.message
+        else
+            return new Error(statsObj.message)
+    else
+        return statsObj
 }

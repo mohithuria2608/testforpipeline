@@ -30,11 +30,13 @@ declare namespace ICommonRequest {
         lng?: number
     }
 
-    interface IError {
+     interface IError {
         statusCode: number,
         httpCode: number,
         type: string,
         message: string
+        message_Ar: string
+        message_En: string
     }
     interface IActivityLogger {
         type: string,

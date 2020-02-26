@@ -4,7 +4,6 @@ import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
 import miscRoutes from './v1/misc.route'
-import aerospikeRoutes from './v1/aerospike.route'
 import guest from './v1/guest.route'
 import miscUserRoutes from './v1/misc.user.route'
 import userOnboardingRoutes from './v1/user.onboarding.route'
@@ -16,7 +15,6 @@ const version1 = "/v1"
 const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: miscRoutes, prefix: version1 + '/config' },
-  { routes: aerospikeRoutes, prefix: version1 + '/aerospike' },
   { routes: guest, prefix: version1 + '/guest' },
   { routes: miscUserRoutes, prefix: version1 + '/user' },
   { routes: userOnboardingRoutes, prefix: version1 + '/login' },

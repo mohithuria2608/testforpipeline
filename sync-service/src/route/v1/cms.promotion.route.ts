@@ -28,7 +28,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ICmsPromotionRequest.ICmsPromotion = ctx.request.body;
                     let res = await cmsPromotionController.postPromotion(headers, payload);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT,Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

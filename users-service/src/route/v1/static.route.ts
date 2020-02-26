@@ -18,7 +18,7 @@ export default (router: Router) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let res = await miscController.faq(headers);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -33,11 +33,11 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {
+                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, {
                         "html": "<html>  <head>  </head> <body> Privacy Policy copyright@KFC</body> </html>"
                     })
                     // let res = await miscController.privacyPolicy(headers);
-                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse
                 }
@@ -52,11 +52,11 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, {
+                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, {
                         html: "<html>  <head>  </head> <body> Terms and Condition copyright@KFC</body> </html>"
                     })
                     // let res = await miscController.privacyPolicy(headers);
-                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse
                 }

@@ -1,5 +1,7 @@
 import * as Joi from '@hapi/joi';
 import { consolelog, validatorErr } from '../utils'
+import * as Constant from '../constant'
+
 /**
  * Helper function to validate an object against the provided schema,
  * and to throw a custom error if object is not valid.
@@ -50,7 +52,11 @@ export const validate = function (validationObj) {
             return next()
         } catch (error) {
             // If any of the objects fails validation, send an HTTP 400 response.
-            return Promise.reject(validatorErr(error))
+            let key = (ctx.headers.language && ctx.headers.language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
+            if (Constant.STATUS_MSG.ERROR.E422[error])
+                return Promise.reject(validatorErr(Constant.STATUS_MSG.ERROR.E422[error][key]))
+            else
+                return Promise.reject(validatorErr(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR[key]))
         }
     }
 }

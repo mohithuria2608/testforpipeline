@@ -1,5 +1,6 @@
 import * as Joi from '@hapi/joi';
 import { consolelog, validatorErr } from '../utils'
+import * as Constant from '../constant'
 
 /**
  * Helper function to validate an object against the provided schema,
@@ -39,9 +40,6 @@ export const validate = function (validationObj) {
     // Return a Koa middleware function
     return async (ctx, next) => {
         try {
-            consolelog(process.cwd(), "Body parameters", JSON.stringify(ctx.request.body), true)
-            consolelog(process.cwd(), "Query parameters", JSON.stringify(ctx.query), true)
-            consolelog(process.cwd(), "Path parameters", JSON.stringify(ctx.params), true)
             // Validate each request data object in the Koa context object
             await validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true })
             await validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })
@@ -54,7 +52,11 @@ export const validate = function (validationObj) {
             return next()
         } catch (error) {
             // If any of the objects fails validation, send an HTTP 400 response.
-            return Promise.reject(validatorErr(error))
+            let key = (ctx.headers.language && ctx.headers.language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
+            if (Constant.STATUS_MSG.ERROR.E422[error])
+                return Promise.reject(validatorErr(Constant.STATUS_MSG.ERROR.E422[error][key]))
+            else
+                return Promise.reject(validatorErr(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR[key]))
         }
     }
 }

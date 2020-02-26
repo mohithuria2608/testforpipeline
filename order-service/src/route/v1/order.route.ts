@@ -35,7 +35,7 @@ export default (router: Router) => {
                     let payload: IOrderRequest.IPostOrder = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.postOrder(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -61,7 +61,7 @@ export default (router: Router) => {
                     let payload: IOrderRequest.IOrderHistory = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.orderHistory(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -86,7 +86,7 @@ export default (router: Router) => {
                     let payload: IOrderRequest.IOrderDetail = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.orderDetail(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -111,7 +111,7 @@ export default (router: Router) => {
                     let payload: IOrderRequest.IOrderStatus = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.orderStatusPing(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -138,7 +138,7 @@ export default (router: Router) => {
                     let payload: IOrderRequest.ITrackOrder = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await orderController.trackOrder(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

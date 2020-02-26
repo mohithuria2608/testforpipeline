@@ -27,7 +27,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "getSession", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     fetchUser: async (call: IUserGrpcRequest.IFetchUserReq, callback) => {
@@ -37,7 +37,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchUser", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
@@ -62,7 +62,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     fetchAddress: async (call: IUserGrpcRequest.IFetchAddressReq, callback) => {
@@ -72,7 +72,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     createUserOnCms: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
@@ -82,7 +82,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     createAddressOnCms: async (call: IUserGrpcRequest.ICreatAddressOnCmsReq, callback) => {
@@ -92,7 +92,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     createUserOnSdm: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
@@ -102,7 +102,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     createAddressOnSdm: async (call: IUserGrpcRequest.ICreatAddressOnSdmReq, callback) => {
@@ -112,7 +112,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createAddressOnSdm", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     }
 })

@@ -513,8 +513,6 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
-                if (cmsCart.coupon_code == "FREEDELIVERY")
-                    cmsCart.discount_amount = 6.5
                 amount.push({
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
                     name: "Discount",
@@ -561,7 +559,7 @@ export class CartClass extends BaseEntity {
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal + cmsCart.shipping[0].price,
+                amount: cmsCart.grandtotal,
                 sequence: 5,
                 action: "add"
             })

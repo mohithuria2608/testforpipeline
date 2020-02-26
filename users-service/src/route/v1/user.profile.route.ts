@@ -16,15 +16,15 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
-                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
-                    email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message)),
-                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.message)),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
+                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
+                    email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
+                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
 
                     /**
                      * @description allow these keys
                      */
-                    isGuest: Joi.any().description("allow for android").error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    isGuest: Joi.any().description("allow for android").error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
                 }
             }),
             async (ctx) => {
@@ -33,7 +33,7 @@ export default (router: Router) => {
                     let payload: IUserRequest.ICreateProfile = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await userController.createProfile(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -49,10 +49,10 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    email: Joi.string().email().lowercase().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.message)),
-                    name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.message)),
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.message)),
-                    phnNo: Joi.string().max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.message)),
+                    email: Joi.string().email().lowercase().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
+                    name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
+                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
+                    phnNo: Joi.string().max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
 
                     /**
                      * @description allow these keys
@@ -66,7 +66,7 @@ export default (router: Router) => {
                     let payload: IUserRequest.IEditProfile = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await userController.editProfile(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

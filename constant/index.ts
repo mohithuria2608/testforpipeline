@@ -558,503 +558,513 @@ export const DATABASE = {
 };
 
 export const STATUS_MSG = {
-    ERROR: {
-        E400: {
-            USER_NOT_CREATED_ON_SDM: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_NOT_CREATED_ON_SDM',
-                message: 'Some issue has occured. Please try after sometime'
+    "ERROR": {
+        "E400": {
+            "USER_NOT_CREATED_ON_SDM": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_NOT_CREATED_ON_SDM",
+                "message": "Some issue has occured. Please try after sometime",
+                "message_Ar": "Some issue has occured. Please try after sometime in arabic",
+                "message_En": "Some issue has occured. Please try after sometime"
             },
-
-            USER_NOT_CREATED_ON_CMS: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_NOT_CREATED_ON_CMS',
-                message: 'Some issue has occured. Please try after sometime'
+            "USER_NOT_CREATED_ON_CMS": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_NOT_CREATED_ON_CMS",
+                "message": "Some issue has occured. Please try after sometime",
+                "message_Ar": "Some issue has occured. Please try after sometime in arabic",
+                "message_En": "Some issue has occured. Please try after sometime"
             },
-
-            MIN_CART_VALUE_VOILATION: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'MIN_CART_VALUE_VOILATION',
-                message: 'Minimum cart voilation'
+            "MIN_CART_VALUE_VOILATION": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "MIN_CART_VALUE_VOILATION",
+                "message": "Minimum cart voilation",
+                "message_Ar": "Minimum cart voilation in arabic",
+                "message_En": "Minimum cart voilation"
             },
-
-            MAX_COD_CART_VALUE_VOILATION: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'MAX_COD_CART_VALUE_VOILATION',
-                message: 'Maximum cod cart voilation'
+            "MAX_COD_CART_VALUE_VOILATION": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "MAX_COD_CART_VALUE_VOILATION",
+                "message": "Maximum cod cart voilation",
+                "message_Ar": "Maximum cod cart voilation in arabic",
+                "message_En": "Maximum cod cart voilation"
             },
-
-            INVALID_PROMO: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_PROMO',
-                message: 'Invalid Promotion'
+            "INVALID_PROMO": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_PROMO",
+                "message": "Invalid Promotion",
+                "message_Ar": "Invalid Promotion in arabic",
+                "message_En": "Invalid Promotion"
             },
-
-            PROMO_EXPIRED: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'PROMO_EXPIRED',
-                message: 'Promo expired'
+            "PROMO_EXPIRED": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "PROMO_EXPIRED",
+                "message": "Promo expired",
+                "message_Ar": "Promo expired in arabic",
+                "message_En": "Promo expired"
             },
-
-            INVALID_STORE: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_STORE',
-                message: 'Invalid store'
+            "INVALID_STORE": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_STORE",
+                "message": "Invalid store",
+                "message_Ar": "Invalid store in arabic",
+                "message_En": "Invalid store"
             },
-
-            INVALID_ADDRESS: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_ADDRESS',
-                message: 'Invalid address provided'
+            "INVALID_ADDRESS": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_ADDRESS",
+                "message": "Invalid address provided",
+                "message_Ar": "Invalid address provided in arabic",
+                "message_En": "Invalid address provided"
             },
-
-            PROFILE_SETUP_ALLREADY_COMPLETE: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
-                message: 'Profile setup is already complete'
+            "PROFILE_SETUP_ALLREADY_COMPLETE": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
+                "message": "Profile setup is already complete",
+                "message_Ar": "Profile setup is already complete in arabic",
+                "message_En": "Profile setup is already complete"
             },
-
-            OTP_SESSION_EXPIRED: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'OTP_SESSION_EXPIRED',
-                message: 'Otp session has expired'
+            "OTP_SESSION_EXPIRED": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "OTP_SESSION_EXPIRED",
+                "message": "Otp session has expired",
+                "message_Ar": "Otp session has expired in arabic",
+                "message_En": "Otp session has expired"
             },
-
-            OTP_EXPIRED: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'OTP_EXPIRED',
-                message: 'Otp entered has expired'
+            "OTP_EXPIRED": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "OTP_EXPIRED",
+                "message": "Otp entered has expired",
+                "message_Ar": "Otp entered has expired in arabic",
+                "message_En": "Otp entered has expired"
             },
-
-            INVALID_OTP: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_OTP',
-                message: 'Invalid otp'
+            "INVALID_OTP": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_OTP",
+                "message": "Invalid otp",
+                "message_Ar": "Invalid otp in arabic",
+                "message_En": "Invalid otp"
             },
-
-            USER_ALREADY_EXIST: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_ALREADY_EXIST',
-                message: 'User already exist, please login'
+            "USER_ALREADY_EXIST": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_ALREADY_EXIST",
+                "message": "User already exist, please login",
+                "message_Ar": "User already exist, please login in arabic",
+                "message_En": "User already exist, please login"
             },
-
-            INVALID_ID: {
-                statusCode: 400,
-                httpCode: 400,
-                message: 'Invalid Id Provided ',
-                type: 'INVALID_ID'
+            "INVALID_ID": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Invalid Id Provided ",
+                "type": "INVALID_ID",
+                "message_Ar": "Invalid Id Provided  in arabic",
+                "message_En": "Invalid Id Provided "
             },
-
-            APP_ERROR: {
-                statusCode: 400,
-                httpCode: 400,
-                message: 'Application Error',
-                type: 'APP_ERROR'
+            "APP_ERROR": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Application Error",
+                "type": "APP_ERROR",
+                "message_Ar": "Application Error in arabic",
+                "message_En": "Application Error"
             },
-
-            DEFAULT: {
-                statusCode: 400,
-                httpCode: 400,
-                message: 'Bad Request',
-                type: 'DEFAULT'
+            "DEFAULT": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Bad Request",
+                "type": "DEFAULT",
+                "message_Ar": "Bad Request in arabic",
+                "message_En": "Bad Request"
             }
         },
-        E401: {
-            UNAUTHORIZED: {
-                statusCode: 401,
-                httpCode: 401,
-                message: 'You are not authorized to perform this action',
-                type: 'UNAUTHORIZED'
+        "E401": {
+            "UNAUTHORIZED": {
+                "statusCode": 401,
+                "httpCode": 401,
+                "message": "You are not authorized to perform this action",
+                "type": "UNAUTHORIZED",
+                "message_Ar": "You are not authorized to perform this action in arabic",
+                "message_En": "You are not authorized to perform this action"
             },
-
-            ACCESS_TOKEN_EXPIRED: {
-                statusCode: 401,
-                httpCode: 401,
-                type: 'ACCESS_TOKEN_EXPIRED',
-                message: 'Access token has expired.'
+            "ACCESS_TOKEN_EXPIRED": {
+                "statusCode": 401,
+                "httpCode": 401,
+                "type": "ACCESS_TOKEN_EXPIRED",
+                "message": "Access token has expired.",
+                "message_Ar": "Access token has expired. in arabic",
+                "message_En": "Access token has expired."
             }
         },
-        E404: {
-            RESOURCE_NOT_FOUND: {
-                statusCode: 404,
-                httpCode: 404,
-                type: 'RESOURCE_NOT_FOUND',
-                message: 'Resource not found'
+        "E404": {
+            "RESOURCE_NOT_FOUND": {
+                "statusCode": 404,
+                "httpCode": 404,
+                "type": "RESOURCE_NOT_FOUND",
+                "message": "Resource not found",
+                "message_Ar": "Resource not found in arabic",
+                "message_En": "Resource not found"
             }
         },
-        E409: {
-            ORDER_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Order not found',
-                type: 'ORDER_NOT_FOUND'
+        "E409": {
+            "ORDER_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Order not found",
+                "type": "ORDER_NOT_FOUND",
+                "message_Ar": "Order not found in arabic",
+                "message_En": "Order not found"
             },
-
-            CONFIG_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Config not found',
-                type: 'CONFIG_NOT_FOUND'
+            "CONFIG_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Config not found",
+                "type": "CONFIG_NOT_FOUND",
+                "message_Ar": "Config not found in arabic",
+                "message_En": "Config not found"
             },
-
-            USER_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'User not found',
-                type: 'USER_NOT_FOUND'
+            "USER_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "User not found",
+                "type": "USER_NOT_FOUND",
+                "message_Ar": "User not found in arabic",
+                "message_En": "User not found"
             },
-
-            MENU_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Menu not found',
-                type: 'MENU_NOT_FOUND'
+            "MENU_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Menu not found",
+                "type": "MENU_NOT_FOUND",
+                "message_Ar": "Menu not found in arabic",
+                "message_En": "Menu not found"
             },
-
-            HOME_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Home not found',
-                type: 'HOME_NOT_FOUND'
+            "HOME_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Home not found",
+                "type": "HOME_NOT_FOUND",
+                "message_Ar": "Home not found in arabic",
+                "message_En": "Home not found"
             },
-
-            SERVICE_UNAVAILABLE: {
-                statusCode: 409,
-                httpCode: 409,
-                type: 'SERVICE_UNAVAILABLE',
-                message: "Sorry, we don't, deliver at this location"
+            "SERVICE_UNAVAILABLE": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "type": "SERVICE_UNAVAILABLE",
+                "message": "Sorry, we don't, deliver at this location",
+                "message_Ar": "Sorry, we don't, deliver at this location in arabic",
+                "message_En": "Sorry, we don't, deliver at this location"
             },
-
-            ADDRESS_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                type: 'ADDRESS_NOT_FOUND',
-                message: "Address not found"
+            "ADDRESS_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "type": "ADDRESS_NOT_FOUND",
+                "message": "Address not found",
+                "message_Ar": "Address not found in arabic",
+                "message_En": "Address not found"
             },
-
-            CART_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                type: 'CART_NOT_FOUND',
-                message: "Cart not found"
+            "CART_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "type": "CART_NOT_FOUND",
+                "message": "Cart not found",
+                "message_Ar": "Cart not found in arabic",
+                "message_En": "Cart not found"
             },
-
-            STORE_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Store not found',
-                type: 'STORE_NOT_FOUND'
+            "STORE_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Store not found",
+                "type": "STORE_NOT_FOUND",
+                "message_Ar": "Store not found in arabic",
+                "message_En": "Store not found"
             },
-
-            PROMO_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Promotion not found',
-                type: 'PROMO_NOT_FOUND'
+            "PROMO_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Promotion not found",
+                "type": "PROMO_NOT_FOUND",
+                "message_Ar": "Promotion not found in arabic",
+                "message_En": "Promotion not found"
             },
-
-            DATA_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Data not found',
-                type: 'DATA_NOT_FOUND'
-            },
-        },
-        E410: {
-            FORCE_UPDATE: {
-                statusCode: 410,
-                httpCode: 410,
-                message: 'Force update',
-                type: 'FORCE_UPDATE'
-            },
-        },
-        E422: {
-            INVALID_COUNTRY_CODE: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid country code',
-                type: 'INVALID_COUNTRY_CODE'
-            },
-            INVALID_PHONE_NO: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid phone number',
-                type: 'INVALID_PHONE_NO'
-            },
-            INVALID_EMAIL: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid email',
-                type: 'INVALID_EMAIL'
-            },
-            INVALID_NAME: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid name',
-                type: 'INVALID_NAME'
-            },
-            INVALID_LOCATION: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid location',
-                type: 'INVALID_LOCATION'
-            },
-            INVALID_ADDRESS: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid address',
-                type: 'INVALID_ADDRESS'
-            },
-            INVALID_OTP: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid otp',
-                type: 'INVALID_OTP'
-            },
-            INVALID_SOCIAL_INFO: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid social info',
-                type: 'INVALID_SOCIAL_INFO'
-            },
-            INVALID_CART: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid cart',
-                type: 'INVALID_CART'
-            },
-            INVALID_COUPON: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid coupon',
-                type: 'INVALID_COUPON'
-            },
-            INVALID_PRODUCTS: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid products',
-                type: 'INVALID_PRODUCTS'
-            },
-            INVALID_ORDER: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid order',
-                type: 'INVALID_ORDER'
-            },
-            INVALID_USERNAME: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid user name',
-                type: 'INVALID_USERNAME'
-            },
-            INVALID_PASSWORD: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid password',
-                type: 'INVALID_PASSWORD'
-            },
-            INVALID_LANGUAGE: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid language',
-                type: 'INVALID_LANGUAGE'
-            },
-            INVALID_BRAND: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid brand',
-                type: 'INVALID_BRAND'
-            },
-            INVALID_COUNTRY: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid country',
-                type: 'INVALID_COUNTRY'
-            },
-            DEFAULT_VALIDATION_ERROR: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid info provided',
-                type: 'DEFAULT_VALIDATION_ERROR'
-            },
-            VALIDATION_ERROR: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Validation Error :',
-                type: 'VALIDATION_ERROR'
+            "DATA_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Data not found",
+                "type": "DATA_NOT_FOUND",
+                "message_Ar": "Data not found in arabic",
+                "message_En": "Data not found"
             }
         },
-        E500: {
-            DB_ERROR: {
-                statusCode: 500,
-                httpCode: 500,
-                message: 'DB Error : ',
-                type: 'DB_ERROR'
-            },
-
-            IMP_ERROR: {
-                statusCode: 500,
-                httpCode: 500,
-                message: 'Implementation Error',
-                type: 'IMP_ERROR'
-            },
-
-            INVALID_TOKEN_TYPE: {
-                statusCode: 500,
-                httpCode: 500,
-                message: 'Invalid token type provided',
-                type: 'INVALID_TOKEN_TYPE'
-            },
-
-            CREATE_ORDER_ERROR: {
-                statusCode: 500,
-                httpCode: 500,
-                type: 'CREATE_ORDER_ERROR',
-                message: 'Error while creating order on SDM'
-            },
+        "E410": {
+            "FORCE_UPDATE": {
+                "statusCode": 410,
+                "httpCode": 410,
+                "message": "Force update",
+                "type": "FORCE_UPDATE",
+                "message_Ar": "Force update in arabic",
+                "message_En": "Force update"
+            }
         },
-        E501: {
-            TOKENIZATION_ERROR: {
-                statusCode: 501,
-                httpCode: 501,
-                message: 'Failure in creating token',
-                type: 'TOKENIZATION_ERROR'
+        "E422": {
+            "INVALID_COUNTRY_CODE": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Your number belongs to another country",
+                "type": "INVALID_COUNTRY_CODE",
+                "message_Ar": "Your number belongs to another country in arabic",
+                "message_En": "Your number belongs to another country"
+            },
+            "INVALID_PHONE_NO": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid phone number",
+                "type": "INVALID_PHONE_NO",
+                "message_Ar": "Invalid phone number in arabic",
+                "message_En": "Invalid phone number"
+            },
+            "INVALID_EMAIL": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid email",
+                "type": "INVALID_EMAIL",
+                "message_Ar": "Invalid email in arabic",
+                "message_En": "Invalid email"
+            },
+            "INVALID_NAME": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid name",
+                "type": "INVALID_NAME",
+                "message_Ar": "Invalid name in arabic",
+                "message_En": "Invalid name"
+            },
+            "INVALID_LOCATION": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid location",
+                "type": "INVALID_LOCATION",
+                "message_Ar": "Invalid location in arabic",
+                "message_En": "Invalid location"
+            },
+            "INVALID_ADDRESS": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid address",
+                "type": "INVALID_ADDRESS",
+                "message_Ar": "Invalid address in arabic",
+                "message_En": "Invalid address"
+            },
+            "INVALID_OTP": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid otp",
+                "type": "INVALID_OTP",
+                "message_Ar": "Invalid otp in arabic",
+                "message_En": "Invalid otp"
+            },
+            "INVALID_SOCIAL_INFO": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid social info",
+                "type": "INVALID_SOCIAL_INFO",
+                "message_Ar": "Invalid social info in arabic",
+                "message_En": "Invalid social info"
+            },
+            "INVALID_CART": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid cart",
+                "type": "INVALID_CART",
+                "message_Ar": "Invalid cart in arabic",
+                "message_En": "Invalid cart"
+            },
+            "INVALID_COUPON": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid coupon",
+                "type": "INVALID_COUPON",
+                "message_Ar": "Invalid coupon in arabic",
+                "message_En": "Invalid coupon"
+            },
+            "INVALID_PRODUCTS": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid products",
+                "type": "INVALID_PRODUCTS",
+                "message_Ar": "Invalid products in arabic",
+                "message_En": "Invalid products"
+            },
+            "INVALID_ORDER": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid order",
+                "type": "INVALID_ORDER",
+                "message_Ar": "Invalid order in arabic",
+                "message_En": "Invalid order"
+            },
+            "INVALID_USERNAME": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid user name",
+                "type": "INVALID_USERNAME",
+                "message_Ar": "Invalid user name in arabic",
+                "message_En": "Invalid user name"
+            },
+            "INVALID_PASSWORD": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid password",
+                "type": "INVALID_PASSWORD",
+                "message_Ar": "Invalid password in arabic",
+                "message_En": "Invalid password"
+            },
+            "INVALID_LANGUAGE": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid language",
+                "type": "INVALID_LANGUAGE",
+                "message_Ar": "Invalid language in arabic",
+                "message_En": "Invalid language"
+            },
+            "INVALID_BRAND": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid brand",
+                "type": "INVALID_BRAND",
+                "message_Ar": "Invalid brand in arabic",
+                "message_En": "Invalid brand"
+            },
+            "INVALID_COUNTRY": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid country",
+                "type": "INVALID_COUNTRY",
+                "message_Ar": "Invalid country in arabic",
+                "message_En": "Invalid country"
+            },
+            "DEFAULT_VALIDATION_ERROR": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid info provided",
+                "type": "DEFAULT_VALIDATION_ERROR",
+                "message_Ar": "Invalid info provided in arabic",
+                "message_En": "Invalid info provided"
+            },
+            "VALIDATION_ERROR": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Validation Error :",
+                "type": "VALIDATION_ERROR",
+                "message_Ar": "Validation Error : in arabic",
+                "message_En": "Validation Error :"
+            }
+        },
+        "E500": {
+            "DB_ERROR": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "message": "DB Error : ",
+                "type": "DB_ERROR",
+                "message_Ar": "DB Error :  in arabic",
+                "message_En": "DB Error : "
+            },
+            "IMP_ERROR": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "message": "Implementation Error",
+                "type": "IMP_ERROR",
+                "message_Ar": "Implementation Error in arabic",
+                "message_En": "Implementation Error"
+            },
+            "INVALID_TOKEN_TYPE": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "message": "Invalid token type provided",
+                "type": "INVALID_TOKEN_TYPE",
+                "message_Ar": "Invalid token type provided in arabic",
+                "message_En": "Invalid token type provided"
+            },
+            "CREATE_ORDER_ERROR": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "type": "CREATE_ORDER_ERROR",
+                "message": "Error while creating order on SDM",
+                "message_Ar": "Error while creating order on SDM in arabic",
+                "message_En": "Error while creating order on SDM"
+            }
+        },
+        "E501": {
+            "TOKENIZATION_ERROR": {
+                "statusCode": 501,
+                "httpCode": 501,
+                "message": "Failure in creating token",
+                "type": "TOKENIZATION_ERROR",
+                "message_Ar": "Failure in creating token in arabic",
+                "message_En": "Failure in creating token"
             }
         }
     },
-    SUCCESS: {
-        S200: {
-            OTP_SENT: {
-                statusCode: 200,
-                httpCode: 200,
-                type: 'OTP_SENT',
-                message: 'Otp sent successfully'
+    "SUCCESS": {
+        "S200": {
+            "OTP_SENT": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "type": "OTP_SENT",
+                "message": "Otp sent successfully",
+                "message_Ar": "Otp sent successfully in arabic",
+                "message_En": "Otp sent successfully"
             },
-
-            OTP_VERIFIED: {
-                statusCode: 200,
-                httpCode: 200,
-                type: 'OTP_VERIFIED',
-                message: 'Otp verified'
+            "OTP_VERIFIED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "type": "OTP_VERIFIED",
+                "message": "Otp verified",
+                "message_Ar": "Otp verified in arabic",
+                "message_En": "Otp verified"
             },
-
-            RESET_SUCCESS: {
-                statusCode: 200,
-                httpCode: 200,
-                type: 'RESET_SUCCESS',
-                message: 'Password has been successfully reset'
+            "SOCIAL_LOGIN": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Logged In Successfully",
+                "type": "SOCIAL_LOGIN",
+                "message_Ar": "Logged In Successfully in arabic",
+                "message_En": "Logged In Successfully"
             },
-
-            PHONE_VERIFIED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Phone number successfully verified',
-                type: 'PHONE_VERIFIED'
+            "LOGIN": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Logged In Successfully",
+                "type": "LOGIN",
+                "message_Ar": "Logged In Successfully in arabic",
+                "message_En": "Logged In Successfully"
             },
-
-            FORGET_PASSWORD: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Forget password successfully',
-                type: 'FORGET_PASSWORD'
+            "LOGOUT": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Logged Out Successfully",
+                "type": "LOGOUT",
+                "message_Ar": "Logged Out Successfully in arabic",
+                "message_En": "Logged Out Successfully"
             },
-
-            UPLOAD: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'File uploaded successfully',
-                type: 'UPLOAD'
-            },
-
-            UPDATED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Updated Successfully',
-                type: 'UPDATED'
-            },
-
-            DELETED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Deleted Successfully',
-                type: 'DELETED'
-            },
-
-            BLOCKED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Blocked Successfully',
-                type: 'BLOCKED'
-            },
-            SOCIAL_LOGIN: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Logged In Successfully',
-                type: 'SOCIAL_LOGIN'
-            },
-
-            LOGIN: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Logged In Successfully',
-                type: 'LOGIN'
-            },
-
-            LOGOUT: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Logged Out Successfully',
-                type: 'LOGOUT'
-            },
-
-            DEFAULT: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Success',
-                type: 'DEFAULT',
-            },
-
-            ACCOUNT_DELETED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Account has been deleted',
-                type: 'ACCOUNT_DELETED'
-            }
-        },
-        S201: {
-            CREATED: {
-                statusCode: 201,
-                httpCode: 201,
-                message: 'Created Successfully',
-                type: 'CREATED'
-            },
-        },
-        S205: {
-            MENU_CHANGED: {
-                statusCode: 205,
-                httpCode: 205,
-                message: 'Menu has been changed. Please refresh your menu.',
-                type: 'MENU_CHANGED'
-            },
-
-            DATA_CHANGED: {
-                statusCode: 205,
-                httpCode: 205,
-                message: 'Existing data has been changed. Please refresh your data.',
-                type: 'DATA_CHANGED'
+            "DEFAULT": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message_Ar": "adfa in arabic",
+                "message_En": "adfa",
+                "message": "adfa",
+                "type": "DEFAULT"
             }
         }
     },
@@ -1087,6 +1097,7 @@ export const STATUS_MSG = {
     },
     FRONTEND_ERROR: {
         VALIDATION: {
+            INVALID_COUNTRY_CODE: "Your number belongs to another country",
             INVALID_PHONE_NO: "Invalid phone number",
             INVALID_EMAIL: "Please enter email address in a valid format",
             INVALID_OTP: "Invalid otp",

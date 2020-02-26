@@ -534,7 +534,7 @@ export class OrderClass extends BaseEntity {
         try {
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
-                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING })
             }
             let orderData = {
                 orderType: orderType,
@@ -879,9 +879,9 @@ export class OrderClass extends BaseEntity {
                 $match: match
             })
             if (payload.isActive == 1) {
-                pipeline.push({ $sort: { updatedAt: -1 } })
+                pipeline.push({ $sort: { createdAt: -1 } })
             } else {
-                pipeline.push({ $sort: { isActive: -1, updatedAt: -1 } })
+                pipeline.push({ $sort: { isActive: -1, createdAt: -1 } })
             }
             pipeline = pipeline.concat([
                 { $skip: skip },
