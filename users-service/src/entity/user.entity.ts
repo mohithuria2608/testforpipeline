@@ -326,16 +326,14 @@ export class UserEntity extends BaseEntity {
                 let user = await this.getUser({ userId: payload.id })
                 console.log("user after getting cms id", user)
                 if (user.sdmUserRef && user.sdmCorpRef) {
+                    /**
+                     * @todo : shashi bhai ko bolna hai agar phoneNo update customer mein aye same user ka to error nai update hojaa chaiye
+                     */
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify({
-                                cmsUserRef: user.cmsUserRef,
-                                email: user.email,
-                                sdmUserRef: user.sdmUserRef,
-                                sdmCorpRef: user.sdmCorpRef,
-                            })
+                            argv: JSON.stringify(user)
                         }
                     })
                 }

@@ -34,26 +34,6 @@ export class OrderSDMEntity extends BaseSDM {
     }
 
     /**
-   * @method SDK
-   * */
-    async updateOrder(payload) {
-        try {
-            let data = {
-                name: "UpdateOrder",
-                req: payload
-            }
-            let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
-                return res.UpdateOrderResult
-            else
-                return Promise.reject(res)
-        } catch (error) {
-            consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
     * @method SDK
     * */
     async getOrderDetail(payload: IOrderSdmRequest.IOrderDetail) {

@@ -490,8 +490,8 @@ export class OrderClass extends BaseEntity {
                 order: order,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: "Test order notes 1", //payload.cmsOrderRef
-                orderNotes2: "Test order notes 2",
+                orderNotes1: payload.cmsOrderRef,
+                orderNotes2: payload._id,
                 creditCardPaymentbool: (payload['payment']['paymentMethodId'] == 0) ? false : true,
                 isSuspended: (payload['payment']['paymentMethodId'] == 0) ? false : true,
                 menuTemplateID: 17,
