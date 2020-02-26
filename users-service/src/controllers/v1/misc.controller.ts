@@ -34,7 +34,7 @@ export class MiscController {
                         minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
                     }
                 ],
-                errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
+                errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language]
             }
         } catch (error) {
             consolelog(process.cwd(), "configuration", JSON.stringify(error), false)

@@ -1189,15 +1189,28 @@ export const STATUS_MSG = {
     },
     FRONTEND_ERROR: {
         VALIDATION: {
-            INVALID_COUNTRY_CODE: "Your number belongs to another country",
-            INVALID_PHONE_NO: "Invalid phone number",
-            INVALID_EMAIL: "Please enter email address in a valid format",
-            INVALID_OTP: "Invalid otp",
-            INAVLID_NAME: "Please enter a valid name",
-            EMPTY_PHONE_NO: "Empty phone number",
-            EMPTY_EMAIL: "Empty email",
-            EMPTY_OTP: "Empty otp",
-            EMPTY_NAME: "Empty name",
+            En: {
+                INVALID_COUNTRY_CODE: "Your number belongs to another country",
+                INVALID_PHONE_NO: "Invalid phone number",
+                INVALID_EMAIL: "Please enter email address in a valid format",
+                INVALID_OTP: "Invalid otp",
+                INAVLID_NAME: "Please enter a valid name",
+                EMPTY_PHONE_NO: "Empty phone number",
+                EMPTY_EMAIL: "Empty email",
+                EMPTY_OTP: "Empty otp",
+                EMPTY_NAME: "Empty name",
+            },
+            Ar: {
+                INVALID_COUNTRY_CODE: "Your number belongs to another country in arabic",
+                INVALID_PHONE_NO: "Invalid phone number in arabic",
+                INVALID_EMAIL: "Please enter email address in a valid format in arabic",
+                INVALID_OTP: "Invalid otp in arabic",
+                INAVLID_NAME: "Please enter a valid name in arabic",
+                EMPTY_PHONE_NO: "Empty phone number in arabic",
+                EMPTY_EMAIL: "Empty email in arabic",
+                EMPTY_OTP: "Empty otp in arabic",
+                EMPTY_NAME: "Empty name in arabic",
+            }
         }
     },
     AEROSPIKE_ERROR: {

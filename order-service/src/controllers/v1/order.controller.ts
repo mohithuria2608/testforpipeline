@@ -62,7 +62,6 @@ export class OrderController {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.sdmUserRef == undefined || userData.sdmUserRef == 0) {
-                // return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 userData = await userService.createUserOnSdm(userData)
             }
             if (userData.cmsUserRef == undefined || userData.cmsUserRef == 0) {
@@ -72,7 +71,7 @@ export class OrderController {
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
-                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId }, {}, { lean: true })
+                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId, status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO }, {}, { lean: true })
                 if (order && order._id)
                     retry = true
             }
