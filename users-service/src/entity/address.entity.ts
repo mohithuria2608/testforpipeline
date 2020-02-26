@@ -116,9 +116,9 @@ export class AddressEntity extends BaseEntity {
                 areaId: 16,// store.areaId
                 cityId: 17,// store.cityId
             };
-            consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
 
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
+                consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,
                     bins: deliveryAddress,
@@ -134,12 +134,14 @@ export class AddressEntity extends BaseEntity {
                 let dataToUpdate = {
                     pickup: [deliveryAddress]
                 }
-                let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
-                if (oldAdd && oldAdd.length > 0) {
-                    if (deliveryAddress.storeId == store.storeId) {
-                        return oldAdd[0]
-                    }
-                }
+                // let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
+                // if (oldAdd && oldAdd.length > 0) {
+                //     if (deliveryAddress.storeId == store.storeId) {
+                //         return oldAdd[0]
+                //     }
+                // }
+                consolelog(process.cwd(), "pickupAddress", JSON.stringify(deliveryAddress), false)
+
                 let putArg: IAerospike.Put = {
                     bins: dataToUpdate,
                     set: this.set,

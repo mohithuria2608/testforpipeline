@@ -38,7 +38,7 @@ export class UserService {
         })
     }
 
-    async fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
+    async   fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
         return new Promise(async (resolve, reject) => {
             consolelog(process.cwd(), "fetchAddress", payload, false)
 
