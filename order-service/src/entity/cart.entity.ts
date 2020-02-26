@@ -252,7 +252,6 @@ export class CartClass extends BaseEntity {
                 if (user && user.id) {
                     if (user.cartId == payload.cartId) {
                         await this.createDefaultCart({
-                            cartId: payload.cartId,
                             userId: user.id
                         })
                         let getArg: IAerospike.Get = {
@@ -276,7 +275,7 @@ export class CartClass extends BaseEntity {
     async createDefaultCart(payload: IOrderGrpcRequest.ICreateDefaultCart) {
         try {
             let dataToSave: ICartRequest.ICartData = {
-                cartId: payload.cartId,
+                cartId: payload.userId,
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
@@ -292,7 +291,7 @@ export class CartClass extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
-                key: payload.cartId,
+                key: payload.userId,
                 ttl: Constant.SERVER.DEFAULT_CART_TTL,
                 create: true,
             }
@@ -300,30 +299,6 @@ export class CartClass extends BaseEntity {
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createDefaultCart", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    async updateCartTTL(payload: IOrderGrpcRequest.IUpdateDefaultCartTTL) {
-        try {
-            let op = [
-                Aerospike.operations.touch(0)
-            ]
-            await Aerospike.operationsOnMap({ set: this.set, key: payload.cartId }, op)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    async assignNewCart(oldCartId: string, cartId: string, userId: string) {
-        try {
-            await this.createDefaultCart({ userId: userId, cartId: cartId })
-            await Aerospike.remove({ set: this.set, key: oldCartId })
-            return
-        } catch (error) {
-            consolelog(process.cwd(), "assignNewCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

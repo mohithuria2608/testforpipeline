@@ -1,6 +1,7 @@
 declare namespace IAppversionRequest {
     interface IFetchAppversion {
         type?: string
-        isActive?: number
+        isActive: number,
+        deviceType?: string
     }
 }

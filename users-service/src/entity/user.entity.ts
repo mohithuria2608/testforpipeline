@@ -183,8 +183,7 @@ export class UserEntity extends BaseEntity {
                 isCreate = false
             } else {
                 isCreate = true
-                let cartId = payload.cartId
-                this.createDefaultCart(cartId, userUpdate.id)
+                this.createDefaultCart(userUpdate.id)
             }
             let putArg: IAerospike.Put = {
                 bins: userUpdate,

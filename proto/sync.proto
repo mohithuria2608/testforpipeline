@@ -17,7 +17,8 @@ message IFetchConfigRes {
 
 message IFetchAppversionReq {
     optional string type = 1;
-    optional int32 isActive = 2;
+    required int32 isActive = 2;
+    optional string deviceType = 3;
 }
 
 message IFetchAppversionRes {

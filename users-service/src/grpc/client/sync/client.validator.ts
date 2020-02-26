@@ -32,7 +32,11 @@ export class SyncServiceValidator {
                         Constant.DATABASE.TYPE.APP_VERSION.NORMAL,
                         Constant.DATABASE.TYPE.APP_VERSION.SKIP,
                         Constant.DATABASE.TYPE.APP_VERSION.FORCE),
-                    isActive: Joi.number().valid(0, 1)
+                    isActive: Joi.number().valid(0, 1).required(),
+                    deviceType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.DEVICE.ANDROID,
+                        Constant.DATABASE.TYPE.DEVICE.IOS
+                    )
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

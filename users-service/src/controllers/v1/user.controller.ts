@@ -106,9 +106,10 @@ export class UserController {
                         userchangePayload.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
                     }
                 }
+                let userId = ENTITY.UserE.ObjectId().toString()
                 let tempUser: IUserRequest.IUserData = {
-                    id: ENTITY.UserE.ObjectId().toString(),
-                    cartId: ENTITY.UserE.ObjectId().toString(),
+                    id: userId,
+                    cartId: userId,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     phnVerified: 0,
                     brand: headers.brand,
@@ -304,9 +305,10 @@ export class UserController {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
+                let userId = ENTITY.UserE.ObjectId().toString()
                 let tempUser: IUserRequest.IUserData = {
-                    id: ENTITY.UserE.ObjectId().toString(),
-                    cartId: ENTITY.UserE.ObjectId().toString(),
+                    id: userId,
+                    cartId: userId,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     phnVerified: 0,
                     socialKey: payload.socialKey,
@@ -374,7 +376,7 @@ export class UserController {
                         medium: userData.medium,
                         socialKey: userData.socialKey,
                         otp: Constant.SERVER.BY_PASS_OTP,
-                        cartId: userData.cartId,
+                        cartId: userData.id,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,

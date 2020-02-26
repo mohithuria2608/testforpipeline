@@ -43,20 +43,7 @@ export class WebhookNoonpayController {
                         /**
                          * @description update order on sdm with payment object
                          */
-                        /**
-                        * @description : update user with new cart
-                        */
-                        let newCartId = ENTITY.OrderE.ObjectId().toString()
-                        ENTITY.CartE.assignNewCart(order.cartId, newCartId, order.userId)
-                        let asUserChange = {
-                            set: Constant.SET_NAME.USER,
-                            as: {
-                                update: true,
-                                argv: JSON.stringify({ userId: order.userId, cartId: newCartId })
-                            }
-                        }
-                        await userService.sync(asUserChange)
-                        redirectUrl = redirectUrl + "payment/success?newCartId=" + newCartId
+                        redirectUrl = redirectUrl + "payment/success"
                     } else {
                         let dataToUpdateOrder = {
                             $addToSet: {

@@ -71,7 +71,8 @@ export enum KAFKA_TOPIC {
 
 export enum MIDDLEWARE {
     AUTH = "auth",
-    ACTIVITY_LOG = "activity_log"
+    ACTIVITY_LOG = "activity_log",
+    APP_VERSION = "app_version"
 };
 
 export const SERVER = {
@@ -399,7 +400,6 @@ export const DATABASE = {
         },
 
         APP_VERSION: {
-            CURRENT: "CURRENT",
             FORCE: "FORCE",
             SKIP: "SKIP",
             NORMAL: "NORMAL"
@@ -771,6 +771,14 @@ export const STATUS_MSG = {
                 httpCode: 409,
                 message: 'Data not found',
                 type: 'DATA_NOT_FOUND'
+            },
+        },
+        E410: {
+            FORCE_UPDATE: {
+                statusCode: 410,
+                httpCode: 410,
+                message: 'Force update',
+                type: 'FORCE_UPDATE'
             },
         },
         E422: {

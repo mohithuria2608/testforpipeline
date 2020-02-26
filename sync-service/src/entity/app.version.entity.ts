@@ -16,6 +16,12 @@ export class AppversionEntity extends BaseEntity {
         },
         {
             set: this.set,
+            bin: 'deviceType',
+            index: 'idx_' + this.set + '_' + 'deviceType',
+            type: "STRING"
+        },
+        {
+            set: this.set,
             bin: 'isActive',
             index: 'idx_' + this.set + '_' + 'isActive',
             type: "NUMERIC"
@@ -32,8 +38,12 @@ export class AppversionEntity extends BaseEntity {
             Constant.DATABASE.TYPE.APP_VERSION.NORMAL,
             Constant.DATABASE.TYPE.APP_VERSION.SKIP,
             Constant.DATABASE.TYPE.APP_VERSION.FORCE,
-            Constant.DATABASE.TYPE.APP_VERSION.CURRENT).description("sk"),
+        ).description("sk"),
         appversion: Joi.string().required(),
+        deviceType: Joi.string().valid(
+            Constant.DATABASE.TYPE.DEVICE.ANDROID,
+            Constant.DATABASE.TYPE.DEVICE.IOS
+        ),
         isActive: Joi.number().valid(0, 1).required(),
         createdAt: Joi.number(),
         updatedAt: Joi.number(),
@@ -60,7 +70,8 @@ export class AppversionEntity extends BaseEntity {
     /**
     * @method INTERNAL
     * @param {string=} type : Appversion type
-    * @param {number=} isActive : status
+    * @param {number} isActive : status
+    * @param {string=} deviceType 
     * */
     async getAppversion(payload: IAppversionRequest.IFetchAppversion) {
         try {
@@ -75,11 +86,25 @@ export class AppversionEntity extends BaseEntity {
                 }
                 let appversionData = await Aerospike.query(queryArg)
                 if (appversionData && appversionData.length > 0) {
-                    return appversionData
+                    return appversionData.filter(obj => { return obj.isActive == 1 })
                 } else
                     return []
             }
-            if (payload.isActive != undefined) {
+            else if (payload.deviceType && payload.deviceType != "") {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "deviceType",
+                        value: payload.deviceType
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let appversionData = await Aerospike.query(queryArg)
+                if (appversionData && appversionData.length > 0) {
+                    return appversionData.filter(obj => { return obj.isActive == 1 })
+                } else
+                    return []
+            } else {
                 let queryArg: IAerospike.Query = {
                     equal: {
                         bin: "isActive",
@@ -94,7 +119,6 @@ export class AppversionEntity extends BaseEntity {
                 } else
                     return []
             }
-            return []
         } catch (error) {
             consolelog(process.cwd(), "getAppversion", JSON.stringify(error), false)
             return Promise.reject(error)

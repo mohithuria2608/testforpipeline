@@ -14,12 +14,13 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
+            let userId = ENTITY.UserE.ObjectId().toString()
             let tempUser: IUserRequest.IUserData = {
-                id: ENTITY.UserE.ObjectId().toString(),
+                id: userId,
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 brand: headers.brand,
                 country: headers.country,
-                cartId: ENTITY.UserE.ObjectId().toString(),
+                cartId: userId,
                 phnVerified: 0,
             }
             let userData = await ENTITY.UserE.buildUser(tempUser)
@@ -89,7 +90,7 @@ export class GuestController {
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
                 otp: Constant.SERVER.BY_PASS_OTP,
-                cartId: userData.cartId,
+                cartId: userData.id,
                 otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                 otpVerified: 0,
                 isGuest: payload.isGuest,

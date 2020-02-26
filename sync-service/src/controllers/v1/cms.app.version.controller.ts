@@ -31,6 +31,7 @@ export class CmsAppversionController {
      * @method GRPC
      * @param {string=} type
      * @param {number=} isActive
+     * @param {string=} deviceType
      * @description Get appversion from as 
      */
     async getAppversion(payload: IAppversionRequest.IFetchAppversion) {

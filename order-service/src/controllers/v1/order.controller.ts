@@ -81,7 +81,6 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
-            let newCartId = ""
             let noonpayRedirectionUrl = ""
             if (!retry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
@@ -177,25 +176,11 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
-                /**
-                * @description : update user with new cart in case of Cash On Delivery
-                */
-                newCartId = ENTITY.OrderE.ObjectId().toString()
-                ENTITY.CartE.assignNewCart(order.cartId, newCartId, auth.id)
-                let asUserChange = {
-                    set: Constant.SET_NAME.USER,
-                    as: {
-                        update: true,
-                        argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
-                    }
-                }
-                await userService.sync(asUserChange)
             }
             ENTITY.OrderE.syncOrder(order)
 
             return {
                 orderPlaced: {
-                    newCartId: newCartId,
                     noonpayRedirectionUrl: noonpayRedirectionUrl,
                     orderInfo: order
                 }

@@ -41,6 +41,18 @@ declare namespace ISyncGrpcRequest {
 
     interface IFetchAppversion {
         type?: string,
-        isActive?: number
+        isActive: number,
+        deviceType?: string
+    }
+
+    interface IAppversion {
+        id: string,
+        type: string,
+        deviceType: string,
+        appversion: string,
+        isActive: number,
+        createdAt: number,
+        updatedAt: number
+
     }
 }

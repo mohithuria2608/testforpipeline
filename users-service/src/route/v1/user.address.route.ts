@@ -16,7 +16,7 @@ export default (router: Router) => {
             validate({
                 headers: COMMON_HEADERS,
                 body: {
-                    storeId : Joi.number(),
+                    storeId: Joi.number(),
                     lat: Joi.number().min(0).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     bldgName: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
