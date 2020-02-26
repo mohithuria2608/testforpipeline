@@ -35,6 +35,7 @@ export class CartClass extends BaseEntity {
 
     public cartSchema = Joi.object().keys({
         cartId: Joi.string().required().description("pk"),
+        cartUnique: Joi.string().required(),
         cmsCartRef: Joi.number().required(),
         userId: Joi.string().required().description("sk"),
         orderId: Joi.string().required().description("sk, UAE-1"),
@@ -276,6 +277,7 @@ export class CartClass extends BaseEntity {
         try {
             let dataToSave: ICartRequest.ICartData = {
                 cartId: payload.userId,
+                cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,

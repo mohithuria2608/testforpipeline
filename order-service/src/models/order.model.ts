@@ -3,6 +3,7 @@ import * as Constant from '../constant';
 
 export interface Iorder extends Document {
     cartId: string,
+    cartUnique: any
     orderType: string,
     cmsCartRef: number,
     sdmOrderRef: number,
@@ -13,7 +14,6 @@ export interface Iorder extends Document {
     status: string,
     sdmOrderStatus: number,
     items: any,
-    itemsHash: any
     amount: any,
     address: any,
     store: any,
@@ -28,6 +28,7 @@ export interface Iorder extends Document {
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
+    cartUnique: { type: String },
     orderType: { type: String, required: true },
     cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
@@ -54,7 +55,6 @@ const orderSchema = new Schema({
     },
     sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
     items: { type: Schema.Types.Mixed, required: true },
-    itemsHash: { type: String },
     amount: [{
         sequence: { type: Number, },
         name: { type: String },

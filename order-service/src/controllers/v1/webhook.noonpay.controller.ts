@@ -1,8 +1,9 @@
 import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { paymentService, userService } from '../../grpc/client'
+import { paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../aerospike'
 
 export class WebhookNoonpayController {
 
@@ -44,6 +45,16 @@ export class WebhookNoonpayController {
                          * @description update order on sdm with payment object
                          */
                         redirectUrl = redirectUrl + "payment/success"
+                        let cartUpdate = {
+                            cartUnique: ENTITY.CartE.ObjectId().toString(),
+                        }
+                        let putArg: IAerospike.Put = {
+                            bins: cartUpdate,
+                            set: ENTITY.CartE.set,
+                            key: order.cartId,
+                            update: true,
+                        }
+                        await Aerospike.put(putArg)
                     } else {
                         let dataToUpdateOrder = {
                             $addToSet: {

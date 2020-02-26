@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog, hashObj } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../aerospike'
 
 export class OrderController {
 
@@ -60,7 +61,6 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let itemsHash = hashObj(payload.items)
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.sdmUserRef == undefined || userData.sdmUserRef == 0) {
                 userData = await userService.createUserOnSdm(userData)
@@ -71,12 +71,8 @@ export class OrderController {
             let order: IOrderRequest.IOrderData
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (hashObj(getCurrentCart.items) == itemsHash) {
-                order = await ENTITY.OrderE.getOneEntityMdb({
-                    cartId: payload.cartId,
-                    status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                    itemsHash: itemsHash
-                }, {}, { lean: true, sort: { createdAt: -1 } })
+            if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
+                order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
                 if (order && order._id)
                     retry = true
             }
@@ -150,7 +146,7 @@ export class OrderController {
                     return { cartValidate: cartData }
                 }
                 cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, cartData, getAddress, getStore, userData, promo, itemsHash)
+                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, cartData, getAddress, getStore, userData, promo)
             }
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
@@ -180,6 +176,16 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
+                let cartUpdate = {
+                    cartUnique: ENTITY.CartE.ObjectId().toString(),
+                }
+                let putArg: IAerospike.Put = {
+                    bins: cartUpdate,
+                    set: ENTITY.CartE.set,
+                    key: payload.cartId,
+                    update: true,
+                }
+                await Aerospike.put(putArg)
             }
             ENTITY.OrderE.syncOrder(order)
 
