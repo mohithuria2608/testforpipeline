@@ -565,119 +565,119 @@ export const STATUS_MSG = {
                 "httpCode": 400,
                 "type": "USER_NOT_CREATED_ON_SDM",
                 "message": "Some issue has occured. Please try after sometime",
-                "message_Ar": "Some issue has occured. Please try after sometime in arabic",
-                "message_En": "Some issue has occured. Please try after sometime"
+                "message_Ar": "لقد واجهتنا مشكلة، يرجى المحاولة بعد قليل",
+                "message_En": "We have encountered some issue. Please try after sometime"
             },
             "USER_NOT_CREATED_ON_CMS": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "USER_NOT_CREATED_ON_CMS",
                 "message": "Some issue has occured. Please try after sometime",
-                "message_Ar": "Some issue has occured. Please try after sometime in arabic",
-                "message_En": "Some issue has occured. Please try after sometime"
+                "message_Ar": "لقد واجهتنا مشكلة، يرجى المحاولة بعد قليل",
+                "message_En": "We have encountered some issue. Please try after sometime"
             },
             "MIN_CART_VALUE_VOILATION": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "MIN_CART_VALUE_VOILATION",
                 "message": "Minimum cart voilation",
-                "message_Ar": "Minimum cart voilation in arabic",
-                "message_En": "Minimum cart voilation"
+                "message_Ar": "الحد الأدنى للطلب يجب أن يكون 23 درهم",
+                "message_En": "Minimum order value should be 23 AED"
             },
             "MAX_COD_CART_VALUE_VOILATION": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "MAX_COD_CART_VALUE_VOILATION",
                 "message": "Maximum cod cart voilation",
-                "message_Ar": "Maximum cod cart voilation in arabic",
-                "message_En": "Maximum cod cart voilation"
+                "message_Ar": "الحد الأقصى المتاح 300 درهم",
+                "message_En": "Maximum COD allowed is 300 AED"
             },
             "INVALID_PROMO": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "INVALID_PROMO",
                 "message": "Invalid Promotion",
-                "message_Ar": "Invalid Promotion in arabic",
-                "message_En": "Invalid Promotion"
+                "message_Ar": "الكوبون الذي أدخلته غير صحيح",
+                "message_En": "The promo code that you have entered is invalid"
             },
             "PROMO_EXPIRED": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "PROMO_EXPIRED",
                 "message": "Promo expired",
-                "message_Ar": "Promo expired in arabic",
-                "message_En": "Promo expired"
+                "message_Ar": "الكوبون الذي أدخلته لم يعد صالحًا",
+                "message_En": "This promo does not exists any longer"
             },
             "INVALID_STORE": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "INVALID_STORE",
                 "message": "Invalid store",
-                "message_Ar": "Invalid store in arabic",
-                "message_En": "Invalid store"
+                "message_Ar": "هذا المخزن خارج الخدمة في الوقت الحالي",
+                "message_En": "This store is unserviceable at the moment"
             },
             "INVALID_ADDRESS": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "INVALID_ADDRESS",
                 "message": "Invalid address provided",
-                "message_Ar": "Invalid address provided in arabic",
-                "message_En": "Invalid address provided"
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "This address does not exists"
             },
             "PROFILE_SETUP_ALLREADY_COMPLETE": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
                 "message": "Profile setup is already complete",
-                "message_Ar": "Profile setup is already complete in arabic",
-                "message_En": "Profile setup is already complete"
+                "message_Ar": "حسابك مكتمل بنسبة 100%",
+                "message_En": "Your profile is 100% complete"
             },
             "OTP_SESSION_EXPIRED": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "OTP_SESSION_EXPIRED",
                 "message": "Otp session has expired",
-                "message_Ar": "Otp session has expired in arabic",
-                "message_En": "Otp session has expired"
+                "message_Ar": "لقد انتهت فترة صلاحية هذا الرمز",
+                "message_En": "This OTP session has expired"
             },
             "OTP_EXPIRED": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "OTP_EXPIRED",
                 "message": "Otp entered has expired",
-                "message_Ar": "Otp entered has expired in arabic",
-                "message_En": "Otp entered has expired"
+                "message_Ar": "هذا الرمز لم يعد موجودًا",
+                "message_En": "This OTP does not exist any longer"
             },
             "INVALID_OTP": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "INVALID_OTP",
                 "message": "Invalid otp",
-                "message_Ar": "Invalid otp in arabic",
-                "message_En": "Invalid otp"
+                "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
+                "message_En": "You have entered an incorrect OTP. Please try again"
             },
             "USER_ALREADY_EXIST": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "USER_ALREADY_EXIST",
                 "message": "User already exist, please login",
-                "message_Ar": "User already exist, please login in arabic",
-                "message_En": "User already exist, please login"
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This phone number is already is use"
             },
             "INVALID_ID": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "message": "Invalid Id Provided ",
                 "type": "INVALID_ID",
-                "message_Ar": "Invalid Id Provided  in arabic",
-                "message_En": "Invalid Id Provided "
+                "message_Ar": "يبدو أن المعلومات التي أدخلتها غير صحيحة ",
+                "message_En": "The information that you have provided seems incorrect"
             },
             "APP_ERROR": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "message": "Application Error",
                 "type": "APP_ERROR",
-                "message_Ar": "Application Error in arabic",
+                "message_Ar": "خطأ في التطبيق",
                 "message_En": "Application Error"
             },
             "DEFAULT": {
@@ -685,7 +685,7 @@ export const STATUS_MSG = {
                 "httpCode": 400,
                 "message": "Bad Request",
                 "type": "DEFAULT",
-                "message_Ar": "Bad Request in arabic",
+                "message_Ar": "طلب خاطئ",
                 "message_En": "Bad Request"
             }
         },
@@ -695,7 +695,7 @@ export const STATUS_MSG = {
                 "httpCode": 401,
                 "message": "You are not authorized to perform this action",
                 "type": "UNAUTHORIZED",
-                "message_Ar": "You are not authorized to perform this action in arabic",
+                "message_Ar": "ليست لديك صلاحية لتقوم بهذا الطلب",
                 "message_En": "You are not authorized to perform this action"
             },
             "ACCESS_TOKEN_EXPIRED": {
@@ -703,7 +703,7 @@ export const STATUS_MSG = {
                 "httpCode": 401,
                 "type": "ACCESS_TOKEN_EXPIRED",
                 "message": "Access token has expired.",
-                "message_Ar": "Access token has expired. in arabic",
+                "message_Ar": "انتهت صلاحية رمز الوصول",
                 "message_En": "Access token has expired."
             }
         },
@@ -713,7 +713,7 @@ export const STATUS_MSG = {
                 "httpCode": 404,
                 "type": "RESOURCE_NOT_FOUND",
                 "message": "Resource not found",
-                "message_Ar": "Resource not found in arabic",
+                "message_Ar": "المصدر غير موجود",
                 "message_En": "Resource not found"
             }
         },
@@ -723,15 +723,15 @@ export const STATUS_MSG = {
                 "httpCode": 409,
                 "message": "Order not found",
                 "type": "ORDER_NOT_FOUND",
-                "message_Ar": "Order not found in arabic",
-                "message_En": "Order not found"
+                "message_Ar": "الطلب غير موجود، يرجى إدخال رقم هاتف صحيح وإعادة الطلب",
+                "message_En": "Order not found, please enter the correct phone number and order ID"
             },
             "CONFIG_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "message": "Config not found",
                 "type": "CONFIG_NOT_FOUND",
-                "message_Ar": "Config not found in arabic",
+                "message_Ar": "التكوين غير موجود",
                 "message_En": "Config not found"
             },
             "USER_NOT_FOUND": {
@@ -739,71 +739,71 @@ export const STATUS_MSG = {
                 "httpCode": 409,
                 "message": "User not found",
                 "type": "USER_NOT_FOUND",
-                "message_Ar": "User not found in arabic",
-                "message_En": "User not found"
+                "message_Ar": "هذا المستخدم غير موجود",
+                "message_En": "This user does not exist "
             },
             "MENU_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "message": "Menu not found",
                 "type": "MENU_NOT_FOUND",
-                "message_Ar": "Menu not found in arabic",
-                "message_En": "Menu not found"
+                "message_Ar": "يبدو أن هذه القائمة غير قابلة للاستخدام في هذا البلد، نقوم حاليًا بمحاولة تحديث القائمة",
+                "message_En": "Seems like this menu is not applicable in this country, we are trying to refresh the menu"
             },
             "HOME_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "message": "Home not found",
                 "type": "HOME_NOT_FOUND",
-                "message_Ar": "Home not found in arabic",
-                "message_En": "Home not found"
+                "message_Ar": "نحاول حاليًا تحديث الصفحة الرئيسية",
+                "message_En": "We are trying to refresh the home screen"
             },
             "SERVICE_UNAVAILABLE": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "type": "SERVICE_UNAVAILABLE",
                 "message": "Sorry, we don't, deliver at this location",
-                "message_Ar": "Sorry, we don't, deliver at this location in arabic",
-                "message_En": "Sorry, we don't, deliver at this location"
+                "message_Ar": "عذرًا، لا نقوم بالتوصيل في هذه المنطقة",
+                "message_En": "Sorry, we do not, deliver at this location"
             },
             "ADDRESS_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "type": "ADDRESS_NOT_FOUND",
                 "message": "Address not found",
-                "message_Ar": "Address not found in arabic",
-                "message_En": "Address not found"
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "This address does not exist"
             },
             "CART_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "type": "CART_NOT_FOUND",
                 "message": "Cart not found",
-                "message_Ar": "Cart not found in arabic",
-                "message_En": "Cart not found"
+                "message_Ar": "العربة لم تعد موجودة",
+                "message_En": "This cart no longer exists"
             },
             "STORE_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "message": "Store not found",
                 "type": "STORE_NOT_FOUND",
-                "message_Ar": "Store not found in arabic",
-                "message_En": "Store not found"
+                "message_Ar": "هذا المخزن غير متاح الآن",
+                "message_En": "This store is unserviceable at the moment"
             },
             "PROMO_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "message": "Promotion not found",
                 "type": "PROMO_NOT_FOUND",
-                "message_Ar": "Promotion not found in arabic",
-                "message_En": "Promotion not found"
+                "message_Ar": "هذا العرض لم يعد متاحًا",
+                "message_En": "This promo does not exists any longer"
             },
             "DATA_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
                 "message": "Data not found",
                 "type": "DATA_NOT_FOUND",
-                "message_Ar": "Data not found in arabic",
+                "message_Ar": "تعذر العثور على المعلومات",
                 "message_En": "Data not found"
             }
         },
@@ -813,8 +813,8 @@ export const STATUS_MSG = {
                 "httpCode": 410,
                 "message": "Force update",
                 "type": "FORCE_UPDATE",
-                "message_Ar": "Force update in arabic",
-                "message_En": "Force update"
+                "message_Ar": "يجب عليك تحديث التطبيق لآخر نسخة لكي تتمكن من الاستمرار في استخدامه",
+                "message_En": "You need to update the application with the latest version in order to continue using it"
             }
         },
         "E422": {
@@ -823,63 +823,63 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Your number belongs to another country",
                 "type": "INVALID_COUNTRY_CODE",
-                "message_Ar": "Your number belongs to another country in arabic",
-                "message_En": "Your number belongs to another country"
+                "message_Ar": "هذا الرقم لا ينتمي لهذه الدولة",
+                "message_En": "This number does not exist in this country"
             },
             "INVALID_PHONE_NO": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid phone number",
                 "type": "INVALID_PHONE_NO",
-                "message_Ar": "Invalid phone number in arabic",
-                "message_En": "Invalid phone number"
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Please enter a valid phone number"
             },
             "INVALID_EMAIL": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid email",
                 "type": "INVALID_EMAIL",
-                "message_Ar": "Invalid email in arabic",
-                "message_En": "Invalid email"
+                "message_Ar": "يرجى إدخال بريد إلكتروني صالح",
+                "message_En": "Please enter a valid email address"
             },
             "INVALID_NAME": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid name",
                 "type": "INVALID_NAME",
-                "message_Ar": "Invalid name in arabic",
-                "message_En": "Invalid name"
+                "message_Ar": "يرجى إدخال اسم صالح",
+                "message_En": "Please enter a valid name"
             },
             "INVALID_LOCATION": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid location",
                 "type": "INVALID_LOCATION",
-                "message_Ar": "Invalid location in arabic",
-                "message_En": "Invalid location"
+                "message_Ar": "هذا المكان غير موجود",
+                "message_En": "This location does not exist"
             },
             "INVALID_ADDRESS": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid address",
                 "type": "INVALID_ADDRESS",
-                "message_Ar": "Invalid address in arabic",
-                "message_En": "Invalid address"
+                "message_Ar": "يرجى إدخال بريد إلكتروني صالح",
+                "message_En": "Please enter a valid email address"
             },
             "INVALID_OTP": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid otp",
                 "type": "INVALID_OTP",
-                "message_Ar": "Invalid otp in arabic",
-                "message_En": "Invalid otp"
+                "message_Ar": "يرجى إدخال بريد إلكتروني صالح",
+                "message_En": "Please enter a valid email address"
             },
             "INVALID_SOCIAL_INFO": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid social info",
                 "type": "INVALID_SOCIAL_INFO",
-                "message_Ar": "Invalid social info in arabic",
+                "message_Ar": "معلومات وسيلة التواصل غير صحيحة",
                 "message_En": "Invalid social info"
             },
             "INVALID_CART": {
@@ -887,7 +887,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid cart",
                 "type": "INVALID_CART",
-                "message_Ar": "Invalid cart in arabic",
+                "message_Ar": "العربة غير صالحة",
                 "message_En": "Invalid cart"
             },
             "INVALID_COUPON": {
@@ -895,7 +895,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid coupon",
                 "type": "INVALID_COUPON",
-                "message_Ar": "Invalid coupon in arabic",
+                "message_Ar": "الكوبون غير صالح",
                 "message_En": "Invalid coupon"
             },
             "INVALID_PRODUCTS": {
@@ -903,7 +903,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid products",
                 "type": "INVALID_PRODUCTS",
-                "message_Ar": "Invalid products in arabic",
+                "message_Ar": "المنتجات غير صالحة",
                 "message_En": "Invalid products"
             },
             "INVALID_ORDER": {
@@ -911,7 +911,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid order",
                 "type": "INVALID_ORDER",
-                "message_Ar": "Invalid order in arabic",
+                "message_Ar": "الطلب غير صالح",
                 "message_En": "Invalid order"
             },
             "INVALID_USERNAME": {
@@ -919,7 +919,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid user name",
                 "type": "INVALID_USERNAME",
-                "message_Ar": "Invalid user name in arabic",
+                "message_Ar": "اسم المستخدم غير صحيح",
                 "message_En": "Invalid user name"
             },
             "INVALID_PASSWORD": {
@@ -927,7 +927,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid password",
                 "type": "INVALID_PASSWORD",
-                "message_Ar": "Invalid password in arabic",
+                "message_Ar": "كلمة المرور غير صحيحة",
                 "message_En": "Invalid password"
             },
             "INVALID_LANGUAGE": {
@@ -935,7 +935,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid language",
                 "type": "INVALID_LANGUAGE",
-                "message_Ar": "Invalid language in arabic",
+                "message_Ar": "اللغة غير صحيحة",
                 "message_En": "Invalid language"
             },
             "INVALID_BRAND": {
@@ -944,14 +944,14 @@ export const STATUS_MSG = {
                 "message": "Invalid brand",
                 "type": "INVALID_BRAND",
                 "message_Ar": "Invalid brand in arabic",
-                "message_En": "Invalid brand"
+                "message_En": "العلامة التجارية غير صالحة"
             },
             "INVALID_COUNTRY": {
                 "statusCode": 422,
                 "httpCode": 422,
                 "message": "Invalid country",
                 "type": "INVALID_COUNTRY",
-                "message_Ar": "Invalid country in arabic",
+                "message_Ar": "البلد غير صحيح",
                 "message_En": "Invalid country"
             },
             "DEFAULT_VALIDATION_ERROR": {
@@ -959,7 +959,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Invalid info provided",
                 "type": "DEFAULT_VALIDATION_ERROR",
-                "message_Ar": "Invalid info provided in arabic",
+                "message_Ar": "المعلومات التي تم ادخالها غير صحيحة",
                 "message_En": "Invalid info provided"
             },
             "VALIDATION_ERROR": {
@@ -967,7 +967,7 @@ export const STATUS_MSG = {
                 "httpCode": 422,
                 "message": "Validation Error :",
                 "type": "VALIDATION_ERROR",
-                "message_Ar": "Validation Error : in arabic",
+                "message_Ar": "خطأ في التحقق",
                 "message_En": "Validation Error :"
             }
         },
@@ -977,7 +977,7 @@ export const STATUS_MSG = {
                 "httpCode": 500,
                 "message": "DB Error : ",
                 "type": "DB_ERROR",
-                "message_Ar": "DB Error :  in arabic",
+                "message_Ar": "خطأ في قاعدة البيانات",
                 "message_En": "DB Error : "
             },
             "IMP_ERROR": {
@@ -985,7 +985,7 @@ export const STATUS_MSG = {
                 "httpCode": 500,
                 "message": "Implementation Error",
                 "type": "IMP_ERROR",
-                "message_Ar": "Implementation Error in arabic",
+                "message_Ar": "خطأ في التنفيذ",
                 "message_En": "Implementation Error"
             },
             "INVALID_TOKEN_TYPE": {
@@ -993,7 +993,7 @@ export const STATUS_MSG = {
                 "httpCode": 500,
                 "message": "Invalid token type provided",
                 "type": "INVALID_TOKEN_TYPE",
-                "message_Ar": "Invalid token type provided in arabic",
+                "message_Ar": "نوع الرمز الذي تم إدخاله غير صحيح",
                 "message_En": "Invalid token type provided"
             },
             "CREATE_ORDER_ERROR": {
@@ -1001,8 +1001,8 @@ export const STATUS_MSG = {
                 "httpCode": 500,
                 "type": "CREATE_ORDER_ERROR",
                 "message": "Error while creating order on SDM",
-                "message_Ar": "Error while creating order on SDM in arabic",
-                "message_En": "Error while creating order on SDM"
+                "message_Ar": "لقد واجهتنا مشكلة في إنشاء الطلب",
+                "message_En": "We have encountered an error while creating an order"
             }
         },
         "E501": {
@@ -1011,7 +1011,7 @@ export const STATUS_MSG = {
                 "httpCode": 501,
                 "message": "Failure in creating token",
                 "type": "TOKENIZATION_ERROR",
-                "message_Ar": "Failure in creating token in arabic",
+                "message_Ar": "فشل في إنشاء الرمز",
                 "message_En": "Failure in creating token"
             }
         }
@@ -1023,7 +1023,7 @@ export const STATUS_MSG = {
                 "httpCode": 200,
                 "type": "OTP_SENT",
                 "message": "Otp sent successfully",
-                "message_Ar": "Otp sent successfully in arabic",
+                "message_Ar": "تم إرسال رمز التحقق بنجاح",
                 "message_En": "Otp sent successfully"
             },
             "OTP_VERIFIED": {
@@ -1031,15 +1031,71 @@ export const STATUS_MSG = {
                 "httpCode": 200,
                 "type": "OTP_VERIFIED",
                 "message": "Otp verified",
-                "message_Ar": "Otp verified in arabic",
-                "message_En": "Otp verified"
+                "message_Ar": "تم بنجاح",
+                "message_En": "Success"
+            },
+            "RESET_SUCCESS": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "type": "RESET_SUCCESS",
+                "message": "Password has been successfully reset",
+                "message_Ar": "تم إعادة تعيين كلمة المرور بنجاح",
+                "message_En": "Password has been reset successfully"
+            },
+            "PHONE_VERIFIED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Phone number successfully verified",
+                "type": "PHONE_VERIFIED",
+                "message_Ar": "تم التحقق من رقم الجوال بنجاح",
+                "message_En": "Phone number verification success"
+            },
+            "FORGET_PASSWORD": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Forget password successfully",
+                "type": "FORGET_PASSWORD",
+                "message_Ar": "تم إعادة تعيين كلمة المرور",
+                "message_En": "You password has been reset"
+            },
+            "UPLOAD": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "File uploaded successfully",
+                "type": "UPLOAD",
+                "message_Ar": "تم رفع هذا الملف بنجاح",
+                "message_En": "This files has been uploaded successfully"
+            },
+            "UPDATED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Updated Successfully",
+                "type": "UPDATED",
+                "message_Ar": "تم التعديل بنجاح",
+                "message_En": "Updated Successfully"
+            },
+            "DELETED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Deleted Successfully",
+                "type": "DELETED",
+                "message_Ar": "تم الحذف بنجاح",
+                "message_En": "Deleted Successfully"
+            },
+            "BLOCKED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Blocked Successfully",
+                "type": "BLOCKED",
+                "message_Ar": "تم المنع بنجاح",
+                "message_En": "Blocked Successfully"
             },
             "SOCIAL_LOGIN": {
                 "statusCode": 200,
                 "httpCode": 200,
                 "message": "Logged In Successfully",
                 "type": "SOCIAL_LOGIN",
-                "message_Ar": "Logged In Successfully in arabic",
+                "message_Ar": "تم تسجيل الدخول بنجاح",
                 "message_En": "Logged In Successfully"
             },
             "LOGIN": {
@@ -1047,7 +1103,7 @@ export const STATUS_MSG = {
                 "httpCode": 200,
                 "message": "Logged In Successfully",
                 "type": "LOGIN",
-                "message_Ar": "Logged In Successfully in arabic",
+                "message_Ar": "تم تسجيل الدخول بنجاح",
                 "message_En": "Logged In Successfully"
             },
             "LOGOUT": {
@@ -1056,7 +1112,7 @@ export const STATUS_MSG = {
                 "message": "Logged Out Successfully",
                 "type": "LOGOUT",
                 "message_Ar": "Logged Out Successfully in arabic",
-                "message_En": "Logged Out Successfully"
+                "message_En": "تم تسجيل الخروج بنجاح"
             },
             "DEFAULT": {
                 "statusCode": 200,
@@ -1065,6 +1121,42 @@ export const STATUS_MSG = {
                 "message_En": "adfa",
                 "message": "adfa",
                 "type": "DEFAULT"
+            },
+            "ACCOUNT_DELETED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Account has been deleted",
+                "type": "ACCOUNT_DELETED",
+                "message_Ar": "تم حذف الحساب بنجاح",
+                "message_En": "Account has been deleted"
+            }
+        },
+        "S201": {
+            "CREATED": {
+                "statusCode": 201,
+                "httpCode": 201,
+                "message": "Created Successfully",
+                "type": "CREATED",
+                "message_Ar": "تم الإنشاء بنجاح",
+                "message_En": "Created Successfully"
+            }
+        },
+        "S205": {
+            "MENU_CHANGED": {
+                "statusCode": 205,
+                "httpCode": 205,
+                "message": "Menu has been changed. Please refresh your menu.",
+                "type": "MENU_CHANGED",
+                "message_Ar": "تم حدوث تغير في القائمة، يرجى تحديث القائمة",
+                "message_En": "Menu has been changed. Please refresh your menu."
+            },
+            "DATA_CHANGED": {
+                "statusCode": 205,
+                "httpCode": 205,
+                "message": "Existing data has been changed. Please refresh your data.",
+                "type": "DATA_CHANGED",
+                "message_Ar": "لقد حدثت بعض التعديلات في المعلومات، نحاول حاليًا تحديثها",
+                "message_En": "There is some update with the date. We are trying to refresh it"
             }
         }
     },
