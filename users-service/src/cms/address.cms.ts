@@ -3,7 +3,7 @@ import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
-import { consolelog } from '../utils'
+import { consolelog, nameConstructor } from '../utils'
 
 export class AddressCMSEntity extends BaseCMS {
     constructor() {
@@ -12,6 +12,7 @@ export class AddressCMSEntity extends BaseCMS {
 
     async createAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
+            let naemRes = nameConstructor(payload.name)
             let address = []
             if (payload.asAddress && typeof payload.asAddress == 'string')
                 payload.asAddress = JSON.parse(payload.asAddress)
@@ -19,8 +20,8 @@ export class AddressCMSEntity extends BaseCMS {
                 payload.asAddress.map(obj => {
                     address.push({
                         "id": obj.id,
-                        "firstName": payload.name,
-                        "lastName": payload.name,
+                        "firstName": naemRes.firstName,
+                        "lastName": naemRes.lastName,
                         "password": payload.password,
                         "countryId": "AE",// Constant.DATABASE.COUNTRY.UAE, // donot change
                         "zip": "00000",
@@ -74,12 +75,13 @@ export class AddressCMSEntity extends BaseCMS {
 
     async updateAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
+            let naemRes = nameConstructor(payload.name)
             let formObj: IAddressCMSRequest.IUpdateAddress = {
                 "customerId": payload.cmsUserRef.toString(),
                 "addressId": payload.asAddress[0].cmsAddressRef.toString(),
                 "websiteId": "1",
-                "firstName": payload.name,
-                "lastName": payload.name,
+                "firstName": naemRes.firstName,
+                "lastName": naemRes.lastName,
                 "password": payload.password,
                 "countryId": "AE", // donot change
                 "zip": "00000",

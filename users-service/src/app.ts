@@ -31,13 +31,6 @@ export const start = (async () => {
     //   createdAt: new Date().getTime()
     // });
 
-    let a = "ankit"
-    let splitName = a.split(" ")
-    let firstName = splitName.length == 1 ? splitName[0] : splitName.join(" ")
-    let lastName = splitName.length > 1 ? splitName[splitName.length - 1] : "."
-
-    console.log("nameeeeeeeeeeeeeeeee firstName", firstName)
-    console.log("nameeeeeeeeeeeeeeeee lastName", lastName)
     await bootstrap(server)
 
   } catch (error) {
