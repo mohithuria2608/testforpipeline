@@ -137,6 +137,7 @@ export class AddressController {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.length) {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                    payload['addressId'] = payload.addressId
                     payload['lat'] = store[0].location.latitude
                     payload['lng'] = store[0].location.longitude
                     payload['bldgName'] = ""
