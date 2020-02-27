@@ -207,6 +207,7 @@ export class UserController {
                 console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == 0 || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
+
                 if (asAddress && asAddress.length > 0) {
                 }
                 if (cmsAddress && cmsAddress.length > 0)

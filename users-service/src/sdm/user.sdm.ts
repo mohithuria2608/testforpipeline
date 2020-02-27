@@ -144,7 +144,7 @@ export class UserSDMEntity extends BaseSDM {
             else
                 return {}
         } catch (error) {
-            consolelog(process.cwd(), "getCustomerByEmail", JSON.stringify(error), false)
+            consolelog(process.cwd(), "getCustomerByEmail", error, false)
             return Promise.reject(error)
         }
     }
