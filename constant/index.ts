@@ -870,10 +870,10 @@ export const STATUS_MSG = {
             "INVALID_OTP": {
                 "statusCode": 422,
                 "httpCode": 422,
-                "message": "Please enter a valid email address",
+                "message": "You have entered an incorrect OTP. Please try again",
                 "type": "INVALID_OTP",
-                "message_Ar": "يرجى إدخال بريد إلكتروني صالح",
-                "message_En": "Please enter a valid email address"
+                "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
+                "message_En": "You have entered an incorrect OTP. Please try again"
             },
             "INVALID_SOCIAL_INFO": {
                 "statusCode": 422,
