@@ -497,7 +497,7 @@ export class OrderClass extends BaseEntity {
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)
-            if (createOrder) {
+            if (createOrder && typeof createOrder == 'number') {
                 let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
                     orderId: createOrder,
                     sdmOrderRef: createOrder,
@@ -512,8 +512,16 @@ export class OrderClass extends BaseEntity {
                     })
                 }
                 return {}
-            } else
+            } else {
+                this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
+                    isActive: 0,
+                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                    updatedAt: new Date().getTime(),
+                    sdmOrderStatus: -2,
+                    validationRemarks: createOrder.ResultText
+                })
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
+            }
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
             return Promise.reject(error)
