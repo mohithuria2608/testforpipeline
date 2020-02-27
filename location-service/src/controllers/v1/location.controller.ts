@@ -95,15 +95,19 @@ export class LocationController {
                                         }
                                     }
                                 }
-                                storeCollection.sort(compare)
-                                a['store'] = storeCollection
-                                areaCollection.push(a)
+                                if (storeCollection && storeCollection.length > 0) {
+                                    storeCollection.sort(compare)
+                                    a['store'] = storeCollection
+                                    areaCollection.push(a)
+                                }
                             }
                         }
                     }
-                    areaCollection.sort(compare)
-                    c['area'] = areaCollection
-                    res.push(c)
+                    if (areaCollection && areaCollection.length > 0) {
+                        areaCollection.sort(compare)
+                        c['area'] = areaCollection
+                        res.push(c)
+                    }
                 }
             }
             res.sort(compare)
