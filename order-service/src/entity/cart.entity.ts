@@ -287,9 +287,10 @@ export class CartClass extends BaseEntity {
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],
-                address: null,
+                address: {},
                 amount: []
             }
+            console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,

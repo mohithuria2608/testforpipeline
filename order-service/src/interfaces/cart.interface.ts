@@ -24,19 +24,19 @@ declare namespace ICartRequest {
         amount: number
     }
     interface IAddress {
-        addressId: string,
-        sdmAddressRef: number,
-        cmsAddressRef: number,
-        storeId: number,
-        areaId: number,
-        cityId: number,
-        tag: number,
-        bldgName: string,
-        description: string,
-        flatNum: string,
-        addressType: string,
-        lat: number,
-        lng: number,
+        addressId?: string,
+        sdmAddressRef?: number,
+        cmsAddressRef?: number,
+        storeId?: number,
+        areaId?: number,
+        cityId?: number,
+        tag?: number,
+        bldgName?: string,
+        description?: string,
+        flatNum?: string,
+        addressType?: string,
+        lat?: number,
+        lng?: number,
     }
 
     interface IStore {
