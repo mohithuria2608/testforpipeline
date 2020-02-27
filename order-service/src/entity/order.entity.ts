@@ -672,7 +672,10 @@ export class OrderClass extends BaseEntity {
                             //         }
                             //     }
                             // }
-                            if (recheck && sdmOrder.ValidationRemarks && (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null")) {
+                            if (recheck && sdmOrder.ValidationRemarks &&
+                                (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
+                                sdmOrder.ValidationRemarks != "EXCEED_ORDER_AMOUNT"
+                            ) {
                                 consolelog(process.cwd(), "order step 0:       ", sdmOrder.ValidationRemarks, true)
                                 recheck = false
                                 this.updateOneEntityMdb({ _id: order._id }, {
