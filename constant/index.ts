@@ -115,7 +115,7 @@ export const SERVER = {
     ANDROID_PACKAGE_NAME: "com.android.kfc",
     IOS_SCHEME_HOST: "americanaKFCUAE://",
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
-    AUTH_MECH : "Bearer"
+    AUTH_MECH: "Bearer"
 };
 
 export const DATABASE = {
@@ -614,7 +614,7 @@ export const STATUS_MSG = {
                 "httpCode": 400,
                 "type": "INVALID_STORE",
                 "message": "This store is unserviceable at the moment",
-                "message_Ar": "هذا المخزن خارج الخدمة في الوقت الحالي",
+                "message_Ar": "هذا المطعم خارج الخدمة في الوقت الحالي",
                 "message_En": "This store is unserviceable at the moment"
             },
             "INVALID_ADDRESS": {
@@ -630,7 +630,7 @@ export const STATUS_MSG = {
                 "httpCode": 400,
                 "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
                 "message": "Your profile is 100% complete",
-                "message_Ar": "حسابك مكتمل بنسبة 100%",
+                "message_Ar": "حسابك مكتمل بنسبة %100",
                 "message_En": "Your profile is 100% complete"
             },
             "OTP_SESSION_EXPIRED": {
@@ -788,7 +788,7 @@ export const STATUS_MSG = {
                 "httpCode": 409,
                 "message": "This store is unserviceable at the moment",
                 "type": "STORE_NOT_FOUND",
-                "message_Ar": "هذا المخزن غير متاح الآن",
+                "message_Ar": "هذا المطعم غير متاح الآن",
                 "message_En": "This store is unserviceable at the moment"
             },
             "PROMO_NOT_FOUND": {
@@ -984,10 +984,10 @@ export const STATUS_MSG = {
             "IMP_ERROR": {
                 "statusCode": 500,
                 "httpCode": 500,
-                "message": "We have encountered some issue. Please try after sometime",
-                "message_Ar": "لقد واجهتنا مشكلة، يرجى المحاولة بعد قليل",
-                "message_En": "We have encountered some issue. Please try after sometime",
+                "message": "Implementation Error",
                 "type": "IMP_ERROR",
+                "message_Ar": "خطأ في التنفيذ",
+                "message_En": "Implementation Error"
             },
             "INVALID_TOKEN_TYPE": {
                 "statusCode": 500,
