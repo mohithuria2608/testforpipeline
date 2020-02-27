@@ -17,14 +17,14 @@ export class OrderClass extends BaseEntity {
     */
     async syncOrder(payload: IOrderRequest.IOrderData) {
         try {
-            let sdmOrderChange = {
+            kafkaService.kafkaSync({
                 set: this.set,
                 sdm: {
                     create: true,
                     argv: JSON.stringify(payload)
-                }
-            }
-            kafkaService.kafkaSync(sdmOrderChange)
+                },
+                inQ: true
+            })
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOrder", JSON.stringify(error), false)
@@ -823,14 +823,14 @@ export class OrderClass extends BaseEntity {
                             }
                             consolelog(process.cwd(), "recheck", recheck, true)
                             if (recheck) {
-                                let orderChange = {
+                                kafkaService.kafkaSync({
                                     set: this.set,
                                     sdm: {
                                         get: true,
                                         argv: JSON.stringify(payload)
-                                    }
-                                }
-                                kafkaService.kafkaSync(orderChange)
+                                    },
+                                    inQ: true
+                                })
                             }
                         }
                     }

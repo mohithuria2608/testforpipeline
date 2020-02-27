@@ -584,7 +584,8 @@ export class UserController {
                         sdm: {
                             sync: true,
                             argv: JSON.stringify(userData)
-                        }
+                        },
+                        inQ: true
                     })
                     return formatUserData(userData, headers, auth.isGuest)
                 }
@@ -639,7 +640,8 @@ export class UserController {
                         sdm: {
                             create: true,
                             argv: JSON.stringify(userData)
-                        }
+                        },
+                        inQ: true
                     })
                 } else {
                     userData = await ENTITY.UserE.createUserOnSdm(userData)
@@ -652,7 +654,8 @@ export class UserController {
                         cms: {
                             create: true,
                             argv: JSON.stringify(userData)
-                        }
+                        },
+                        inQ: true
                     })
                 } else {
                     userData = await ENTITY.UserE.createUserOnCms(userData)
@@ -670,7 +673,8 @@ export class UserController {
                         sdm: {
                             update: true,
                             argv: JSON.stringify(userData)
-                        }
+                        },
+                        inQ: true
                     })
                 } else {
                     await SDM.UserSDME.updateCustomerOnSdm(userData)
@@ -684,7 +688,8 @@ export class UserController {
                         cms: {
                             update: true,
                             argv: JSON.stringify(userData)
-                        }
+                        },
+                        inQ: true
                     })
                 } else {
                     await CMS.UserCMSE.updateCustomerOnCms(userData)

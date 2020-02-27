@@ -74,6 +74,8 @@ Hands-on Microservices with TypeScript 3
     * ssh localadmin@amfuatnejnkvm02
     * kubectl get pods -n nodeapp
     * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
+# UAT aerospike
+* kubectl exec -it aerospike-0 bash -n aerospikedb
 
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json

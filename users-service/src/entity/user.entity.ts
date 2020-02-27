@@ -281,7 +281,8 @@ export class UserEntity extends BaseEntity {
                     cms: {
                         update: true,
                         argv: JSON.stringify(user)
-                    }
+                    },
+                    inQ: true
                 })
             }
 
@@ -334,7 +335,8 @@ export class UserEntity extends BaseEntity {
                         cms: {
                             update: true,
                             argv: JSON.stringify(user)
-                        }
+                        },
+                        inQ: true
                     })
                 }
                 return user

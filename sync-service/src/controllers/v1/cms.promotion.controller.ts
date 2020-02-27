@@ -19,7 +19,8 @@ export class CmsPromotionController {
                 as: {
                     create: true,
                     argv: JSON.stringify(payload.data)
-                }
+                },
+                inQ: true
             }
             if (payload.action == "update") {
                 promoChange['as']['update'] = true

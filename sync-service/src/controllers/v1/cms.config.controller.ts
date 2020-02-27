@@ -74,7 +74,8 @@ export class CmsConfigController {
                                             ],
                                             store_code: store_code
                                         })
-                                    }
+                                    },
+                                    inQ: true
                                 }
                                 kafkaService.kafkaSync(pingServices)
                             } else {
@@ -128,7 +129,8 @@ export class CmsConfigController {
                                             ],
                                             store_code: store_code
                                         })
-                                    }
+                                    },
+                                    inQ: true
                                 }
                                 kafkaService.kafkaSync(pingServices)
                             } else {
@@ -179,7 +181,8 @@ export class CmsConfigController {
                                             ],
                                             store_code: store_code
                                         })
-                                    }
+                                    },
+                                    inQ: true
                                 }
                                 kafkaService.kafkaSync(pingServices)
                             } else {
@@ -212,7 +215,8 @@ export class CmsConfigController {
                 as: {
                     reset: true,
                     argv: JSON.stringify(payload)
-                }
+                },
+                inQ: true
             }
             // this.syncConfigFromKafka(configChange)
             kafkaService.kafkaSync(configChange)

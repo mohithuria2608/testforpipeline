@@ -2,6 +2,7 @@ import * as kafka from 'kafka-node';
 import { KafkaClientClass } from './client';
 import { consolelog } from "../utils"
 import * as Constant from '../constant'
+import { kafkaController } from '../controllers';
 
 class KafkaProducer {
 
@@ -53,6 +54,9 @@ class KafkaProducer {
             }
         ], (error, data) => {
             if (error) {
+                let messages = JSON.parse(req.messages)
+                messages['inQ'] = false
+                kafkaController.kafkaSync(messages)
                 consolelog(process.cwd(), 'Err in producing to kafka topic', JSON.stringify(error), false);
             } else {
                 consolelog(process.cwd(), 'message produced to kafka successfully', JSON.stringify(data), true);

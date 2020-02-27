@@ -1,8 +1,10 @@
 import * as config from "config"
+import * as Constant from '../../../constant'
 import { kafkaServiceValidator } from './client.validator'
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 import { consolelog } from '../../../utils'
+import { logService } from '../logger/client'
 
 export class KafkaService {
 
@@ -33,6 +35,8 @@ export class KafkaService {
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in producing data on kafka  for syncing", JSON.stringify(error), false)
+                        if (error.code === Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE)
+                            logService.sync(payload)
                         reject(error)
                     }
                 })
