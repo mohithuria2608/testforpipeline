@@ -81,7 +81,6 @@ export class GuestController {
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
             }
-
             let userchangePayload = {
                 username: username,
                 fullPhnNo: fullPhnNo,
@@ -97,7 +96,6 @@ export class GuestController {
                 brand: headers.brand,
                 country: headers.country,
                 profileStep: 1,
-
             }
             if (address && address.id)
                 userchangePayload['address'] = address
@@ -106,18 +104,20 @@ export class GuestController {
                 userchangePayload['deleteUserId'] = auth.id
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
-                let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
-                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
-                    userchangePayload['email'] = cmsUserByPhoneNo.email
-                    userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
+                let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
+                if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                    if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != fullPhnNo)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
+                    userchangePayload['email'] = cmsUserByEmail.email
+                    userchangePayload['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                    if (cmsUserByPhoneNo.SdmUserRef && (cmsUserByPhoneNo.SdmUserRef != null || cmsUserByPhoneNo.SdmUserRef != "null") && (cmsUserByPhoneNo.SdmUserRef != "0"))
-                        userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
-                    if (cmsUserByPhoneNo.SdmCorpRef && (cmsUserByPhoneNo.SdmCorpRef != null || cmsUserByPhoneNo.SdmCorpRef != "null") && (cmsUserByPhoneNo.SdmCorpRef != "0"))
-                        userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
-                    if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                        userData.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
+                    if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
+                        userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
+                    if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
+                        userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
+                    if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
+                        userData.cmsAddress = cmsUserByEmail.address.slice(0, 6)
                     }
                 } else {
                     userchangePayload['sdmUserRef'] = 0

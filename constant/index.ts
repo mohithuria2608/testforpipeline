@@ -657,13 +657,21 @@ export const STATUS_MSG = {
                 "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
                 "message_En": "You have entered an incorrect OTP. Please try again"
             },
-            "USER_ALREADY_EXIST": {
+            "USER_PHONE_ALREADY_EXIST": {
                 "statusCode": 400,
                 "httpCode": 400,
-                "type": "USER_ALREADY_EXIST",
+                "type": "USER_PHONE_ALREADY_EXIST",
                 "message": "This phone number is already is use",
                 "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
                 "message_En": "This phone number is already is use"
+            },
+            "USER_EMAIL_ALREADY_EXIST": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_ALREADY_EXIST",
+                "message": "This email is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This email is already is use"
             },
             "INVALID_ID": {
                 "statusCode": 400,
@@ -1192,27 +1200,27 @@ export const STATUS_MSG = {
         En: {
             VALIDATION: {
                 INVALID_COUNTRY_CODE: "Your number belongs to another country",
-                INVALID_PHONE_NO: "Invalid phone number",
-                INVALID_EMAIL: "Please enter email address in a valid format",
-                INVALID_OTP: "Invalid otp",
+                INVALID_PHONE_NO: "Please enter a valid phone number",
+                INVALID_EMAIL: "Please enter a valid email address",
+                INVALID_OTP: "You have entered an incorrect OTP. Please try again",
                 INAVLID_NAME: "Please enter a valid name",
-                EMPTY_PHONE_NO: "Empty phone number",
-                EMPTY_EMAIL: "Empty email",
-                EMPTY_OTP: "Empty otp",
-                EMPTY_NAME: "Empty name",
+                EMPTY_PHONE_NO: "Please enter a valid phone number",
+                EMPTY_EMAIL: "Please enter a valid email address",
+                EMPTY_OTP: "Please enter OTP",
+                EMPTY_NAME: "Please enter a valid name",
             }
         },
         Ar: {
             VALIDATION: {
-                INVALID_COUNTRY_CODE: "Your number belongs to another country in arabic",
-                INVALID_PHONE_NO: "Invalid phone number in arabic",
-                INVALID_EMAIL: "Please enter email address in a valid format in arabic",
-                INVALID_OTP: "Invalid otp in arabic",
-                INAVLID_NAME: "Please enter a valid name in arabic",
-                EMPTY_PHONE_NO: "Empty phone number in arabic",
-                EMPTY_EMAIL: "Empty email in arabic",
-                EMPTY_OTP: "Empty otp in arabic",
-                EMPTY_NAME: "Empty name in arabic",
+                INVALID_COUNTRY_CODE: "رقم الهاتف الذي أدخلته ينتمي لبلد آخر",
+                INVALID_PHONE_NO: "يرجى إدخال رقم جوال صالح",
+                INVALID_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
+                INVALID_OTP: "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
+                INAVLID_NAME: "يرجى إدخال اسم صالح",
+                EMPTY_PHONE_NO: "يرجى إدخال رقم جوال صالح",
+                EMPTY_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
+                EMPTY_OTP: "يرجى أدخل رمز التأكيد",
+                EMPTY_NAME: "يرجى إدخال اسم صالح",
             }
         }
     },
