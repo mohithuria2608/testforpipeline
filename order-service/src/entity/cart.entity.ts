@@ -295,7 +295,7 @@ export class CartClass extends BaseEntity {
                 set: this.set,
                 key: payload.userId,
                 ttl: Constant.SERVER.DEFAULT_CART_TTL,
-                create: true,
+                createOrReplace: true,
             }
             await Aerospike.put(putArg)
             return {}
