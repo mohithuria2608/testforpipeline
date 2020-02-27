@@ -2187,7 +2187,7 @@ export const start = (async () => {
               "ModCode": "NONE",
               "Name": "Chicken Fillet Sandwich",
               "QCComponent": 1,
-              "QCInstanceID": 508,
+              "QCInstanceID": 276,
               "QCLevel": 0,
               "QCProID": 21
             },
@@ -2198,7 +2198,7 @@ export const start = (async () => {
               "ModCode": "NONE",
               "Name": "Medium Fries",
               "QCComponent": 2,
-              "QCInstanceID": 508,
+              "QCInstanceID": 276,
               "QCLevel": 0,
               "QCProID": 21
             },
@@ -2209,7 +2209,7 @@ export const start = (async () => {
               "ModCode": "NONE",
               "Name": "Pepsi Medium",
               "QCComponent": 3,
-              "QCInstanceID": 508,
+              "QCInstanceID": 276,
               "QCLevel": 0,
               "QCProID": 21
             },
@@ -2251,7 +2251,7 @@ export const start = (async () => {
               "ModCode": "NONE",
               "Name": "Chicken Fillet Sandwich",
               "QCComponent": 1,
-              "QCInstanceID": 509,
+              "QCInstanceID": 260,
               "QCLevel": 0,
               "QCProID": 21
             },
@@ -2262,7 +2262,7 @@ export const start = (async () => {
               "ModCode": "NONE",
               "Name": "Medium Fries",
               "QCComponent": 2,
-              "QCInstanceID": 509,
+              "QCInstanceID": 260,
               "QCLevel": 0,
               "QCProID": 21
             },
@@ -2273,7 +2273,7 @@ export const start = (async () => {
               "ModCode": "NONE",
               "Name": "Pepsi Medium",
               "QCComponent": 3,
-              "QCInstanceID": 509,
+              "QCInstanceID": 260,
               "QCLevel": 0,
               "QCProID": 21
             }
@@ -2292,7 +2292,7 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    //  let detail =  await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39787090 })
+    //  let detail =  await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39787910 })
     console.log("detail")
   } catch (error) {
     console.error(error)
