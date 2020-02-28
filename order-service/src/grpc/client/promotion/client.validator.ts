@@ -12,7 +12,7 @@ export class PromotionServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    couponCode: Joi.string().lowercase().required(),
+                    couponCode: Joi.string().required(),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

@@ -108,7 +108,7 @@ export class PromotionClass extends BaseEntity {
                     queryArg = {
                         equal: {
                             bin: "couponCodeL",
-                            value: payload.couponCode
+                            value: payload.couponCode.toLowerCase()
                         },
                         set: this.set,
                         background: false,
