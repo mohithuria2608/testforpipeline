@@ -19,6 +19,12 @@ export class PromotionClass extends BaseEntity {
             index: 'idx_' + this.set + '_' + 'couponCode',
             type: "STRING"
         },
+        {
+            set: this.set,
+            bin: 'couponCodeToCheck',
+            index: 'idx_' + this.set + '_' + 'couponCodeToCheck',
+            type: "STRING"
+        }
     ]
     constructor() {
         super(Constant.SET_NAME.PROMOTION)
@@ -100,7 +106,7 @@ export class PromotionClass extends BaseEntity {
                 if (payload.couponCode) {
                     queryArg = {
                         equal: {
-                            bin: "couponCode",
+                            bin: "couponCodeToCheck",
                             value: payload.couponCode
                         },
                         set: this.set,
