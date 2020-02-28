@@ -113,7 +113,7 @@ export class OrderController {
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
                 if (payload.couponCode && payload.items && payload.items.length > 0) {
-                    let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                    let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode.toLowerCase() })
                     if (!promo || (promo && !promo.isValid)) {
                         delete payload['couponCode']
                     }
