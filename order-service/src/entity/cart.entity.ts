@@ -306,6 +306,35 @@ export class CartClass extends BaseEntity {
         }
     }
 
+    async resetCart(cartId: string) {
+        try {
+            let cartUpdate = {
+                cartUnique: this.ObjectId().toString(),
+                cmsCartRef: 0,
+                sdmOrderRef: 0,
+                cmsOrderRef: 0,
+                userId: cartId,
+                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
+                items: [],
+                address: {},
+                amount: []
+            }
+            let putArg: IAerospike.Put = {
+                bins: cartUpdate,
+                set: this.set,
+                key: cartId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "resetCart", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
     async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             let sellingPrice = 0
@@ -483,9 +512,26 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-            let req = await this.createCartReqForCms(payload, userData)
-            let cmsCart = await CMS.CartCMSE.createCart(req.req)
-            return cmsCart
+            if (payload.items && payload.items.length > 0) {
+                let req = await this.createCartReqForCms(payload, userData)
+                let cmsCart = await CMS.CartCMSE.createCart(req.req)
+                return cmsCart
+            } else {
+                return {
+                    cms_cart_id: 0,
+                    currency_code: "",
+                    cart_items: [],
+                    subtotal: 0,
+                    grandtotal: 0,
+                    tax: [],
+                    shipping: [],
+                    not_available: [],
+                    is_price_changed: true,
+                    coupon_code: "",
+                    discount_amount: 0,
+                    success: true
+                }
+            }
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -41,30 +41,8 @@ export class WebhookNoonpayController {
                     }
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     if (order.payment.status == "AUTHORIZATION") {
-                        /**
-                         * @description update order on sdm with payment object
-                         */
                         redirectUrl = redirectUrl + "payment/success"
-                        let cartUpdate = {
-                            cartUnique: ENTITY.CartE.ObjectId().toString(),
-                            cmsCartRef: 0,
-                            sdmOrderRef: 0,
-                            cmsOrderRef: 0,
-                            userId: order.userId,
-                            status: Constant.DATABASE.STATUS.ORDER.CART.AS,
-                            createdAt: new Date().getTime(),
-                            updatedAt: new Date().getTime(),
-                            items: [],
-                            address: {},
-                            amount: []
-                        }
-                        let putArg: IAerospike.Put = {
-                            bins: cartUpdate,
-                            set: ENTITY.CartE.set,
-                            key: order.cartId,
-                            update: true,
-                        }
-                        await Aerospike.put(putArg)
+                        ENTITY.CartE.resetCart(order.cartId)
                     } else {
                         let dataToUpdateOrder = {
                             $addToSet: {

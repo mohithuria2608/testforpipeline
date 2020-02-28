@@ -183,16 +183,7 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
-                let cartUpdate = {
-                    cartUnique: ENTITY.CartE.ObjectId().toString(),
-                }
-                let putArg: IAerospike.Put = {
-                    bins: cartUpdate,
-                    set: ENTITY.CartE.set,
-                    key: payload.cartId,
-                    update: true,
-                }
-                await Aerospike.put(putArg)
+                ENTITY.CartE.resetCart(payload.cartId)
             }
             ENTITY.OrderE.syncOrder(order)
 
