@@ -57,6 +57,10 @@ export enum KAFKA_TOPIC {
     CMS_USER = "cms_user",
     AS_USER = "as_user",
 
+    CMS_ADDRESS = "cms_address",
+    SDM_ADDRESS = "sdm_address",
+    AS_ADDRESS = "as_address",
+
     AS_PROMOTION = 'as_promotion',
 
     SDM_ORDER = 'sdm_order',
@@ -99,12 +103,15 @@ export const SERVER = {
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
     USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
-    OTP_EXPIRE_TIME: (10 * 60 * 60 * 1000),
+    OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     MIN_COD_CART_VALUE: 300,//AED
+    MIN_CART_VALUE: 23,//AED
+    PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
+    PAYMENT_API_KEY_PREFIX: "Key_",
     DISPLAY_COLOR: true,
     ANDROID_SCHEME_HOST: "https://",
     ANDROID_PACKAGE_NAME: "com.android.kfc",
@@ -114,7 +121,7 @@ export const SERVER = {
 
 export const DATABASE = {
     STORE_CODE: {
-        KSA_STORE: "ksa_store"
+        MAIN_WEB_STORE: "main_website_store"
     },
 
     BRAND: {
@@ -133,6 +140,11 @@ export const DATABASE = {
     LANGUAGE: {
         EN: 'En',
         AR: 'Ar'
+    },
+
+    PAYMENT_LOCALE: {
+        EN: 'en',
+        AR: 'ar'
     },
 
     UDF: {
@@ -165,6 +177,18 @@ export const DATABASE = {
                 METHOD: "POST",
                 URL: "getuser"
             },
+            CREATE_ADDRESS: {
+                METHOD: "POST",
+                URL: "createaddress"
+            },
+            DELETE_ADDRESS: {
+                METHOD: "POST",
+                URL: "userdeleteaddress"
+            },
+            UPDATE_ADDRESS: {
+                METHOD: "POST",
+                URL: "updateaddress"
+            },
             CREATE_CART: {
                 METHOD: "POST",
                 URL: "customcart/create-validate-cart"
@@ -184,32 +208,52 @@ export const DATABASE = {
                     UPDATE: 5,
                     GET: 5,
                     SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             ORDER: {
-                TOTAL_RETRY: {
-                    GET: 10000,
-                },
                 MAX_RETRY: {
                     CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 },
                 INTERVAL: {
                     GET_STATUS: 10000
@@ -222,24 +266,44 @@ export const DATABASE = {
                     CREATE: 5,
                     UPDATE: 5,
                     GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             }
         },
@@ -248,36 +312,70 @@ export const DATABASE = {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             MENU: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             PROMOTION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             UPSELL: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             },
             CONFIG: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
                 }
             }
         }
     },
 
     TYPE: {
+        PAYMENT_ACTION_HINTS: {
+            STATUS_USING_NOONPAY_ID: 'GET_PAYMENT_STATUS_USING_NOONPAY_ID',
+            SYNC_CONFIGURATION: 'SYNC_PAYMENT_CONFIGURATION'
+        },
+
+        PAYMENT_METHOD: {
+            CARD: "Card",
+            COD: "Cash On Delivery"
+        },
+
         CONFIG: {
             GENERAL: "general",
             PAYMENT: "payment",
@@ -311,6 +409,7 @@ export const DATABASE = {
 
         ACTIVITY_LOG: {
             SDM_REQUEST: "SDM_REQUEST",
+            CMS_REQUEST: "CMS_REQUEST",
             FAIL_Q: "FAIL_Q",
             REQUEST: "REQUEST",
             ERROR: "ERROR",
@@ -423,6 +522,38 @@ export const DATABASE = {
                 CMS: "",
                 SDM: []
             },
+        },
+
+        PAYMENT: {
+            INITIATED: 'INITIATED',
+            AUTHORIZED: 'AUTHORIZED',
+            CANCELLED: 'CANCELLED', // Reverse payment
+            CAPTURED: 'CAPTURED',
+            REFUNDED: 'REFUNDED',
+            EXPIRED: 'EXPIRED',
+            FAILED: 'FAILED',
+        },
+
+        TRANSACTION: {
+            AUTHORIZATION: 'AUTHORIZATION',
+            VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
+            CAPTURE: 'CAPTURE',
+            REFUND: 'REFUND'
+        }
+    },
+
+    ACTION: {
+        TRANSACTION: {
+            INITIATE: 'INITIATE',
+            AUTHORIZE: 'AUTHORIZE',
+            CAPTURE: 'CAPTURE',
+            SALE: 'SALE',
+            REVERSE: 'REVERSE',
+            REFUND: 'REFUND'
+        },
+        CART_AMOUNT: {
+            ADD: "add",
+            SUBTRACT: "subtract"
         }
     }
 };
@@ -430,11 +561,32 @@ export const DATABASE = {
 export const STATUS_MSG = {
     ERROR: {
         E400: {
-            MINIMUM_CART_VALUE_VIOLATION: {
+            USER_NOT_CREATED_ON_SDM: {
                 statusCode: 400,
                 httpCode: 400,
-                type: 'MINIMUM_CART_VALUE_VIOLATION',
-                message: 'Minimum cart value not met'
+                type: 'USER_NOT_CREATED_ON_SDM',
+                message: 'Some issue has occured. Please try after sometime'
+            },
+
+            USER_NOT_CREATED_ON_CMS:{
+                statusCode: 400,
+                httpCode: 400,
+                type: 'USER_NOT_CREATED_ON_CMS',
+                message: 'Some issue has occured. Please try after sometime'
+            },
+
+            MIN_CART_VALUE_VOILATION: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'MIN_CART_VALUE_VOILATION',
+                message: 'Minimum cart voilation'
+            },
+
+            MAX_COD_CART_VALUE_VOILATION: {
+                statusCode: 400,
+                httpCode: 400,
+                type: 'MAX_COD_CART_VALUE_VOILATION',
+                message: 'Maximum cod cart voilation'
             },
 
             INVALID_PROMO: {
@@ -943,5 +1095,68 @@ export const STATUS_MSG = {
             DUPLICATE_INDEX: 200,
             DATA_NOT_FOUND: 2,
         }
+    },
+    NOONPAY_ERROR: {
+        default: {
+            statusCode: 6000,
+            httpCode: 400,
+            message: 'Unknown error', // associate noonpay returned message
+            type: 'UNHANDLED_ERROR',
+            actionHint: ''
+        },
+        1500: {
+            statusCode: 1500,
+            httpCode: 401,
+            message: 'Payment authorization error',
+            type: 'CONFIGURATION_ERROR',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION
+        },
+        19001: {
+            statusCode: 6001,
+            httpCode: 409,
+            message: 'No payment transaction found for the provided order id',
+            type: 'INVALID_ORDER_ID',
+            actionHint: ''
+        },
+        19004: {
+            statusCode: 6004,
+            httpCode: 400,
+            message: 'Invalid data provided',
+            type: 'INVALID_DATA_PROVIDED',
+            actionHint: '',
+            useNoonPayMessage: true
+        },
+        19019: {
+            statusCode: 6019,
+            httpCode: 422,
+            message: 'The requested operation can not be processed.',
+            type: 'OPERATION_ERROR',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID,
+            useNoonPayMessage: true
+        },
+        19066: {
+            statusCode: 6066,
+            httpCode: 422,
+            message: 'Insufficient funds for the requested operation.',
+            type: 'OPERATION_ERROR',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
+        },
+        19077: {
+            statusCode: 6077,
+            httpCode: 400,
+            message: 'Invalid Capture transaction id',
+            type: 'INVALID_CAPTURE_TRANSACTION_ID',
+            actionHint: ''
+        },
+        19085: {
+            statusCode: 6085,
+            httpCode: 400,
+            message: 'Multiple payments were initiated for the given order, use noonpay order id to get the status',
+            type: 'MULTIPLE_PAYMENTS_INITIATED',
+            actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
+        },
+    },
+    SDM_ORDER_VALIDATION: {
+        ORDER_AMOUNT_MISMATCH: "Order amount mismatch"
     }
 };

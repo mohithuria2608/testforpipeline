@@ -18,10 +18,10 @@ declare namespace IAddressRequest {
         updatedAt: number,
         sdmAddressRef: number,
         cmsAddressRef: number,
-        sdmCountryRef: number,
-        sdmStoreRef: number,
-        sdmAreaRef: number,
-        sdmCityRef: number,
+        countryId: number,
+        storeId: number,
+        areaId: number,
+        cityId: number,
     }
 
     interface IRegisterAddress {
@@ -32,7 +32,10 @@ declare namespace IAddressRequest {
         bldgName?: string,
         description?: string,
         flatNum?: string,
-        tag?: string
+        tag?: string,
+
+        sdmAddressRef?: number,
+        cmsAddressRef?: number,
     }
 
     interface IUpdateAddress {
@@ -43,11 +46,14 @@ declare namespace IAddressRequest {
         description?: string,
         flatNum?: string,
         tag?: string,
+
+        sdmAddressRef?: number,
+        cmsAddressRef?: number,
     }
 
     interface ISyncOldAddress {
         addressId: string,
-        sdmStoreRef?: number,
+        storeId?: number,
         lat?: number,
         lng?: number,
         bldgName?: string,

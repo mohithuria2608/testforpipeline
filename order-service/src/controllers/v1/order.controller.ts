@@ -37,9 +37,9 @@ export class OrderController {
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
                 let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
-                    ENTITY.OrderE.createSdmOrder(data)
+                    await ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
-                    ENTITY.OrderE.getSdmOrder(data)
+                    await ENTITY.OrderE.getSdmOrder(data)
             }
             return {}
         } catch (error) {
@@ -64,6 +64,9 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            if (userData.sdmUserRef && userData.sdmUserRef == 0) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
+            }
             let order: IOrderRequest.IOrderData
             let retry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
@@ -72,7 +75,11 @@ export class OrderController {
                 if (order && order._id)
                     retry = true
             }
-
+            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
+            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             let newCartId = ""
             let noonpayRedirectionUrl = ""
             if (!retry) {
@@ -83,9 +90,13 @@ export class OrderController {
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
 
-                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.sdmStoreRef })
+                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId })
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
+                else {
+                    if (!getStore['isOnline'])
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                }
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
                 if (payload.couponCode && payload.items && payload.items.length > 0) {
@@ -123,17 +134,12 @@ export class OrderController {
                 cartData['orderType'] = payload.orderType
                 order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
             }
-            // let subTotal = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL.SUB_TOTAL })
-            // let tax = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
-            let amount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
-            // if ((subTotal[0].amount + tax[0].amount) < 23.5) {
-            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MINIMUM_CART_VALUE_VIOLATION)
-            // }
+            // let totalAmount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order.cmsOrderRef.toString(),
-                    amount: amount[0].amount,
-                    storeCode: "kfc_uae_store",
+                    amount: totalAmount[0].amount,
+                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                     paymentMethodId: 1,
                     channel: "Mobile",
                     locale: "en",
@@ -145,16 +151,16 @@ export class OrderController {
                     },
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
-                        amount: amount[0].amount,
-                        name: "Card",
+                        amount: totalAmount[0].amount,
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD
                     }
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
-                        amount: amount[0].amount,
-                        name: "Cash On Delivery"
+                        amount: totalAmount[0].amount,
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
                 /**

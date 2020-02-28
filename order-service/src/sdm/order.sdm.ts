@@ -5,7 +5,6 @@ import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog } from '../utils'
 import * as  _ from 'lodash';
-import { kafkaService } from '../grpc/client';
 
 export class OrderSDMEntity extends BaseSDM {
 
@@ -22,31 +21,12 @@ export class OrderSDMEntity extends BaseSDM {
                 name: "UpdateOrder",
                 req: payload
             }
-            kafkaService.kafkaSync({
-                set: Constant.SET_NAME.LOGGER,
-                mdb: {
-                    create: true,
-                    argv: JSON.stringify({
-                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
-                        info: {
-                            request: {
-                                body: data.req
-                            }
-                        },
-                        description: "",
-                        options: {
-                            env: Constant.SERVER.ENV[config.get("env")],
-                        },
-                        createdAt: new Date().getTime(),
-                    })
-                }
-            })
 
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
             else
-                return Promise.reject(JSON.stringify(res))
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
             return Promise.reject(error)
@@ -66,7 +46,7 @@ export class OrderSDMEntity extends BaseSDM {
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
             else
-                return Promise.reject(JSON.stringify(res))
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
             return Promise.reject(error)
@@ -85,7 +65,7 @@ export class OrderSDMEntity extends BaseSDM {
                     conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     language: "En",
                     orderID: payload.sdmOrderRef,
-                    menuTemplateID: "17"
+                    menuTemplateID: Constant.SERVER.SDM.MENU_TEMPLATE_ID
                 }
             }
             let res = await this.requestData(data.name, data.req)

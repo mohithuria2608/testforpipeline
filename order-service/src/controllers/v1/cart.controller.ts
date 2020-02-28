@@ -10,6 +10,7 @@ export class CartController {
 
     /**
      * @method POST
+     * @param {string} cartId :cartId
      * @param {string} curMenuId :current menu id
      * @param {number} menuUpdatedAt :current menu id
      * @param {number=} lat :latitude
@@ -19,12 +20,16 @@ export class CartController {
      * */
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let storeOnline = true
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+            if (userData.cmsUserRef && userData.cmsUserRef == 0) {
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
+            }
 
-            let checkCart = await Aerospike.exists({ set: ENTITY.CartE.set, key: payload.cartId })
+            let checkCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             if (!checkCart) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }
@@ -33,8 +38,10 @@ export class CartController {
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore[] = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.length > 0) {
-                    if (store[0].menuId != payload.curMenuId)
+                    if (store[0].menuId != payload.curMenuId) {
                         invalidMenu = true
+                        storeOnline = store[0].isOnline
+                    }
                 } else
                     invalidMenu = true
             } else {
@@ -58,9 +65,12 @@ export class CartController {
             } else
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
+            console.log("validate cart ", payload.cartId, payload.items.length)
             let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
+
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
+            res['storeOnline'] = storeOnline
             return res
         } catch (error) {
             consolelog(process.cwd(), "postCart", JSON.stringify(error), false)

@@ -60,26 +60,54 @@ gulp.task("copyLua", function () {
 	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
 });
 
-/**
-  * @todo add "lint" after "clean"
-  */
 gulp.task('default', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
 
 
-gulp.task('server', function () {
+gulp.task('local', function () {
 	pm2.connect(true, function () {
 		pm2.start({
 			name: 'menu',
 			script: 'dist/app.js',
 			env: {
-				"NODE_ENV": process.env.NODE_ENV ? process.env.NODE_ENV : "default"
+				"NODE_ENV": "default"
 			}
 		}, function () {
-			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, process.env.NODE_ENV);
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "local");
 			pm2.streamLogs('menu', 0);
 		});
 	});
 });
 
 
-gulp.task('one', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "server"));
+gulp.task('dev', function () {
+	pm2.connect(true, function () {
+		pm2.start({
+			name: 'menu',
+			script: 'dist/app.js',
+			env: {
+				"NODE_ENV": "development"
+			}
+		}, function () {
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "development");
+			pm2.streamLogs('menu', 0);
+		});
+	});
+});
+gulp.task('qa', function () {
+	pm2.connect(true, function () {
+		pm2.start({
+			name: 'menu',
+			script: 'dist/app.js',
+			env: {
+				"NODE_ENV": "testing"
+			}
+		}, function () {
+			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "testing");
+			pm2.streamLogs('menu', 0);
+		});
+	});
+});
+
+gulp.task('local', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", 'local'));
+gulp.task('dev', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "dev"));
+gulp.task('qa', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "qa"));

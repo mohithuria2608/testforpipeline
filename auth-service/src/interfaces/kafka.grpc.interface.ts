@@ -10,6 +10,7 @@ declare namespace IKafkaGrpcRequest {
         mdb?: IChangeMongo
         count?: number,
         q?: string
+        error?: string
     }
     interface IChangeAerospike {
         create?: boolean,

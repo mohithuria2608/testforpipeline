@@ -8,7 +8,8 @@ declare namespace ICommonRequest {
         devicemodel: string,
         devicetype: string,
         osversion: string,
-        deviceid: string
+        deviceid: string,
+        timezone: string,
     }
 
     interface AuthorizationObj {
@@ -39,7 +40,7 @@ declare namespace ICommonRequest {
     interface IReqPromiseOptions {
         method: string,
         url: string,
-        body?: true
+        body?: boolean
         form?: boolean,
         qs?: boolean,
         formData?: boolean

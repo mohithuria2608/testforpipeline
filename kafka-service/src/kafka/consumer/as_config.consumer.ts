@@ -8,7 +8,7 @@ const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
 class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG);
+        super(topic, topic);
     }
 
     handleMessage() {
@@ -22,7 +22,7 @@ class AsConfigConsumer extends BaseConsumer {
 
     private async syncConfig(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count >= 0) {
+            if (message.count > 0) {
                 let res = await syncService.sync(message)
                 return res
             }
@@ -32,10 +32,16 @@ class AsConfigConsumer extends BaseConsumer {
             consolelog(process.cwd(), "syncConfig", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                kafkaController.kafkaSync(message)
-            }
-            else
+                if (message.count == 0){
+                    message.error = JSON.stringify(error)
+                    kafkaController.produceToFailureTopic(message)
+                }
+                else
+                    kafkaController.kafkaSync(message)
+            } else{
+                message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
+            }
             return {}
         }
     }

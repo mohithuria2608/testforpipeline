@@ -3,11 +3,12 @@ import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { userService, orderService, paymentService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE
 
 class PingServiceConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE);
+        super(topic, topic);
     }
 
     handleMessage() {
@@ -44,10 +45,16 @@ class PingServiceConsumer extends BaseConsumer {
             consolelog(process.cwd(), `pingService`, JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                kafkaController.kafkaSync(message)
-            }
-            else
+                if (message.count == 0){
+                    message.error = JSON.stringify(error)
+                    kafkaController.produceToFailureTopic(message)
+                }
+                else
+                    kafkaController.kafkaSync(message)
+            } else{
+                message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
+            }
             return Promise.reject(error)
         }
     }

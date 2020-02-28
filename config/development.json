@@ -41,12 +41,12 @@
             "url": "https://americananode.appskeeper.com/payment-service/",
             "port": 4009
         },
-        "upload": {
-            "url": "https://americananode.appskeeper.com/upload-service/",
-            "port": 4010
-        },
         "promotion": {
             "url": "https://americananode.appskeeper.com/promotion-service/",
+            "port": 4010
+        },
+        "upload": {
+            "url": "https://americananode.appskeeper.com/upload-service/",
             "port": 4011
         },
         "log": {
@@ -177,7 +177,7 @@
     "blobBaseUrl": {
         "product": "http://40.123.207.192/media/catalog/product/",
         "home": "http://40.123.207.192/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/development/"
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
@@ -204,10 +204,9 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "auth": {
-            "username": "shashi.bhushan@appinventiv.com",
-            "password": "shashi@123"
-        },
         "baseUrl": "http://40.123.207.192/rest/V1/"
+    },
+    "sdm": {
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"
     }
 }

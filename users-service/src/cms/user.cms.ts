@@ -27,6 +27,7 @@ export class UserCMSEntity extends BaseCMS {
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.CREATE_USER.METHOD,
                 url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.CREATE_USER.URL,
+                body: true
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
@@ -58,14 +59,15 @@ export class UserCMSEntity extends BaseCMS {
                 formObj['lastName'] = payload.name
             }
             if (payload.sdmUserRef != undefined)
-                formObj['sdmUserRef'] = payload.sdmUserRef
+                formObj['sdm_user_ref'] = payload.sdmUserRef
             if (payload.sdmCorpRef != undefined)
-                formObj['sdmCorpRef'] = payload.sdmCorpRef
+                formObj['sdm_corp_ref'] = payload.sdmCorpRef
             const headers = {};
             const form = formObj;
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.UPDATE_USER.METHOD,
                 url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.UPDATE_USER.URL,
+                body: true
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
@@ -103,6 +105,7 @@ export class UserCMSEntity extends BaseCMS {
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.GET_USER.METHOD,
                 url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.GET_USER.URL,
+                body: true
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {

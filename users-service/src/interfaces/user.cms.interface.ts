@@ -25,9 +25,20 @@ declare namespace IUserCMSRequest {
     }
 
     interface IGetUser {
-        // websiteId: string,
         cmsUserRef?: number,
         email?: string,
         fullPhnNo?: string,
+    }
+
+    interface ICmsUser {
+        customer_id: string,
+        email: string,
+        firstName: string,
+        lastName: string,
+        phone: string,
+        SdmUserRef: string,
+        SdmCorpRef: string,
+        alternatePhone: string[],
+        address: IAddressCMSRequest.ICmsAddress[]
     }
 }

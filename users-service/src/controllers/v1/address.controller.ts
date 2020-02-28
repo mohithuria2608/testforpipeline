@@ -1,9 +1,90 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
+import { kafkaService } from '../../grpc/client'
 
 export class AddressController {
     constructor() { }
+
+    /**
+     * @description sync address to cms and sdm coming from KAFKA
+     * @param {IKafkaGrpcRequest.IKafkaBody} payload 
+     */
+    async syncAddress(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.sync)) {
+                let data = JSON.parse(payload.as.argv)
+                if (payload.as.create) {
+                }
+            }
+            if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
+                let data = JSON.parse(payload.cms.argv)
+                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
+                userData.asAddress = data.asAddress
+                if (payload.cms.create) {
+                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                        await ENTITY.AddressE.addAddressOnCms(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            cms: {
+                                create: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
+                }
+                if (payload.cms.update) {
+                    // if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                    //     await ENTITY.AddressE.updateAddressOnCms(userData)
+                    // else {
+                    //     kafkaService.kafkaSync({
+                    //         set: ENTITY.AddressE.set,
+                    //         cms: {
+                    //             update: true,
+                    //             argv: JSON.stringify(userData)
+                    //         }
+                    //     })
+                    // }
+                }
+            }
+            if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
+                let data = JSON.parse(payload.sdm.argv)
+                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
+                userData.asAddress = data.asAddress
+                if (payload.sdm.create) {
+                    if (userData.sdmUserRef && userData.sdmUserRef != 0)
+                        await ENTITY.AddressE.addAddressOnSdm(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            sdm: {
+                                create: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
+                }
+                if (payload.sdm.update) {
+                    if (userData.sdmUserRef && userData.sdmUserRef != 0)
+                        await ENTITY.AddressE.updateAddressOnSdm(userData)
+                    else {
+                        kafkaService.kafkaSync({
+                            set: ENTITY.AddressE.set,
+                            sdm: {
+                                update: true,
+                                argv: JSON.stringify(userData)
+                            }
+                        })
+                    }
+                }
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncAddress", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 
     /**
     * @method POST
@@ -41,7 +122,23 @@ export class AddressController {
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
-            return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
+                userData.asAddress = [addressData]
+                kafkaService.kafkaSync({
+                    set: ENTITY.AddressE.set,
+                    cms: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    },
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    }
+                })
+            }
+
+            return addressData
         } catch (error) {
             consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -51,7 +148,7 @@ export class AddressController {
     /**
     * @method INTERNAL
     * @description Sync old address
-    * @param {string} sdmStoreRef
+    * @param {string} storeId
     * @param {number} lat
     * @param {number} lng
     * @param {string} bldgName
@@ -64,8 +161,8 @@ export class AddressController {
             userData = await ENTITY.UserE.getUser({ userId: userData.id })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
-            if (payload.sdmStoreRef) {
-                store = await ENTITY.UserE.fetchStore(payload.sdmStoreRef)
+            if (payload.storeId) {
+                store = await ENTITY.UserE.fetchStore(payload.storeId)
                 if (store && store.length) {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude
@@ -111,7 +208,20 @@ export class AddressController {
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             }
-            return await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
+            let updatedAdd = await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
+
+            if (updatedAdd.cmsAddressRef && updatedAdd.cmsAddressRef != 0) {
+                userData['asAddress'] = [updatedAdd]
+                kafkaService.kafkaSync({
+                    set: ENTITY.AddressE.set,
+                    cms: {
+                        update: true,
+                        argv: JSON.stringify(userData)
+                    }
+                })
+            }
+
+            return updatedAdd
         } catch (error) {
             consolelog(process.cwd(), "updateAddressById", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -125,7 +235,7 @@ export class AddressController {
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let address: IAddressRequest.IAddressModel[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
+            let address: IAddressRequest.IAddress[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
             return address
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)

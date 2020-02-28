@@ -15,6 +15,7 @@ export class UserServiceValidator {
                     userId: Joi.string(),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
                     phnNo: Joi.string().max(9),
+                    cartId: Joi.string()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -82,7 +83,8 @@ export class UserServiceValidator {
                         argv: Joi.string()
                     }),
                     count: Joi.number(),
-                    q: Joi.string()
+                    q: Joi.string(),
+                    error: Joi.string().allow("")
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

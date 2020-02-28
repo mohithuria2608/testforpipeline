@@ -9,7 +9,7 @@ export class Configuration {
 
     async init() {
         try {
-            let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.KSA_STORE })
+            let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE })
             
             return {}
         } catch (error) {

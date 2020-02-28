@@ -105,23 +105,20 @@ export class GuestController {
                 userchangePayload['deleteUserId'] = auth.id
                 await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
             } else {
-                let cmsUserByPhoneNo = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                 if (cmsUserByPhoneNo && cmsUserByPhoneNo.customer_id) {
-                    userchangePayload['cmsUserRef'] = cmsUserByPhoneNo.customer_id
+                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customer_id)
                     userchangePayload['email'] = cmsUserByPhoneNo.email
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                    if (cmsUserByPhoneNo.sdm_user_ref)
-                        userchangePayload['sdmUserRef'] = cmsUserByPhoneNo.sdm_user_ref
-                    if (cmsUserByPhoneNo.sdm_corp_ref)
-                        userchangePayload['sdmCorpRef'] = cmsUserByPhoneNo.sdm_corp_ref
+                    if (cmsUserByPhoneNo.SdmCorpRef)
+                        userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
+                    if (cmsUserByPhoneNo.SdmCorpRef)
+                        userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                     if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                        /**
-                         * @todo : sync cms address on as
-                         */
+                        userData.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
                     }
                 } else {
-                    userchangePayload['syncUserOnCms'] = 1
                     userchangePayload['sdmUserRef'] = 0
                     userchangePayload['sdmCorpRef'] = 0
                     userchangePayload['cmsUserRef'] = 0

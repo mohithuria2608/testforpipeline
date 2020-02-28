@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog,validatorErr } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class UserServiceValidator {
@@ -46,7 +46,8 @@ export class UserServiceValidator {
                         argv: Joi.string()
                     }),
                     count: Joi.number(),
-                    q: Joi.string()
+                    q: Joi.string(),
+                    error: Joi.string().allow("")
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

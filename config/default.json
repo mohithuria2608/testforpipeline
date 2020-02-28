@@ -41,12 +41,12 @@
             "url": "http://localhost:3080/payment-service/",
             "port": 4009
         },
-        "upload": {
-            "url": "http://localhost:3080/upload-service/",
-            "port": 4010
-        },
         "promotion": {
             "url": "http://localhost:3080/promotion-service/",
+            "port": 4010
+        },
+        "upload": {
+            "url": "http://localhost:3080/upload-service/",
             "port": 4011
         },
         "log": {
@@ -99,11 +99,11 @@
             "server": "localhost:50060",
             "client": "127.0.0.1:50060"
         },
-        "upload": {
+        "promotion": {
             "server": "localhost:50061",
             "client": "127.0.0.1:50061"
         },
-        "promotion": {
+        "upload": {
             "server": "localhost:50062",
             "client": "127.0.0.1:50062"
         },
@@ -208,10 +208,9 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "auth": {
-            "username": "shashi.bhushan@appinventiv.com",
-            "password": "shashi@123"
-        },
         "baseUrl": "http://40.123.207.192/rest/V1/"
+    },
+    "sdm": {
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"
     }
 }

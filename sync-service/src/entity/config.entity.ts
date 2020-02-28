@@ -26,47 +26,6 @@ export class ConfigEntity extends BaseEntity {
         super(Constant.SET_NAME.CONFIG)
     }
 
-    eg: {
-        "store_code": "ksa_store",
-        "store_id": "ksa_store",
-        "noon_pay_config": {
-            "brand_code": "ksa",
-            "country_code": "us",
-            "payment_methods": [
-                {
-                    "id": "1",
-                    "name": "phla method",
-                    "order_category": "SC"
-                },
-                {
-                    "id": "3",
-                    "name": "Teesra  Method",
-                    "order_category": "General"
-                }
-            ],
-            "code": "noonpay",
-            "status": "1"
-        },
-        "cod_info": {
-            "status": "1",
-            "title": "Cash On Delivery",
-            "code": "cashondelivery"
-        },
-        "free_shipping": {
-            "status": "1",
-            "title": "Free Shipping",
-            "min_order_total": null,
-            "price": 0,
-            "code": "freeshipping"
-        },
-        "flat_rate": {
-            "status": "1",
-            "title": "Flat Rate",
-            "price": 5,
-            "code": "freeshipping"
-        }
-    }
-
     public configSchema = Joi.object().keys({
         id: Joi.string().required().description("pk"),
         type: Joi.string().required().valid(
@@ -106,6 +65,23 @@ export class ConfigEntity extends BaseEntity {
         })
     })
 
+    /**
+     * @method BOOTSTRAP
+     * */
+    async postConfiguration(data) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: data,
+                set: this.set,
+                key: data.id,
+                createOrReplace: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            return {}
+        }
+    }
 
     /**
     * @method INTERNAL

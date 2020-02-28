@@ -3,11 +3,12 @@ import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { orderService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
 
 class SdmOrderStatusConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER);
+        super(topic, topic);
     }
 
     handleMessage() {
@@ -28,10 +29,16 @@ class SdmOrderStatusConsumer extends BaseConsumer {
             consolelog(process.cwd(), "sdmOrder", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                kafkaController.kafkaSync(message)
-            }
-            else
+                if (message.count == 0){
+                    message.error = JSON.stringify(error)
+                    kafkaController.produceToFailureTopic(message)
+                }
+                else
+                    kafkaController.kafkaSync(message)
+            } else{
+                message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
+            }
             return {}
         }
     }

@@ -15,8 +15,24 @@ export class LocationController {
         try {
             let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
-            if (store && store.length > 0)
-                return { menuId: store[0].menuId }
+            if (store && store.length > 0) {
+                let res = {
+                    menuId: store[0].menuId,
+                    store: {
+                        storeId: store[0].storeId,
+                        countryId: store[0].countryId,
+                        areaId: store[0].areaId,
+                        cityId: store[0].cityId,
+                        location: store[0].location,
+                        address_en: store[0].address_en,
+                        address_ar: store[0].address_ar,
+                        name_en: store[0].name_en,
+                        name_ar: store[0].name_ar,
+                    },
+                    isOnline: store[0].isOnline
+                }
+                return res
+            }
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
         } catch (error) {
@@ -40,7 +56,7 @@ export class LocationController {
             }
             // const promise = await Promise.all([,, ])
             const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
-            const area: IAreaRequest.IArea[] = await  ENTITY.AreaE.scanAerospike()
+            const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
             const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
 
             consolelog(process.cwd(), "city", city.length, true)

@@ -46,7 +46,8 @@ export class PaymentServiceValidator {
                         argv: Joi.string()
                     }),
                     count: Joi.number(),
-                    q: Joi.string()
+                    q: Joi.string(),
+                    error: Joi.string().allow("")
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

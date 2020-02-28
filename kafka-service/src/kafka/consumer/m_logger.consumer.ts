@@ -2,17 +2,17 @@ import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { logService } from "../../grpc/client"
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER
 
 class MLoggerConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER);
+        super(topic, topic);
     }
 
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                consolelog(process.cwd(), "consumer m_logger", JSON.stringify(message), true)
                 this.logMessages(message);
             })
     }

@@ -17,6 +17,8 @@ template=`echo "$template" | sed "s@{{Payment_image}}@$Payment_image@g"`
 template=`echo "$template" | sed "s@{{Promotion_image}}@$Promotion_image@g"`
 template=`echo "$template" | sed "s@{{Notification_image}}@$Notification_image@g"`
 template=`echo "$template" | sed "s@{{Log_image}}@$Log_image@g"`
+template=`echo "$template" | sed "s@{{Home_image}}@$Home_image@g"`
+
 
 
 

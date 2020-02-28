@@ -16,6 +16,7 @@ const loggerSchema = new Schema({
         type: String, enum: [
             Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
+            Constant.DATABASE.TYPE.ACTIVITY_LOG.CMS_REQUEST,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR
         ],

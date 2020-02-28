@@ -3,6 +3,7 @@ declare namespace IStoreRequest {
     interface IStore {
         id: string,
         storeId: number,
+        cityId: number,
         countryId: number,
         provinceId: number,
         areaId: number,
@@ -29,7 +30,8 @@ declare namespace IStoreRequest {
         address_en: string,
         address_ar: string,
         startTime: string,
-        endTime: string
+        endTime: string,
+        isOnline: boolean
     }
 
     interface IFetchStore {
