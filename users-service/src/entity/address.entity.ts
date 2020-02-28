@@ -155,7 +155,7 @@ export class AddressEntity extends BaseEntity {
 
             return deliveryAddress
         } catch (error) {
-            consolelog(process.cwd(), "addAddress", JSON.stringify(error), false)
+            consolelog(process.cwd(), "addAddress", error, false)
             return Promise.reject(error)
         }
     }
