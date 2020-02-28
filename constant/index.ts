@@ -867,13 +867,13 @@ export const STATUS_MSG = {
                 "message_Ar": "هذا المكان غير موجود",
                 "message_En": "This location does not exist"
             },
-            "INVALID_ADDRESS": {
-                "statusCode": 422,
-                "httpCode": 422,
-                "message": "Please enter a valid email address",
+            "INVALID_ADDRESS":  {
+                "statusCode": 400,
+                "httpCode": 400,
                 "type": "INVALID_ADDRESS",
-                "message_Ar": "يرجى إدخال بريد إلكتروني صالح",
-                "message_En": "Please enter a valid email address"
+                "message": "This address does not exists",
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "This address does not exists"
             },
             "INVALID_OTP": {
                 "statusCode": 422,

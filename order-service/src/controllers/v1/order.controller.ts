@@ -62,10 +62,10 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
-            if (userData.sdmUserRef == undefined || userData.sdmUserRef == 0) {
+            if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
                 userData = await userService.createUserOnSdm(userData)
             }
-            if (userData.cmsUserRef == undefined || userData.cmsUserRef == 0) {
+            if (!userData.cmsUserRef || userData.cmsUserRef == 0) {
                 userData = await userService.createUserOnCms(userData)
             }
             let order: IOrderRequest.IOrderData
@@ -91,12 +91,12 @@ export class OrderController {
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
                 else {
-                    if (getAddress.cmsAddressRef == undefined || getAddress.cmsAddressRef == 0) {
+                    if (!getAddress.cmsAddressRef || getAddress.cmsAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
                         await userService.creatAddressOnCms(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                     }
-                    if (getAddress.sdmAddressRef == undefined || getAddress.sdmAddressRef == 0) {
+                    if (!getAddress.sdmAddressRef || getAddress.sdmAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
                         await userService.creatAddressOnSdm(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })

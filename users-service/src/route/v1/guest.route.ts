@@ -42,10 +42,10 @@ export default (router: Router) => {
                     email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
                     name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
                     isGuest: Joi.number().valid(0, 1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
-                    addressId: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.type)),
+                    addressId: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.type)).required(),
                     addressType: Joi.string().valid(
                         Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                        Constant.DATABASE.TYPE.ADDRESS.DELIVERY).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
+                        Constant.DATABASE.TYPE.ADDRESS.DELIVERY).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)).required(),
                 }
             }),
             async (ctx) => {

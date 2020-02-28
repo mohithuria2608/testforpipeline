@@ -1,9 +1,10 @@
 'use strict';
-import * as Joi from '@hapi/joi';
+import * as config from "config"
 import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog, nameConstructor } from '../utils'
 import * as  _ from 'lodash';
+import { kafkaService } from '../grpc/client'
 
 export class UserSDMEntity extends BaseSDM {
 
@@ -44,8 +45,30 @@ export class UserSDMEntity extends BaseSDM {
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "LAG GAYI",
+                            info: {
+                                request: {
+                                    body: data
+                                },
+                                response: res.RegisterCustomerResult
+                            },
+                            description: name,
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
                 return res.RegisterCustomerResult
+            }
             else
                 return Promise.reject(res)
         } catch (error) {
@@ -88,8 +111,30 @@ export class UserSDMEntity extends BaseSDM {
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "LAG GAYI",
+                            info: {
+                                request: {
+                                    body: data
+                                },
+                                response: res.UpdateCustomerResult
+                            },
+                            description: name,
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
                 return res.UpdateCustomerResult
+            }
             else
                 return Promise.reject(res)
         } catch (error) {
@@ -113,8 +158,30 @@ export class UserSDMEntity extends BaseSDM {
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "LAG GAYI",
+                            info: {
+                                request: {
+                                    body: data
+                                },
+                                response: res.UpdateCustomerTokenResult
+                            },
+                            description: name,
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
                 return res.UpdateCustomerTokenResult
+            }
             else
                 return Promise.reject(res)
         } catch (error) {
@@ -139,8 +206,30 @@ export class UserSDMEntity extends BaseSDM {
                 }
             }
             let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "LAG GAYI",
+                            info: {
+                                request: {
+                                    body: data
+                                },
+                                response: res.GetCustomerByEmailResult
+                            },
+                            description: name,
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
                 return res.GetCustomerByEmailResult
+            }
             else
                 return {}
         } catch (error) {
