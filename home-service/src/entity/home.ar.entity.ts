@@ -5,34 +5,21 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
-export class HomeClass extends BaseEntity {
-    public sindex: IAerospike.CreateIndex[] = [
-        {
-            set: this.set,
-            bin: 'language',
-            index: 'idx_' + this.set + '_' + 'language',
-            type: "STRING"
-        }
-    ]
-    constructor() {
-        super(Constant.SET_NAME.HOME)
-    }
+export class HomeArClass extends BaseEntity {
 
-    public homeSchema = Joi.object().keys({
-        id: Joi.number().required().description("pk"),
-        language: Joi.string().required().description("sk"),
-    })
+    constructor() {
+        super(Constant.SET_NAME.HOME_AR)
+    }
 
     /**
      * @method BOOTSTRAP
      * */
     async postHome(data) {
         try {
-
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.id,
+                key: data.countryId,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -48,15 +35,11 @@ export class HomeClass extends BaseEntity {
     * */
     async getHome(payload: IHomeRequest.IFetchHome) {
         try {
-            let queryArg: IAerospike.Query = {
-                equal: {
-                    bin: "language",
-                    value: payload.language
-                },
+            let queryArg: IAerospike.Get = {
+                key: payload.countryId,
                 set: this.set,
-                background: false,
             }
-            let home = await Aerospike.query(queryArg)
+            let home = await Aerospike.get(queryArg)
             if (home && home.length > 0) {
                 return home
             } else
@@ -68,4 +51,4 @@ export class HomeClass extends BaseEntity {
     }
 }
 
-export const HomeE = new HomeClass()
+export const HomeArE = new HomeArClass()

@@ -1,6 +1,7 @@
 import * as config from "config"
+import * as Constant from "../../constant";
 import { consolelog, grpcSendError } from "../../utils"
-import { menuController } from '../../controllers';
+import { menuController, upsellController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -31,8 +32,13 @@ server.addService(menuProto.MenuService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            let res = await menuController.syncFromKafka(call.request)
-            callback(null, res)
+            if (call.request.set === Constant.SET_NAME.MENU_EN || call.request.set === Constant.SET_NAME.MENU_AR) {
+                let res = await menuController.syncFromKafka(call.request)
+                callback(null, res)
+            } else {
+                let res = await upsellController.syncFromKafka(call.request)
+                callback(null, res)
+            }
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))

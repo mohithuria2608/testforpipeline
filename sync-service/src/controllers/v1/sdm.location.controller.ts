@@ -15,7 +15,7 @@ export class SdmLocationController {
         try {
             let syncLocation = await ENTITY.LocationE.fetchLocationFromSDM(payload);
             if (syncLocation.success) {
-                kafkaService.kafkaSync({ set: 'location', cms: { create: true, argv: JSON.stringify(syncLocation) } })
+                kafkaService.kafkaSync({ set: Constant.SET_NAME.LOCATION, cms: { create: true, argv: JSON.stringify(syncLocation) } })
             }
         } catch (error) {
             consolelog(process.cwd(), "postMenu", error, false)

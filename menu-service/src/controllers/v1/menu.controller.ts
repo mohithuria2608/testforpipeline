@@ -14,11 +14,11 @@ export class MenuController {
      * */
     async bootstrapMenu() {
         try {
-            await Aerospike.truncate({ set: ENTITY.MenuE.set, before_nanos: 0 })
+            await Aerospike.truncate({ set: ENTITY.MenuEnE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {
-                ENTITY.MenuE.postMenu(iterator)
+                ENTITY.MenuEnE.postMenu(iterator)
             }
             return {}
         } catch (error) {
@@ -34,7 +34,7 @@ export class MenuController {
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 1;
-            return await ENTITY.MenuE.getMenu({ menuId: menuId, language: headers.language })
+            return await ENTITY.MenuEnE.getMenu({ menuId: menuId, language: headers.language })
         } catch (error) {
             consolelog(process.cwd(), "fetchMenu", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -49,7 +49,7 @@ export class MenuController {
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
             let menuId = 1;
-            let menu = await ENTITY.MenuE.getMenu({ menuId: menuId, language: payload.language })
+            let menu = await ENTITY.MenuEnE.getMenu({ menuId: menuId, language: payload.language })
             return { menu: JSON.stringify(menu) }
         } catch (error) {
             consolelog(process.cwd(), "grpcFetchMenu", JSON.stringify(error), false)
@@ -64,22 +64,13 @@ export class MenuController {
     * */
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
-            console.log("\n", payload, typeof payload.as, data[0]);
-            if (payload.set == "menu") {
-                await ENTITY.MenuE.postMenu(data[0]);
-                uploadService.uploadMenuToBlob({ name: `kfc_uae_1_${data[0].language}.json`, json: JSON.stringify(data[0]) })
+            let data = JSON.parse(payload.as.argv)[0];
+            switch (data.language) {
+                case Constant.DATABASE.LANGUAGE.EN: await ENTITY.MenuEnE.postMenu(data); break;
+                case Constant.DATABASE.LANGUAGE.AR: await ENTITY.MenuArE.postMenu(data); break;
             }
-            if (data.type == "upsell") {
-                if (payload.as.create || payload.as.update || payload.as.get) {
-                    if (payload.as.create) {
-
-                    }
-                    if (payload.as.update) {
-
-                    }
-                }
-            }
+            // upload the menu to the blob storage
+            uploadService.uploadToBlob({ name: `kfc_uae_1_${data.language}.json`, json: JSON.stringify(data) })
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)

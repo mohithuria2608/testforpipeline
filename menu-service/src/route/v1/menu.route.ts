@@ -53,7 +53,7 @@ export default (router: Router) => {
                     // var myMessage = protobuf.Writer.create()
                     //     .string(JSON.stringify(await ENTITY.MenuE.getMenu({ menuId: 1, language: "En" })))
                     //     .finish();
-                    ctx.body = await ENTITY.MenuE.getMenu({ menuId: 1, language: "Ar" })
+                    ctx.body = await ENTITY.MenuEnE.getMenu({ menuId: 1, language: "Ar" })
                 }
                 catch (error) {
                     throw error

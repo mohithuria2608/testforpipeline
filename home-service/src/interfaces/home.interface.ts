@@ -40,6 +40,6 @@ declare namespace IHomeRequest {
     }
 
     interface IFetchHome {
-        language: string
+        countryId: number
     }
 }

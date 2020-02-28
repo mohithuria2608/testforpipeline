@@ -5,6 +5,7 @@ import { as_configConsumerE } from './as_config.consumer';
 import { cms_menuConsumerE } from './cms_menu.consumer';
 import { sdm_menuConsumerE } from './sdm_menu.consumer';
 import { as_menuConsumerE } from './as_menu.consumer';
+import { as_homeConsumerE } from './as_home.consumer';
 
 import { as_storeConsumerE } from './as_store.consumer';
 
@@ -35,6 +36,7 @@ export function initConsumers() {
     cms_userConsumerE.handleMessage();
 
     as_menuConsumerE.handleMessage();
+    as_homeConsumerE.handleMessage();
     sdm_menuConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
 

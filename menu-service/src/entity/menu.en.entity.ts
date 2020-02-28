@@ -6,46 +6,12 @@ import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
 export class MenuClass extends BaseEntity {
-    public sindex: IAerospike.CreateIndex[] = [
-        {
-            set: this.set,
-            bin: 'menuId',
-            index: 'idx_' + this.set + '_' + 'menuId',
-            type: "NUMERIC"
-        },
-        {
-            set: this.set,
-            bin: 'language',
-            index: 'idx_' + this.set + '_' + 'language',
-            type: "STRING"
-        }
-    ]
+
+    
+
     constructor() {
-        super(Constant.SET_NAME.MENU)
+        super(Constant.SET_NAME.MENU_EN)
     }
-
-
-    public productSchema = Joi.object().keys({
-        id: Joi.number().required(),
-    })
-
-    public categorySchema = Joi.object().keys({
-        id: Joi.number().required(),
-        position: Joi.number().required(),
-        name: Joi.string().required(),
-        products: Joi.array().items(this.productSchema)
-    })
-
-    public menuSchema = Joi.object().keys({
-        id: Joi.number().required().description("pk"),
-        menuTempId: Joi.number().required(),
-        conceptId: Joi.number().required(),
-        menuId: Joi.number().required().description("sk"),
-        currency: Joi.string().required(),
-        language: Joi.string().required().description("sk"),
-        updatedAt: Joi.number().required(),
-        categories: Joi.array().items(this.categorySchema)
-    })
 
     /**
      * @method BOOTSTRAP
@@ -97,4 +63,4 @@ export class MenuClass extends BaseEntity {
     }
 }
 
-export const MenuE = new MenuClass()
+export const MenuEnE = new MenuClass()

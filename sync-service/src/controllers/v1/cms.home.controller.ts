@@ -17,7 +17,7 @@ export class CmsHomeController {
                 set: ENTITY.HomeE.set,
                 as: {
                     create: true,
-                    argv: payload.data
+                    argv: JSON.stringify(payload.data)
                 }
             }
             kafkaService.kafkaSync(menuChange)

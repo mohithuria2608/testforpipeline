@@ -7,7 +7,7 @@ import { consolelog } from '../utils'
 
 export class HomeEntity extends BaseEntity {
     constructor() {
-        super(Constant.SET_NAME.HOME)
+        super(Constant.SET_NAME.HOME_EN)
     }
 
     /**

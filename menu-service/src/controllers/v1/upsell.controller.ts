@@ -38,6 +38,24 @@ export class UpsellController {
             return Promise.reject(error)
         }
     }
+
+    /**
+    * @method GRPC
+    * @param {string} type  enum[menu, upsell]
+    * @param {string} data  actuall array of menu or upsell
+    * */
+    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+        try {
+            let data = JSON.parse(payload.as.argv)[0];
+            if (payload.set == "menu") {
+                await ENTITY.MenuEnE.postMenu(data);
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const upsellController = new UpsellController();

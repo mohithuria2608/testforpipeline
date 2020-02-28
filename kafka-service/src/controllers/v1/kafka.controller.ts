@@ -33,7 +33,7 @@ export class KafkaController {
                             payload['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.GET
                         else if (payload.cms.update)
                             payload['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE
-                       
+
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -70,7 +70,7 @@ export class KafkaController {
                     }
                     break;
                 }
-                case Constant.SET_NAME.MENU: {
+                case Constant.SET_NAME.MENU_EN: {
                     let messages = null;
                     let topic = null
                     let partition = 0
@@ -104,6 +104,40 @@ export class KafkaController {
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU
+                        messages['q'] = topic
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
+                case Constant.SET_NAME.HOME_EN: case Constant.SET_NAME.HOME_AR: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm
+                        delete messages.cms
+                        delete messages.mdb
+                        if (!payload.hasOwnProperty('count'))
+                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HOME
+                        messages['q'] = topic
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
+                case Constant.SET_NAME.LOCATION: {
+                    let messages = null;
+                    let topic = null;
+                    let partition = 0;
+                    if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.reset || payload.cms.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm;
+                        delete messages.cms;
+                        delete messages.mdb;
+                        if (!payload.hasOwnProperty('count'))
+                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }

@@ -56,7 +56,7 @@ server.addService(locationProto.LocationService.service, {
     PostLocationDataToCMS: async (call: IStoreGrpcRequest.ISyncStoresReq, callback) => {
         try {
             consolelog(process.cwd(), "grpc syncStore", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await storeController.syncStores(call.request);
+            let res: IStoreRequest.IStore[] = await storeController.postLocationToCMS(call.request);
             callback(null, { store: true })
         } catch (error) {
             consolelog(process.cwd(), "syncStore", JSON.stringify(error), false)

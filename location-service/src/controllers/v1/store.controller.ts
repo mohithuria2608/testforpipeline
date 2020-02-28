@@ -91,6 +91,21 @@ export class StoreController {
             return Promise.reject(error)
         }
     }
+
+    /**
+     * @method GRPC
+     * syncs stores from CMS to Aerospike
+     */
+    async postLocationToCMS(payload): Promise<any> {
+        try {
+            let locationEvent = JSON.parse(payload.cms.argv);
+            
+            return {};
+        } catch (error) {
+            consolelog(process.cwd(), "syncStores", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const storeController = new StoreController();

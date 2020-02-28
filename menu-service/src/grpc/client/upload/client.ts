@@ -23,7 +23,7 @@ export class UploadService {
         console.log(process.cwd(), 'GRPC connection established upload-service', config.get("grpc.upload.client"), true)
     }
 
-    async uploadMenuToBlob(payload): Promise<{}> {
+    async uploadToBlob(payload): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
                 // await uploadServiceValidator.uploadValidator(payload)

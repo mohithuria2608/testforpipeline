@@ -13,11 +13,11 @@ export class HomeController {
      * */
     async bootstrapHome() {
         try {
-            await Aerospike.truncate({ set: ENTITY.HomeE.set, before_nanos: 0 })
+            await Aerospike.truncate({ set: ENTITY.HomeEnE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + '/../../../model/home.json', 'utf-8');
             let home = JSON.parse(rawdata);
             for (const iterator of home) {
-                ENTITY.HomeE.postHome(iterator)
+                ENTITY.HomeEnE.postHome(iterator)
             }
             return {}
         } catch (error) {
@@ -31,7 +31,10 @@ export class HomeController {
     * */
     async fetchHome(headers: ICommonRequest.IHeaders) {
         try {
-            return await ENTITY.HomeE.getHome({ language: headers.language })
+            switch (headers.language) {
+                case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HomeEnE.getHome({ countryId: 1 }); break;
+                case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HomeArE.getHome({ countryId: 1 }); break;
+            }
         } catch (error) {
             consolelog(process.cwd(), "fetchHome", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -44,16 +47,13 @@ export class HomeController {
     * */
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
-            if (payload.as.create || payload.as.update || payload.as.get) {
-                if (payload.as.create) {
-
-                }
-                if (payload.as.update) {
-
-                }
+            let data = JSON.parse(payload.as.argv)[0];
+            console.log("DATA -----------> ", data);
+            switch (data.language) {
+                case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HomeEnE.postHome(data); break;
+                case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HomeArE.postHome(data); break;
             }
-            return {}
+            return {};
         } catch (error) {
             consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
             return Promise.reject(error)
