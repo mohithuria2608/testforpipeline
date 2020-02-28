@@ -2,7 +2,7 @@
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import { consolelog } from '../utils'
+import { consolelog, hashObj } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
 import { promotionService, userService } from '../grpc/client'
@@ -492,7 +492,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
+    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems?: any, ) {
         try {
             let prevCart: ICartRequest.ICartData
             if (curItems == undefined) {
@@ -581,6 +581,16 @@ export class CartClass extends BaseEntity {
                 })
             } else
                 dataToUpdate['items'] = curItems
+
+            if (changeCartUnique) {
+                let dataToHash: ICartRequest.IDataToHash = {
+                    items: dataToUpdate['items'],
+                    promo: dataToUpdate['couponApplied']
+                }
+                dataToUpdate['cartUnique'] = hashObj(dataToHash)
+                // this.ObjectId().toString()
+            }
+
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
