@@ -413,6 +413,7 @@ export const DATABASE = {
             REQUEST: "REQUEST",
             ERROR: "ERROR",
             INFO: "INFO",
+            SMS: "SMS",
         },
 
         PROFILE_STEP: {
