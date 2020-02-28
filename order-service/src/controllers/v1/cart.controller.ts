@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, hashObj } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 
@@ -26,9 +26,8 @@ export class CartController {
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             let checkCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (!checkCart) {
+            if (!checkCart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
-            }
 
             let invalidMenu = false
             if (payload.lat && payload.lng) {
@@ -61,8 +60,8 @@ export class CartController {
             } else
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
-            console.log("cmsValidatedCart",  JSON.stringify(cmsValidatedCart))
-            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, payload.items)
+            console.log("cmsValidatedCart", JSON.stringify(cmsValidatedCart))
+            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, true, payload.items)
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
             res['storeOnline'] = storeOnline

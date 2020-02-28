@@ -69,12 +69,19 @@ export class OrderController {
                 userData = await userService.createUserOnCms(userData)
             }
             let order: IOrderRequest.IOrderData
-            let retry = false
+            let paymentRetry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
+            let dataToHash: ICartRequest.IDataToHash = {
+                items: payload.items,
+                promo: payload.couponCode ? 1 : 0
+            }
+            const hash = hashObj(dataToHash)
+            console.log("cartUnique ================ ", getCurrentCart.cartUnique)
+            console.log("cartUnique ---------------- ", hash)
+            if (hash == getCurrentCart.cartUnique) {
                 order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
                 if (order && order._id)
-                    retry = true
+                    paymentRetry = true
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
@@ -82,7 +89,7 @@ export class OrderController {
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             let noonpayRedirectionUrl = ""
-            if (!retry) {
+            if (!paymentRetry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                     addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
@@ -141,7 +148,7 @@ export class OrderController {
                     cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
                     cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
-                    cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
+                    cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items)
                     cartData['promo'] = promo ? promo : {}
                     return { cartValidate: cartData }
                 }

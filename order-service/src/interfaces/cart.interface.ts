@@ -66,4 +66,9 @@ declare namespace ICartRequest {
         cmsCartRef?: number
         cartUpdatedAt?: number
     }
+
+    interface IDataToHash {
+        items: any,
+        promo: number
+    }
 }
