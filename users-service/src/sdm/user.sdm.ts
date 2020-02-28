@@ -46,27 +46,28 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                kafkaService.kafkaSync({
-                    set: Constant.SET_NAME.LOGGER,
-                    mdb: {
-                        create: true,
-                        argv: JSON.stringify({
-                            type: "LAG GAYI",
-                            info: {
-                                request: {
-                                    body: data
+                if (res.RegisterCustomerResult.CUST_CORPID == "0" || res.RegisterCustomerResult.CUST_CORPID == null)
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: "LAG GAYI",
+                                info: {
+                                    request: {
+                                        body: data
+                                    },
+                                    response: res.RegisterCustomerResult
                                 },
-                                response: res.RegisterCustomerResult
-                            },
-                            description: name,
-                            options: {
-                                env: Constant.SERVER.ENV[config.get("env")],
-                            },
-                            createdAt: new Date().getTime(),
-                        })
-                    },
-                    inQ: true
-                })
+                                description: data.name,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        },
+                        inQ: true
+                    })
                 return res.RegisterCustomerResult
             }
             else
@@ -112,27 +113,28 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                kafkaService.kafkaSync({
-                    set: Constant.SET_NAME.LOGGER,
-                    mdb: {
-                        create: true,
-                        argv: JSON.stringify({
-                            type: "LAG GAYI",
-                            info: {
-                                request: {
-                                    body: data
+                if (res.UpdateCustomerResult.CUST_CORPID == "0" || res.UpdateCustomerResult.CUST_CORPID == null)
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: "LAG GAYI",
+                                info: {
+                                    request: {
+                                        body: data
+                                    },
+                                    response: res.UpdateCustomerResult
                                 },
-                                response: res.UpdateCustomerResult
-                            },
-                            description: name,
-                            options: {
-                                env: Constant.SERVER.ENV[config.get("env")],
-                            },
-                            createdAt: new Date().getTime(),
-                        })
-                    },
-                    inQ: true
-                })
+                                description: data.name,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        },
+                        inQ: true
+                    })
                 return res.UpdateCustomerResult
             }
             else
@@ -159,27 +161,28 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                kafkaService.kafkaSync({
-                    set: Constant.SET_NAME.LOGGER,
-                    mdb: {
-                        create: true,
-                        argv: JSON.stringify({
-                            type: "LAG GAYI",
-                            info: {
-                                request: {
-                                    body: data
+                if (res.UpdateCustomerTokenResult.CUST_CORPID == "0" || res.UpdateCustomerTokenResult.CUST_CORPID == null)
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: "LAG GAYI",
+                                info: {
+                                    request: {
+                                        body: data
+                                    },
+                                    response: res.UpdateCustomerTokenResult
                                 },
-                                response: res.UpdateCustomerTokenResult
-                            },
-                            description: name,
-                            options: {
-                                env: Constant.SERVER.ENV[config.get("env")],
-                            },
-                            createdAt: new Date().getTime(),
-                        })
-                    },
-                    inQ: true
-                })
+                                description: data.name,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        },
+                        inQ: true
+                    })
                 return res.UpdateCustomerTokenResult
             }
             else
@@ -207,27 +210,28 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                kafkaService.kafkaSync({
-                    set: Constant.SET_NAME.LOGGER,
-                    mdb: {
-                        create: true,
-                        argv: JSON.stringify({
-                            type: "LAG GAYI",
-                            info: {
-                                request: {
-                                    body: data
+                if (res.GetCustomerByEmailResult.CUST_CORPID == "0" || res.GetCustomerByEmailResult.CUST_CORPID == null)
+                    kafkaService.kafkaSync({
+                        set: Constant.SET_NAME.LOGGER,
+                        mdb: {
+                            create: true,
+                            argv: JSON.stringify({
+                                type: "LAG GAYI",
+                                info: {
+                                    request: {
+                                        body: data
+                                    },
+                                    response: res.GetCustomerByEmailResult
                                 },
-                                response: res.GetCustomerByEmailResult
-                            },
-                            description: name,
-                            options: {
-                                env: Constant.SERVER.ENV[config.get("env")],
-                            },
-                            createdAt: new Date().getTime(),
-                        })
-                    },
-                    inQ: true
-                })
+                                description: data.name,
+                                options: {
+                                    env: Constant.SERVER.ENV[config.get("env")],
+                                },
+                                createdAt: new Date().getTime(),
+                            })
+                        },
+                        inQ: true
+                    })
                 return res.GetCustomerByEmailResult
             }
             else
