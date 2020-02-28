@@ -718,7 +718,7 @@ export class UserController {
             if (payload.name)
                 dataToUpdate['name'] = payload.name
             if (payload.email) {
-                // dataToUpdate['email'] = payload.email
+                dataToUpdate['email'] = payload.email
                 // let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                 // if (cmsUserByEmail && cmsUserByEmail.customerId) {
                 //     if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != fullPhnNo)
