@@ -20,13 +20,13 @@ server.addService(notificationProto.NotificationService.service, {
     sms: async (call, callback) => {
         try {
             consolelog(process.cwd(), "sms", JSON.stringify(call.request), true)
-            let res: {} = await sms.singleSms(call.request)
+            let res: {} = await sms.sendSMS(call.request)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sms", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
-    },
+    }
 })
 
 server.bind(config.get("grpc.notification.server"), grpc.ServerCredentials.createInsecure())

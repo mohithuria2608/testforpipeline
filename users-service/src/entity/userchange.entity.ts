@@ -198,8 +198,8 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['sdmAddress'] = payload.sdmAddress
             if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
-                    message: payload.otp.toString(),
-                    destination: payload.fullPhnNo.replace("+", ""),
+                    message: `${payload.otp.toString()} is your OTP for KFC UAE app login`,
+                    destination: encodeURIComponent(payload.fullPhnNo),
                     type: 0,
                     dlr: 1,
                 })
