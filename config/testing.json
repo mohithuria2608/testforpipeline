@@ -193,9 +193,9 @@
         "url": "20.46.146.2:9092"
     },
     "aerospike": {
-        "hosts": "localhost:3000",
-        "username": "",
-        "password": ""
+        "hosts": "40.123.212.40:3000",
+        "username": "aerospikeusr",
+        "password": "GM2nGDQkN5yMdPZs"
     },
     "mongo": {
         "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",

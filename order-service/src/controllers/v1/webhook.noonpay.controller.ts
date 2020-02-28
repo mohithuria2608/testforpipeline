@@ -47,6 +47,16 @@ export class WebhookNoonpayController {
                         redirectUrl = redirectUrl + "payment/success"
                         let cartUpdate = {
                             cartUnique: ENTITY.CartE.ObjectId().toString(),
+                            cmsCartRef: 0,
+                            sdmOrderRef: 0,
+                            cmsOrderRef: 0,
+                            userId: order.userId,
+                            status: Constant.DATABASE.STATUS.ORDER.CART.AS,
+                            createdAt: new Date().getTime(),
+                            updatedAt: new Date().getTime(),
+                            items: [],
+                            address: {},
+                            amount: []
                         }
                         let putArg: IAerospike.Put = {
                             bins: cartUpdate,

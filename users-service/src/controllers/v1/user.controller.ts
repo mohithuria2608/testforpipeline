@@ -717,8 +717,29 @@ export class UserController {
             }
             if (payload.name)
                 dataToUpdate['name'] = payload.name
-            if (payload.email)
-                dataToUpdate['email'] = payload.email
+            if (payload.email) {
+                // dataToUpdate['email'] = payload.email
+                // let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
+                // if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                //     if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != fullPhnNo)
+                //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                //     userUpdate['phnVerified'] = 1
+                //     userUpdate['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
+                //     userUpdate['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
+                //     userUpdate['fullPhnNo'] = cmsUserByEmail.phone
+                //     userUpdate['cCode'] = cmsUserByEmail.phone.slice(0, 4)
+                //     userUpdate['phnNo'] = cmsUserByEmail.phone.slice(4)
+                //     userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                //     if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
+                //         userUpdate['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
+                //     if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
+                //         userUpdate['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
+                //     if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
+                //         userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
+                //     }
+                // }
+            }
+
             if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
                 const fullPhnNo = payload.cCode + payload.phnNo;
                 const username = headers.brand + "_" + fullPhnNo;
