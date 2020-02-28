@@ -34,7 +34,11 @@ export class MenuController {
     async fetchMenu(headers: ICommonRequest.IHeaders, payload: IMenuRequest.IFetchMenu) {
         try {
             let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 1;
-            return await ENTITY.MenuE.getMenu({ menuId: menuId, language: headers.language })
+            let menu = await ENTITY.MenuE.getMenu({ menuId: menuId, language: headers.language })
+            if (menu && menu.menuId)
+                return menu
+            else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.MENU_NOT_FOUND)
         } catch (error) {
             consolelog(process.cwd(), "fetchMenu", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -48,7 +52,7 @@ export class MenuController {
     * */
     async grpcFetchMenu(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
-            let menuId = 1;
+            let menuId = payload.menuId ? parseInt(payload.menuId.toString()) : 1;
             let menu = await ENTITY.MenuE.getMenu({ menuId: menuId, language: payload.language })
             return { menu: JSON.stringify(menu) }
         } catch (error) {

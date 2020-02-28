@@ -89,7 +89,7 @@ export class MenuClass extends BaseEntity {
             if (menu && menu.length > 0) {
                 return menu[0]
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.MENU_NOT_FOUND)
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "getMenu", JSON.stringify(error), false)
             return Promise.reject(error)
