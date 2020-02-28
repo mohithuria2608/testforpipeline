@@ -526,7 +526,7 @@ export class CartClass extends BaseEntity {
                     tax: [],
                     shipping: [],
                     not_available: [],
-                    is_price_changed: true,
+                    is_price_changed: false,
                     coupon_code: "",
                     discount_amount: 0,
                     success: true
