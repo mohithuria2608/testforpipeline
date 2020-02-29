@@ -77,6 +77,10 @@ Hands-on Microservices with TypeScript 3
 # UAT aerospike
 * kubectl exec -it aerospike-0 bash -n aerospikedb
 
+# UAT mongoDB public
+* 40.127.244.213:10006
+* mongo url : mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db
+
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json
 * 207 server : https://bloobstorage.blob.core.windows.net/americana/models/kfc_uae_1_En.json
