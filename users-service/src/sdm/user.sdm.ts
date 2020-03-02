@@ -46,13 +46,13 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.RegisterCustomerResult.CUST_CORPID == "0" || res.RegisterCustomerResult.CUST_CORPID == null)
+                if (res.RegisterCustomerResult.CUST_CORPID == 0 || res.RegisterCustomerResult.CUST_CORPID == "0" || res.RegisterCustomerResult.CUST_CORPID == null || res.RegisterCustomerResult.CUST_CORPID == "null")
                     kafkaService.kafkaSync({
                         set: Constant.SET_NAME.LOGGER,
                         mdb: {
                             create: true,
                             argv: JSON.stringify({
-                                type: "LAG GAYI",
+                                type: "ISSUE",
                                 info: {
                                     request: {
                                         body: data
@@ -113,13 +113,13 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.UpdateCustomerResult.CUST_CORPID == "0" || res.UpdateCustomerResult.CUST_CORPID == null)
+                if (res.UpdateCustomerResult.CUST_CORPID == 0 || res.UpdateCustomerResult.CUST_CORPID == "0" || res.UpdateCustomerResult.CUST_CORPID == null || res.UpdateCustomerResult.CUST_CORPID == "null")
                     kafkaService.kafkaSync({
                         set: Constant.SET_NAME.LOGGER,
                         mdb: {
                             create: true,
                             argv: JSON.stringify({
-                                type: "LAG GAYI",
+                                type: "ISSUE",
                                 info: {
                                     request: {
                                         body: data
@@ -161,13 +161,13 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.UpdateCustomerTokenResult.CUST_CORPID == "0" || res.UpdateCustomerTokenResult.CUST_CORPID == null)
+                if (res.UpdateCustomerTokenResult.CUST_CORPID == 0 || res.UpdateCustomerTokenResult.CUST_CORPID == "0" || res.UpdateCustomerTokenResult.CUST_CORPID == null || res.UpdateCustomerTokenResult.CUST_CORPID == "null")
                     kafkaService.kafkaSync({
                         set: Constant.SET_NAME.LOGGER,
                         mdb: {
                             create: true,
                             argv: JSON.stringify({
-                                type: "LAG GAYI",
+                                type: "ISSUE",
                                 info: {
                                     request: {
                                         body: data
@@ -210,13 +210,13 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.GetCustomerByEmailResult.CUST_CORPID == "0" || res.GetCustomerByEmailResult.CUST_CORPID == null)
+                if (res.GetCustomerByEmailResult.CUST_CORPID == 0 || res.GetCustomerByEmailResult.CUST_CORPID == "0" || res.GetCustomerByEmailResult.CUST_CORPID == null || res.GetCustomerByEmailResult.CUST_CORPID == "null")
                     kafkaService.kafkaSync({
                         set: Constant.SET_NAME.LOGGER,
                         mdb: {
                             create: true,
                             argv: JSON.stringify({
-                                type: "LAG GAYI",
+                                type: "ISSUE",
                                 info: {
                                     request: {
                                         body: data

@@ -260,18 +260,23 @@ export class OrderController {
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let sdmOrderRef = payload.orderId.split("-")
-            if (sdmOrderRef && sdmOrderRef.length > 0) {
+            let sdmOrder = 0
+            if (sdmOrderRef && sdmOrderRef.length == 2) {
                 if (sdmOrderRef[0] != headers.country)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
-            } else
+                else
+                    sdmOrder = parseInt(sdmOrderRef[1])
+            } else if (sdmOrderRef && sdmOrderRef.length == 1)
+                sdmOrder = parseInt(sdmOrderRef[0])
+            else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
             let userData: IUserRequest.IUserData
             if (payload.cCode && payload.phnNo) {
                 userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
                 if (userData.id == undefined || userData.id == null || userData.id == "")
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: parseInt(sdmOrderRef[1]) }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
             if (order && order._id) {
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
