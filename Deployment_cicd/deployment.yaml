@@ -96,13 +96,7 @@ spec:
           name: grpc-user
       nodeSelector:
         agentpool: amfuatnenp1
-      resources:
-        requests:
-          memory: "1gi"
-          cpu: "1000m"
-        limits:
-          memory: "1gi"
-          cpu: "1000m"
+
 ---
 apiVersion: v1
 kind: Service
@@ -233,13 +227,7 @@ spec:
           name: grpc-order
       nodeSelector:
         agentpool: amfuatnenp1
-      resources:
-        requests:
-          memory: "1gi"
-          cpu: "1000m"
-        limits:
-          memory: "1gi"
-          cpu: "1000m"
+
 ---
 apiVersion: v1
 kind: Service
@@ -369,13 +357,7 @@ spec:
           name: grpc-kafka
       nodeSelector:
         agentpool: amfuatnenp1
-      resources:
-        requests:
-          memory: "1gi"
-          cpu: "1000m"
-        limits:
-          memory: "1gi"
-          cpu: "1000m"
+
 ---
 apiVersion: v1
 kind: Service
