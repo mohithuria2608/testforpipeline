@@ -8,7 +8,6 @@ import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
 import { kafkaService } from '../grpc/client';
-import { parse } from 'path';
 
 
 export class UserEntity extends BaseEntity {
@@ -38,7 +37,7 @@ export class UserEntity extends BaseEntity {
             type: "STRING"
         }
     ]
-
+    CREATE INDEX idx_user_email ON americana.user (email) STRING
     constructor() {
         super(Constant.SET_NAME.USER)
     }
