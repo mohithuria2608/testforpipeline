@@ -25,4 +25,26 @@ template=`echo "$template" | sed "s@{{Home_image}}@$Home_image@g"`
 # apply the yml with the substituted value
 echo "$template" | kubectl apply -f -
 
+# Deploy the HPA for Application pods
+ for dep in `kubectl get deploy -n nodeapp|grep -i service|awk '{print $1}'`
+  do
+  echo "---"
+  echo "apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "$dep"autoscaler
+  namespace: nodeapp
+spec:
+  maxReplicas: 8
+  minReplicas: 3
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "$dep"
+  targetCPUUtilizationPercentage: 70"
+  done > ./Deployment_cicd/hpa.yaml
+  
+kubectl apply -f ./Deployment_cicd/hpa.yaml 
+
 kubectl apply -f ./Deployment_cicd/ingress.yaml
+
