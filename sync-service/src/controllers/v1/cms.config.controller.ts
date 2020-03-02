@@ -195,6 +195,58 @@ export class CmsConfigController {
                     }
                     break;
                 }
+                case Constant.DATABASE.TYPE.CONFIG.SHIPMENT: {
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
+                        if (payload.as.reset) {
+                            if (data.data && data.data.length > 0) {
+                                let store_code = data.data['store_code']
+                                data.data.map(async config => {
+                                    let dataToSave = {
+                                        id: data.type + "_" + config.store_code,
+                                        type: data.type,
+                                    }
+                                    if (config.store_code)
+                                        dataToSave['store_code'] = config.store_code
+                                    if (config.store_id)
+                                        dataToSave['store_id'] = config.store_id
+                                    if (config.free_shipping)
+                                        dataToSave['free_shipping'] = config.free_shipping
+                                    if (config.flat_rate)
+                                        dataToSave['flat_rate'] = config.flat_rate
+                                    let putArg: IAerospike.Put = {
+                                        bins: dataToSave,
+                                        set: ENTITY.ConfigE.set,
+                                        key: dataToSave['id'],
+                                        createOrReplace: true,
+                                    }
+                                    await Aerospike.put(putArg)
+                                })
+                                let pingServices: IKafkaGrpcRequest.IKafkaBody = {
+                                    set: Constant.SET_NAME.PING_SERVICE,
+                                    as: {
+                                        create: true,
+                                        argv: JSON.stringify({
+                                            set: Constant.SET_NAME.CONFIG,
+                                            service: [
+                                                Constant.MICROSERVICE.ORDER,
+                                                Constant.MICROSERVICE.USER
+                                            ],
+                                            store_code: store_code
+                                        })
+                                    },
+                                    inQ: true
+                                }
+                                kafkaService.kafkaSync(pingServices)
+                            } else {
+                                return Promise.reject("Unhandled error while saving payment configs from cms")
+                            }
+                        }
+                        else if (payload.as.get) {
+                            await ENTITY.ConfigE.getConfig(data)
+                        }
+                    }
+                    break;
+                }
             }
             return {}
         } catch (error) {

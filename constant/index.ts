@@ -63,6 +63,7 @@ export enum KAFKA_TOPIC {
     SDM_ORDER = 'sdm_order',
 
     AS_CONFIG = 'as_config',
+    AS_APP_VERSION = 'as_app_version',
 
     M_LOGGER = 'm_logger',
 
@@ -353,6 +354,15 @@ export const DATABASE = {
                 }
             },
             CONFIG: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            APP_VERSION: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
@@ -868,7 +878,7 @@ export const STATUS_MSG = {
                 "message_Ar": "هذا المكان غير موجود",
                 "message_En": "This location does not exist"
             },
-            "INVALID_ADDRESS":  {
+            "INVALID_ADDRESS": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "INVALID_ADDRESS",

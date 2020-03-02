@@ -17,7 +17,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
-                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
+                    phnNo: Joi.string().min(9).max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
                     email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
                     name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
 
@@ -52,7 +52,7 @@ export default (router: Router) => {
                     email: Joi.string().email().lowercase().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
                     name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
-                    phnNo: Joi.string().max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
+                    phnNo: Joi.string().min(9).max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
 
                     /**
                      * @description allow these keys

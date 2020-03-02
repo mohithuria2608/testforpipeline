@@ -16,7 +16,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
-                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
+                    phnNo: Joi.string().min(9).max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
                 }
             }),
             async (ctx) => {
@@ -40,7 +40,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
-                    phnNo: Joi.string().max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
+                    phnNo: Joi.string().min(9).max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
                     otp: Joi.number().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_OTP.type)),
                     isGuest: Joi.boolean().valid(0, 1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
                 }

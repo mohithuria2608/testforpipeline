@@ -14,7 +14,7 @@ export class UserServiceValidator {
                 let dataToValidate = Joi.object().keys({
                     userId: Joi.string(),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-                    phnNo: Joi.string().max(9),
+                    phnNo: Joi.string().min(9).max(9),
                     cartId: Joi.string()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })

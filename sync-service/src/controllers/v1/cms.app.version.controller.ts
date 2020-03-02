@@ -37,7 +37,6 @@ export class CmsAppversionController {
             if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                 if (payload.as.reset) {
                     if (data.data && data.data.length > 0) {
-                        let store_code = data.data['store_code']
                         data.data.map(async appversion => {
                             let putArg: IAerospike.Put = {
                                 bins: appversion,
@@ -63,7 +62,6 @@ export class CmsAppversionController {
                                         Constant.MICROSERVICE.PROMOTION,
                                         Constant.MICROSERVICE.HOME
                                     ],
-                                    store_code: store_code
                                 })
                             },
                             inQ: true

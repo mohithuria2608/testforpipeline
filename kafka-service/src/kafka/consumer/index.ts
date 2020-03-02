@@ -1,6 +1,7 @@
 import { failConsumerE } from './failure.consumer';
 
 import { as_configConsumerE } from './as_config.consumer';
+import { as_appversionConsumerE } from './as_appversion.consumer';
 
 import { cms_menuConsumerE } from './cms_menu.consumer';
 import { sdm_menuConsumerE } from './sdm_menu.consumer';
@@ -33,7 +34,8 @@ export function initConsumers() {
     failConsumerE.handleMessage();
 
     as_configConsumerE.handleMessage();
-
+    as_appversionConsumerE.handleMessage();
+    
     as_userConsumerE.handleMessage();
     sdm_userConsumerE.handleMessage();
     cms_userConsumerE.handleMessage();

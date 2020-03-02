@@ -382,6 +382,39 @@ export class KafkaController {
                     }
                     break;
                 }
+                case Constant.SET_NAME.APP_VERSION: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm
+                        delete messages.cms
+                        delete messages.mdb
+                        if (payload.count == 0) {
+                            if (payload.as.create) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE
+                            }
+                            else if (payload.as.reset) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET
+                            }
+                            else if (payload.as.update) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE
+                            }
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
+                        }
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION
+                        messages['q'] = topic
+                        if (payload.inQ)
+                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        else
+                            await syncService.sync(messages)
+                    }
+                    break;
+                }
                 case Constant.SET_NAME.LOGGER: {
                     let messages = null;
                     let topic = null

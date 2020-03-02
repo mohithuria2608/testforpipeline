@@ -32,6 +32,7 @@ class KafkaProducer {
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,

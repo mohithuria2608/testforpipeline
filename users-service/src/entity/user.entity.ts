@@ -30,6 +30,12 @@ export class UserEntity extends BaseEntity {
             bin: 'cartId',
             index: 'idx_' + this.set + '_' + 'cartId',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'email',
+            index: 'idx_' + this.set + '_' + 'email',
+            type: "STRING"
         }
     ]
 

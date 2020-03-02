@@ -269,6 +269,8 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
+            // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
+            // {"email":"aadi.test12@gmail.com","medium":"FB","name":"Aadi Singh","socialKey":"465869130981340"}
             let userData: IUserRequest.IUserData = {}
             let queryArg: IAerospike.Query = {
                 udf: {
