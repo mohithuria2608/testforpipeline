@@ -305,22 +305,6 @@ export let generateOtp = async function () {
     return otp
 }
 
-export let formatUserData = function (userObj: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
-    try {
-        userObj['country'] = headers.country
-        userObj['language'] = headers.language
-
-        delete userObj['session']
-        delete userObj['password']
-        delete userObj['sdmUserRef']
-        delete userObj['cmsUserRef']
-        return userObj
-    } catch (error) {
-        consolelog(process.cwd(), 'formatUserData', JSON.stringify(error), false)
-        return Promise.reject(error)
-    }
-}
-
 /**
  * @description to form a bucket id from first 3 numbers of _id to make read operations faster in redis
  * @param id 

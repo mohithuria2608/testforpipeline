@@ -185,11 +185,11 @@ export class UserchangeEntity extends BaseEntity {
             if (payload.address)
                 dataToUpdateUserchange['address'] = payload.address
             if (payload.cmsUserRef != undefined)
-                dataToUpdateUserchange['cmsUserRef'] = payload.cmsUserRef
+                dataToUpdateUserchange['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
             if (payload.sdmUserRef != undefined)
-                dataToUpdateUserchange['sdmUserRef'] = payload.sdmUserRef
+                dataToUpdateUserchange['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
             if (payload.sdmCorpRef != undefined)
-                dataToUpdateUserchange['sdmCorpRef'] = payload.sdmCorpRef
+                dataToUpdateUserchange['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
             if (payload.cmsAddress && payload.cmsAddress.length > 0)
                 dataToUpdateUserchange['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)

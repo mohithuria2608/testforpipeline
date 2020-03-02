@@ -84,6 +84,28 @@ export class UserSDMEntity extends BaseSDM {
     async updateCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
             let naemRes = nameConstructor(payload.name)
+            if (payload.sdmCorpRef == 0 || payload.sdmCorpRef == null)
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "ISSUE",
+                            info: {
+                                request: {
+                                    body: payload
+                                },
+                                response: {}
+                            },
+                            description: "SDM CORP FAILURE",
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {

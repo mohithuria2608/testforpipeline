@@ -109,7 +109,7 @@ message IUserData {
     required string medium = 13;
     required int32 createdAt = 14;
     optional string cartId = 15;
-    required string sdmCorpRef = 16;
+    required int32 sdmCorpRef = 16;
     required string fullPhnNo = 17;
     required string password = 18;
 }
@@ -152,7 +152,7 @@ message ICreatAddressOnCmsReq {
     required string medium = 13;
     required int32 createdAt = 14;
     optional string cartId = 15;
-    required string sdmCorpRef = 16;
+    required int32 sdmCorpRef = 16;
     required string fullPhnNo = 17;
     required string password = 18;
     optional string asAddress = 19;
@@ -177,7 +177,7 @@ message ICreatAddressOnSdmReq {
     required string medium = 13;
     required int32 createdAt = 14;
     optional string cartId = 15;
-    required string sdmCorpRef = 16;
+    required int32 sdmCorpRef = 16;
     required string fullPhnNo = 17;
     required string password = 18;
     optional string asAddress = 19;

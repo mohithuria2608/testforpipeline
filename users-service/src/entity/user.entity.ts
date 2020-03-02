@@ -1,4 +1,5 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
@@ -7,6 +8,7 @@ import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
 import { kafkaService } from '../grpc/client';
+import { parse } from 'path';
 
 
 export class UserEntity extends BaseEntity {
@@ -129,6 +131,28 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
+            if (payload.sdmUserRef && payload.sdmUserRef != 0 && (payload.sdmCorpRef == 0 || payload.sdmCorpRef == null))
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "ISSUE",
+                            info: {
+                                request: {
+                                    body: payload
+                                },
+                                response: {}
+                            },
+                            description: "SDM CORP FAILURE",
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
             let isCreate = false
             let userUpdate: IUserRequest.IUserData = {}
             userUpdate['id'] = payload.id
@@ -147,11 +171,11 @@ export class UserEntity extends BaseEntity {
             if (payload.phnNo)
                 userUpdate['phnNo'] = payload.phnNo
             if (payload.sdmUserRef != undefined)
-                userUpdate['sdmUserRef'] = payload.sdmUserRef
+                userUpdate['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
             if (payload.sdmCorpRef != undefined)
-                userUpdate['sdmCorpRef'] = payload.sdmCorpRef
+                userUpdate['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
             if (payload.cmsUserRef != undefined)
-                userUpdate['cmsUserRef'] = payload.cmsUserRef
+                userUpdate['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
             if (payload.emailVerified != undefined)
@@ -327,9 +351,6 @@ export class UserEntity extends BaseEntity {
                 let user = await this.getUser({ userId: payload.id })
                 console.log("user after getting cms id", user)
                 if (user.sdmUserRef && user.sdmCorpRef) {
-                    /**
-                     * @todo : shashi bhai ko bolna hai agar phoneNo update customer mein aye same user ka to error nai update hojaa chaiye
-                     */
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {

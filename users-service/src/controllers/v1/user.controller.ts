@@ -95,9 +95,9 @@ export class UserController {
                 let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                 if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
                     userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
-                    if (cmsUserByPhoneNo.SdmUserRef)
+                    if (cmsUserByPhoneNo.SdmUserRef && (cmsUserByPhoneNo.SdmUserRef != null || cmsUserByPhoneNo.SdmUserRef != "null") && (SdmUserRef.SdmCorpRef != "0"))
                         userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
-                    if (cmsUserByPhoneNo.SdmCorpRef)
+                    if (cmsUserByPhoneNo.SdmCorpRef && (cmsUserByPhoneNo.SdmCorpRef != null || cmsUserByPhoneNo.SdmCorpRef != "null") && (cmsUserByPhoneNo.SdmCorpRef != "0"))
                         userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                     userchangePayload['email'] = cmsUserByPhoneNo.email
                     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
@@ -182,11 +182,11 @@ export class UserController {
                 if (userchange[0].country)
                     userUpdate['country'] = userchange[0].country
                 if (userchange[0].sdmUserRef != undefined)
-                    userUpdate['sdmUserRef'] = userchange[0].sdmUserRef
+                    userUpdate['sdmUserRef'] = parseInt(userchange[0].sdmUserRef.toString())
                 if (userchange[0].sdmCorpRef != undefined)
-                    userUpdate['sdmCorpRef'] = userchange[0].sdmCorpRef
+                    userUpdate['sdmCorpRef'] = parseInt(userchange[0].sdmCorpRef.toString())
                 if (userchange[0].cmsUserRef != undefined)
-                    userUpdate['cmsUserRef'] = userchange[0].cmsUserRef
+                    userUpdate['cmsUserRef'] = parseInt(userchange[0].cmsUserRef.toString())
                 if (userchange[0].asAddress && userchange[0].asAddress.length > 0) {
                     asAddress = userchange[0].asAddress
                     userUpdate['asAddress'] = []
@@ -512,9 +512,9 @@ export class UserController {
                     if (checkUser && checkUser.length > 0) {
                         userchangePayload['id'] = checkUser[0].id
                         userchangePayload['deleteUserId'] = auth.id
-                        userchangePayload['sdmUserRef'] = checkUser[0].sdmUserRef
-                        userchangePayload['sdmCorpRef'] = checkUser[0].sdmCorpRef
-                        userchangePayload['cmsUserRef'] = checkUser[0].cmsUserRef
+                        userchangePayload['sdmUserRef'] = parseInt(checkUser[0].sdmUserRef.toString())
+                        userchangePayload['sdmCorpRef'] = parseInt(checkUser[0].sdmCorpRef.toString())
+                        userchangePayload['cmsUserRef'] = parseInt(checkUser[0].cmsUserRef.toString())
                         await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
                     } else {
                         let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
@@ -526,9 +526,9 @@ export class UserController {
                             userchangePayload['email'] = cmsUserByPhoneNo.email
                             userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
                             userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                            if (cmsUserByPhoneNo.SdmUserRef)
+                            if (cmsUserByPhoneNo.SdmUserRef && (cmsUserByPhoneNo.SdmUserRef != null || cmsUserByPhoneNo.SdmUserRef != "null") && (cmsUserByPhoneNo.SdmUserRef != "0"))
                                 userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
-                            if (cmsUserByPhoneNo.SdmCorpRef)
+                            if (cmsUserByPhoneNo.SdmCorpRef && (cmsUserByPhoneNo.SdmCorpRef != null || cmsUserByPhoneNo.SdmCorpRef != "null") && (cmsUserByPhoneNo.SdmCorpRef != "0"))
                                 userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
                             if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
                                 userchangePayload['cmsAddress'] = cmsUserByPhoneNo.address.slice(0, 6)
@@ -625,8 +625,8 @@ export class UserController {
                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true
-                    updateAs['sdmUserRef'] = sdmUserByEmail.CUST_ID
-                    updateAs['sdmCorpRef'] = sdmUserByEmail.CUST_CORPID
+                    updateAs['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
+                    updateAs['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
                     if (sdmUserByEmail.Addresses && sdmUserByEmail.Addresses.CC_ADDRESS && sdmUserByEmail.Addresses.CC_ADDRESS.length > 0) {
                         userData.sdmAddress = sdmUserByEmail.Addresses.CC_ADDRESS.slice((sdmUserByEmail.Addresses.CC_ADDRESS.length - 6) < 0 ? 0 : sdmUserByEmail.Addresses.CC_ADDRESS.length - 6, sdmUserByEmail.Addresses.CC_ADDRESS.length)
                     }
