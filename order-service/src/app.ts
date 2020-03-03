@@ -576,7 +576,7 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39796151 })
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39796151 })
 
   } catch (error) {
     console.error(error)

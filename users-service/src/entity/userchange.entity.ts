@@ -61,6 +61,10 @@ export class UserchangeEntity extends BaseEntity {
         otpExpAt: Joi.number(),
         otpVerified: Joi.number(),
         deleteUserId: Joi.string(),
+        chngEmailCms: Joi.number(),
+        chngPhnCms: Joi.number(),
+        chngEmailSdm: Joi.number(),
+        chngPhnSdm: Joi.number(),
     });
 
     /**
@@ -196,6 +200,14 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['asAddress'] = payload.asAddress
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
                 dataToUpdateUserchange['sdmAddress'] = payload.sdmAddress
+            if (payload.chngPhnCms != undefined)
+                dataToUpdateUserchange['chngPhnCms'] = payload.chngPhnCms
+            if (payload.chngPhnSdm != undefined)
+                dataToUpdateUserchange['chngPhnSdm'] = payload.chngPhnSdm
+            if (payload.chngEmailCms != undefined)
+                dataToUpdateUserchange['chngEmailCms'] = payload.chngEmailCms
+            if (payload.chngEmailSdm != undefined)
+                dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
             if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
                     message: `${payload.otp.toString()} is your OTP for KFC UAE app login`,

@@ -38,7 +38,7 @@ server.addService(authProto.AuthService.service, {
     }
 })
 
-server.bind(config.get("grpc.auth.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.auth.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": 1500 })
 
 consolelog(process.cwd(),"GRPC server running at", config.get("grpc.auth.server"), true)
 server.start();

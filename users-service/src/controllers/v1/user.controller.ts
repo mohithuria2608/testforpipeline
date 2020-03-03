@@ -215,7 +215,7 @@ export class UserController {
 
                 if (sdmAddress && sdmAddress.length > 0)
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
-
+                
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }

@@ -31,7 +31,7 @@ server.addService(homeProto.HomeService.service, {
     },
 })
 
-server.bind(config.get("grpc.home.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.home.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": 1500 })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.home.server"), true)
 server.start();

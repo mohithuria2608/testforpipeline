@@ -41,7 +41,7 @@ server.addService(uploadProto.UploadService.service, {
     }
 })
 
-server.bind(config.get("grpc.upload.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.upload.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": 1500 })
 
 consolelog(process.cwd(), "Grpc upload Server running at", config.get("grpc.upload.server"), true)
 server.start();

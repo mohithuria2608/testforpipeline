@@ -40,7 +40,7 @@ server.addService(menuProto.MenuService.service, {
     },
 })
 
-server.bind(config.get("grpc.menu.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.menu.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": 1500 })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.menu.server"), true)
 server.start();

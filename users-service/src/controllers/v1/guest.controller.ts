@@ -168,7 +168,7 @@ export class GuestController {
     //             else
     //                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
     //         }
-    //         let userchangePayload = {
+    //         let userchangePayload: IUserchangeRequest.IUserchange = {
     //             username: username,
     //             fullPhnNo: fullPhnNo,
     //             name: payload.name,
@@ -206,7 +206,7 @@ export class GuestController {
     //                 } else {
     //                     let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
     //                     if (cmsUserByEmail && cmsUserByEmail.customerId) {
-    //                         if (asUserByPhone[0].cmsUserRef && parseInt(cmsUserByEmail['customerId']) != asUserByPhone[0].cmsUserRef)
+    //                         if (cmsUserByEmail.phone != fullPhnNo)
     //                             return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
     //                         userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail['customerId'])
     //                         userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail['SdmUserRef'])
@@ -218,6 +218,10 @@ export class GuestController {
     //                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
     //                             userchangePayload['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
     //                             userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+    //                         } else {
+    //                              userchangePayload['sdmUserRef'] = 0
+    //                         userchangePayload['sdmCorpRef'] = 0
+    //                         userchangePayload['cmsUserRef'] = 0
     //                         }
     //                     }
     //                 }
@@ -236,49 +240,65 @@ export class GuestController {
     //             }
     //             let asUserByEmail = await Aerospike.query(queryArg)
     //             if (asUserByEmail && asUserByEmail.length > 0) {
-    //                 if (asUserByEmail[0].fullPhnNo != fullPhnNo)
+    //                 let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+    //                 if (cmsUserByPhone && cmsUserByPhone.customerId)
     //                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-    //                 let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
-    //                 if (cmsUserByEmail && cmsUserByEmail.customerId) {
-    //                     if (cmsUserByEmail.email != payload.email)
-    //                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-    //                     userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail['customerId'])
-    //                     userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail['SdmUserRef'])
-    //                     userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail['SdmCorpRef'])
-    //                 } else {
-    //                     let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-    //                     if (cmsUserByPhone && cmsUserByPhone.customerId) {
-    //                         if (asUserByEmail[0].cmsUserRef != cmsUserByPhone.customerId)
-    //                             return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-    //                         userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhone['customerId'])
-    //                         userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhone['SdmUserRef'])
-    //                         userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhone['SdmCorpRef'])
+    //                 else {
+    //                     let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+    //                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+    //                         userchangePayload['chngPhnSdm'] = 1
+    //                         userchangePayload['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
+    //                         userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+    //                         userchangePayload['cmsUserRef'] = 0
+    //                     } else {
+    //                         userchangePayload['sdmUserRef'] = 0
+    //                         userchangePayload['sdmCorpRef'] = 0
+    //                         userchangePayload['cmsUserRef'] = 0
     //                     }
     //                 }
-    //                 userchangePayload['id'] = asUserByEmail[0].id
-    //                 userchangePayload['deleteUserId'] = auth.id
-    //                 await ENTITY.UserchangeE.buildUserchange(asUserByEmail[0].id, userchangePayload)
     //             } else {
     //                 let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
     //                 if (cmsUserByEmail && cmsUserByEmail.customerId) {
-    //                     if (cmsUserByEmail.email != payload.email)
-    //                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+    //                     if (cmsUserByEmail.phone != fullPhnNo) {
+    //                         let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+    //                         if (cmsUserByPhone && cmsUserByPhone.customerId)
+    //                             return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+    //                         else {
+    //                             userchangePayload['chngPhnCms'] = 1
+    //                             userchangePayload['chngPhnSdm'] = 1
+    //                         }
+    //                     }
     //                     userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail['customerId'])
     //                     userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail['SdmUserRef'])
     //                     userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail['SdmCorpRef'])
     //                 } else {
     //                     let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
     //                     if (cmsUserByPhone && cmsUserByPhone.customerId) {
-    //                         if (cmsUserByPhone.phone != fullPhnNo)
-    //                             return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+    //                         if (cmsUserByPhone.email != payload.email) {
+    //                             let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+    //                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+    //                                 if (cmsUserByPhone.SdmUserRef != sdmUserByEmail.CUST_ID) {
+    //                                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+    //                                 } else {
+    //                                     userchangePayload['chngPhnCms'] = 1
+    //                                     userchangePayload['chngPhnSdm'] = 1
+    //                                 }
+    //                             }
+    //                             else {
+    //                                 userchangePayload['chngEmailCms'] = 1
+    //                                 userchangePayload['chngEmailSdm'] = 1
+    //                             }
+    //                         }
     //                         userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhone['customerId'])
     //                         userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhone['SdmUserRef'])
     //                         userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhone['SdmCorpRef'])
     //                     } else {
-    //                         let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+    //                         let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
     //                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+    //                             userchangePayload['chngPhnSdm'] = 1
     //                             userchangePayload['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
     //                             userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+    //                             userchangePayload['cmsUserRef'] = 0
     //                         } else {
     //                             userchangePayload['sdmUserRef'] = 0
     //                             userchangePayload['sdmCorpRef'] = 0
