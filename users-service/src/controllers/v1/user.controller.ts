@@ -215,7 +215,7 @@ export class UserController {
 
                 if (sdmAddress && sdmAddress.length > 0)
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
-                
+
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -269,8 +269,6 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
-            // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
-            // {"email":"aadi.test12@gmail.com","medium":"FB","name":"Aadi Singh","socialKey":"465869130981340"}
             let userData: IUserRequest.IUserData = {}
             let queryArg: IAerospike.Query = {
                 udf: {
@@ -492,8 +490,8 @@ export class UserController {
                         set: ENTITY.UserE.set,
                         background: false,
                     }
-                    let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                    consolelog(process.cwd(), "checkUser", JSON.stringify(checkUser), false)
+                    let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                    consolelog(process.cwd(), "checkUser", JSON.stringify(asUserByPhone), false)
                     let userchangePayload = {
                         username: username,
                         fullPhnNo: fullPhnNo,
@@ -513,13 +511,13 @@ export class UserController {
                         country: headers.country,
                         emailVerified: 1,
                     }
-                    if (checkUser && checkUser.length > 0) {
-                        userchangePayload['id'] = checkUser[0].id
+                    if (asUserByPhone && asUserByPhone.length > 0) {
+                        userchangePayload['id'] = asUserByPhone[0].id
                         userchangePayload['deleteUserId'] = auth.id
-                        userchangePayload['sdmUserRef'] = parseInt(checkUser[0].sdmUserRef.toString())
-                        userchangePayload['sdmCorpRef'] = parseInt(checkUser[0].sdmCorpRef.toString())
-                        userchangePayload['cmsUserRef'] = parseInt(checkUser[0].cmsUserRef.toString())
-                        await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
+                        userchangePayload['sdmUserRef'] = parseInt(asUserByPhone[0].sdmUserRef.toString())
+                        userchangePayload['sdmCorpRef'] = parseInt(asUserByPhone[0].sdmCorpRef.toString())
+                        userchangePayload['cmsUserRef'] = parseInt(asUserByPhone[0].cmsUserRef.toString())
+                        await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload)
                     } else {
                         let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                         if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {

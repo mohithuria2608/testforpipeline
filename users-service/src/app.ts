@@ -20,7 +20,8 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
-
+    // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
+    
     // event.emit('logger', {
     //   type: Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
     //   info: { name: "ankit" },
