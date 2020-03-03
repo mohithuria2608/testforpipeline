@@ -208,7 +208,7 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "baseUrl": "http://40.123.207.192/rest/V1/"
+        "baseUrl": "http://40.113.79.117/rest/V1/"
     },
     "sdm": {
         "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"

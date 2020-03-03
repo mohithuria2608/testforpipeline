@@ -393,7 +393,7 @@ export class AddressEntity extends BaseEntity {
     async createCmsAddOnAs(userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.ICmsAddress[]) {
         try {
             for (const obj of cmsAddress) {
-                if (obj.addressId) {
+                if (obj.addressId && obj.sdmAddressRef) {
                     let bin = obj['addressType']
                     let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
                     if (store && store.length) {

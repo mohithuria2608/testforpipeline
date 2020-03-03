@@ -227,8 +227,6 @@ export const start = (async () => {
                                   QCProID: i.promoId,
                                 }
                                 let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                                console.log("dependentSteps", dependentSteps)
-
                                 if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
                                   /**
                                    * @description (ingredient == 1) :  "name": "Twister Meal"
@@ -239,8 +237,6 @@ export const start = (async () => {
                                       let ItemID = 0
                                       if (dspl.subOptions && dspl.subOptions.length > 0) {
                                         dspl.subOptions.forEach(dsplso => {
-                                          console.log("dsplso", dsplso)
-
                                           if (dsplso.selected == 1)
                                             ItemID = dsplso.sdmId
                                         })
@@ -361,7 +357,6 @@ export const start = (async () => {
                     if (pl.selected == 1) {
                       if (pl.dependentSteps && pl.dependentSteps.length > 0) {
                         let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                        console.log("dependentSteps", dependentSteps)
                         if (dependentSteps.position == pl.dependentSteps[0]) {
                           if (dependentSteps.type == "stepper") {
                             dependentSteps.productLinks.forEach(dspl => {

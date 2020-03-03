@@ -721,30 +721,30 @@ export class UserController {
             if (payload.name)
                 dataToUpdate['name'] = payload.name
             if (payload.email && payload.email != userData.email) {
-                // let queryArg: IAerospike.Query = {
-                //     equal: {
-                //         bin: "email",
-                //         value: payload.email
-                //     },
-                //     set: ENTITY.UserE.set,
-                //     background: false,
-                // }
-                // let asUserByEmail = await Aerospike.query(queryArg)
-                // if (asUserByEmail && asUserByEmail.id) {
-                //     if (asUserByEmail.fullPhnNo != userData.fullPhnNo)
-                //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                // }
-                // let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
-                // if (cmsUserByEmail && cmsUserByEmail.customerId) {
-                //     if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
-                //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                // }
-                // let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
-                // if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                //     let phoneNoWithoutPlus = userData.fullPhnNo.replace('+', '')
-                //     if (sdmUserByEmail.CUST_PHONELOOKUP != phoneNoWithoutPlus)
-                //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                // }
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "email",
+                        value: payload.email
+                    },
+                    set: ENTITY.UserE.set,
+                    background: false,
+                }
+                let asUserByEmail = await Aerospike.query(queryArg)
+                if (asUserByEmail && asUserByEmail.id) {
+                    if (asUserByEmail.fullPhnNo != userData.fullPhnNo)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                }
+                let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
+                if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                    if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                }
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                    let phoneNoWithoutPlus = userData.fullPhnNo.replace('+', '')
+                    if (sdmUserByEmail.CUST_PHONELOOKUP != phoneNoWithoutPlus)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                }
                 dataToUpdate['email'] = payload.email
             }
 
