@@ -117,7 +117,7 @@ server.addService(userProto.UserService.service, {
     }
 })
 
-server.bind(config.get("grpc.user.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": 1500 })
+server.bind(config.get("grpc.user.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.user.server"), true)
 server.start();

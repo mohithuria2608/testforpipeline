@@ -59,6 +59,9 @@
         }
     },
     "grpc": {
+        "configuration": {
+            "keepalive_timeout_ms": 1500
+        },
         "auth": {
             "server": "localhost:50051",
             "client": "127.0.0.1:50051"

@@ -65,7 +65,7 @@ server.addService(locationProto.LocationService.service, {
     },
 })
 
-server.bind(config.get("grpc.location.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": 1500 })
+server.bind(config.get("grpc.location.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.location.server"), true)
 server.start();
