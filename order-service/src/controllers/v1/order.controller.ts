@@ -73,7 +73,8 @@ export class OrderController {
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             let dataToHash: ICartRequest.IDataToHash = {
                 items: payload.items,
-                promo: payload.couponCode ? 1 : 0
+                promo: payload.couponCode ? 1 : 0,
+                updatedAt: getCurrentCart.updatedAt
             }
             const hash = hashObj(dataToHash)
             console.log("cartUnique ================ ", getCurrentCart.cartUnique)
@@ -143,17 +144,17 @@ export class OrderController {
                 let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
 
-                let cartData: ICartRequest.ICartData
+                // let getCurrentCart: ICartRequest.ICartData
                 if (cmsOrder && cmsOrder['order_id']) {
-                    cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-                    cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
+                    // getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+                    getCurrentCart['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
-                    cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items)
-                    cartData['promo'] = promo ? promo : {}
-                    return { cartValidate: cartData }
+                    getCurrentCart = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items)
+                    getCurrentCart['promo'] = promo ? promo : {}
+                    return { cartValidate: getCurrentCart }
                 }
-                cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, cartData, getAddress, getStore, userData, promo)
+                getCurrentCart['orderType'] = payload.orderType
+                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, getCurrentCart, getAddress, getStore, userData, promo)
             }
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
