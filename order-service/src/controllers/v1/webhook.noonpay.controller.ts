@@ -42,7 +42,7 @@ export class WebhookNoonpayController {
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     if (order.payment.status == "AUTHORIZATION") {
                         redirectUrl = redirectUrl + "payment/success"
-                        ENTITY.CartE.resetCart(order.cartId)
+                        ENTITY.CartE.resetCart(order.userId)
                     } else {
                         let dataToUpdateOrder = {
                             $addToSet: {

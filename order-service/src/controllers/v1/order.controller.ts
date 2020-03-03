@@ -183,7 +183,7 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
-                ENTITY.CartE.resetCart(payload.cartId)
+                ENTITY.CartE.resetCart(auth.id)
             }
             ENTITY.OrderE.syncOrder(order)
 

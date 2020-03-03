@@ -306,14 +306,15 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async resetCart(cartId: string) {
+    async resetCart(userId: string) {
         try {
             let cartUpdate = {
                 cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
-                userId: cartId,
+                userId: userId,
+                cartId: userId,
                 status: Constant.DATABASE.STATUS.ORDER.CART.AS,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
@@ -324,7 +325,7 @@ export class CartClass extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: cartUpdate,
                 set: this.set,
-                key: cartId,
+                key: userId,
                 update: true,
             }
             await Aerospike.put(putArg)
