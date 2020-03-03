@@ -572,6 +572,14 @@ export const DATABASE = {
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {
+            "INVALID_PHONE_NO": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Please enter a valid phone number",
+                "type": "INVALID_PHONE_NO",
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Please enter a valid phone number"
+            },
             "USER_NOT_CREATED_ON_SDM": {
                 "statusCode": 400,
                 "httpCode": 400,

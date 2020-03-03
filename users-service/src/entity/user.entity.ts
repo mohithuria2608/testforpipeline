@@ -37,7 +37,6 @@ export class UserEntity extends BaseEntity {
             type: "STRING"
         }
     ]
-    CREATE INDEX idx_user_email ON americana.user (email) STRING
     constructor() {
         super(Constant.SET_NAME.USER)
     }

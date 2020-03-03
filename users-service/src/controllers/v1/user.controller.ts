@@ -481,6 +481,8 @@ export class UserController {
             if (userData && userData.id) {
                 if (userData && userData.id && userData.profileStep && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
+                if (userData.fullPhnNo && userData.fullPhnNo != "" && userData.fullPhnNo != fullPhnNo)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PHONE_NO)
                 if (userData.socialKey && userData.medium) {
                     let queryArg: IAerospike.Query = {
                         equal: {
@@ -578,7 +580,6 @@ export class UserController {
                             userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                         }
                     }
-
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     console.log("hereeeeeeeeeeeeee", userData)
                     kafkaService.kafkaSync({
@@ -719,27 +720,32 @@ export class UserController {
             }
             if (payload.name)
                 dataToUpdate['name'] = payload.name
-            if (payload.email) {
-                dataToUpdate['email'] = payload.email
+            if (payload.email && payload.email != userData.email) {
+                // let queryArg: IAerospike.Query = {
+                //     equal: {
+                //         bin: "email",
+                //         value: payload.email
+                //     },
+                //     set: ENTITY.UserE.set,
+                //     background: false,
+                // }
+                // let asUserByEmail = await Aerospike.query(queryArg)
+                // if (asUserByEmail && asUserByEmail.id) {
+                //     if (asUserByEmail.fullPhnNo != userData.fullPhnNo)
+                //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                // }
                 // let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                 // if (cmsUserByEmail && cmsUserByEmail.customerId) {
-                //     if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != fullPhnNo)
+                //     if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
                 //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                //     userUpdate['phnVerified'] = 1
-                //     userUpdate['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
-                //     userUpdate['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
-                //     userUpdate['fullPhnNo'] = cmsUserByEmail.phone
-                //     userUpdate['cCode'] = cmsUserByEmail.phone.slice(0, 4)
-                //     userUpdate['phnNo'] = cmsUserByEmail.phone.slice(4)
-                //     userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                //     if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
-                //         userUpdate['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
-                //     if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
-                //         userUpdate['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
-                //     if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
-                //         userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
-                //     }
                 // }
+                // let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                // if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                //     let phoneNoWithoutPlus = userData.fullPhnNo.replace('+', '')
+                //     if (sdmUserByEmail.CUST_PHONELOOKUP != phoneNoWithoutPlus)
+                //         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                // }
+                dataToUpdate['email'] = payload.email
             }
 
             if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
