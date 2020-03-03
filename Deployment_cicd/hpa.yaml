@@ -1,6 +1,5 @@
-
 # Deploy the HPA for Application pods
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: auth-autoscaler
@@ -29,7 +28,7 @@ spec:
 
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: user-autoscaler
@@ -56,7 +55,7 @@ spec:
         averageUtilization: 70
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: order-autoscaler
@@ -83,7 +82,7 @@ spec:
         averageUtilization: 70
 
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: menu-autoscaler
@@ -110,7 +109,7 @@ spec:
         averageUtilization: 70
         
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: deeplink-autoscaler
@@ -138,7 +137,7 @@ spec:
 
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: kafka-autoscaler
@@ -166,7 +165,7 @@ spec:
         
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: sync-autoscaler
@@ -193,7 +192,7 @@ spec:
         averageUtilization: 70
         
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: location-autoscaler
@@ -221,7 +220,7 @@ spec:
         
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: notification-autoscaler
@@ -248,7 +247,7 @@ spec:
         averageUtilization: 70
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: payment-autoscaler
@@ -275,7 +274,7 @@ spec:
         averageUtilization: 70
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: promotion-autoscaler
@@ -303,7 +302,7 @@ spec:
         
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: upload-autoscaler
@@ -330,7 +329,7 @@ spec:
         averageUtilization: 70
         
 ---
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: log-autoscaler
@@ -358,7 +357,7 @@ spec:
 
 ---
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: home-autoscaler
