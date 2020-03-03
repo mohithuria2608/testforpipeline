@@ -629,10 +629,13 @@ export class CartClass extends BaseEntity {
             } else
                 dataToUpdate['items'] = curItems
 
+            let updatedAt = new Date().getTime()
+            dataToUpdate['updatedAt'] = updatedAt
             if (changeCartUnique) {
                 let dataToHash: ICartRequest.IDataToHash = {
                     items: dataToUpdate['items'],
-                    promo: dataToUpdate['couponApplied']
+                    promo: dataToUpdate['couponApplied'],
+                    updatedAt: updatedAt
                 }
                 dataToUpdate['cartUnique'] = hashObj(dataToHash)
                 // this.ObjectId().toString()
