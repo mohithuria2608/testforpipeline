@@ -176,7 +176,7 @@
     },
     "blobBaseUrl": {
         "product": "http://40.113.79.117/media/catalog/product/",
-        "home": "https://magentouat.appskeeper.com/media/homepage/",
+        "home": "http://40.123.205.1/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
     },
     "cryptoSecret": "d6F3Efeq",

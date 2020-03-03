@@ -576,9 +576,8 @@ export class UserController {
                             userUpdate['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
                         if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
                             userUpdate['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
-                        if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
+                        if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0)
                             userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
-                        }
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     console.log("hereeeeeeeeeeeeee", userData)
