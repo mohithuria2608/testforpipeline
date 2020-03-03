@@ -13,12 +13,10 @@ export class SdmLocationController {
      * */
     async syncLocationData(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let syncLocation = await ENTITY.LocationE.fetchLocationFromSDM(payload);
-            if (syncLocation.success) {
-                kafkaService.kafkaSync({ set: Constant.SET_NAME.LOCATION, cms: { create: true, argv: JSON.stringify(syncLocation) } })
-            }
+            await ENTITY.LocationE.fetchLocationFromSDM(payload);
+            kafkaService.kafkaSync({ set: Constant.SET_NAME.LOCATION, cms: { create: true, argv: JSON.stringify({ event: "location_sync" }) } });
         } catch (error) {
-            consolelog(process.cwd(), "postMenu", error, false)
+            consolelog(process.cwd(), "syncLocationData", error, false)
             return Promise.reject(error)
         }
     }

@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import { storeController } from '../../controllers';
+import { storeController, locationController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -55,11 +55,11 @@ server.addService(locationProto.LocationService.service, {
 
     PostLocationDataToCMS: async (call: IStoreGrpcRequest.ISyncStoresReq, callback) => {
         try {
-            consolelog(process.cwd(), "grpc syncStore", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await storeController.postLocationToCMS(call.request);
+            consolelog(process.cwd(), "grpc PostLocationDataToCMS", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IStore[] = await locationController.postLocationToCMS(call.request);
             callback(null, { store: true })
         } catch (error) {
-            consolelog(process.cwd(), "syncStore", JSON.stringify(error), false)
+            consolelog(process.cwd(), "PostLocationDataToCMS", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

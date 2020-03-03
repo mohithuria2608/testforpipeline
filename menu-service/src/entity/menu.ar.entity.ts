@@ -19,7 +19,7 @@ export class MenuClass extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.id,
+                key: data.menuId,
                 createOrReplace: true,
             }
             await Aerospike.put(putArg)

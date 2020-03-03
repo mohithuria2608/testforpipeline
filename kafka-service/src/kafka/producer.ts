@@ -21,7 +21,7 @@ class KafkaProducer {
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,

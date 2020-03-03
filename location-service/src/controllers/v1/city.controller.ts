@@ -3,6 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+import * as Utils from "../../utils";
 import { Aerospike } from '../../aerospike'
 
 export class CityController {
@@ -23,9 +24,15 @@ export class CityController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"bootstrapCity", JSON.stringify(error), false)
+            consolelog(process.cwd(), "bootstrapCity", JSON.stringify(error), false)
             return Promise.reject(error)
         }
+    }
+
+    /** post on CMS */
+    async postOnCMS() {
+        let cityData = await ENTITY.SyncCityE.getList();
+        await Utils.sendRequestToCMS('SYNC_CITY', cityData);
     }
 }
 

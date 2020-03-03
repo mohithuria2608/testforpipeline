@@ -37,10 +37,10 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .post('/upsell',
+        .post('/hidden',
             ...getMiddleware([
                 // Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                // Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
                 // headers: JOI_CMS_HEADERS,
@@ -54,7 +54,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ICmsMenuRequest.ICmsMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await cmsMenuController.postUpsell(headers, payload, auth);
+                    let res = await cmsMenuController.postHiddenMenu(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

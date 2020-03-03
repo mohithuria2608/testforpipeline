@@ -9,7 +9,7 @@ import { as_homeConsumerE } from './as_home.consumer';
 
 import { as_storeConsumerE } from './as_store.consumer';
 
-import { as_upsellConsumerE } from './as_upsell.consumer';
+import { as_hiddenConsumerE } from './as_hidden.consumer';
 
 import { sdm_userConsumerE } from './sdm_user.consumer';
 import { cms_userConsumerE } from './cms_user.consumer';
@@ -52,7 +52,7 @@ export function initConsumers() {
     cms_locationConsumerE.handleMessage();
     as_storeConsumerE.handleMessage();
 
-    as_upsellConsumerE.handleMessage();
+    as_hiddenConsumerE.handleMessage();
 
     as_promotionConsumerE.handleMessage();
 

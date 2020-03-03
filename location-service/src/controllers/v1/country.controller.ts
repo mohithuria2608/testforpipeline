@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+import * as Utils from "../../utils";
 import { Aerospike } from '../../aerospike'
 
 export class CountryController {
@@ -22,9 +23,15 @@ export class CountryController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"bootstrapCountry", JSON.stringify(error), false)
+            consolelog(process.cwd(), "bootstrapCountry", JSON.stringify(error), false)
             return Promise.reject(error)
         }
+    }
+
+    /** post on CMS */
+    async postOnCMS() {
+        let countryData = await ENTITY.SyncCountryE.getList();
+        await Utils.sendRequestToCMS('SYNC_COUNTRY', countryData);
     }
 }
 

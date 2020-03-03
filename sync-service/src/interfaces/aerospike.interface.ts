@@ -14,7 +14,7 @@ declare namespace IAerospike {
     interface Put {
         bins?: object,
         set: string,
-        key?: string,
+        key?: string | number,
         ttl?: number,
         create?: boolean,
         replace?: boolean,
@@ -89,7 +89,7 @@ declare namespace IAerospike {
     interface Put {
         bins?: object,
         set: string,
-        key?: string,
+        key?: string | number,
         ttl?: number,
         create?: boolean,
         replace?: boolean,

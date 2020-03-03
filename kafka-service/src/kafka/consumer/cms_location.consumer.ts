@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 class CMSLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(Constant.KAFKA_TOPIC.CMS_LOCATION, 'client');
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION);
     }
 
     handleMessage() {
@@ -34,7 +34,7 @@ class CMSLocationConsumer extends BaseConsumer {
                  * @description : ignore
                  */
             }
-            else{
+            else {
                 message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
             }

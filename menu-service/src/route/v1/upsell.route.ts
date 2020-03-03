@@ -3,7 +3,7 @@ import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
-import { upsellController } from '../../controllers';
+import { hiddenController } from '../../controllers';
 import * as JOI from './common.joi.validator';
 
 export default (router: Router) => {
@@ -22,8 +22,8 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IUpsellRequest.IFetchUpsell = ctx.request.query;
-                    let res = await upsellController.fetchUpsellProducts(headers, payload);
+                    let payload: IHiddenRequest.IFetchHidden = ctx.request.query;
+                    let res = await hiddenController.fetchHiddenProducts(headers, payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

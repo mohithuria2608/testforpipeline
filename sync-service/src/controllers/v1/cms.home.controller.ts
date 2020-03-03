@@ -13,14 +13,14 @@ export class CmsHomeController {
      */
     async postHomeData(headers: ICommonRequest.IHeaders, payload: ICmsHomeRequest.ICmsHome, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let menuChange = {
+            let homeData = {
                 set: ENTITY.HomeE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload.data)
                 }
             }
-            kafkaService.kafkaSync(menuChange)
+            kafkaService.kafkaSync(homeData)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "postHomeData", JSON.stringify(error), false)

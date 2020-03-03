@@ -3,6 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+import * as Utils from "../../utils";
 import { Aerospike } from '../../aerospike'
 
 export class AreaController {
@@ -23,9 +24,15 @@ export class AreaController {
             }
             return {}
         } catch (error) {
-            consolelog(process.cwd(),"bootstrapArea", JSON.stringify(error), false)
+            consolelog(process.cwd(), "bootstrapArea", JSON.stringify(error), false)
             return Promise.reject(error)
         }
+    }
+
+    /** post on CMS */
+    async postOnCMS() {
+        let areaData = await ENTITY.SyncAreaE.getList();
+        await Utils.sendRequestToCMS('SYNC_AREA', areaData);
     }
 }
 

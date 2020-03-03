@@ -27,6 +27,7 @@ export enum SET_NAME {
     MENU_EN = "menu_en",
     MENU_AR = "menu_ar",
     UPSELL = "upsell",
+    HIDDEN = "hidden",
     PROMOTION = "promotion",
     CART = "cart",
     ORDER = "order",
@@ -35,6 +36,11 @@ export enum SET_NAME {
     AREA = "area",
     CITY = "city",
     STORE = "store",
+    SYNC_STORE_EN = "sync_store_en",
+    SYNC_STORE_AR = "sync_store_ar",
+    SYNC_CITY = "sync_city",
+    SYNC_AREA = "sync_area",
+    SYNC_COUNTRY = "sync_country",
     LOGGER = "logger",
     FAILQ = "failq",
     PING_SERVICE = "ping-service"
@@ -47,7 +53,7 @@ export enum KAFKA_TOPIC {
     CMS_MENU = "cms_menu",
     AS_MENU = "as_menu",
     AS_HOME = "as_home",
-    AS_UPSELL = "as_upsell",
+    AS_HIDDEN = "as_hidden",
 
     AS_LOCATION = "as_location",
     CMS_LOCATION = "cms_location",
@@ -154,8 +160,8 @@ export const DATABASE = {
         MENU: {
             get_menu: "get_menu"
         },
-        UPSELL: {
-            get_upsell: "get_upsell"
+        HIDDEN: {
+            get_hidden: "get_hidden"
         },
     },
 
@@ -238,7 +244,7 @@ export const DATABASE = {
                     RESET: 5
                 }
             },
-            UPSELL: {
+            HIDDEN: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
@@ -297,7 +303,7 @@ export const DATABASE = {
                     RESET: 5
                 }
             },
-            UPSELL: {
+            HIDDEN: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
@@ -344,7 +350,7 @@ export const DATABASE = {
                     RESET: 5
                 }
             },
-            UPSELL: {
+            HIDDEN: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,
@@ -568,7 +574,7 @@ export const STATUS_MSG = {
                 message: 'Some issue has occured. Please try after sometime'
             },
 
-            USER_NOT_CREATED_ON_CMS:{
+            USER_NOT_CREATED_ON_CMS: {
                 statusCode: 400,
                 httpCode: 400,
                 type: 'USER_NOT_CREATED_ON_CMS',

@@ -4,12 +4,12 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 
-export class UpsellClass extends BaseEntity {
+export class HiddenClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
 
     constructor() {
-        super(Constant.SET_NAME.UPSELL)
+        super(Constant.SET_NAME.HIDDEN)
     }
 }
 
-export const UpsellE = new UpsellClass()
+export const HiddenE = new HiddenClass()

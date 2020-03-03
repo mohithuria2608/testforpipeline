@@ -1,11 +1,11 @@
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import {  menuService } from "../../grpc/client"
+import { menuService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL
+const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
 
-class AsUpsellConsumer extends BaseConsumer {
+class AsHiddenConsumer extends BaseConsumer {
 
     constructor() {
         super(topic, topic);
@@ -14,13 +14,13 @@ class AsUpsellConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_upsell", JSON.stringify(message), true)
-                this.syncUpsell(message);
+                consolelog(process.cwd(), "consumer as_hidden", JSON.stringify(message), true)
+                this.syncHidden(message);
                 return null;
             })
     }
 
-    private async syncUpsell(message: IKafkaRequest.IKafkaBody) {
+    private async syncHidden(message: IKafkaRequest.IKafkaBody) {
         try {
             if (message.count > 0) {
                 let res = await menuService.sync(message)
@@ -32,13 +32,13 @@ class AsUpsellConsumer extends BaseConsumer {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                if (message.count == 0){
+                if (message.count == 0) {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
                 }
                 else
                     kafkaController.kafkaSync(message)
-            } else{
+            } else {
                 message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
             }
@@ -48,4 +48,4 @@ class AsUpsellConsumer extends BaseConsumer {
 }
 
 
-export const as_upsellConsumerE = new AsUpsellConsumer();
+export const as_hiddenConsumerE = new AsHiddenConsumer();

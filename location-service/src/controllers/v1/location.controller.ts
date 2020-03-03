@@ -2,6 +2,9 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { storeController } from './store.controller'
+import { cityController } from './city.controller';
+import { areaController } from './area.controller';
+import { countryController } from './country.controller';
 export class LocationController {
 
     constructor() { }
@@ -110,6 +113,23 @@ export class LocationController {
             return res
         } catch (error) {
             consolelog(process.cwd(), "getPickupList", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * syncs stores from CMS to Aerospike
+     */
+    async postLocationToCMS(payload): Promise<any> {
+        try {
+            await Promise.all([
+                cityController.postOnCMS(),
+                areaController.postOnCMS(),
+                countryController.postOnCMS()
+            ]);
+        } catch (error) {
+            consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

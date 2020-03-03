@@ -16,7 +16,6 @@ export class KafkaController {
     * */
     async kafkaSync(payload: IKafkaRequest.IKafkaBody) {
         try {
-            console.log("in kafka : ", payload)
             switch (payload.set) {
                 case Constant.SET_NAME.USER: {
                     let messages = null;
@@ -165,7 +164,7 @@ export class KafkaController {
                     }
                     break;
                 }
-                case Constant.SET_NAME.MENU_EN: {
+                case Constant.SET_NAME.MENU_EN: case Constant.SET_NAME.MENU_AR: {
                     let messages = null;
                     let topic = null
                     let partition = 0
@@ -258,8 +257,9 @@ export class KafkaController {
                     if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.reset || payload.cms.sync)) {
                         messages = { ...payload }
                         delete messages.sdm;
-                        delete messages.cms;
+                        delete messages.as;
                         delete messages.mdb;
+                        console.log("------------>", messages);
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
@@ -268,7 +268,7 @@ export class KafkaController {
                     }
                     break;
                 }
-                case Constant.SET_NAME.UPSELL: {
+                case Constant.SET_NAME.HIDDEN: {
                     let messages = null;
                     let topic = null
                     let partition = 0
@@ -279,17 +279,17 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.CREATE
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.GET
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.GET
                             else if (payload.as.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.UPSELL.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_UPSELL
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }

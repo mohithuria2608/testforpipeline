@@ -1,5 +1,6 @@
 'use strict'
 import * as config from 'config'
+import * as request from "request";
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as crypto from 'crypto'
@@ -359,4 +360,23 @@ export let validatorErr = function (error) {
         name: "ValidationError",
         message: error
     }
+}
+
+export let sendRequestToCMS = function (type, data) {
+    return new Promise((resolve, reject) => {
+        let requestUrl = "";
+        switch (type) {
+            case 'SYNC_CITY': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createcity"; break;
+            case 'SYNC_AREA': requestUrl = ""; break;
+            default: reject(new Error('Invalid Request Entity Type'));
+        }
+        request.post({
+            headers: { 'content-type': 'application/json' },
+            url: requestUrl,
+            body: JSON.stringify(data)
+        }, function (err, d, b) {
+            if (err) reject(err);
+            else resolve(b);
+        });
+    })
 }

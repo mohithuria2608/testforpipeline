@@ -17,7 +17,7 @@ export class CmsMenuController {
                 set: ENTITY.MenuE.set,
                 as: {
                     create: true,
-                    argv: await ENTITY.MenuE.formatMenu(payload.data)
+                    argv: JSON.stringify(payload.data)
                 }
             }
             if (payload.action == "update") {
@@ -34,27 +34,27 @@ export class CmsMenuController {
 
     /**
      * @method POST
-     * @description syncs upsell products
+     * @description syncs hidden products
      * @param {any} data
     */
-    async postUpsell(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
+    async postHiddenMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            payload['type'] = "upsell"
-            let upsellChange = {
-                set: ENTITY.UpsellE.set,
+            payload['type'] = "hidden"
+            let hiddenMenuData = {
+                set: ENTITY.HiddenE.set,
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
                 }
             }
             if (payload.action == "update") {
-                upsellChange['as']['update'] = true
-                delete upsellChange['as']['create']
+                hiddenMenuData['as']['update'] = true
+                delete hiddenMenuData['as']['create']
             }
-            kafkaService.kafkaSync(upsellChange)
+            kafkaService.kafkaSync(hiddenMenuData)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncUpsellProducts", JSON.stringify(error), false)
+            consolelog(process.cwd(), "postHiddenMenu", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

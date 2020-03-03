@@ -48,7 +48,6 @@ export class HomeController {
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv)[0];
-            console.log("DATA -----------> ", data);
             switch (data.language) {
                 case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HomeEnE.postHome(data); break;
                 case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HomeArE.postHome(data); break;

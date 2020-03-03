@@ -5,7 +5,7 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
-export class UpsellClass extends BaseEntity {
+export class HiddenClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
         {
             set: this.set,
@@ -32,7 +32,7 @@ export class UpsellClass extends BaseEntity {
         products: Joi.array().items(this.productSchema)
     })
 
-    public upsellSchema = Joi.object().keys({
+    public hiddenSchema = Joi.object().keys({
         id: Joi.number().required().description("pk"),
         menuTempId: Joi.number().required(),
         conceptId: Joi.number().required(),
@@ -44,12 +44,12 @@ export class UpsellClass extends BaseEntity {
     })
 
     constructor() {
-        super(Constant.SET_NAME.UPSELL)
+        super(Constant.SET_NAME.HIDDEN)
     }
     /**
      * @method BOOTSTRAP
      * */
-    async bootstrapUpsell(data) {
+    async bootstrapHidden(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
@@ -65,15 +65,33 @@ export class UpsellClass extends BaseEntity {
     }
 
     /**
+     * @method BOOTSTRAP
+     * */
+    async postHiddenMenu(data) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: data,
+                set: this.set,
+                key: data.menuId,
+                createOrReplace: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            return {}
+        }
+    }
+
+    /**
     * @method GRPC
     * @param {number=} menuId
     * */
-    async getUpsellProducts(payload: IUpsellRequest.IFetchUpsell) {
+    async getHiddenProducts(payload: IHiddenRequest.IFetchHidden) {
         try {
             let queryArg: IAerospike.Query = {
                 udf: {
-                    module: 'upsell',
-                    func: Constant.DATABASE.UDF.UPSELL.get_upsell,
+                    module: 'hidden',
+                    func: Constant.DATABASE.UDF.HIDDEN.get_hidden,
                     args: [payload.language],
                     forEach: true
                 },
@@ -84,16 +102,16 @@ export class UpsellClass extends BaseEntity {
                 set: this.set,
                 background: false,
             }
-            let upsell = await Aerospike.query(queryArg)
-            if (upsell && upsell.length > 0) {
-                return upsell[0].categories[0].products
+            let hidden = await Aerospike.query(queryArg)
+            if (hidden && hidden.length > 0) {
+                return hidden[0].categories[0].products
             } else
                 return []
         } catch (error) {
-            consolelog(process.cwd(), "getUpsellProducts", JSON.stringify(error), false)
+            consolelog(process.cwd(), "getHiddenProducts", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 }
 
-export const UpsellE = new UpsellClass()
+export const HiddenE = new HiddenClass()

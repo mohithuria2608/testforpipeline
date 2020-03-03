@@ -2,7 +2,7 @@
 'use strict';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { startLocationSequence } from "../service";
+import { startLocationForCMSSequence } from "../service";
 import { consolelog } from '../utils'
 
 export class LocationClass extends BaseEntity {
@@ -17,8 +17,7 @@ export class LocationClass extends BaseEntity {
      */
     async fetchLocationFromSDM(payload) {
         try {
-            await startLocationSequence();
-            return { success: true, data: 'location_sync' };
+            await startLocationForCMSSequence();
         } catch (error) {
             consolelog(process.cwd(), "fetchLocationFromSDM", error, false)
             return Promise.reject(error)

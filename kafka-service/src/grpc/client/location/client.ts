@@ -55,6 +55,7 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.syncValidator(payload)
+                console.log("PAYLOADDD ---> ", payload);
                 this.locationClient.PostLocationDataToCMS(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully synced location on cms", JSON.stringify(res), false)
