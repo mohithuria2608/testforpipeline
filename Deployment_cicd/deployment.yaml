@@ -6,7 +6,6 @@ metadata:
     app: auth-service
   namespace: nodeapp
 spec:
-  replicas: 1
   revisionHistoryLimit: 4
   selector:
     matchLabels:
