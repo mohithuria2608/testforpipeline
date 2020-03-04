@@ -135,7 +135,7 @@ function getDiffServices(services: string) {
 
 // gets the detail of the area from the database
 async function getAreaDetail(areaId: number) {
-    let area: any = await Aerospike.get({ set: 'sync_area', key: areaId });
+    let area: any = await Aerospike.get({ set: Constant.SET_NAME.SYNC_AREA, key: areaId });
     return {
         countryId: area.countryId,
         provinceId: area.provinceId

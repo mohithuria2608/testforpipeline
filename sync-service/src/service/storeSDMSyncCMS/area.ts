@@ -46,9 +46,9 @@ async function getAreaDetail(areaId: number, storeId: number) {
                 provinceId: parseInt(single.AREA_PROVINCEID),
                 storeId: storeId,
                 areaPinCode: "1",
-                deliveryReferenceCode: "1",
-                validationAreaType: "1"
-            }
+                deliveryRefCode: "1",
+                validAreaType: "1"
+            } 
         };
     } else return { success: false };
 }

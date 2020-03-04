@@ -5,6 +5,6 @@ import countrySequence from "./country";
 
 export const startLocationForCMSSequence = async function () {
     console.log("> Fetching Data From SDM");
-    await Promise.all([countrySequence(), citySequence(), areaSequence()]);
+    // await Promise.all([countrySequence(), citySequence(), areaSequence()]);
     // await storeSequence();
 }

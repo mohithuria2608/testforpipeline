@@ -128,8 +128,8 @@ export class LocationController {
     async postLocationToCMS(payload): Promise<any> {
         try {
             await Promise.all([
-                cityController.postOnCMS(),
-                areaController.postOnCMS(),
+                // cityController.postOnCMS(),
+                // areaController.postOnCMS(),
                 storeController.postOnCMS()
                 // countryController.postOnCMS()
             ]);
