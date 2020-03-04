@@ -619,11 +619,15 @@ export class OrderClass extends BaseEntity {
                 let recheck = true
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0 })
                 if (order && order._id) {
-                    if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime())
+                    consolelog(process.cwd(), "order step -8:       ", order.sdmOrderStatus, true)
+                    if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
+                        consolelog(process.cwd(), "order step -7:       ", order.sdmOrderStatus, true)
                         recheck = false
-
+                    }
                     if (recheck) {
+                        consolelog(process.cwd(), "order step -6:       ", order.sdmOrderStatus, true)
                         if (order.sdmOrderRef && order.sdmOrderRef != 0) {
+                            consolelog(process.cwd(), "order step -5:       ", order.sdmOrderStatus, true)
                             let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
                             consolelog(process.cwd(), "SDM order status", sdmOrder.Status, true)
                             // if (recheck && sdmOrder.Total) {
@@ -683,7 +687,9 @@ export class OrderClass extends BaseEntity {
                                 })
                             }
                             if (recheck && sdmOrder && sdmOrder.OrderID) {
+                                consolelog(process.cwd(), "order step -9:       ", order.sdmOrderStatus, true)
                                 if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
+                                    consolelog(process.cwd(), "order step -10:       ", order.sdmOrderStatus, true)
                                     if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
                                         consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.paymentMethodId == 0) {
