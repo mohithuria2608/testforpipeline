@@ -693,7 +693,7 @@ export class OrderClass extends BaseEntity {
                                 consolelog(process.cwd(), "order step -9:       ", order.sdmOrderStatus, true)
                                 consolelog(process.cwd(), "order step -11:       ", oldStatus, true)
                                 if (
-                                    (parseInt(sdmOrder.Status) > oldStatus) ||
+                                    (parseInt(sdmOrder.Status) >= oldStatus) ||
                                     ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < oldStatus)
                                 ) {
                                     consolelog(process.cwd(), "order step -10:       ", parseInt(sdmOrder.Status), true)
