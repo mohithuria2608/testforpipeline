@@ -629,10 +629,10 @@ export class OrderClass extends BaseEntity {
                         if (order.sdmOrderRef && order.sdmOrderRef != 0) {
                             consolelog(process.cwd(), "order step -5:       ", order.sdmOrderStatus, true)
                             let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
-                            if (order.sdmOrderStatus != sdmOrder.Status)
+                            if (order.sdmOrderStatus != parseInt(sdmOrder.Status))
                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                     updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status
+                                    sdmOrderStatus: parseInt(sdmOrder.Status)
                                 }, { new: true })
                             consolelog(process.cwd(), "SDM order status", sdmOrder.Status, true)
                             // if (recheck && sdmOrder.Total) {
@@ -690,8 +690,7 @@ export class OrderClass extends BaseEntity {
                             }
                             if (recheck && sdmOrder && sdmOrder.OrderID) {
                                 consolelog(process.cwd(), "order step -9:       ", order.sdmOrderStatus, true)
-                                if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
-                                    consolelog(process.cwd(), "order step -10:       ", order.sdmOrderStatus, true)
+                                // if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
                                     if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
                                         consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.paymentMethodId == 0) {
@@ -826,7 +825,7 @@ export class OrderClass extends BaseEntity {
                                         recheck = false
                                         consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
                                     }
-                                }
+                                // }
                             }
                             if (payload.timeInterval == 0)
                                 recheck = false
