@@ -631,7 +631,7 @@ export class OrderClass extends BaseEntity {
                             consolelog(process.cwd(), "order step 3:       ", order.sdmOrderStatus, true)
                             let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
                             console.log(process.cwd(), "SDM order status", typeof sdmOrder.Status, parseInt(sdmOrder.Status), true)
-                            if (sdmOrder.Status) {
+                            if (sdmOrder.Status && typeof sdmOrder.Status) {
                                 if (order.sdmOrderStatus != parseInt(sdmOrder.Status)) {
                                     order = await this.updateOneEntityMdb({ _id: order._id }, {
                                         updatedAt: new Date().getTime(),
@@ -836,7 +836,7 @@ export class OrderClass extends BaseEntity {
                             } else
                                 recheck = false
 
-                            recheck = false
+                            // recheck = false
                             consolelog(process.cwd(), "recheck", recheck, true)
                             if (recheck) {
                                 kafkaService.kafkaSync({
