@@ -37,7 +37,8 @@ declare namespace ICartCMSRequest {
         coupon_code: string,
         discount_amount: number,
         success: boolean,
-        order_id?: string
+        order_id?: string,
+        free_items: string
     }
 
     interface ITax {
