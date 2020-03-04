@@ -256,7 +256,8 @@ export const DATABASE = {
                     RESET: 5
                 },
                 INTERVAL: {
-                    GET_STATUS: 30000
+                    GET_STATUS: 30000,
+                    GET_STATUS_ONCE: 0
                 }
             }
         },

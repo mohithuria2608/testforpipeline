@@ -504,7 +504,7 @@ export class OrderClass extends BaseEntity {
                     this.getSdmOrder({
                         sdmOrderRef: order.sdmOrderRef,
                         timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
-                        status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                        // status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                     })
                 }
                 return {}
@@ -829,6 +829,8 @@ export class OrderClass extends BaseEntity {
                                     }
                                 }
                             }
+                            if (payload.timeInterval == 0)
+                                recheck = false
                             consolelog(process.cwd(), "recheck", recheck, true)
                             if (recheck) {
                                 kafkaService.kafkaSync({
@@ -843,6 +845,7 @@ export class OrderClass extends BaseEntity {
                         }
                     }
                 }
+
             }, payload.timeInterval)
             return {}
         } catch (error) {
