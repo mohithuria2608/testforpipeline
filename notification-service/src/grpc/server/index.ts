@@ -26,10 +26,10 @@ server.addService(notificationProto.NotificationService.service, {
             consolelog(process.cwd(), "sms", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
-    },
+    }
 })
 
-server.bind(config.get("grpc.notification.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.notification.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.notification.server"), true)
 server.start();

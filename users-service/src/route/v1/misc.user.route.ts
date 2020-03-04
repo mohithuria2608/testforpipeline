@@ -23,7 +23,7 @@ export default (router: Router) => {
                     let authObj = ctx.state.user
                     let res = await miscUserController.refreshToken(headers, payload, authObj);
                     ctx.set({ 'accessToken': res.accessToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res.response)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -44,7 +44,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let authObj = ctx.state.user
                     let res = await miscUserController.logout(headers, authObj);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGOUT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGOUT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

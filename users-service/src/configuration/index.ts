@@ -13,7 +13,7 @@ export class Configuration {
             
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "pingService", JSON.stringify(error), false)
+            consolelog(process.cwd(), "bootstraping Config", JSON.stringify(error), false)
             return {}
         }
     }

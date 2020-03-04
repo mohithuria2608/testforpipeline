@@ -42,6 +42,7 @@ export enum SET_NAME {
     SYNC_AREA = "sync_area",
     SYNC_COUNTRY = "sync_country",
     LOGGER = "logger",
+    APP_VERSION = "appversion",
     FAILQ = "failq",
     PING_SERVICE = "ping-service"
 };
@@ -72,6 +73,7 @@ export enum KAFKA_TOPIC {
     SDM_ORDER = 'sdm_order',
 
     AS_CONFIG = 'as_config',
+    AS_APP_VERSION = 'as_app_version',
 
     M_LOGGER = 'm_logger',
 
@@ -80,7 +82,8 @@ export enum KAFKA_TOPIC {
 
 export enum MIDDLEWARE {
     AUTH = "auth",
-    ACTIVITY_LOG = "activity_log"
+    ACTIVITY_LOG = "activity_log",
+    APP_VERSION = "app_version"
 };
 
 export const SERVER = {
@@ -123,6 +126,7 @@ export const SERVER = {
     ANDROID_PACKAGE_NAME: "com.android.kfc",
     IOS_SCHEME_HOST: "americanaKFCUAE://",
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
+    AUTH_MECH: "Bearer"
 };
 
 export const DATABASE = {
@@ -193,7 +197,7 @@ export const DATABASE = {
             },
             UPDATE_ADDRESS: {
                 METHOD: "POST",
-                URL: "updateaddress"
+                URL: "userupdateaddress"
             },
             CREATE_CART: {
                 METHOD: "POST",
@@ -262,7 +266,8 @@ export const DATABASE = {
                     RESET: 5
                 },
                 INTERVAL: {
-                    GET_STATUS: 10000
+                    GET_STATUS: 30000,
+                    GET_STATUS_ONCE: 0
                 }
             }
         },
@@ -367,6 +372,15 @@ export const DATABASE = {
                     SYNC: 5,
                     RESET: 5
                 }
+            },
+            APP_VERSION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
             }
         }
     },
@@ -407,7 +421,7 @@ export const DATABASE = {
             APPLE: "APPLE"
         },
 
-        VERSION_UPDATE: {
+        APP_VERSION: {
             FORCE: "FORCE",
             SKIP: "SKIP",
             NORMAL: "NORMAL"
@@ -420,6 +434,7 @@ export const DATABASE = {
             REQUEST: "REQUEST",
             ERROR: "ERROR",
             INFO: "INFO",
+            SMS: "SMS",
         },
 
         PROFILE_STEP: {
@@ -544,7 +559,8 @@ export const DATABASE = {
             AUTHORIZATION: 'AUTHORIZATION',
             VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
             CAPTURE: 'CAPTURE',
-            REFUND: 'REFUND'
+            REFUND: 'REFUND',
+            FAILED: 'FAILED'
         }
     },
 
@@ -565,495 +581,621 @@ export const DATABASE = {
 };
 
 export const STATUS_MSG = {
-    ERROR: {
-        E400: {
-            USER_NOT_CREATED_ON_SDM: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_NOT_CREATED_ON_SDM',
-                message: 'Some issue has occured. Please try after sometime'
+    "ERROR": {
+        "E400": {
+            "INVALID_PHONE_NO": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Please enter a valid phone number",
+                "type": "INVALID_PHONE_NO",
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Please enter a valid phone number"
             },
-
-            USER_NOT_CREATED_ON_CMS: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_NOT_CREATED_ON_CMS',
-                message: 'Some issue has occured. Please try after sometime'
+            "USER_NOT_CREATED_ON_SDM": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_NOT_CREATED_ON_SDM",
+                "message": "We have encountered some issue. Please try after sometime",
+                "message_Ar": "لقد واجهتنا مشكلة، يرجى المحاولة بعد قليل",
+                "message_En": "We have encountered some issue. Please try after sometime"
             },
-
-            MIN_CART_VALUE_VOILATION: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'MIN_CART_VALUE_VOILATION',
-                message: 'Minimum cart voilation'
+            "USER_NOT_CREATED_ON_CMS": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_NOT_CREATED_ON_CMS",
+                "message": "We have encountered some issue. Please try after sometime",
+                "message_Ar": "لقد واجهتنا مشكلة، يرجى المحاولة بعد قليل",
+                "message_En": "We have encountered some issue. Please try after sometime"
             },
-
-            MAX_COD_CART_VALUE_VOILATION: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'MAX_COD_CART_VALUE_VOILATION',
-                message: 'Maximum cod cart voilation'
+            "MIN_CART_VALUE_VOILATION": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "MIN_CART_VALUE_VOILATION",
+                "message": "Minimum order value should be 23 AED",
+                "message_Ar": "الحد الأدنى للطلب يجب أن يكون 23 درهم",
+                "message_En": "Minimum order value should be 23 AED"
             },
-
-            INVALID_PROMO: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_PROMO',
-                message: 'Invalid Promotion'
+            "MAX_COD_CART_VALUE_VOILATION": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "MAX_COD_CART_VALUE_VOILATION",
+                "message": "Maximum COD allowed is 300 AED",
+                "message_Ar": "الحد الأقصى المتاح 300 درهم",
+                "message_En": "Maximum COD allowed is 300 AED"
             },
-
-            PROMO_EXPIRED: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'PROMO_EXPIRED',
-                message: 'Promo expired'
+            "INVALID_PROMO": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_PROMO",
+                "message": "The promo code that you have entered is invalid",
+                "message_Ar": "الكوبون الذي أدخلته غير صحيح",
+                "message_En": "The promo code that you have entered is invalid"
             },
-
-            INVALID_STORE: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_STORE',
-                message: 'Invalid store'
+            "PROMO_EXPIRED": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "PROMO_EXPIRED",
+                "message": "This promo does not exists any longer",
+                "message_Ar": "الكوبون الذي أدخلته لم يعد صالحًا",
+                "message_En": "This promo does not exists any longer"
             },
-
-            INVALID_ADDRESS: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_ADDRESS',
-                message: 'Invalid address provided'
+            "INVALID_STORE": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_STORE",
+                "message": "This store is unserviceable at the moment",
+                "message_Ar": "هذا المطعم خارج الخدمة في الوقت الحالي",
+                "message_En": "This store is unserviceable at the moment"
             },
-
-            PROFILE_SETUP_ALLREADY_COMPLETE: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'PROFILE_SETUP_ALLREADY_COMPLETE',
-                message: 'Profile setup is already complete'
+            "INVALID_ADDRESS": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_ADDRESS",
+                "message": "This address does not exists",
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "This address does not exists"
             },
-
-            OTP_SESSION_EXPIRED: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'OTP_SESSION_EXPIRED',
-                message: 'Otp session has expired'
+            "PROFILE_SETUP_ALLREADY_COMPLETE": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
+                "message": "Your profile is 100% complete",
+                "message_Ar": "حسابك مكتمل بنسبة %100",
+                "message_En": "Your profile is 100% complete"
             },
-
-            OTP_EXPIRED: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'OTP_EXPIRED',
-                message: 'Otp entered has expired'
+            "OTP_SESSION_EXPIRED": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "OTP_SESSION_EXPIRED",
+                "message": "This OTP session has expired",
+                "message_Ar": "لقد انتهت فترة صلاحية هذا الرمز",
+                "message_En": "This OTP session has expired"
             },
-
-            INVALID_OTP: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'INVALID_OTP',
-                message: 'Invalid otp'
+            "OTP_EXPIRED": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "OTP_EXPIRED",
+                "message": "This OTP does not exist any longer",
+                "message_Ar": "هذا الرمز لم يعد موجودًا",
+                "message_En": "This OTP does not exist any longer"
             },
-
-            USER_ALREADY_EXIST: {
-                statusCode: 400,
-                httpCode: 400,
-                type: 'USER_ALREADY_EXIST',
-                message: 'User already exist, please login'
+            "INVALID_OTP": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_OTP",
+                "message": "You have entered an incorrect OTP. Please try again",
+                "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
+                "message_En": "You have entered an incorrect OTP. Please try again"
             },
-
-            INVALID_ID: {
-                statusCode: 400,
-                httpCode: 400,
-                message: 'Invalid Id Provided ',
-                type: 'INVALID_ID'
+            "USER_PHONE_ALREADY_EXIST": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_PHONE_ALREADY_EXIST",
+                "message": "This phone number is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This phone number is already is use"
             },
-
-            APP_ERROR: {
-                statusCode: 400,
-                httpCode: 400,
-                message: 'Application Error',
-                type: 'APP_ERROR'
+            "USER_EMAIL_ALREADY_EXIST": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "USER_ALREADY_EXIST",
+                "message": "This email is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This email is already is use"
             },
-
-            DEFAULT: {
-                statusCode: 400,
-                httpCode: 400,
-                message: 'Bad Request',
-                type: 'DEFAULT'
+            "INVALID_ID": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "The information that you have provided seems incorrect",
+                "type": "INVALID_ID",
+                "message_Ar": "يبدو أن المعلومات التي أدخلتها غير صحيحة ",
+                "message_En": "The information that you have provided seems incorrect"
+            },
+            "APP_ERROR": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Application Error",
+                "type": "APP_ERROR",
+                "message_Ar": "خطأ في التطبيق",
+                "message_En": "Application Error"
+            },
+            "DEFAULT": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Bad Request",
+                "type": "DEFAULT",
+                "message_Ar": "طلب خاطئ",
+                "message_En": "Bad Request"
             }
         },
-        E401: {
-            UNAUTHORIZED: {
-                statusCode: 401,
-                httpCode: 401,
-                message: 'You are not authorized to perform this action',
-                type: 'UNAUTHORIZED'
+        "E401": {
+            "UNAUTHORIZED": {
+                "statusCode": 401,
+                "httpCode": 401,
+                "message": "You are not authorized to perform this action",
+                "type": "UNAUTHORIZED",
+                "message_Ar": "ليست لديك صلاحية لتقوم بهذا الطلب",
+                "message_En": "You are not authorized to perform this action"
             },
-
-            ACCESS_TOKEN_EXPIRED: {
-                statusCode: 401,
-                httpCode: 401,
-                type: 'ACCESS_TOKEN_EXPIRED',
-                message: 'Access token has expired.'
+            "ACCESS_TOKEN_EXPIRED": {
+                "statusCode": 401,
+                "httpCode": 401,
+                "type": "ACCESS_TOKEN_EXPIRED",
+                "message": "Access token has expired.",
+                "message_Ar": "انتهت صلاحية رمز الوصول",
+                "message_En": "Access token has expired."
             }
         },
-        E404: {
-            RESOURCE_NOT_FOUND: {
-                statusCode: 404,
-                httpCode: 404,
-                type: 'RESOURCE_NOT_FOUND',
-                message: 'Resource not found'
+        "E404": {
+            "RESOURCE_NOT_FOUND": {
+                "statusCode": 404,
+                "httpCode": 404,
+                "type": "RESOURCE_NOT_FOUND",
+                "message": "Resource not found",
+                "message_Ar": "المصدر غير موجود",
+                "message_En": "Resource not found"
             }
         },
-        E409: {
-            ORDER_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Order not found',
-                type: 'ORDER_NOT_FOUND'
+        "E409": {
+            "ORDER_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Order not found, please enter the correct phone number and order ID",
+                "type": "ORDER_NOT_FOUND",
+                "message_Ar": "الطلب غير موجود، يرجى إدخال رقم هاتف صحيح وإعادة الطلب",
+                "message_En": "Order not found, please enter the correct phone number and order ID"
             },
-
-            CONFIG_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Config not found',
-                type: 'CONFIG_NOT_FOUND'
+            "CONFIG_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Config not found",
+                "type": "CONFIG_NOT_FOUND",
+                "message_Ar": "التكوين غير موجود",
+                "message_En": "Config not found"
             },
-
-            USER_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'User not found',
-                type: 'USER_NOT_FOUND'
+            "USER_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "This user does not exist ",
+                "type": "USER_NOT_FOUND",
+                "message_Ar": "هذا المستخدم غير موجود",
+                "message_En": "This user does not exist "
             },
-
-            MENU_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Menu not found',
-                type: 'MENU_NOT_FOUND'
+            "MENU_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Seems like this menu is not applicable in this country, we are trying to refresh the menu",
+                "type": "MENU_NOT_FOUND",
+                "message_Ar": "يبدو أن هذه القائمة غير قابلة للاستخدام في هذا البلد، نقوم حاليًا بمحاولة تحديث القائمة",
+                "message_En": "Seems like this menu is not applicable in this country, we are trying to refresh the menu"
             },
-
-            HOME_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Home not found',
-                type: 'HOME_NOT_FOUND'
+            "HOME_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "We are trying to refresh the home screen",
+                "type": "HOME_NOT_FOUND",
+                "message_Ar": "نحاول حاليًا تحديث الصفحة الرئيسية",
+                "message_En": "We are trying to refresh the home screen"
             },
-
-            SERVICE_UNAVAILABLE: {
-                statusCode: 409,
-                httpCode: 409,
-                type: 'SERVICE_UNAVAILABLE',
-                message: "Sorry, we don't, deliver at this location"
+            "SERVICE_UNAVAILABLE": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "type": "SERVICE_UNAVAILABLE",
+                "message": "Sorry, we don't, deliver at this location",
+                "message_Ar": "عذرًا، لا نقوم بالتوصيل في هذه المنطقة",
+                "message_En": "Sorry, we do not, deliver at this location"
             },
-
-            ADDRESS_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                type: 'ADDRESS_NOT_FOUND',
-                message: "Address not found"
+            "ADDRESS_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "type": "ADDRESS_NOT_FOUND",
+                "message": "This address does not exist",
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "This address does not exist"
             },
-
-            CART_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                type: 'CART_NOT_FOUND',
-                message: "Cart not found"
+            "CART_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "type": "CART_NOT_FOUND",
+                "message": "This cart no longer exists",
+                "message_Ar": "العربة لم تعد موجودة",
+                "message_En": "This cart no longer exists"
             },
-
-            STORE_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Store not found',
-                type: 'STORE_NOT_FOUND'
+            "STORE_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "This store is unserviceable at the moment",
+                "type": "STORE_NOT_FOUND",
+                "message_Ar": "هذا المطعم غير متاح الآن",
+                "message_En": "This store is unserviceable at the moment"
             },
-
-            PROMO_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Promotion not found',
-                type: 'PROMO_NOT_FOUND'
+            "PROMO_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "This promo does not exists any longer",
+                "type": "PROMO_NOT_FOUND",
+                "message_Ar": "هذا العرض لم يعد متاحًا",
+                "message_En": "This promo does not exists any longer"
             },
-
-            DATA_NOT_FOUND: {
-                statusCode: 409,
-                httpCode: 409,
-                message: 'Data not found',
-                type: 'DATA_NOT_FOUND'
-            },
-        },
-        E422: {
-            INVALID_COUNTRY_CODE: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid country code',
-                type: 'INVALID_COUNTRY_CODE'
-            },
-            INVALID_PHONE_NO: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid phone number',
-                type: 'INVALID_PHONE_NO'
-            },
-            INVALID_EMAIL: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid email',
-                type: 'INVALID_EMAIL'
-            },
-            INVALID_NAME: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid name',
-                type: 'INVALID_NAME'
-            },
-            INVALID_LOCATION: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid location',
-                type: 'INVALID_LOCATION'
-            },
-            INVALID_ADDRESS: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid address',
-                type: 'INVALID_ADDRESS'
-            },
-            INVALID_OTP: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid otp',
-                type: 'INVALID_OTP'
-            },
-            INVALID_SOCIAL_INFO: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid social info',
-                type: 'INVALID_SOCIAL_INFO'
-            },
-            INVALID_CART: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid cart',
-                type: 'INVALID_CART'
-            },
-            INVALID_COUPON: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid coupon',
-                type: 'INVALID_COUPON'
-            },
-            INVALID_PRODUCTS: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid products',
-                type: 'INVALID_PRODUCTS'
-            },
-            INVALID_ORDER: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid order',
-                type: 'INVALID_ORDER'
-            },
-            INVALID_USERNAME: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid user name',
-                type: 'INVALID_USERNAME'
-            },
-            INVALID_PASSWORD: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid password',
-                type: 'INVALID_PASSWORD'
-            },
-            INVALID_LANGUAGE: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid language',
-                type: 'INVALID_LANGUAGE'
-            },
-            INVALID_BRAND: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid brand',
-                type: 'INVALID_BRAND'
-            },
-            INVALID_COUNTRY: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid country',
-                type: 'INVALID_COUNTRY'
-            },
-            DEFAULT_VALIDATION_ERROR: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Invalid info provided',
-                type: 'DEFAULT_VALIDATION_ERROR'
-            },
-            VALIDATION_ERROR: {
-                statusCode: 422,
-                httpCode: 422,
-                message: 'Validation Error :',
-                type: 'VALIDATION_ERROR'
+            "DATA_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Data not found",
+                "type": "DATA_NOT_FOUND",
+                "message_Ar": "تعذر العثور على المعلومات",
+                "message_En": "Data not found"
             }
         },
-        E500: {
-            DB_ERROR: {
-                statusCode: 500,
-                httpCode: 500,
-                message: 'DB Error : ',
-                type: 'DB_ERROR'
-            },
-
-            IMP_ERROR: {
-                statusCode: 500,
-                httpCode: 500,
-                message: 'Implementation Error',
-                type: 'IMP_ERROR'
-            },
-
-            INVALID_TOKEN_TYPE: {
-                statusCode: 500,
-                httpCode: 500,
-                message: 'Invalid token type provided',
-                type: 'INVALID_TOKEN_TYPE'
-            },
-
-            CREATE_ORDER_ERROR: {
-                statusCode: 500,
-                httpCode: 500,
-                type: 'CREATE_ORDER_ERROR',
-                message: 'Error while creating order on SDM'
-            },
+        "E410": {
+            "FORCE_UPDATE": {
+                "statusCode": 410,
+                "httpCode": 410,
+                "message": "You need to update the application with the latest version in order to continue using it",
+                "type": "FORCE_UPDATE",
+                "message_Ar": "يجب عليك تحديث التطبيق لآخر نسخة لكي تتمكن من الاستمرار في استخدامه",
+                "message_En": "You need to update the application with the latest version in order to continue using it"
+            }
         },
-        E501: {
-            TOKENIZATION_ERROR: {
-                statusCode: 501,
-                httpCode: 501,
-                message: 'Failure in creating token',
-                type: 'TOKENIZATION_ERROR'
+        "E422": {
+            "INVALID_COUNTRY_CODE": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "This number does not exist in this country",
+                "type": "INVALID_COUNTRY_CODE",
+                "message_Ar": "هذا الرقم لا ينتمي لهذه الدولة",
+                "message_En": "This number does not exist in this country"
+            },
+            "INVALID_PHONE_NO": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Please enter a valid phone number",
+                "type": "INVALID_PHONE_NO",
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Please enter a valid phone number"
+            },
+            "INVALID_EMAIL": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Please enter a valid email address",
+                "type": "INVALID_EMAIL",
+                "message_Ar": "يرجى إدخال بريد إلكتروني صالح",
+                "message_En": "Please enter a valid email address"
+            },
+            "INVALID_NAME": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Please enter a valid name",
+                "type": "INVALID_NAME",
+                "message_Ar": "يرجى إدخال اسم صالح",
+                "message_En": "Please enter a valid name"
+            },
+            "INVALID_LOCATION": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "This location does not exist",
+                "type": "INVALID_LOCATION",
+                "message_Ar": "هذا المكان غير موجود",
+                "message_En": "This location does not exist"
+            },
+            "INVALID_ADDRESS": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_ADDRESS",
+                "message": "This address does not exists",
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "This address does not exists"
+            },
+            "INVALID_OTP": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "You have entered an incorrect OTP. Please try again",
+                "type": "INVALID_OTP",
+                "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
+                "message_En": "You have entered an incorrect OTP. Please try again"
+            },
+            "INVALID_SOCIAL_INFO": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid social info",
+                "type": "INVALID_SOCIAL_INFO",
+                "message_Ar": "معلومات وسيلة التواصل غير صحيحة",
+                "message_En": "Invalid social info"
+            },
+            "INVALID_CART": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid cart",
+                "type": "INVALID_CART",
+                "message_Ar": "العربة غير صالحة",
+                "message_En": "Invalid cart"
+            },
+            "INVALID_COUPON": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid coupon",
+                "type": "INVALID_COUPON",
+                "message_Ar": "الكوبون غير صالح",
+                "message_En": "Invalid coupon"
+            },
+            "INVALID_PRODUCTS": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid products",
+                "type": "INVALID_PRODUCTS",
+                "message_Ar": "المنتجات غير صالحة",
+                "message_En": "Invalid products"
+            },
+            "INVALID_ORDER": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid order",
+                "type": "INVALID_ORDER",
+                "message_Ar": "الطلب غير صالح",
+                "message_En": "Invalid order"
+            },
+            "INVALID_USERNAME": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid user name",
+                "type": "INVALID_USERNAME",
+                "message_Ar": "اسم المستخدم غير صحيح",
+                "message_En": "Invalid user name"
+            },
+            "INVALID_PASSWORD": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid password",
+                "type": "INVALID_PASSWORD",
+                "message_Ar": "كلمة المرور غير صحيحة",
+                "message_En": "Invalid password"
+            },
+            "INVALID_LANGUAGE": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid language",
+                "type": "INVALID_LANGUAGE",
+                "message_Ar": "اللغة غير صحيحة",
+                "message_En": "Invalid language"
+            },
+            "INVALID_BRAND": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid brand",
+                "type": "INVALID_BRAND",
+                "message_Ar": "العلامة التجارية غير صالحة",
+                "message_En": "Invalid brand"
+            },
+            "INVALID_COUNTRY": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid country",
+                "type": "INVALID_COUNTRY",
+                "message_Ar": "البلد غير صحيح",
+                "message_En": "Invalid country"
+            },
+            "DEFAULT_VALIDATION_ERROR": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Invalid info provided",
+                "type": "DEFAULT_VALIDATION_ERROR",
+                "message_Ar": "المعلومات التي تم ادخالها غير صحيحة",
+                "message_En": "Invalid info provided"
+            },
+            "VALIDATION_ERROR": {
+                "statusCode": 422,
+                "httpCode": 422,
+                "message": "Validation Error :",
+                "type": "VALIDATION_ERROR",
+                "message_Ar": "خطأ في التحقق",
+                "message_En": "Validation Error :"
+            }
+        },
+        "E500": {
+            "DB_ERROR": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "message": "DB Error : ",
+                "type": "DB_ERROR",
+                "message_Ar": "خطأ في قاعدة البيانات",
+                "message_En": "DB Error : "
+            },
+            "IMP_ERROR": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "message": "Implementation Error",
+                "type": "IMP_ERROR",
+                "message_Ar": "خطأ في التنفيذ",
+                "message_En": "Implementation Error"
+            },
+            "INVALID_TOKEN_TYPE": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "message": "Invalid token type provided",
+                "type": "INVALID_TOKEN_TYPE",
+                "message_Ar": "نوع الرمز الذي تم إدخاله غير صحيح",
+                "message_En": "Invalid token type provided"
+            },
+            "CREATE_ORDER_ERROR": {
+                "statusCode": 500,
+                "httpCode": 500,
+                "type": "CREATE_ORDER_ERROR",
+                "message": "We have encountered an error while creating an order",
+                "message_Ar": "لقد واجهتنا مشكلة في إنشاء الطلب",
+                "message_En": "We have encountered an error while creating an order"
+            }
+        },
+        "E501": {
+            "TOKENIZATION_ERROR": {
+                "statusCode": 501,
+                "httpCode": 501,
+                "message": "Failure in creating token",
+                "type": "TOKENIZATION_ERROR",
+                "message_Ar": "فشل في إنشاء الرمز",
+                "message_En": "Failure in creating token"
             }
         }
     },
-    SUCCESS: {
-        S200: {
-            OTP_SENT: {
-                statusCode: 200,
-                httpCode: 200,
-                type: 'OTP_SENT',
-                message: 'Otp sent successfully'
+    "SUCCESS": {
+        "S200": {
+            "OTP_SENT": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "type": "OTP_SENT",
+                "message": "Otp sent successfully",
+                "message_Ar": "تم إرسال رمز التحقق بنجاح",
+                "message_En": "Otp sent successfully"
             },
-
-            OTP_VERIFIED: {
-                statusCode: 200,
-                httpCode: 200,
-                type: 'OTP_VERIFIED',
-                message: 'Otp verified'
+            "OTP_VERIFIED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "type": "OTP_VERIFIED",
+                "message": "Otp verified",
+                "message_Ar": "تم بنجاح",
+                "message_En": "Otp verified"
             },
-
-            RESET_SUCCESS: {
-                statusCode: 200,
-                httpCode: 200,
-                type: 'RESET_SUCCESS',
-                message: 'Password has been successfully reset'
+            "RESET_SUCCESS": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "type": "RESET_SUCCESS",
+                "message": "Password has been reset successfully",
+                "message_Ar": "تم إعادة تعيين كلمة المرور بنجاح",
+                "message_En": "Password has been reset successfully"
             },
-
-            PHONE_VERIFIED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Phone number successfully verified',
-                type: 'PHONE_VERIFIED'
+            "PHONE_VERIFIED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Phone number verification success",
+                "type": "PHONE_VERIFIED",
+                "message_Ar": "تم التحقق من رقم الجوال بنجاح",
+                "message_En": "Phone number verification success"
             },
-
-            FORGET_PASSWORD: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Forget password successfully',
-                type: 'FORGET_PASSWORD'
+            "FORGET_PASSWORD": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "You password has been reset",
+                "type": "FORGET_PASSWORD",
+                "message_Ar": "تم إعادة تعيين كلمة المرور",
+                "message_En": "You password has been reset"
             },
-
-            UPLOAD: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'File uploaded successfully',
-                type: 'UPLOAD'
+            "UPLOAD": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "This files has been uploaded successfully",
+                "type": "UPLOAD",
+                "message_Ar": "تم رفع هذا الملف بنجاح",
+                "message_En": "This files has been uploaded successfully"
             },
-
-            UPDATED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Updated Successfully',
-                type: 'UPDATED'
+            "UPDATED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Updated Successfully",
+                "type": "UPDATED",
+                "message_Ar": "تم التعديل بنجاح",
+                "message_En": "Updated Successfully"
             },
-
-            DELETED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Deleted Successfully',
-                type: 'DELETED'
+            "DELETED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Deleted Successfully",
+                "type": "DELETED",
+                "message_Ar": "تم الحذف بنجاح",
+                "message_En": "Deleted Successfully"
             },
-
-            BLOCKED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Blocked Successfully',
-                type: 'BLOCKED'
+            "BLOCKED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Blocked Successfully",
+                "type": "BLOCKED",
+                "message_Ar": "تم المنع بنجاح",
+                "message_En": "Blocked Successfully"
             },
-            SOCIAL_LOGIN: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Logged In Successfully',
-                type: 'SOCIAL_LOGIN'
+            "SOCIAL_LOGIN": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Logged In Successfully",
+                "type": "SOCIAL_LOGIN",
+                "message_Ar": "تم تسجيل الدخول بنجاح",
+                "message_En": "Logged In Successfully"
             },
-
-            LOGIN: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Logged In Successfully',
-                type: 'LOGIN'
+            "LOGIN": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Logged In Successfully",
+                "type": "LOGIN",
+                "message_Ar": "تم تسجيل الدخول بنجاح",
+                "message_En": "Logged In Successfully"
             },
-
-            LOGOUT: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Logged Out Successfully',
-                type: 'LOGOUT'
+            "LOGOUT": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Logged Out Successfully",
+                "type": "LOGOUT",
+                "message_Ar": "تم تسجيل الخروج بنجاح",
+                "message_En": "Logged Out Successfully"
             },
-
-            DEFAULT: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Success',
-                type: 'DEFAULT',
+            "DEFAULT": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message_Ar": "بنجاح",
+                "message_En": "Success",
+                "message": "Success",
+                "type": "DEFAULT"
             },
-
-            ACCOUNT_DELETED: {
-                statusCode: 200,
-                httpCode: 200,
-                message: 'Account has been deleted',
-                type: 'ACCOUNT_DELETED'
+            "ACCOUNT_DELETED": {
+                "statusCode": 200,
+                "httpCode": 200,
+                "message": "Account has been deleted",
+                "type": "ACCOUNT_DELETED",
+                "message_Ar": "تم حذف الحساب بنجاح",
+                "message_En": "Account has been deleted"
             }
         },
-        S201: {
-            CREATED: {
-                statusCode: 201,
-                httpCode: 201,
-                message: 'Created Successfully',
-                type: 'CREATED'
-            },
+        "S201": {
+            "CREATED": {
+                "statusCode": 201,
+                "httpCode": 201,
+                "message": "Created Successfully",
+                "type": "CREATED",
+                "message_Ar": "تم الإنشاء بنجاح",
+                "message_En": "Created Successfully"
+            }
         },
-        S205: {
-            MENU_CHANGED: {
-                statusCode: 205,
-                httpCode: 205,
-                message: 'Menu has been changed. Please refresh your menu.',
-                type: 'MENU_CHANGED'
+        "S205": {
+            "MENU_CHANGED": {
+                "statusCode": 205,
+                "httpCode": 205,
+                "message": "Menu has been changed. Please refresh your menu.",
+                "type": "MENU_CHANGED",
+                "message_Ar": "تم حدوث تغير في القائمة، يرجى تحديث القائمة",
+                "message_En": "Menu has been changed. Please refresh your menu."
             },
-
-            DATA_CHANGED: {
-                statusCode: 205,
-                httpCode: 205,
-                message: 'Existing data has been changed. Please refresh your data.',
-                type: 'DATA_CHANGED'
+            "DATA_CHANGED": {
+                "statusCode": 205,
+                "httpCode": 205,
+                "message": "There is some update with the date. We are trying to refresh it",
+                "type": "DATA_CHANGED",
+                "message_Ar": "لقد حدثت بعض التعديلات في المعلومات، نحاول حاليًا تحديثها",
+                "message_En": "There is some update with the date. We are trying to refresh it"
             }
         }
     },
@@ -1085,15 +1227,31 @@ export const STATUS_MSG = {
         }
     },
     FRONTEND_ERROR: {
-        VALIDATION: {
-            INVALID_PHONE_NO: "Invalid phone number",
-            INVALID_EMAIL: "Please enter email address in a valid format",
-            INVALID_OTP: "Invalid otp",
-            INAVLID_NAME: "Please enter a valid name",
-            EMPTY_PHONE_NO: "Empty phone number",
-            EMPTY_EMAIL: "Empty email",
-            EMPTY_OTP: "Empty otp",
-            EMPTY_NAME: "Empty name",
+        En: {
+            VALIDATION: {
+                INVALID_COUNTRY_CODE: "Your number belongs to another country",
+                INVALID_PHONE_NO: "Please enter a valid phone number",
+                INVALID_EMAIL: "Please enter a valid email address",
+                INVALID_OTP: "You have entered an incorrect OTP. Please try again",
+                INAVLID_NAME: "Please enter a valid name",
+                EMPTY_PHONE_NO: "Please enter a valid phone number",
+                EMPTY_EMAIL: "Please enter a valid email address",
+                EMPTY_OTP: "Please enter OTP",
+                EMPTY_NAME: "Please enter a valid name",
+            }
+        },
+        Ar: {
+            VALIDATION: {
+                INVALID_COUNTRY_CODE: "رقم الهاتف الذي أدخلته ينتمي لبلد آخر",
+                INVALID_PHONE_NO: "يرجى إدخال رقم جوال صالح",
+                INVALID_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
+                INVALID_OTP: "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
+                INAVLID_NAME: "يرجى إدخال اسم صالح",
+                EMPTY_PHONE_NO: "يرجى إدخال رقم جوال صالح",
+                EMPTY_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
+                EMPTY_OTP: "يرجى أدخل رمز التأكيد",
+                EMPTY_NAME: "يرجى إدخال اسم صالح",
+            }
         }
     },
     AEROSPIKE_ERROR: {

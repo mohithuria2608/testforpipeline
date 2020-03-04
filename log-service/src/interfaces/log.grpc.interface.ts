@@ -12,6 +12,7 @@ declare namespace ILogGrpcRequest {
         count?: number,
         q?: string
         error?: string
+        inQ: boolean,
     }
     interface IChangeAerospike {
         create?: boolean,

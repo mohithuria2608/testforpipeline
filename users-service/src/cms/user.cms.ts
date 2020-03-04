@@ -3,7 +3,7 @@ import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
-import { consolelog } from '../utils'
+import { consolelog, nameConstructor } from '../utils'
 
 export class UserCMSEntity extends BaseCMS {
     constructor() {
@@ -12,15 +12,16 @@ export class UserCMSEntity extends BaseCMS {
 
     async createCustomerOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
+            let naemRes = nameConstructor(payload.name)
             let formObj: IUserCMSRequest.ICreateUser = {
                 "email": payload.email,
                 "phone": payload.fullPhnNo,
                 "websiteId": "1",
-                "firstName": payload.name,
-                "lastName": payload.name,
+                "firstName": naemRes.firstName,
+                "lastName": naemRes.lastName,
                 "password": payload.password,
-                "sdm_user_ref": payload.sdmUserRef ? payload.sdmUserRef : 0,
-                "sdm_corp_ref": payload.sdmCorpRef ? payload.sdmCorpRef : 0
+                "sdmUserRef": payload.sdmUserRef ? payload.sdmUserRef : 0,
+                "sdmCorpRef": payload.sdmCorpRef ? payload.sdmCorpRef : 0
             }
             const headers = {};
             const form = formObj;
@@ -55,13 +56,14 @@ export class UserCMSEntity extends BaseCMS {
             if (payload.fullPhnNo)
                 formObj['phone'] = payload.fullPhnNo
             if (payload.name) {
-                formObj['firstName'] = payload.name
-                formObj['lastName'] = payload.name
+                let naemRes = nameConstructor(payload.name)
+                formObj['firstName'] = naemRes.firstName
+                formObj['lastName'] = naemRes.lastName
             }
             if (payload.sdmUserRef != undefined)
-                formObj['sdm_user_ref'] = payload.sdmUserRef
+                formObj['sdmUserRef'] = payload.sdmUserRef
             if (payload.sdmCorpRef != undefined)
-                formObj['sdm_corp_ref'] = payload.sdmCorpRef
+                formObj['sdmCorpRef'] = payload.sdmCorpRef
             const headers = {};
             const form = formObj;
             const options = {

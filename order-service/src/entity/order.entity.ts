@@ -17,14 +17,14 @@ export class OrderClass extends BaseEntity {
     */
     async syncOrder(payload: IOrderRequest.IOrderData) {
         try {
-            let sdmOrderChange = {
+            kafkaService.kafkaSync({
                 set: this.set,
                 sdm: {
                     create: true,
                     argv: JSON.stringify(payload)
-                }
-            }
-            kafkaService.kafkaSync(sdmOrderChange)
+                },
+                inQ: true
+            })
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOrder", JSON.stringify(error), false)
@@ -49,8 +49,8 @@ export class OrderClass extends BaseEntity {
                 CEntry: []
             }
             items.forEach(product => {
-                let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
                 for (let i = 0; i < product.qty; i++) {
+                    let instanceId = Math.floor(Math.random() * (999 - 100 + 1) + 100);
                     if (product.originalTypeId == "simple") {
                         if (product.typeId == "simple") {
                             // "name": "Fresh Orange Juice"
@@ -136,7 +136,7 @@ export class OrderClass extends BaseEntity {
                             product.items.forEach(i => {
                                 if (i['sku'] == product.selectedItem) {
                                     Entries.CEntry.push({
-                                        ItemID: 600002,// i.sdmId,
+                                        ItemID: i.sdmId,
                                         Level: 0,
                                         ModCode: "NONE",
                                         Name: i.name,
@@ -247,8 +247,6 @@ export class OrderClass extends BaseEntity {
                                                                         QCProID: i.promoId,
                                                                     }
                                                                     let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                                                                    console.log("dependentSteps", dependentSteps)
-
                                                                     if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
                                                                         /**
                                                                          * @description (ingredient == 1) :  "name": "Twister Meal"
@@ -259,8 +257,6 @@ export class OrderClass extends BaseEntity {
                                                                                 let ItemID = 0
                                                                                 if (dspl.subOptions && dspl.subOptions.length > 0) {
                                                                                     dspl.subOptions.forEach(dsplso => {
-                                                                                        console.log("dsplso", dsplso)
-
                                                                                         if (dsplso.selected == 1)
                                                                                             ItemID = dsplso.sdmId
                                                                                     })
@@ -381,7 +377,6 @@ export class OrderClass extends BaseEntity {
                                             if (pl.selected == 1) {
                                                 if (pl.dependentSteps && pl.dependentSteps.length > 0) {
                                                     let dependentSteps = product.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                                                    console.log("dependentSteps", dependentSteps)
                                                     if (dependentSteps.position == pl.dependentSteps[0]) {
                                                         if (dependentSteps.type == "stepper") {
                                                             dependentSteps.productLinks.forEach(dspl => {
@@ -444,8 +439,24 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.IOrderData) {
         try {
+            let Comps
+            if (payload.promo && payload.promo.couponId && payload.promo.couponCode && payload.promo.posId) {
+                let discountAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT })
+                Comps = {
+                    KeyValueOfdecimalCCompkckD9yn_P: {
+                        Key: payload.promo.posId,
+                        Value: {
+                            Amount: discountAmount[0].amount,
+                            CompID: payload.promo.posId,
+                            EnterAmount: discountAmount[0].amount,
+                            Name: payload.promo.couponCode
+                        }
+                    }
+                }
+            }
             let order = {
                 AddressID: payload.address.sdmAddressRef,
+                Comps: Comps,
                 // AreaID: "",//payload.address.areaId
                 // CityID: "",//payload.address.areaId
                 ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
@@ -465,7 +476,7 @@ export class OrderClass extends BaseEntity {
             }
             /**
              * @step 1 :create order on sdm 
-             * @step 2 :update mongo order using payload.cartId sdmOrderRef
+             * @step 2 :update mongo order using payload.cartUnique sdmOrderRef
              */
             let data: IOrderSdmRequest.ICreateOrder = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
@@ -474,15 +485,17 @@ export class OrderClass extends BaseEntity {
                 order: order,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: "Test order notes 1", //payload.cmsOrderRef
-                orderNotes2: "Test order notes 2",
+                orderNotes1: payload.cmsOrderRef,
+                orderNotes2: payload._id,
                 creditCardPaymentbool: (payload['payment']['paymentMethodId'] == 0) ? false : true,
                 isSuspended: (payload['payment']['paymentMethodId'] == 0) ? false : true,
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)
-            if (createOrder) {
-                let order = await this.updateOneEntityMdb({ cartId: payload.cartId }, {
+            console.log("create order", createOrder, typeof createOrder)
+            if (createOrder && typeof createOrder == 'string') {
+                let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
+                    orderId: createOrder,
                     sdmOrderRef: createOrder,
                     isActive: 1,
                     updatedAt: new Date().getTime()
@@ -491,12 +504,20 @@ export class OrderClass extends BaseEntity {
                     this.getSdmOrder({
                         sdmOrderRef: order.sdmOrderRef,
                         timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
-                        status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                        // status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                     })
                 }
                 return {}
-            } else
+            } else {
+                this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
+                    isActive: 0,
+                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                    updatedAt: new Date().getTime(),
+                    sdmOrderStatus: -2,
+                    validationRemarks: createOrder.ResultText
+                })
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
+            }
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -506,21 +527,30 @@ export class OrderClass extends BaseEntity {
     /**
     * @method INTERNAL
     * */
-    async createOrder(orderType: string, cartData: ICartRequest.ICartData, address: IUserGrpcRequest.IFetchAddressRes, store: IStoreGrpcRequest.IStore, userData: IUserRequest.IUserData) {
+    async createOrder(
+        headers: ICommonRequest.IHeaders,
+        orderType: string,
+        cartData: ICartRequest.ICartData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        store: IStoreGrpcRequest.IStore,
+        userData: IUserRequest.IUserData,
+        promo: IPromotionGrpcRequest.IValidatePromotionRes) {
         try {
+            console.log("cartDaTa", cartData)
             let amount = cartData.amount
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
-                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TAX })
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING })
             }
             let orderData = {
                 orderType: orderType,
                 cartId: cartData.cartId,
+                cartUnique: cartData.cartUnique,
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
                 cmsOrderRef: cartData.cmsOrderRef,
                 userId: cartData.userId,
                 sdmUserRef: userData.sdmUserRef,
-                orderId: cartData.orderId,
+                country: headers.country,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: cartData.items,
@@ -559,8 +589,16 @@ export class OrderClass extends BaseEntity {
                 trackUntil: 0,
                 isActive: 1,
                 changePaymentMode: 0,
-                paymentMethodAddedOnSdm: 0,
+                paymentMethodAddedOnSdm: 0
             }
+            if (promo) {
+                if (promo.posId == 7193 || promo.posId == 6830)
+                    orderData['promo'] = promo
+                else
+                    orderData['promo'] = {}
+            } else
+                orderData['promo'] = {}
+
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order
         } catch (error) {
@@ -579,7 +617,7 @@ export class OrderClass extends BaseEntity {
         try {
             setTimeout(async () => {
                 let recheck = true
-                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, amount: 0 })
+                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0 })
                 if (order && order._id) {
                     if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime())
                         recheck = false
@@ -588,47 +626,52 @@ export class OrderClass extends BaseEntity {
                         if (order.sdmOrderRef && order.sdmOrderRef != 0) {
                             let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
                             consolelog(process.cwd(), "SDM order status", sdmOrder.Status, true)
-                            if (recheck && sdmOrder.Total) {
-                                consolelog(process.cwd(), "order step -4:       ", sdmOrder.ValidationRemarks, true)
-                                let amount = order.amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0].amount
-                                if (amount != parseFloat(sdmOrder.Total)) {
-                                    consolelog(process.cwd(), "order step -3:       ", sdmOrder.ValidationRemarks, true)
-                                    recheck = false
-                                    if (order.payment.paymentMethodId == 0) {
-                                        consolelog(process.cwd(), "order step -2:       ", sdmOrder.ValidationRemarks, true)
-                                        this.updateOneEntityMdb({ _id: order._id }, {
-                                            isActive: 0,
-                                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                            updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status,
-                                            validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                        })
-                                    } else {
-                                        consolelog(process.cwd(), "order step -1:       ", sdmOrder.ValidationRemarks, true)
-                                        await paymentService.reversePayment({
-                                            noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                        })
-                                        let status = await paymentService.getPaymentStatus({
-                                            noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                            paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                        })
-                                        this.updateOneEntityMdb({ _id: order._id }, {
-                                            isActive: 0,
-                                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                            updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status,
-                                            validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                            $addToSet: {
-                                                transLogs: status
-                                            },
-                                            "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
-                                        })
-                                    }
-                                }
-                            }
-                            if (recheck && sdmOrder.ValidationRemarks && (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null")) {
+                            // if (recheck && sdmOrder.Total) {
+                            //     consolelog(process.cwd(), "order step -4:       ", sdmOrder.ValidationRemarks, true)
+                            //     let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+                            //     console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
+
+                            //     if (amount[0].amount != parseFloat(sdmOrder.Total)) {
+                            //         consolelog(process.cwd(), "order step -3:       ", sdmOrder.ValidationRemarks, true)
+                            //         recheck = false
+                            //         if (order.payment.paymentMethodId == 0) {
+                            //             consolelog(process.cwd(), "order step -2:       ", sdmOrder.ValidationRemarks, true)
+                            //             this.updateOneEntityMdb({ _id: order._id }, {
+                            //                 isActive: 0,
+                            //                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                            //                 updatedAt: new Date().getTime(),
+                            //                 sdmOrderStatus: sdmOrder.Status,
+                            //                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                            //             })
+                            //         } else {
+                            //             consolelog(process.cwd(), "order step -1:       ", sdmOrder.ValidationRemarks, true)
+                            //             await paymentService.reversePayment({
+                            //                 noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                            //                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                            //             })
+                            //             let status = await paymentService.getPaymentStatus({
+                            //                 noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                            //                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                            //                 paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                            //             })
+                            //             this.updateOneEntityMdb({ _id: order._id }, {
+                            //                 isActive: 0,
+                            //                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                            //                 updatedAt: new Date().getTime(),
+                            //                 sdmOrderStatus: sdmOrder.Status,
+                            //                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                            //                 $addToSet: {
+                            //                     transLogs: status
+                            //                 },
+                            //                 "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
+                            //             })
+                            //         }
+                            //     }
+                            // }
+                            if (recheck && sdmOrder.ValidationRemarks &&
+                                (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
+                                sdmOrder.ValidationRemarks != "EXCEED_ORDER_AMOUNT"
+                            ) {
                                 consolelog(process.cwd(), "order step 0:       ", sdmOrder.ValidationRemarks, true)
                                 recheck = false
                                 this.updateOneEntityMdb({ _id: order._id }, {
@@ -786,20 +829,23 @@ export class OrderClass extends BaseEntity {
                                     }
                                 }
                             }
+                            if (payload.timeInterval == 0)
+                                recheck = false
                             consolelog(process.cwd(), "recheck", recheck, true)
                             if (recheck) {
-                                let orderChange = {
+                                kafkaService.kafkaSync({
                                     set: this.set,
                                     sdm: {
                                         get: true,
                                         argv: JSON.stringify(payload)
-                                    }
-                                }
-                                kafkaService.kafkaSync(orderChange)
+                                    },
+                                    inQ: true
+                                })
                             }
                         }
                     }
                 }
+
             }, payload.timeInterval)
             return {}
         } catch (error) {
@@ -845,9 +891,9 @@ export class OrderClass extends BaseEntity {
                 $match: match
             })
             if (payload.isActive == 1) {
-                pipeline.push({ $sort: { updatedAt: -1 } })
+                pipeline.push({ $sort: { createdAt: -1 } })
             } else {
-                pipeline.push({ $sort: { isActive: -1, updatedAt: -1 } })
+                pipeline.push({ $sort: { isActive: -1, createdAt: -1 } })
             }
             pipeline = pipeline.concat([
                 { $skip: skip },

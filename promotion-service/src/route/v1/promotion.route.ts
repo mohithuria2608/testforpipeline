@@ -24,7 +24,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IPromotionRequest.IGetPromotion = ctx.request.query;
                     let res = await promotionController.getPromotionsList(headers, payload);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

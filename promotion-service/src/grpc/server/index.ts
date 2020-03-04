@@ -42,7 +42,7 @@ server.addService(promotionProto.PromotionService.service, {
     },
 })
 
-server.bind(config.get("grpc.promotion.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.promotion.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.promotion.server"), true)
 server.start();

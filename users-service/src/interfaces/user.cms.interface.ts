@@ -10,8 +10,8 @@ declare namespace IUserCMSRequest {
         firstName: string
         lastName: string
         password: string,
-        sdm_user_ref?: number
-        sdm_corp_ref?: number
+        sdmUserRef?: number
+        sdmCorpRef?: number
     }
 
     interface IUpdateUser {
@@ -31,7 +31,7 @@ declare namespace IUserCMSRequest {
     }
 
     interface ICmsUser {
-        customer_id: string,
+        customerId: string,
         email: string,
         firstName: string,
         lastName: string,

@@ -1,0 +1,20 @@
+[
+    {
+        "id": "f2fa8060-5153-11ea-9af6-4f21b10cd3d9",
+        "type": "NORMAL",
+        "deviceType": "IOS",
+        "appversion": "0.0.1",
+        "isActive": 1,
+        "createdAt": 1582530812000,
+        "updatedAt": 1582530812000
+    },
+    {
+        "id": "f2fa8060-5153-11ea-9af6-4f21b10cd3d8",
+        "type": "NORMAL",
+        "deviceType": "ANDROID",
+        "appversion": "0.0.1",
+        "isActive": 1,
+        "createdAt": 1582530812000,
+        "updatedAt": 1582530812000
+    }
+]

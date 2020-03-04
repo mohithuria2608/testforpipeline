@@ -2,6 +2,7 @@ declare namespace ICartRequest {
 
     interface ICartData {
         cartId?: string,
+        cartUnique?: string,
         cmsCartRef?: number,
         sdmOrderRef?: number,
         cmsOrderRef?: number,
@@ -23,19 +24,19 @@ declare namespace ICartRequest {
         amount: number
     }
     interface IAddress {
-        addressId: string,
-        sdmAddressRef: number,
-        cmsAddressRef: number,
-        storeId: number,
-        areaId: number,
-        cityId: number,
-        tag: number,
-        bldgName: string,
-        description: string,
-        flatNum: string,
-        addressType: string,
-        lat: number,
-        lng: number,
+        addressId?: string,
+        sdmAddressRef?: number,
+        cmsAddressRef?: number,
+        storeId?: number,
+        areaId?: number,
+        cityId?: number,
+        tag?: number,
+        bldgName?: string,
+        description?: string,
+        flatNum?: string,
+        addressType?: string,
+        lat?: number,
+        lng?: number,
     }
 
     interface IStore {
@@ -52,6 +53,7 @@ declare namespace ICartRequest {
         name_ar: string,
     }
     interface IValidateCart extends ICommonRequest.ICordinatesOpt {
+        orderType: string
         cartId: string,
         curMenuId: number,
         menuUpdatedAt: number,
@@ -63,5 +65,11 @@ declare namespace ICartRequest {
         cartId?: string,
         cmsCartRef?: number
         cartUpdatedAt?: number
+    }
+
+    interface IDataToHash {
+        items: any,
+        promo: number,
+        updatedAt: number
     }
 }

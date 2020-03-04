@@ -32,7 +32,7 @@ export class LocationController {
                         name_en: store[0].name_en,
                         name_ar: store[0].name_ar,
                     },
-                    isOnline: store[0].isOnline
+                    isOnline: true,// store[0].isOnline
                 }
                 return res
             }
@@ -98,15 +98,19 @@ export class LocationController {
                                         }
                                     }
                                 }
-                                storeCollection.sort(compare)
-                                a['store'] = storeCollection
-                                areaCollection.push(a)
+                                if (storeCollection && storeCollection.length > 0) {
+                                    storeCollection.sort(compare)
+                                    a['store'] = storeCollection
+                                    areaCollection.push(a)
+                                }
                             }
                         }
                     }
-                    areaCollection.sort(compare)
-                    c['area'] = areaCollection
-                    res.push(c)
+                    if (areaCollection && areaCollection.length > 0) {
+                        areaCollection.sort(compare)
+                        c['area'] = areaCollection
+                        res.push(c)
+                    }
                 }
             }
             res.sort(compare)

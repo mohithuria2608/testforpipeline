@@ -18,7 +18,8 @@ const loggerSchema = new Schema({
             Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.CMS_REQUEST,
             Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
-            Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR
+            Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR,
+            Constant.DATABASE.TYPE.ACTIVITY_LOG.SMS
         ],
         index: true
     },

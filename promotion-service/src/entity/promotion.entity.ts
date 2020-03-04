@@ -19,6 +19,12 @@ export class PromotionClass extends BaseEntity {
             index: 'idx_' + this.set + '_' + 'couponCode',
             type: "STRING"
         },
+        {
+            set: this.set,
+            bin: 'couponCodeL',
+            index: 'idx_' + this.set + '_' + 'couponCodeL',
+            type: "STRING"
+        }
     ]
     constructor() {
         super(Constant.SET_NAME.PROMOTION)
@@ -28,6 +34,7 @@ export class PromotionClass extends BaseEntity {
         id: Joi.number().required().description("pk"),
         couponId: Joi.string().trim().required().description("sk"),
         couponCode: Joi.string().trim().required().description("sk"),
+        couponCodeL: Joi.string().trim().required().description("sk"),
         promotionType: Joi.string().trim().required(),
         discountAmount: Joi.number().required(),
         maxDiscountApp: Joi.number().required(),
@@ -100,8 +107,8 @@ export class PromotionClass extends BaseEntity {
                 if (payload.couponCode) {
                     queryArg = {
                         equal: {
-                            bin: "couponCode",
-                            value: payload.couponCode
+                            bin: "couponCodeL",
+                            value: payload.couponCode.toLowerCase()
                         },
                         set: this.set,
                         background: false,

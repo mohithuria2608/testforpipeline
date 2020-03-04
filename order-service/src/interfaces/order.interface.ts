@@ -4,19 +4,22 @@ declare namespace IOrderRequest {
         _id: string,
         orderType: string,
         cartId: string,
+        cartUnique: string
         cmsCartRef: number,
         sdmOrderRef: number,
         cmsOrderRef: number,
         userId: string,
         sdmUserRef: number,
-        orderId: string,
+        country: string,
         status: string,
         createdAt: number,
         updatedAt: number,
         items: any,
+        itemsHash: string
         address: IAddress,
         store: IStore,
         amount: IAmount[],
+        promo: IPromotionGrpcRequest.IValidatePromotionRes
     }
 
     interface IAddress {

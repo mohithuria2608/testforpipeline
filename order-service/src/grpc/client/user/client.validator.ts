@@ -14,7 +14,7 @@ export class UserServiceValidator {
                 let dataToValidate = Joi.object().keys({
                     userId: Joi.string(),
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE),
-                    phnNo: Joi.string().max(9),
+                    phnNo: Joi.string().min(9).max(9),
                     cartId: Joi.string()
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
@@ -84,7 +84,8 @@ export class UserServiceValidator {
                     }),
                     count: Joi.number(),
                     q: Joi.string(),
-                    error: Joi.string().allow("")
+                    error: Joi.string().allow(""),
+                    inQ: Joi.boolean().required()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

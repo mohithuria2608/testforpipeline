@@ -34,6 +34,7 @@ declare namespace IUserSDMRequest {
     interface IUpdateUser extends ICommonRequest.ISDM {
         customer: {
             CUST_CLASSID: number,
+            CUST_CORPID: number,
             CUST_EMAIL: string,// "nkhan1000@mailinator.com",
             CUST_FIRSTNAME: string,// "nusrattest",
             CUST_ID: number,
@@ -52,4 +53,14 @@ declare namespace IUserSDMRequest {
             WCUST_STATUS: number
         }
     }
+
+    interface IUpdateCustomerTokenReq {
+        name: string,
+        req: IUpdateCustomerToken,
+    }
+
+    interface IUpdateCustomerToken {
+        
+    }
+
 }

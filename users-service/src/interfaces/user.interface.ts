@@ -26,7 +26,7 @@ declare namespace IUserRequest {
     interface TempAddressArray {
         asAddress?: IAddressRequest.IAddress[],
         cmsAddress?: any,
-        sdmAddresses?: any
+        sdmAddress?: any
     }
     interface IPhone {
         cCode: string,

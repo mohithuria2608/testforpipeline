@@ -18,7 +18,8 @@ export class CmsUserController {
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
-                }
+                },
+                inQ: true
             }
             if (payload.action == "update") {
                 userChange['as']['update'] = true

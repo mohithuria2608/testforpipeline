@@ -27,7 +27,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "getSession", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     fetchUser: async (call: IUserGrpcRequest.IFetchUserReq, callback) => {
@@ -37,7 +37,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchUser", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
@@ -62,7 +62,7 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
         }
     },
     fetchAddress: async (call: IUserGrpcRequest.IFetchAddressReq, callback) => {
@@ -72,12 +72,52 @@ server.addService(userProto.UserService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
-            callback(grpcSendError(error))
+            callback(grpcSendError(error, 'En'))
+        }
+    },
+    createUserOnCms: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.createUserOnCms(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
+            callback(grpcSendError(error, 'En'))
+        }
+    },
+    createAddressOnCms: async (call: IUserGrpcRequest.ICreatAddressOnCmsReq, callback) => {
+        try {
+            consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.AddressE.addAddressOnCms(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(error), false)
+            callback(grpcSendError(error, 'En'))
+        }
+    },
+    createUserOnSdm: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.UserE.createUserOnSdm(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
+            callback(grpcSendError(error, 'En'))
+        }
+    },
+    createAddressOnSdm: async (call: IUserGrpcRequest.ICreatAddressOnSdmReq, callback) => {
+        try {
+            consolelog(process.cwd(), "createAddressOnSdm", JSON.stringify(call.request), true)
+            let res: {} = await ENTITY.AddressE.addAddressOnSdm(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "createAddressOnSdm", JSON.stringify(error), false)
+            callback(grpcSendError(error, 'En'))
         }
     }
 })
 
-server.bind(config.get("grpc.user.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.user.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.user.server"), true)
 server.start();

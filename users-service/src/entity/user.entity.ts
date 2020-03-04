@@ -1,4 +1,5 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
@@ -28,9 +29,14 @@ export class UserEntity extends BaseEntity {
             bin: 'cartId',
             index: 'idx_' + this.set + '_' + 'cartId',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'email',
+            index: 'idx_' + this.set + '_' + 'email',
+            type: "STRING"
         }
     ]
-
     constructor() {
         super(Constant.SET_NAME.USER)
     }
@@ -129,6 +135,28 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
+            if (payload.sdmUserRef && payload.sdmUserRef != 0 && (payload.sdmCorpRef == 0 || payload.sdmCorpRef == null))
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: "ISSUE",
+                            info: {
+                                request: {
+                                    body: payload
+                                },
+                                response: {}
+                            },
+                            description: "SDM CORP FAILURE",
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
             let isCreate = false
             let userUpdate: IUserRequest.IUserData = {}
             userUpdate['id'] = payload.id
@@ -147,11 +175,11 @@ export class UserEntity extends BaseEntity {
             if (payload.phnNo)
                 userUpdate['phnNo'] = payload.phnNo
             if (payload.sdmUserRef != undefined)
-                userUpdate['sdmUserRef'] = payload.sdmUserRef
+                userUpdate['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
             if (payload.sdmCorpRef != undefined)
-                userUpdate['sdmCorpRef'] = payload.sdmCorpRef
+                userUpdate['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
             if (payload.cmsUserRef != undefined)
-                userUpdate['cmsUserRef'] = payload.cmsUserRef
+                userUpdate['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
             if (payload.phnVerified != undefined)
                 userUpdate['phnVerified'] = payload.phnVerified
             if (payload.emailVerified != undefined)
@@ -174,17 +202,17 @@ export class UserEntity extends BaseEntity {
                 userUpdate['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
                 userUpdate['asAddress'] = payload.asAddress
-            if (payload.sdmAddresses && payload.sdmAddresses.length > 0)
-                userUpdate['sdmAddresses'] = payload.sdmAddresses
-                
+            if (payload.sdmAddress && payload.sdmAddress.length > 0)
+                userUpdate['sdmAddress'] = payload.sdmAddress
+
             userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
                 isCreate = false
             } else {
                 isCreate = true
-                let cartId = payload.cartId
-                this.createDefaultCart(cartId, userUpdate.id)
+                userUpdate.cartId = userUpdate.id
+                this.createDefaultCart(userUpdate.id)
             }
             let putArg: IAerospike.Put = {
                 bins: userUpdate,
@@ -259,6 +287,7 @@ export class UserEntity extends BaseEntity {
     async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
             let res = await SDM.UserSDME.createCustomerOnSdm(payload)
+
             let putArg: IAerospike.Put = {
                 bins: {
                     sdmUserRef: parseInt(res.CUST_ID.toString()),
@@ -270,15 +299,21 @@ export class UserEntity extends BaseEntity {
             }
             await Aerospike.put(putArg)
             let user = await this.getUser({ userId: payload.id })
+            if (user.socialKey) {
+                SDM.UserSDME.updateCustomerTokenOnSdm(user)
+            }
+            console.log("user after getting sdm id", user)
             if (user.cmsUserRef != 0) {
                 kafkaService.kafkaSync({
                     set: this.set,
                     cms: {
                         update: true,
                         argv: JSON.stringify(user)
-                    }
+                    },
+                    inQ: true
                 })
             }
+
             return user
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
@@ -307,17 +342,29 @@ export class UserEntity extends BaseEntity {
     async createUserOnCms(payload: IUserRequest.IUserData) {
         try {
             let res = await CMS.UserCMSE.createCustomerOnCms(payload)
-            if (res && res.customer_id) {
+            if (res && res.customerId) {
                 let putArg: IAerospike.Put = {
                     bins: {
-                        cmsUserRef: parseInt(res.customer_id.toString()),
+                        cmsUserRef: parseInt(res.customerId.toString()),
                     },
                     set: this.set,
                     key: payload.id,
                     update: true,
                 }
                 await Aerospike.put(putArg)
-                return await this.getUser({ userId: payload.id })
+                let user = await this.getUser({ userId: payload.id })
+                console.log("user after getting cms id", user)
+                if (user.sdmUserRef && user.sdmCorpRef) {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        cms: {
+                            update: true,
+                            argv: JSON.stringify(user)
+                        },
+                        inQ: true
+                    })
+                }
+                return user
             }
             return {}
         } catch (error) {

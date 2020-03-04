@@ -24,28 +24,14 @@ export class AddressController {
                 if (payload.cms.create) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.addAddressOnCms(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            cms: {
-                                create: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
                 if (payload.cms.update) {
-                    // if (userData.cmsUserRef && userData.cmsUserRef != 0)
-                    //     await ENTITY.AddressE.updateAddressOnCms(userData)
-                    // else {
-                    //     kafkaService.kafkaSync({
-                    //         set: ENTITY.AddressE.set,
-                    //         cms: {
-                    //             update: true,
-                    //             argv: JSON.stringify(userData)
-                    //         }
-                    //     })
-                    // }
+                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                        await ENTITY.AddressE.updateAddressOnCms(userData)
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
@@ -55,28 +41,14 @@ export class AddressController {
                 if (payload.sdm.create) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.addAddressOnSdm(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            sdm: {
-                                create: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
                 if (payload.sdm.update) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.updateAddressOnSdm(userData)
-                    else {
-                        kafkaService.kafkaSync({
-                            set: ENTITY.AddressE.set,
-                            sdm: {
-                                update: true,
-                                argv: JSON.stringify(userData)
-                            }
-                        })
-                    }
+                    else
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
             }
             return {}
@@ -102,9 +74,72 @@ export class AddressController {
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
             if (payload.storeId) {
-                store = await ENTITY.UserE.fetchStore(payload.storeId)
+                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.length) {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                    payload['lat'] = store[0].location.latitude
+                    payload['lng'] = store[0].location.longitude
+                    payload['bldgName'] = store[0].location.description
+                    payload['description'] = store[0].location.description
+                    payload['flatNum'] = store[0].location.description
+                    payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+            } else if (payload.lat && payload.lng) {
+                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.length) {
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                } else
+                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+            } else
+                return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+
+            let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
+                userData.asAddress = [addressData]
+                kafkaService.kafkaSync({
+                    set: ENTITY.AddressE.set,
+                    cms: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    },
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(userData)
+                    },
+                    inQ: true
+                })
+            }
+
+            return addressData
+        } catch (error) {
+            consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method INTERNAL
+    * @description Sync old address
+    * @param {string} storeId
+    * @param {number} lat
+    * @param {number} lng
+    * @param {string} bldgName
+    * @param {string} description
+    * @param {string} flatNum
+    * @param {string} tag
+    * */
+    async syncOldAddress(headers: ICommonRequest.IHeaders, userId: string, payload: IAddressRequest.ISyncOldAddress) {
+        try {
+            console.log("syncOldAddress", userId, payload)
+            let userData = await ENTITY.UserE.getUser({ userId: userId })
+            let type = ""
+            let store: IStoreGrpcRequest.IStore[]
+            if (payload.storeId) {
+                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
+                if (store && store.length) {
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                    payload['addressId'] = payload.addressId
                     payload['lat'] = store[0].location.latitude
                     payload['lng'] = store[0].location.longitude
                     payload['bldgName'] = ""
@@ -134,55 +169,12 @@ export class AddressController {
                     sdm: {
                         create: true,
                         argv: JSON.stringify(userData)
-                    }
+                    },
+                    inQ: true
                 })
             }
 
             return addressData
-        } catch (error) {
-            consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-    * @method INTERNAL
-    * @description Sync old address
-    * @param {string} storeId
-    * @param {number} lat
-    * @param {number} lng
-    * @param {string} bldgName
-    * @param {string} description
-    * @param {string} flatNum
-    * @param {string} tag
-    * */
-    async syncOldAddress(userData: IUserRequest.IUserData, payload: IAddressRequest.ISyncOldAddress) {
-        try {
-            userData = await ENTITY.UserE.getUser({ userId: userData.id })
-            let type = ""
-            let store: IStoreGrpcRequest.IStore[]
-            if (payload.storeId) {
-                store = await ENTITY.UserE.fetchStore(payload.storeId)
-                if (store && store.length) {
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-                    payload['lat'] = store[0].location.latitude
-                    payload['lng'] = store[0].location.longitude
-                    payload['bldgName'] = ""
-                    payload['description'] = ""
-                    payload['flatNum'] = ""
-                    payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
-                } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
-            } else if (payload.lat && payload.lng) {
-                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.length) {
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-                } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
-            } else
-                return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
-
-            return await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
         } catch (error) {
             consolelog(process.cwd(), "syncOldAddress", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -217,7 +209,8 @@ export class AddressController {
                     cms: {
                         update: true,
                         argv: JSON.stringify(userData)
-                    }
+                    },
+                    inQ: true
                 })
             }
 
@@ -234,9 +227,12 @@ export class AddressController {
     * */
     async fetchAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IFetchAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let address: IAddressRequest.IAddress[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
-            return address
+            if (auth.isGuest != undefined && auth.isGuest == 0) {
+                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+                let address: IAddressRequest.IAddress[] = await ENTITY.AddressE.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
+                return address
+            } else
+                return []
         } catch (error) {
             consolelog(process.cwd(), "fetchAddress", JSON.stringify(error), false)
             return Promise.reject(error)

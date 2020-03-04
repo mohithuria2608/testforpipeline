@@ -18,7 +18,8 @@ export class CmsMenuController {
                 as: {
                     create: true,
                     argv: JSON.stringify(payload.data)
-                }
+                },
+                inQ: true
             }
             if (payload.action == "update") {
                 menuChange['as']['update'] = true
@@ -45,7 +46,8 @@ export class CmsMenuController {
                 as: {
                     create: true,
                     argv: JSON.stringify(payload)
-                }
+                },
+                inQ: true
             }
             if (payload.action == "update") {
                 hiddenMenuData['as']['update'] = true

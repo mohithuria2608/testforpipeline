@@ -3,8 +3,6 @@ import { consolelog, hashObj } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
-import { cartController } from './cart.controller';
-import { parse } from 'path'
 
 export class OrderController {
 
@@ -64,33 +62,56 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
-            if (userData.sdmUserRef && userData.sdmUserRef == 0) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
+            if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
+                userData = await userService.createUserOnSdm(userData)
+            }
+            if (!userData.cmsUserRef || userData.cmsUserRef == 0) {
+                userData = await userService.createUserOnCms(userData)
             }
             let order: IOrderRequest.IOrderData
-            let retry = false
+            let paymentRetry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (hashObj(getCurrentCart.items) == hashObj(payload.items)) {
-                order = await ENTITY.OrderE.getOneEntityMdb({ cartId: payload.cartId }, {}, { lean: true })
+            let dataToHash: ICartRequest.IDataToHash = {
+                items: payload.items,
+                promo: payload.couponCode ? 1 : 0,
+                updatedAt: getCurrentCart.updatedAt
+            }
+            const hash = hashObj(dataToHash)
+            console.log("cartUnique ================ ", getCurrentCart.cartUnique)
+            console.log("cartUnique ---------------- ", hash)
+            if (hash == getCurrentCart.cartUnique) {
+                order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
                 if (order && order._id)
-                    retry = true
+                    paymentRetry = true
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
-            let newCartId = ""
             let noonpayRedirectionUrl = ""
-            if (!retry) {
+            if (!paymentRetry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                     addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                 let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+
                 if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
+                else {
+                    if (!getAddress.cmsAddressRef || getAddress.cmsAddressRef == 0) {
+                        userData['asAddress'] = JSON.stringify([getAddress])
+                        await userService.creatAddressOnCms(userData)
+                        getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                    }
+                    if (!getAddress.sdmAddressRef || getAddress.sdmAddressRef == 0) {
+                        userData['asAddress'] = JSON.stringify([getAddress])
+                        await userService.creatAddressOnSdm(userData)
+                        getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+                    }
+                }
 
-                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId })
+                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
                 else {
@@ -117,24 +138,24 @@ export class OrderController {
                     curMenuId: payload.curMenuId,
                     menuUpdatedAt: payload.menuUpdatedAt,
                     couponCode: payload.couponCode,
-                    items: payload.items
+                    items: payload.items,
+                    orderType: payload.orderType
                 }
                 let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
 
-                let cartData: ICartRequest.ICartData
+                // let getCurrentCart: ICartRequest.ICartData
                 if (cmsOrder && cmsOrder['order_id']) {
-                    cartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-                    cartData['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
+                    // getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+                    getCurrentCart['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
-                    cartData = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, payload.items)
-                    cartData['promo'] = promo
-                    return { cartValidate: cartData }
+                    getCurrentCart = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items)
+                    getCurrentCart['promo'] = promo ? promo : {}
+                    return { cartValidate: getCurrentCart }
                 }
-                cartData['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(payload.orderType, cartData, getAddress, getStore, userData)
+                getCurrentCart['orderType'] = payload.orderType
+                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, getCurrentCart, getAddress, getStore, userData, promo)
             }
-            // let totalAmount = order.amount.filter(elem => { return elem.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (payload.paymentMethodId != 0) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order.cmsOrderRef.toString(),
@@ -163,25 +184,12 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
-                /**
-                * @description : update user with new cart in case of Cash On Delivery
-                */
-                newCartId = ENTITY.OrderE.ObjectId().toString()
-                ENTITY.CartE.assignNewCart(order.cartId, newCartId, auth.id)
-                let asUserChange = {
-                    set: Constant.SET_NAME.USER,
-                    as: {
-                        update: true,
-                        argv: JSON.stringify({ userId: auth.id, cartId: newCartId })
-                    }
-                }
-                await userService.sync(asUserChange)
+                ENTITY.CartE.resetCart(auth.id)
             }
             ENTITY.OrderE.syncOrder(order)
 
             return {
                 orderPlaced: {
-                    newCartId: newCartId,
                     noonpayRedirectionUrl: noonpayRedirectionUrl,
                     orderInfo: order
                 }
@@ -213,7 +221,7 @@ export class OrderController {
      * */
     async orderDetail(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderDetail, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { transLogs: 0 })
             if (order && order._id) {
                 return order
             } else {
@@ -231,7 +239,7 @@ export class OrderController {
      * */
     async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { status: 1, orderId: 1 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1 })
             if (order && order._id) {
                 order['nextPing'] = 15
                 order['unit'] = "second"
@@ -252,14 +260,30 @@ export class OrderController {
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            let sdmOrderRef = payload.orderId.split("-")
+            let sdmOrder = 0
+            if (sdmOrderRef && sdmOrderRef.length == 2) {
+                if (sdmOrderRef[0] != headers.country)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
+                else
+                    sdmOrder = parseInt(sdmOrderRef[1])
+            } else if (sdmOrderRef && sdmOrderRef.length == 1)
+                sdmOrder = parseInt(sdmOrderRef[0])
+            else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
             let userData: IUserRequest.IUserData
             if (payload.cCode && payload.phnNo) {
                 userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
                 if (userData.id == undefined || userData.id == null || userData.id == "")
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ orderId: payload.orderId }, { transLogs: 0 })
+            await ENTITY.OrderE.getSdmOrder({
+                sdmOrderRef: sdmOrder,
+                timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS_ONCE
+            })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
             if (order && order._id) {
+
                 if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]

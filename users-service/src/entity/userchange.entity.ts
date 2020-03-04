@@ -61,6 +61,10 @@ export class UserchangeEntity extends BaseEntity {
         otpExpAt: Joi.number(),
         otpVerified: Joi.number(),
         deleteUserId: Joi.string(),
+        chngEmailCms: Joi.number(),
+        chngPhnCms: Joi.number(),
+        chngEmailSdm: Joi.number(),
+        chngPhnSdm: Joi.number(),
     });
 
     /**
@@ -185,20 +189,28 @@ export class UserchangeEntity extends BaseEntity {
             if (payload.address)
                 dataToUpdateUserchange['address'] = payload.address
             if (payload.cmsUserRef != undefined)
-                dataToUpdateUserchange['cmsUserRef'] = payload.cmsUserRef
+                dataToUpdateUserchange['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
             if (payload.sdmUserRef != undefined)
-                dataToUpdateUserchange['sdmUserRef'] = payload.sdmUserRef
+                dataToUpdateUserchange['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
             if (payload.sdmCorpRef != undefined)
-                dataToUpdateUserchange['sdmCorpRef'] = payload.sdmCorpRef
+                dataToUpdateUserchange['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
             if (payload.cmsAddress && payload.cmsAddress.length > 0)
                 dataToUpdateUserchange['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
                 dataToUpdateUserchange['asAddress'] = payload.asAddress
-            if (payload.sdmAddresses && payload.sdmAddresses.length > 0)
-                dataToUpdateUserchange['sdmAddresses'] = payload.sdmAddresses
-            if (payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
+            if (payload.sdmAddress && payload.sdmAddress.length > 0)
+                dataToUpdateUserchange['sdmAddress'] = payload.sdmAddress
+            if (payload.chngPhnCms != undefined)
+                dataToUpdateUserchange['chngPhnCms'] = payload.chngPhnCms
+            if (payload.chngPhnSdm != undefined)
+                dataToUpdateUserchange['chngPhnSdm'] = payload.chngPhnSdm
+            if (payload.chngEmailCms != undefined)
+                dataToUpdateUserchange['chngEmailCms'] = payload.chngEmailCms
+            if (payload.chngEmailSdm != undefined)
+                dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
+            if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
-                    message: payload.otp.toString(),
+                    message: `${payload.otp.toString()} is your OTP for KFC UAE app login`,
                     destination: encodeURIComponent(payload.fullPhnNo),
                     type: 0,
                     dlr: 1,

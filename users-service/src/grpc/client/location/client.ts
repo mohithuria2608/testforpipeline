@@ -27,7 +27,7 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.fetchStoreValidator(payload)
-                this.locationClient.fetchStore({ storeId: payload.storeId }, (error, res) => {
+                this.locationClient.fetchStore({ storeId: payload.storeId, language: payload.language }, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully fetched store", JSON.stringify(res), false)
                         resolve(res.store)

@@ -29,4 +29,5 @@ export class MongoClass {
     }
 }
 
+
 export const Mongo = new MongoClass();

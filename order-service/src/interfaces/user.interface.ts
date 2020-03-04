@@ -1,6 +1,6 @@
 declare namespace IUserRequest {
 
-    interface IUserData {
+    interface IUserData extends TempAddressArray {
         id?: string,
         sdmUserRef?: number,
         sdmCorpRef?: number,
@@ -17,6 +17,12 @@ declare namespace IUserRequest {
         createdAt?: number,
         cartId?: string,
         password?: string,
+    }
+
+    interface TempAddressArray {
+        asAddress?: any,
+        cmsAddress?: any,
+        sdmAddress?: any
     }
 
     interface IFetchUser {

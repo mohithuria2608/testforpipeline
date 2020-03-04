@@ -18,7 +18,8 @@ export class CmsHomeController {
                 as: {
                     create: true,
                     argv: JSON.stringify(payload.data)
-                }
+                },
+                inQ: true
             }
             kafkaService.kafkaSync(homeData)
             return {}
