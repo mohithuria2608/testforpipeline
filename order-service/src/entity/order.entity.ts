@@ -648,7 +648,6 @@ export class OrderClass extends BaseEntity {
                             //                 isActive: 0,
                             //                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                             //                 updatedAt: new Date().getTime(),
-                            //                 sdmOrderStatus: sdmOrder.Status,
                             //                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
                             //             })
                             //         } else {
@@ -666,7 +665,6 @@ export class OrderClass extends BaseEntity {
                             //                 isActive: 0,
                             //                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                             //                 updatedAt: new Date().getTime(),
-                            //                 sdmOrderStatus: sdmOrder.Status,
                             //                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
                             //                 $addToSet: {
                             //                     transLogs: status
@@ -686,7 +684,6 @@ export class OrderClass extends BaseEntity {
                                     isActive: 0,
                                     status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                     updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: sdmOrder.Status,
                                     validationRemarks: sdmOrder.ValidationRemarks
                                 })
                             }
@@ -715,7 +712,6 @@ export class OrderClass extends BaseEntity {
                                                             order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                                 paymentMethodAddedOnSdm: 1,
                                                                 updatedAt: new Date().getTime(),
-                                                                sdmOrderStatus: sdmOrder.Status
                                                             }, { new: true })
                                                         }
                                                         else {
@@ -728,7 +724,6 @@ export class OrderClass extends BaseEntity {
                                                                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                                                 changePaymentMode: true,
                                                                 updatedAt: new Date().getTime(),
-                                                                sdmOrderStatus: sdmOrder.Status
                                                             }, { new: true })
                                                         }
                                                     }
@@ -750,14 +745,12 @@ export class OrderClass extends BaseEntity {
                                             order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                 status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                 updatedAt: new Date().getTime(),
-                                                sdmOrderStatus: sdmOrder.Status
                                             }, { new: true })
 
                                             setTimeout(async () => {
                                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                     status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
                                                     updatedAt: new Date().getTime(),
-                                                    sdmOrderStatus: sdmOrder.Status
                                                 }, { new: true })
                                             }, 10000)
                                         } else {
@@ -767,7 +760,6 @@ export class OrderClass extends BaseEntity {
                                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                     status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                     updatedAt: new Date().getTime(),
-                                                    sdmOrderStatus: sdmOrder.Status
                                                 }, { new: true })
                                                 await paymentService.capturePayment({
                                                     noonpayOrderId: order.transLogs[1].noonpayOrderId,
@@ -797,7 +789,6 @@ export class OrderClass extends BaseEntity {
                                         this.updateOneEntityMdb({ _id: order._id }, {
                                             status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
                                             updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status
                                         })
                                         if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                                             recheck = false
@@ -808,7 +799,6 @@ export class OrderClass extends BaseEntity {
                                             this.updateOneEntityMdb({ _id: order._id }, {
                                                 status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
                                                 updatedAt: new Date().getTime(),
-                                                sdmOrderStatus: sdmOrder.Status
                                             })
                                         }
                                     }
@@ -820,7 +810,6 @@ export class OrderClass extends BaseEntity {
                                             status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
                                             updatedAt: new Date().getTime(),
                                             trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
-                                            sdmOrderStatus: sdmOrder.Status
                                         })
                                     }
                                     else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
@@ -830,7 +819,6 @@ export class OrderClass extends BaseEntity {
                                             isActive: 0,
                                             status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
                                             updatedAt: new Date().getTime(),
-                                            sdmOrderStatus: sdmOrder.Status
                                         })
                                     }
                                     else {
