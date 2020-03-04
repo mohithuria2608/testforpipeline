@@ -347,11 +347,20 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
+    async createCartReqForCms(
+        items: any,
+        selFreeItem: any,
+        orderType: string,
+        couponCode: string,
+        userData: IUserRequest.IUserData
+    ) {
         try {
+            if (selFreeItem && selFreeItem.en && selFreeItem.en.length > 0) {
+                items = items.concat(selFreeItem.en)
+            }
             let sellingPrice = 0
             let cart = []
-            payload.items.map(sitem => {
+            items.map(sitem => {
                 sellingPrice = sellingPrice + (sitem.sellingPrice * sitem.qty)
                 if (sitem['originalTypeId'] == 'simple') {
                     if (sitem['type_id'] == 'simple') {
@@ -509,10 +518,10 @@ export class CartClass extends BaseEntity {
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart,
-                order_type: payload.orderType
+                order_type: orderType
             }
-            if (payload.couponCode)
-                req['coupon_code'] = payload.couponCode
+            if (couponCode)
+                req['coupon_code'] = couponCode
             else
                 req['coupon_code'] = ""
             return { req: req, sellingPrice: sellingPrice }
@@ -524,12 +533,8 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-
             if (payload.items && payload.items.length > 0) {
-                if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
-                    payload.items = payload.items.concat(payload.selFreeItem.en)
-                }
-                let req = await this.createCartReqForCms(payload, userData)
+                let req = await this.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
                 let cmsCart = await CMS.CartCMSE.createCart(req.req)
                 return cmsCart
             } else {
