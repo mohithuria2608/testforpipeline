@@ -24,9 +24,9 @@ export class BaseEntity {
     /**
      * @description Validate latitude and longitude from location service
      */
-    async fetchStore(storeId: number): Promise<IStoreGrpcRequest.IStore[]> {
+    async fetchStore(storeId: number, language: string): Promise<IStoreGrpcRequest.IStore[]> {
         try {
-            let store = await locationService.fetchStore({ storeId })
+            let store = await locationService.fetchStore({ storeId, language })
             if (store && store.id)
                 return [store]
             else
@@ -53,23 +53,11 @@ export class BaseEntity {
     /**
      * @description Create a default cart when a user is created with a default TTL from order service
      */
-    async createDefaultCart(cartId: string, userId: string) {
+    async createDefaultCart(userId: string) {
         try {
-            return await orderService.createDefaultCart({ cartId, userId })
+            return await orderService.createDefaultCart({ userId })
         } catch (error) {
             consolelog(process.cwd(), "createDefaultCart", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @description Update the default cart TTL from order service
-     */
-    async updateCartTTL(cartId: string, userId: string) {
-        try {
-            return await orderService.updateCartTTL({ cartId })
-        } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

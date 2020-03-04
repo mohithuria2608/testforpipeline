@@ -5,7 +5,6 @@ declare namespace IOrderGrpcRequest {
     }
 
     interface ICreateDefaultCart {
-        cartId: string,
         userId: string
     }
 

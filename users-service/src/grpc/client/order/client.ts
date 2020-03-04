@@ -27,31 +27,12 @@ export class OrderService {
         return new Promise(async (resolve, reject) => {
             try {
                 await orderServiceValidator.createDefaultCartValidator(payload)
-                this.orderClient.createDefaultCart({ cartId: payload.cartId, userId: payload.userId }, (error, res) => {
+                this.orderClient.createDefaultCart({  userId: payload.userId }, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully created default cart", JSON.stringify(res), false)
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in creating created default cart", JSON.stringify(error), false)
-                        reject(error)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        })
-    }
-
-    async updateCartTTL(payload: IOrderGrpcRequest.IUpdateDefaultCartTTL): Promise<IOrderGrpcRequest.IUpdateDefaultCartTTLRes> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await orderServiceValidator.updateCartTtlValidator(payload)
-                this.orderClient.updateCartTtl({ cartId: payload.cartId }, (error, res) => {
-                    if (!error) {
-                        consolelog(process.cwd(), "successfully updated default cart ttl", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in  updating default cart ttl", JSON.stringify(error), false)
                         reject(error)
                     }
                 })

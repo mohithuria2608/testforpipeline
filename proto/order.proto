@@ -2,7 +2,6 @@ syntax = "proto3";
 
 service OrderService {
     rpc CreateDefaultCart (ICreateDefaultCartReq) returns (ICreateDefaultCartRes) {}
-    rpc UpdateCartTtl (IUpdateDefaultCartTTLReq) returns (IUpdateDefaultCartTTLRes) {}
     rpc GetCart (IGetCartReq) returns (IGetCartRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
@@ -13,12 +12,6 @@ message ICreateDefaultCartReq {
 }
 
 message ICreateDefaultCartRes { }
-
-message IUpdateDefaultCartTTLReq {
-    required string cartId = 1;
-}
-
-message IUpdateDefaultCartTTLRes { }
 
 message IGetCartReq {
     required string cartId = 1;
@@ -37,6 +30,7 @@ message IKafkaReq {
     optional int32 count = 6;
     optional string q = 7;
     optional string error = 8;
+    required bool inQ = 9;
 }
 
 message IAerospike {

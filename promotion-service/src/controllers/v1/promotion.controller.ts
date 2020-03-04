@@ -39,6 +39,7 @@ export class PromotionController {
             let promo = JSON.parse(rawdata);
 
             for (const iterator of promo) {
+                iterator['couponCodeL'] = iterator['couponCode'].toLowerCase()
                 ENTITY.PromotionE.post(iterator, { create: true })
             }
             return {}

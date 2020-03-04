@@ -38,7 +38,7 @@ export class UserService {
         })
     }
 
-    async fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
+    async   fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
         return new Promise(async (resolve, reject) => {
             consolelog(process.cwd(), "fetchAddress", payload, false)
 
@@ -65,6 +65,78 @@ export class UserService {
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in syncing user on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async createUserOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.userClient.createUserOnCms(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully created user on cms", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating user on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async creatAddressOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.userClient.createAddressOnCms(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully created address on cms", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating address on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async createUserOnSdm(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.userClient.createUserOnSdm(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully created user on sdm", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating user on sdm", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+
+    async creatAddressOnSdm(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.userClient.createAddressOnSdm(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully created address on sdm", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in creating address on sdm", JSON.stringify(error), false)
                         reject(error)
                     }
                 })

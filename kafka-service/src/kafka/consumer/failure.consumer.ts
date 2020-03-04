@@ -34,14 +34,14 @@ class FailConsumer extends BaseConsumer {
                 },
                 createdAt: new Date().getTime(),
             }
-            let dataToSave = {
+            kafkaController.kafkaSync({
                 set: Constant.SET_NAME.LOGGER,
                 mdb: {
                     create: true,
                     argv: JSON.stringify(data)
-                }
-            }
-            kafkaController.kafkaSync(dataToSave)
+                },
+                inQ: true
+            })
             return {}
         } catch (error) {
             consolelog(process.cwd(), `handleFailReq`, JSON.stringify(error), false);

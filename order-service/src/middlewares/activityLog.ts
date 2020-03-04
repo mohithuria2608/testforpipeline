@@ -10,7 +10,7 @@ export default (opts?): Middleware => {
         let startTime = new Date().getTime();
         ctx.res.on('finish', () => {
             executionTime = new Date().getTime() - startTime;
-            let data : ICommonRequest.IActivityLogger = {
+            let data: ICommonRequest.IActivityLogger = {
                 type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
                 info: {
                     'request': {
@@ -31,19 +31,19 @@ export default (opts?): Middleware => {
                 description: "",
                 options: {
                     env: Constant.SERVER.ENV[config.get("env")],
-                    
+
                 },
                 createdAt: new Date().getTime(),
             }
-            let dataToSave = {
+            // consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
+            kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOGGER,
                 mdb: {
                     create: true,
                     argv: JSON.stringify(data)
-                }
-            }
-            // consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
-            kafkaService.kafkaSync(dataToSave)
+                },
+                inQ: true
+            })
         })
 
         await next()

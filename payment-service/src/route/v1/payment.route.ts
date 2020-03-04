@@ -26,7 +26,7 @@ export default (router: Router) => {
                     // let payload: ICartRequest.IGetCart = ctx.request.query;
                     // let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     // let res = await cartController.getCart(headers, payload, auth);
-                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    // let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse
                 }
@@ -52,7 +52,7 @@ export default (router: Router) => {
                     let payload: IPaymentGrpcRequest.IGetPaymentMethods = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await paymentController.getPaymentMethods(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -82,7 +82,7 @@ export default (router: Router) => {
                     payload.locale = headers.language.toLowerCase();
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await paymentController.initiatePayment(payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -118,7 +118,7 @@ export default (router: Router) => {
                     let payload: IPaymentGrpcRequest.IGetPaymentStatus = ctx.request.query;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await paymentController.getPaymentStatus(payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -146,7 +146,7 @@ export default (router: Router) => {
                     let payload: IPaymentGrpcRequest.ICapturePayment = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await paymentController.capturePayment(payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -172,7 +172,7 @@ export default (router: Router) => {
                     let payload: IPaymentGrpcRequest.IReversePayment = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await paymentController.reversePayment(payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -200,7 +200,7 @@ export default (router: Router) => {
                     let payload: IPaymentGrpcRequest.IRefundPayment = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await paymentController.refundPayment(payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

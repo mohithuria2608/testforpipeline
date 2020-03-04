@@ -39,7 +39,7 @@ export class BaseSDM {
      * requests a client 
      * @param name - name of the function to hit
      */
-    async requestData(name: string, params: object): Promise<any> {
+    async   requestData(name: string, params: object): Promise<any> {
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
                 consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
@@ -62,7 +62,8 @@ export class BaseSDM {
                                 },
                                 createdAt: new Date().getTime(),
                             })
-                        }
+                        },
+                        inQ: true
                     })
                     if (error) { reject(error); }
                     else {

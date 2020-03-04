@@ -24,4 +24,6 @@ declare namespace IUserGrpcRequest {
         areaId: number,
         cityId: number,
     }
+
+    
 }

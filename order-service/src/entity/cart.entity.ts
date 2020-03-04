@@ -2,7 +2,7 @@
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import { consolelog } from '../utils'
+import { consolelog, hashObj } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
 import { promotionService, userService } from '../grpc/client'
@@ -35,6 +35,7 @@ export class CartClass extends BaseEntity {
 
     public cartSchema = Joi.object().keys({
         cartId: Joi.string().required().description("pk"),
+        cartUnique: Joi.string().required(),
         cmsCartRef: Joi.number().required(),
         userId: Joi.string().required().description("sk"),
         orderId: Joi.string().required().description("sk, UAE-1"),
@@ -252,7 +253,6 @@ export class CartClass extends BaseEntity {
                 if (user && user.id) {
                     if (user.cartId == payload.cartId) {
                         await this.createDefaultCart({
-                            cartId: payload.cartId,
                             userId: user.id
                         })
                         let getArg: IAerospike.Get = {
@@ -276,7 +276,8 @@ export class CartClass extends BaseEntity {
     async createDefaultCart(payload: IOrderGrpcRequest.ICreateDefaultCart) {
         try {
             let dataToSave: ICartRequest.ICartData = {
-                cartId: payload.cartId,
+                cartId: payload.userId,
+                cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
@@ -286,15 +287,16 @@ export class CartClass extends BaseEntity {
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],
-                address: null,
+                address: {},
                 amount: []
             }
+            console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
-                key: payload.cartId,
-                ttl: Constant.SERVER.DEFAULT_CART_TTL,
-                create: true,
+                key: payload.userId,
+                // ttl: Constant.SERVER.DEFAULT_CART_TTL,
+                createOrReplace: true,
             }
             await Aerospike.put(putArg)
             return {}
@@ -304,28 +306,32 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCartTTL(payload: IOrderGrpcRequest.IUpdateDefaultCartTTL) {
+    async resetCart(userId: string) {
         try {
-            let op = [
-                Aerospike.operations.touch(0)
-            ]
-            await Aerospike.operationsOnMap({ set: this.set, key: payload.cartId }, op)
+            let cartUpdate = {
+                cartUnique: this.ObjectId().toString(),
+                cmsCartRef: 0,
+                sdmOrderRef: 0,
+                cmsOrderRef: 0,
+                userId: userId,
+                cartId: userId,
+                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
+                items: [],
+                address: {},
+                amount: []
+            }
+            let putArg: IAerospike.Put = {
+                bins: cartUpdate,
+                set: this.set,
+                key: userId,
+                update: true,
+            }
+            await Aerospike.put(putArg)
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    async assignNewCart(oldCartId: string, cartId: string, userId: string) {
-        try {
-            await this.createDefaultCart({ userId: userId, cartId: cartId })
-            await Aerospike.remove({ set: this.set, key: oldCartId })
-            consolelog(process.cwd(), "assignNewCart1111111111111111112222222222222222", oldCartId, false)
-
-            return
-        } catch (error) {
-            consolelog(process.cwd(), "assignNewCart", JSON.stringify(error), false)
+            consolelog(process.cwd(), "resetCart", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -491,7 +497,8 @@ export class CartClass extends BaseEntity {
                 cms_user_id: userData.cmsUserRef,
                 website_id: 1,
                 category_id: 20,
-                cart_items: cart
+                cart_items: cart,
+                order_type: payload.orderType
             }
             if (payload.couponCode)
                 req['coupon_code'] = payload.couponCode
@@ -506,25 +513,42 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-            let req = await this.createCartReqForCms(payload, userData)
-            let cmsCart = await CMS.CartCMSE.createCart(req.req)
-            return cmsCart
+            if (payload.items && payload.items.length > 0) {
+                let req = await this.createCartReqForCms(payload, userData)
+                let cmsCart = await CMS.CartCMSE.createCart(req.req)
+                return cmsCart
+            } else {
+                return {
+                    cms_cart_id: 0,
+                    currency_code: "",
+                    cart_items: [],
+                    subtotal: 0,
+                    grandtotal: 0,
+                    tax: [],
+                    shipping: [],
+                    not_available: [],
+                    is_price_changed: false,
+                    coupon_code: "",
+                    discount_amount: 0,
+                    success: true
+                }
+            }
         } catch (error) {
             consolelog(process.cwd(), "createCartOnCMS", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, curItems?: any) {
+    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems?: any, ) {
         try {
             let prevCart: ICartRequest.ICartData
             if (curItems == undefined) {
-                console.log("validate cart 33333333333333", cartId)
-
                 prevCart = await this.getCart({ cartId: cartId })
                 curItems = prevCart.items
             }
             let dataToUpdate: ICartRequest.ICartData = {}
+            console.log("cmsCart", JSON.stringify(cmsCart))
+
             dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
@@ -541,8 +565,6 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
-                if (cmsCart.coupon_code == "FREEDELIVERY")
-                    cmsCart.discount_amount = 6.5
                 amount.push({
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
                     name: "Discount",
@@ -574,26 +596,22 @@ export class CartClass extends BaseEntity {
                     action: "add"
                 })
             }
-            let delivery = {
-                type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
-                name: "Delivery",
-                code: "DELIVERY",
-                amount: 0,
-                sequence: 4,
-                action: "add"
+            if (cmsCart.shipping && cmsCart.shipping.length > 0) {
+                if (cmsCart.shipping[0].price > 0)
+                    amount.push({
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
+                        name: "Delivery",
+                        code: cmsCart.shipping[0].method_code,
+                        amount: cmsCart.shipping[0].price,
+                        sequence: 4,
+                        action: "add"
+                    })
             }
-            if (cmsCart.grandtotal > 0) {
-                delivery.amount = 6.5
-                // if (cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY")
-                //     delivery.amount = 0
-            }
-            amount.push(delivery)
-
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal + delivery.amount - ((cmsCart.coupon_code && cmsCart.coupon_code == "FREEDELIVERY") ? 6.5 : 0),
+                amount: cmsCart.grandtotal,
                 sequence: 5,
                 action: "add"
             })
@@ -608,9 +626,21 @@ export class CartClass extends BaseEntity {
                         dataToUpdate['notAvailable'].push(obj)
                     }
                 })
-            } else {
+            } else
                 dataToUpdate['items'] = curItems
+
+            let updatedAt = new Date().getTime()
+            dataToUpdate['updatedAt'] = updatedAt
+            if (changeCartUnique) {
+                let dataToHash: ICartRequest.IDataToHash = {
+                    items: dataToUpdate['items'],
+                    promo: dataToUpdate['couponApplied'],
+                    updatedAt: updatedAt
+                }
+                dataToUpdate['cartUnique'] = hashObj(dataToHash)
+                // this.ObjectId().toString()
             }
+
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
@@ -621,7 +651,7 @@ export class CartClass extends BaseEntity {
             let newCart = await this.getCart({ cartId: cartId })
             return newCart
         } catch (error) {
-            consolelog(process.cwd(), "updateCart", JSON.stringify(error), false)
+            consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)
         }
     }

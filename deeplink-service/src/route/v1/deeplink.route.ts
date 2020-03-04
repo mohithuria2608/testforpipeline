@@ -2,7 +2,7 @@ import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
-import { consolelog, sendSuccess } from '../../utils'
+import { consolelog, sendSuccess, stsMsgI18 } from '../../utils'
 import { deeplinkController } from '../../controllers';
 import * as JOI from './common.route.validator';
 
@@ -28,7 +28,7 @@ export default (router: Router) => {
                     ctx.body = deeplink
                 }
                 catch (error) {
-                    consolelog(process.cwd(),'deeplink', JSON.stringify(error), false)
+                    consolelog(process.cwd(), 'deeplink', JSON.stringify(error), false)
                     throw error
                 }
             })
@@ -44,9 +44,10 @@ export default (router: Router) => {
                 },
             }), async (ctx) => {
                 try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: DeeplinkRequest.IDeeplinkMapper = { ...ctx.request.query, ...ctx.request.header };
                     let res = await deeplinkController.deepLinkMapper(payload)
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

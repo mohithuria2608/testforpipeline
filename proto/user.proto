@@ -6,6 +6,10 @@ service UserService {
     rpc FetchSession (IFetchSessionReq) returns (ISession) {}
     rpc FetchUser (IFetchUserReq) returns (IUserData) {}
     rpc FetchAddress (IFetchAddressReq) returns (IFetchAddressRes) {}
+    rpc CreateUserOnCms (IUserData) returns (IUserData) {}
+    rpc CreateAddressOnCms (ICreatAddressOnCmsReq) returns (ICreatAddressOnCmsRes) {}
+    rpc CreateUserOnSdm (IUserData) returns (IUserData) {}
+    rpc CreateAddressOnSdm (ICreatAddressOnSdmReq) returns (ICreatAddressOnSdmRes) {}
 }
 
 message IKafkaReq {
@@ -17,6 +21,7 @@ message IKafkaReq {
     optional int32 count = 6;
     optional string q = 7;
     optional string error = 8;
+    required bool inQ = 9;
 }
 
 message IAerospike {
@@ -104,6 +109,9 @@ message IUserData {
     required string medium = 13;
     required int32 createdAt = 14;
     optional string cartId = 15;
+    required int32 sdmCorpRef = 16;
+    required string fullPhnNo = 17;
+    required string password = 18;
 }
 
 message IFetchAddressReq {
@@ -128,3 +136,53 @@ message IFetchAddressRes {
     required int32 areaId = 13;
     required int32 countryId = 14;
 }
+
+message ICreatAddressOnCmsReq {
+    required string id = 1;
+    required int32 sdmUserRef = 2;
+    required int32 cmsUserRef = 3;
+    required bool isGuest = 4;
+    required string name = 5;
+    required string cCode = 6;
+    required string phnNo = 7;
+    required bool phnVerified = 8;
+    required string email = 9;
+    required int32 profileStep = 11;
+    required string socialKey = 12;
+    required string medium = 13;
+    required int32 createdAt = 14;
+    optional string cartId = 15;
+    required int32 sdmCorpRef = 16;
+    required string fullPhnNo = 17;
+    required string password = 18;
+    optional string asAddress = 19;
+    optional string cmsAddress = 20;
+    optional string sdmAddress = 21;
+}
+
+message ICreatAddressOnCmsRes { }
+
+message ICreatAddressOnSdmReq {
+    required string id = 1;
+    required int32 sdmUserRef = 2;
+    required int32 cmsUserRef = 3;
+    required bool isGuest = 4;
+    required string name = 5;
+    required string cCode = 6;
+    required string phnNo = 7;
+    required bool phnVerified = 8;
+    required string email = 9;
+    required int32 profileStep = 11;
+    required string socialKey = 12;
+    required string medium = 13;
+    required int32 createdAt = 14;
+    optional string cartId = 15;
+    required int32 sdmCorpRef = 16;
+    required string fullPhnNo = 17;
+    required string password = 18;
+    optional string asAddress = 19;
+    optional string cmsAddress = 20;
+    optional string sdmAddress = 21;
+}
+
+message ICreatAddressOnSdmRes { }

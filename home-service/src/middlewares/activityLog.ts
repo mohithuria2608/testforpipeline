@@ -35,15 +35,15 @@ export default (opts?): Middleware => {
                 },
                 createdAt: new Date().getTime(),
             }
-            let dataToSave = {
+            consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
+            kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOGGER,
                 mdb: {
                     create: true,
                     argv: JSON.stringify(data)
-                }
-            }
-            consolelog(process.cwd(), "activity log", JSON.stringify(data), true)
-            kafkaService.kafkaSync(dataToSave)
+                },
+                inQ: true
+            })
         })
 
         await next()

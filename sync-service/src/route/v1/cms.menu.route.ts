@@ -29,7 +29,7 @@ export default (router: Router) => {
                     let payload: ICmsMenuRequest.ICmsMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cmsMenuController.postMenu(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }
@@ -45,7 +45,11 @@ export default (router: Router) => {
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
-                    action: Joi.string().required().valid("update", "create").error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    action: Joi.string().required().valid(
+                        Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,
+                        Constant.DATABASE.TYPE.SYNC_ACTION.UPDATE,
+                        Constant.DATABASE.TYPE.SYNC_ACTION.RESET
+                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     data: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
@@ -55,7 +59,7 @@ export default (router: Router) => {
                     let payload: ICmsMenuRequest.ICmsMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cmsMenuController.postHiddenMenu(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

@@ -14,7 +14,8 @@ export class LogController {
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.CMS_REQUEST:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO:
-                case Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR: {
+                case Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR:
+                case Constant.DATABASE.TYPE.ACTIVITY_LOG.SMS: {
                     ENTITY.LoggerE.createOneEntity(data)
                     break;
                 }

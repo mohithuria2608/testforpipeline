@@ -27,8 +27,17 @@ spec:
           name: api
         - containerPort: 50051
           name: grpc-auth
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
+
+
 ---
 apiVersion: v1
 kind: Service
@@ -92,8 +101,16 @@ spec:
         - containerPort: 4001
         - containerPort: 50052
           name: grpc-user
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+          requests:
+            cpu: "1000m"
+            memory: "1000Mi"
       nodeSelector:
         agentpool: amfuatnenp1
+
 ---
 apiVersion: v1
 kind: Service
@@ -156,8 +173,16 @@ spec:
         - containerPort: 4002
         - containerPort: 50053
           name: grpc-menu
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
+
 ---
 apiVersion: v1
 kind: Service
@@ -221,8 +246,16 @@ spec:
         - containerPort: 4003
         - containerPort: 50054
           name: grpc-order
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+          requests:
+            cpu: "1000m"
+            memory: "1000Mi"
       nodeSelector:
         agentpool: amfuatnenp1
+
 ---
 apiVersion: v1
 kind: Service
@@ -286,6 +319,13 @@ spec:
           name: api
         - containerPort: 50056
           name: grpc-deeplink
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -350,8 +390,16 @@ spec:
           name: api
         - containerPort: 50057
           name: grpc-kafka
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "1000Mi"
+          requests:
+            cpu: "1000m"
+            memory: "1000Mi"
       nodeSelector:
-        agentpool: amfuatnenp1          
+        agentpool: amfuatnenp1
+
 ---
 apiVersion: v1
 kind: Service
@@ -414,6 +462,13 @@ spec:
           name: api
         - containerPort: 50055
           name: grpc-sync
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -479,6 +534,13 @@ spec:
           name: api
         - containerPort: 50058
           name: grpc-location
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -545,6 +607,13 @@ spec:
           name: api
         - containerPort: 50059
           name: grpc-location
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -610,6 +679,13 @@ spec:
           name: api
         - containerPort: 50060
           name: grpc-payment
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -675,6 +751,13 @@ spec:
           name: api
         - containerPort: 50061
           name: grpc-promotion
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -739,6 +822,13 @@ spec:
           name: api
         - containerPort: 50062
           name: grpc-upload
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -804,6 +894,14 @@ spec:
           name: api
         - containerPort: 50063
           name: grpc-log
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -869,6 +967,13 @@ spec:
           name: api
         - containerPort: 50064
           name: grpc-auth
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---

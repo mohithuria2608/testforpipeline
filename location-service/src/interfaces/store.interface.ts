@@ -35,7 +35,8 @@ declare namespace IStoreRequest {
     }
 
     interface IFetchStore {
-        storeId: number
+        storeId: number,
+        language: string,
     }
 
     interface IValidateCoordinates extends ICommonRequest.ICordinatesOpt { }

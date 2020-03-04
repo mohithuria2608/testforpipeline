@@ -14,6 +14,7 @@ message IKafkaReq {
     optional int32 count = 6;
     optional string q = 7;
     optional string error = 8;
+    required bool inQ = 9;
 }
 
 message IAerospike {

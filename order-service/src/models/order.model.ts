@@ -3,13 +3,14 @@ import * as Constant from '../constant';
 
 export interface Iorder extends Document {
     cartId: string,
+    cartUnique: string
     orderType: string,
     cmsCartRef: number,
     sdmOrderRef: number,
     cmsOrderRef: number,
     userId: string,
     sdmUserRef: number,
-    orderId: string,
+    country: string,
     status: string,
     sdmOrderStatus: number,
     items: any,
@@ -27,13 +28,18 @@ export interface Iorder extends Document {
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
+    cartUnique: { type: String },
     orderType: { type: String, required: true },
     cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true },
     userId: { type: String, required: true, index: true },
     sdmUserRef: { type: Number, required: true },
-    orderId: { type: String, required: true, index: true },
+    country: {
+        type: String, required: true, enum: [
+            Constant.DATABASE.COUNTRY.UAE
+        ]
+    },
     status: {
         type: String, enum: [
             Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
@@ -112,7 +118,7 @@ const orderSchema = new Schema({
         name_ar: { type: String },
     },
     payment: {
-        paymentMethodId: { type: Number, required: true, enum: [0, 1] },
+        paymentMethodId: { type: Number, enum: [0, 1] },
         amount: { type: Number, default: 0 },
         name: {
             type: String, enum: [
@@ -126,17 +132,19 @@ const orderSchema = new Schema({
                 Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION,
                 Constant.DATABASE.STATUS.TRANSACTION.CAPTURE,
                 Constant.DATABASE.STATUS.TRANSACTION.REFUND,
+                Constant.DATABASE.STATUS.TRANSACTION.FAILED,
             ]
         }
     },
     transLogs: { type: Schema.Types.Mixed, required: true },
-    isActive: { type: Number, required: true, enum: [0, 1] },
-    changePaymentMode: { type: Number, required: true, enum: [0, 1] },
-    paymentMethodAddedOnSdm: { type: Number, required: true, enum: [0, 1] },
+    isActive: { type: Number, required: true, enum: [0, 1], default: 1 },
+    changePaymentMode: { type: Number, required: true, enum: [0, 1], default: 0 },
+    paymentMethodAddedOnSdm: { type: Number, required: true, enum: [0, 1], default: 0 },
     createdAt: { type: Number, required: true },
     updatedAt: { type: Number, required: true },
     trackUntil: { type: Number, required: true },
-    validationRemarks: { type: String }
+    validationRemarks: { type: String },
+
 });
 
 export let order = model<Iorder>('order', orderSchema)

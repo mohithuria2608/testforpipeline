@@ -2,6 +2,7 @@ import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { syncService } from '../../grpc/client';
+import { appversion } from "../../appversion";
 
 export class MiscController {
 
@@ -34,7 +35,7 @@ export class MiscController {
                         minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
                     }
                 ],
-                errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR
+                errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language]
             }
         } catch (error) {
             consolelog(process.cwd(), "configuration", JSON.stringify(error), false)
@@ -109,6 +110,11 @@ export class MiscController {
                     case Constant.SET_NAME.CONFIG: {
                         let config = await syncService.fetchConfig({ store_code: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE })
                         consolelog(process.cwd(), "config", JSON.stringify(config), true)
+                        break;
+                    }
+                    case Constant.SET_NAME.APP_VERSION: {
+                        let config = await syncService.fetchAppversion({ isActive: 1 })
+                        consolelog(process.cwd(), "appversion", JSON.stringify(config), true)
                         break;
                     }
                 }

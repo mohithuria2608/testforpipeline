@@ -30,16 +30,6 @@ server.addService(orderProto.OrderService.service, {
             callback(grpcSendError(error))
         }
     },
-    updateCartTtl: async (call: IOrderGrpcRequest.IUpdateDefaultCartTTLReq, callback) => {
-        try {
-            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(call.request), true)
-            let res: {} = await ENTITY.CartE.updateCartTTL(call.request)
-            callback(null, res)
-        } catch (error) {
-            consolelog(process.cwd(), "updateCartTTL", JSON.stringify(error), false)
-            callback(grpcSendError(error))
-        }
-    },
     getCart: async (call: IOrderGrpcRequest.IGetCartReq, callback) => {
         try {
             consolelog(process.cwd(), "getCart", JSON.stringify(call.request), true)
@@ -73,7 +63,7 @@ server.addService(orderProto.OrderService.service, {
     }
 })
 
-server.bind(config.get("grpc.order.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.order.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.order.server"), true)
 server.start();

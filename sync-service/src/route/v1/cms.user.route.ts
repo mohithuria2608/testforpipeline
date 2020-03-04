@@ -29,7 +29,7 @@ export default (router: Router) => {
                     let payload: ICmsUserRequest.ICmsUser = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cmsUserController.postUser(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT,Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

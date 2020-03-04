@@ -1,8 +1,9 @@
 import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import { paymentService, userService } from '../../grpc/client'
+import { paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
+import { Aerospike } from '../../aerospike'
 
 export class WebhookNoonpayController {
 
@@ -28,38 +29,47 @@ export class WebhookNoonpayController {
                 let status = await paymentService.getPaymentStatus({
                     noonpayOrderId: payload.orderId,
                     storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                    paymentStatus:Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
                 })
-                let dataToUpdateOrder = {
-                    $addToSet: {
-                        transLogs: status
-                    },
-                    "payment.transactionId": status.transactions[0].id,
-                    "payment.status": status.transactions[0].type
-                }
-                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                if (order.payment.status == "AUTHORIZATION") {
-                    /**
-                     * @description update order on sdm with payment object
-                     */
-                    /**
-                    * @description : update user with new cart
-                    */
-                    let newCartId = ENTITY.OrderE.ObjectId().toString()
-                    ENTITY.CartE.assignNewCart(order.cartId, newCartId, order.userId)
-                    let asUserChange = {
-                        set: Constant.SET_NAME.USER,
-                        as: {
-                            update: true,
-                            argv: JSON.stringify({ userId: order.userId, cartId: newCartId })
-                        }
+                if (status.transactions && status.transactions.length > 0) {
+                    let dataToUpdateOrder = {
+                        $addToSet: {
+                            transLogs: status
+                        },
+                        "payment.transactionId": status.transactions[0].id,
+                        "payment.status": status.transactions[0].type
                     }
-                    await userService.sync(asUserChange)
-                    redirectUrl = redirectUrl + "payment/success?newCartId=" + newCartId
+                    order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                    if (order.payment.status == "AUTHORIZATION") {
+                        redirectUrl = redirectUrl + "payment/success"
+                        ENTITY.CartE.resetCart(order.userId)
+                    } else {
+                        let dataToUpdateOrder = {
+                            $addToSet: {
+                                transLogs: status
+                            },
+                            isActive: 0,
+                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                            updatedAt: new Date().getTime(),
+                            "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
+                        }
+                        order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                        redirectUrl = redirectUrl + "payment/failure"
+                    }
+                    return redirectUrl
                 } else {
+                    let dataToUpdateOrder = {
+                        $addToSet: {
+                            transLogs: status
+                        },
+                        isActive: 0,
+                        status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                        updatedAt: new Date().getTime(),
+                        "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
+                    }
+                    order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     redirectUrl = redirectUrl + "payment/failure"
                 }
-                return redirectUrl
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }

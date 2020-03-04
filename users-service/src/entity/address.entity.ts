@@ -97,6 +97,7 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
+            console.log("addressData", JSON.stringify(addressData))
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let deliveryAddress = {
                 id: id,
@@ -116,9 +117,9 @@ export class AddressEntity extends BaseEntity {
                 areaId: 16,// store.areaId
                 cityId: 17,// store.cityId
             };
-            consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
 
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
+                consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,
                     bins: deliveryAddress,
@@ -129,16 +130,19 @@ export class AddressEntity extends BaseEntity {
                 }
                 await Aerospike.listOperations(listAppendArg)
             } else {
+                deliveryAddress['description'] = store.location.description.substr(0, 10)
                 deliveryAddress['addressType'] = Constant.DATABASE.TYPE.ADDRESS.PICKUP
                 let dataToUpdate = {
                     pickup: [deliveryAddress]
                 }
-                let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
-                if (oldAdd && oldAdd.length > 0) {
-                    if (deliveryAddress.storeId == store.storeId) {
-                        return oldAdd[0]
-                    }
-                }
+                // let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
+                // if (oldAdd && oldAdd.length > 0) {
+                //     if (deliveryAddress.storeId == store.storeId) {
+                //         return oldAdd[0]
+                //     }
+                // }
+                consolelog(process.cwd(), "pickupAddress", JSON.stringify(deliveryAddress), false)
+
                 let putArg: IAerospike.Put = {
                     bins: dataToUpdate,
                     set: this.set,
@@ -151,7 +155,7 @@ export class AddressEntity extends BaseEntity {
 
             return deliveryAddress
         } catch (error) {
-            consolelog(process.cwd(), "addAddress", JSON.stringify(error), false)
+            consolelog(process.cwd(), "addAddress", error, false)
             return Promise.reject(error)
         }
     }
@@ -166,6 +170,10 @@ export class AddressEntity extends BaseEntity {
     async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
             let listaddress = await this.getAddress({ userId: userData.id, bin: bin })
+            console.log("listaddress", listaddress)
+            console.log("addressUpdate", addressUpdate)
+            console.log("bin", bin)
+            console.log("isDelete", isDelete)
             let sdmAddressRef = addressUpdate.sdmAddressRef ? addressUpdate.sdmAddressRef : 0
             let cmsAddressRef = addressUpdate.cmsAddressRef ? addressUpdate.cmsAddressRef : 0
             let index = listaddress.findIndex(x => x.id === addressUpdate.addressId);
@@ -232,6 +240,14 @@ export class AddressEntity extends BaseEntity {
    * */
     async addAddressOnSdm(userData: IUserRequest.IUserData) {
         try {
+            if (userData.asAddress && typeof userData.asAddress == 'string')
+                userData.asAddress = JSON.parse(userData.asAddress)
+            if (userData.asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) {
+                userData.asAddress[0].bldgName = ""
+                userData.asAddress[0].description = ""
+                userData.asAddress[0].flatNum = ""
+                userData.asAddress[0].addressType = "PICKUP"
+            }
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
@@ -300,7 +316,8 @@ export class AddressEntity extends BaseEntity {
                     cms: {
                         update: true,
                         argv: JSON.stringify(userData)
-                    }
+                    },
+                    inQ: true
                 })
             }
             return {}
@@ -332,20 +349,22 @@ export class AddressEntity extends BaseEntity {
         try {
             consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(userData.asAddress), false)
             let res = await CMS.AddressCMSE.createAddresssOnCms(userData)
-            if (res && res.customer_id) {
-                if (res.address_ids && res.address_ids.length > 0) {
-                    for (const iterator of res.address_ids) {
-                        let updateAddressOnAs: IAddressRequest.IUpdateAddress = {
-                            addressId: iterator.id,
-                            cmsAddressRef: parseInt(iterator.address_id),
+            if (res && res.customerId) {
+                if (res.addressIds && res.addressIds.length > 0) {
+                    for (const iterator of res.addressIds) {
+                        if (iterator.id && iterator.addressId) {
+                            let updateAddressOnAs: IAddressRequest.IUpdateAddress = {
+                                addressId: iterator.id,
+                                cmsAddressRef: parseInt(iterator.addressId),
+                            }
+                            let bin = ""
+                            userData.asAddress.forEach(obj => {
+                                if (obj.id == iterator.id)
+                                    bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                            })
+                            if (bin != "")
+                                await this.updateAddress(updateAddressOnAs, bin, userData, false)
                         }
-                        let bin = ""
-                        userData.asAddress.forEach(obj => {
-                            if (obj.id == iterator.id)
-                                bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-                        })
-                        if (bin != "")
-                            await this.updateAddress(updateAddressOnAs, bin, userData, false)
                     }
                 }
             }
@@ -371,24 +390,37 @@ export class AddressEntity extends BaseEntity {
         }
     }
 
-    async createCmsAddOnAs(userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.IAddress[]) {
+    async createCmsAddOnAs(userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.ICmsAddress[]) {
         try {
             for (const obj of cmsAddress) {
-                let bin = obj['address_type']
-                let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
-                if (store && store.length) {
-                    let add = {
-                        lat: parseFloat(obj.latitude),
-                        lng: parseFloat(obj.longitude),
-                        bldgName: obj.bldg_name,
-                        description: obj.description,
-                        flatNum: obj.flat_num,
-                        tag: obj.add_tag,
-                        addressType: bin,
-                        sdmAddressRef: parseInt(obj.sdm_address_ref),
-                        cmsAddressRef: 0,//obj.id,
+                if (obj.addressId && obj.sdmAddressRef) {
+                    let bin = obj['addressType']
+                    let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
+                    if (store && store.length) {
+                        let add = {
+                            lat: parseFloat(obj.latitude),
+                            lng: parseFloat(obj.longitude),
+                            bldgName: obj.bldgName,
+                            description: obj.description,
+                            flatNum: obj.flatNum,
+                            tag: obj.addTag,
+                            addressType: bin,
+                            sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
+                            cmsAddressRef: parseInt(obj.addressId),
+                        }
+                        let asAdd = await this.addAddress(userData, bin, add, store[0])
+                        if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
+                            userData.asAddress = [asAdd]
+                            kafkaService.kafkaSync({
+                                set: this.set,
+                                sdm: {
+                                    create: true,
+                                    argv: JSON.stringify(userData)
+                                },
+                                inQ: true
+                            })
+                        }
                     }
-                    this.addAddress(userData, bin, add, store[0])
                 }
             }
             return {}
@@ -400,7 +432,41 @@ export class AddressEntity extends BaseEntity {
 
     async createSdmAddOnCmsAndAs(userData: IUserRequest.IUserData, sdmAddress) {
         try {
-            for (const obj of sdmAddress) {
+            let asAddress = [];
+            for (const sdmAddObj of sdmAddress) {
+                if (sdmAddObj.WADDR_STATUS && sdmAddObj.WADDR_STATUS == '1') {
+                    let bin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                    if (sdmAddObj.ADDR_MAPCODE.X && sdmAddObj.ADDR_MAPCODE.Y) {
+                        let store: IStoreGrpcRequest.IStore[]
+                        store = await this.validateCoordinate(parseFloat(sdmAddObj.ADDR_MAPCODE.X), parseFloat(sdmAddObj.ADDR_MAPCODE.Y))
+                        if (store && store.length) {
+                            let addressPayload: IAddressRequest.IRegisterAddress = {
+                                lat: parseFloat(sdmAddObj.ADDR_MAPCODE.X),
+                                lng: parseFloat(sdmAddObj.ADDR_MAPCODE.Y),
+                                bldgName: sdmAddObj.ADDR_BLDGNAME,
+                                description: sdmAddObj.ADDR_DESC,
+                                flatNum: sdmAddObj.ADDR_FLATNUM,
+                                tag: Constant.DATABASE.TYPE.TAG.OTHER,
+                                sdmAddressRef: parseInt(sdmAddObj.ADDR_ID)
+                            }
+                            let addressData = await this.addAddress(userData, bin, addressPayload, store[0])
+                            asAddress.push(addressData)
+                        }
+                    }
+                }
+            }
+            if (asAddress && asAddress.length > 0) {
+                if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
+                    userData.asAddress = asAddress
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        cms: {
+                            create: true,
+                            argv: JSON.stringify(userData)
+                        },
+                        inQ: true
+                    })
+                }
             }
             return {}
         } catch (error) {

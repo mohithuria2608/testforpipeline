@@ -19,7 +19,7 @@ export default (router: Router) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let res = await miscController.configuration(headers);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, res)
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
                 }

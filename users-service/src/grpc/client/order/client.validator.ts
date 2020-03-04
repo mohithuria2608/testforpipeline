@@ -11,24 +11,7 @@ export class OrderServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    cartId: Joi.string().required(),
                     userId: Joi.string().required()
-                })
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(error.message)
-                resolve({})
-            } catch (error) {
-                reject(validatorErr(error.message))
-            }
-        })
-    }
-
-    async updateCartTtlValidator(data: IOrderGrpcRequest.IUpdateDefaultCartTTL) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    cartId: Joi.string().required()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

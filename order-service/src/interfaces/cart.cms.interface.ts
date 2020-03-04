@@ -7,7 +7,8 @@ declare namespace ICartCMSRequest {
         website_id: number,
         cart_items: ICMSCartItems[],
         category_id: number,
-        coupon_code?: string
+        coupon_code?: string,
+        order_type: string,
     }
 
     interface ICMSCartItems {
@@ -30,6 +31,7 @@ declare namespace ICartCMSRequest {
         subtotal: number,
         grandtotal: number,
         tax: ITax[]
+        shipping: IShipping[]
         not_available: number[],
         is_price_changed: boolean,
         coupon_code: string,
@@ -41,5 +43,11 @@ declare namespace ICartCMSRequest {
     interface ITax {
         tax_name: string,
         amount: number,
+    }
+
+    interface IShipping {
+        method_name: string,
+        price: number,
+        method_code: string
     }
 }

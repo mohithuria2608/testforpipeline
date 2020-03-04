@@ -2,6 +2,7 @@ import * as kafka from 'kafka-node';
 import { KafkaClientClass } from './client';
 import { consolelog } from "../utils"
 import * as Constant from '../constant'
+import { kafkaController } from '../controllers';
 
 class KafkaProducer {
 
@@ -31,6 +32,7 @@ class KafkaProducer {
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,
@@ -53,6 +55,9 @@ class KafkaProducer {
             }
         ], (error, data) => {
             if (error) {
+                let messages = JSON.parse(req.messages)
+                messages['inQ'] = false
+                kafkaController.kafkaSync(messages)
                 consolelog(process.cwd(), 'Err in producing to kafka topic', JSON.stringify(error), false);
             } else {
                 consolelog(process.cwd(), 'message produced to kafka successfully', JSON.stringify(data), true);

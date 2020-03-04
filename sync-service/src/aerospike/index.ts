@@ -33,7 +33,7 @@ class AerospikeClass {
                         totalTimeout: 1000
                     }
                     let aerospikeConfig = {
-                        
+
                         hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
@@ -58,6 +58,8 @@ class AerospikeClass {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         if (ENTITY.ConfigE.sindex && ENTITY.ConfigE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.ConfigE.sindex)
+                        if (ENTITY.AppversionE.sindex && ENTITY.AppversionE.sindex.length > 0)
+                            this.bootstrapIndex(ENTITY.AppversionE.sindex)
                         resolve({})
                     }
                 } catch (error) {
@@ -369,7 +371,7 @@ class AerospikeClass {
             }
         })
     }
-    
+
     async  udfRegister(argv) {
         return new Promise(async (resolve, reject) => {
             try {

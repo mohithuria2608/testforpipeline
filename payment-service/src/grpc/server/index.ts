@@ -119,7 +119,7 @@ server.addService(paymentProto.PaymentService.service, {
     }
 })
 
-server.bind(config.get("grpc.payment.server"), grpc.ServerCredentials.createInsecure())
+server.bind(config.get("grpc.payment.server"), grpc.ServerCredentials.createInsecure(), { "grpc.keepalive_timeout_ms": config.get("grpc.configuration.keepalive_timeout_ms") })
 
 consolelog(process.cwd(), "GRPC server running at", config.get("grpc.payment.server"), true)
 server.start();

@@ -19,7 +19,7 @@ export class OrderCMSEntity extends BaseCMS {
                 body: true
             }
             let cmsRes = await this.request(options, headers, form)
-            if (cmsRes[0]) {
+            if (cmsRes && cmsRes.length > 0) {
                 if (cmsRes[0].success)
                     return cmsRes[0]
                 else

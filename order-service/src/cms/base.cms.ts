@@ -50,7 +50,8 @@ export class BaseCMS {
                                 },
                                 createdAt: new Date().getTime(),
                             })
-                        }
+                        },
+                        inQ: true
                     })
                     consolelog(process.cwd(), "In request manager body", JSON.stringify(body), true)
                     resolve(body)
@@ -74,7 +75,8 @@ export class BaseCMS {
                                 },
                                 createdAt: new Date().getTime(),
                             })
-                        }
+                        },
+                        inQ: true
                     })
                     consolelog(process.cwd(), "In request manager err", error.message, true)
                     reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)

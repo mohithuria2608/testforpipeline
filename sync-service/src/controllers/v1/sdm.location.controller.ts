@@ -14,7 +14,7 @@ export class SdmLocationController {
     async syncLocationData(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
             await ENTITY.LocationE.fetchLocationFromSDM(payload);
-            kafkaService.kafkaSync({ set: Constant.SET_NAME.LOCATION, cms: { create: true, argv: JSON.stringify({ event: "location_sync" }) } });
+            kafkaService.kafkaSync({ set: Constant.SET_NAME.LOCATION, cms: { create: true, argv: JSON.stringify({ event: "location_sync" }) }, inQ: true });
         } catch (error) {
             consolelog(process.cwd(), "syncLocationData", error, false)
             return Promise.reject(error)

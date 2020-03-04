@@ -25,30 +25,12 @@ export class OrderSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.UpdateOrderResult
+            else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
+                return res.SDKResult
             else
                 return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-   * @method SDK
-   * */
-    async updateOrder(payload) {
-        try {
-            let data = {
-                name: "UpdateOrder",
-                req: payload
-            }
-            let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
-                return res.UpdateOrderResult
-            else
-                return Promise.reject(res)
-        } catch (error) {
-            consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -71,8 +53,10 @@ export class OrderSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.GetOrderDetailsResult
+            else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
+                return res.SDKResult
             else
-                return {}
+                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'getOrderDetail', JSON.stringify(error), false)
             return (error)
@@ -105,9 +89,10 @@ export class OrderSDMEntity extends BaseSDM {
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
                 return res.ProcessCreditCardPaymentResult
-            else {
+            else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
+                return res.SDKResult
+            else
                 return false
-            }
         } catch (error) {
             consolelog(process.cwd(), 'processCreditCardOnSdm', JSON.stringify(error), false)
             return (error)
