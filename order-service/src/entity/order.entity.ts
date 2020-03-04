@@ -618,6 +618,7 @@ export class OrderClass extends BaseEntity {
             setTimeout(async () => {
                 let recheck = true
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0 })
+                let oldStatus = order.oldStatus
                 if (order && order._id) {
                     consolelog(process.cwd(), "order step -8:       ", order.sdmOrderStatus, true)
                     if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
@@ -690,7 +691,10 @@ export class OrderClass extends BaseEntity {
                             }
                             if (recheck && sdmOrder && sdmOrder.OrderID) {
                                 consolelog(process.cwd(), "order step -9:       ", order.sdmOrderStatus, true)
-                                // if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
+                                if (
+                                    (parseInt(sdmOrder.Status) > oldStatus) ||
+                                    ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < oldStatus)
+                                ) {
                                     if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
                                         consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.paymentMethodId == 0) {
@@ -825,7 +829,7 @@ export class OrderClass extends BaseEntity {
                                         recheck = false
                                         consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
                                     }
-                                // }
+                                }
                             }
                             if (payload.timeInterval == 0)
                                 recheck = false
