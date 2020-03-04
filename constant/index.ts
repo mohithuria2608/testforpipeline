@@ -125,7 +125,8 @@ export const SERVER = {
     ANDROID_PACKAGE_NAME: "com.android.kfc",
     IOS_SCHEME_HOST: "americanaKFCUAE://",
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
-    AUTH_MECH: "Bearer"
+    AUTH_MECH: "Bearer",
+    ADDR_SHOW_TIME: 3,//hr
 };
 
 export const DATABASE = {
