@@ -635,7 +635,7 @@ export class OrderClass extends BaseEntity {
                                     updatedAt: new Date().getTime(),
                                     sdmOrderStatus: parseInt(sdmOrder.Status)
                                 }, { new: true })
-                            consolelog(process.cwd(), "SDM order status", sdmOrder.Status, true)
+                            consolelog(process.cwd(), "SDM order status", parseInt(sdmOrder.Status), true)
                             // if (recheck && sdmOrder.Total) {
                             //     consolelog(process.cwd(), "order step -4:       ", sdmOrder.ValidationRemarks, true)
                             //     let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
@@ -695,13 +695,14 @@ export class OrderClass extends BaseEntity {
                                     (parseInt(sdmOrder.Status) > oldStatus) ||
                                     ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < oldStatus)
                                 ) {
+                                    consolelog(process.cwd(), "order step -10:       ", parseInt(sdmOrder.Status), true)
                                     if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
                                         consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.paymentMethodId == 0) {
                                             consolelog(process.cwd(), "order step 2 :       ", parseInt(sdmOrder.Status), true)
                                         } else {
                                             consolelog(process.cwd(), "order step 3 :       ", parseInt(sdmOrder.Status), true)
-                                            if (sdmOrder.Status == 96) {
+                                            if (parseInt(sdmOrder.Status) == 96) {
                                                 consolelog(process.cwd(), "order step 4 :       ", parseInt(sdmOrder.Status), true)
                                                 if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION) {
                                                     consolelog(process.cwd(), "order step 5 :       ", parseInt(sdmOrder.Status), true)
@@ -733,12 +734,8 @@ export class OrderClass extends BaseEntity {
                                                     }
                                                 }
                                             }
-                                            else if (sdmOrder.Status == 0) {
+                                            else if (parseInt(sdmOrder.Status) == 0) {
                                                 consolelog(process.cwd(), "order step 9 :       ", parseInt(sdmOrder.Status), true)
-                                                order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                    updatedAt: new Date().getTime(),
-                                                    sdmOrderStatus: sdmOrder.Status
-                                                }, { new: true })
                                             }
                                         }
                                     }
