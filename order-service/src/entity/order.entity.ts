@@ -835,6 +835,8 @@ export class OrderClass extends BaseEntity {
                                     recheck = false
                             } else
                                 recheck = false
+
+                            recheck = false
                             consolelog(process.cwd(), "recheck", recheck, true)
                             if (recheck) {
                                 kafkaService.kafkaSync({
