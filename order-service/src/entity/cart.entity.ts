@@ -518,7 +518,7 @@ export class CartClass extends BaseEntity {
         }
     } O
 
-    async createCartnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             if (payload.items && payload.items.length > 0) {
                 let req = await this.createCartReqForCms(payload, userData)
