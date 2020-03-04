@@ -691,6 +691,7 @@ export class OrderClass extends BaseEntity {
                             }
                             if (recheck && sdmOrder && sdmOrder.OrderID) {
                                 consolelog(process.cwd(), "order step -9:       ", order.sdmOrderStatus, true)
+                                consolelog(process.cwd(), "order step -11:       ", oldStatus, true)
                                 if (
                                     (parseInt(sdmOrder.Status) > oldStatus) ||
                                     ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < oldStatus)
