@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as Constant from "../../constant";
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
@@ -6,24 +7,24 @@ import { Aerospike } from '../../aerospike'
 export class HiddenController {
     constructor() { }
 
-    /**
-    * @method BOOTSTRAP
-    * @description : Post bulk hidden data
-    * */
-    async bootstrapHidden() {
-        try {
-            await Aerospike.truncate({ set: ENTITY.HiddenE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
-            let hidden = JSON.parse(rawdata);
-            for (const iterator of hidden) {
-                ENTITY.HiddenE.bootstrapHidden(iterator)
-            }
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "bootstrapHidden", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
+    // /**
+    // * @method BOOTSTRAP
+    // * @description : Post bulk hidden data
+    // * */
+    // async bootstrapHidden() {
+    //     try {
+    //         await Aerospike.truncate({ set: ENTITY.HiddenE.set, before_nanos: 0 })
+    //         let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
+    //         let hidden = JSON.parse(rawdata);
+    //         for (const iterator of hidden) {
+    //             ENTITY.HiddenE.bootstrapHidden(iterator)
+    //         }
+    //         return {}
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "bootstrapHidden", JSON.stringify(error), false)
+    //         return Promise.reject(error)
+    //     }
+    // }
 
     /**
     * @method GET
@@ -32,7 +33,10 @@ export class HiddenController {
     async fetchHiddenProducts(headers: ICommonRequest.IHeaders, payload: IHiddenRequest.IFetchHidden) {
         try {
             payload['language'] = headers.language
-            return await ENTITY.HiddenE.getHiddenProducts(payload)
+            switch (payload.language) {
+                case Constant.DATABASE.LANGUAGE.EN: return ENTITY.HiddenEnE.getHiddenProducts(payload);
+                case Constant.DATABASE.LANGUAGE.AR: return ENTITY.HiddenArE.getHiddenProducts(payload);
+            }
         } catch (error) {
             consolelog(process.cwd(), "fetchHiddenProducts", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -47,7 +51,10 @@ export class HiddenController {
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv);
-            await ENTITY.HiddenE.postHiddenMenu(data.data[0]);
+            switch (data.data[0].language) {
+                case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HiddenEnE.postHiddenMenu(data.data[0]); break;
+                case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HiddenArE.postHiddenMenu(data.data[0]); break;
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)

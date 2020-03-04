@@ -5,21 +5,7 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
-export class HiddenClass extends BaseEntity {
-    public sindex: IAerospike.CreateIndex[] = [
-        {
-            set: this.set,
-            bin: 'menuId',
-            index: 'idx_' + this.set + '_' + 'menuId',
-            type: "NUMERIC"
-        },
-        {
-            set: this.set,
-            bin: 'language',
-            index: 'idx_' + this.set + '_' + 'language',
-            type: "STRING"
-        }
-    ]
+export class HiddenEnClass extends BaseEntity {
 
     public productSchema = Joi.object().keys({
         id: Joi.number().required().description("pk")
@@ -114,4 +100,4 @@ export class HiddenClass extends BaseEntity {
     }
 }
 
-export const HiddenE = new HiddenClass()
+export const HiddenEnE = new HiddenEnClass()
