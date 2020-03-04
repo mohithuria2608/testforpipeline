@@ -618,7 +618,7 @@ export class OrderClass extends BaseEntity {
             setTimeout(async () => {
                 let recheck = true
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0 })
-                let oldStatus = order.oldStatus
+                let oldStatus = order.sdmOrderStatus
                 if (order && order._id) {
                     consolelog(process.cwd(), "order step -8:       ", order.sdmOrderStatus, true)
                     if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
