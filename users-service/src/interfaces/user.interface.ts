@@ -60,10 +60,7 @@ declare namespace IUserRequest {
     }
 
     interface IEditProfile {
-        email?: string,
-        name?: string,
-        cCode?: string,
-        phnNo?: string,
+        name: string,
     }
 
     interface IFetchUser {

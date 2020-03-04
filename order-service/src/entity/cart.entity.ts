@@ -516,7 +516,7 @@ export class CartClass extends BaseEntity {
             consolelog(process.cwd(), "createCartReqForCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
-    } O
+    }
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
@@ -709,6 +709,10 @@ export class CartClass extends BaseEntity {
                 dataToUpdate['couponApplied'] = 1
             } else {
                 dataToUpdate['couponApplied'] = 0
+                dataToUpdate['freeItems'] = {
+                    ar: [],
+                    en: []
+                }
             }
             if (cmsCart.tax && cmsCart.tax.length > 0) {
                 amount.push({

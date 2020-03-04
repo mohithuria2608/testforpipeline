@@ -704,10 +704,7 @@ export class UserController {
 
     /**
     * @method PATCH
-    * @param {string=} email : email
     * @param {string=} name : name
-    * @param {string=} cCode : country code
-    * @param {string=} phnNo : phone number
     * */
     async editProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.IEditProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -717,67 +714,7 @@ export class UserController {
             }
             if (payload.name)
                 dataToUpdate['name'] = payload.name
-            if (payload.email && payload.email != userData.email) {
-                let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "email",
-                        value: payload.email
-                    },
-                    set: ENTITY.UserE.set,
-                    background: false,
-                }
-                let asUserByEmail = await Aerospike.query(queryArg)
-                if (asUserByEmail && asUserByEmail.id) {
-                    if (asUserByEmail.fullPhnNo != userData.fullPhnNo)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                }
-                let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
-                if (cmsUserByEmail && cmsUserByEmail.customerId) {
-                    if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                }
-                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
-                if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                    let phoneNoWithoutPlus = userData.fullPhnNo.replace('+', '')
-                    if (sdmUserByEmail.CUST_PHONELOOKUP != phoneNoWithoutPlus)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-                }
-                dataToUpdate['email'] = payload.email
-            }
-
-            if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
-                const fullPhnNo = payload.cCode + payload.phnNo;
-                const username = headers.brand + "_" + fullPhnNo;
-                let userchangePayload = {
-                    cCode: payload.cCode,
-                    phnNo: payload.phnNo,
-                    otp: Constant.SERVER.BY_PASS_OTP,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                    otpVerified: 0,
-                    brand: headers.brand,
-                    country: headers.country,
-                }
-                let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "username",
-                        value: username
-                    },
-                    set: ENTITY.UserE.set,
-                    background: false,
-                }
-                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                if (checkUser && checkUser.length > 0) {
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
-                }
-                await ENTITY.UserchangeE.buildUserchange(userData.id, userchangePayload)
-            }
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
-            if (payload.cCode && payload.phnNo && (userData.phnNo != payload.phnNo) && (userData.cCode != payload.cCode)) {
-                user['fullPhnNo'] = payload.cCode + payload.phnNo
-                user['phnNo'] = payload.phnNo
-                user['cCode'] = payload.cCode
-                user['phnVerified'] = 0
-            }
             return formatUserData(user, headers, auth.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "editProfile", JSON.stringify(error), false)
