@@ -683,7 +683,7 @@ export class OrderClass extends BaseEntity {
                                 })
                             }
                             if (recheck && sdmOrder && sdmOrder.OrderID) {
-                                if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || (parseInt(sdmOrder.Status) == 0 && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
+                                if ((parseInt(sdmOrder.Status) > order.sdmOrderStatus) || ((parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96) && parseInt(sdmOrder.Status) < order.sdmOrderStatus)) {
                                     if (parseInt(sdmOrder.Status) == 0 || parseInt(sdmOrder.Status) == 96 || parseInt(sdmOrder.Status) == 1) {
                                         consolelog(process.cwd(), "order step 1 :       ", parseInt(sdmOrder.Status), true)
                                         if (order.payment.paymentMethodId == 0) {
