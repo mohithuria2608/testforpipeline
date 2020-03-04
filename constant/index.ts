@@ -26,8 +26,8 @@ export enum SET_NAME {
     HOME_AR = "home_ar",
     MENU_EN = "menu_en",
     MENU_AR = "menu_ar",
-    UPSELL = "upsell",
-    HIDDEN = "hidden",
+    HIDDEN_AR = "hidden_ar",
+    HIDDEN_EN = "hidden_en",
     PROMOTION = "promotion",
     CART = "cart",
     ORDER = "order",
@@ -159,13 +159,7 @@ export const DATABASE = {
     UDF: {
         USER: {
             check_social_key: "check_social_key",
-        },
-        MENU: {
-            get_menu: "get_menu"
-        },
-        HIDDEN: {
-            get_hidden: "get_hidden"
-        },
+        }
     },
 
     CMS: {

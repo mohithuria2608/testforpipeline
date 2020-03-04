@@ -7,7 +7,7 @@ import { Aerospike } from '../aerospike'
 
 export class MenuClass extends BaseEntity {
 
-    
+
 
     constructor() {
         super(Constant.SET_NAME.MENU_EN)
@@ -35,32 +35,19 @@ export class MenuClass extends BaseEntity {
     * @method GRPC
     * @param {string} id : user id
     * */
-    async getMenu(payload: IMenuRequest.IFetchMenu) {
-        try {
-            let queryArg: IAerospike.Query = {
-                udf: {
-                    module: 'menu',
-                    func: Constant.DATABASE.UDF.MENU.get_menu,
-                    args: [payload.language],
-                    forEach: true
-                },
-                equal: {
-                    bin: "menuId",
-                    value: payload.menuId
-                },
-                set: this.set,
-                background: false,
-            }
-            let menu = await Aerospike.query(queryArg)
-            if (menu && menu.length > 0) {
-                return menu[0]
-            } else
-                return {}
-        } catch (error) {
-            consolelog(process.cwd(), "getMenu", JSON.stringify(error), false)
-            return Promise.reject(error)
+   async getMenu(payload: IMenuRequest.IFetchMenu) {
+    try {
+        let getArg: IAerospike.Get = {
+            key: payload.menuId,
+            set: this.set
         }
+        let menu = await Aerospike.get(getArg)
+        return menu
+    } catch (error) {
+        consolelog(process.cwd(), "getMenu en", JSON.stringify(error), false)
+        return Promise.reject(error)
     }
+}
 }
 
 export const MenuEnE = new MenuClass()

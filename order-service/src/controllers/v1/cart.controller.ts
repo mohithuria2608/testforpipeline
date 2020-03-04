@@ -41,9 +41,8 @@ export class CartController {
                     invalidMenu = true
             } else {
                 const defaultMenu = await menuService.fetchMenu({
+                    menuId: 1,
                     language: headers.language,
-                    country: headers.country,
-                    isDefault: true
                 })
                 if (
                     (defaultMenu.menuId && defaultMenu.menuId != payload.curMenuId)

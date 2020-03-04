@@ -8,7 +8,7 @@ export class HiddenClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
 
     constructor() {
-        super(Constant.SET_NAME.HIDDEN)
+        super(Constant.SET_NAME.HIDDEN_EN)
     }
 }
 

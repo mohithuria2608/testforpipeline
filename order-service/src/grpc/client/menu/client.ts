@@ -26,7 +26,7 @@ export class MenuService {
     async fetchMenu(payload: IMenuGrpcRequest.IFetchMenuReq): Promise<any> {
         return new Promise(async (resolve, reject) => {
             await menuServiceValidator.fetchMenu(payload)
-            this.menuClient.fetchMenu({ country: payload.country, language: payload.language, isDefault: payload.isDefault }, (error, res) => {
+            this.menuClient.fetchMenu({ menuId: payload.menuId, language: payload.language }, (error, res) => {
                 if (!error) {
                     consolelog(process.cwd(), "successfully fetched Menu", "", false)
                     resolve(JSON.parse(res.menu))

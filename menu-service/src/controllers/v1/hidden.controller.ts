@@ -7,24 +7,27 @@ import { Aerospike } from '../../aerospike'
 export class HiddenController {
     constructor() { }
 
-    // /**
-    // * @method BOOTSTRAP
-    // * @description : Post bulk hidden data
-    // * */
-    // async bootstrapHidden() {
-    //     try {
-    //         await Aerospike.truncate({ set: ENTITY.HiddenE.set, before_nanos: 0 })
-    //         let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
-    //         let hidden = JSON.parse(rawdata);
-    //         for (const iterator of hidden) {
-    //             ENTITY.HiddenE.bootstrapHidden(iterator)
-    //         }
-    //         return {}
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "bootstrapHidden", JSON.stringify(error), false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+    /**
+    * @method BOOTSTRAP
+    * @description : Post bulk hidden data
+    * */
+    async bootstrapHidden() {
+        try {
+            await Aerospike.truncate({ set: ENTITY.HiddenArE.set, before_nanos: 0 })
+            await Aerospike.truncate({ set: ENTITY.HiddenEnE.set, before_nanos: 0 })
+            let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
+            let menu = JSON.parse(rawdata);
+            for (const iterator of menu) {
+                ENTITY.HiddenArE.postHiddenMenu(iterator)
+                ENTITY.HiddenEnE.postHiddenMenu(iterator)
+            }
+            return {}
+
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapHidden", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 
     /**
     * @method GET
@@ -33,10 +36,13 @@ export class HiddenController {
     async fetchHiddenProducts(headers: ICommonRequest.IHeaders, payload: IHiddenRequest.IFetchHidden) {
         try {
             payload['language'] = headers.language
+            let menu = []
             switch (payload.language) {
-                case Constant.DATABASE.LANGUAGE.EN: return ENTITY.HiddenEnE.getHiddenProducts(payload);
-                case Constant.DATABASE.LANGUAGE.AR: return ENTITY.HiddenArE.getHiddenProducts(payload);
+                case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.HiddenEnE.getHiddenProducts(payload); break;
+                case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.HiddenArE.getHiddenProducts(payload); break;
             }
+            let hidden = menu.filter(elem => { return elem.name == "Upsell" })
+            return (hidden && hidden.length > 0) ? hidden[0].products : []
         } catch (error) {
             consolelog(process.cwd(), "fetchHiddenProducts", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -61,6 +67,25 @@ export class HiddenController {
             return Promise.reject(error)
         }
     }
+
+    /**
+   * @method GRPC
+   * @param {number} menuId :menuId
+   * @param {string} language :language
+   * */
+    // async grpcFetchHidden(payload: IMenuGrpcRequest.IFetchMenuData) {
+    //     try {
+    //         let menu = {}
+    //         switch (payload.language) {
+    //             case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.MenuEnE.getMenu({ menuId: payload.menuId }); break;
+    //             case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.MenuArE.getMenu({ menuId: payload.menuId }); break;
+    //         }
+    //         return { menu: JSON.stringify(menu) }
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)
+    //         return Promise.reject(error)
+    //     }
+    // }
 }
 
 export const hiddenController = new HiddenController();

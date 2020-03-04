@@ -35,27 +35,14 @@ export class MenuClass extends BaseEntity {
     * */
     async getMenu(payload: IMenuRequest.IFetchMenu) {
         try {
-            let queryArg: IAerospike.Query = {
-                udf: {
-                    module: 'menu',
-                    func: Constant.DATABASE.UDF.MENU.get_menu,
-                    args: [payload.language],
-                    forEach: true
-                },
-                equal: {
-                    bin: "menuId",
-                    value: payload.menuId
-                },
-                set: this.set,
-                background: false,
+            let getArg: IAerospike.Get = {
+                key: payload.menuId,
+                set: this.set
             }
-            let menu = await Aerospike.query(queryArg)
-            if (menu && menu.length > 0) {
-                return menu[0]
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.MENU_NOT_FOUND)
+            let menu = await Aerospike.get(getArg)
+            return menu
         } catch (error) {
-            consolelog(process.cwd(), "getMenu", JSON.stringify(error), false)
+            consolelog(process.cwd(), "getMenu ar", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

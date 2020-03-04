@@ -574,8 +574,126 @@ export class CartClass extends BaseEntity {
                 if (cmsCart.free_items && cmsCart.free_items != "") {
                     let freeItemSku = cmsCart.free_items.split(",")
                     dataToUpdate['freeItems'] = {
-                        ar: [],
-                        en: []
+                        ar: [
+                            {
+                                "id": 1793,
+                                "position": 0,
+                                "name": "free item 1 ar",
+                                "description": "",
+                                "inSide": 0,
+                                "finalPrice": 0,
+                                "specialPrice": 0,
+                                "catId": 40,
+                                "promoId": -1,
+                                "metaKeyword": [
+                                    "free item 1"
+                                ],
+                                "bundleProductOptions": [],
+                                "selectedItem": 0,
+                                "configurableProductOptions": [],
+                                "typeId": "simple",
+                                "originalTypeId": "simple",
+                                "items": [],
+                                "sku": 0,
+                                "sdmId": 0,
+                                "imageSmall": null,
+                                "imageThumbnail": "/imagestemp/0.png",
+                                "image": null,
+                                "taxClassId": 2,
+                                "virtualGroup": 0,
+                                "visibility": 4,
+                                "associative": 0
+                            },
+                            {
+                                "id": 1795,
+                                "position": 0,
+                                "name": "free item 2 ar",
+                                "description": "",
+                                "inSide": 0,
+                                "finalPrice": 0,
+                                "specialPrice": 0,
+                                "catId": 40,
+                                "promoId": -1,
+                                "metaKeyword": [
+                                    "free item 1"
+                                ],
+                                "bundleProductOptions": [],
+                                "selectedItem": 0,
+                                "configurableProductOptions": [],
+                                "typeId": "simple",
+                                "originalTypeId": "simple",
+                                "items": [],
+                                "sku": 0,
+                                "sdmId": 0,
+                                "imageSmall": null,
+                                "imageThumbnail": "/imagestemp/0.png",
+                                "image": null,
+                                "taxClassId": 2,
+                                "virtualGroup": 0,
+                                "visibility": 4,
+                                "associative": 0
+                            }
+                        ],
+                        en: [
+                            {
+                                "id": 1793,
+                                "position": 0,
+                                "name": "free item 1 en",
+                                "description": "",
+                                "inSide": 0,
+                                "finalPrice": 0,
+                                "specialPrice": 0,
+                                "catId": 40,
+                                "promoId": -1,
+                                "metaKeyword": [
+                                    "free item 1"
+                                ],
+                                "bundleProductOptions": [],
+                                "selectedItem": 0,
+                                "configurableProductOptions": [],
+                                "typeId": "simple",
+                                "originalTypeId": "simple",
+                                "items": [],
+                                "sku": 0,
+                                "sdmId": 0,
+                                "imageSmall": null,
+                                "imageThumbnail": "/imagestemp/0.png",
+                                "image": null,
+                                "taxClassId": 2,
+                                "virtualGroup": 0,
+                                "visibility": 4,
+                                "associative": 0
+                            },
+                            {
+                                "id": 1795,
+                                "position": 0,
+                                "name": "free item 2 en",
+                                "description": "",
+                                "inSide": 0,
+                                "finalPrice": 0,
+                                "specialPrice": 0,
+                                "catId": 40,
+                                "promoId": -1,
+                                "metaKeyword": [
+                                    "free item 1"
+                                ],
+                                "bundleProductOptions": [],
+                                "selectedItem": 0,
+                                "configurableProductOptions": [],
+                                "typeId": "simple",
+                                "originalTypeId": "simple",
+                                "items": [],
+                                "sku": 0,
+                                "sdmId": 0,
+                                "imageSmall": null,
+                                "imageThumbnail": "/imagestemp/0.png",
+                                "image": null,
+                                "taxClassId": 2,
+                                "virtualGroup": 0,
+                                "visibility": 4,
+                                "associative": 0
+                            }
+                        ]
                     }
                 }
                 amount.push({

@@ -36,27 +36,4 @@ export default (router: Router) => {
                     throw error
                 }
             })
-        .get('/fs',
-            async (ctx) => {
-                try {
-                    let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
-                    let menu = JSON.parse(rawdata);
-                    ctx.body = menu
-                }
-                catch (error) {
-                    throw error
-                }
-            })
-        .get('/as',
-            async (ctx) => {
-                try {
-                    // var myMessage = protobuf.Writer.create()
-                    //     .string(JSON.stringify(await ENTITY.MenuE.getMenu({ menuId: 1, language: "En" })))
-                    //     .finish();
-                    ctx.body = await ENTITY.MenuEnE.getMenu({ menuId: 1, language: "Ar" })
-                }
-                catch (error) {
-                    throw error
-                }
-            })
 }
