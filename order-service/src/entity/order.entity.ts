@@ -617,7 +617,7 @@ export class OrderClass extends BaseEntity {
         try {
             setTimeout(async () => {
                 let recheck = true
-                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0 })
+                let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, selFreeItem: 0, freeItems: 0 })
                 let oldStatus = order.sdmOrderStatus
                 if (order && order._id) {
                     consolelog(process.cwd(), "order step 0:       ", order.sdmOrderStatus, true)
@@ -831,12 +831,12 @@ export class OrderClass extends BaseEntity {
                                         }
                                     }
                                 }
-                                if (payload.timeInterval == 0)
-                                    recheck = false
                             } else
                                 recheck = false
 
-                            // recheck = false
+                            if (payload.timeInterval == 0)
+                                recheck = false
+                            recheck = false
                             consolelog(process.cwd(), "recheck", recheck, true)
                             if (recheck) {
                                 kafkaService.kafkaSync({
@@ -851,7 +851,6 @@ export class OrderClass extends BaseEntity {
                         }
                     }
                 }
-
             }, payload.timeInterval)
             return {}
         } catch (error) {
