@@ -133,15 +133,7 @@ export class OrderController {
                  * @description step 3 create order on MONGO synchronously
                  * @description step 4 inititate payment on Noonpay synchronously
                  */
-                let postCartPayload: ICartRequest.IValidateCart = {
-                    cartId: payload.cartId,
-                    curMenuId: payload.curMenuId,
-                    menuUpdatedAt: payload.menuUpdatedAt,
-                    couponCode: payload.couponCode,
-                    items: payload.items,
-                    orderType: payload.orderType
-                }
-                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
 
                 // let getCurrentCart: ICartRequest.ICartData
