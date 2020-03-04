@@ -414,7 +414,7 @@ export const start = (async () => {
       "licenseCode": "AmericanaWeb",
       "conceptID": 3,
       "order": {
-        "AddressID": "10512559",
+        "AddressID": "10514480",// "10512559",
         // "Comps": {
         //   "KeyValueOfdecimalCCompkckD9yn_P": {
         //     Key: 7193,
@@ -428,7 +428,7 @@ export const start = (async () => {
         // },
         "ConceptID": "3",
         "CountryID": 1,
-        "CustomerID": "7694266",
+        "CustomerID": "7695133",// "7694266",
         "DeliveryChargeID": 279,
         "DistrictID": -1,
         "Entries": {
@@ -567,7 +567,7 @@ export const start = (async () => {
         "OrderMode": "1",
         "OrderType": 0,
         "ProvinceID": 7,
-        "StoreID": "1219",
+        "StoreID": "1240",//"1219",
         "StreetID": 315
       },
       "autoApprove": "true",
@@ -576,7 +576,7 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39796151 })
+    let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39809766 })
 
   } catch (error) {
     console.error(error)

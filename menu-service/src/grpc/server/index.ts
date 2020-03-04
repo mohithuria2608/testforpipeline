@@ -35,9 +35,11 @@ server.addService(menuProto.MenuService.service, {
             if (call.request.set === Constant.SET_NAME.MENU_EN || call.request.set === Constant.SET_NAME.MENU_AR) {
                 let res = await menuController.syncFromKafka(call.request)
                 callback(null, res)
-            } else {
+            } else if (call.request.set === Constant.SET_NAME.HIDDEN_EN || call.request.set === Constant.SET_NAME.HIDDEN_AR) {
                 let res = await hiddenController.syncFromKafka(call.request)
                 callback(null, res)
+            } else {
+                callback("unhandled error in sync menu")
             }
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
