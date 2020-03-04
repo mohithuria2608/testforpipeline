@@ -12,9 +12,14 @@ declare namespace ICartRequest {
         createdAt?: number,
         updatedAt?: number,
         items?: any,
+        notAvailable?: any
         address?: IAddress,
         amount?: IAmount[],
-        store?: IStore
+        store?: IStore,
+        freeItems?: {
+            ar?: any
+            en?: any
+        }
     }
 
     interface IAmount {
@@ -58,7 +63,7 @@ declare namespace ICartRequest {
         curMenuId: number,
         menuUpdatedAt: number,
         couponCode?: string,
-        items: any
+        items: any,
     }
 
     interface IGetCart extends ICommonRequest.ICordinatesOpt {
