@@ -838,16 +838,16 @@ export class OrderClass extends BaseEntity {
                                 recheck = false
                             recheck = false
                             consolelog(process.cwd(), "recheck", recheck, true)
-                            if (recheck) {
-                                kafkaService.kafkaSync({
-                                    set: this.set,
-                                    sdm: {
-                                        get: true,
-                                        argv: JSON.stringify(payload)
-                                    },
-                                    inQ: true
-                                })
-                            }
+                            // if (recheck) {
+                            //     kafkaService.kafkaSync({
+                            //         set: this.set,
+                            //         sdm: {
+                            //             get: true,
+                            //             argv: JSON.stringify(payload)
+                            //         },
+                            //         inQ: true
+                            //     })
+                            // }
                         }
                     }
                 }
