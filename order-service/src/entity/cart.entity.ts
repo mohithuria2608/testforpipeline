@@ -293,7 +293,8 @@ export class CartClass extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 items: [],
                 address: {},
-                amount: []
+                amount: [],
+                freeItems: { en: [], ar: [] }
             }
             console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
@@ -325,7 +326,8 @@ export class CartClass extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 items: [],
                 address: {},
-                amount: []
+                amount: [],
+                freeItems: { en: [], ar: [] }
             }
             let putArg: IAerospike.Put = {
                 bins: cartUpdate,
@@ -514,9 +516,9 @@ export class CartClass extends BaseEntity {
             consolelog(process.cwd(), "createCartReqForCms", JSON.stringify(error), false)
             return Promise.reject(error)
         }
-    }
+    } O
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
+    async createCartnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
             if (payload.items && payload.items.length > 0) {
                 let req = await this.createCartReqForCms(payload, userData)
