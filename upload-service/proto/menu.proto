@@ -58,9 +58,8 @@ message IKafkaRes {
 }
 
 message IFetchMenu {
-    required string country = 1;
-    required bool isDefault = 2;
-    required string language = 3;
+    required int32 menuId = 1;
+    required string language = 2;
 }
 
 message IMenu {

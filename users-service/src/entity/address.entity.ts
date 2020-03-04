@@ -254,7 +254,7 @@ export class AddressEntity extends BaseEntity {
                 language: "En",
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
-                    ADDR_AREAID: 16,// 1786,
+                    ADDR_AREAID: 1786,//  16
                     ADDR_BLDGNAME: userData.asAddress[0].bldgName,
                     ADDR_BLDGNUM: userData.asAddress[0].bldgName,
                     ADDR_CITYID: 17,
@@ -262,7 +262,7 @@ export class AddressEntity extends BaseEntity {
                     ADDR_COUNTRYID: 1,
                     ADDR_CUSTID: userData.sdmUserRef,
                     ADDR_DESC: userData.asAddress[0].description,
-                    ADDR_DISTRICTID: 1008,// 1021,
+                    ADDR_DISTRICTID: 1021,// 1008
                     ADDR_FLATNUM: userData.asAddress[0].flatNum,
                     ADDR_FLOOR: userData.asAddress[0].flatNum,
                     ADDR_MAPCODE: {
@@ -288,7 +288,7 @@ export class AddressEntity extends BaseEntity {
                             PHONE_TYPE: 2,
                         }
                     },
-                    WADDR_AREAID: 16,// 1786,
+                    WADDR_AREAID: 1786,// 16
                     WADDR_BUILD_NAME: userData.asAddress[0].bldgName,
                     WADDR_BUILD_NUM: userData.asAddress[0].bldgName,
                     WADDR_BUILD_TYPE: -1,
@@ -296,7 +296,7 @@ export class AddressEntity extends BaseEntity {
                     WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
                     WADDR_DIRECTIONS: userData.asAddress[0].description,
-                    WADDR_DISTRICTID: 1008,// 1021,
+                    WADDR_DISTRICTID: 1021,// 1008
                     WADDR_DISTRICT_TEXT: "Default",
                     WADDR_MNUID: 4,
                     WADDR_PROVINCEID: 7,

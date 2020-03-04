@@ -30,7 +30,7 @@ export class HiddenEnClass extends BaseEntity {
     })
 
     constructor() {
-        super(Constant.SET_NAME.HIDDEN)
+        super(Constant.SET_NAME.HIDDEN_EN)
     }
     /**
      * @method BOOTSTRAP
@@ -74,27 +74,14 @@ export class HiddenEnClass extends BaseEntity {
     * */
     async getHiddenProducts(payload: IHiddenRequest.IFetchHidden) {
         try {
-            let queryArg: IAerospike.Query = {
-                udf: {
-                    module: 'hidden',
-                    func: Constant.DATABASE.UDF.HIDDEN.get_hidden,
-                    args: [payload.language],
-                    forEach: true
-                },
-                equal: {
-                    bin: "menuId",
-                    value: parseInt(payload.menuId.toString())
-                },
-                set: this.set,
-                background: false,
+            let getArg: IAerospike.Get = {
+                key: parseInt(payload.menuId.toString()),
+                set: this.set
             }
-            let hidden = await Aerospike.query(queryArg)
-            if (hidden && hidden.length > 0) {
-                return hidden[0].categories[0].products
-            } else
-                return []
+            let hidden = await Aerospike.get(getArg)
+            return hidden.categories
         } catch (error) {
-            consolelog(process.cwd(), "getHiddenProducts", JSON.stringify(error), false)
+            consolelog(process.cwd(), "getHiddenProducts en", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

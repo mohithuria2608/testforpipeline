@@ -5,6 +5,6 @@ export let bootstrap = async function (server) {
 
     await Aerospike.init();
     menuController.bootstrapMenu()
-    // hiddenController.bootstrapHidden()
+    hiddenController.bootstrapHidden()
     return
 }

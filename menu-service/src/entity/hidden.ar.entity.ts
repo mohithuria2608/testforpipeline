@@ -30,24 +30,7 @@ export class HiddenArClass extends BaseEntity {
     })
 
     constructor() {
-        super(Constant.SET_NAME.HIDDEN)
-    }
-    /**
-     * @method BOOTSTRAP
-     * */
-    async bootstrapHidden(data) {
-        try {
-            let putArg: IAerospike.Put = {
-                bins: data,
-                set: this.set,
-                key: data.id,
-                create: true,
-            }
-            await Aerospike.put(putArg)
-            return {}
-        } catch (error) {
-            return {}
-        }
+        super(Constant.SET_NAME.HIDDEN_AR)
     }
 
     /**
@@ -74,27 +57,14 @@ export class HiddenArClass extends BaseEntity {
     * */
     async getHiddenProducts(payload: IHiddenRequest.IFetchHidden) {
         try {
-            let queryArg: IAerospike.Query = {
-                udf: {
-                    module: 'hidden',
-                    func: Constant.DATABASE.UDF.HIDDEN.get_hidden,
-                    args: [payload.language],
-                    forEach: true
-                },
-                equal: {
-                    bin: "menuId",
-                    value: parseInt(payload.menuId.toString())
-                },
-                set: this.set,
-                background: false,
+            let getArg: IAerospike.Get = {
+                key: parseInt(payload.menuId.toString()),
+                set: this.set
             }
-            let hidden = await Aerospike.query(queryArg)
-            if (hidden && hidden.length > 0) {
-                return hidden[0].categories[0].products
-            } else
-                return []
+            let hidden = await Aerospike.get(getArg)
+            return hidden.categories
         } catch (error) {
-            consolelog(process.cwd(), "getHiddenProducts", JSON.stringify(error), false)
+            consolelog(process.cwd(), "getHiddenProducts ar", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

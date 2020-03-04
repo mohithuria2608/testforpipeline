@@ -49,15 +49,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    email: Joi.string().email().lowercase().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
-                    name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
-                    cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
-                    phnNo: Joi.string().min(9).max(9).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
-
-                    /**
-                     * @description allow these keys
-                     */
-                    isGuest: Joi.any().description("allow for android")
+                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
                 }
             }),
             async (ctx) => {

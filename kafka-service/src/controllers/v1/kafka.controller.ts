@@ -296,7 +296,7 @@ export class KafkaController {
                     }
                     break;
                 }
-                case Constant.SET_NAME.HIDDEN: {
+                case Constant.SET_NAME.HIDDEN_EN: case Constant.SET_NAME.HIDDEN_AR:{
                     let messages = null;
                     let topic = null
                     let partition = 0

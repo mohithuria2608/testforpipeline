@@ -16,6 +16,7 @@ export class CartController {
      * @param {number=} lng :longitude
      * @param {string=} couponCode :couponCode
      * @param {Array} items :array of products
+     * @param {Array} selectedFreeItem :{ar:[],en:[]}
      * */
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -41,9 +42,8 @@ export class CartController {
                     invalidMenu = true
             } else {
                 const defaultMenu = await menuService.fetchMenu({
+                    menuId: 1,
                     language: headers.language,
-                    country: headers.country,
-                    isDefault: true
                 })
                 if (
                     (defaultMenu.menuId && defaultMenu.menuId != payload.curMenuId)
@@ -61,7 +61,7 @@ export class CartController {
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
             console.log("cmsValidatedCart", JSON.stringify(cmsValidatedCart))
-            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, true, payload.items)
+            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, true, payload.items, payload.selFreeItem)
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
             res['storeOnline'] = storeOnline
