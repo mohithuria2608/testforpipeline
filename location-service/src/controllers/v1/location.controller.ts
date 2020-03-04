@@ -126,7 +126,8 @@ export class LocationController {
             await Promise.all([
                 cityController.postOnCMS(),
                 areaController.postOnCMS(),
-                countryController.postOnCMS()
+                storeController.postOnCMS()
+                // countryController.postOnCMS()
             ]);
         } catch (error) {
             consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)

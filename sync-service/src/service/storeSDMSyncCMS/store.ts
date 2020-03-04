@@ -20,38 +20,34 @@ export default async function () {
         if (store.STR_ISACTIVE === "true") {
             if (store.Fences && store.Locations) {
                 for (let i = 0; i < store.Fences.CC_STORE_MAP_FENCE.length; i++) {
-                    // let areaDetail = await getAreaDetail(parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID));
+                    let areaDetail = await getAreaDetail(parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID));
                     let saveData = {
-                        name: store.STR_NAME || "",
-                        sdm_storeid: store.STR_ID,
-                        store_id: "1",
+                        sdmStoreId: store.STR_ID,
+                        ...areaDetail,
                         menuId: parseInt(store.STR_WEB_MNUID),
-                        latitude: parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE),
-                        longitude: parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LONGITUDE),
-                        email: 'test@mail.com',
-                        phone_one: store.STR_PHONE1 || "",
-                        phone_two: store.STR_PHONE2 || "",
-                        working_hours: 3,
-                        geofence_type: 3,
-                        geofence_area_code: 3,
-                        description: 'Some description',
-                        address: store.STR_ADDRESS || "",
-                        geofence_coordinates: "55.3366541862488,25.2316916616407;55.3373193740845,25.2311287579901",
-                        os_home_delivery: "0",
-                        os_pick_up: "0",
-                        os_take_away: "1",
-                        map_id: "123",
-                        language: "1",
-                        city: "2",
-                        country: "IND",
-                        region: "2",
-                        start_date: "",
-                        end_date: "",
-                        status: "1",
-                        is_global: "1",
-                        home_delivery_status: "1",
-                        pickup_status: "1",
-                        takeaway_status: "0",
+                        areaId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID),
+                        streetId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_STREETID),
+                        districtId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_DISTRICTID),
+                        mapId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_ID),
+                        name_en: store.STR_NAME || "",
+                        name_ar: store.STR_NAMEUN || "",
+                        phone1: store.STR_PHONE1 || "",
+                        phone2: store.STR_PHONE2 || "",
+                        services: getDiffServices(store.STR_SERVICES),
+                        active: 1,
+                        location: {
+                            description: store.Locations.CC_STORE_MAP_LOCATION.MAPL_DESCRIPTION,
+                            latitude: parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE),
+                            longitude: parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LONGITUDE),
+                        },
+                        address_en: store.STR_ADDRESS || "",
+                        address_ar: store.STR_ADDRESSUN || "",
+                        geoFence: createGeoFence(
+                            store.Fences.CC_STORE_MAP_FENCE[i].MAPF_LATITUDE,
+                            store.Fences.CC_STORE_MAP_FENCE[i].MAPF_LONGITUDE
+                        ),
+                        startTime: new Date(store.STR_WH_STARTTIME),
+                        endTime: new Date(store.STR_WH_ENDTIME),
                         monday_status: "0",
                         monday_open: "10:00 pm",
                         monday_close: "10:00 pm",
@@ -82,8 +78,8 @@ export default async function () {
                     // save and insert data into database
                     await Aerospike.put({
                         bins: saveData,
-                        set: Constant.SET_NAME.SYNC_STORE_EN,
-                        key: saveData.sdm_storeid,
+                        set: Constant.SET_NAME.SYNC_STORE,
+                        key: saveData.sdmStoreId,
                         createOrReplace: true
                     });
                 }

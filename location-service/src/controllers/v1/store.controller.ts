@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
+import * as Utils from "../../utils";
 import { Aerospike } from '../../aerospike'
 
 export class StoreController {
@@ -92,6 +93,12 @@ export class StoreController {
             consolelog(process.cwd(), "syncStores", JSON.stringify(error), false)
             return Promise.reject(error)
         }
+    }
+
+    /** post on CMS */
+    async postOnCMS() {
+        let storesData = await ENTITY.SyncStoreE.getList();
+        await Utils.sendRequestToCMS('SYNC_STORE', storesData);
     }
 }
 
