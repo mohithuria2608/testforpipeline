@@ -7,6 +7,7 @@ import route from './route'
 import * as SDM from './sdm';
 import * as ENTITY from './entity';
 import * as CMS from './cms';
+import * as Constant from './constant'
 
 const app = new Koa()
 
@@ -411,21 +412,10 @@ export const start = (async () => {
 
     await bootstrap(server)
     let order = {
-      "licenseCode": "AmericanaWeb",
+      "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
       "conceptID": 3,
       "order": {
         "AddressID": "10514480",// "10512559",
-        // "Comps": {
-        //   "KeyValueOfdecimalCCompkckD9yn_P": {
-        //     Key: 7193,
-        //     Value: {
-        //       Amount: "11",
-        //       CompID: 7193,
-        //       EnterAmount: "11",
-        //       Name: "10% W.F. Discount"
-        //     }
-        //   }
-        // },
         "ConceptID": "3",
         "CountryID": 1,
         "CustomerID": "7695133",// "7694266",
@@ -576,7 +566,7 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39809766 })
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39809766 })
 
   } catch (error) {
     console.error(error)

@@ -149,7 +149,7 @@ export class OrderController {
                     // getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
                     getCurrentCart['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
-                    getCurrentCart = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items)
+                    getCurrentCart = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items, payload.selFreeItem)
                     getCurrentCart['promo'] = promo ? promo : {}
                     return { cartValidate: getCurrentCart }
                 }

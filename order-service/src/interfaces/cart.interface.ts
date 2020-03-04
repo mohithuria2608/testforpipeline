@@ -64,6 +64,10 @@ declare namespace ICartRequest {
         menuUpdatedAt: number,
         couponCode?: string,
         items: any,
+        selFreeItem?: {
+            ar?: any
+            en?: any
+        }
     }
 
     interface IGetCart extends ICommonRequest.ICordinatesOpt {

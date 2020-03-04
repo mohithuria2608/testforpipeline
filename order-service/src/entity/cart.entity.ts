@@ -207,7 +207,11 @@ export class CartClass extends BaseEntity {
         freeItems: Joi.object().keys({
             ar: Joi.array().items(this.itemSchema),
             en: Joi.array().items(this.itemSchema)
-        })
+        }),
+        selFreeItem: Joi.object().keys({
+            ar: Joi.array().items(this.itemSchema),
+            en: Joi.array().items(this.itemSchema)
+        }),
     })
 
     /**
@@ -520,7 +524,11 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
+
             if (payload.items && payload.items.length > 0) {
+                if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
+                    payload.items = payload.items.concat(payload.selFreeItem.en)
+                }
                 let req = await this.createCartReqForCms(payload, userData)
                 let cmsCart = await CMS.CartCMSE.createCart(req.req)
                 return cmsCart
@@ -547,7 +555,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems?: any, ) {
+    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems: any, selFreeItem: any) {
         try {
             let prevCart: ICartRequest.ICartData
             if (curItems == undefined) {
@@ -573,129 +581,137 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
-                if (cmsCart.free_items && cmsCart.free_items != "") {
-                    let freeItemSku = cmsCart.free_items.split(",")
+                if (selFreeItem && selFreeItem.en && selFreeItem.en.length > 0) {
                     dataToUpdate['freeItems'] = {
-                        ar: [
-                            {
-                                "id": 1793,
-                                "position": 0,
-                                "name": "free item 1 ar",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 0,
-                                "specialPrice": 0,
-                                "catId": 40,
-                                "promoId": -1,
-                                "metaKeyword": [
-                                    "free item 1"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "typeId": "simple",
-                                "originalTypeId": "simple",
-                                "items": [],
-                                "sku": 0,
-                                "sdmId": 0,
-                                "imageSmall": null,
-                                "imageThumbnail": "/imagestemp/0.png",
-                                "image": null,
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            },
-                            {
-                                "id": 1795,
-                                "position": 0,
-                                "name": "free item 2 ar",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 0,
-                                "specialPrice": 0,
-                                "catId": 40,
-                                "promoId": -1,
-                                "metaKeyword": [
-                                    "free item 1"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "typeId": "simple",
-                                "originalTypeId": "simple",
-                                "items": [],
-                                "sku": 0,
-                                "sdmId": 0,
-                                "imageSmall": null,
-                                "imageThumbnail": "/imagestemp/0.png",
-                                "image": null,
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            }
-                        ],
-                        en: [
-                            {
-                                "id": 1793,
-                                "position": 0,
-                                "name": "free item 1 en",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 0,
-                                "specialPrice": 0,
-                                "catId": 40,
-                                "promoId": -1,
-                                "metaKeyword": [
-                                    "free item 1"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "typeId": "simple",
-                                "originalTypeId": "simple",
-                                "items": [],
-                                "sku": 0,
-                                "sdmId": 0,
-                                "imageSmall": null,
-                                "imageThumbnail": "/imagestemp/0.png",
-                                "image": null,
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            },
-                            {
-                                "id": 1795,
-                                "position": 0,
-                                "name": "free item 2 en",
-                                "description": "",
-                                "inSide": 0,
-                                "finalPrice": 0,
-                                "specialPrice": 0,
-                                "catId": 40,
-                                "promoId": -1,
-                                "metaKeyword": [
-                                    "free item 1"
-                                ],
-                                "bundleProductOptions": [],
-                                "selectedItem": 0,
-                                "configurableProductOptions": [],
-                                "typeId": "simple",
-                                "originalTypeId": "simple",
-                                "items": [],
-                                "sku": 0,
-                                "sdmId": 0,
-                                "imageSmall": null,
-                                "imageThumbnail": "/imagestemp/0.png",
-                                "image": null,
-                                "taxClassId": 2,
-                                "virtualGroup": 0,
-                                "visibility": 4,
-                                "associative": 0
-                            }
-                        ]
+                        ar: [],
+                        en: []
+                    }
+                    dataToUpdate['selFreeItem'] = selFreeItem
+                } else {
+                    if (cmsCart.free_items && cmsCart.free_items != "") {
+                        let freeItemSku = cmsCart.free_items.split(",")
+                        dataToUpdate['freeItems'] = {
+                            ar: [
+                                {
+                                    "id": 1793,
+                                    "position": 0,
+                                    "name": "free item 1 ar",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 0,
+                                    "specialPrice": 0,
+                                    "catId": 40,
+                                    "promoId": -1,
+                                    "metaKeyword": [
+                                        "free item 1"
+                                    ],
+                                    "bundleProductOptions": [],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "typeId": "simple",
+                                    "originalTypeId": "simple",
+                                    "items": [],
+                                    "sku": 0,
+                                    "sdmId": 0,
+                                    "imageSmall": null,
+                                    "imageThumbnail": "/imagestemp/0.png",
+                                    "image": null,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 0,
+                                    "visibility": 4,
+                                    "associative": 0
+                                },
+                                {
+                                    "id": 1795,
+                                    "position": 0,
+                                    "name": "free item 2 ar",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 0,
+                                    "specialPrice": 0,
+                                    "catId": 40,
+                                    "promoId": -1,
+                                    "metaKeyword": [
+                                        "free item 1"
+                                    ],
+                                    "bundleProductOptions": [],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "typeId": "simple",
+                                    "originalTypeId": "simple",
+                                    "items": [],
+                                    "sku": 0,
+                                    "sdmId": 0,
+                                    "imageSmall": null,
+                                    "imageThumbnail": "/imagestemp/0.png",
+                                    "image": null,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 0,
+                                    "visibility": 4,
+                                    "associative": 0
+                                }
+                            ],
+                            en: [
+                                {
+                                    "id": 1793,
+                                    "position": 0,
+                                    "name": "free item 1 en",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 0,
+                                    "specialPrice": 0,
+                                    "catId": 40,
+                                    "promoId": -1,
+                                    "metaKeyword": [
+                                        "free item 1"
+                                    ],
+                                    "bundleProductOptions": [],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "typeId": "simple",
+                                    "originalTypeId": "simple",
+                                    "items": [],
+                                    "sku": 0,
+                                    "sdmId": 0,
+                                    "imageSmall": null,
+                                    "imageThumbnail": "/imagestemp/0.png",
+                                    "image": null,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 0,
+                                    "visibility": 4,
+                                    "associative": 0
+                                },
+                                {
+                                    "id": 1795,
+                                    "position": 0,
+                                    "name": "free item 2 en",
+                                    "description": "",
+                                    "inSide": 0,
+                                    "finalPrice": 0,
+                                    "specialPrice": 0,
+                                    "catId": 40,
+                                    "promoId": -1,
+                                    "metaKeyword": [
+                                        "free item 1"
+                                    ],
+                                    "bundleProductOptions": [],
+                                    "selectedItem": 0,
+                                    "configurableProductOptions": [],
+                                    "typeId": "simple",
+                                    "originalTypeId": "simple",
+                                    "items": [],
+                                    "sku": 0,
+                                    "sdmId": 0,
+                                    "imageSmall": null,
+                                    "imageThumbnail": "/imagestemp/0.png",
+                                    "image": null,
+                                    "taxClassId": 2,
+                                    "virtualGroup": 0,
+                                    "visibility": 4,
+                                    "associative": 0
+                                }
+                            ]
+                        }
                     }
                 }
                 amount.push({
@@ -710,6 +726,10 @@ export class CartClass extends BaseEntity {
             } else {
                 dataToUpdate['couponApplied'] = 0
                 dataToUpdate['freeItems'] = {
+                    ar: [],
+                    en: []
+                }
+                dataToUpdate['selFreeItem'] = {
                     ar: [],
                     en: []
                 }
@@ -754,7 +774,6 @@ export class CartClass extends BaseEntity {
             })
             dataToUpdate['amount'] = amount
             console.log("amount", typeof amount, JSON.stringify(amount))
-
             if (cmsCart.not_available && cmsCart.not_available.length > 0) {
                 curItems.forEach(obj => {
                     if (cmsCart.not_available.indexOf(obj.id) == -1) {
