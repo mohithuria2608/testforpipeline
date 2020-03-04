@@ -56,8 +56,8 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
-                        this.udfRegister({ module: process.cwd() + '/lua/menu.lua' })
-                        this.udfRegister({ module: process.cwd() + '/lua/upsell.lua' })
+                        // this.udfRegister({ module: process.cwd() + '/lua/menu.lua' })
+                        // this.udfRegister({ module: process.cwd() + '/lua/upsell.lua' })
                         resolve({})
                     }
                 } catch (error) {

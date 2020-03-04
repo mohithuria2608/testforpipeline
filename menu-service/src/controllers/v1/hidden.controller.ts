@@ -18,8 +18,10 @@ export class HiddenController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {
-                ENTITY.HiddenArE.postHiddenMenu(iterator)
-                ENTITY.HiddenEnE.postHiddenMenu(iterator)
+                if (iterator.language == Constant.DATABASE.LANGUAGE.AR)
+                    ENTITY.HiddenArE.postHiddenMenu(iterator)
+                if (iterator.language == Constant.DATABASE.LANGUAGE.EN)
+                    ENTITY.HiddenEnE.postHiddenMenu(iterator)
             }
             return {}
 
