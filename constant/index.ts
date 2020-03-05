@@ -490,7 +490,8 @@ export const DATABASE = {
         ORDER: {
             CART: {
                 AS: "CART",
-                CMS: ""
+                CMS: "",
+                BASE_FREQ: 15000,
             },
             PENDING: {
                 MONGO: "PENDING",

@@ -421,6 +421,35 @@
                         "virtualGroup": 0,
                         "visibility": 4,
                         "associative": 0
+                    },
+                    {
+                        "id": 1796,
+                        "position": 23,
+                        "name": "Twister Sandwich - Spicy",
+                        "description": "",
+                        "inSide": 0,
+                        "finalPrice": 0,
+                        "specialPrice": 0,
+                        "catId": 38,
+                        "promoId": -1,
+                        "metaKeyword": [
+                            "Twister Sandwich - Spicy"
+                        ],
+                        "bundleProductOptions": [],
+                        "selectedItem": 0,
+                        "configurableProductOptions": [],
+                        "typeId": "simple",
+                        "originalTypeId": "simple",
+                        "items": [],
+                        "sku": 110002,
+                        "sdmId": 110002,
+                        "imageSmall": "\/m\/e\/menutwistersandwichoriginal_1_1.png",
+                        "imageThumbnail": "\/imagestemp\/110002.png",
+                        "image": "\/m\/e\/menutwistersandwichoriginal_1_1.png",
+                        "taxClassId": 2,
+                        "virtualGroup": 16298,
+                        "visibility": 4,
+                        "associative": 0
                     }
                 ]
             }
