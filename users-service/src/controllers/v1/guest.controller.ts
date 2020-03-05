@@ -72,36 +72,6 @@ export class GuestController {
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
             }
-            if (userData.sdmUserRef) {
-                let userId = ENTITY.UserE.ObjectId().toString()
-                let tempUser: IUserRequest.IUserData = {
-                    id: userId,
-                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-                    brand: headers.brand,
-                    country: headers.country,
-                    cartId: userId,
-                    phnVerified: 0,
-                }
-                userData = await ENTITY.UserE.buildUser(tempUser)
-                auth.id = userData.id
-                if (address && address.id) {
-                    delete address.id
-                    delete address.sdmAddressRef
-                    delete address.cmsAddressRef
-                    await addressController.registerAddress(headers, address, auth);
-                }
-            }
-            let queryArg: IAerospike.Query = {
-                equal: {
-                    bin: "username",
-                    value: username
-                },
-                set: ENTITY.UserE.set,
-                background: false,
-            }
-            let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-
-
             let userchangePayload: IUserchangeRequest.IUserchange = {
                 username: username,
                 fullPhnNo: fullPhnNo,
@@ -120,6 +90,36 @@ export class GuestController {
             }
             if (address && address.id)
                 userchangePayload['address'] = address
+            if (userData.sdmUserRef) {
+                let userId = ENTITY.UserE.ObjectId().toString()
+                let tempUser: IUserRequest.IUserData = {
+                    id: userId,
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    brand: headers.brand,
+                    country: headers.country,
+                    cartId: userId,
+                    phnVerified: 0,
+                }
+                userData = await ENTITY.UserE.buildUser(tempUser)
+                auth.id = userData.id
+                if (address && address.id) {
+                    delete address.id
+                    delete address.sdmAddressRef
+                    delete address.cmsAddressRef
+                    delete userchangePayload['address']
+                    await addressController.registerAddress(headers, address, auth);
+                }
+            }
+            let queryArg: IAerospike.Query = {
+                equal: {
+                    bin: "username",
+                    value: username
+                },
+                set: ENTITY.UserE.set,
+                background: false,
+            }
+            let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+
             if (asUserByPhone && asUserByPhone.length > 0) {
                 console.log('STEP : 1               MS : P')
                 if (asUserByPhone[0].email == payload.email) {
