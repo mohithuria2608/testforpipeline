@@ -201,7 +201,7 @@
         "password": "",
         "config": {
             "timeout": 5000,
-            "maxConnsPerNode": 1000
+            "maxConnsPerNode": 10000
         }
     },
     "mongo": {
