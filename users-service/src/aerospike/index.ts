@@ -33,7 +33,6 @@ class AerospikeClass {
                         totalTimeout: config.get("aerospike.config.timeout")
                     }
                     let aerospikeConfig = {
-
                         hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
@@ -52,9 +51,8 @@ class AerospikeClass {
                             write: defaultPolicy,
                         },
                         maxConnsPerNode: config.get("aerospike.config.maxConnsPerNode"),
-                        captureStackTraces: true
                     }
-                    this.client = await aerospike.connect(aerospikeConfig);
+                    this.client = await aerospike.connect({ captureStackTraces: true }, aerospikeConfig);
                     if (this.client) {
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         this.udfRegister({ module: process.cwd() + '/lua/user.lua' })

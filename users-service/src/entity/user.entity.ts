@@ -218,6 +218,7 @@ export class UserEntity extends BaseEntity {
                 bins: userUpdate,
                 set: this.set,
                 key: payload.id,
+                // createOrReplace: true
             }
             if (isCreate)
                 putArg['create'] = true
