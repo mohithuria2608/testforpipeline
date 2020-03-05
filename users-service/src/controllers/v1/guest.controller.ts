@@ -104,6 +104,8 @@ export class GuestController {
                 auth.id = userData.id
                 if (address && address.id) {
                     // delete address.id
+                    if (address.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY)
+                        delete address.storeId
                     address['addressId'] = address.id
                     delete address.sdmAddressRef
                     delete address.cmsAddressRef
