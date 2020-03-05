@@ -103,7 +103,7 @@ export class GuestController {
                 userData = await ENTITY.UserE.buildUser(tempUser)
                 auth.id = userData.id
                 if (address && address.id) {
-                    delete address.id
+                    // delete address.id
                     delete address.sdmAddressRef
                     delete address.cmsAddressRef
                     delete userchangePayload['address']
