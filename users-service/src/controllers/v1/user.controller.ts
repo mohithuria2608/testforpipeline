@@ -208,6 +208,12 @@ export class UserController {
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
                     await this.validateUserOnSdm(userData, false)
 
+                // if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchange[0].chngEmailCms || userchange[0].chngPhnCms)) 
+                //     CMS.UserCMSE.updateCustomerOnCms(userData)
+
+                // if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm)) 
+                //     SDM.UserSDME.updateCustomerOnSdm(userData)
+
                 if (asAddress && asAddress.length > 0) {
                 }
                 if (cmsAddress && cmsAddress.length > 0)
