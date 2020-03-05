@@ -86,6 +86,8 @@ export class GuestController {
                 auth.id = userData.id
                 if (address && address.id) {
                     delete address.id
+                    delete address.sdmAddressRef
+                    delete address.cmsAddressRef
                     await addressController.registerAddress(headers, address, auth);
                 }
             }
