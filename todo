@@ -10,3 +10,9 @@
 
 
 * bypass cms for order placing
+
+
+* uanttended order on cms (order placed on sdm but not on cms)
+* status update from sdm (8 mins)
+* ms not responding state handling
+* health check on ms

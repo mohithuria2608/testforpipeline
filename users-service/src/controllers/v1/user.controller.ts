@@ -422,6 +422,17 @@ export class UserController {
                             if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
                                 createUser['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                             }
+                        } else {
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                            if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                createUser['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
+                                createUser['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+                                createUser['cmsUserRef'] = 0
+                            } else {
+                                createUser['sdmUserRef'] = 0
+                                createUser['sdmCorpRef'] = 0
+                                createUser['cmsUserRef'] = 0
+                            }
                         }
                         userData = await ENTITY.UserE.buildUser(createUser)
                     }
@@ -512,35 +523,131 @@ export class UserController {
                         emailVerified: 1,
                     }
                     if (asUserByPhone && asUserByPhone.length > 0) {
-                        userchangePayload['id'] = asUserByPhone[0].id
+                        if (asUserByPhone[0].email != payload.email) {
+                            let queryArg: IAerospike.Query = {
+                                equal: {
+                                    bin: "email",
+                                    value: payload.email
+                                },
+                                set: ENTITY.UserE.set,
+                                background: false,
+                            }
+                            let asUserByEmail = await Aerospike.query(queryArg)
+                            if (asUserByEmail && asUserByEmail.length > 0) {
+                                if (asUserByEmail[0].id != asUserByPhone[0].id)
+                                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+                                userchangePayload['id'] = asUserByEmail[0].id
+                                userchangePayload['cmsUserRef'] = asUserByEmail[0].cmsUserRef
+                                userchangePayload['sdmUserRef'] = asUserByEmail[0].sdmUserRef
+                                userchangePayload['sdmCorpRef'] = asUserByEmail[0].sdmCorpRef
+                            } else {
+                                userchangePayload['id'] = asUserByPhone[0].id
+                                let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
+                                if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                                    if (cmsUserByEmail.phone != fullPhnNo)
+                                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail['customerId'])
+                                    userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail['SdmUserRef'])
+                                    userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail['SdmCorpRef'])
+                                } else {
+                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                                    if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                        if (asUserByPhone[0].sdmUserRef && asUserByPhone[0].sdmUserRef != parseInt(sdmUserByEmail.CUST_ID))
+                                            return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                        userchangePayload['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
+                                        userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+                                        userchangePayload['cmsUserRef'] = parseInt(asUserByEmail[0].cmsUserRef.toString())
+                                    } else {
+                                        userchangePayload['sdmUserRef'] = 0
+                                        userchangePayload['sdmCorpRef'] = 0
+                                        userchangePayload['cmsUserRef'] = 0
+                                    }
+                                }
+                            }
+                        }
                         userchangePayload['deleteUserId'] = auth.id
-                        userchangePayload['sdmUserRef'] = parseInt(asUserByPhone[0].sdmUserRef.toString())
-                        userchangePayload['sdmCorpRef'] = parseInt(asUserByPhone[0].sdmCorpRef.toString())
-                        userchangePayload['cmsUserRef'] = parseInt(asUserByPhone[0].cmsUserRef.toString())
                         await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload)
                     } else {
-                        let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                        if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
-                            if (cmsUserByPhoneNo['email'] && cmsUserByPhoneNo['email'] != payload.email)
-                                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
-                            if (cmsUserByPhoneNo['email'])
-                                userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
-                            userchangePayload['email'] = cmsUserByPhoneNo.email
-                            userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
-                            userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                            if (cmsUserByPhoneNo.SdmUserRef && (cmsUserByPhoneNo.SdmUserRef != null || cmsUserByPhoneNo.SdmUserRef != "null") && (cmsUserByPhoneNo.SdmUserRef != "0"))
-                                userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
-                            if (cmsUserByPhoneNo.SdmCorpRef && (cmsUserByPhoneNo.SdmCorpRef != null || cmsUserByPhoneNo.SdmCorpRef != "null") && (cmsUserByPhoneNo.SdmCorpRef != "0"))
-                                userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
-                            if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                                userchangePayload['cmsAddress'] = cmsUserByPhoneNo.address.slice(0, 6)
+                        let queryArg: IAerospike.Query = {
+                            equal: {
+                                bin: "email",
+                                value: payload.email
+                            },
+                            set: ENTITY.UserE.set,
+                            background: false,
+                        }
+                        let asUserByEmail = await Aerospike.query(queryArg)
+                        if (asUserByEmail && asUserByEmail.length > 0) {
+                            userchangePayload['id'] = asUserByEmail[0].id
+                            let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                            if (cmsUserByPhone && cmsUserByPhone.customerId)
+                                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                            else {
+                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                                if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                    userchangePayload['chngPhnSdm'] = 1
+                                    userchangePayload['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
+                                    userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+                                    userchangePayload['cmsUserRef'] = 0
+                                } else {
+                                    userchangePayload['sdmUserRef'] = 0
+                                    userchangePayload['sdmCorpRef'] = 0
+                                    userchangePayload['cmsUserRef'] = 0
+                                }
                             }
                         } else {
-                            userchangePayload['sdmUserRef'] = 0
-                            userchangePayload['sdmCorpRef'] = 0
-                            userchangePayload['cmsUserRef'] = 0
+                            userchangePayload['id'] = auth.id
+                            let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
+                            if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                                if (cmsUserByEmail.phone != fullPhnNo) {
+                                    let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                                    if (cmsUserByPhone && cmsUserByPhone.customerId)
+                                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+                                    else {
+                                        userchangePayload['chngPhnCms'] = 1
+                                        userchangePayload['chngPhnSdm'] = 1
+                                    }
+                                }
+                                userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail['customerId'])
+                                userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail['SdmUserRef'])
+                                userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail['SdmCorpRef'])
+                            } else {
+                                let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                                if (cmsUserByPhone && cmsUserByPhone.customerId) {
+                                    if (cmsUserByPhone.email != payload.email) {
+                                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                                        if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                            if (cmsUserByPhone.SdmUserRef != sdmUserByEmail.CUST_ID) {
+                                                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                            } else {
+                                                userchangePayload['chngPhnCms'] = 1
+                                                userchangePayload['chngPhnSdm'] = 1
+                                            }
+                                        }
+                                        else {
+                                            userchangePayload['chngEmailCms'] = 1
+                                            userchangePayload['chngEmailSdm'] = 1
+                                        }
+                                    }
+                                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhone['customerId'])
+                                    userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhone['SdmUserRef'])
+                                    userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhone['SdmCorpRef'])
+                                } else {
+                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                                    if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                        userchangePayload['chngPhnSdm'] = 1
+                                        userchangePayload['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
+                                        userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
+                                        userchangePayload['cmsUserRef'] = 0
+                                    } else {
+                                        userchangePayload['sdmUserRef'] = 0
+                                        userchangePayload['sdmCorpRef'] = 0
+                                        userchangePayload['cmsUserRef'] = 0
+                                    }
+                                }
+                            }
                         }
-                        userchangePayload['id'] = auth.id
+                        console.log("userchangePayload", userchangePayload)
                         userchangePayload['deleteUserId'] = ""
                         await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
                     }
@@ -710,7 +817,7 @@ export class UserController {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let dataToUpdate = {
-                id: userData.id,
+                id: userData.id
             }
             if (payload.name)
                 dataToUpdate['name'] = payload.name

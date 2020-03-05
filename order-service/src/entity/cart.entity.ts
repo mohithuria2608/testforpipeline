@@ -660,6 +660,10 @@ export class CartClass extends BaseEntity {
                             ]
                         }
                     }
+                    dataToUpdate['selFreeItem'] = {
+                        ar: [],
+                        en: []
+                    }
                 }
                 amount.push({
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
