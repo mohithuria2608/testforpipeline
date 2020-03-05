@@ -104,6 +104,7 @@ export class GuestController {
                 auth.id = userData.id
                 if (address && address.id) {
                     // delete address.id
+                    address['addressId'] = address.id
                     delete address.sdmAddressRef
                     delete address.cmsAddressRef
                     delete userchangePayload['address']
