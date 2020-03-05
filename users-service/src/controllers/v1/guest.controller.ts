@@ -71,6 +71,7 @@ export class GuestController {
                     phnVerified: 0,
                 }
                 userData = await ENTITY.UserE.buildUser(tempUser)
+                auth.id = userData.id
             }
             let queryArg: IAerospike.Query = {
                 equal: {
