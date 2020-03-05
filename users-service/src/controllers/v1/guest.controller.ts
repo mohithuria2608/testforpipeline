@@ -250,23 +250,32 @@ export class GuestController {
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
                     }
                     else {
+                        console.log('STEP : 13               MS : E , CMS ')
+                        userchangePayload['id'] = asUserByEmail[0].id
+                        userchangePayload['deleteUserId'] = ""
                         userchangePayload['chngPhnSdm'] = 1
                         userchangePayload['chngPhnCms'] = 1
                     }
                 } else {
                     let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                     if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                        console.log('STEP : 14               MS :  , CMS: E ')
                         if (cmsUserByEmail.phone == fullPhnNo) {
+                            console.log('STEP : 15               MS :  , CMS : E')
                             userchangePayload['id'] = auth.id
                             userchangePayload['deleteUserId'] = ""
                             userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail['customerId'])
                             userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail['SdmUserRef'])
                             userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail['SdmCorpRef'])
                         } else {
+                            console.log('STEP : 16               MS :  , CMS : ')
                             let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                            if (cmsUserByPhone && cmsUserByPhone.customerId)
+                            if (cmsUserByPhone && cmsUserByPhone.customerId){
+                                console.log('STEP : 17               MS :  , CMS : P   different user')
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+                            }
                             else {
+                                console.log('STEP : 18               MS :  , CMS :')
                                 userchangePayload['id'] = auth.id
                                 userchangePayload['deleteUserId'] = ""
                                 userchangePayload['chngPhnCms'] = 1
@@ -274,13 +283,17 @@ export class GuestController {
                             }
                         }
                     } else {
+                        console.log('STEP : 19               MS :  , CMS :')
                         let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                         if (cmsUserByPhone && cmsUserByPhone.customerId) {
+                            console.log('STEP : 20               MS :  , CMS : P')
                             let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                console.log('STEP : 21               MS :  , CMS : P , SDM : E  different user')
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
                             }
                             else {
+                                console.log('STEP : 22               MS :  , CMS : P , SDM : ')
                                 userchangePayload['id'] = auth.id
                                 userchangePayload['deleteUserId'] = ""
                                 userchangePayload['chngEmailCms'] = 1
@@ -290,8 +303,10 @@ export class GuestController {
                                 userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhone['SdmCorpRef'])
                             }
                         } else {
+                            console.log('STEP : 23               MS :  , CMS :  , SDM : ')
                             let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
+                                console.log('STEP : 23               MS :  , CMS :  , SDM : E')
                                 userchangePayload['id'] = auth.id
                                 userchangePayload['deleteUserId'] = ""
                                 userchangePayload['chngPhnSdm'] = 1
@@ -299,6 +314,7 @@ export class GuestController {
                                 userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
                                 userchangePayload['cmsUserRef'] = 0
                             } else {
+                                console.log('STEP : 23               MS :  , CMS :  , SDM : ')
                                 userchangePayload['id'] = auth.id
                                 userchangePayload['deleteUserId'] = ""
                                 userchangePayload['sdmUserRef'] = 0
