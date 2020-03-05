@@ -158,7 +158,7 @@ export class SessionEntity extends BaseEntity {
                         key: obj.id,
                         set: this.set
                     }
-                    await Aerospike.remove(putArg)
+                    Aerospike.remove(putArg)
                 })
             }
             return {}

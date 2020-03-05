@@ -15,6 +15,7 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
+            headers.deviceid = headers.deviceid + Math.random()
             let userId = ENTITY.UserE.ObjectId().toString()
             let tempUser: IUserRequest.IUserData = {
                 id: userId,
