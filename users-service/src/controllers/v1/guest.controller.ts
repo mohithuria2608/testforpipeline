@@ -189,9 +189,9 @@ export class GuestController {
             if (asUserByPhone && asUserByPhone.length > 0) {
                 if (asUserByPhone[0].email == payload.email) {
                     userchangePayload['id'] = asUserByPhone[0].id
-                    userchangePayload['cmsUserRef'] = asUserByPhone[0].cmsUserRef
-                    userchangePayload['sdmUserRef'] = asUserByPhone[0].sdmUserRef
-                    userchangePayload['sdmCorpRef'] = asUserByPhone[0].sdmCorpRef
+                    // userchangePayload['cmsUserRef'] = asUserByPhone[0].cmsUserRef
+                    // userchangePayload['sdmUserRef'] = asUserByPhone[0].sdmUserRef
+                    // userchangePayload['sdmCorpRef'] = asUserByPhone[0].sdmCorpRef
                     userchangePayload['deleteUserId'] = auth.id
                 } else {
                     let queryArg: IAerospike.Query = {
