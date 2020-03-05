@@ -1,6 +1,7 @@
 import * as config from "config"
 import * as Koa from 'koa'
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
+// process.env.AEROSPIKE_DEBUG_STACKTRACES = "1";
 import { bootstrap, consolelog } from './utils'
 require('./grpc/server')
 import middleware from './middlewares'
@@ -21,7 +22,7 @@ export const start = (async () => {
     const port = config.get("server.user.port")
     const server = app.listen(port)
     // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
-    
+
     // event.emit('logger', {
     //   type: Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO,
     //   info: { name: "ankit" },
