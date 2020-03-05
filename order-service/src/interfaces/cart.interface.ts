@@ -19,7 +19,11 @@ declare namespace ICartRequest {
         freeItems?: {
             ar?: any
             en?: any
-        }
+        },
+        selFreeItem?: {
+            ar?: any
+            en?: any
+        },
     }
 
     interface IAmount {

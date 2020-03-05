@@ -144,7 +144,6 @@ const orderSchema = new Schema({
     updatedAt: { type: Number, required: true },
     trackUntil: { type: Number, required: true },
     validationRemarks: { type: String },
-
 });
 
 export let order = model<Iorder>('order', orderSchema)

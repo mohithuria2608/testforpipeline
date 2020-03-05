@@ -540,6 +540,11 @@ export class OrderClass extends BaseEntity {
             if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING })
             }
+            let items = cartData.items
+            if (headers.language == Constant.DATABASE.LANGUAGE.EN)
+                items = items.concat(cartData.selFreeItem.en)
+            else
+                items = items.concat(cartData.selFreeItem.ar)
             let orderData = {
                 orderType: orderType,
                 cartId: cartData.cartId,
@@ -552,7 +557,7 @@ export class OrderClass extends BaseEntity {
                 country: headers.country,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
-                items: cartData.items,
+                items: items,
                 amount: amount,
                 address: {
                     addressId: address.id,
