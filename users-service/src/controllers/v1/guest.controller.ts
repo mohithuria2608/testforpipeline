@@ -54,99 +54,24 @@ export class GuestController {
     * @param {string} addressId : number
     * @param {string} addressType 
     * */
-    // async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
-    //     try {
-    //         let address
-    //         const fullPhnNo = payload.cCode + payload.phnNo;
-    //         const username = headers.brand + "_" + fullPhnNo;
-    //         let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-    //         let queryArg: IAerospike.Query = {
-    //             equal: {
-    //                 bin: "username",
-    //                 value: username
-    //             },
-    //             set: ENTITY.UserE.set,
-    //             background: false,
-    //         }
-    //         let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-
-    //         if (payload.addressId && payload.addressType) {
-    //             let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
-    //                 userId: auth.id,
-    //                 bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
-    //                 addressId: payload.addressId
-    //             })
-    //             if (oldAdd && oldAdd.id)
-    //                 address = oldAdd
-    //             else
-    //                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
-    //         }
-    //         let userchangePayload = {
-    //             username: username,
-    //             fullPhnNo: fullPhnNo,
-    //             name: payload.name,
-    //             email: payload.email,
-    //             cCode: payload.cCode,
-    //             phnNo: payload.phnNo,
-    //             otp: Constant.SERVER.BY_PASS_OTP,
-    //             cartId: userData.id,
-    //             otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-    //             otpVerified: 0,
-    //             isGuest: payload.isGuest,
-    //             brand: headers.brand,
-    //             country: headers.country,
-    //             profileStep: 1,
-    //         }
-    //         if (address && address.id)
-    //             userchangePayload['address'] = address
-    //         if (checkUser && checkUser.length > 0) {
-    //             userchangePayload['id'] = checkUser[0].id
-    //             userchangePayload['deleteUserId'] = auth.id
-    //             await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
-    //         } else {
-    //             let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
-    //             if (cmsUserByEmail && cmsUserByEmail.customerId) {
-    //                 if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != fullPhnNo)
-    //                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
-    //                 userchangePayload['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
-    //                 userchangePayload['email'] = cmsUserByEmail.email
-    //                 userchangePayload['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
-    //                 userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-    //                 if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
-    //                     userchangePayload['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
-    //                 if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
-    //                     userchangePayload['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
-    //                 if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
-    //                     userData.cmsAddress = cmsUserByEmail.address.slice(0, 6)
-    //                 }
-    //             } else {
-    //                 userchangePayload['sdmUserRef'] = 0
-    //                 userchangePayload['sdmCorpRef'] = 0
-    //                 userchangePayload['cmsUserRef'] = 0
-    //             }
-    //             console.log("userchangePayload", userchangePayload)
-    //             await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
-    //         }
-    //         userData['name'] = payload.name
-    //         userData['email'] = payload.email
-    //         userData['fullPhnNo'] = payload.cCode + payload.phnNo
-    //         userData['phnNo'] = payload.phnNo
-    //         userData['cCode'] = payload.cCode
-    //         userData['phnVerified'] = 0
-    //         userData['profileStep'] = 0
-    //         return formatUserData(userData, headers, payload.isGuest)
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "guestCheckout", JSON.stringify(error), false)
-    //         return Promise.reject(error)
-    //     }
-    // }
-
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
             let address
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+            if (userData.sdmUserRef) {
+                let userId = ENTITY.UserE.ObjectId().toString()
+                let tempUser: IUserRequest.IUserData = {
+                    id: userId,
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    brand: headers.brand,
+                    country: headers.country,
+                    cartId: userId,
+                    phnVerified: 0,
+                }
+                userData = await ENTITY.UserE.buildUser(tempUser)
+            }
             let queryArg: IAerospike.Query = {
                 equal: {
                     bin: "username",
@@ -270,7 +195,7 @@ export class GuestController {
                         } else {
                             console.log('STEP : 16               MS :  , CMS : ')
                             let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                            if (cmsUserByPhone && cmsUserByPhone.customerId){
+                            if (cmsUserByPhone && cmsUserByPhone.customerId) {
                                 console.log('STEP : 17               MS :  , CMS : P   different user')
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
                             }
