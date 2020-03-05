@@ -178,8 +178,8 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.113.79.117/media/catalog/product/",
-        "home": "http://40.123.207.192/pub/media/homepage/",
+        "product": "https://magentouat.appskeeper.com/media/catalog/product/",
+        "home": "https://magentouat.appskeeper.com/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
     },
     "cryptoSecret": "d6F3Efeq",
@@ -207,7 +207,7 @@
         "password": "AppInvDbUser"
     },
     "cms": {
-        "baseUrl": "http://40.113.79.117/rest/V1/"
+        "baseUrl": "https://magentouat.appskeeper.com/rest/V1/"
     },
     "sdm": {
         "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"

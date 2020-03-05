@@ -186,6 +186,7 @@ export class GuestController {
             }
             if (address && address.id)
                 userchangePayload['address'] = address
+            consolelog(process.cwd(), "asUserByPhone", asUserByPhone, true)
             if (asUserByPhone && asUserByPhone.length > 0) {
                 if (asUserByPhone[0].email != payload.email) {
                     let queryArg: IAerospike.Query = {
@@ -197,6 +198,7 @@ export class GuestController {
                         background: false,
                     }
                     let asUserByEmail = await Aerospike.query(queryArg)
+                    consolelog(process.cwd(), "asUserByEmail", asUserByEmail, true)
                     if (asUserByEmail && asUserByEmail.length > 0) {
                         if (asUserByEmail[0].id != asUserByPhone[0].id)
                             return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
