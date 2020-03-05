@@ -4,6 +4,7 @@ import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import * as CMS from '../../cms';
 import * as SDM from '../../sdm';
+import { addressController } from './address.controller';
 
 export class GuestController {
 
@@ -60,6 +61,17 @@ export class GuestController {
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+            if (payload.addressId && payload.addressType) {
+                let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
+                    userId: auth.id,
+                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
+                    addressId: payload.addressId
+                })
+                if (oldAdd && oldAdd.id)
+                    address = oldAdd
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
+            }
             if (userData.sdmUserRef) {
                 let userId = ENTITY.UserE.ObjectId().toString()
                 let tempUser: IUserRequest.IUserData = {
@@ -72,6 +84,10 @@ export class GuestController {
                 }
                 userData = await ENTITY.UserE.buildUser(tempUser)
                 auth.id = userData.id
+                if (address && address.id) {
+                    delete address.id
+                    await addressController.registerAddress(headers, address, auth);
+                }
             }
             let queryArg: IAerospike.Query = {
                 equal: {
@@ -83,17 +99,7 @@ export class GuestController {
             }
             let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
 
-            if (payload.addressId && payload.addressType) {
-                let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
-                    userId: auth.id,
-                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
-                    addressId: payload.addressId
-                })
-                if (oldAdd && oldAdd.id)
-                    address = oldAdd
-                else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ADDRESS_NOT_FOUND)
-            }
+
             let userchangePayload: IUserchangeRequest.IUserchange = {
                 username: username,
                 fullPhnNo: fullPhnNo,
