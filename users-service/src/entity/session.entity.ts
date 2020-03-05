@@ -151,7 +151,7 @@ export class SessionEntity extends BaseEntity {
             // let sessions: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
 
             let sessions = await Aerospike.scan({ set: this.set, bins: [] })
-            sessions.filter(obj => { return obj.deviceid == deviceid })
+            sessions = sessions.filter(obj => { return obj.deviceid == deviceid })
             if (sessions && sessions.length > 0) {
                 sessions.map(async obj => {
                     let putArg: IAerospike.Remove = {
