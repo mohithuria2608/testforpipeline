@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog, hashObj } from '../../utils'
+import { consolelog, hashObj, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 
@@ -232,7 +232,7 @@ export class OrderController {
         try {
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1 })
             if (order && order._id) {
-                order['nextPing'] = 15
+                order['nextPing'] = getFrequency(order.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingFe
                 order['unit'] = "second"
                 return order
             } else {
@@ -268,22 +268,25 @@ export class OrderController {
                 if (userData.id == undefined || userData.id == null || userData.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
-            await ENTITY.OrderE.getSdmOrder({
-                sdmOrderRef: sdmOrder,
-                timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS_ONCE
-            })
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
-            if (order && order._id) {
-
-                if (payload.cCode && payload.phnNo && (userData.id != order.userId))
+            let getSdmOrderRef = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { status: 1 })
+            if (getSdmOrderRef && getSdmOrderRef._id) {
+                await ENTITY.OrderE.getSdmOrder({
+                    sdmOrderRef: sdmOrder,
+                    timeInterval: getFrequency(getSdmOrderRef.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingMs
+                })
+                let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
+                if (order && order._id) {
+                    if (payload.cCode && payload.phnNo && (userData.id != order.userId))
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
+                    order['nextPing'] = getFrequency(getSdmOrderRef.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingFe
+                    order['unit'] = "second"
+                    return order
+                } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
-                order['nextPing'] = 15
-                order['unit'] = "second"
-                return order
-            } else {
+            } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-            }
+
         } catch (error) {
             consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
             return Promise.reject(error)

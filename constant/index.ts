@@ -260,8 +260,10 @@ export const DATABASE = {
                     RESET: 5
                 },
                 INTERVAL: {
-                    GET_STATUS: 30000,
-                    GET_STATUS_ONCE: 0
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
                 }
             }
         },
@@ -482,7 +484,11 @@ export const DATABASE = {
             TAX: "TAX",
             SHIPPING: "SHIPPING",
             TOTAL: "TOTAL",
-
+        },
+        FREQ_TYPE: {
+            GET: "GET",
+            GET_ONCE: "GET_ONCE",
+            GET_MAX: "GET_MAX",
         }
     },
 
@@ -491,52 +497,105 @@ export const DATABASE = {
             CART: {
                 AS: "CART",
                 CMS: "",
-                BASE_FREQ: 15000,
             },
             PENDING: {
                 MONGO: "PENDING",
                 CMS: "",
-                SDM: [0, 1, 96] //@description : ((Suspended = 96)/(open = 1)
+                SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             CONFIRMED: {
                 MONGO: "CONFIRMED",
                 CMS: "",
-                SDM: [2] //@description : in kitchen
+                SDM: [2], //@description : in kitchen
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             BEING_PREPARED: {
                 MONGO: "BEING_PREPARED",
                 CMS: "",
-                SDM: [2] //@description : in kitchen
+                SDM: [2], //@description : in kitchen
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             READY: {
                 MONGO: "READY",
                 CMS: "",
-                SDM: [8] //@description : ready
+                SDM: [8], //@description : ready
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             ON_THE_WAY: {
                 MONGO: "ON_THE_WAY",
                 CMS: "",
-                SDM: [16, 32] //@description : assigned/shipped
+                SDM: [16, 32], //@description : assigned/shipped
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             DELIVERED: {
                 MONGO: "DELIVERED",
                 CMS: "",
-                SDM: [64, 128, 2048] //@description : delivered
+                SDM: [64, 128, 2048], //@description : delivered
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             CLOSED: {
                 MONGO: "",
                 CMS: "",
-                SDM: []
+                SDM: [],
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             CANCELED: {
                 MONGO: "CANCELED",
                 CMS: "",
-                SDM: [512, 256, 1024, 4096, 8192] //@description : cancelled
+                SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
             FAILURE: {
                 MONGO: "FAILURE",
                 CMS: "",
-                SDM: []
+                SDM: [],
+                FREQ: {
+                    GET: 30000,
+                    GET_ONCE: 0,
+                    GET_MAX: 30000,
+                    NEXT_PING: 15,
+                }
             },
         },
 

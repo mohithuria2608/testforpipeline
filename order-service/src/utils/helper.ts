@@ -396,3 +396,7 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
     else
         return statsObj
 }
+
+export let getFrequency = function (status: string, type: string, prevTimeInterval?: number) {
+    return { nextPingMs: Constant.DATABASE.STATUS.ORDER[status].FREQ[type], nextPingFe: Constant.DATABASE.STATUS.ORDER[status].FREQ.NEXT_PING }
+}
