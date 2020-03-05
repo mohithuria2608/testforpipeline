@@ -103,7 +103,6 @@ export class GuestController {
                 userData = await ENTITY.UserE.buildUser(tempUser)
                 auth.id = userData.id
                 if (address && address.id) {
-                    // delete address.id
                     if (address.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY)
                         delete address.storeId
                     address['addressId'] = address.id
@@ -124,11 +123,11 @@ export class GuestController {
             let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
 
             if (asUserByPhone && asUserByPhone.length > 0) {
+                userchangePayload['id'] = asUserByPhone[0].id
                 console.log('STEP : 1               MS : P')
                 if (asUserByPhone[0].email == payload.email) {
                     console.log('STEP : 2               MS : P/E  , same user')
-                    userchangePayload['id'] = asUserByPhone[0].id
-                    userchangePayload['deleteUserId'] = ""
+                    userchangePayload['deleteUserId'] = auth.id
                 } else {
                     console.log('STEP : 3               MS : P')
                     let queryArg: IAerospike.Query = {
@@ -145,7 +144,6 @@ export class GuestController {
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
                     } else {
                         console.log('STEP : 5               MS : P')
-                        userchangePayload['id'] = asUserByPhone[0].id
                         let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                         if (cmsUserByEmail && cmsUserByEmail.customerId) {
                             console.log('STEP : 6               MS : P, CMS : E  different user')
@@ -159,12 +157,14 @@ export class GuestController {
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
                             } else {
                                 console.log('STEP : 9               MS : P, CMS :, SDM :    update email')
+                                userchangePayload['deleteUserId'] = auth.id
                                 userchangePayload['chngEmailSdm'] = 1
                                 userchangePayload['chngEmailCms'] = 1
                             }
                         }
                     }
                 }
+                console.log("userchangePayload by phone : ", userchangePayload)
                 await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload)
             } else {
                 console.log('STEP : 10               MS : ')
@@ -179,7 +179,6 @@ export class GuestController {
                 let asUserByEmail = await Aerospike.query(queryArg)
                 if (asUserByEmail && asUserByEmail.length > 0) {
                     userchangePayload['id'] = asUserByEmail[0].id
-                    userchangePayload['deleteUserId'] = ""
                     console.log('STEP : 11               MS : E')
                     let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                     if (cmsUserByPhone && cmsUserByPhone.customerId) {
@@ -188,11 +187,12 @@ export class GuestController {
                     }
                     else {
                         console.log('STEP : 13               MS : E , CMS ')
-                        userchangePayload['id'] = asUserByEmail[0].id
-                        userchangePayload['deleteUserId'] = ""
+                        userchangePayload['deleteUserId'] = auth.id
                         userchangePayload['chngPhnSdm'] = 1
                         userchangePayload['chngPhnCms'] = 1
                     }
+                    console.log("userchangePayload by email : ", userchangePayload)
+                    await ENTITY.UserchangeE.buildUserchange(asUserByEmail[0].id, userchangePayload)
                 } else {
                     let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                     if (cmsUserByEmail && cmsUserByEmail.customerId) {
@@ -260,11 +260,10 @@ export class GuestController {
                             }
                         }
                     }
+                    console.log("userchangePayload by new user : ", userchangePayload)
+                    await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
                 }
-                console.log("userchangePayload", userchangePayload)
-                await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
             }
-
             userData['name'] = payload.name
             userData['email'] = payload.email
             userData['fullPhnNo'] = payload.cCode + payload.phnNo

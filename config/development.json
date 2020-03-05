@@ -198,7 +198,11 @@
     "aerospike": {
         "hosts": "40.123.212.40:3000",
         "username": "aerospikeusr",
-        "password": "GM2nGDQkN5yMdPZs"
+        "password": "GM2nGDQkN5yMdPZs",
+        "config": {
+            "timeout": 5000,
+            "maxConnsPerNode": 1000
+        }
     },
     "mongo": {
         "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",

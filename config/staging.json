@@ -198,7 +198,11 @@
     "aerospike": {
         "hosts": "aerospike.aerospikedb.svc.cluster.local:3000",
         "username": "",
-        "password": ""
+        "password": "",
+        "config": {
+            "timeout": 5000,
+            "maxConnsPerNode": 1000
+        }
     },
     "mongo": {
         "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",

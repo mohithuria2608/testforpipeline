@@ -202,7 +202,11 @@
     "aerospike": {
         "hosts": "localhost:3000",
         "username": "",
-        "password": ""
+        "password": "",
+        "config": {
+            "timeout": 5000,
+            "maxConnsPerNode": 1000
+        }
     },
     "mongo": {
         "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",

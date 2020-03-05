@@ -30,10 +30,10 @@ class AerospikeClass {
             if (!this.client) {
                 try {
                     const defaultPolicy = {
-                        totalTimeout: 1000
+                        totalTimeout: config.get("aerospike.config.timeout")
                     }
                     let aerospikeConfig = {
-                        
+
                         hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
@@ -51,7 +51,7 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
-                        maxConnsPerNode: 1000
+                        maxConnsPerNode: config.get("aerospike.config.maxConnsPerNode")
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
@@ -371,7 +371,7 @@ class AerospikeClass {
             }
         })
     }
-    
+
     async  udfRegister(argv) {
         return new Promise(async (resolve, reject) => {
             try {
