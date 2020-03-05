@@ -51,7 +51,8 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
-                        maxConnsPerNode: config.get("aerospike.config.maxConnsPerNode")
+                        maxConnsPerNode: config.get("aerospike.config.maxConnsPerNode"),
+                        captureStackTraces: true
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
