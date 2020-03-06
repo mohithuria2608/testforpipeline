@@ -595,30 +595,40 @@ export class CartClass extends BaseEntity {
                 } else {
                     if (cmsCart.free_items && cmsCart.free_items != "") {
                         let freeItemSku = cmsCart.free_items.split(",")
-                        let freeItems_En = await menuService.fetchHidden({
-                            menuId: 1,
-                            language: Constant.DATABASE.LANGUAGE.EN,
-                            type: Constant.DATABASE.TYPE.MENU.FREE
-                        })
-                        let freeItems_Ar = await menuService.fetchHidden({
-                            menuId: 1,
-                            language: Constant.DATABASE.LANGUAGE.AR,
-                            type: Constant.DATABASE.TYPE.MENU.FREE
-                        })
-                        if (freeItems_En.products && freeItems_En.products.length > 0)
-                            freeItems_En = freeItems_En.products.filter(obj => {
-                                console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.sku.toString()))
-                                return freeItemSku.indexOf(obj.sku.toString()) >= 0
+                        if (freeItemSku && freeItemSku.length > 0) {
+                            let freeItems_En = await menuService.fetchHidden({
+                                menuId: 1,
+                                language: Constant.DATABASE.LANGUAGE.EN,
+                                type: Constant.DATABASE.TYPE.MENU.FREE
                             })
-                        else
-                            freeItems_En = []
-                        if (freeItems_Ar.products && freeItems_Ar.products.length > 0)
-                            freeItems_Ar = freeItems_Ar.products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
-                        else
-                            freeItems_Ar = []
-                        dataToUpdate['freeItems'] = {
-                            ar: freeItems_Ar,
-                            en: freeItems_En
+                            let freeItems_Ar = await menuService.fetchHidden({
+                                menuId: 1,
+                                language: Constant.DATABASE.LANGUAGE.AR,
+                                type: Constant.DATABASE.TYPE.MENU.FREE
+                            })
+                            console.log("reeItems_En.products", freeItems_En.products, freeItems_En.products.length)
+
+                            if (freeItems_En.products && freeItems_En.products.length > 0)
+                                freeItems_En = freeItems_En.products.filter(obj => {
+                                    console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.sku.toString()))
+                                    return freeItemSku.indexOf(obj.sku.toString()) >= 0
+                                })
+                            else
+                                freeItems_En = []
+                            if (freeItems_Ar.products && freeItems_Ar.products.length > 0)
+                                freeItems_Ar = freeItems_Ar.products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
+                            else
+                                freeItems_Ar = []
+                            dataToUpdate['freeItems'] = {
+                                ar: freeItems_Ar,
+                                en: freeItems_En
+                            }
+                        } else {
+                            dataToUpdate['selFreeItem'] = {
+                                ar: [],
+                                en: []
+                            }
+                            dataToUpdate['couponApplied'] = 0
                         }
                     }
                     dataToUpdate['selFreeItem'] = {
