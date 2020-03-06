@@ -610,8 +610,8 @@ export class CartClass extends BaseEntity {
                             if (freeItems_En && freeItems_En.length > 0) {
                                 if (freeItems_En[0].products && freeItems_En[0].products.length > 0)
                                     freeItems_En = freeItems_En[0].products.filter(obj => {
-                                        console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.sku.toString()))
-                                        return freeItemSku.indexOf(obj.sku.toString()) >= 0
+                                        console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.id.toString()))
+                                        return freeItemSku.indexOf(obj.id.toString()) >= 0
                                     })
                                 else
                                     freeItems_En = []
@@ -703,7 +703,6 @@ export class CartClass extends BaseEntity {
                 action: "add"
             })
             dataToUpdate['amount'] = amount
-            console.log("amount", typeof amount, JSON.stringify(amount))
             if (cmsCart.not_available && cmsCart.not_available.length > 0) {
                 curItems.forEach(obj => {
                     if (cmsCart.not_available.indexOf(obj.id) == -1) {
