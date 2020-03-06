@@ -606,7 +606,10 @@ export class CartClass extends BaseEntity {
                             type: Constant.DATABASE.TYPE.MENU.FREE
                         })
                         if (freeItems_En.products && freeItems_En.products.length > 0)
-                            freeItems_En = freeItems_En.products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
+                            freeItems_En = freeItems_En.products.filter(obj => {
+                                console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.sku.toString()))
+                                return freeItemSku.indexOf(obj.sku.toString()) >= 0
+                            })
                         else
                             freeItems_En = []
                         if (freeItems_Ar.products && freeItems_Ar.products.length > 0)
