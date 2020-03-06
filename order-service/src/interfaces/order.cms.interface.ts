@@ -8,6 +8,6 @@ declare namespace IOrderCMSRequest {
     interface IUpdateOrderCms {
         order_id: number,
         order_status: string,
-        payment_status: string
+        payment_status?: string
     }
 }

@@ -50,8 +50,13 @@ export class WebhookNoonpayController {
                         }
                     })
                     if (order.payment.status == "AUTHORIZATION") {
-                        redirectUrl = redirectUrl + "payment/success"
                         ENTITY.CartE.resetCart(order.userId)
+                        CMS.OrderCMSE.updateOrder({
+                            order_id: order.cmsOrderRef,
+                            payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                        })
+                        redirectUrl = redirectUrl + "payment/success"
                     } else {
                         let dataToUpdateOrder = {
                             isActive: 0,
@@ -60,6 +65,11 @@ export class WebhookNoonpayController {
                             "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
                         }
                         order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                        CMS.OrderCMSE.updateOrder({
+                            order_id: order.cmsOrderRef,
+                            payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                        })
                         redirectUrl = redirectUrl + "payment/failure"
                     }
                     return redirectUrl
@@ -82,6 +92,11 @@ export class WebhookNoonpayController {
                             id: status.transactions[0].id.toString(),
                             data: JSON.stringify(status)
                         }
+                    })
+                    CMS.OrderCMSE.updateOrder({
+                        order_id: order.cmsOrderRef,
+                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                        order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                     })
                     redirectUrl = redirectUrl + "payment/failure"
                 }

@@ -198,6 +198,11 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
                 })
+                CMS.OrderCMSE.updateOrder({
+                    order_id: order.cmsOrderRef,
+                    // payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                })
                 ENTITY.CartE.resetCart(auth.id)
             }
             ENTITY.OrderE.syncOrder(order)

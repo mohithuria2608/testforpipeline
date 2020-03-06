@@ -642,55 +642,65 @@ export class OrderClass extends BaseEntity {
                                         updatedAt: new Date().getTime(),
                                         sdmOrderStatus: parseInt(sdmOrder.Status)
                                     }, { new: true })
-                                    // if (recheck && sdmOrder.Total) {
-                                    //     consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
-                                    //     let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
-                                    //     console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
+                                    if (recheck && sdmOrder.Total) {
+                                        consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
+                                        let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+                                        console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
 
-                                    //     if (amount[0].amount != parseFloat(sdmOrder.Total)) {
-                                    //         consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
-                                    //         recheck = false
-                                    //         if (order.payment.paymentMethodId == 0) {
-                                    //             consolelog(process.cwd(), "order step 6:       ", sdmOrder.ValidationRemarks, true)
-                                    //             this.updateOneEntityMdb({ _id: order._id }, {
-                                    //                 isActive: 0,
-                                    //                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                    //                 updatedAt: new Date().getTime(),
-                                    //                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                    //             })
-                                    //         } else {
-                                    //             consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
-                                    //             await paymentService.reversePayment({
-                                    //                 noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                    //                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                    //             })
-                                    //             let status = await paymentService.getPaymentStatus({
-                                    //                 noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                    //                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                    //                 paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                    //             })
-                                    //             this.updateOneEntityMdb({ _id: order._id }, {
-                                    //                 isActive: 0,
-                                    //                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                    //                 updatedAt: new Date().getTime(),
-                                    //                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                    //                 $addToSet: {
-                                    //                     transLogs: status
-                                    //                 },
-                                    //                 "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
-                                    //             })
-                                    //             CMS.TransactionCMSE.createTransaction({
-                                    //                 order_id: order.cmsOrderRef,
-                                    //                 message: status.transactions[0].type,
-                                    //                 type: status.transactions[0].type,
-                                    //                 payment_data: {
-                                    //                     id: status.transactions[0].id.toString(),
-                                    //                     data: JSON.stringify(status)
-                                    //                 }
-                                    //             })
-                                    //         }
-                                    //     }
-                                    // }
+                                        // if (amount[0].amount != parseFloat(sdmOrder.Total)) {
+                                        //     consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
+                                        //     recheck = false
+                                        //     if (order.payment.paymentMethodId == 0) {
+                                        //         consolelog(process.cwd(), "order step 6:       ", sdmOrder.ValidationRemarks, true)
+                                        //         this.updateOneEntityMdb({ _id: order._id }, {
+                                        //             isActive: 0,
+                                        //             status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                        //             updatedAt: new Date().getTime(),
+                                        //             validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                        //         })
+                                        //         CMS.OrderCMSE.updateOrder({
+                                        //             order_id: order.cmsOrderRef,
+                                        //            // payment_status: ,
+                                        //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                        //         })
+                                        //     } else {
+                                        //         consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
+                                        //         await paymentService.reversePayment({
+                                        //             noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        //             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                        //         })
+                                        //         let status = await paymentService.getPaymentStatus({
+                                        //             noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        //             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                        //             paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                        //         })
+                                        //         this.updateOneEntityMdb({ _id: order._id }, {
+                                        //             isActive: 0,
+                                        //             status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                        //             updatedAt: new Date().getTime(),
+                                        //             validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                        //             $addToSet: {
+                                        //                 transLogs: status
+                                        //             },
+                                        //             "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
+                                        //         })
+                                        //         CMS.TransactionCMSE.createTransaction({
+                                        //             order_id: order.cmsOrderRef,
+                                        //             message: status.transactions[0].type,
+                                        //             type: status.transactions[0].type,
+                                        //             payment_data: {
+                                        //                 id: status.transactions[0].id.toString(),
+                                        //                 data: JSON.stringify(status)
+                                        //             }
+                                        //         })
+                                        //         CMS.OrderCMSE.updateOrder({
+                                        //             order_id: order.cmsOrderRef,
+                                        //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION,
+                                        //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                        //         })
+                                        //     }
+                                        // }
+                                    }
                                     if (recheck && sdmOrder.ValidationRemarks &&
                                         (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
                                         sdmOrder.ValidationRemarks != "EXCEED_ORDER_AMOUNT"
@@ -702,6 +712,11 @@ export class OrderClass extends BaseEntity {
                                             status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                             updatedAt: new Date().getTime(),
                                             validationRemarks: sdmOrder.ValidationRemarks
+                                        })
+                                        CMS.OrderCMSE.updateOrder({
+                                            order_id: order.cmsOrderRef,
+                                            payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
                                         })
                                     }
                                     if (recheck && sdmOrder && sdmOrder.OrderID) {
@@ -746,6 +761,12 @@ export class OrderClass extends BaseEntity {
                                                                         changePaymentMode: true,
                                                                         updatedAt: new Date().getTime(),
                                                                     }, { new: true })
+
+                                                                    CMS.OrderCMSE.updateOrder({
+                                                                        order_id: order.cmsOrderRef,
+                                                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                                                    })
                                                                 }
                                                             }
                                                         }
@@ -769,6 +790,12 @@ export class OrderClass extends BaseEntity {
                                                             status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
                                                             updatedAt: new Date().getTime(),
                                                         }, { new: true })
+
+                                                        CMS.OrderCMSE.updateOrder({
+                                                            order_id: order.cmsOrderRef,
+                                                            // payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                                                        })
                                                     }, 10000)
                                                 } else {
                                                     consolelog(process.cwd(), "order step 23 :       ", parseInt(sdmOrder.Status), true)
@@ -807,6 +834,11 @@ export class OrderClass extends BaseEntity {
                                                                 data: JSON.stringify(status)
                                                             }
                                                         })
+                                                        CMS.OrderCMSE.updateOrder({
+                                                            order_id: order.cmsOrderRef,
+                                                            payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                                                        })
                                                     }
                                                 }
                                             }
@@ -815,6 +847,11 @@ export class OrderClass extends BaseEntity {
                                                 this.updateOneEntityMdb({ _id: order._id }, {
                                                     status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
                                                     updatedAt: new Date().getTime(),
+                                                })
+                                                CMS.OrderCMSE.updateOrder({
+                                                    order_id: order.cmsOrderRef,
+                                                    // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.READY.MONGO
                                                 })
                                                 if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                                                     recheck = false
@@ -825,6 +862,11 @@ export class OrderClass extends BaseEntity {
                                                     this.updateOneEntityMdb({ _id: order._id }, {
                                                         status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
                                                         updatedAt: new Date().getTime(),
+                                                    })
+                                                    CMS.OrderCMSE.updateOrder({
+                                                        order_id: order.cmsOrderRef,
+                                                        // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                        order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO
                                                     })
                                                 }
                                             }
@@ -837,6 +879,11 @@ export class OrderClass extends BaseEntity {
                                                     updatedAt: new Date().getTime(),
                                                     trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
                                                 })
+                                                CMS.OrderCMSE.updateOrder({
+                                                    order_id: order.cmsOrderRef,
+                                                    // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO
+                                                })
                                             }
                                             else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
                                                 consolelog(process.cwd(), "order step 28:       ", parseInt(sdmOrder.Status), true)
@@ -845,6 +892,11 @@ export class OrderClass extends BaseEntity {
                                                     isActive: 0,
                                                     status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
                                                     updatedAt: new Date().getTime(),
+                                                })
+                                                CMS.OrderCMSE.updateOrder({
+                                                    order_id: order.cmsOrderRef,
+                                                    // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO
                                                 })
                                             }
                                             else {
