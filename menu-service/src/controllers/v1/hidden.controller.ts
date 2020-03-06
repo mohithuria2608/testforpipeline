@@ -74,20 +74,26 @@ export class HiddenController {
    * @method GRPC
    * @param {number} menuId :menuId
    * @param {string} language :language
+   * @param {string} type :MENU / FREE / UPSELL
    * */
-    // async grpcFetchHidden(payload: IMenuGrpcRequest.IFetchMenuData) {
-    //     try {
-    //         let menu = {}
-    //         switch (payload.language) {
-    //             case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.MenuEnE.getMenu({ menuId: payload.menuId }); break;
-    //             case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.MenuArE.getMenu({ menuId: payload.menuId }); break;
-    //         }
-    //         return { menu: JSON.stringify(menu) }
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+    async grpcFetchHidden(payload: IMenuGrpcRequest.IFetchMenuData) {
+        try {
+            let menu = {}
+            switch (payload.language) {
+                case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.MenuEnE.getMenu({ menuId: payload.menuId }); break;
+                case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.MenuArE.getMenu({ menuId: payload.menuId }); break;
+            }
+            if (menu['categories'] && menu['categories'].length > 0) {
+                menu['categories'].filter(obj => {
+                    return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[Constant.DATABASE.TYPE.MENU.FREE])
+                })
+            }
+            return { menu: JSON.stringify(menu) }
+        } catch (error) {
+            consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const hiddenController = new HiddenController();

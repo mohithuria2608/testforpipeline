@@ -61,7 +61,7 @@ export class CartController {
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
             console.log("cmsValidatedCart", JSON.stringify(cmsValidatedCart))
-            let res = await ENTITY.CartE.updateCart(payload.cartId, cmsValidatedCart, true, payload.items, payload.selFreeItem)
+            let res = await ENTITY.CartE.updateCart(headers, payload.cartId, cmsValidatedCart, true, payload.items, payload.selFreeItem)
             res['invalidMenu'] = invalidMenu
             res['promo'] = promo
             res['storeOnline'] = storeOnline

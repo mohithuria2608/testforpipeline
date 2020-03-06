@@ -37,6 +37,20 @@ export class MenuService {
             })
         })
     }
+    async fetchHidden(payload: IMenuGrpcRequest.IFetchHiddenReq): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            await menuServiceValidator.fetchHidden(payload)
+            this.menuClient.fetchHidden({ menuId: payload.menuId, language: payload.language }, (error, res) => {
+                if (!error) {
+                    consolelog(process.cwd(), "successfully fetched Menu", "", false)
+                    resolve(JSON.parse(res.menu))
+                } else {
+                    consolelog(process.cwd(), "Error in fetching Menu", JSON.stringify(error), false)
+                    reject(sendError(error))
+                }
+            })
+        })
+    }
 }
 
 export const menuService = new MenuService();

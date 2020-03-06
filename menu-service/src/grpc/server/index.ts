@@ -29,6 +29,16 @@ server.addService(menuProto.MenuService.service, {
             callback(grpcSendError(error))
         }
     },
+    fetchHidden: async (call: IMenuGrpcRequest.IFetchHidden, callback) => {
+        try {
+            consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(call.request), true)
+            let res: IMenuGrpcRequest.IFetchMenuRes = await hiddenController.grpcFetchHidden(call.request)
+            callback(null, res)
+        } catch (error) {
+            consolelog(process.cwd(), "fetchHidden-server", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)

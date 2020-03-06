@@ -5,7 +5,7 @@ import { BaseEntity } from './base.entity'
 import { consolelog, hashObj } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
-import { promotionService, userService } from '../grpc/client'
+import { promotionService, userService, menuService } from '../grpc/client'
 
 export class CartClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -560,7 +560,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems: any, selFreeItem: any) {
+    async updateCart(headers: ICommonRequest.IHeaders, cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems: any, selFreeItem: any) {
         try {
             let prevCart: ICartRequest.ICartData
             if (curItems == undefined) {
@@ -595,69 +595,22 @@ export class CartClass extends BaseEntity {
                 } else {
                     if (cmsCart.free_items && cmsCart.free_items != "") {
                         let freeItemSku = cmsCart.free_items.split(",")
+                        let freeItems_En = await menuService.fetchHidden({
+                            menuId: 1,
+                            language: Constant.DATABASE.LANGUAGE.EN,
+                            type: ""
+                        })
+                        let freeItems_Ar = await menuService.fetchHidden({
+                            menuId: 1,
+                            language: Constant.DATABASE.LANGUAGE.AR,
+                            type: ""
+                        })
+                        freeItems_En = freeItems_En.filter(obj => { return freeItemSku.indexOf(obj.sku) >= 0 })
+                        freeItems_Ar = freeItems_Ar.filter(obj => { return freeItemSku.indexOf(obj.sku) >= 0 })
+
                         dataToUpdate['freeItems'] = {
-                            ar: [
-                                {
-                                    "id": 1793,
-                                    "position": 0,
-                                    "name": "الإعصار ساندويتش - الأصل",
-                                    "description": "",
-                                    "inSide": 0,
-                                    "finalPrice": 0,
-                                    "specialPrice": 0,
-                                    "catId": 38,
-                                    "promoId": -1,
-                                    "metaKeyword": [
-                                        "Twister Sandwich - Original"
-                                    ],
-                                    "bundleProductOptions": [],
-                                    "selectedItem": 0,
-                                    "configurableProductOptions": [],
-                                    "typeId": "simple",
-                                    "originalTypeId": "simple",
-                                    "items": [],
-                                    "sku": 110003,
-                                    "sdmId": 110003,
-                                    "imageSmall": null,
-                                    "imageThumbnail": "/imagestemp/110003.png",
-                                    "image": null,
-                                    "taxClassId": 2,
-                                    "virtualGroup": 0,
-                                    "visibility": 4,
-                                    "associative": 0
-                                }
-                            ],
-                            en: [
-                                {
-                                    "id": 1793,
-                                    "position": 0,
-                                    "name": "Twister Sandwich - Original",
-                                    "description": "",
-                                    "inSide": 0,
-                                    "finalPrice": 0,
-                                    "specialPrice": 0,
-                                    "catId": 38,
-                                    "promoId": -1,
-                                    "metaKeyword": [
-                                        "Twister Sandwich - Original"
-                                    ],
-                                    "bundleProductOptions": [],
-                                    "selectedItem": 0,
-                                    "configurableProductOptions": [],
-                                    "typeId": "simple",
-                                    "originalTypeId": "simple",
-                                    "items": [],
-                                    "sku": 110003,
-                                    "sdmId": 110003,
-                                    "imageSmall": null,
-                                    "imageThumbnail": "/imagestemp/110003.png",
-                                    "image": null,
-                                    "taxClassId": 2,
-                                    "virtualGroup": 0,
-                                    "visibility": 4,
-                                    "associative": 0
-                                }
-                            ]
+                            ar: freeItems_Ar,
+                            en: freeItems_En
                         }
                     }
                     dataToUpdate['selFreeItem'] = {

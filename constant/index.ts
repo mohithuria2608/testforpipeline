@@ -493,6 +493,17 @@ export const DATABASE = {
             GET: "GET",
             GET_ONCE: "GET_ONCE",
             GET_MAX: "GET_MAX",
+        },
+
+        MENU: {
+            MENU: "MENU",
+            FREE: "FREE",
+            UPSELL: "UPSELL"
+        },
+
+        MENU_CATEGORY: {
+            FREE: "Free Product",
+            UPSELL: "Upsell"
         }
     },
 
