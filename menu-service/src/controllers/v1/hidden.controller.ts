@@ -80,8 +80,8 @@ export class HiddenController {
         try {
             let menu = {}
             switch (payload.language) {
-                case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.MenuEnE.getMenu({ menuId: payload.menuId }); break;
-                case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.MenuArE.getMenu({ menuId: payload.menuId }); break;
+                case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.HiddenEnE.getHiddenProducts({ menuId: payload.menuId }); break;
+                case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.HiddenArE.getHiddenProducts({ menuId: payload.menuId }); break;
             }
             if (menu['categories'] && menu['categories'].length > 0) {
                 menu['categories'].filter(obj => {
