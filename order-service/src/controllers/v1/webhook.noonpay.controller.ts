@@ -41,7 +41,7 @@ export class WebhookNoonpayController {
                     }
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     CMS.TransactionCMSE.createTransaction({
-                        order_id: order.cmsOrderRef.toString(),
+                        order_id: order.cmsOrderRef,
                         message: status.transactions[0].type,
                         type: status.transactions[0].type,
                         payment_data: {
@@ -75,7 +75,7 @@ export class WebhookNoonpayController {
                     }
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     CMS.TransactionCMSE.createTransaction({
-                        order_id: order.cmsOrderRef.toString(),
+                        order_id: order.cmsOrderRef,
                         message: status.transactions[0].type,
                         type: status.transactions[0].type,
                         payment_data: {

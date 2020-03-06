@@ -146,9 +146,7 @@ export class OrderController {
                 }
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
 
-                // let getCurrentCart: ICartRequest.ICartData
                 if (cmsOrder && cmsOrder['order_id']) {
-                    // getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
                     getCurrentCart['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
                 } else {
                     getCurrentCart = await ENTITY.CartE.updateCart(headers, payload.cartId, cmsOrder, false, payload.items, payload.selFreeItem)
@@ -179,13 +177,18 @@ export class OrderController {
                     }
                 })
                 CMS.TransactionCMSE.createTransaction({
-                    order_id: order.cmsOrderRef.toString(),
+                    order_id: order.cmsOrderRef,
                     message: initiatePaymentObj.paymentStatus,
                     type: initiatePaymentObj.paymentStatus,
                     payment_data: {
                         id: initiatePaymentObj.noonpayOrderId.toString(),
                         data: JSON.stringify(initiatePaymentObj)
                     }
+                })
+                CMS.OrderCMSE.updateOrder({
+                    order_id: order.cmsOrderRef,
+                    payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {

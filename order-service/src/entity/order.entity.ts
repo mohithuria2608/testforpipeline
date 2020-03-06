@@ -680,7 +680,7 @@ export class OrderClass extends BaseEntity {
                                     //                 "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
                                     //             })
                                     //             CMS.TransactionCMSE.createTransaction({
-                                    //                 order_id: order.cmsOrderRef.toString(),
+                                    //                 order_id: order.cmsOrderRef,
                                     //                 message: status.transactions[0].type,
                                     //                 type: status.transactions[0].type,
                                     //                 payment_data: {
@@ -799,7 +799,7 @@ export class OrderClass extends BaseEntity {
                                                             updatedAt: new Date().getTime()
                                                         })
                                                         CMS.TransactionCMSE.createTransaction({
-                                                            order_id: order.cmsOrderRef.toString(),
+                                                            order_id: order.cmsOrderRef,
                                                             message: status.transactions[0].type,
                                                             type: status.transactions[0].type,
                                                             payment_data: {

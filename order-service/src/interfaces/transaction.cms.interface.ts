@@ -1,7 +1,7 @@
 declare namespace ITransactionCMSRequest {
 
     interface ICreateTransactionCms {
-        order_id: string,
+        order_id: number,
         message: string,
         type: string,
         payment_data: {

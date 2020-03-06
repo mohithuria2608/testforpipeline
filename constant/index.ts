@@ -201,6 +201,10 @@ export const DATABASE = {
                 METHOD: "POST",
                 URL: "custom-order/create-order"
             },
+            UPDATE_ORDER: {
+                METHOD: "POST",
+                URL: "custom-order/update-attribute"
+            },
             CREATE_TRANSACTION: {
                 METHOD: "POST",
                 URL: "custom-order/add-transaction"

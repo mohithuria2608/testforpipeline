@@ -4,4 +4,10 @@ declare namespace IOrderCMSRequest {
         address_id?: number,
         payment_method: string
     }
+
+    interface IUpdateOrderCms {
+        order_id: number,
+        order_status: string,
+        payment_status: string
+    }
 }
