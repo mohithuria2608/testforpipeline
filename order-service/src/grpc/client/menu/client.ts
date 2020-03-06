@@ -42,7 +42,7 @@ export class MenuService {
             await menuServiceValidator.fetchHidden(payload)
             this.menuClient.fetchHidden({ menuId: payload.menuId, language: payload.language, type: payload.type }, (error, res) => {
                 if (!error) {
-                    consolelog(process.cwd(), "successfully fetched Hidden Menu", "", false)
+                    consolelog(process.cwd(), "successfully fetched Hidden Menu", res.menu, false)
                     resolve(JSON.parse(res.menu))
                 } else {
                     consolelog(process.cwd(), "Error in fetching Hidden Menu", JSON.stringify(error), false)
