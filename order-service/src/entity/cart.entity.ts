@@ -606,17 +606,24 @@ export class CartClass extends BaseEntity {
                                 language: Constant.DATABASE.LANGUAGE.AR,
                                 type: Constant.DATABASE.TYPE.MENU.FREE
                             })
-                            console.log("reeItems_En.products", freeItems_En.products, freeItems_En.products.length)
-
-                            if (freeItems_En.products && freeItems_En.products.length > 0)
-                                freeItems_En = freeItems_En.products.filter(obj => {
-                                    console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.sku.toString()))
-                                    return freeItemSku.indexOf(obj.sku.toString()) >= 0
-                                })
-                            else
+                            console.log("reeItems_En.products", freeItems_En[0].products, freeItems_En[0].products.length)
+                            if (freeItems_En && freeItems_En.length > 0) {
+                                if (freeItems_En[0].products && freeItems_En[0].products.length > 0)
+                                    freeItems_En = freeItems_En[0].products.filter(obj => {
+                                        console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.sku.toString()))
+                                        return freeItemSku.indexOf(obj.sku.toString()) >= 0
+                                    })
+                                else
+                                    freeItems_En = []
+                            } else
                                 freeItems_En = []
-                            if (freeItems_Ar.products && freeItems_Ar.products.length > 0)
-                                freeItems_Ar = freeItems_Ar.products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
+
+                            if (freeItems_Ar && freeItems_Ar.length > 0) {
+                                if (freeItems_Ar[0].products && freeItems_Ar[0].products.length > 0)
+                                    freeItems_Ar = freeItems_Ar[0].products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
+                                else
+                                    freeItems_Ar = []
+                            }
                             else
                                 freeItems_Ar = []
                             dataToUpdate['freeItems'] = {
