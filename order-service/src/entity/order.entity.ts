@@ -679,6 +679,15 @@ export class OrderClass extends BaseEntity {
                                     //                 },
                                     //                 "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
                                     //             })
+                                    //             CMS.TransactionCMSE.createTransaction({
+                                    //                 order_id: order.cmsOrderRef.toString(),
+                                    //                 message: status.transactions[0].type,
+                                    //                 type: status.transactions[0].type,
+                                    //                 payment_data: {
+                                    //                     id: status.transactions[0].id.toString(),
+                                    //                     data: JSON.stringify(status)
+                                    //                 }
+                                    //             })
                                     //         }
                                     //     }
                                     // }
@@ -788,6 +797,15 @@ export class OrderClass extends BaseEntity {
                                                                 transLogs: status
                                                             },
                                                             updatedAt: new Date().getTime()
+                                                        })
+                                                        CMS.TransactionCMSE.createTransaction({
+                                                            order_id: order.cmsOrderRef.toString(),
+                                                            message: status.transactions[0].type,
+                                                            type: status.transactions[0].type,
+                                                            payment_data: {
+                                                                id: status.transactions[0].id.toString(),
+                                                                data: JSON.stringify(status)
+                                                            }
                                                         })
                                                     }
                                                 }

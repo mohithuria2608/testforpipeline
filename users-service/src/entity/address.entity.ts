@@ -256,7 +256,7 @@ export class AddressEntity extends BaseEntity {
                 address: {
                     ADDR_AREAID: 1786,//  16
                     ADDR_BLDGNAME: userData.asAddress[0].bldgName,
-                    ADDR_BLDGNUM: userData.asAddress[0].bldgName,
+                    ADDR_BLDGNUM: userData.asAddress[0].flatNum,
                     ADDR_CITYID: 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
@@ -290,7 +290,7 @@ export class AddressEntity extends BaseEntity {
                     },
                     WADDR_AREAID: 1786,// 16
                     WADDR_BUILD_NAME: userData.asAddress[0].bldgName,
-                    WADDR_BUILD_NUM: userData.asAddress[0].bldgName,
+                    WADDR_BUILD_NUM: userData.asAddress[0].flatNum,
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
                     WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,

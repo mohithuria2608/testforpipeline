@@ -15,7 +15,7 @@ export class GuestController {
      * */
     async guestLogin(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestLogin) {
         try {
-            headers.deviceid = headers.deviceid + Math.random()
+            // headers.deviceid = headers.deviceid + Math.random()
             let userId = ENTITY.UserE.ObjectId().toString()
             let tempUser: IUserRequest.IUserData = {
                 id: userId,
@@ -122,7 +122,6 @@ export class GuestController {
                 background: false,
             }
             let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-
             if (asUserByPhone && asUserByPhone.length > 0) {
                 userchangePayload['id'] = asUserByPhone[0].id
                 console.log('STEP : 1               MS : P')

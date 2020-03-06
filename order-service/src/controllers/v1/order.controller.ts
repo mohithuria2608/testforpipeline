@@ -2,6 +2,7 @@ import * as Constant from '../../constant'
 import { consolelog, hashObj, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
+import * as CMS from '../../cms'
 
 export class OrderController {
 
@@ -165,6 +166,15 @@ export class OrderController {
                         paymentMethodId: payload.paymentMethodId,
                         amount: totalAmount[0].amount,
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD
+                    }
+                })
+                CMS.TransactionCMSE.createTransaction({
+                    order_id: order.cmsOrderRef.toString(),
+                    message: initiatePaymentObj.paymentStatus,
+                    type: initiatePaymentObj.paymentStatus,
+                    payment_data: {
+                        id: initiatePaymentObj.noonpayOrderId.toString(),
+                        data: JSON.stringify(initiatePaymentObj)
                     }
                 })
             } else {

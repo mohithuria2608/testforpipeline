@@ -3,7 +3,7 @@ import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../aerospike'
+import * as CMS from '../../cms'
 
 export class WebhookNoonpayController {
 
@@ -40,14 +40,20 @@ export class WebhookNoonpayController {
                         "payment.status": status.transactions[0].type
                     }
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                    CMS.TransactionCMSE.createTransaction({
+                        order_id: order.cmsOrderRef.toString(),
+                        message: status.transactions[0].type,
+                        type: status.transactions[0].type,
+                        payment_data: {
+                            id: status.transactions[0].id.toString(),
+                            data: JSON.stringify(status)
+                        }
+                    })
                     if (order.payment.status == "AUTHORIZATION") {
                         redirectUrl = redirectUrl + "payment/success"
                         ENTITY.CartE.resetCart(order.userId)
                     } else {
                         let dataToUpdateOrder = {
-                            $addToSet: {
-                                transLogs: status
-                            },
                             isActive: 0,
                             status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                             updatedAt: new Date().getTime(),
@@ -68,6 +74,15 @@ export class WebhookNoonpayController {
                         "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
                     }
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                    CMS.TransactionCMSE.createTransaction({
+                        order_id: order.cmsOrderRef.toString(),
+                        message: status.transactions[0].type,
+                        type: status.transactions[0].type,
+                        payment_data: {
+                            id: status.transactions[0].id.toString(),
+                            data: JSON.stringify(status)
+                        }
+                    })
                     redirectUrl = redirectUrl + "payment/failure"
                 }
             } else {
