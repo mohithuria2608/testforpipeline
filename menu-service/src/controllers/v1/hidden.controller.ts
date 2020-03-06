@@ -78,13 +78,13 @@ export class HiddenController {
    * */
     async grpcFetchHidden(payload: IMenuGrpcRequest.IFetchMenuData) {
         try {
-            let menu = {}
+            let menu = []
             switch (payload.language) {
                 case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.HiddenEnE.getHiddenProducts({ menuId: payload.menuId }); break;
                 case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.HiddenArE.getHiddenProducts({ menuId: payload.menuId }); break;
             }
-            if (menu['categories'] && menu['categories'].length > 0) {
-                menu['categories'].filter(obj => {
+            if (menu && menu.length > 0) {
+                menu.filter(obj => {
                     return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[Constant.DATABASE.TYPE.MENU.FREE])
                 })
             }
