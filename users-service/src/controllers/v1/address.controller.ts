@@ -70,7 +70,8 @@ export class AddressController {
     * */
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            payload.tag = payload.tag.toUpperCase()
+            if (payload.tag)
+                payload.tag = payload.tag.toUpperCase()
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
