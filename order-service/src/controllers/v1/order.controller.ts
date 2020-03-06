@@ -83,6 +83,11 @@ export class OrderController {
                 order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
                 if (order && order._id)
                     paymentRetry = true
+            } else {
+                if (getCurrentCart.items && getCurrentCart.items.length == 0) {
+                    getCurrentCart['promo'] = {}
+                    return { cartValidate: getCurrentCart }
+                }
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
