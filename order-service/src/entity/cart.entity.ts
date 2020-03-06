@@ -605,9 +605,14 @@ export class CartClass extends BaseEntity {
                             language: Constant.DATABASE.LANGUAGE.AR,
                             type: Constant.DATABASE.TYPE.MENU.FREE
                         })
-                        freeItems_En = freeItems_En.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
-                        freeItems_Ar = freeItems_Ar.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
-
+                        if (freeItems_En.products && freeItems_En.products.length > 0)
+                            freeItems_En = freeItems_En.products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
+                        else
+                            freeItems_En = []
+                        if (freeItems_Ar.products && freeItems_Ar.products.length > 0)
+                            freeItems_Ar = freeItems_Ar.products.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
+                        else
+                            freeItems_Ar = []
                         dataToUpdate['freeItems'] = {
                             ar: freeItems_Ar,
                             en: freeItems_En
