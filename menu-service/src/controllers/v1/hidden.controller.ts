@@ -84,8 +84,8 @@ export class HiddenController {
                 case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.HiddenArE.getHiddenProducts({ menuId: payload.menuId }); break;
             }
             if (menu && menu.length > 0) {
-                menu.filter(obj => {
-                    return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[Constant.DATABASE.TYPE.MENU.FREE])
+                menu = menu.filter(obj => {
+                    return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[payload.type])
                 })
             }
             console.log("menu...............", JSON.stringify(menu))
