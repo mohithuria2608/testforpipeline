@@ -665,14 +665,15 @@ export class CartClass extends BaseEntity {
                         en: []
                     }
                 }
-                amount.push({
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
-                    name: "Discount",
-                    code: cmsCart.coupon_code,
-                    amount: cmsCart.discount_amount,
-                    sequence: 2,
-                    action: "subtract"
-                })
+                if (cmsCart.discount_amount != 0)
+                    amount.push({
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
+                        name: "Discount",
+                        code: cmsCart.coupon_code,
+                        amount: cmsCart.discount_amount,
+                        sequence: 2,
+                        action: "subtract"
+                    })
                 dataToUpdate['couponApplied'] = 1
             } else {
                 dataToUpdate['couponApplied'] = 0
