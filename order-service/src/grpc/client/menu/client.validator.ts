@@ -39,7 +39,7 @@ export class MenuServiceValidator {
                     type: Joi.string().valid(
                         Constant.DATABASE.TYPE.MENU.FREE,
                         Constant.DATABASE.TYPE.MENU.UPSELL,
-                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
