@@ -611,7 +611,7 @@ export class CartClass extends BaseEntity {
                                 if (freeItems_En[0].products && freeItems_En[0].products.length > 0)
                                     freeItems_En = freeItems_En[0].products.filter(obj => {
                                         console.log("obj.sku", obj.sku, typeof obj.sku, freeItemSku.indexOf(obj.id.toString()))
-                                        return (freeItemSku.indexOf(obj.id.toString()) >= 0) || (obj.id == 1796)
+                                        return (freeItemSku.indexOf(obj.id.toString()) >= 0)
                                     })
                                 else
                                     freeItems_En = []
