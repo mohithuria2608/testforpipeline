@@ -603,7 +603,7 @@ export class CartClass extends BaseEntity {
                         let freeItems_Ar = await menuService.fetchHidden({
                             menuId: 1,
                             language: Constant.DATABASE.LANGUAGE.AR,
-                            type: Constant.DATABASE.TYPE.MENU.UPSELL
+                            type: Constant.DATABASE.TYPE.MENU.FREE
                         })
                         freeItems_En = freeItems_En.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
                         freeItems_Ar = freeItems_Ar.filter(obj => { return freeItemSku.indexOf(obj.sku.toString()) >= 0 })
