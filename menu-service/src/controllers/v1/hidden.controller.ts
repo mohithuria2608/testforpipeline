@@ -88,6 +88,7 @@ export class HiddenController {
                     return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[Constant.DATABASE.TYPE.MENU.FREE])
                 })
             }
+            console.log("menu...............", JSON.stringify(menu))
             return { menu: JSON.stringify(menu) }
         } catch (error) {
             consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)
