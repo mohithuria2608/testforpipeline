@@ -134,7 +134,12 @@ export class OrderController {
                  * @description step 4 inititate payment on Noonpay synchronously
                  */
                 let cmsReq = await ENTITY.CartE.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
-                let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
+
+                let cmsOrderReq = {
+                    ...cmsReq.req,
+                    payment_method: payload.paymentMethodId == 0 ? "cashondelivery" : "noonpay"
+                }
+                let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
 
                 // let getCurrentCart: ICartRequest.ICartData
                 if (cmsOrder && cmsOrder['order_id']) {
