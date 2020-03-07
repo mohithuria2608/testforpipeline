@@ -118,6 +118,7 @@ export const SERVER = {
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     MIN_COD_CART_VALUE: 300,//AED
     MIN_CART_VALUE: 23,//AED
+    MAX_PENDING_STATE_TIME: (8 * 60 * 1000),//millisecond
     PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
     PAYMENT_API_KEY_PREFIX: "Key_",
     DISPLAY_COLOR: true,
@@ -268,9 +269,9 @@ export const DATABASE = {
                     RESET: 5
                 },
                 INTERVAL: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             }
@@ -400,6 +401,11 @@ export const DATABASE = {
             COD: "Cash On Delivery"
         },
 
+        PAYMENT_METHOD_ID: {
+            CARD: 1,
+            COD: 0
+        },
+
         CONFIG: {
             GENERAL: "general",
             PAYMENT: "payment",
@@ -526,9 +532,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -537,9 +543,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [2], //@description : in kitchen
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -548,9 +554,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [2], //@description : in kitchen
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -559,9 +565,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [8], //@description : ready
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -570,9 +576,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [16, 32], //@description : assigned/shipped
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -581,9 +587,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [64, 128, 2048], //@description : delivered
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -592,9 +598,9 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [],
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -603,20 +609,20 @@ export const DATABASE = {
                 CMS: "",
                 SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
             FAILURE: {
                 MONGO: "FAILURE",
                 CMS: "",
-                SDM: [],
+                SDM: [-2], //@description : for development purpose, not sdm actual value
                 FREQ: {
-                    GET: 30000,
+                    GET: 5000,
                     GET_ONCE: 0,
-                    GET_MAX: 30000,
+                    GET_MAX: 65000,
                     NEXT_PING: 15,
                 }
             },
@@ -1398,6 +1404,8 @@ export const STATUS_MSG = {
         },
     },
     SDM_ORDER_VALIDATION: {
-        ORDER_AMOUNT_MISMATCH: "Order amount mismatch"
+        ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
+        EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
+        MAX_PENDING_TIME_REACHED: "Maximum pending time reached"
     }
 };

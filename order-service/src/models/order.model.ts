@@ -118,7 +118,7 @@ const orderSchema = new Schema({
         name_ar: { type: String },
     },
     payment: {
-        paymentMethodId: { type: Number, enum: [0, 1] },
+        paymentMethodId: { type: Number, enum: [Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD] },
         amount: { type: Number, default: 0 },
         name: {
             type: String, enum: [

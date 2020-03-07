@@ -397,6 +397,20 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let getFrequency = function (status: string, type: string, prevTimeInterval?: number) {
-    return { nextPingMs: Constant.DATABASE.STATUS.ORDER[status].FREQ[type], nextPingFe: Constant.DATABASE.STATUS.ORDER[status].FREQ.NEXT_PING }
+export let getFrequency = function (argv: IOrderRequest.IGetSdmOrderFreq) {
+    if (argv.statusChanged) {
+        let nextPingMs = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ[argv.type]
+        let nextPingFe = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.NEXT_PING
+        return { nextPingMs: nextPingMs, nextPingFe: nextPingFe }
+    } else {
+        if (argv.prevTimeInterval >= Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX) {
+            let nextPingMs = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX
+            let nextPingFe = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.NEXT_PING
+            return { nextPingMs: nextPingMs, nextPingFe: nextPingFe }
+        } else {
+            let nextPingMs = (Constant.DATABASE.STATUS.ORDER[argv.status].FREQ[argv.type] + argv.prevTimeInterval) > Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX ? Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX : (Constant.DATABASE.STATUS.ORDER[argv.status].FREQ[argv.type] + argv.prevTimeInterval)
+            let nextPingFe = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.NEXT_PING
+            return { nextPingMs: nextPingMs, nextPingFe: nextPingFe }
+        }
+    }
 }

@@ -92,7 +92,7 @@ export class OrderController {
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
-            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
+            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             let noonpayRedirectionUrl = ""
             if (!paymentRetry) {
@@ -142,7 +142,7 @@ export class OrderController {
 
                 let cmsOrderReq = {
                     ...cmsReq.req,
-                    payment_method: payload.paymentMethodId == 0 ? "cashondelivery" : "noonpay"
+                    payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
                 }
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
 
@@ -156,12 +156,12 @@ export class OrderController {
                 getCurrentCart['orderType'] = payload.orderType
                 order = await ENTITY.OrderE.createOrder(headers, payload.orderType, getCurrentCart, getAddress, getStore, userData, promo)
             }
-            if (payload.paymentMethodId != 0) {
+            if (payload.paymentMethodId != Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order.cmsOrderRef.toString(),
                     amount: totalAmount[0].amount,
                     storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                    paymentMethodId: 1,
+                    paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
                     channel: "Mobile",
                     locale: "en",
                 })
@@ -260,7 +260,12 @@ export class OrderController {
         try {
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1 })
             if (order && order._id) {
-                order['nextPing'] = getFrequency(order.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingFe
+                order['nextPing'] = getFrequency({
+                    status: order.status,
+                    type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                    prevTimeInterval: 0,
+                    statusChanged: false
+                }).nextPingFe
                 order['unit'] = "second"
                 return order
             } else {
@@ -301,14 +306,24 @@ export class OrderController {
             if (getSdmOrderRef && getSdmOrderRef._id) {
                 await ENTITY.OrderE.getSdmOrder({
                     sdmOrderRef: sdmOrder,
-                    timeInterval: getFrequency(getSdmOrderRef.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingMs
+                    timeInterval: getFrequency({
+                        status: getSdmOrderRef.status,
+                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                        prevTimeInterval: 0,
+                        statusChanged: false
+                    }).nextPingMs
                 })
                 let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
                 if (order && order._id) {
                     if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                     order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
-                    order['nextPing'] = getFrequency(getSdmOrderRef.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingFe
+                    order['nextPing'] = getFrequency({
+                        status: order.status,
+                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                        prevTimeInterval: 0,
+                        statusChanged: false
+                    }).nextPingFe
                     order['unit'] = "second"
                     return order
                 } else
@@ -333,13 +348,30 @@ export class OrderController {
             }, { sdmOrderRef: 1, createdAt: 1, status: 1 }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(order => {
-                    if ((order.createdAt + (8 * 60 * 1000)) > new Date().getTime())
+                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime())
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,
-                            timeInterval: getFrequency(order.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingMs
+                            timeInterval: getFrequency({
+                                status: order.status,
+                                type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                                prevTimeInterval: 0,
+                                statusChanged: false
+                            }).nextPingMs
                         })
+                    else {
+                        if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
+                            ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                                isActive: 0,
+                                status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                updatedAt: new Date().getTime(),
+                                sdmOrderStatus: -2,
+                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+                            })
+                        }
+                    }
                 });
             }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "bootstrapPendingOrders", JSON.stringify(error), false)
             return Promise.reject(error)

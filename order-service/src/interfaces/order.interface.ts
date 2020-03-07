@@ -86,4 +86,11 @@ declare namespace IOrderRequest {
         sdmOrderRef: number,
         timeInterval: number
     }
+
+    interface IGetSdmOrderFreq {
+        status: string,
+        type: string,
+        prevTimeInterval: number,
+        statusChanged: boolean
+    }
 }
