@@ -271,6 +271,7 @@ export class OrderController {
             return Promise.reject(error)
         }
     }
+
     /**
      * @method GET
      * @param {string=} cCode
@@ -317,6 +318,30 @@ export class OrderController {
 
         } catch (error) {
             consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @JUGAAD
+     * @description : @todo : remove this
+     */
+    async bootstrapPendingOrders() {
+        try {
+            let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
+                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+            }, { sdmOrderRef: 1, createdAt: 1, status: 1 }, { lean: true })
+            if (getPendingOrders && getPendingOrders.length > 0) {
+                getPendingOrders.forEach(order => {
+                    if ((order.createdAt + (8 * 60 * 1000)) > new Date().getTime())
+                        ENTITY.OrderE.getSdmOrder({
+                            sdmOrderRef: order.sdmOrderRef,
+                            timeInterval: getFrequency(order.status, Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE).nextPingMs
+                        })
+                });
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapPendingOrders", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

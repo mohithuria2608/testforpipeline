@@ -1,6 +1,7 @@
 import { Aerospike } from "../aerospike";
 import { Mongo } from '../mongo'
 import { SDM } from "../sdm";
+import { orderController } from '../controllers';
 
 export let bootstrap = async function (server) {
     
@@ -10,5 +11,6 @@ export let bootstrap = async function (server) {
 
     await SDM.init()
 
+    await orderController.bootstrapPendingOrders()
     return
 }
