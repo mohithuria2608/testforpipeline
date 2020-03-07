@@ -98,17 +98,17 @@ export class UserchangeEntity extends BaseEntity {
         try {
             if (curUserchnage && curUserchnage.id) {
                 if (curUserchnage.fullPhnNo) {
-                    if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo))
+                    if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo)) {
+                        console.log("incorrect phone number => invalid otp")
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
-                }
-                if (curUserchnage.cCode && curUserchnage.phnNo) {
-                    if (curUserchnage.cCode != payload.cCode || curUserchnage.phnNo != payload.phnNo)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                    }
                 }
                 if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (curUserchnage.otp != payload.otp)
+                if (curUserchnage.otp != payload.otp) {
+                    console.log("incorrect otp => invalid otp")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+                }
                 if (curUserchnage.otpExpAt < new Date().getTime())
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_EXPIRED)
             } else {
