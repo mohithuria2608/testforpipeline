@@ -929,7 +929,7 @@ export class OrderClass extends BaseEntity {
                                     statusChanged = true
                                 } else {
                                     if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO &&
-                                        (order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()) {
+                                        (order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
                                         recheck = false
                                         order = await this.updateOneEntityMdb({ _id: order._id }, {
                                             isActive: 0,
