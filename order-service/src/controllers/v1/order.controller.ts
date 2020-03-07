@@ -314,6 +314,10 @@ export class OrderController {
         }
     }
 
+    /**
+     * @JUGAAD
+     * @description : @todo : remove this
+     */
     async bootstrapPendingOrders() {
         try {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
