@@ -800,7 +800,7 @@ export class OrderClass extends BaseEntity {
 
                                                             CMS.OrderCMSE.updateOrder({
                                                                 order_id: order.cmsOrderRef,
-                                                                // payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                                                payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
                                                                 order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                                                             })
                                                         }, 10000)
@@ -858,7 +858,7 @@ export class OrderClass extends BaseEntity {
                                                     }, { new: true })
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
-                                                        // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                                         order_status: Constant.DATABASE.STATUS.ORDER.READY.MONGO
                                                     })
                                                     if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
@@ -875,7 +875,7 @@ export class OrderClass extends BaseEntity {
                                                         }, { new: true })
                                                         CMS.OrderCMSE.updateOrder({
                                                             order_id: order.cmsOrderRef,
-                                                            // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                            payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                                             order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO
                                                         })
                                                     }
@@ -894,7 +894,7 @@ export class OrderClass extends BaseEntity {
                                                     }, { new: true })
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
-                                                        // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                                         order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO
                                                     })
                                                     break;
@@ -913,7 +913,7 @@ export class OrderClass extends BaseEntity {
                                                     }, { new: true })
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
-                                                        // payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                                         order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO
                                                     })
                                                     break;
