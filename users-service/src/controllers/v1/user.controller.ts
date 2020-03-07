@@ -221,8 +221,10 @@ export class UserController {
                 if (sdmAddress && sdmAddress.length > 0)
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
 
-            } else
+            } else{
+                console.log("user not found => invalid otp")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
+            }
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: payload.isGuest,
                 userId: userData.id,
