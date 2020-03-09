@@ -41,6 +41,31 @@ export class SyncService {
             }
         })
     }
+    async fetchAppversion(payload: ISyncGrpcRequest.IFetchAppversion): Promise<ISyncGrpcRequest.IAppversion[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await syncServiceValidator.fetchAppversionValidator(payload)
+                let req = {
+                    isActive: payload.isActive
+                }
+                if (payload.deviceType)
+                    req['deviceType'] = payload.deviceType
+                if (payload.type)
+                    req['type'] = payload.type
+                this.syncClient.fetchAppversion(req, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully fetched app version", JSON.stringify(res), false)
+                        resolve(JSON.parse(res.appversion))
+                    } else {
+                        consolelog(process.cwd(), "Error in fetching  app version", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const syncService = new SyncService();

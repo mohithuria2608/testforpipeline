@@ -1,7 +1,7 @@
 import * as config from "config"
 import * as Constant from "../../constant";
 import { consolelog, grpcSendError } from "../../utils"
-import { menuController, hiddenController } from '../../controllers';
+import { menuController, hiddenController, miscController } from '../../controllers';
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -42,15 +42,27 @@ server.addService(menuProto.MenuService.service, {
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
-            if (call.request.set === Constant.SET_NAME.MENU_EN || call.request.set === Constant.SET_NAME.MENU_AR) {
-                let res = await menuController.syncFromKafka(call.request)
-                callback(null, res)
-            } else if (call.request.set === Constant.SET_NAME.HIDDEN_EN || call.request.set === Constant.SET_NAME.HIDDEN_AR) {
-                let res = await hiddenController.syncFromKafka(call.request)
-                callback(null, res)
-            } else {
-                callback("unhandled error in sync menu")
+            let data = call.request
+            let res: any
+            switch (data.set) {
+                case Constant.SET_NAME.MENU_EN: case Constant.SET_NAME.MENU_AR: {
+                    res = await menuController.syncFromKafka(data)
+                    break;
+                }
+                case Constant.SET_NAME.HIDDEN_AR: case Constant.SET_NAME.HIDDEN_EN: {
+                    res = await hiddenController.syncFromKafka(data)
+                    break;
+                }
+                case Constant.SET_NAME.PING_SERVICE: {
+                    res = await miscController.pingService(data)
+                    break;
+                }
+                default: {
+                    callback("unhandled grpc : set", {})
+                    break;
+                }
             }
+            callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "sync", JSON.stringify(error), false)
             callback(grpcSendError(error))

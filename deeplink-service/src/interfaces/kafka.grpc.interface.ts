@@ -1,5 +1,18 @@
-declare namespace IPromotionGrpcRequest {
-
+declare namespace IKafkaGrpcRequest {
+    interface IKafkaReq {
+        request: IKafkaBody
+    }
+    interface IKafkaBody {
+        set: string,
+        as?: IChangeAerospike
+        cms?: IChangeCMS
+        sdm?: IChangeSDM
+        mdb?: IChangeMongo
+        count?: number,
+        q?: string
+        error?: string
+        inQ: boolean,
+    }
     interface IChangeAerospike {
         create?: boolean,
         update?: boolean,
@@ -8,7 +21,6 @@ declare namespace IPromotionGrpcRequest {
         sync?: boolean,
         argv: string
     }
-
     interface IChangeCMS {
         create?: boolean,
         update?: boolean,
@@ -17,7 +29,6 @@ declare namespace IPromotionGrpcRequest {
         sync?: boolean,
         argv: string
     }
-
     interface IChangeSDM {
         create?: boolean,
         update?: boolean,
@@ -26,6 +37,7 @@ declare namespace IPromotionGrpcRequest {
         sync?: boolean,
         argv: string
     }
+
     interface IChangeMongo {
         create: boolean,
         update?: boolean,
@@ -33,13 +45,5 @@ declare namespace IPromotionGrpcRequest {
         get?: boolean,
         sync?: boolean,
         argv: string
-    }
-    
-    interface IValidatePromotionReq {
-        request: IPromotionRequest.IValidatePromotion
-    }
-
-    interface IValidatePromotionRes {
-        isValid: boolean
     }
 }

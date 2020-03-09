@@ -23,6 +23,11 @@ export class MiscController {
                         consolelog(process.cwd(), "config", JSON.stringify(config), true)
                         break;
                     }
+                    case Constant.SET_NAME.APP_VERSION: {
+                        let config = await syncService.fetchAppversion({ isActive: 1 })
+                        consolelog(process.cwd(), "appversion", JSON.stringify(config), true)
+                        break;
+                    }
                 }
             }
             return {}

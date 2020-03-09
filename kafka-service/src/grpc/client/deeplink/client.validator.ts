@@ -4,7 +4,7 @@ import * as Joi from '@hapi/joi';
 import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
-export class HomeServiceValidator {
+export class DeeplinkServiceValidator {
     constructor() {
     }
 
@@ -62,6 +62,6 @@ export class HomeServiceValidator {
 }
 
 
-export const homeServiceValidator = new HomeServiceValidator()
+export const deeplinkServiceValidator = new DeeplinkServiceValidator()
 
 

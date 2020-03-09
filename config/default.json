@@ -150,6 +150,10 @@
                     "server": "/../../../proto/sync.proto",
                     "client": "/../../../../proto/sync.proto"
                 },
+                "deeplink": {
+                    "server": "/../../../proto/deeplink.proto",
+                    "client": "/../../../../proto/deeplink.proto"
+                },
                 "notification": {
                     "server": "/../../../proto/notification.proto",
                     "client": "/../../../../proto/notification.proto"
