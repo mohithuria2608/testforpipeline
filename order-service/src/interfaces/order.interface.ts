@@ -19,7 +19,10 @@ declare namespace IOrderRequest {
         address: IAddress,
         store: IStore,
         amount: IAmount[],
-        promo: IPromotionGrpcRequest.IValidatePromotionRes
+        promo: IPromotionGrpcRequest.IValidatePromotionRes,
+        isFreeItem: boolean,
+        trackUntil: number,
+        validationRemarks: string,
     }
 
     interface IAddress {

@@ -85,7 +85,9 @@ export class OrderController {
                     paymentRetry = true
             } else {
                 if (getCurrentCart.items && getCurrentCart.items.length == 0) {
-                    getCurrentCart['promo'] = {}
+                    let midRes: any = { ...getCurrentCart }
+                    midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
+                    midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
                     return { cartValidate: getCurrentCart }
                 }
             }
@@ -146,15 +148,22 @@ export class OrderController {
                 }
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
 
-                if (cmsOrder && cmsOrder['order_id']) {
-                    getCurrentCart['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
-                } else {
-                    getCurrentCart = await ENTITY.CartE.updateCart(headers, payload.cartId, cmsOrder, false, payload.items, payload.selFreeItem)
-                    getCurrentCart['promo'] = promo ? promo : {}
+                if (cmsOrder && !cmsOrder['order_id']) {
+                    getCurrentCart = await ENTITY.CartE.updateCart({
+                        headers: headers,
+                        orderType: payload.orderType,
+                        cartId: payload.cartId,
+                        cmsCart: cmsOrder,
+                        changeCartUnique: true,
+                        curItems: payload.items,
+                        selFreeItem: payload.selFreeItem,
+                        invalidMenu: false,
+                        storeOnline: true,
+                        promo: promo ? promo : {}
+                    })
                     return { cartValidate: getCurrentCart }
                 }
-                getCurrentCart['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, getCurrentCart, getAddress, getStore, userData, promo)
+                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData, promo)
             }
             if (payload.paymentMethodId != Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({

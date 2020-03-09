@@ -26,9 +26,24 @@ export class CartController {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let checkCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (!checkCart)
+            let validatedCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            if (!validatedCart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            let dataToHash: ICartRequest.IDataToHash = {
+                items: payload.items,
+                promo: payload.couponCode ? 1 : 0,
+                updatedAt: validatedCart.updatedAt
+            }
+            const hash = hashObj(dataToHash)
+            console.log("cartUnique ================ ", validatedCart.cartUnique)
+            console.log("cartUnique ---------------- ", hash)
+            
+            if (hash == validatedCart.cartUnique && (new Date().getTime() - validatedCart.updatedAt) < (30 * 1000)) {
+                let midRes: any = { ...validatedCart }
+                midRes['invalidMenu'] = (validatedCart['invalidMenu'] == 1) ? true : false
+                midRes['storeOnline'] = (validatedCart['storeOnline'] == 1) ? true : false
+                return midRes
+            }
 
             let invalidMenu = false
             if (payload.lat && payload.lng) {
@@ -52,6 +67,7 @@ export class CartController {
                     invalidMenu = true
                 }
             }
+
             if (payload.couponCode && payload.items && payload.items.length > 0) {
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (!promo || (promo && !promo.isValid)) {
@@ -61,9 +77,20 @@ export class CartController {
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
             console.log("cmsValidatedCart", JSON.stringify(cmsValidatedCart))
-            let res = await ENTITY.CartE.updateCart(headers, payload.cartId, cmsValidatedCart, true, payload.items, payload.selFreeItem)
+            validatedCart = await ENTITY.CartE.updateCart({
+                headers: headers,
+                orderType: payload.orderType,
+                cartId: payload.cartId,
+                cmsCart: cmsValidatedCart,
+                changeCartUnique: true,
+                curItems: payload.items,
+                selFreeItem: payload.selFreeItem,
+                invalidMenu: invalidMenu,
+                promo: promo,
+                storeOnline: storeOnline
+            })
+            let res: any = { ...validatedCart }
             res['invalidMenu'] = invalidMenu
-            res['promo'] = promo
             res['storeOnline'] = storeOnline
             return res
         } catch (error) {

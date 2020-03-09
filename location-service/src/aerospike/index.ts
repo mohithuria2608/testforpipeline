@@ -55,6 +55,7 @@ class AerospikeClass {
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
+                        global.healthcheck.as = true
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         if (ENTITY.CountryE.sindex && ENTITY.CountryE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.CountryE.sindex)

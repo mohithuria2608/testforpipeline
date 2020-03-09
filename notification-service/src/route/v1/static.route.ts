@@ -1,4 +1,5 @@
 import * as Router from 'koa-router';
+import * as Constant from '../../constant';
 
 export default (router: Router) => {
     router

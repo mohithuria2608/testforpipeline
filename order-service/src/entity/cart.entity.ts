@@ -170,7 +170,9 @@ export class CartClass extends BaseEntity {
         status: Joi.string().valid(
             Constant.DATABASE.STATUS.ORDER.CART.AS,
         ).required(),
+        orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP, Constant.DATABASE.TYPE.ORDER.DELIVERY),
         updatedAt: Joi.number().required(),
+        createdAt: Joi.number().required(),
         address: Joi.object().keys({
             addressId: Joi.string(),
             sdmAddressRef: Joi.number(),
@@ -212,6 +214,9 @@ export class CartClass extends BaseEntity {
             ar: Joi.array().items(this.itemSchema),
             en: Joi.array().items(this.itemSchema)
         }),
+        invalidMenu: Joi.number().valid(0, 1).required(),
+        promo: Joi.any(),
+        storeOnline: Joi.number().valid(0, 1).required(),
     })
 
     /**
@@ -228,8 +233,6 @@ export class CartClass extends BaseEntity {
                     key: payload.cartId
                 }
                 let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
-                console.log("validate cart 444444444444444444444", cart)
-
                 if (cart && cart.cartId) {
                     return cart
                 } else
@@ -245,20 +248,13 @@ export class CartClass extends BaseEntity {
                     background: false,
                 }
                 let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
-                console.log("validate cart 5555555555555555555555", cart)
-
                 if (cart && cart.length > 0) {
                     return cart[0]
                 } else
                     cartFound = false
             }
-
-            console.log("validate cart 666666666666666666666", cartFound)
-
             if (!cartFound) {
                 let user = await userService.fetchUser({ cartId: payload.cartId })
-                console.log("validate cart 77777777777777777777777", cartFound)
-
                 if (user && user.id) {
                     if (user.cartId == payload.cartId) {
                         await this.createDefaultCart({
@@ -298,7 +294,10 @@ export class CartClass extends BaseEntity {
                 items: [],
                 address: {},
                 amount: [],
-                freeItems: { en: [], ar: [] }
+                freeItems: { en: [], ar: [] },
+                promo: {},
+                invalidMenu: 0,
+                storeOnline: 1
             }
             console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
@@ -318,7 +317,7 @@ export class CartClass extends BaseEntity {
 
     async resetCart(userId: string) {
         try {
-            let cartUpdate = {
+            let cartUpdate: ICartRequest.ICartData = {
                 cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
@@ -331,7 +330,12 @@ export class CartClass extends BaseEntity {
                 items: [],
                 address: {},
                 amount: [],
-                freeItems: { en: [], ar: [] }
+                freeItems: {
+                    en: [], ar: [],
+                },
+                promo: {},
+                invalidMenu: 0,
+                storeOnline: 1
             }
             let putArg: IAerospike.Put = {
                 bins: cartUpdate,
@@ -560,41 +564,43 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(headers: ICommonRequest.IHeaders, cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems: any, selFreeItem: any) {
+    async updateCart(payload: ICartRequest.IUpdateCart) {
         try {
             let prevCart: ICartRequest.ICartData
-            if (curItems == undefined) {
-                prevCart = await this.getCart({ cartId: cartId })
-                curItems = prevCart.items
+            if (payload.curItems == undefined) {
+                prevCart = await this.getCart({ cartId: payload.cartId })
+                payload.curItems = prevCart.items
             }
             let dataToUpdate: ICartRequest.ICartData = {}
-            console.log("cmsCart", JSON.stringify(cmsCart))
-
-            dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
+            console.log("cmsCart", JSON.stringify(payload.cmsCart))
+            dataToUpdate['orderType'] = payload.orderType
+            dataToUpdate['cmsCartRef'] = parseInt(payload.cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
-            dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
+            dataToUpdate['isPriceChanged'] = payload.cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
-
+            dataToUpdate['invalidMenu'] = payload.invalidMenu ? 1 : 0
+            dataToUpdate['storeOnline'] = payload.storeOnline ? 1 : 0
             let amount = []
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 name: "Sub Total",
                 code: "SUB_TOTAL",
-                amount: cmsCart.subtotal,
+                amount: payload.cmsCart.subtotal,
                 sequence: 1,
                 action: "add"
             })
-            if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
-                if (selFreeItem && selFreeItem.en && selFreeItem.en.length > 0) {
+            if (payload.cmsCart.coupon_code && payload.cmsCart.coupon_code != "") {
+                dataToUpdate['promo'] = payload.promo
+                if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
                     dataToUpdate['freeItems'] = {
                         ar: [],
                         en: []
                     }
-                    dataToUpdate['selFreeItem'] = selFreeItem
+                    dataToUpdate['selFreeItem'] = payload.selFreeItem
                 } else {
-                    if (cmsCart.free_items && cmsCart.free_items != "") {
-                        let freeItemSku = cmsCart.free_items.split(",")
+                    if (payload.cmsCart.free_items && payload.cmsCart.free_items != "") {
+                        let freeItemSku = payload.cmsCart.free_items.split(",")
                         if (freeItemSku && freeItemSku.length > 0) {
                             let freeItems_En = await menuService.fetchHidden({
                                 menuId: 1,
@@ -640,17 +646,18 @@ export class CartClass extends BaseEntity {
                         en: []
                     }
                 }
-                if (cmsCart.discount_amount != 0)
+                if (payload.cmsCart.discount_amount != 0)
                     amount.push({
                         type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
                         name: "Discount",
-                        code: cmsCart.coupon_code,
-                        amount: cmsCart.discount_amount,
+                        code: payload.cmsCart.coupon_code,
+                        amount: payload.cmsCart.discount_amount,
                         sequence: 2,
                         action: "subtract"
                     })
                 dataToUpdate['couponApplied'] = 1
             } else {
+                dataToUpdate['promo'] = {}
                 dataToUpdate['couponApplied'] = 0
                 dataToUpdate['freeItems'] = {
                     ar: [],
@@ -661,12 +668,12 @@ export class CartClass extends BaseEntity {
                     en: []
                 }
             }
-            if (cmsCart.tax && cmsCart.tax.length > 0) {
+            if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
                 amount.push({
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
-                    name: cmsCart.tax[0].tax_name,
-                    code: cmsCart.tax[0].tax_name,
-                    amount: cmsCart.tax[0].amount,
+                    name: payload.cmsCart.tax[0].tax_name,
+                    code: payload.cmsCart.tax[0].tax_name,
+                    amount: payload.cmsCart.tax[0].amount,
                     sequence: 3,
                     action: "add"
                 })
@@ -680,13 +687,13 @@ export class CartClass extends BaseEntity {
                     action: "add"
                 })
             }
-            if (cmsCart.shipping && cmsCart.shipping.length > 0) {
-                if (cmsCart.shipping[0].price > 0)
+            if (payload.cmsCart.shipping && payload.cmsCart.shipping.length > 0) {
+                if (payload.cmsCart.shipping[0].price > 0)
                     amount.push({
                         type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                         name: "Delivery",
-                        code: cmsCart.shipping[0].method_code,
-                        amount: cmsCart.shipping[0].price,
+                        code: payload.cmsCart.shipping[0].method_code,
+                        amount: payload.cmsCart.shipping[0].price,
                         sequence: 4,
                         action: "add"
                     })
@@ -695,42 +702,41 @@ export class CartClass extends BaseEntity {
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal,
+                amount: payload.cmsCart.grandtotal,
                 sequence: 5,
                 action: "add"
             })
             dataToUpdate['amount'] = amount
-            if (cmsCart.not_available && cmsCart.not_available.length > 0) {
-                curItems.forEach(obj => {
-                    if (cmsCart.not_available.indexOf(obj.id) == -1) {
+            if (payload.cmsCart.not_available && payload.cmsCart.not_available.length > 0) {
+                payload.curItems.forEach(obj => {
+                    if (payload.cmsCart.not_available.indexOf(obj.id) == -1) {
                         dataToUpdate['items'].push(obj)
                     } else {
                         dataToUpdate['notAvailable'].push(obj)
                     }
                 })
             } else
-                dataToUpdate['items'] = curItems
+                dataToUpdate['items'] = payload.curItems
 
             let updatedAt = new Date().getTime()
             dataToUpdate['updatedAt'] = updatedAt
-            if (changeCartUnique) {
+            if (payload.changeCartUnique) {
                 let dataToHash: ICartRequest.IDataToHash = {
                     items: dataToUpdate['items'],
                     promo: dataToUpdate['couponApplied'],
                     updatedAt: updatedAt
                 }
                 dataToUpdate['cartUnique'] = hashObj(dataToHash)
-                // this.ObjectId().toString()
             }
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
-                key: cartId,
+                key: payload.cartId,
                 update: true,
             }
             await Aerospike.put(putArg)
-            let newCart = await this.getCart({ cartId: cartId })
+            let newCart = await this.getCart({ cartId: payload.cartId })
             return newCart
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)

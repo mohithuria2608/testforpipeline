@@ -9,6 +9,7 @@ declare namespace ICartRequest {
         userId?: string,
         orderId?: string,
         status?: string,
+        orderType?: string
         createdAt?: number,
         updatedAt?: number,
         items?: any,
@@ -16,6 +17,9 @@ declare namespace ICartRequest {
         address?: IAddress,
         amount?: IAmount[],
         store?: IStore,
+        invalidMenu?: number,
+        promo?: IPromotionGrpcRequest.IValidatePromotionRes,
+        storeOnline?: number
         freeItems?: {
             ar?: any
             en?: any
@@ -78,6 +82,19 @@ declare namespace ICartRequest {
         cartId?: string,
         cmsCartRef?: number
         cartUpdatedAt?: number
+    }
+
+    interface IUpdateCart {
+        headers: ICommonRequest.IHeaders,
+        orderType: string,
+        cartId: string,
+        cmsCart: ICartCMSRequest.ICmsCartRes,
+        changeCartUnique: boolean,
+        curItems: any,
+        selFreeItem: any,
+        invalidMenu: boolean,
+        promo: IPromotionGrpcRequest.IValidatePromotionRes,
+        storeOnline: boolean
     }
 
     interface IDataToHash {

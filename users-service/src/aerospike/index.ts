@@ -56,6 +56,7 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         global.healthcheck.as = true
+                        global.healthcheck.as = true
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         this.udfRegister({ module: process.cwd() + '/lua/user.lua' })
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)

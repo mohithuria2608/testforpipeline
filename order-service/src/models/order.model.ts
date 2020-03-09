@@ -23,13 +23,21 @@ export interface Iorder extends Document {
     paymentMethodAddedOnSdm: number,
     createdAt: number,
     updatedAt: number,
-    trackUntil: number
+    trackUntil: number,
+    validationRemarks: string,
+    promo: any,
+    isFreeItem: any
 };
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
     cartUnique: { type: String },
-    orderType: { type: String, required: true },
+    orderType: {
+        type: String, required: true, enum: [
+            Constant.DATABASE.TYPE.ORDER.PICKUP,
+            Constant.DATABASE.TYPE.ORDER.DELIVERY
+        ]
+    },
     cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true },
@@ -144,6 +152,8 @@ const orderSchema = new Schema({
     updatedAt: { type: Number, required: true },
     trackUntil: { type: Number, required: true },
     validationRemarks: { type: String },
+    promo: { type: Schema.Types.Mixed },
+    isFreeItem: { type: Boolean }
 });
 
 export let order = model<Iorder>('order', orderSchema)

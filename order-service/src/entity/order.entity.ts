@@ -440,7 +440,12 @@ export class OrderClass extends BaseEntity {
     async createSdmOrder(payload: IOrderRequest.IOrderData) {
         try {
             let Comps
-            if (payload.promo && payload.promo.couponId && payload.promo.couponCode && payload.promo.posId) {
+            if (payload.promo &&
+                payload.promo.couponId &&
+                payload.promo.couponCode &&
+                payload.promo.posId &&
+                !payload.isFreeItem
+            ) {
                 let discountAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT })
                 Comps = {
                     KeyValueOfdecimalCCompkckD9yn_P: {
@@ -533,7 +538,7 @@ export class OrderClass extends BaseEntity {
     * */
     async createOrder(
         headers: ICommonRequest.IHeaders,
-        orderType: string,
+        cmsOrderRef: number,
         cartData: ICartRequest.ICartData,
         address: IUserGrpcRequest.IFetchAddressRes,
         store: IStoreGrpcRequest.IStore,
@@ -542,7 +547,7 @@ export class OrderClass extends BaseEntity {
         try {
             console.log("cartDaTa", cartData)
             let amount = cartData.amount
-            if (orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+            if (cartData.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING })
             }
             let items = cartData.items
@@ -551,15 +556,16 @@ export class OrderClass extends BaseEntity {
             else
                 items = items.concat(cartData.selFreeItem.ar)
             let orderData = {
-                orderType: orderType,
+                orderType: cartData.orderType,
                 cartId: cartData.cartId,
                 cartUnique: cartData.cartUnique,
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
-                cmsOrderRef: cartData.cmsOrderRef,
+                cmsOrderRef: cmsOrderRef,
                 userId: cartData.userId,
                 sdmUserRef: userData.sdmUserRef,
                 country: headers.country,
+                language: headers.language,
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
                 sdmOrderStatus: -1,
                 items: items,
@@ -601,13 +607,11 @@ export class OrderClass extends BaseEntity {
                 paymentMethodAddedOnSdm: 0
             }
             if (promo) {
-                if (promo.posId == 7193 || promo.posId == 6830)
-                    orderData['promo'] = promo
-                else
-                    orderData['promo'] = {}
+                orderData['promo'] = promo
             } else
                 orderData['promo'] = {}
-
+            if (cartData.selFreeItem && cartData.selFreeItem.ar && cartData.selFreeItem.ar.length > 0)
+                orderData['isFreeItem'] = true
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order
         } catch (error) {
