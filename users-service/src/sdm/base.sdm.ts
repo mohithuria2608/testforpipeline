@@ -26,6 +26,7 @@ export class BaseSDM {
         try {
             if (!BaseSDM.client) {
                 let soapC = await this.soap.createClientAsync(this.baseSOAPUrl)
+                global.healthcheck.sdm = true
                 consolelog(process.cwd(), "Soap client connected", "", true)
                 BaseSDM.client = soapC;
             }
