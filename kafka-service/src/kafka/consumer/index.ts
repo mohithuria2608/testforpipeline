@@ -50,7 +50,6 @@ export function initConsumers() {
     sdm_menuConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
 
-    // as_locationConsumerE.handleMessage();
     cms_locationConsumerE.handleMessage();
     as_storeConsumerE.handleMessage();
 
