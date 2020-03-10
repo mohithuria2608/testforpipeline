@@ -114,7 +114,6 @@ export const SERVER = {
     OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     MIN_COD_CART_VALUE: 300,//AED
     MIN_CART_VALUE: 23,//AED
@@ -413,7 +412,6 @@ export const DATABASE = {
         },
 
         TOKEN: {
-            CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
             REFRESH_AUTH: "REFRESH_AUTH"

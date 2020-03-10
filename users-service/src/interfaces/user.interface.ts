@@ -36,9 +36,6 @@ declare namespace IUserRequest {
     interface IEmail {
         email: string
     }
-    interface IRefreshToken {
-    }
-
     interface IAuthSendOtp extends IPhone {
     }
 
@@ -68,14 +65,6 @@ declare namespace IUserRequest {
         cCode?: string,
         phnNo?: string,
         cartId?: string
-    }
-
-    interface ICheckUserOnCms {
-
-    }
-
-    interface ICheckUserOnSdm {
-
     }
 
 }

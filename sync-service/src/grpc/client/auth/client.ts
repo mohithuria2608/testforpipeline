@@ -23,20 +23,6 @@ export class AuthService {
         console.log(process.cwd(),'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
     }
 
-    async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {
-        return new Promise(async (resolve, reject) => {
-            await authServiceValidator.createTokenValidator(payload)
-            this.authClient.createToken({ deviceid: payload.deviceid, tokenType: payload.tokenType, devicetype: payload.devicetype, authCred: payload.authCred }, (error, res) => {
-                if (!error) {
-                    consolelog(process.cwd(),"successfully created access and refresh token", JSON.stringify(res), false)
-                    resolve(res)
-                } else {
-                    consolelog(process.cwd(),"Error in creating token", JSON.stringify(error), false)
-                    reject(error)
-                }
-            })
-        })
-    }
     async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
             await authServiceValidator.verifyTokenValidator(payload)

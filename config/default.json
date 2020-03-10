@@ -188,6 +188,7 @@
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
+    "jwtAlgo": "HS256",
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",

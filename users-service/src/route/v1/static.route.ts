@@ -8,11 +8,11 @@ import { miscController } from '../../controllers';
 export default (router: Router) => {
     router
         .get('/', async (ctx: Router.IRouterContext) => {
-            if (global.healthcheck.as &&
-                global.healthcheck.sdm)
-                ctx.body = "<html>  <head>  </head> <body> user-service@KFC</body> </html>"
-            else
-                ctx.status = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.httpCode
+            //if (global.healthcheck.as &&
+            //                global.healthcheck.sdm)
+            ctx.body = "<html>  <head>  </head> <body> user-service@KFC</body> </html>"
+            //else
+            //                ctx.status = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.httpCode
         })
         .get('/faq',
             validate({

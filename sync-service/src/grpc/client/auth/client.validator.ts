@@ -7,32 +7,6 @@ import * as Constant from '../../../constant'
 export class AuthServiceValidator {
     constructor() {
     }
-    async  createTokenValidator(data: IAuthGrpcRequest.ICreateTokenData) {
-        return new Promise((resolve, reject) => {
-            try {
-                let dataToValidate = Joi.object().keys({
-                    deviceid: Joi.string().required(),
-                    tokenType: Joi.string().valid(
-                        Constant.DATABASE.TYPE.TOKEN.CMS_AUTH
-                    ).required(),
-                    devicetype: Joi.string().valid(
-                        Constant.DATABASE.TYPE.DEVICE.WEB
-                    ).required(),
-                    id: Joi.string().optional(),
-                    authCred: Joi.object().keys({
-                        username: Joi.string(),
-                        password: Joi.string()
-                    })
-                });
-                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-                if (error)
-                    reject(error.message)
-                resolve({})
-            } catch (error) {
-                reject(validatorErr(error.message))
-            }
-        })
-    }
 
     async verifyTokenValidator(data: IAuthGrpcRequest.IVerifyTokenObj) {
         return new Promise((resolve, reject) => {

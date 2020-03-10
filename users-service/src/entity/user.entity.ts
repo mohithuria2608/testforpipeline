@@ -388,34 +388,6 @@ export class UserEntity extends BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    /**
-     * @description Get user info from CMS
-     * @param payload 
-     */
-    async checkUserOnCms(payload: IUserRequest.ICheckUserOnCms): Promise<any> {
-        try {
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "checkUserOnCms", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @description Get user info from SDM
-     * @param payload 
-     */
-    async checkUserOnSdm(payload: IUserRequest.ICheckUserOnSdm): Promise<any> {
-        try {
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "checkUserOnSdm", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-
 }
 
 export const UserE = new UserEntity()
