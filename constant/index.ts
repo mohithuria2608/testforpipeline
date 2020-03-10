@@ -573,6 +573,12 @@ export const DATABASE = {
     }
 };
 
+export const SMS_MSG = {
+    USER: {
+        OTP_VERIFICATION: (otp) => `${otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone.`,
+    }
+}
+
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {

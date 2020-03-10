@@ -9,7 +9,7 @@ export class LocationClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
 
     constructor() {
-        super('location')
+        super(Constant.SET_NAME.LOCATION)
     }
 
     /**

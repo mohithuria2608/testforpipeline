@@ -2,9 +2,7 @@ declare namespace INotificationGrpcRequest {
 
     interface ISendSms {
         message: string,
-        destination: string,
-        type: number,
-        dlr: number,
+        destination: string
     }
 
     interface ISendSmsRes {

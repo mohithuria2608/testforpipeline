@@ -7,8 +7,6 @@ service NotificationService {
 message ISmsReq {
     required string message = 1;
     required string destination = 2;
-    required int32 type = 3;
-    required int32 dlr = 4;
 }
 
 message ISmsRes { }

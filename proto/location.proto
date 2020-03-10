@@ -3,7 +3,7 @@ syntax = "proto3";
 service LocationService {
     rpc FetchStore (IFetchStoreReq) returns (IFetchStoreRes) {}
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
-    rpc SyncStores (ISyncStoresReq) returns (ISyncStoresRes) {}
+    rpc SyncLocationFromCMS (ISyncLocationFromCMSReq) returns (ISyncLocationFromCMSRes) {}
     rpc PostLocationDataToCMS (IPostLocationDataToCMSReq) returns (IPostLocationDataToCMSRes) {}
 }
 
@@ -29,6 +29,21 @@ message ISyncStoresRes {
 
 message IFetchStoreRes {
     required IStore store = 1;
+}
+
+message ISyncLocationFromCMSReq {
+    required string set = 1;
+    optional IAerospike as = 2;
+    optional ICms cms = 3;
+    optional ISdm sdm = 4;
+    optional IMdb mdb = 5;
+    optional int32 count = 6;
+    optional string q = 7;
+    optional string error = 8;
+}
+
+message ISyncLocationFromCMSRes {
+    required bool store = 1;
 }
 
 message IPostLocationDataToCMSRes {

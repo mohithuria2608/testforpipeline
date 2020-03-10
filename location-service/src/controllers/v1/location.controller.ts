@@ -138,6 +138,22 @@ export class LocationController {
             return Promise.reject(error)
         }
     }
+
+    /**
+     * @method GRPC
+     * syncs location data from CMS
+     */
+    async syncLocationFromCMS(payload): Promise<any> {
+        try {
+            let syncData = JSON.parse(payload.as.argv);
+            // switch (syncData.type) {
+            //     case 'city': 
+            // }
+        } catch (error) {
+            consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const locationController = new LocationController();

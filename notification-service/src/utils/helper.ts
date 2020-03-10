@@ -5,6 +5,7 @@ import * as Constant from '../constant'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
+const utf8 = require('utf8');
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
@@ -389,4 +390,24 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
             return new Error(statsObj.message)
     else
         return statsObj
+}
+
+export let utfConverter = function (input: string) {
+    var encoded = utf8.encode(input);
+    var output = "";
+
+    function convertIntoUtf16(utf16) {
+        if (utf16.length == 1) return utf16[0].toString(16).padStart(4, '0');
+        else return utf16[0].toString(16).padStart(4, '0') + utf16[1].toString(16).padStart(4, '0');
+    }
+
+    for (var i = 0; i < encoded.length; i++) {
+        var byte = encoded[i].charCodeAt(0);
+        if (byte <= 0xffff) output += convertIntoUtf16([byte]);
+        else {
+            let minus10000 = byte - 0x10000;
+            output += convertIntoUtf16([(minus10000 >> 10) + 0xD800, (minus10000 & parseInt("1111111111", 2)) + 0xDC00]);
+        }
+    }
+    return output;
 }

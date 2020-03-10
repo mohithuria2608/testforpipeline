@@ -287,16 +287,27 @@ export class KafkaController {
                         delete messages.sdm;
                         delete messages.as;
                         delete messages.mdb;
-                        console.log("------------>", messages);
+                        console.log("HERERERE ---> ");
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
                         messages['q'] = topic
                         kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm;
+                        delete messages.cms;
+                        delete messages.mdb;
+                        if (!payload.hasOwnProperty('count'))
+                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION
+                        messages['q'] = topic
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
                     break;
                 }
-                case Constant.SET_NAME.HIDDEN_EN: case Constant.SET_NAME.HIDDEN_AR:{
+                case Constant.SET_NAME.HIDDEN_EN: case Constant.SET_NAME.HIDDEN_AR: {
                     let messages = null;
                     let topic = null
                     let partition = 0
