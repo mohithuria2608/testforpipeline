@@ -19,6 +19,7 @@ declare namespace IOrderRequest {
         address: IAddress,
         store: IStore,
         amount: IAmount[],
+        language: string,
         promo: IPromotionGrpcRequest.IValidatePromotionRes
     }
 
@@ -85,6 +86,7 @@ declare namespace IOrderRequest {
     interface IGetSdmOrder {
         sdmOrderRef: number,
         status?: string,
+        language: string
         timeInterval: number
     }
 }

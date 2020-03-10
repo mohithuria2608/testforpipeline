@@ -33,11 +33,12 @@ export class OrderController {
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
-                let data = JSON.parse(payload.sdm.argv)
+                let data = JSON.parse(payload.sdm.argv);
+                data.language = Constant.DATABASE.LANGUAGE.EN;
                 if (payload.sdm.create)
                     await ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
-                    await ENTITY.OrderE.getSdmOrder(data)
+                await ENTITY.OrderE.getSdmOrder(data, true)
             }
             return {}
         } catch (error) {
@@ -279,7 +280,8 @@ export class OrderController {
             }
             await ENTITY.OrderE.getSdmOrder({
                 sdmOrderRef: sdmOrder,
-                timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS_ONCE
+                timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS_ONCE,
+                language: headers.language
             })
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
             if (order && order._id) {

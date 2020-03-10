@@ -228,7 +228,7 @@ export class GuestController {
                 }
                 userchangePayload['id'] = asUserByPhone[0].id
                 userchangePayload['deleteUserId'] = auth.id
-                await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload)
+                await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload, headers.language)
             } else {
                 let queryArg: IAerospike.Query = {
                     equal: {
@@ -308,7 +308,7 @@ export class GuestController {
                     }
                 }
                 console.log("userchangePayload", userchangePayload)
-                await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
+                await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload, headers.language)
             }
 
             userData['name'] = payload.name

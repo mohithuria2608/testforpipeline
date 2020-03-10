@@ -3,7 +3,7 @@ import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import * as CMS from "../cms"
-import { kafkaService, paymentService } from '../grpc/client';
+import { kafkaService, paymentService, notificationService, userService } from '../grpc/client';
 import { OrderSDME } from '../sdm';
 
 
@@ -504,6 +504,7 @@ export class OrderClass extends BaseEntity {
                     this.getSdmOrder({
                         sdmOrderRef: order.sdmOrderRef,
                         timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS,
+                        language: payload.language
                         // status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
                     })
                 }
@@ -613,7 +614,7 @@ export class OrderClass extends BaseEntity {
     * @param {string} sdmOrderRef : sdm order id
     * @param {string} timeInterval : set timeout interval
     * */
-    async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
+    async getSdmOrder(payload: IOrderRequest.IGetSdmOrder, isSync: boolean = false) {
         try {
             setTimeout(async () => {
                 let recheck = true
@@ -741,7 +742,17 @@ export class OrderClass extends BaseEntity {
                                                 status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                 updatedAt: new Date().getTime(),
                                                 sdmOrderStatus: sdmOrder.Status
-                                            }, { new: true })
+                                            }, { new: true });
+
+                                            // send sms to user only if not in sync
+                                            if (!isSync) {
+                                                let userData = await userService.fetchUser({ userId: order.userId });
+                                                let smsMessage = (order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY) ? Constant.SMS_MSG[payload.language].ORDER.DELIVERY_CONFIRMED(order) : Constant.SMS_MSG[payload.language].ORDER.PICKUP_CONFIRMED(order);
+                                                notificationService.sendSms({
+                                                    message: smsMessage,
+                                                    destination: encodeURIComponent(userData.cCode + userData.phnNo)
+                                                });
+                                            }
 
                                             setTimeout(async () => {
                                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
@@ -778,7 +789,17 @@ export class OrderClass extends BaseEntity {
                                                         transLogs: status
                                                     },
                                                     updatedAt: new Date().getTime()
-                                                })
+                                                });
+
+                                                // send sms to user only if not in sync
+                                                if (!isSync) {
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    let smsMessage = (order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY) ? Constant.SMS_MSG[payload.language].ORDER.DELIVERY_CONFIRMED(order) : Constant.SMS_MSG[payload.language].ORDER.PICKUP_CONFIRMED(order);
+                                                    notificationService.sendSms({
+                                                        message: smsMessage,
+                                                        destination: encodeURIComponent(userData.cCode + userData.phnNo)
+                                                    });
+                                                }
                                             }
                                         }
                                     }
@@ -816,12 +837,20 @@ export class OrderClass extends BaseEntity {
                                     else if (parseInt(sdmOrder.Status) == 512 || parseInt(sdmOrder.Status) == 256 || parseInt(sdmOrder.Status) == 1024 || parseInt(sdmOrder.Status) == 4096 || parseInt(sdmOrder.Status) == 8192) {
                                         consolelog(process.cwd(), "order step 17:       ", parseInt(sdmOrder.Status), true)
                                         recheck = false
-                                        this.updateOneEntityMdb({ _id: order._id }, {
+                                        let orderData = this.updateOneEntityMdb({ _id: order._id }, {
                                             isActive: 0,
                                             status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
                                             updatedAt: new Date().getTime(),
                                             sdmOrderStatus: sdmOrder.Status
-                                        })
+                                        });
+                                        // send sms to user only if not in sync
+                                        if (!isSync) {
+                                            let userData = await userService.fetchUser({ userId: order.userId });
+                                            notificationService.sendSms({
+                                                message: Constant.SMS_MSG[payload.language].ORDER.ORDER_CANCEL(orderData),
+                                                destination: encodeURIComponent(userData.cCode + userData.phnNo)
+                                            });
+                                        }
                                     }
                                     else {
                                         recheck = false
