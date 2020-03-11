@@ -26,11 +26,7 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.TAG.HOME,
                         Constant.DATABASE.TYPE.TAG.OFFICE,
                         Constant.DATABASE.TYPE.TAG.HOTEL,
-                        Constant.DATABASE.TYPE.TAG.OTHER,
-                        Constant.DATABASE.TYPE.TAG.home,
-                        Constant.DATABASE.TYPE.TAG.office,
-                        Constant.DATABASE.TYPE.TAG.hotel,
-                        Constant.DATABASE.TYPE.TAG.other,
+                        Constant.DATABASE.TYPE.TAG.OTHER
                     ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                 }
             }),

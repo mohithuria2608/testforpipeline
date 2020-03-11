@@ -454,11 +454,7 @@ export const DATABASE = {
             HOME: "HOME",
             OFFICE: "OFFICE",
             HOTEL: "HOTEL",
-            OTHER: "OTHER",
-            home: "home",
-            office: "office",
-            hotel: "hotel",
-            other: "other"
+            OTHER: "OTHER"
         },
 
         ADDRESS: {
