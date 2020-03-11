@@ -178,12 +178,13 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.113.79.117/media/catalog/product/",
-        "home": "http://40.123.207.192/pub/media/homepage/",
+        "product": "http://40.123.205.1/pub/media/catalog/product/",
+        "home": "http://40.123.205.1/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
+    "jwtAlgo": "HS256",
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",
@@ -198,7 +199,11 @@
     "aerospike": {
         "hosts": "aerospike.aerospikedb.svc.cluster.local:3000",
         "username": "",
-        "password": ""
+        "password": "",
+        "config": {
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
+        }
     },
     "mongo": {
         "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",
@@ -207,7 +212,7 @@
         "password": "AppInvDbUser"
     },
     "cms": {
-        "baseUrl": "http://40.113.79.117/rest/V1/"
+        "baseUrl": "https://magentouat.appskeeper.com/rest/V1/"
     },
     "sdm": {
         "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"

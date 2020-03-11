@@ -7,6 +7,6 @@ export let bootstrap = async function (server) {
     /**
      * @description Bootstrap promotions
      */
-    promotionController.postPromotion();
+    // promotionController.postPromotion();
     return
 }

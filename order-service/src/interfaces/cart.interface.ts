@@ -9,24 +9,35 @@ declare namespace ICartRequest {
         userId?: string,
         orderId?: string,
         status?: string,
+        orderType?: string
         createdAt?: number,
         updatedAt?: number,
         items?: any,
         notAvailable?: any
         address?: IAddress,
         amount?: IAmount[],
+        vat?: IAmount,
         store?: IStore,
+        invalidMenu?: number,
+        promo?: IPromotionGrpcRequest.IValidatePromotionRes,
+        storeOnline?: number
         freeItems?: {
             ar?: any
             en?: any
-        }
+        },
+        selFreeItem?: {
+            ar?: any
+            en?: any
+        },
     }
 
     interface IAmount {
-        type: string
-        name: string
-        code: string
-        amount: number
+        type?: string
+        name?: string
+        code?: string
+        amount?: number,
+        sequence?: number,
+        action?: string
     }
     interface IAddress {
         addressId?: string,
@@ -74,6 +85,19 @@ declare namespace ICartRequest {
         cartId?: string,
         cmsCartRef?: number
         cartUpdatedAt?: number
+    }
+
+    interface IUpdateCart {
+        headers: ICommonRequest.IHeaders,
+        orderType: string,
+        cartId: string,
+        cmsCart: ICartCMSRequest.ICmsCartRes,
+        changeCartUnique: boolean,
+        curItems: any,
+        selFreeItem: any,
+        invalidMenu: boolean,
+        promo: IPromotionGrpcRequest.IValidatePromotionRes,
+        storeOnline: boolean
     }
 
     interface IDataToHash {

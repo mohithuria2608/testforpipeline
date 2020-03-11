@@ -5,12 +5,6 @@ declare namespace IAuthGrpcRequest {
         devicetype: string,
         tokenType: string,
         id?: string,
-        authCred?: IAuthCred
-    }
-
-    interface IAuthCred {
-        username: string,
-        password: string
     }
 
     interface IVerifyTokenObj {

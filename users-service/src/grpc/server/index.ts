@@ -58,6 +58,10 @@ server.addService(userProto.UserService.service, {
                     res = await miscController.pingService(data)
                     break;
                 }
+                default: {
+                    callback("unhandled grpc : set", {})
+                    break;
+                }
             }
             callback(null, res)
         } catch (error) {

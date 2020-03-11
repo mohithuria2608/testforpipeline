@@ -10,3 +10,71 @@
 
 
 * bypass cms for order placing
+
+
+* uanttended order on cms (order placed on sdm but not on cms)
+* status update from sdm (8 mins)
+* ms not responding state handling
+* health check on ms
+
+
+
+* payment jira 
+1396
+1423
+1392
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <-- POST /v1/login/verify-otp
+Body parameters {"otp":"1212","cCode":"+971","isGuest":0,"phnNo":"585469785"}
+Query parameters {}
+Path parameters {"0":"/v1/login/verify-otp"}
+user not found => invalid otp
+{"level":"error","message":"app--------------In error handler--------------{\"statusCode\":400,\"httpCode\":400,\"type\":\"INVALID_OTP\",\"message\":\"You have entered an incorrect OTP. Please try again\",\"message_Ar\":\"لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى\",\"message_En\":\"You have entered an incorrect OTP. Please try again\"}","timestamp":"2020-03-10T17:37:56.669Z"}
+{"level":"error","message":"app--------------In error handler type of --------------string","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"error","message":"app--------------In error handler direct --------------{\"statusCode\":400,\"httpCode\":400,\"type\":\"INVALID_OTP\",\"message\":\"You have entered an incorrect OTP. Please try again\",\"message_Ar\":\"لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى\",\"message_En\":\"You have entered an incorrect OTP. Please try again\"}","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"error","message":"app--------------In error handler parsed --------------{\"statusCode\":400,\"httpCode\":400,\"type\":\"INVALID_OTP\",\"message\":\"You have entered an incorrect OTP. Please try again\",\"message_Ar\":\"لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى\",\"message_En\":\"You have entered an incorrect OTP. Please try again\"}","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"error","message":"app--------------In error sendError(error)--------------{\"statusCode\":400,\"httpCode\":400,\"payload\":{\"statusCode\":400,\"httpCode\":400,\"message\":\"You have entered an incorrect OTP. Please try again\",\"type\":\"INVALID_OTP\"},\"headers\":{}}","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"error","message":"app--------------In error handler type of --------------string","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"error","message":"app--------------In error handler direct --------------{\"statusCode\":400,\"httpCode\":400,\"type\":\"INVALID_OTP\",\"message\":\"You have entered an incorrect OTP. Please try again\",\"message_Ar\":\"لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى\",\"message_En\":\"You have entered an incorrect OTP. Please try again\"}","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"error","message":"app--------------In error handler parsed --------------{\"statusCode\":400,\"httpCode\":400,\"type\":\"INVALID_OTP\",\"message\":\"You have entered an incorrect OTP. Please try again\",\"message_Ar\":\"لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى\",\"message_En\":\"You have entered an incorrect OTP. Please try again\"}","timestamp":"2020-03-10T17:37:56.670Z"}
+{"level":"info","message":"app--------------activity log--------------{\"type\":\"REQUEST\",\"info\":{\"request\":{\"query\":{},\"path\":\"/v1/login/verify-otp\",\"method\":\"POST\",\"pathParams\":{\"0\":\"/v1/login/verify-otp\"},\"body\":{\"otp\":\"1212\",\"cCode\":\"+971\",\"isGuest\":0,\"phnNo\":\"585469785\"}},\"response\":{\"statusCode\":400,\"message\":\"You have entered an incorrect OTP. Please try again\"},\"ip\":\"::ffff:10.2.2.6\",\"executionTime\":5,\"user\":{}},\"description\":\"\",\"options\":{\"env\":3},\"createdAt\":1583861876670}","timestamp":"2020-03-10T17:37:56.670Z"}
+  --> POST /v1/login/verify-otp 400 7ms 118b
+{"level":"error","message":"app--------------successfully produced data on kafka for syncing--------------{\"data\":\"success\"}","timestamp":"2020-03-10T17:37:56.673Z"}
+  <-- PATCH /v1/profile/create
+{"level":"info","message":"app--------------authorization--------------Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VpZCI6IjZFOTZBRTU0LTU4RTgtNDRCRS05NzZDLUNGNTg2QkRGQzhBRiIsImRldmljZXR5cGUiOiJJT1MiLCJ0b2tlblR5cGUiOiJVU0VSX0FVVEgiLCJpZCI6IjVlNjdkMDcxMGJjOTBkMDAxYTJiNWI4ZCIsImF1dGhDcmVkIjpudWxsLCJpc0d1ZXN0IjowLCJzZXNzaW9uVGltZSI6MTU4Mzg2MTg4NiwiZXhwIjoxNTkyNTAxODg1LCJpYXQiOjE1ODM4NjE4ODV9.JKU3rFVuwzuKtHXTOGmkKQDAYhbjTq9X0Nnmw9ETTtY","timestamp":"2020-03-10T17:38:14.624Z"}
+{"level":"error","message":"app--------------successfully verified token--------------{\"tokenType\":\"USER_AUTH\",\"deviceid\":\"6E96AE54-58E8-44BE-976C-CF586BDFC8AF\",\"devicetype\":\"IOS\",\"id\":\"5e67d0710bc90d001a2b5b8d\",\"isGuest\":0,\"sessionTime\":1583861886}","timestamp":"2020-03-10T17:38:14.630Z"}
+Body parameters {"email":"hshbja@hhab.com","cCode":"+971","phnNo":"585469785","name":"hag dk"}
+Query parameters {}
+Path parameters {"0":"/v1/profile/create"}
+{"level":"error","message":"app--------------In error handler--------------{\"statusCode\":409,\"httpCode\":409,\"message\":\"This user does not exist \",\"type\":\"USER_NOT_FOUND\",\"message_Ar\":\"هذا المستخدم غير موجود\",\"message_En\":\"This user does not exist \"}","timestamp":"2020-03-10T17:38:14.633Z"}
+{"level":"error","message":"app--------------In error handler type of --------------string","timestamp":"2020-03-10T17:38:14.633Z"}
+{"level":"error","message":"app--------------In error handler direct --------------{\"statusCode\":409,\"httpCode\":409,\"message\":\"This user does not exist \",\"type\":\"USER_NOT_FOUND\",\"message_Ar\":\"هذا المستخدم غير موجود\",\"message_En\":\"This user does not exist \"}","timestamp":"2020-03-10T17:38:14.634Z"}
+{"level":"error","message":"app--------------In error handler parsed --------------{\"statusCode\":409,\"httpCode\":409,\"message\":\"This user does not exist \",\"type\":\"USER_NOT_FOUND\",\"message_Ar\":\"هذا المستخدم غير موجود\",\"message_En\":\"This user does not exist \"}","timestamp":"2020-03-10T17:38:14.634Z"}
+{"level":"error","message":"app--------------In error sendError(error)--------------{\"statusCode\":409,\"httpCode\":409,\"payload\":{\"statusCode\":409,\"httpCode\":409,\"message\":\"This user does not exist \",\"type\":\"USER_NOT_FOUND\"},\"headers\":{}}","timestamp":"2020-03-10T17:38:14.634Z"}
+{"level":"error","message":"app--------------In error handler type of --------------string","timestamp":"2020-03-10T17:38:14.634Z"}
+{"level":"error","message":"app--------------In error handler direct --------------{\"statusCode\":409,\"httpCode\":409,\"message\":\"This user does not exist \",\"type\":\"USER_NOT_FOUND\",\"message_Ar\":\"هذا المستخدم غير موجود\",\"message_En\":\"This user does not exist \"}","timestamp":"2020-03-10T17:38:14.634Z"}
+{"level":"error","message":"app--------------In error handler parsed --------------{\"statusCode\":409,\"httpCode\":409,\"message\":\"This user does not exist \",\"type\":\"USER_NOT_FOUND\",\"message_Ar\":\"هذا المستخدم غير موجود\",\"message_En\":\"This user does not exist \"}","timestamp":"2020-03-10T17:38:14.634Z"}
+{"level":"info","message":"app--------------activity log--------------{\"type\":\"REQUEST\",\"info\":{\"request\":{\"query\":{},\"path\":\"/v1/profile/create\",\"method\":\"PATCH\",\"pathParams\":{\"0\":\"/v1/profile/create\"},\"body\":{\"email\":\"hshbja@hhab.com\",\"cCode\":\"+971\",\"phnNo\":\"585469785\",\"name\":\"hag dk\"}},\"response\":{\"statusCode\":409,\"message\":\"This user does not exist \"},\"ip\":\"::ffff:10.2.2.6\",\"executionTime\":4,\"user\":{\"tokenType\":\"USER_AUTH\",\"deviceid\":\"6E96AE54-58E8-44BE-976C-CF586BDFC8AF\",\"devicetype\":\"IOS\",\"id\":\"5e67d0710bc90d001a2b5b8d\",\"isGuest\":0,\"sessionTime\":1583861886}},\"description\":\"\",\"options\":{\"env\":3},\"createdAt\":1583861894634}","timestamp":"2020-03-10T17:38:14.634Z"}
+  --> PATCH /v1/profile/create 409 12ms 95b
+{"level":"error","message":"app--------------successfully produced data on kafka for syncing--------------{\"data\":\"success\"}","timestamp":"2020-03-10T17:38:14.636Z"}
+  <-- GET /
+  --> GET / 200 1ms 62b
+  <-- GET /
+  --> GET / 200 1ms 62b
+  <-- GET /
+  --> GET / 200 1ms 62b
+  <-- GET /
+

@@ -13,15 +13,8 @@ declare namespace ICommonRequest {
         tokenType: string,
         id?: string,
         isGuest: number,
-        authCred?: IAuthCred
         sessionTime: number
     }
-
-    interface IAuthCred {
-        username: string,
-        password: string
-    }
-
 
     interface IPagination {
         page?: number,

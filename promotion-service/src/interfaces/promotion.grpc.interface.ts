@@ -1,20 +1,5 @@
 declare namespace IPromotionGrpcRequest {
 
-    interface IKafkaReq {
-        request: IKafkaBody
-    }
-    interface IKafkaBody {
-        set: string,
-        as: IChangeAerospike
-        cms: IChangeCMS
-        sdm: IChangeSDM
-        mdb?: IChangeMongo
-        count?: number,
-        q?: string
-        error?: string
-        inQ: boolean,
-    }
-
     interface IChangeAerospike {
         create?: boolean,
         update?: boolean,

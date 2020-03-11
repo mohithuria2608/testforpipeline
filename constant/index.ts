@@ -114,10 +114,10 @@ export const SERVER = {
     OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
     ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
     REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    CMS_AUTH_EXP: (10 * 60 * 1000),
     TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
     MIN_COD_CART_VALUE: 300,//AED
     MIN_CART_VALUE: 23,//AED
+    MAX_PENDING_STATE_TIME: (8 * 60 * 1000),//millisecond
     PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
     PAYMENT_API_KEY_PREFIX: "Key_",
     DISPLAY_COLOR: true,
@@ -125,7 +125,8 @@ export const SERVER = {
     ANDROID_PACKAGE_NAME: "com.android.kfc",
     IOS_SCHEME_HOST: "americanaKFCUAE://",
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
-    AUTH_MECH: "Bearer"
+    AUTH_MECH: "Bearer",
+    ADDR_SHOW_TIME: 3,//hr
 };
 
 export const DATABASE = {
@@ -199,6 +200,14 @@ export const DATABASE = {
             CREATE_ORDER: {
                 METHOD: "POST",
                 URL: "custom-order/create-order"
+            },
+            UPDATE_ORDER: {
+                METHOD: "POST",
+                URL: "custom-order/update-attribute"
+            },
+            CREATE_TRANSACTION: {
+                METHOD: "POST",
+                URL: "custom-order/add-transaction"
             }
         }
     },
@@ -259,8 +268,10 @@ export const DATABASE = {
                     RESET: 5
                 },
                 INTERVAL: {
-                    GET_STATUS: 30000,
-                    GET_STATUS_ONCE: 0
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
                 }
             }
         },
@@ -389,6 +400,11 @@ export const DATABASE = {
             COD: "Cash On Delivery"
         },
 
+        PAYMENT_METHOD_ID: {
+            CARD: 1,
+            COD: 0
+        },
+
         CONFIG: {
             GENERAL: "general",
             PAYMENT: "payment",
@@ -396,7 +412,6 @@ export const DATABASE = {
         },
 
         TOKEN: {
-            CMS_AUTH: "CMS_AUTH",
             GUEST_AUTH: "GUEST_AUTH",
             USER_AUTH: "USER_AUTH",
             REFRESH_AUTH: "REFRESH_AUTH"
@@ -481,7 +496,22 @@ export const DATABASE = {
             TAX: "TAX",
             SHIPPING: "SHIPPING",
             TOTAL: "TOTAL",
+        },
+        FREQ_TYPE: {
+            GET: "GET",
+            GET_ONCE: "GET_ONCE",
+            GET_MAX: "GET_MAX",
+        },
 
+        MENU: {
+            MENU: "MENU",
+            FREE: "FREE",
+            UPSELL: "UPSELL"
+        },
+
+        MENU_CATEGORY: {
+            FREE: "Free Product",
+            UPSELL: "Upsell"
         }
     },
 
@@ -489,52 +519,106 @@ export const DATABASE = {
         ORDER: {
             CART: {
                 AS: "CART",
-                CMS: ""
+                CMS: "",
             },
             PENDING: {
                 MONGO: "PENDING",
-                CMS: "",
-                SDM: [0, 1, 96] //@description : ((Suspended = 96)/(open = 1)
+                CMS: "pending",
+                SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             CONFIRMED: {
                 MONGO: "CONFIRMED",
-                CMS: "",
-                SDM: [2] //@description : in kitchen
+                CMS: "processing",
+                SDM: [2], //@description : in kitchen
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             BEING_PREPARED: {
                 MONGO: "BEING_PREPARED",
-                CMS: "",
-                SDM: [2] //@description : in kitchen
+                CMS: "being_prepared",
+                SDM: [2], //@description : in kitchen
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             READY: {
                 MONGO: "READY",
-                CMS: "",
-                SDM: [8] //@description : ready
+                CMS: "ready",
+                SDM: [8], //@description : ready
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             ON_THE_WAY: {
                 MONGO: "ON_THE_WAY",
-                CMS: "",
-                SDM: [16, 32] //@description : assigned/shipped
+                CMS: "shipped",
+                SDM: [16, 32], //@description : assigned/shipped
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             DELIVERED: {
                 MONGO: "DELIVERED",
-                CMS: "",
-                SDM: [64, 128, 2048] //@description : delivered
+                CMS: "complete",
+                SDM: [64, 128, 2048], //@description : delivered
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             CLOSED: {
                 MONGO: "",
-                CMS: "",
-                SDM: []
+                CMS: "closed",
+                SDM: [],
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             CANCELED: {
                 MONGO: "CANCELED",
-                CMS: "",
-                SDM: [512, 256, 1024, 4096, 8192] //@description : cancelled
+                CMS: "canceled",
+                SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
             FAILURE: {
                 MONGO: "FAILURE",
-                CMS: "",
-                SDM: []
+                CMS: "failed",
+                SDM: [-2], //@description : for development purpose, not sdm actual value
+                FREQ: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 15,
+                }
             },
         },
 
@@ -1337,6 +1421,8 @@ export const STATUS_MSG = {
         },
     },
     SDM_ORDER_VALIDATION: {
-        ORDER_AMOUNT_MISMATCH: "Order amount mismatch"
+        ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
+        EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
+        MAX_PENDING_TIME_REACHED: "Maximum pending time reached"
     }
 };

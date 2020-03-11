@@ -77,7 +77,7 @@ export class MenuController {
     * */
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv);
+            let data = JSON.parse(payload.as.argv)[0];
             switch (data.language) {
                 case Constant.DATABASE.LANGUAGE.EN: await ENTITY.MenuEnE.postMenu(data); break;
                 case Constant.DATABASE.LANGUAGE.AR: await ENTITY.MenuArE.postMenu(data); break;

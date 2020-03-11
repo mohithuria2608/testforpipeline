@@ -1,8 +1,8 @@
 import * as Constant from '../../constant'
-import { consolelog, hashObj } from '../../utils'
+import { consolelog, hashObj, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../aerospike'
+import * as CMS from '../../cms'
 
 export class OrderController {
 
@@ -38,7 +38,7 @@ export class OrderController {
                 if (payload.sdm.create)
                     await ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
-                await ENTITY.OrderE.getSdmOrder(data, true)
+                    await ENTITY.OrderE.getSdmOrder(data)
             }
             return {}
         } catch (error) {
@@ -84,11 +84,18 @@ export class OrderController {
                 order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
                 if (order && order._id)
                     paymentRetry = true
+            } else {
+                if (getCurrentCart.items && getCurrentCart.items.length == 0) {
+                    let midRes: any = { ...getCurrentCart }
+                    midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
+                    midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
+                    return { cartValidate: getCurrentCart }
+                }
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
-            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == 0)
+            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             let noonpayRedirectionUrl = ""
             if (!paymentRetry) {
@@ -134,35 +141,37 @@ export class OrderController {
                  * @description step 3 create order on MONGO synchronously
                  * @description step 4 inititate payment on Noonpay synchronously
                  */
-                let postCartPayload: ICartRequest.IValidateCart = {
-                    cartId: payload.cartId,
-                    curMenuId: payload.curMenuId,
-                    menuUpdatedAt: payload.menuUpdatedAt,
-                    couponCode: payload.couponCode,
-                    items: payload.items,
-                    orderType: payload.orderType
-                }
-                let cmsReq = await ENTITY.CartE.createCartReqForCms(postCartPayload, userData)
-                let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsReq.req, getAddress.cmsAddressRef)
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
 
-                // let getCurrentCart: ICartRequest.ICartData
-                if (cmsOrder && cmsOrder['order_id']) {
-                    // getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-                    getCurrentCart['cmsOrderRef'] = parseInt(cmsOrder['order_id'])
-                } else {
-                    getCurrentCart = await ENTITY.CartE.updateCart(payload.cartId, cmsOrder, false, payload.items, payload.selFreeItem)
-                    getCurrentCart['promo'] = promo ? promo : {}
+                let cmsOrderReq = {
+                    ...cmsReq.req,
+                    payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
+                }
+                let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
+
+                if (cmsOrder && !cmsOrder['order_id']) {
+                    getCurrentCart = await ENTITY.CartE.updateCart({
+                        headers: headers,
+                        orderType: payload.orderType,
+                        cartId: payload.cartId,
+                        cmsCart: cmsOrder,
+                        changeCartUnique: true,
+                        curItems: payload.items,
+                        selFreeItem: payload.selFreeItem,
+                        invalidMenu: false,
+                        storeOnline: true,
+                        promo: promo ? promo : {}
+                    })
                     return { cartValidate: getCurrentCart }
                 }
-                getCurrentCart['orderType'] = payload.orderType
-                order = await ENTITY.OrderE.createOrder(headers, payload.orderType, getCurrentCart, getAddress, getStore, userData, promo)
+                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData, promo)
             }
-            if (payload.paymentMethodId != 0) {
+            if (payload.paymentMethodId != Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                     orderId: order.cmsOrderRef.toString(),
                     amount: totalAmount[0].amount,
                     storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                    paymentMethodId: 1,
+                    paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
                     channel: "Mobile",
                     locale: "en",
                 })
@@ -177,6 +186,20 @@ export class OrderController {
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD
                     }
                 })
+                CMS.TransactionCMSE.createTransaction({
+                    order_id: order.cmsOrderRef,
+                    message: initiatePaymentObj.paymentStatus,
+                    type: initiatePaymentObj.paymentStatus,
+                    payment_data: {
+                        id: initiatePaymentObj.noonpayOrderId.toString(),
+                        data: JSON.stringify(initiatePaymentObj)
+                    }
+                })
+                CMS.OrderCMSE.updateOrder({
+                    order_id: order.cmsOrderRef,
+                    payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
+                })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                     payment: {
@@ -184,6 +207,11 @@ export class OrderController {
                         amount: totalAmount[0].amount,
                         name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
                     }
+                })
+                CMS.OrderCMSE.updateOrder({
+                    order_id: order.cmsOrderRef,
+                    payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                 })
                 ENTITY.CartE.resetCart(auth.id)
             }
@@ -242,7 +270,12 @@ export class OrderController {
         try {
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1 })
             if (order && order._id) {
-                order['nextPing'] = 15
+                order['nextPing'] = getFrequency({
+                    status: order.status,
+                    type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                    prevTimeInterval: 0,
+                    statusChanged: false
+                }).nextPingFe
                 order['unit'] = "second"
                 return order
             } else {
@@ -253,6 +286,7 @@ export class OrderController {
             return Promise.reject(error)
         }
     }
+
     /**
      * @method GET
      * @param {string=} cCode
@@ -278,25 +312,80 @@ export class OrderController {
                 if (userData.id == undefined || userData.id == null || userData.id == "")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             }
-            await ENTITY.OrderE.getSdmOrder({
-                sdmOrderRef: sdmOrder,
-                timeInterval: Constant.DATABASE.KAFKA.SDM.ORDER.INTERVAL.GET_STATUS_ONCE,
-                language: headers.language
-            })
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
-            if (order && order._id) {
-
-                if (payload.cCode && payload.phnNo && (userData.id != order.userId))
+            let getSdmOrderRef = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { status: 1 })
+            if (getSdmOrderRef && getSdmOrderRef._id) {
+                await ENTITY.OrderE.getSdmOrder({
+                    sdmOrderRef: sdmOrder,
+                    language: headers.language,
+                    timeInterval: getFrequency({
+                        status: getSdmOrderRef.status,
+                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                        prevTimeInterval: 0,
+                        statusChanged: false
+                    }).nextPingMs
+                })
+                let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
+                if (order && order._id) {
+                    if (payload.cCode && payload.phnNo && (userData.id != order.userId))
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
+                    order['nextPing'] = getFrequency({
+                        status: order.status,
+                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                        prevTimeInterval: 0,
+                        statusChanged: false
+                    }).nextPingFe
+                    order['unit'] = "second"
+                    return order
+                } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
-                order['nextPing'] = 15
-                order['unit'] = "second"
-                return order
-            } else {
+            } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-            }
+
         } catch (error) {
             consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @JUGAAD
+     * @description : @todo : remove this
+     */
+    async bootstrapPendingOrders() {
+        try {
+            let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
+                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+            }, { sdmOrderRef: 1, createdAt: 1, status: 1 }, { lean: true })
+            if (getPendingOrders && getPendingOrders.length > 0) {
+                getPendingOrders.forEach(order => {
+                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime())
+                        ENTITY.OrderE.getSdmOrder({
+                            sdmOrderRef: order.sdmOrderRef,
+                            language: order.language,
+                            timeInterval: getFrequency({
+                                status: order.status,
+                                type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                                prevTimeInterval: 0,
+                                statusChanged: false
+                            }).nextPingMs
+                        })
+                    else {
+                        if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
+                            ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                                isActive: 0,
+                                status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                updatedAt: new Date().getTime(),
+                                sdmOrderStatus: -2,
+                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+                            })
+                        }
+                    }
+                });
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapPendingOrders", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -3,6 +3,7 @@ syntax = "proto3";
 service MenuService {
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
     rpc FetchMenu (IFetchMenu) returns (IMenu) {}
+    rpc FetchHidden (IFetchHidden) returns (IMenu) {}
 }
 
 message IKafkaReq {
@@ -64,4 +65,10 @@ message IFetchMenu {
 
 message IMenu {
     required string menu = 1;
+}
+
+message IFetchHidden {
+    required int32 menuId = 1;
+    required string language = 2;
+    required string type = 3;
 }

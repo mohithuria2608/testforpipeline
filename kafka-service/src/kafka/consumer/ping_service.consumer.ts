@@ -1,7 +1,7 @@
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import { userService, orderService, paymentService } from "../../grpc/client"
+import { userService, orderService, paymentService, promotionService, menuService, homeService, locationService, deeplinkService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE
 
@@ -37,6 +37,26 @@ class PingServiceConsumer extends BaseConsumer {
                             userService.sync(message)
                             break;
                         }
+                        case Constant.MICROSERVICE.DEEPLINK: {
+                            deeplinkService.sync(message)
+                            break;
+                        }
+                        case Constant.MICROSERVICE.HOME: {
+                            homeService.sync(message)
+                            break;
+                        }
+                        case Constant.MICROSERVICE.LOCATION: {
+                            locationService.sync(message)
+                            break;
+                        }
+                        case Constant.MICROSERVICE.MENU: {
+                            menuService.sync(message)
+                            break;
+                        }
+                        case Constant.MICROSERVICE.PROMOTION: {
+                            promotionService.sync(message)
+                            break;
+                        }
                     }
                 })
             }
@@ -45,13 +65,13 @@ class PingServiceConsumer extends BaseConsumer {
             consolelog(process.cwd(), `pingService`, JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                if (message.count == 0){
+                if (message.count == 0) {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
                 }
                 else
                     kafkaController.kafkaSync(message)
-            } else{
+            } else {
                 message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
             }

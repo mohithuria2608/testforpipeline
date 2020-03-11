@@ -21,7 +21,7 @@ export class MiscController {
                 locationVicinity: 100,
                 paymentSuccessUrl: redirectUrl + "payment/success",
                 paymentFailureUrl: redirectUrl + "payment/failure",
-
+                addressShownTime: Constant.SERVER.ADDR_SHOW_TIME,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,

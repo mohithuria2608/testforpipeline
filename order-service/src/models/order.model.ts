@@ -11,6 +11,7 @@ export interface Iorder extends Document {
     userId: string,
     sdmUserRef: number,
     country: string,
+    language: string,
     status: string,
     sdmOrderStatus: number,
     items: any,
@@ -23,13 +24,21 @@ export interface Iorder extends Document {
     paymentMethodAddedOnSdm: number,
     createdAt: number,
     updatedAt: number,
-    trackUntil: number
+    trackUntil: number,
+    validationRemarks: string,
+    promo: any,
+    isFreeItem: any
 };
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
     cartUnique: { type: String },
-    orderType: { type: String, required: true },
+    orderType: {
+        type: String, required: true, enum: [
+            Constant.DATABASE.TYPE.ORDER.PICKUP,
+            Constant.DATABASE.TYPE.ORDER.DELIVERY
+        ]
+    },
     cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true },
@@ -38,6 +47,12 @@ const orderSchema = new Schema({
     country: {
         type: String, required: true, enum: [
             Constant.DATABASE.COUNTRY.UAE
+        ]
+    },
+    language: {
+        type: String, required: true, enum: [
+            Constant.DATABASE.LANGUAGE.AR,
+            Constant.DATABASE.LANGUAGE.EN
         ]
     },
     status: {
@@ -70,12 +85,28 @@ const orderSchema = new Schema({
             type: String, enum: [
                 Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
-                Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                 Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                 Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
             ]
         }
     }],
+    vat: {
+        sequence: { type: Number, },
+        name: { type: String },
+        code: { type: String },
+        action: {
+            type: String, enum: [
+                Constant.DATABASE.ACTION.CART_AMOUNT.ADD,
+                Constant.DATABASE.ACTION.CART_AMOUNT.SUBTRACT
+            ]
+        },
+        amount: { type: Number, default: 0 },
+        type: {
+            type: String, enum: [
+                Constant.DATABASE.TYPE.CART_AMOUNT.TAX
+            ]
+        }
+    },
     address: {
         addressId: { type: String },
         sdmAddressRef: { type: Number, default: 0 },
@@ -118,7 +149,7 @@ const orderSchema = new Schema({
         name_ar: { type: String },
     },
     payment: {
-        paymentMethodId: { type: Number, enum: [0, 1] },
+        paymentMethodId: { type: Number, enum: [Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD] },
         amount: { type: Number, default: 0 },
         name: {
             type: String, enum: [
@@ -144,7 +175,8 @@ const orderSchema = new Schema({
     updatedAt: { type: Number, required: true },
     trackUntil: { type: Number, required: true },
     validationRemarks: { type: String },
-
+    promo: { type: Schema.Types.Mixed },
+    isFreeItem: { type: Boolean }
 });
 
 export let order = model<Iorder>('order', orderSchema)

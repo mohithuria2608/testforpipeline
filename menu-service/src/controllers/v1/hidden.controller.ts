@@ -18,8 +18,10 @@ export class HiddenController {
             let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
             let menu = JSON.parse(rawdata);
             for (const iterator of menu) {
-                ENTITY.HiddenArE.postHiddenMenu(iterator)
-                ENTITY.HiddenEnE.postHiddenMenu(iterator)
+                if (iterator.language == Constant.DATABASE.LANGUAGE.AR)
+                    ENTITY.HiddenArE.postHiddenMenu(iterator)
+                if (iterator.language == Constant.DATABASE.LANGUAGE.EN)
+                    ENTITY.HiddenEnE.postHiddenMenu(iterator)
             }
             return {}
 
@@ -72,20 +74,27 @@ export class HiddenController {
    * @method GRPC
    * @param {number} menuId :menuId
    * @param {string} language :language
+   * @param {string} type :MENU / FREE / UPSELL
    * */
-    // async grpcFetchHidden(payload: IMenuGrpcRequest.IFetchMenuData) {
-    //     try {
-    //         let menu = {}
-    //         switch (payload.language) {
-    //             case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.MenuEnE.getMenu({ menuId: payload.menuId }); break;
-    //             case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.MenuArE.getMenu({ menuId: payload.menuId }); break;
-    //         }
-    //         return { menu: JSON.stringify(menu) }
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)
-    //         return Promise.reject(error)
-    //     }
-    // }
+    async grpcFetchHidden(payload: IMenuGrpcRequest.IFetchMenuData) {
+        try {
+            let menu = []
+            switch (payload.language) {
+                case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.HiddenEnE.getHiddenProducts({ menuId: payload.menuId }); break;
+                case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.HiddenArE.getHiddenProducts({ menuId: payload.menuId }); break;
+            }
+            if (menu && menu.length > 0) {
+                menu = menu.filter(obj => {
+                    return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[payload.type])
+                })
+            }
+            console.log("menu...............", JSON.stringify(menu))
+            return { menu: JSON.stringify(menu) }
+        } catch (error) {
+            consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const hiddenController = new HiddenController();

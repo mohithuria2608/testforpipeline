@@ -4,7 +4,6 @@ import { Context } from 'koa'
 
 import staticRoutes from './v1/static.route'
 import cmsConfigRoutes from './v1/cms.config.route'
-import cmsRoutes from './v1/cms.route'
 import cmsMenuRoutes from './v1/cms.menu.route'
 import cmsHomeRoutes from './v1/cms.home.route'
 import cmsLocationRoutes from './v1/cms.location.route'
@@ -19,7 +18,6 @@ const version1 = "/v1"
 const children = [
   { routes: staticRoutes, prefix: '' },
   { routes: cmsConfigRoutes, prefix: version1 + '/config' },
-  { routes: cmsRoutes, prefix: version1 + '/cms' },
   { routes: cmsMenuRoutes, prefix: version1 + '/menu' },
   { routes: cmsHomeRoutes, prefix: version1 + '/home' },
   { routes: cmsLocationRoutes, prefix: version1 + '/location' },

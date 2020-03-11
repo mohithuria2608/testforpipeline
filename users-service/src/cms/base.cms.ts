@@ -13,7 +13,10 @@ export class BaseCMS {
             let params = {
                 method: options.method,
                 url: options.url,
-                headers: headers
+                headers: headers,
+                agentOptions: {
+                    rejectUnauthorized: false
+                }
             }
             if (options.form) {
                 params['form'] = parameter

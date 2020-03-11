@@ -150,6 +150,10 @@
                     "server": "/../../../proto/sync.proto",
                     "client": "/../../../../proto/sync.proto"
                 },
+                "deeplink": {
+                    "server": "/../../../proto/deeplink.proto",
+                    "client": "/../../../../proto/deeplink.proto"
+                },
                 "notification": {
                     "server": "/../../../proto/notification.proto",
                     "client": "/../../../../proto/notification.proto"
@@ -184,6 +188,7 @@
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
+    "jwtAlgo": "HS256",
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",
@@ -202,7 +207,11 @@
     "aerospike": {
         "hosts": "localhost:3000",
         "username": "",
-        "password": ""
+        "password": "",
+        "config": {
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
+        }
     },
     "mongo": {
         "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",

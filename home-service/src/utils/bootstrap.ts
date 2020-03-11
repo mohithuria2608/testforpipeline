@@ -4,6 +4,6 @@ import { homeController } from '../controllers';
 export let bootstrap = async function (server) {
 
     await Aerospike.init();
-    homeController.bootstrapHome()
+    // homeController.bootstrapHome()
     return
 }

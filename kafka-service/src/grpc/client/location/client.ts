@@ -68,6 +68,25 @@ export class LocationService {
             }
         });
     }
+
+    async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await locationServiceValidator.syncValidator(payload)
+                this.locationClient.sync(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully synced location on cms", JSON.stringify(res), false)
+                        resolve(res)
+                    } else {
+                        consolelog(process.cwd(), "Error in syncing location on cms", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const locationService = new LocationService();

@@ -15,7 +15,10 @@ export class PaymentServiceValidator {
                     storeCode: Joi.string().trim().required().description('CMS store code'),
                     orderId: Joi.string().trim().required().description('CMS order id'),
                     amount: Joi.number().required().greater(0),
-                    paymentMethodId: Joi.number().integer().required().description('User selected payment method id of noonpay payment methods'),
+                    paymentMethodId: Joi.number().valid(
+                        Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD,
+                        Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD
+                    ).integer().required().description('User selected payment method id of noonpay payment methods'),
                     channel: Joi.string().trim().required().valid('Mobile', 'Web'),
                     locale: Joi.string().trim().lowercase().optional().valid(Constant.DATABASE.PAYMENT_LOCALE.EN, Constant.DATABASE.PAYMENT_LOCALE.AR),
                 });

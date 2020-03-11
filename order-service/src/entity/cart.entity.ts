@@ -5,7 +5,7 @@ import { BaseEntity } from './base.entity'
 import { consolelog, hashObj } from '../utils'
 import * as CMS from "../cms"
 import { Aerospike } from '../aerospike'
-import { promotionService, userService } from '../grpc/client'
+import { promotionService, userService, menuService } from '../grpc/client'
 
 export class CartClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -170,7 +170,9 @@ export class CartClass extends BaseEntity {
         status: Joi.string().valid(
             Constant.DATABASE.STATUS.ORDER.CART.AS,
         ).required(),
+        orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP, Constant.DATABASE.TYPE.ORDER.DELIVERY),
         updatedAt: Joi.number().required(),
+        createdAt: Joi.number().required(),
         address: Joi.object().keys({
             addressId: Joi.string(),
             sdmAddressRef: Joi.number(),
@@ -203,7 +205,17 @@ export class CartClass extends BaseEntity {
                 name: Joi.string().required(),
                 code: Joi.string().required(),
                 amount: Joi.number().required(),
+                sequence: Joi.number().required(),
+                action: Joi.string().required(),
             })),
+        vat: Joi.object().keys({
+            type: Joi.string().required(),
+            name: Joi.string().required(),
+            code: Joi.string().required(),
+            amount: Joi.number().required(),
+            sequence: Joi.number().required(),
+            action: Joi.string().required(),
+        }),
         freeItems: Joi.object().keys({
             ar: Joi.array().items(this.itemSchema),
             en: Joi.array().items(this.itemSchema)
@@ -212,6 +224,9 @@ export class CartClass extends BaseEntity {
             ar: Joi.array().items(this.itemSchema),
             en: Joi.array().items(this.itemSchema)
         }),
+        invalidMenu: Joi.number().valid(0, 1).required(),
+        promo: Joi.any(),
+        storeOnline: Joi.number().valid(0, 1).required(),
     })
 
     /**
@@ -228,8 +243,6 @@ export class CartClass extends BaseEntity {
                     key: payload.cartId
                 }
                 let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
-                console.log("validate cart 444444444444444444444", cart)
-
                 if (cart && cart.cartId) {
                     return cart
                 } else
@@ -245,20 +258,13 @@ export class CartClass extends BaseEntity {
                     background: false,
                 }
                 let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
-                console.log("validate cart 5555555555555555555555", cart)
-
                 if (cart && cart.length > 0) {
                     return cart[0]
                 } else
                     cartFound = false
             }
-
-            console.log("validate cart 666666666666666666666", cartFound)
-
             if (!cartFound) {
                 let user = await userService.fetchUser({ cartId: payload.cartId })
-                console.log("validate cart 77777777777777777777777", cartFound)
-
                 if (user && user.id) {
                     if (user.cartId == payload.cartId) {
                         await this.createDefaultCart({
@@ -298,7 +304,11 @@ export class CartClass extends BaseEntity {
                 items: [],
                 address: {},
                 amount: [],
-                freeItems: { en: [], ar: [] }
+                vat: {},
+                freeItems: { en: [], ar: [] },
+                promo: {},
+                invalidMenu: 0,
+                storeOnline: 1
             }
             console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
@@ -318,7 +328,7 @@ export class CartClass extends BaseEntity {
 
     async resetCart(userId: string) {
         try {
-            let cartUpdate = {
+            let cartUpdate: ICartRequest.ICartData = {
                 cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
@@ -331,7 +341,13 @@ export class CartClass extends BaseEntity {
                 items: [],
                 address: {},
                 amount: [],
-                freeItems: { en: [], ar: [] }
+                vat: {},
+                freeItems: {
+                    en: [], ar: [],
+                },
+                promo: {},
+                invalidMenu: 0,
+                storeOnline: 1
             }
             let putArg: IAerospike.Put = {
                 bins: cartUpdate,
@@ -347,11 +363,20 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartReqForCms(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
+    async createCartReqForCms(
+        items: any,
+        selFreeItem: any,
+        orderType: string,
+        couponCode: string,
+        userData: IUserRequest.IUserData
+    ) {
         try {
+            if (selFreeItem && selFreeItem.en && selFreeItem.en.length > 0) {
+                items = items.concat(selFreeItem.en)
+            }
             let sellingPrice = 0
             let cart = []
-            payload.items.map(sitem => {
+            items.map(sitem => {
                 sellingPrice = sellingPrice + (sitem.sellingPrice * sitem.qty)
                 if (sitem['originalTypeId'] == 'simple') {
                     if (sitem['type_id'] == 'simple') {
@@ -509,10 +534,10 @@ export class CartClass extends BaseEntity {
                 website_id: 1,
                 category_id: 20,
                 cart_items: cart,
-                order_type: payload.orderType
+                order_type: orderType
             }
-            if (payload.couponCode)
-                req['coupon_code'] = payload.couponCode
+            if (couponCode)
+                req['coupon_code'] = couponCode
             else
                 req['coupon_code'] = ""
             return { req: req, sellingPrice: sellingPrice }
@@ -524,12 +549,8 @@ export class CartClass extends BaseEntity {
 
     async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
         try {
-
             if (payload.items && payload.items.length > 0) {
-                if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
-                    payload.items = payload.items.concat(payload.selFreeItem.en)
-                }
-                let req = await this.createCartReqForCms(payload, userData)
+                let req = await this.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
                 let cmsCart = await CMS.CartCMSE.createCart(req.req)
                 return cmsCart
             } else {
@@ -555,175 +576,100 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async updateCart(cartId: string, cmsCart: ICartCMSRequest.ICmsCartRes, changeCartUnique: boolean, curItems: any, selFreeItem: any) {
+    async updateCart(payload: ICartRequest.IUpdateCart) {
         try {
             let prevCart: ICartRequest.ICartData
-            if (curItems == undefined) {
-                prevCart = await this.getCart({ cartId: cartId })
-                curItems = prevCart.items
+            if (payload.curItems == undefined) {
+                prevCart = await this.getCart({ cartId: payload.cartId })
+                payload.curItems = prevCart.items
             }
             let dataToUpdate: ICartRequest.ICartData = {}
-            console.log("cmsCart", JSON.stringify(cmsCart))
-
-            dataToUpdate['cmsCartRef'] = parseInt(cmsCart.cms_cart_id.toString())
+            console.log("cmsCart", JSON.stringify(payload.cmsCart))
+            dataToUpdate['orderType'] = payload.orderType
+            dataToUpdate['cmsCartRef'] = parseInt(payload.cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
-            dataToUpdate['isPriceChanged'] = cmsCart.is_price_changed ? 1 : 0
+            dataToUpdate['isPriceChanged'] = payload.cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
-
+            dataToUpdate['invalidMenu'] = payload.invalidMenu ? 1 : 0
+            dataToUpdate['storeOnline'] = payload.storeOnline ? 1 : 0
             let amount = []
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 name: "Sub Total",
                 code: "SUB_TOTAL",
-                amount: cmsCart.subtotal,
+                amount: payload.cmsCart.subtotal,
                 sequence: 1,
                 action: "add"
             })
-            if (cmsCart.coupon_code && cmsCart.coupon_code != "") {
-                if (selFreeItem && selFreeItem.en && selFreeItem.en.length > 0) {
+            if (payload.cmsCart.coupon_code && payload.cmsCart.coupon_code != "") {
+                dataToUpdate['promo'] = payload.promo
+                if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
                     dataToUpdate['freeItems'] = {
                         ar: [],
                         en: []
                     }
-                    dataToUpdate['selFreeItem'] = selFreeItem
+                    dataToUpdate['selFreeItem'] = payload.selFreeItem
                 } else {
-                    if (cmsCart.free_items && cmsCart.free_items != "") {
-                        let freeItemSku = cmsCart.free_items.split(",")
-                        dataToUpdate['freeItems'] = {
-                            ar: [
-                                {
-                                    "id": 1793,
-                                    "position": 0,
-                                    "name": "free item 1 ar",
-                                    "description": "",
-                                    "inSide": 0,
-                                    "finalPrice": 0,
-                                    "specialPrice": 0,
-                                    "catId": 40,
-                                    "promoId": -1,
-                                    "metaKeyword": [
-                                        "free item 1"
-                                    ],
-                                    "bundleProductOptions": [],
-                                    "selectedItem": 0,
-                                    "configurableProductOptions": [],
-                                    "typeId": "simple",
-                                    "originalTypeId": "simple",
-                                    "items": [],
-                                    "sku": 0,
-                                    "sdmId": 0,
-                                    "imageSmall": null,
-                                    "imageThumbnail": "/imagestemp/0.png",
-                                    "image": null,
-                                    "taxClassId": 2,
-                                    "virtualGroup": 0,
-                                    "visibility": 4,
-                                    "associative": 0
-                                },
-                                {
-                                    "id": 1795,
-                                    "position": 0,
-                                    "name": "free item 2 ar",
-                                    "description": "",
-                                    "inSide": 0,
-                                    "finalPrice": 0,
-                                    "specialPrice": 0,
-                                    "catId": 40,
-                                    "promoId": -1,
-                                    "metaKeyword": [
-                                        "free item 1"
-                                    ],
-                                    "bundleProductOptions": [],
-                                    "selectedItem": 0,
-                                    "configurableProductOptions": [],
-                                    "typeId": "simple",
-                                    "originalTypeId": "simple",
-                                    "items": [],
-                                    "sku": 0,
-                                    "sdmId": 0,
-                                    "imageSmall": null,
-                                    "imageThumbnail": "/imagestemp/0.png",
-                                    "image": null,
-                                    "taxClassId": 2,
-                                    "virtualGroup": 0,
-                                    "visibility": 4,
-                                    "associative": 0
-                                }
-                            ],
-                            en: [
-                                {
-                                    "id": 1793,
-                                    "position": 0,
-                                    "name": "free item 1 en",
-                                    "description": "",
-                                    "inSide": 0,
-                                    "finalPrice": 0,
-                                    "specialPrice": 0,
-                                    "catId": 40,
-                                    "promoId": -1,
-                                    "metaKeyword": [
-                                        "free item 1"
-                                    ],
-                                    "bundleProductOptions": [],
-                                    "selectedItem": 0,
-                                    "configurableProductOptions": [],
-                                    "typeId": "simple",
-                                    "originalTypeId": "simple",
-                                    "items": [],
-                                    "sku": 0,
-                                    "sdmId": 0,
-                                    "imageSmall": null,
-                                    "imageThumbnail": "/imagestemp/0.png",
-                                    "image": null,
-                                    "taxClassId": 2,
-                                    "virtualGroup": 0,
-                                    "visibility": 4,
-                                    "associative": 0
-                                },
-                                {
-                                    "id": 1795,
-                                    "position": 0,
-                                    "name": "free item 2 en",
-                                    "description": "",
-                                    "inSide": 0,
-                                    "finalPrice": 0,
-                                    "specialPrice": 0,
-                                    "catId": 40,
-                                    "promoId": -1,
-                                    "metaKeyword": [
-                                        "free item 1"
-                                    ],
-                                    "bundleProductOptions": [],
-                                    "selectedItem": 0,
-                                    "configurableProductOptions": [],
-                                    "typeId": "simple",
-                                    "originalTypeId": "simple",
-                                    "items": [],
-                                    "sku": 0,
-                                    "sdmId": 0,
-                                    "imageSmall": null,
-                                    "imageThumbnail": "/imagestemp/0.png",
-                                    "image": null,
-                                    "taxClassId": 2,
-                                    "virtualGroup": 0,
-                                    "visibility": 4,
-                                    "associative": 0
-                                }
-                            ]
+                    if (payload.cmsCart.free_items && payload.cmsCart.free_items != "") {
+                        let freeItemSku = payload.cmsCart.free_items.split(",")
+                        if (freeItemSku && freeItemSku.length > 0) {
+                            let freeItems_En = await menuService.fetchHidden({
+                                menuId: 1,
+                                language: Constant.DATABASE.LANGUAGE.EN,
+                                type: Constant.DATABASE.TYPE.MENU.FREE
+                            })
+                            let freeItems_Ar = await menuService.fetchHidden({
+                                menuId: 1,
+                                language: Constant.DATABASE.LANGUAGE.AR,
+                                type: Constant.DATABASE.TYPE.MENU.FREE
+                            })
+                            console.log("reeItems_En.products", freeItems_En[0].products, freeItems_En[0].products.length)
+                            if (freeItems_En && freeItems_En.length > 0) {
+                                if (freeItems_En[0].products && freeItems_En[0].products.length > 0)
+                                    freeItems_En = freeItems_En[0].products.filter(obj => { return (freeItemSku.indexOf(obj.id.toString()) >= 0) })
+                                else
+                                    freeItems_En = []
+                            } else
+                                freeItems_En = []
+
+                            if (freeItems_Ar && freeItems_Ar.length > 0) {
+                                if (freeItems_Ar[0].products && freeItems_Ar[0].products.length > 0)
+                                    freeItems_Ar = freeItems_Ar[0].products.filter(obj => { return freeItemSku.indexOf(obj.id.toString()) >= 0 })
+                                else
+                                    freeItems_Ar = []
+                            }
+                            else
+                                freeItems_Ar = []
+                            dataToUpdate['freeItems'] = {
+                                ar: freeItems_Ar,
+                                en: freeItems_En
+                            }
+                        } else {
+                            dataToUpdate['selFreeItem'] = {
+                                ar: [],
+                                en: []
+                            }
+                            dataToUpdate['couponApplied'] = 0
                         }
                     }
+                    dataToUpdate['selFreeItem'] = {
+                        ar: [],
+                        en: []
+                    }
                 }
-                amount.push({
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
-                    name: "Discount",
-                    code: cmsCart.coupon_code,
-                    amount: cmsCart.discount_amount,
-                    sequence: 2,
-                    action: "subtract"
-                })
+                if (payload.cmsCart.discount_amount != 0)
+                    amount.push({
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
+                        name: "Discount",
+                        code: payload.cmsCart.coupon_code,
+                        amount: payload.cmsCart.discount_amount,
+                        sequence: 2,
+                        action: "subtract"
+                    })
                 dataToUpdate['couponApplied'] = 1
             } else {
+                dataToUpdate['promo'] = {}
                 dataToUpdate['couponApplied'] = 0
                 dataToUpdate['freeItems'] = {
                     ar: [],
@@ -734,33 +680,33 @@ export class CartClass extends BaseEntity {
                     en: []
                 }
             }
-            if (cmsCart.tax && cmsCart.tax.length > 0) {
-                amount.push({
+            if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
+                dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
-                    name: cmsCart.tax[0].tax_name,
-                    code: cmsCart.tax[0].tax_name,
-                    amount: cmsCart.tax[0].amount,
-                    sequence: 3,
+                    name: payload.cmsCart.tax[0].tax_name,
+                    code: payload.cmsCart.tax[0].tax_name,
+                    amount: payload.cmsCart.tax[0].amount,
+                    sequence: 0,
                     action: "add"
-                })
+                }
             } else {
-                amount.push({
+                dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: "VAT",
                     code: "VAT",
                     amount: 0,
-                    sequence: 3,
+                    sequence: 0,
                     action: "add"
-                })
+                }
             }
-            if (cmsCart.shipping && cmsCart.shipping.length > 0) {
-                if (cmsCart.shipping[0].price > 0)
+            if (payload.cmsCart.shipping && payload.cmsCart.shipping.length > 0) {
+                if (payload.cmsCart.shipping[0].price > 0)
                     amount.push({
                         type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                         name: "Delivery",
-                        code: cmsCart.shipping[0].method_code,
-                        amount: cmsCart.shipping[0].price,
-                        sequence: 4,
+                        code: payload.cmsCart.shipping[0].method_code,
+                        amount: payload.cmsCart.shipping[0].price,
+                        sequence: 3,
                         action: "add"
                     })
             }
@@ -768,43 +714,41 @@ export class CartClass extends BaseEntity {
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
                 name: "Total",
                 code: "TOTAL",
-                amount: cmsCart.grandtotal,
-                sequence: 5,
+                amount: payload.cmsCart.grandtotal,
+                sequence: 4,
                 action: "add"
             })
             dataToUpdate['amount'] = amount
-            console.log("amount", typeof amount, JSON.stringify(amount))
-            if (cmsCart.not_available && cmsCart.not_available.length > 0) {
-                curItems.forEach(obj => {
-                    if (cmsCart.not_available.indexOf(obj.id) == -1) {
+            if (payload.cmsCart.not_available && payload.cmsCart.not_available.length > 0) {
+                payload.curItems.forEach(obj => {
+                    if (payload.cmsCart.not_available.indexOf(obj.id) == -1) {
                         dataToUpdate['items'].push(obj)
                     } else {
                         dataToUpdate['notAvailable'].push(obj)
                     }
                 })
             } else
-                dataToUpdate['items'] = curItems
+                dataToUpdate['items'] = payload.curItems
 
             let updatedAt = new Date().getTime()
             dataToUpdate['updatedAt'] = updatedAt
-            if (changeCartUnique) {
+            if (payload.changeCartUnique) {
                 let dataToHash: ICartRequest.IDataToHash = {
                     items: dataToUpdate['items'],
                     promo: dataToUpdate['couponApplied'],
                     updatedAt: updatedAt
                 }
                 dataToUpdate['cartUnique'] = hashObj(dataToHash)
-                // this.ObjectId().toString()
             }
 
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
-                key: cartId,
+                key: payload.cartId,
                 update: true,
             }
             await Aerospike.put(putArg)
-            let newCart = await this.getCart({ cartId: cartId })
+            let newCart = await this.getCart({ cartId: payload.cartId })
             return newCart
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)

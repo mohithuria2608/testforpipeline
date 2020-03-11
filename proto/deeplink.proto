@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+service DeeplinkService {
+    rpc Sync (IKafkaReq) returns (IKafkaRes) {}
+}
+
+message IKafkaReq {
+    required string set = 1;
+    optional IAerospike as = 2;
+    optional ICms cms = 3;
+    optional ISdm sdm = 4;
+    optional IMdb mdb = 5;
+    optional int32 count = 6;
+    optional string q = 7;
+    optional string error = 8;
+    required bool inQ = 9;
+}
+
+message IAerospike {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    optional bool sync = 5;
+    optional string argv = 6;
+}
+
+message ICms {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    optional bool sync = 5;
+    optional string argv = 6;
+}
+
+message ISdm {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    optional bool sync = 5;
+    optional string argv = 6;
+}
+
+message IMdb {
+    optional bool create = 1;
+    optional bool update = 2;
+    optional bool reset = 3;
+    optional bool get = 4;
+    optional bool sync = 5;
+    optional string argv = 6;
+}
+
+message IKafkaRes {
+    required string data = 1;
+}

@@ -184,6 +184,7 @@
     },
     "cryptoSecret": "d6F3Efeq",
     "jwtSecret": "cgfhfj",
+    "jwtAlgo": "HS256",
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",
@@ -198,7 +199,11 @@
     "aerospike": {
         "hosts": "40.123.212.40:3000",
         "username": "aerospikeusr",
-        "password": "GM2nGDQkN5yMdPZs"
+        "password": "GM2nGDQkN5yMdPZs",
+        "config": {
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
+        }
     },
     "mongo": {
         "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",
