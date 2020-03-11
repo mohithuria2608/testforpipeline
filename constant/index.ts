@@ -1400,6 +1400,14 @@ export const STATUS_MSG = {
             type: 'MULTIPLE_PAYMENTS_INITIATED',
             actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
         },
+        0: {
+            statusCode: 6051,
+            httpCode: 400,
+            message: 'Banking error',
+            type: 'BANKING_ERROR',
+            actionHint: '',
+            useNoonPayMessage: true
+        },
     },
     SDM_ORDER_VALIDATION: {
         ORDER_AMOUNT_MISMATCH: "Order amount mismatch",

@@ -376,11 +376,14 @@ export class PaymentClass extends BaseEntity {
                 transactions: response.result.transactions,
                 noonpayRedirectionUrl: response.result.checkoutData ? response.result.checkoutData.postUrl : ''
             };
-            if (response.resultCode === 0) {
+            if (response.resultCode === 0 && response.result.order.status !== Constant.DATABASE.STATUS.PAYMENT.FAILED) {
                 return result;
             } else {
                 // some error
-                consolelog(process.cwd(), 'Payment ORDER STATUS, non-zero resultCode', response, true);
+                consolelog(process.cwd(), 'Payment ORDER STATUS, non-zero resultCode or order status failed', response, true);
+                if (response.result.order.status === Constant.DATABASE.STATUS.PAYMENT.FAILED) {
+                    result.message = response.result.order.errorMessage;
+                }
                 return Promise.reject(this.getErrorObject(result));
             }
         } catch (error) {
