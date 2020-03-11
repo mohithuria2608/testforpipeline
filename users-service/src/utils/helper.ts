@@ -36,7 +36,7 @@ export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAG
 }
 
 export let sendError = function (error, language: string = Constant.DATABASE.LANGUAGE.EN) {
-    consolelog(process.cwd(), "In error handler type of ", typeof JSON.stringify(error), false)
+    consolelog(process.cwd(), "In error handler type of ", typeof error, false)
     consolelog(process.cwd(), "In error handler direct ", JSON.stringify(error), false)
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
 
@@ -152,6 +152,8 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     }
     else if (typeof error == 'object') {
         if (error.name == "AerospikeError") {
+            consolelog(process.cwd(), "-----step 1------", "", false)
+
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
             customError.message_Ar = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
             customError.message_En = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
@@ -163,6 +165,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
             }
         }
         else if (error.name === 'ValidationError') {
+            consolelog(process.cwd(), "-----step 2------", "", false)
             customError.message = error.message
             customError.message_Ar = error.message
             customError.message_En = error.message
@@ -171,6 +174,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
             customError.type = Constant.STATUS_MSG.ERROR.E422.VALIDATION_ERROR.type
         }
         else if (error.name === 'PaymentError') {
+            consolelog(process.cwd(), "-----step 3------", "", false)
             customError.message = error.message;
             customError.message_Ar = error.message
             customError.message_En = error.message
@@ -179,6 +183,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
             customError.type = error.type;
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
+            consolelog(process.cwd(), "-----step 4------", "", false)
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']
             customError.message_Ar = error.hasOwnProperty(key) ? error[key] : error['customMessage']
             customError.message_En = error.hasOwnProperty(key) ? error[key] : error['customMessage']
@@ -190,6 +195,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
                 customError['type'] = error.type
         }
         else if (error.hasOwnProperty('statusCode') && error.hasOwnProperty('httpCode') && error.hasOwnProperty('payload')) {
+            consolelog(process.cwd(), "-----step 5------", "", false)
             customError.message = error.payload.message
             customError.message_Ar = error.payload[key]
             customError.message_En = error.payload[key]
@@ -198,7 +204,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
             customError.type = error.payload.type
         }
         else {
-            consolelog(process.cwd(), "Unhandled error type 2", JSON.stringify(error), true)
+            consolelog(process.cwd(), "-----step 6------", "", false)
             customError.message = JSON.stringify(error)
             customError.message_Ar = JSON.stringify(error)
             customError.message_En = JSON.stringify(error)
@@ -208,9 +214,10 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
         }
     }
     else {
-        customError.message = error
-        customError.message_Ar = error
-        customError.message_En = error
+        consolelog(process.cwd(), "-----step 7------", "", false)
+        customError.message = JSON.stringify(error)
+        customError.message_Ar = JSON.stringify(error)
+        customError.message_En = JSON.stringify(error)
     }
     customError.message = customError.message ? customError.message && customError.message.replace(/"/g, '') : ""
     customError.message = customError.message ? customError.message && customError.message.replace('[', '') : ""
