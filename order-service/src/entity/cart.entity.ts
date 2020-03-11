@@ -205,7 +205,17 @@ export class CartClass extends BaseEntity {
                 name: Joi.string().required(),
                 code: Joi.string().required(),
                 amount: Joi.number().required(),
+                sequence: Joi.number().required(),
+                action: Joi.string().required(),
             })),
+        vat: Joi.object().keys({
+            type: Joi.string().required(),
+            name: Joi.string().required(),
+            code: Joi.string().required(),
+            amount: Joi.number().required(),
+            sequence: Joi.number().required(),
+            action: Joi.string().required(),
+        }),
         freeItems: Joi.object().keys({
             ar: Joi.array().items(this.itemSchema),
             en: Joi.array().items(this.itemSchema)
@@ -294,6 +304,7 @@ export class CartClass extends BaseEntity {
                 items: [],
                 address: {},
                 amount: [],
+                vat: {},
                 freeItems: { en: [], ar: [] },
                 promo: {},
                 invalidMenu: 0,
@@ -330,6 +341,7 @@ export class CartClass extends BaseEntity {
                 items: [],
                 address: {},
                 amount: [],
+                vat: {},
                 freeItems: {
                     en: [], ar: [],
                 },
