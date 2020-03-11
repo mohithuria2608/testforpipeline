@@ -669,23 +669,23 @@ export class CartClass extends BaseEntity {
                 }
             }
             if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
-                amount.push({
+                dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: payload.cmsCart.tax[0].tax_name,
                     code: payload.cmsCart.tax[0].tax_name,
                     amount: payload.cmsCart.tax[0].amount,
-                    sequence: 3,
+                    sequence: 0,
                     action: "add"
-                })
+                }
             } else {
-                amount.push({
+                dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                     name: "VAT",
                     code: "VAT",
                     amount: 0,
-                    sequence: 3,
+                    sequence: 0,
                     action: "add"
-                })
+                }
             }
             if (payload.cmsCart.shipping && payload.cmsCart.shipping.length > 0) {
                 if (payload.cmsCart.shipping[0].price > 0)
@@ -694,7 +694,7 @@ export class CartClass extends BaseEntity {
                         name: "Delivery",
                         code: payload.cmsCart.shipping[0].method_code,
                         amount: payload.cmsCart.shipping[0].price,
-                        sequence: 4,
+                        sequence: 3,
                         action: "add"
                     })
             }
@@ -703,7 +703,7 @@ export class CartClass extends BaseEntity {
                 name: "Total",
                 code: "TOTAL",
                 amount: payload.cmsCart.grandtotal,
-                sequence: 5,
+                sequence: 4,
                 action: "add"
             })
             dataToUpdate['amount'] = amount

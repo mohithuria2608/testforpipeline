@@ -570,6 +570,7 @@ export class OrderClass extends BaseEntity {
                 sdmOrderStatus: -1,
                 items: items,
                 amount: amount,
+                vat: cartData.vat,
                 address: {
                     addressId: address.id,
                     sdmAddressRef: address.sdmAddressRef,
@@ -667,8 +668,8 @@ export class OrderClass extends BaseEntity {
                                         //         }, { new: true })
                                         //         CMS.OrderCMSE.updateOrder({
                                         //             order_id: order.cmsOrderRef,
-                                        //            // payment_status: ,
-                                        //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                        //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION,
+                                        //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                         //         })
                                         //     } else {
                                         //         consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
@@ -703,7 +704,7 @@ export class OrderClass extends BaseEntity {
                                         //         CMS.OrderCMSE.updateOrder({
                                         //             order_id: order.cmsOrderRef,
                                         //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION,
-                                        //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                        //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                         //         })
                                         //     }
                                         // }
@@ -723,7 +724,7 @@ export class OrderClass extends BaseEntity {
                                         CMS.OrderCMSE.updateOrder({
                                             order_id: order.cmsOrderRef,
                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                         })
                                     }
                                     if (recheck && sdmOrder && sdmOrder.OrderID) {
@@ -775,7 +776,7 @@ export class OrderClass extends BaseEntity {
                                                                         CMS.OrderCMSE.updateOrder({
                                                                             order_id: order.cmsOrderRef,
                                                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                                                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                                                         })
                                                                     }
                                                                 }
@@ -804,8 +805,8 @@ export class OrderClass extends BaseEntity {
 
                                                             CMS.OrderCMSE.updateOrder({
                                                                 order_id: order.cmsOrderRef,
-                                                                payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                                                order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                                                                payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                                order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS
                                                             })
                                                         }, 10000)
                                                     } else {
@@ -848,7 +849,7 @@ export class OrderClass extends BaseEntity {
                                                             CMS.OrderCMSE.updateOrder({
                                                                 order_id: order.cmsOrderRef,
                                                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                                order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                                                                order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS
                                                             })
                                                         }
                                                     }
@@ -863,7 +864,7 @@ export class OrderClass extends BaseEntity {
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
                                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                        order_status: Constant.DATABASE.STATUS.ORDER.READY.MONGO
+                                                        order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS
                                                     })
                                                     if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                                                         recheck = false
@@ -880,7 +881,7 @@ export class OrderClass extends BaseEntity {
                                                         CMS.OrderCMSE.updateOrder({
                                                             order_id: order.cmsOrderRef,
                                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                            order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO
+                                                            order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.CMS
                                                         })
                                                     }
                                                     break;
@@ -899,7 +900,7 @@ export class OrderClass extends BaseEntity {
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
                                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                        order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO
+                                                        order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.CMS
                                                     })
                                                     break;
                                                 }
@@ -917,8 +918,8 @@ export class OrderClass extends BaseEntity {
                                                     }, { new: true })
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
-                                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                        order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO
+                                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                                        order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS
                                                     })
                                                     break;
                                                 }

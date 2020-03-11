@@ -26,12 +26,44 @@ export class WebhookNoonpayController {
                 /**
                  * @description step 1 get noonpay order status
                  */
-                let status = await paymentService.getPaymentStatus({
-                    noonpayOrderId: payload.orderId,
-                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
-                })
-                if (status.transactions && status.transactions.length > 0) {
+                let status
+                try {
+                    status = await paymentService.getPaymentStatus({
+                        noonpayOrderId: payload.orderId,
+                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                        paymentStatus: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                    })
+                } catch (error) {
+                    let dataToUpdateOrder = {
+                        $addToSet: {
+                            transLogs: status
+                        },
+                        isActive: 0,
+                        status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                        updatedAt: new Date().getTime(),
+                        "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED,
+                        validationRemarks: error.message
+                    }
+                    order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                    CMS.TransactionCMSE.createTransaction({
+                        order_id: order.cmsOrderRef,
+                        message: status.transactions[0].type,
+                        type: status.transactions[0].type,
+                        payment_data: {
+                            id: status.transactions[0].id.toString(),
+                            data: JSON.stringify(status)
+                        }
+                    })
+                    CMS.OrderCMSE.updateOrder({
+                        order_id: order.cmsOrderRef,
+                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                    })
+                    redirectUrl = redirectUrl + "payment/failure"
+                    return redirectUrl
+                }
+
+                if (status && status.resultCode == 0 && status.transactions && status.transactions.length > 0) {
                     let dataToUpdateOrder = {
                         $addToSet: {
                             transLogs: status
@@ -54,7 +86,7 @@ export class WebhookNoonpayController {
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
-                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                         })
                         redirectUrl = redirectUrl + "payment/success"
                     } else {
@@ -68,7 +100,7 @@ export class WebhookNoonpayController {
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                         })
                         redirectUrl = redirectUrl + "payment/failure"
                     }
@@ -96,9 +128,10 @@ export class WebhookNoonpayController {
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
                         payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                        order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                     })
                     redirectUrl = redirectUrl + "payment/failure"
+                    return redirectUrl
                 }
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)

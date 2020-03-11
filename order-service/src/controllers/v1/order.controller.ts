@@ -197,7 +197,7 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
@@ -210,7 +210,7 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                 })
                 ENTITY.CartE.resetCart(auth.id)
             }

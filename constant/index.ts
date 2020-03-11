@@ -523,7 +523,7 @@ export const DATABASE = {
             },
             PENDING: {
                 MONGO: "PENDING",
-                CMS: "",
+                CMS: "pending",
                 SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
                 FREQ: {
                     GET: 5000,
@@ -534,7 +534,7 @@ export const DATABASE = {
             },
             CONFIRMED: {
                 MONGO: "CONFIRMED",
-                CMS: "",
+                CMS: "processing",
                 SDM: [2], //@description : in kitchen
                 FREQ: {
                     GET: 5000,
@@ -545,7 +545,7 @@ export const DATABASE = {
             },
             BEING_PREPARED: {
                 MONGO: "BEING_PREPARED",
-                CMS: "",
+                CMS: "being_prepared",
                 SDM: [2], //@description : in kitchen
                 FREQ: {
                     GET: 5000,
@@ -556,7 +556,7 @@ export const DATABASE = {
             },
             READY: {
                 MONGO: "READY",
-                CMS: "",
+                CMS: "ready",
                 SDM: [8], //@description : ready
                 FREQ: {
                     GET: 5000,
@@ -567,7 +567,7 @@ export const DATABASE = {
             },
             ON_THE_WAY: {
                 MONGO: "ON_THE_WAY",
-                CMS: "",
+                CMS: "shipped",
                 SDM: [16, 32], //@description : assigned/shipped
                 FREQ: {
                     GET: 5000,
@@ -578,7 +578,7 @@ export const DATABASE = {
             },
             DELIVERED: {
                 MONGO: "DELIVERED",
-                CMS: "",
+                CMS: "complete",
                 SDM: [64, 128, 2048], //@description : delivered
                 FREQ: {
                     GET: 5000,
@@ -589,7 +589,7 @@ export const DATABASE = {
             },
             CLOSED: {
                 MONGO: "",
-                CMS: "",
+                CMS: "closed",
                 SDM: [],
                 FREQ: {
                     GET: 5000,
@@ -600,7 +600,7 @@ export const DATABASE = {
             },
             CANCELED: {
                 MONGO: "CANCELED",
-                CMS: "",
+                CMS: "canceled",
                 SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
                 FREQ: {
                     GET: 5000,
@@ -611,7 +611,7 @@ export const DATABASE = {
             },
             FAILURE: {
                 MONGO: "FAILURE",
-                CMS: "",
+                CMS: "failed",
                 SDM: [-2], //@description : for development purpose, not sdm actual value
                 FREQ: {
                     GET: 5000,
