@@ -27,6 +27,27 @@ export class BaseSDM {
             if (!BaseSDM.client) {
                 let soapC = await this.soap.createClientAsync(this.baseSOAPUrl)
                 global.healthcheck.sdm = true
+                kafkaService.kafkaSync({
+                    set: Constant.SET_NAME.LOGGER,
+                    mdb: {
+                        create: true,
+                        argv: JSON.stringify({
+                            type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
+                            info: {
+                                request: {
+                                    body: {}
+                                },
+                                response: global.healthcheck
+                            },
+                            description: "/healthcheck/sdm",
+                            options: {
+                                env: Constant.SERVER.ENV[config.get("env")],
+                            },
+                            createdAt: new Date().getTime(),
+                        })
+                    },
+                    inQ: true
+                })
                 consolelog(process.cwd(), "Soap client connected", "", true)
                 BaseSDM.client = soapC;
             }
