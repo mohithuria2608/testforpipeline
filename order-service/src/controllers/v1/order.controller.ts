@@ -85,11 +85,21 @@ export class OrderController {
                 if (order && order._id)
                     paymentRetry = true
             } else {
-                if (getCurrentCart.items && getCurrentCart.items.length == 0) {
-                    let midRes: any = { ...getCurrentCart }
-                    midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
-                    midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
-                    return { cartValidate: getCurrentCart }
+                let midOrder = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: hash }, {}, { lean: true })
+                if (midOrder && midOrder._id) {
+                    return {
+                        orderPlaced: {
+                            noonpayRedirectionUrl: "",
+                            orderInfo: midOrder
+                        }
+                    }
+                } else {
+                    if (getCurrentCart.items && getCurrentCart.items.length == 0) {
+                        let midRes: any = { ...getCurrentCart }
+                        midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
+                        midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
+                        return { cartValidate: getCurrentCart }
+                    }
                 }
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
