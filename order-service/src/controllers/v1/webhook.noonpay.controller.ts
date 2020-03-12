@@ -80,10 +80,10 @@ export class WebhookNoonpayController {
                         updatedAt: new Date().getTime(),
                         "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
                     }
-                    if(status)
-                    dataToUpdateOrder['$addToSet'] = {
-                        transLogs: status
-                    }
+                    if (status)
+                        dataToUpdateOrder['$addToSet'] = {
+                            transLogs: status
+                        }
                     if (validationRemarks && validationRemarks != "")
                         dataToUpdateOrder['validationRemarks'] = validationRemarks
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
@@ -92,8 +92,8 @@ export class WebhookNoonpayController {
                         message: status.transactions[0].type,
                         type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
                         payment_data: {
-                            id: status.transactions[0].id.toString(),
-                            data: JSON.stringify(status)
+                            id: status ? status.transactions[0].id.toString() : order.cmsOrderRef,
+                            data: status ? JSON.stringify(status) : validationRemarks
                         }
                     })
                     CMS.OrderCMSE.updateOrder({
