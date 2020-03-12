@@ -84,19 +84,6 @@ export class MiscController {
     }
 
     /**
-    * @method GET
-    * @description : Get Privacy Policy
-    * */
-    async privacyPolicy(headers: ICommonRequest.IHeaders) {
-        try {
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "privacyPolicy", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
     * @method INTERNAL
     * @description : PING SERVICES
     * */
