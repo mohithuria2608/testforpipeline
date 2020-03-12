@@ -89,7 +89,7 @@ export class WebhookNoonpayController {
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     CMS.TransactionCMSE.createTransaction({
                         order_id: order.cmsOrderRef,
-                        message: status.transactions[0].type,
+                        message: status ? status.transactions[0].type : validationRemarks,
                         type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
                         payment_data: {
                             id: status ? status.transactions[0].id.toString() : order.cmsOrderRef,
