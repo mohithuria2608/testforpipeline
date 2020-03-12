@@ -627,7 +627,7 @@ export class CartClass extends BaseEntity {
                             console.log("reeItems_En.products", freeItems_En[0].products, freeItems_En[0].products.length)
                             if (freeItems_En && freeItems_En.length > 0) {
                                 if (freeItems_En[0].products && freeItems_En[0].products.length > 0)
-                                    freeItems_En = freeItems_En[0].products.filter(obj => { return (freeItemSku.indexOf(obj.id.toString()) >= 0) })
+                                    freeItems_En = freeItems_En[0].products.filter(obj => { return (freeItemSku.indexOf(obj.sdmId.toString()) >= 0) })
                                 else
                                     freeItems_En = []
                             } else
@@ -635,7 +635,7 @@ export class CartClass extends BaseEntity {
 
                             if (freeItems_Ar && freeItems_Ar.length > 0) {
                                 if (freeItems_Ar[0].products && freeItems_Ar[0].products.length > 0)
-                                    freeItems_Ar = freeItems_Ar[0].products.filter(obj => { return freeItemSku.indexOf(obj.id.toString()) >= 0 })
+                                    freeItems_Ar = freeItems_Ar[0].products.filter(obj => { return freeItemSku.indexOf(obj.sdmId.toString()) >= 0 })
                                 else
                                     freeItems_Ar = []
                             }
