@@ -23,7 +23,9 @@ export class UserCMSEntity extends BaseCMS {
                 "sdmUserRef": payload.sdmUserRef ? payload.sdmUserRef : 0,
                 "sdmCorpRef": payload.sdmCorpRef ? payload.sdmCorpRef : 0
             }
-            const headers = {};
+            const headers = {
+                "password": payload.password
+            };
             const form = formObj;
             const options = {
                 method: Constant.DATABASE.CMS.END_POINTS.CREATE_USER.METHOD,
@@ -51,11 +53,11 @@ export class UserCMSEntity extends BaseCMS {
                 "websiteId": "1",
                 "alternatePhone": ""
             }
-            if (payload.email && payload.email!="")
+            if (payload.email && payload.email != "")
                 formObj['email'] = payload.email
             if (payload.fullPhnNo)
                 formObj['phone'] = payload.fullPhnNo
-            if (payload.name && payload.name!="") {
+            if (payload.name && payload.name != "") {
                 let naemRes = nameConstructor(payload.name)
                 formObj['firstName'] = naemRes.firstName
                 formObj['lastName'] = naemRes.lastName
@@ -94,7 +96,7 @@ export class UserCMSEntity extends BaseCMS {
                 formObj['customerId'] = payload.cmsUserRef
             else
                 formObj['customerId'] = ""
-            if (payload.email && payload.email!="")
+            if (payload.email && payload.email != "")
                 formObj['email'] = payload.email
             else
                 formObj['email'] = ""
