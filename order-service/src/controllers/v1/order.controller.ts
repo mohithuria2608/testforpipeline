@@ -199,7 +199,7 @@ export class OrderController {
                 CMS.TransactionCMSE.createTransaction({
                     order_id: order.cmsOrderRef,
                     message: initiatePaymentObj.paymentStatus,
-                    type: initiatePaymentObj.paymentStatus,
+                    type: 'Order',
                     payment_data: {
                         id: initiatePaymentObj.noonpayOrderId.toString(),
                         data: JSON.stringify(initiatePaymentObj)

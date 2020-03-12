@@ -48,7 +48,7 @@ export class WebhookNoonpayController {
                     CMS.TransactionCMSE.createTransaction({
                         order_id: order.cmsOrderRef,
                         message: status.transactions[0].type,
-                        type: status.transactions[0].type,
+                        type: "Void",
                         payment_data: {
                             id: status.transactions[0].id.toString(),
                             data: JSON.stringify(status)
@@ -72,17 +72,18 @@ export class WebhookNoonpayController {
                         "payment.status": status.transactions[0].type
                     }
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                    CMS.TransactionCMSE.createTransaction({
-                        order_id: order.cmsOrderRef,
-                        message: status.transactions[0].type,
-                        type: status.transactions[0].type,
-                        payment_data: {
-                            id: status.transactions[0].id.toString(),
-                            data: JSON.stringify(status)
-                        }
-                    })
+
                     if (order.payment.status == "AUTHORIZATION") {
                         ENTITY.CartE.resetCart(order.userId)
+                        CMS.TransactionCMSE.createTransaction({
+                            order_id: order.cmsOrderRef,
+                            message: status.transactions[0].type,
+                            type: "Authorization",
+                            payment_data: {
+                                id: status.transactions[0].id.toString(),
+                                data: JSON.stringify(status)
+                            }
+                        })
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
@@ -97,6 +98,15 @@ export class WebhookNoonpayController {
                             "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
                         }
                         order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                        CMS.TransactionCMSE.createTransaction({
+                            order_id: order.cmsOrderRef,
+                            message: status.transactions[0].type,
+                            type: "Void",
+                            payment_data: {
+                                id: status.transactions[0].id.toString(),
+                                data: JSON.stringify(status)
+                            }
+                        })
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
@@ -119,7 +129,7 @@ export class WebhookNoonpayController {
                     CMS.TransactionCMSE.createTransaction({
                         order_id: order.cmsOrderRef,
                         message: status.transactions[0].type,
-                        type: status.transactions[0].type,
+                        type:'Void',
                         payment_data: {
                             id: status.transactions[0].id.toString(),
                             data: JSON.stringify(status)

@@ -408,7 +408,8 @@ export const DATABASE = {
         CONFIG: {
             GENERAL: "general",
             PAYMENT: "payment",
-            SHIPMENT: "shipment"
+            SHIPMENT: "shipment",
+            COUNTRY_SPECIFIC: "country-specific"
         },
 
         TOKEN: {

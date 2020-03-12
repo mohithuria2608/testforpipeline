@@ -696,7 +696,7 @@ export class OrderClass extends BaseEntity {
                                         //         CMS.TransactionCMSE.createTransaction({
                                         //             order_id: order.cmsOrderRef,
                                         //             message: status.transactions[0].type,
-                                        //             type: status.transactions[0].type,
+                                        //             type: 'Void',
                                         //             payment_data: {
                                         //                 id: status.transactions[0].id.toString(),
                                         //                 data: JSON.stringify(status)
@@ -841,7 +841,7 @@ export class OrderClass extends BaseEntity {
                                                             CMS.TransactionCMSE.createTransaction({
                                                                 order_id: order.cmsOrderRef,
                                                                 message: status.transactions[0].type,
-                                                                type: status.transactions[0].type,
+                                                                type: 'Capture',
                                                                 payment_data: {
                                                                     id: status.transactions[0].id.toString(),
                                                                     data: JSON.stringify(status)

@@ -195,7 +195,7 @@ export class CmsConfigController {
                     }
                     break;
                 }
-                case Constant.DATABASE.TYPE.CONFIG.SHIPMENT: {
+                case Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC: {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
                             if (data.data && data.data.length > 0) {
@@ -205,14 +205,27 @@ export class CmsConfigController {
                                         id: data.type + "_" + config.store_code,
                                         type: data.type,
                                     }
-                                    if (config.store_code)
-                                        dataToSave['store_code'] = config.store_code
-                                    if (config.store_id)
-                                        dataToSave['store_id'] = config.store_id
-                                    if (config.free_shipping)
-                                        dataToSave['free_shipping'] = config.free_shipping
-                                    if (config.flat_rate)
-                                        dataToSave['flat_rate'] = config.flat_rate
+                                    if (config.country_code)
+                                        dataToSave['country_code'] = config.country_code
+                                    if (config.country_name)
+                                        dataToSave['country_name'] = config.country_name
+                                    if (config.concept_id)
+                                        dataToSave['concept_id'] = config.concept_id
+                                    if (config.base_currency)
+                                        dataToSave['base_currency'] = config.base_currency
+                                    if (config.licence)
+                                        dataToSave['licence'] = config.licence
+                                    if (config.brand_kfc)
+                                        dataToSave['brand_kfc'] = config.brand_kfc
+                                    if (config.ccode)
+                                        dataToSave['ccode'] = config.ccode
+                                    if (config.language_en)
+                                        dataToSave['language_en'] = config.language_en
+                                    if (config.language_ar)
+                                        dataToSave['language_ar'] = config.language_ar
+                                    if (config.menus)
+                                        dataToSave['menus'] = config.menus
+
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
@@ -238,7 +251,7 @@ export class CmsConfigController {
                                 }
                                 kafkaService.kafkaSync(pingServices)
                             } else {
-                                return Promise.reject("Unhandled error while saving payment configs from cms")
+                                return Promise.reject("Unhandled error while saving country specific configs from cms")
                             }
                         }
                         else if (payload.as.get) {
@@ -270,7 +283,6 @@ export class CmsConfigController {
                 },
                 inQ: true
             }
-            // this.syncConfigFromKafka(configChange)
             kafkaService.kafkaSync(configChange)
             return {}
         } catch (error) {
