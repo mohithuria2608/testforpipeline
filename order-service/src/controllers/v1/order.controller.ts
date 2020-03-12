@@ -183,7 +183,7 @@ export class OrderController {
                     storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                     paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
                     channel: "Mobile",
-                    locale: "en",
+                    locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? "en" : "ar",
                 })
                 noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
