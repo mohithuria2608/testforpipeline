@@ -612,7 +612,7 @@ export class CartClass extends BaseEntity {
                     dataToUpdate['selFreeItem'] = payload.selFreeItem
                 } else {
                     if (payload.cmsCart.free_items && payload.cmsCart.free_items != "") {
-                        let freeItemSku = payload.cmsCart.free_items.split(",")
+                        let freeItemSku = payload.cmsCart.free_items.split(",").map(obj => { return obj.trim() })
                         if (freeItemSku && freeItemSku.length > 0) {
                             let freeItems_En = await menuService.fetchHidden({
                                 menuId: 1,
