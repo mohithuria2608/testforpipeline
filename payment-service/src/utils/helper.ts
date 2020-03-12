@@ -25,6 +25,16 @@ export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAG
         grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.INVALID_ARGUMENT
         grpcErrType = "INVALID_ARGUMENT"
     }
+    else if (error.statusCode == 1500) {
+        grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.PAYMENT_AUTHORIZATION;
+        grpcErrType = "PAYMENT_AUTHORIZATION";
+        message = JSON.stringify(error);
+    }
+    else if (error.statusCode >= 6000 && error.statusCode < 8000) {
+        grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.PAYMENT_ERROR;
+        grpcErrType = "PAYMENT_ERROR";
+        message = JSON.stringify(error);
+    }
     else if (error.statusCode >= 400) {
         grpcErrCode = Constant.STATUS_MSG.GRPC_ERROR.TYPE.INTERNAL
         grpcErrType = "INTERNAL"
@@ -178,6 +188,9 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
             customError.httpCode = error.httpCode;
             customError.type = error.type;
             customError.actionHint = error.actionHint;
+            if(error.data) {
+                customError.data = error.data;
+            }
         }
         else if ((error.hasOwnProperty('message') || error.hasOwnProperty('customMessage'))) {
             customError.message = error.hasOwnProperty('message') ? error['message'] : error['customMessage']

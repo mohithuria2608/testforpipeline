@@ -48,6 +48,7 @@ declare namespace ICommonRequest {
         message_En: string
         actionHint?: string,
         useNoonPayMessage?: boolean;
+        data?: any;
     }
     interface IActivityLogger {
         type: string,

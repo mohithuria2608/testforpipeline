@@ -117,6 +117,7 @@ export class PaymentClass extends BaseEntity {
         PENDING_PAYMENT_CAPTURE: {
             statusCode: 7005,
             httpCode: 400,
+            name: 'PaymentError',
             message: 'Awaiting payment capture.',
             type: 'PENDING_PAYMENT_CAPTURE',
             actionHint: ''
@@ -219,6 +220,10 @@ export class PaymentClass extends BaseEntity {
             err = cloneObject(Constant.STATUS_MSG.NOONPAY_ERROR.default);
             err.message = nonzeroResponse.message;
         }
+        // attach noonpay response object
+        if (nonzeroResponse && nonzeroResponse.resultCode !== undefined) {
+            err.data = nonzeroResponse;
+        }
         err.name = 'PaymentError';
         console.log('---------error object', err);
         return err;
@@ -262,7 +267,7 @@ export class PaymentClass extends BaseEntity {
         const { error, value } = PaymentClass.INITIATE_PAYMENT_REQUEST_SCHEMA.validate(payload);
         if (error) {
             consolelog(process.cwd(), 'Payment INITIATE Validation error', JSON.stringify(error), false);
-            return Promise.reject(error);
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR);
         }
         // get payment method details
         const config = await this.getNoonpayConfig(payload.storeCode);
