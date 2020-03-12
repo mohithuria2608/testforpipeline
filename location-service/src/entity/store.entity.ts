@@ -109,6 +109,21 @@ export class StoreEntity extends BaseEntity {
         storeDataAr = Object.assign(storeDataAr, data);
         return [storeDataEn, storeDataAr];
     }
+
+    async saveData(data) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: data,
+                set: this.set,
+                key: data.id,
+                create: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            return {}
+        }
+    }
 }
 
 export const StoreE = new StoreEntity()

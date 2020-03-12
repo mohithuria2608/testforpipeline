@@ -576,7 +576,7 @@ export const DATABASE = {
 export const SMS_MSG = {
     En: {
         USER: {
-            OTP_VERIFICATION: (otp) => `${otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone.`,
+            OTP_VERIFICATION: (otp) => `${otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. rMXm+gJ4X0P`,
         },
         ORDER: {
             DELIVERY_CONFIRMED: (data) => `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,

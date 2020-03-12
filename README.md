@@ -49,6 +49,10 @@ Hands-on Microservices with TypeScript 3
 * ssh americana-nodeapi@40.123.210.73		
 * jy9ypeF8DQf2ZTLT
 * https://americananode.appskeeper.com/
+
+# AEROSPIKE DB
+* ssh aerospikeusr@40.123.212.40
+* GM2nGDQkN5yMdPZs
  
 # pm2 -qa environment SSH Credentials
 * ssh americana-qa@40.123.196.7

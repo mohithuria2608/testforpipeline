@@ -33,6 +33,11 @@ export class CountryController {
         let countryData = await ENTITY.SyncCountryE.getList();
         await Utils.sendRequestToCMS('SYNC_COUNTRY', countryData);
     }
+
+    /** sync to aerospike */
+    async syncToAS(payload) {
+        await ENTITY.CountryE.saveData(payload);
+    }
 }
 
 export const countryController = new CountryController();

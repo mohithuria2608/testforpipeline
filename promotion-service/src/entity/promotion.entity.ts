@@ -86,6 +86,19 @@ export class PromotionClass extends BaseEntity {
 
     /**
      * @method INTERNAL
+     * @description removes promotion from aerospike
+     */
+    async removeAllPromotions() {
+        try {
+            return Aerospike.truncate({ set: this.set, before_nanos: 0 });
+        } catch (error) {
+            consolelog(process.cwd(), "removeAllPromotions", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method INTERNAL
      * @description :  updates promotion data
      */
     filterPromotionData(promotionPayload) {

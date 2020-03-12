@@ -29,6 +29,7 @@ class KafkaProducer {
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_ADDRESS,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
