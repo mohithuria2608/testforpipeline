@@ -37,7 +37,7 @@ export class WebhookNoonpayController {
                     })
                 } catch (error) {
                     isFailed = true
-                    validationRemarks = error.message
+                    validationRemarks = error.details
                 }
 
                 if (!isFailed && status && status.resultCode == 0 && status.transactions && status.transactions.length > 0) {
@@ -75,13 +75,14 @@ export class WebhookNoonpayController {
                 }
                 if (isFailed) {
                     let dataToUpdateOrder = {
-                        $addToSet: {
-                            transLogs: status
-                        },
                         isActive: 0,
                         status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                         updatedAt: new Date().getTime(),
                         "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
+                    }
+                    if(status)
+                    dataToUpdateOrder['$addToSet'] = {
+                        transLogs: status
                     }
                     if (validationRemarks && validationRemarks != "")
                         dataToUpdateOrder['validationRemarks'] = validationRemarks
