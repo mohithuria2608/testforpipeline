@@ -221,7 +221,7 @@ export class UserController {
                 if (sdmAddress && sdmAddress.length > 0)
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
 
-            } else{
+            } else {
                 console.log("user not found => invalid otp")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -290,9 +290,10 @@ export class UserController {
             if (userObj && userObj.length > 0) {
                 userData = userObj[0]
                 let userUpdate: IUserRequest.IUserData = {
-                    id: userObj[0].id,
-                    name: payload.name,
+                    id: userObj[0].id
                 }
+                if (payload.name)
+                    userUpdate['name'] = payload.name
                 if (userObj[0].phnVerified == 1) {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
@@ -354,6 +355,9 @@ export class UserController {
                             id: userObj[0].id,
                             name: payload.name,
                         }
+                        if (name)
+                            userUpdate['name'] = payload.name
+
                         if (userObj[0].phnVerified == 1) {
                             userData = await ENTITY.UserE.buildUser(userUpdate)
                         } else {
