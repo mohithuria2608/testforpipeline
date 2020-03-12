@@ -634,11 +634,26 @@ export const DATABASE = {
         },
 
         TRANSACTION: {
-            AUTHORIZATION: 'AUTHORIZATION',
-            VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
-            CAPTURE: 'CAPTURE',
-            REFUND: 'REFUND',
-            FAILED: 'FAILED'
+            AUTHORIZATION: {
+                AS: 'AUTHORIZATION',
+                CMS: 'Order'
+            },
+            VOID_AUTHORIZATION: {
+                AS: 'VOID_AUTHORIZATION', // Reverse payment
+                CMS: 'Void'
+            },
+            CAPTURE: {
+                AS: 'CAPTURE',
+                CMS: 'Capture'
+            },
+            REFUND: {
+                AS: 'REFUND',
+                CMS: ""
+            },
+            FAILED: {
+                AS: 'FAILED',
+                CMS: ""
+            }
         }
     },
 

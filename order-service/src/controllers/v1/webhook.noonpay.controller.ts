@@ -26,6 +26,8 @@ export class WebhookNoonpayController {
                 /**
                  * @description step 1 get noonpay order status
                  */
+                let isFailed = false
+                let validationRemarks = ""
                 let status
                 try {
                     status = await paymentService.getPaymentStatus({
@@ -34,36 +36,11 @@ export class WebhookNoonpayController {
                         paymentStatus: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
                     })
                 } catch (error) {
-                    let dataToUpdateOrder = {
-                        $addToSet: {
-                            transLogs: status
-                        },
-                        isActive: 0,
-                        status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                        updatedAt: new Date().getTime(),
-                        "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED,
-                        validationRemarks: error.message
-                    }
-                    order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                    CMS.TransactionCMSE.createTransaction({
-                        order_id: order.cmsOrderRef,
-                        message: status.transactions[0].type,
-                        type: "Void",
-                        payment_data: {
-                            id: status.transactions[0].id.toString(),
-                            data: JSON.stringify(status)
-                        }
-                    })
-                    CMS.OrderCMSE.updateOrder({
-                        order_id: order.cmsOrderRef,
-                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
-                    })
-                    redirectUrl = redirectUrl + "payment/failure"
-                    return redirectUrl
+                    isFailed = true
+                    validationRemarks = error.message
                 }
 
-                if (status && status.resultCode == 0 && status.transactions && status.transactions.length > 0) {
+                if (!isFailed && status && status.resultCode == 0 && status.transactions && status.transactions.length > 0) {
                     let dataToUpdateOrder = {
                         $addToSet: {
                             transLogs: status
@@ -78,7 +55,7 @@ export class WebhookNoonpayController {
                         CMS.TransactionCMSE.createTransaction({
                             order_id: order.cmsOrderRef,
                             message: status.transactions[0].type,
-                            type: "Authorization",
+                            type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
                             payment_data: {
                                 id: status.transactions[0].id.toString(),
                                 data: JSON.stringify(status)
@@ -90,32 +67,13 @@ export class WebhookNoonpayController {
                             order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                         })
                         redirectUrl = redirectUrl + "payment/success"
+                        return redirectUrl
                     } else {
-                        let dataToUpdateOrder = {
-                            isActive: 0,
-                            status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                            updatedAt: new Date().getTime(),
-                            "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
-                        }
-                        order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                        CMS.TransactionCMSE.createTransaction({
-                            order_id: order.cmsOrderRef,
-                            message: status.transactions[0].type,
-                            type: "Void",
-                            payment_data: {
-                                id: status.transactions[0].id.toString(),
-                                data: JSON.stringify(status)
-                            }
-                        })
-                        CMS.OrderCMSE.updateOrder({
-                            order_id: order.cmsOrderRef,
-                            payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
-                        })
-                        redirectUrl = redirectUrl + "payment/failure"
+                        isFailed = true
+                        // validationRemarks = error.message
                     }
-                    return redirectUrl
-                } else {
+                }
+                if (isFailed) {
                     let dataToUpdateOrder = {
                         $addToSet: {
                             transLogs: status
@@ -123,13 +81,15 @@ export class WebhookNoonpayController {
                         isActive: 0,
                         status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                         updatedAt: new Date().getTime(),
-                        "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED
+                        "payment.status": Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
                     }
+                    if (validationRemarks && validationRemarks != "")
+                        dataToUpdateOrder['validationRemarks'] = validationRemarks
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     CMS.TransactionCMSE.createTransaction({
                         order_id: order.cmsOrderRef,
                         message: status.transactions[0].type,
-                        type:'Void',
+                        type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
                         payment_data: {
                             id: status.transactions[0].id.toString(),
                             data: JSON.stringify(status)
