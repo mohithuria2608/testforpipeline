@@ -23,13 +23,13 @@ export class TransactionCMSEntity extends BaseCMS {
                 if (cmsRes[0].success)
                     return cmsRes[0]
                 else
-                    Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
             else
-                Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
             consolelog(process.cwd(), 'createTransaction', JSON.stringify(error), false)
-            // return Promise.reject(error)
+            return Promise.reject(error)
         }
     }
 }
