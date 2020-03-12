@@ -102,6 +102,7 @@ export class WebhookNoonpayController {
                         order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                     })
                     redirectUrl = redirectUrl + "payment/failure"
+                    console.log("redirectUrl=================>", redirectUrl)
                     return redirectUrl
                 }
             } else {

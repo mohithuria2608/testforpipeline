@@ -53,7 +53,7 @@ export class OrderCMSEntity extends BaseCMS {
                 Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
             consolelog(process.cwd(), 'updateOrder', JSON.stringify(error), false)
-            return Promise.reject(error)
+            // return Promise.reject(error)
         }
     }
 }
