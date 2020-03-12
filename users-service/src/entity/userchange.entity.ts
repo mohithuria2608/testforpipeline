@@ -122,7 +122,7 @@ export class UserchangeEntity extends BaseEntity {
         }
     }
 
-    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange) {
+    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, lang: string = 'En') {
         try {
             let isCreate = false
             let checkUserchange = await this.getUserchange({ userId: userId })
@@ -210,10 +210,8 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
             if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendSms({
-                    message: `${payload.otp.toString()} is your OTP for KFC UAE app login`,
-                    destination: encodeURIComponent(payload.fullPhnNo),
-                    type: 0,
-                    dlr: 1,
+                    message: Constant.SMS_MSG.En.USER.OTP_VERIFICATION(payload.otp.toString()),
+                    destination: encodeURIComponent(payload.fullPhnNo)
                 })
             }
             let putArg: IAerospike.Put = {

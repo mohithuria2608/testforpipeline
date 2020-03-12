@@ -386,11 +386,13 @@ export let sendRequestToCMS = function (type, data) {
             case 'SYNC_STORE': requestUrl = "http://40.123.207.192/rest/V1/restaurant/create"; break;
             default: reject(new Error('Invalid Request Entity Type'));
         }
+        console.log(Array.isArray(data), JSON.stringify(data[0]));
         request.post({
             headers: { 'content-type': 'application/json' },
             url: requestUrl,
             body: JSON.stringify(data)
         }, function (err, d, b) {
+            console.log("b --> ", b);
             if (err) reject(err);
             else resolve(b);
         });

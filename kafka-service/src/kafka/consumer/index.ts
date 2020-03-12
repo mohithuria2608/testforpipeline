@@ -7,8 +7,7 @@ import { cms_menuConsumerE } from './cms_menu.consumer';
 import { sdm_menuConsumerE } from './sdm_menu.consumer';
 import { as_menuConsumerE } from './as_menu.consumer';
 import { as_homeConsumerE } from './as_home.consumer';
-
-import { as_storeConsumerE } from './as_store.consumer';
+import { as_locationConsumerE } from './as_location.consumer';
 
 import { as_hiddenConsumerE } from './as_hidden.consumer';
 
@@ -36,7 +35,7 @@ export function initConsumers() {
 
     as_configConsumerE.handleMessage();
     as_appversionConsumerE.handleMessage();
-    
+
     as_userConsumerE.handleMessage();
     sdm_userConsumerE.handleMessage();
     cms_userConsumerE.handleMessage();
@@ -50,8 +49,9 @@ export function initConsumers() {
     sdm_menuConsumerE.handleMessage();
     cms_menuConsumerE.handleMessage();
 
+    as_locationConsumerE.handleMessage();
     cms_locationConsumerE.handleMessage();
-    as_storeConsumerE.handleMessage();
+    // as_storeConsumerE.handleMessage();
 
     as_hiddenConsumerE.handleMessage();
 

@@ -11,14 +11,8 @@ message ICreateToken {
     required string devicetype = 2;
     required string tokenType = 3;
     optional string id = 4;
-    optional IAuthCred authCred = 5;
-    required int32 isGuest = 6;
-    required int32 sessionTime = 7;
-}
-
-message IAuthCred {
-    required string username = 1;
-    required string password =2;
+    required int32 isGuest = 5;
+    required int32 sessionTime = 6;
 }
 
 message IToken {

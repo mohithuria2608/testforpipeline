@@ -11,7 +11,11 @@ declare namespace IStoreGrpcRequest {
     interface IValidateCoordinateData extends ICommonRequest.ICordinatesOpt {
     }
 
-    interface ISyncStoresReq {
+    interface ISyncLocationFromCMSReq {
+        request: any
+    }
+
+    interface IPostLocationDataToCMSReq {
         request: any
     }
 }

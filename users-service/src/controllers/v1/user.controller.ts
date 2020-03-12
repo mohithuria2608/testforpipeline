@@ -75,7 +75,7 @@ export class UserController {
                     otpVerified: 0,
                     isGuest: 0
                 }
-                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload)
+                await ENTITY.UserchangeE.buildUserchange(checkUser[0].id, userchangePayload, headers.language)
             } else {
                 let userchangePayload: IUserchangeRequest.IUserchange = {
                     username: username,
@@ -116,7 +116,7 @@ export class UserController {
                     country: headers.country,
                 }
                 let user = await ENTITY.UserE.buildUser(tempUser)
-                await ENTITY.UserchangeE.buildUserchange(user.id, userchangePayload)
+                await ENTITY.UserchangeE.buildUserchange(user.id, userchangePayload, headers.language)
             }
             return {}
         } catch (error) {
@@ -334,7 +334,7 @@ export class UserController {
                             }
                         }
                     }
-                    await ENTITY.UserchangeE.buildUserchange(userData.id, userchange)
+                    await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
@@ -393,7 +393,7 @@ export class UserController {
                                     userchange['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                                 }
                             } else {
-                                await ENTITY.UserchangeE.buildUserchange(userData.id, userchange)
+                                await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
                             }
                             userData = await ENTITY.UserE.buildUser(userUpdate)
                         }

@@ -356,7 +356,7 @@ export class PaymentClass extends BaseEntity {
             // ACTUAL: Get Error code 19085
             // TODO: In Authorization payment check, compare the order amount with authorized amount - if different -> cancel the transaction and reverse.
             // To be implemented in order service
-            console.log('--Payment ORDER STATUS');
+            console.log('--Payment ORDER STATUS', JSON.stringify(response));
             let result: IPaymentGrpcRequest.IGetPaymentStatusRes = {
                 resultCode: response.resultCode,
                 message: response.message,

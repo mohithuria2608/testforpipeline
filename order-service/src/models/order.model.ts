@@ -11,6 +11,7 @@ export interface Iorder extends Document {
     userId: string,
     sdmUserRef: number,
     country: string,
+    language: string,
     status: string,
     sdmOrderStatus: number,
     items: any,
@@ -48,6 +49,12 @@ const orderSchema = new Schema({
             Constant.DATABASE.COUNTRY.UAE
         ]
     },
+    language: {
+        type: String, required: true, enum: [
+            Constant.DATABASE.LANGUAGE.AR,
+            Constant.DATABASE.LANGUAGE.EN
+        ]
+    },
     status: {
         type: String, enum: [
             Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
@@ -78,12 +85,28 @@ const orderSchema = new Schema({
             type: String, enum: [
                 Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
                 Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
-                Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
                 Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
                 Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
             ]
         }
     }],
+    vat: {
+        sequence: { type: Number, },
+        name: { type: String },
+        code: { type: String },
+        action: {
+            type: String, enum: [
+                Constant.DATABASE.ACTION.CART_AMOUNT.ADD,
+                Constant.DATABASE.ACTION.CART_AMOUNT.SUBTRACT
+            ]
+        },
+        amount: { type: Number, default: 0 },
+        type: {
+            type: String, enum: [
+                Constant.DATABASE.TYPE.CART_AMOUNT.TAX
+            ]
+        }
+    },
     address: {
         addressId: { type: String },
         sdmAddressRef: { type: Number, default: 0 },

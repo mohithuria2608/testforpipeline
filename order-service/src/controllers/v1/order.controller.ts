@@ -33,7 +33,8 @@ export class OrderController {
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
-                let data = JSON.parse(payload.sdm.argv)
+                let data = JSON.parse(payload.sdm.argv);
+                data.language = Constant.DATABASE.LANGUAGE.EN;
                 if (payload.sdm.create)
                     await ENTITY.OrderE.createSdmOrder(data)
                 if (payload.sdm.get)
@@ -84,11 +85,21 @@ export class OrderController {
                 if (order && order._id)
                     paymentRetry = true
             } else {
-                if (getCurrentCart.items && getCurrentCart.items.length == 0) {
-                    let midRes: any = { ...getCurrentCart }
-                    midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
-                    midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
-                    return { cartValidate: getCurrentCart }
+                let midOrder = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: hash }, {}, { lean: true })
+                if (midOrder && midOrder._id) {
+                    return {
+                        orderPlaced: {
+                            noonpayRedirectionUrl: "",
+                            orderInfo: midOrder
+                        }
+                    }
+                } else {
+                    if (getCurrentCart.items && getCurrentCart.items.length == 0) {
+                        let midRes: any = { ...getCurrentCart }
+                        midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
+                        midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
+                        return { cartValidate: getCurrentCart }
+                    }
                 }
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
@@ -188,7 +199,7 @@ export class OrderController {
                 CMS.TransactionCMSE.createTransaction({
                     order_id: order.cmsOrderRef,
                     message: initiatePaymentObj.paymentStatus,
-                    type: initiatePaymentObj.paymentStatus,
+                    type: 'Order',
                     payment_data: {
                         id: initiatePaymentObj.noonpayOrderId.toString(),
                         data: JSON.stringify(initiatePaymentObj)
@@ -197,7 +208,7 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
@@ -210,7 +221,7 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
                 })
                 ENTITY.CartE.resetCart(auth.id)
             }
@@ -315,6 +326,7 @@ export class OrderController {
             if (getSdmOrderRef && getSdmOrderRef._id) {
                 await ENTITY.OrderE.getSdmOrder({
                     sdmOrderRef: sdmOrder,
+                    language: headers.language,
                     timeInterval: getFrequency({
                         status: getSdmOrderRef.status,
                         type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
@@ -360,6 +372,7 @@ export class OrderController {
                     if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime())
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,
+                            language: order.language,
                             timeInterval: getFrequency({
                                 status: order.status,
                                 type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,

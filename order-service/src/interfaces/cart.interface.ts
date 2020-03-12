@@ -16,6 +16,7 @@ declare namespace ICartRequest {
         notAvailable?: any
         address?: IAddress,
         amount?: IAmount[],
+        vat?: IAmount,
         store?: IStore,
         invalidMenu?: number,
         promo?: IPromotionGrpcRequest.IValidatePromotionRes,
@@ -31,10 +32,12 @@ declare namespace ICartRequest {
     }
 
     interface IAmount {
-        type: string
-        name: string
-        code: string
-        amount: number
+        type?: string
+        name?: string
+        code?: string
+        amount?: number,
+        sequence?: number,
+        action?: string
     }
     interface IAddress {
         addressId?: string,
@@ -100,6 +103,6 @@ declare namespace ICartRequest {
     interface IDataToHash {
         items: any,
         promo: number,
-        updatedAt: number
+        updatedAt: number,
     }
 }

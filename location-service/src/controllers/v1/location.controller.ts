@@ -128,13 +128,29 @@ export class LocationController {
     async postLocationToCMS(payload): Promise<any> {
         try {
             await Promise.all([
-                cityController.postOnCMS(),
-                areaController.postOnCMS(),
+                // cityController.postOnCMS(),
+                // areaController.postOnCMS(),
                 storeController.postOnCMS()
                 // countryController.postOnCMS()
             ]);
         } catch (error) {
             consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * syncs location data from CMS
+     */
+    async syncLocationFromCMS(payload): Promise<any> {
+        try {
+            let syncData = JSON.parse(payload.as.argv);
+            // switch (syncData.type) {
+            //     case 'city': 
+            // }
+        } catch (error) {
+            consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

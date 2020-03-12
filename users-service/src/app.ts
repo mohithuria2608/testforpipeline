@@ -1,4 +1,5 @@
-'use strict'
+if (process.env.NODE_ENV == 'staging')
+  require('newrelic');
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 // process.env.AEROSPIKE_DEBUG_STACKTRACES = "1";
 global.healthcheck = {}

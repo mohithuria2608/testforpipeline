@@ -24,15 +24,14 @@ export class LocationService {
     }
 
     /**
-     * @description : this will sync location (stores)
+     * @description : this will sync location data from CMS
      * @param payload 
      */
-    async syncStores(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
+    async syncLocationFromCMS(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
-                console.log("PAYLOADDDD _-----> ", payload);
                 await locationServiceValidator.syncValidator(payload)
-                this.locationClient.SyncStores(payload, (error, res) => {
+                this.locationClient.SyncLocationFromCMS(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully synced location on cms", JSON.stringify(res), false)
                         resolve(res)
@@ -55,7 +54,6 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.syncValidator(payload)
-                console.log("PAYLOADDD ---> ", payload);
                 this.locationClient.PostLocationDataToCMS(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully synced location on cms", JSON.stringify(res), false)

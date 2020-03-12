@@ -1,3 +1,5 @@
+if (process.env.NODE_ENV == 'staging')
+  require('newrelic');
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 global.healthcheck = {}
 import * as config from "config"

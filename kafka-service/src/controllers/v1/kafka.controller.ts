@@ -290,7 +290,7 @@ export class KafkaController {
                         delete messages.sdm;
                         delete messages.as;
                         delete messages.mdb;
-                        console.log("------------>", messages);
+                        console.log("HERERERE ---> ");
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
@@ -299,6 +299,17 @@ export class KafkaController {
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                         else
                             await locationService.postLocationDataToCMS(messages)
+                    }
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm;
+                        delete messages.cms;
+                        delete messages.mdb;
+                        if (!payload.hasOwnProperty('count'))
+                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION
+                        messages['q'] = topic
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                     }
                     break;
                 }
@@ -488,8 +499,6 @@ export class KafkaController {
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
-                        else
-                            await locationService.syncStores(messages)
                     }
                     break;
                 }

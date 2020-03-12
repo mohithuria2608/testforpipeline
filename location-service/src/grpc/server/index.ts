@@ -43,18 +43,18 @@ server.addService(locationProto.LocationService.service, {
         }
     },
 
-    SyncStores: async (call: IStoreGrpcRequest.ISyncStoresReq, callback) => {
+    SyncLocationFromCMS: async (call: IStoreGrpcRequest.ISyncLocationFromCMSReq, callback) => {
         try {
-            consolelog(process.cwd(), "grpc syncStore", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await storeController.syncStores(call.request);
+            consolelog(process.cwd(), "grpc SyncLocationFromCMS", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IStore[] = await locationController.syncLocationFromCMS(call.request);
             callback(null, { store: true })
         } catch (error) {
-            consolelog(process.cwd(), "syncStore", JSON.stringify(error), false)
+            consolelog(process.cwd(), "SyncLocationFromCMS", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
 
-    PostLocationDataToCMS: async (call: IStoreGrpcRequest.ISyncStoresReq, callback) => {
+    PostLocationDataToCMS: async (call: IStoreGrpcRequest.IPostLocationDataToCMSReq, callback) => {
         try {
             consolelog(process.cwd(), "grpc PostLocationDataToCMS", JSON.stringify(call.request), true)
             let res: IStoreRequest.IStore[] = await locationController.postLocationToCMS(call.request);

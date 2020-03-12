@@ -22,7 +22,7 @@ class AsStoreConsumer extends BaseConsumer {
 
     private async syncStores(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await locationService.syncStores(message)
+            let res = await locationService.postLocationDataToCMS(message)
             return res
         } catch (error) {
             consolelog(process.cwd(), "syncStores", JSON.stringify(error), false);

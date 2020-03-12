@@ -1,5 +1,6 @@
 'use strict';
 import * as config from 'config'
+import * as Helper from "../utils/helper";
 import * as request from "request";
 import { consolelog } from '../utils'
 const exec = require('child_process').exec;
@@ -19,7 +20,7 @@ export class SmsCLass {
     singleSms(payload: ISmsRequest.ISingleSms) {
         try {
             // https://sms.rmlconnect.net/bulksms/bulksms?dlr=1&destination=971503934048&message=06450631062D0628062700200645062706460648062C&username=Adigital&password=vSqKeZdc&source=KFC&type=2
-            let url = `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=${payload.type}&dlr=${payload.dlr}&destination=${payload.destination}&source=${this.source}&message=${payload.message}`
+            let url = `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=2&dlr=0&destination=${payload.destination}&source=${this.source}&message=${payload.message}`
             let command = `curl -X GET ${url}`
             consolelog(process.cwd(), 'singleSms command:', command, true)
 
@@ -39,8 +40,9 @@ export class SmsCLass {
 
     async sendSMS(payload: ISmsRequest.ISingleSms) {
         return new Promise((resolve, reject) => {
+            payload.message = Helper.utfConverter(payload.message);
             request.get(
-                `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=${payload.type}&dlr=${payload.dlr}&destination=${payload.destination}&source=${this.source}&message=${payload.message}`,
+                `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=2&dlr=0&destination=${payload.destination}&source=${this.source}&message=${payload.message}`,
                 function (err, data, b) {
                     kafkaService.kafkaSync({
                         set: Constant.SET_NAME.LOGGER,
@@ -54,7 +56,7 @@ export class SmsCLass {
                                     },
                                     response: err ? err : b
                                 },
-                                description: `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=${payload.type}&dlr=${payload.dlr}&destination=${payload.destination}&source=${this.source}&message=${payload.message}`,
+                                description: `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=2&dlr=0&destination=${payload.destination}&source=${this.source}&message=${payload.message}`,
                                 options: {
                                     env: Constant.SERVER.ENV[config.get("env")],
                                 },
