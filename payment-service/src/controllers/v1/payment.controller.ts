@@ -23,19 +23,12 @@ export class PaymentController {
             }
             else if (amount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE) {
                 console.log("2")
-
                 return [
                     {
                         "id": 1,
                         "name": "Card",
                         "image": "",
                         default: 1
-                    },
-                    {
-                        "id": 2,
-                        "name": "Visa Checkout",
-                        "image": "",
-                        default: 0
                     }
                 ]
             }
@@ -45,12 +38,6 @@ export class PaymentController {
                     {
                         "id": 1,
                         "name": "Card",
-                        "image": "",
-                        default: 0
-                    },
-                    {
-                        "id": 2,
-                        "name": "Visa Checkout",
                         "image": "",
                         default: 0
                     },

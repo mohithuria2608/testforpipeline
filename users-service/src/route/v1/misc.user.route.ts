@@ -1,4 +1,3 @@
-import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
@@ -19,9 +18,8 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: IUserRequest.IRefreshToken = ctx.request.body;
                     let authObj = ctx.state.user
-                    let res = await miscUserController.refreshToken(headers, payload, authObj);
+                    let res = await miscUserController.refreshToken(headers, authObj);
                     ctx.set({ 'accessToken': res.accessToken })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res.response)
                     ctx.status = sendResponse.statusCode;

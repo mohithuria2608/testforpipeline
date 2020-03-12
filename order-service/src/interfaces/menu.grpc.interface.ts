@@ -120,4 +120,15 @@ declare namespace IMenuGrpcRequest {
         associative?: number,
         sku: number,
     }
+
+    interface IFetchHiddenReq {
+        menuId: number,
+        language: string,
+        type: string
+    }
+
+    interface IFetchHiddenRes {
+        menu: IMenu[],
+    }
+
 }

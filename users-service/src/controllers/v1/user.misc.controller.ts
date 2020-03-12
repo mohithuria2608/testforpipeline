@@ -10,7 +10,7 @@ export class MiscUserController {
     * @method POST
     * @description : If the accessToken expire create new token using refreshToken with expiry time = 30 days
     * */
-    async refreshToken(headers: ICommonRequest.IHeaders, payload: IUserRequest.IRefreshToken, authObj: ICommonRequest.AuthorizationObj) {
+    async refreshToken(headers: ICommonRequest.IHeaders, authObj: ICommonRequest.AuthorizationObj) {
         try {
             let sessionTime = Math.ceil((new Date().getTime()) / 1000)
             let sessionUpdate: ISessionRequest.ISession = {

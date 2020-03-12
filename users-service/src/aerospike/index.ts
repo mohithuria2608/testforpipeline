@@ -10,6 +10,7 @@ const aerospike = require('aerospike');
 const path = require('path');
 import * as ENTITY from '../entity'
 import { consolelog } from "../utils";
+import { kafkaService } from '../grpc/client'
 
 class AerospikeClass {
 
@@ -30,10 +31,9 @@ class AerospikeClass {
             if (!this.client) {
                 try {
                     const defaultPolicy = {
-                        totalTimeout: 1000
+                        totalTimeout: config.get("aerospike.config.timeout")
                     }
                     let aerospikeConfig = {
-                        
                         hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
@@ -51,10 +51,33 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
-                        maxConnsPerNode: 1000
+                        maxConnsPerNode: config.get("aerospike.config.maxConnsPerNode"),
                     }
+
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
+                        global.healthcheck.as = true
+                        kafkaService.kafkaSync({
+                            set: Constant.SET_NAME.LOGGER,
+                            mdb: {
+                                create: true,
+                                argv: JSON.stringify({
+                                    type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
+                                    info: {
+                                        request: {
+                                            body: {}
+                                        },
+                                        response: global.healthcheck
+                                    },
+                                    description: "/healthcheck/as",
+                                    options: {
+                                        env: Constant.SERVER.ENV[config.get("env")],
+                                    },
+                                    createdAt: new Date().getTime(),
+                                })
+                            },
+                            inQ: true
+                        })
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         this.udfRegister({ module: process.cwd() + '/lua/user.lua' })
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)
@@ -371,7 +394,7 @@ class AerospikeClass {
             }
         })
     }
-    
+
     async  udfRegister(argv) {
         return new Promise(async (resolve, reject) => {
             try {

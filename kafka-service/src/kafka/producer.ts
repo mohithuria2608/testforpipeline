@@ -24,6 +24,7 @@ class KafkaProducer {
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HOME,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,
@@ -36,6 +37,8 @@ class KafkaProducer {
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
+                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE,
                 process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,
             ], (error, data) => {
                 if (error) {

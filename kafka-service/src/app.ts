@@ -1,3 +1,5 @@
+if (process.env.NODE_ENV == 'staging')
+  require('newrelic');
 require('events').EventEmitter.defaultMaxListeners = 15;
 import * as config from "config"
 import * as Koa from 'koa'

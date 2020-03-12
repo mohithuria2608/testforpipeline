@@ -1,6 +1,0 @@
-WARNING: NODE_APP_INSTANCE value of '2' did not match any instance config file names.
-WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
-{"level":"info","message":"deeplink-service--------------GRPC connection established with auth-service--------------127.0.0.1:50051","timestamp":"2020-02-06T11:18:52.460Z"}
-WARNING: NODE_APP_INSTANCE value of '2' did not match any instance config file names.
-WARNING: See https://github.com/lorenwest/node-config/wiki/Strict-Mode
-{"level":"info","message":"deeplink-service--------------GRPC connection established with auth-service--------------127.0.0.1:50051","timestamp":"2020-02-06T11:21:59.306Z"}

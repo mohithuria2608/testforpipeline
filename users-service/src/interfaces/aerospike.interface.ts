@@ -11,15 +11,6 @@ declare namespace IAerospike {
         key: string,
         set: string,
     }
-    interface Put {
-        bins?: object,
-        set: string,
-        key?: string,
-        ttl?: number,
-        create?: boolean,
-        replace?: boolean,
-        update?: boolean
-    }
 
     interface Append {
         key?: string,

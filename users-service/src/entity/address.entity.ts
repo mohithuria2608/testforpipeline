@@ -99,7 +99,7 @@ export class AddressEntity extends BaseEntity {
         try {
             console.log("addressData", JSON.stringify(addressData))
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
-            let deliveryAddress = {
+            let address = {
                 id: id,
                 lat: addressData.lat,
                 lng: addressData.lng,
@@ -119,10 +119,25 @@ export class AddressEntity extends BaseEntity {
             };
 
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
-                consolelog(process.cwd(), "deliveryAddress", JSON.stringify(deliveryAddress), false)
+                consolelog(process.cwd(), "deliveryAddress", JSON.stringify(address), false)
+                let checkForMax6Add = await this.getAddress({ userId: userData.id, bin: bin })
+                if (checkForMax6Add && checkForMax6Add.length == 6) {
+                    let listRemoveByIndexArg: IAerospike.ListOperation = {
+                        order: true,
+                        set: this.set,
+                        key: userData.id,
+                        bin: bin,
+                        remByIndex: true,
+                        index: 0
+                    }
+                    await Aerospike.listOperations(listRemoveByIndexArg)
+                    let delCmsAddressRef = checkForMax6Add[0]
+                    if (delCmsAddressRef && delCmsAddressRef.cmsAddressRef && delCmsAddressRef.cmsAddressRef != 0)
+                        CMS.AddressCMSE.deleteAddresssOnCms({ cmsUserRef: userData.cmsUserRef, cmsAddressRef: delCmsAddressRef.cmsAddressRef })
+                }
                 let listAppendArg: IAerospike.ListOperation = {
                     order: true,
-                    bins: deliveryAddress,
+                    bins: address,
                     set: this.set,
                     key: userData.id,
                     bin: bin,
@@ -130,10 +145,10 @@ export class AddressEntity extends BaseEntity {
                 }
                 await Aerospike.listOperations(listAppendArg)
             } else {
-                deliveryAddress['description'] = store.location.description.substr(0, 10)
-                deliveryAddress['addressType'] = Constant.DATABASE.TYPE.ADDRESS.PICKUP
+                address['description'] = store.location.description.substr(0, 10)
+                address['addressType'] = Constant.DATABASE.TYPE.ADDRESS.PICKUP
                 let dataToUpdate = {
-                    pickup: [deliveryAddress]
+                    pickup: [address]
                 }
                 // let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
                 // if (oldAdd && oldAdd.length > 0) {
@@ -141,8 +156,7 @@ export class AddressEntity extends BaseEntity {
                 //         return oldAdd[0]
                 //     }
                 // }
-                consolelog(process.cwd(), "pickupAddress", JSON.stringify(deliveryAddress), false)
-
+                consolelog(process.cwd(), "pickupAddress", JSON.stringify(address), false)
                 let putArg: IAerospike.Put = {
                     bins: dataToUpdate,
                     set: this.set,
@@ -153,7 +167,7 @@ export class AddressEntity extends BaseEntity {
                 await Aerospike.put(putArg)
             }
 
-            return deliveryAddress
+            return address
         } catch (error) {
             consolelog(process.cwd(), "addAddress", error, false)
             return Promise.reject(error)
@@ -256,7 +270,7 @@ export class AddressEntity extends BaseEntity {
                 address: {
                     ADDR_AREAID: 1786,//  16
                     ADDR_BLDGNAME: userData.asAddress[0].bldgName,
-                    ADDR_BLDGNUM: userData.asAddress[0].bldgName,
+                    ADDR_BLDGNUM: userData.asAddress[0].flatNum,
                     ADDR_CITYID: 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
@@ -290,7 +304,7 @@ export class AddressEntity extends BaseEntity {
                     },
                     WADDR_AREAID: 1786,// 16
                     WADDR_BUILD_NAME: userData.asAddress[0].bldgName,
-                    WADDR_BUILD_NUM: userData.asAddress[0].bldgName,
+                    WADDR_BUILD_NUM: userData.asAddress[0].flatNum,
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
                     WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,

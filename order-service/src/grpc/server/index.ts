@@ -54,6 +54,10 @@ server.addService(orderProto.OrderService.service, {
                     res = await miscController.pingService(data)
                     break;
                 }
+                default: {
+                    callback("unhandled grpc : set", {})
+                    break;
+                }
             }
             callback(null, res)
         } catch (error) {

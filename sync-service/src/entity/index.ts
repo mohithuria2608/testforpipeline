@@ -1,4 +1,3 @@
-export { CmsE } from './cms.entity'
 export { MenuE } from './menu.entity'
 export { HomeE } from './home.entity'
 export { HiddenE } from './hidden.entity'

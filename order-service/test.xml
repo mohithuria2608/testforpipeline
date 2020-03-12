@@ -1,106 +1,590 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
-    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
-    xmlns:tns="http://tempuri.org/" 
-    xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
-    xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
-    <soap:Body>
-        <UpdateOrder xmlns="http://tempuri.org/">
-            <licenseCode>AmericanaWeb</licenseCode>
-            <language>en</language>
-            <conceptID>3</conceptID>
-            <order>
-                <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10513374</q247:AddressID>
-                <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
-                <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
-                <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7694699</q247:CustomerID>
-                <q247:DeliveryChargeID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">279</q247:DeliveryChargeID>
-                <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
-                <q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:Entries></q247:Entries>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>410013</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>21 Pcs Super Bucket</q247:Name>
-                        <q247:QCComponent>1</q247:QCComponent>
-                        <q247:QCInstanceID>768</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>32</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>510005</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Family Fries</q247:Name>
-                        <q247:QCComponent>2</q247:QCComponent>
-                        <q247:QCInstanceID>768</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>32</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>510002</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Coleslaw Salad Large</q247:Name>
-                        <q247:QCComponent>3</q247:QCComponent>
-                        <q247:QCInstanceID>768</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>32</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>510002</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Coleslaw Salad Large</q247:Name>
-                        <q247:QCComponent>4</q247:QCComponent>
-                        <q247:QCInstanceID>768</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>32</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>510002</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Coleslaw Salad Large</q247:Name>
-                        <q247:QCComponent>5</q247:QCComponent>
-                        <q247:QCInstanceID>768</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>32</q247:QCProID>
-                    </q247:CEntry>
-                    <q247:CEntry>
-                        <q247:DealID>0</q247:DealID>
-                        <q247:ID>0</q247:ID>
-                        <q247:ItemID>610034</q247:ItemID>
-                        <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Pepsi 2.25</q247:Name>
-                        <q247:QCComponent>6</q247:QCComponent>
-                        <q247:QCInstanceID>768</q247:QCInstanceID>
-                        <q247:QCLevel>0</q247:QCLevel>
-                        <q247:QCProID>32</q247:QCProID>
-                    </q247:CEntry>
-                </q247:Entries>
-                <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
-                <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:OrderMode>
-                <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
-                <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-                <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1219</q247:StoreID>
-                <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
-            </order>
-            <autoApprove>true</autoApprove>
-            <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
-            <orderNotes1>383</orderNotes1>
-            <orderNotes2>5e57e44e76512547009def75</orderNotes2>
-            <creditCardPaymentbool>false</creditCardPaymentbool>
-            <isSuspended>false</isSuspended>
-            <menuTemplateID>17</menuTemplateID>
-        </UpdateOrder>
-    </soap:Body>
-</soap:Envelope>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+      <GetOrderDetailsResponse xmlns="http://tempuri.org/">
+         <GetOrderDetailsResult xmlns:a="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:AddressID>10471245</a:AddressID>
+            <a:AreaID>389</a:AreaID>
+            <a:AuthBy/>
+            <a:AuthReq>0</a:AuthReq>
+            <a:AuthReqReason>0</a:AuthReqReason>
+            <a:AuthReqRemarks/>
+            <a:AuthReqRemarksUn/>
+            <a:AuthTime>9000-01-01T00:00:00</a:AuthTime>
+            <a:BackupStoreID>-1</a:BackupStoreID>
+            <a:Balance>0</a:Balance>
+            <a:CancelAllowed>true</a:CancelAllowed>
+            <a:CancelBy/>
+            <a:CancelTime>9000-01-01T00:00:00</a:CancelTime>
+            <a:Change>0</a:Change>
+            <a:CheckNumber>80096</a:CheckNumber>
+            <a:CityID>19</a:CityID>
+            <a:Comps xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+            <a:ConceptID>3</a:ConceptID>
+            <a:CountryID>1</a:CountryID>
+            <a:CreateBy>Web</a:CreateBy>
+            <a:CreateTime>2020-02-24T17:44:39</a:CreateTime>
+            <a:CustomerID>5214123</a:CustomerID>
+            <a:DOB>20200224</a:DOB>
+            <a:DateOfTrans>2020-02-24T17:44:39</a:DateOfTrans>
+            <a:DeliveryChargeID>279</a:DeliveryChargeID>
+            <a:DiscountTotal>40</a:DiscountTotal>
+            <a:Discounts xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+            <a:DistrictID>-1</a:DistrictID>
+            <a:DriverID>0</a:DriverID>
+            <a:DriverName/>
+            <a:DueTime>2020-02-24T17:44:39</a:DueTime>
+            <a:EditAllowed>true</a:EditAllowed>
+            <a:Entries>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143040</a:ID>
+                  <a:Index>7</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>911503</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Twister Box</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Twister Box</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>25</a:Price>
+                  <a:QCComponent>1</a:QCComponent>
+                  <a:QCInstanceID>281</a:QCInstanceID>
+                  <a:QCProID>27</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>Twister Box</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143041</a:ID>
+                  <a:Index>6</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>910001</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Chicken Pcs (O)</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Chicken Pcs (O)</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>0</a:Price>
+                  <a:QCComponent>2</a:QCComponent>
+                  <a:QCInstanceID>281</a:QCInstanceID>
+                  <a:QCProID>27</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>O/Chicken Pc</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143042</a:ID>
+                  <a:Index>5</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>110002</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Twister Sandwich (S)</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Twister Sandwich (S)</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>0</a:Price>
+                  <a:QCComponent>3</a:QCComponent>
+                  <a:QCInstanceID>281</a:QCInstanceID>
+                  <a:QCProID>27</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>S/Twister Sand</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143043</a:ID>
+                  <a:Index>4</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>510050</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Medium Fries</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Medium Fries</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>0</a:Price>
+                  <a:QCComponent>4</a:QCComponent>
+                  <a:QCInstanceID>281</a:QCInstanceID>
+                  <a:QCProID>27</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>Medium Fries</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143044</a:ID>
+                  <a:Index>3</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>510001</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Coleslaw Salad Small</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Coleslaw Salad Small</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>0</a:Price>
+                  <a:QCComponent>5</a:QCComponent>
+                  <a:QCInstanceID>281</a:QCInstanceID>
+                  <a:QCProID>27</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>Coleslaw Small</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143045</a:ID>
+                  <a:Index>2</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>600003</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Pepsi Medium</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Pepsi Medium</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>0</a:Price>
+                  <a:QCComponent>6</a:QCComponent>
+                  <a:QCInstanceID>281</a:QCInstanceID>
+                  <a:QCProID>27</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>Pepsi Medium</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+               <a:CEntry>
+                  <a:Adj1>-1</a:Adj1>
+                  <a:Adj2>-1</a:Adj2>
+                  <a:Adj3>-1</a:Adj3>
+                  <a:Adj4>-1</a:Adj4>
+                  <a:AdjGroup1>-1</a:AdjGroup1>
+                  <a:AdjGroup2>-1</a:AdjGroup2>
+                  <a:AdjGroup3>-1</a:AdjGroup3>
+                  <a:AdjGroup4>-1</a:AdjGroup4>
+                  <a:AskDesc>F</a:AskDesc>
+                  <a:AskPrice>F</a:AskPrice>
+                  <a:Category>-1</a:Category>
+                  <a:CheckID>-1</a:CheckID>
+                  <a:ConceptID>-1</a:ConceptID>
+                  <a:CreateBy>Web</a:CreateBy>
+                  <a:CreateTime>2020-02-24T17:44:40</a:CreateTime>
+                  <a:CustID>-1</a:CustID>
+                  <a:DOB i:nil="true"/>
+                  <a:DateOfTrans>2020-02-24T17:44:40</a:DateOfTrans>
+                  <a:DealID>0</a:DealID>
+                  <a:DiscountPrice>0</a:DiscountPrice>
+                  <a:DueTime>9000-01-01T00:00:00</a:DueTime>
+                  <a:Entries/>
+                  <a:FavoriteName/>
+                  <a:ID>340143046</a:ID>
+                  <a:Index>1</a:Index>
+                  <a:IsSpecialMessage>0</a:IsSpecialMessage>
+                  <a:ItemID>910011</a:ItemID>
+                  <a:Level>0</a:Level>
+                  <a:LongName>Chicken Pc (S) Ges</a:LongName>
+                  <a:LongnameUn/>
+                  <a:ModCode>NONE</a:ModCode>
+                  <a:ModgroupID>-1</a:ModgroupID>
+                  <a:Name>Chicken Pc (S) Ges</a:Name>
+                  <a:Noun>-1</a:Noun>
+                  <a:OrderID>-1</a:OrderID>
+                  <a:OrdrMode>OM_SAVED</a:OrdrMode>
+                  <a:Price>0</a:Price>
+                  <a:QCComponent>0</a:QCComponent>
+                  <a:QCInstanceID>0</a:QCInstanceID>
+                  <a:QCProID>0</a:QCProID>
+                  <a:Remarks i:nil="true"/>
+                  <a:RemarksUn/>
+                  <a:ShortName>Chk Pc (S) Ges</a:ShortName>
+                  <a:ShortnameUn/>
+                  <a:Status>NONE</a:Status>
+                  <a:StoreEntryID>-2</a:StoreEntryID>
+                  <a:SubType>-1</a:SubType>
+                  <a:Tax1ID>0</a:Tax1ID>
+                  <a:Tax1Rate>0</a:Tax1Rate>
+                  <a:Tax2ID>0</a:Tax2ID>
+                  <a:Tax2Rate>0</a:Tax2Rate>
+                  <a:TransBy>Web</a:TransBy>
+                  <a:TransTime>2020-02-24T17:44:40</a:TransTime>
+                  <a:Type>ITEM</a:Type>
+                  <a:UpdateBy>SDM Server[AESHJSRVAS02]</a:UpdateBy>
+                  <a:UpdateTime>2020-02-24T17:45:14</a:UpdateTime>
+                  <a:VoidReason>-1</a:VoidReason>
+                  <a:Weight>0</a:Weight>
+               </a:CEntry>
+            </a:Entries>
+            <a:ExclusiveTaxesTotal>0.31</a:ExclusiveTaxesTotal>
+            <a:ExtendedAttributes>
+               <a:ExtendedAttribute>
+                  <a:CRT_BY>Web</a:CRT_BY>
+                  <a:CRT_DATE>2020-02-24T17:44:40</a:CRT_DATE>
+                  <a:ID>26745299</a:ID>
+                  <a:NAME>note</a:NAME>
+                  <a:OBJECT_ID>47817825</a:OBJECT_ID>
+                  <a:OBJECT_TYPE>Order</a:OBJECT_TYPE>
+                  <a:UPT_BY>Web</a:UPT_BY>
+                  <a:UPT_DATE>2020-02-24T17:44:40</a:UPT_DATE>
+                  <a:VALUE/>
+               </a:ExtendedAttribute>
+               <a:ExtendedAttribute>
+                  <a:CRT_BY>Web</a:CRT_BY>
+                  <a:CRT_DATE>2020-02-24T17:44:40</a:CRT_DATE>
+                  <a:ID>26745300</a:ID>
+                  <a:NAME>taxreceiptinfo</a:NAME>
+                  <a:OBJECT_ID>47817825</a:OBJECT_ID>
+                  <a:OBJECT_TYPE>Order</a:OBJECT_TYPE>
+                  <a:UPT_BY>Web</a:UPT_BY>
+                  <a:UPT_DATE>2020-02-24T17:44:40</a:UPT_DATE>
+                  <a:VALUE/>
+               </a:ExtendedAttribute>
+               <a:ExtendedAttribute>
+                  <a:CRT_BY>Web</a:CRT_BY>
+                  <a:CRT_DATE>2020-02-24T17:44:40</a:CRT_DATE>
+                  <a:ID>26745301</a:ID>
+                  <a:NAME>payamount</a:NAME>
+                  <a:OBJECT_ID>47817825</a:OBJECT_ID>
+                  <a:OBJECT_TYPE>Order</a:OBJECT_TYPE>
+                  <a:UPT_BY>Web</a:UPT_BY>
+                  <a:UPT_DATE>2020-02-24T17:44:40</a:UPT_DATE>
+                  <a:VALUE>0</a:VALUE>
+               </a:ExtendedAttribute>
+               <a:ExtendedAttribute>
+                  <a:CRT_BY>Web</a:CRT_BY>
+                  <a:CRT_DATE>2020-02-24T17:44:40</a:CRT_DATE>
+                  <a:ID>26745302</a:ID>
+                  <a:NAME>paymentmethod</a:NAME>
+                  <a:OBJECT_ID>47817825</a:OBJECT_ID>
+                  <a:OBJECT_TYPE>Order</a:OBJECT_TYPE>
+                  <a:UPT_BY>Web</a:UPT_BY>
+                  <a:UPT_DATE>2020-02-24T17:44:40</a:UPT_DATE>
+                  <a:VALUE>Cash</a:VALUE>
+               </a:ExtendedAttribute>
+               <a:ExtendedAttribute>
+                  <a:CRT_BY>Web</a:CRT_BY>
+                  <a:CRT_DATE>2020-02-24T17:44:40</a:CRT_DATE>
+                  <a:ID>26745303</a:ID>
+                  <a:NAME>orderlanguage</a:NAME>
+                  <a:OBJECT_ID>47817825</a:OBJECT_ID>
+                  <a:OBJECT_TYPE>Order</a:OBJECT_TYPE>
+                  <a:UPT_BY>Web</a:UPT_BY>
+                  <a:UPT_DATE>2020-02-24T17:44:40</a:UPT_DATE>
+                  <a:VALUE>en</a:VALUE>
+               </a:ExtendedAttribute>
+            </a:ExtendedAttributes>
+            <a:ExternalStatus>2</a:ExternalStatus>
+            <a:FirstSendTime>2020-02-24T17:44:39</a:FirstSendTime>
+            <a:GrossTotal>65</a:GrossTotal>
+            <a:InclusiveTaxesTotal>1.1904761904761898</a:InclusiveTaxesTotal>
+            <a:IsAuth>0</a:IsAuth>
+            <a:IsExternal>1</a:IsExternal>
+            <a:LastSendTime>2020-02-24T17:44:39</a:LastSendTime>
+            <a:LoyaltyCardNumber/>
+            <a:LoyaltyRemarks/>
+            <a:Notes>
+               <a:CNote>
+                  <a:NT_DOB>20200224</a:NT_DOB>
+                  <a:NT_FREE_TEXT>Internet</a:NT_FREE_TEXT>
+                  <a:NT_ID>68549749</a:NT_ID>
+                  <a:NT_MANDATORY>1</a:NT_MANDATORY>
+                  <a:NT_NOTEID>13</a:NT_NOTEID>
+                  <a:NT_NOTE_GROUPID>11</a:NT_NOTE_GROUPID>
+                  <a:NT_ORDERID>47817825</a:NT_ORDERID>
+                  <a:NT_SOURCE>2</a:NT_SOURCE>
+               </a:CNote>
+            </a:Notes>
+            <a:OrderID>47817825</a:OrderID>
+            <a:OrderMode>1</a:OrderMode>
+            <a:OrderName/>
+            <a:OrderType>0</a:OrderType>
+            <a:OriginalStoreID>-1</a:OriginalStoreID>
+            <a:OverridePromiseTime>30</a:OverridePromiseTime>
+            <a:PaidOnline>0</a:PaidOnline>
+            <a:PaymentAmount>0</a:PaymentAmount>
+            <a:PaymentMethod>Cash</a:PaymentMethod>
+            <a:PaymentMethodUn/>
+            <a:Payments/>
+            <a:PromiseTime>30</a:PromiseTime>
+            <a:ProvinceID>7</a:ProvinceID>
+            <a:RejectReason>-1</a:RejectReason>
+            <a:Remarks/>
+            <a:SalesAmount>25</a:SalesAmount>
+            <a:ServiceCharge>6.19</a:ServiceCharge>
+            <a:Source>2</a:Source>
+            <a:Status>2</a:Status>
+            <a:StatusTime>2020-02-24T17:45:03</a:StatusTime>
+            <a:StoreDOB>20200224</a:StoreDOB>
+            <a:StoreDueTime>2020-02-24T17:41:40</a:StoreDueTime>
+            <a:StoreID>854</a:StoreID>
+            <a:StoreName>KFC - Souq Extra</a:StoreName>
+            <a:StoreNumber>12894</a:StoreNumber>
+            <a:StoreOrderMode>3</a:StoreOrderMode>
+            <a:StoreWebName/>
+            <a:StoreWebNameUN/>
+            <a:StreetID>-1</a:StreetID>
+            <a:SubTotal>25</a:SubTotal>
+            <a:SuspendReason>-1</a:SuspendReason>
+            <a:Total>31.5</a:Total>
+            <a:TransferBy/>
+            <a:TransferFromOrderID>0</a:TransferFromOrderID>
+            <a:TransferFromStoreID>0</a:TransferFromStoreID>
+            <a:TransferTime>9000-01-01T00:00:00</a:TransferTime>
+            <a:TransferToOrderID>0</a:TransferToOrderID>
+            <a:TransferToStoreID>0</a:TransferToStoreID>
+            <a:UpdateBy>Web</a:UpdateBy>
+            <a:UpdateTime>2020-02-24T17:45:17</a:UpdateTime>
+            <a:ValidateStore>1</a:ValidateStore>
+            <a:ValidationRemarks/>
+            <a:VoidReason>-1</a:VoidReason>
+            <a:ZoneID>-1</a:ZoneID>
+         </GetOrderDetailsResult>
+         <SDKResult xmlns:a="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:ExternalCode>0</a:ExternalCode>
+            <a:ResultCode>Success</a:ResultCode>
+            <a:ResultText>. Order ID returned = 47817825</a:ResultText>
+         </SDKResult>
+      </GetOrderDetailsResponse>
+   </s:Body>
+</s:Envelope>

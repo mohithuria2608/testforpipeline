@@ -6,7 +6,8 @@ declare namespace IMenuGrpcRequest {
 
     interface IFetchMenuData {
         menuId: number,
-        language: string
+        language: string,
+        type?: string
     }
 
     interface IFetchMenuRes {
@@ -28,5 +29,9 @@ declare namespace IMenuGrpcRequest {
     interface IServiceFence {
         type: string;
         coordinates: number[];
+    }
+
+    interface IFetchHidden {
+        request: IFetchMenuData
     }
 }

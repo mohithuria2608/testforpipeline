@@ -4,7 +4,9 @@ service LocationService {
     rpc FetchStore (IFetchStoreReq) returns (IFetchStoreRes) {}
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
     rpc SyncLocationFromCMS (ISyncLocationFromCMSReq) returns (ISyncLocationFromCMSRes) {}
-    rpc PostLocationDataToCMS (IPostLocationDataToCMSReq) returns (IPostLocationDataToCMSRes) {}
+    rpc SyncStores (ISyncStoresReq) returns (ISyncStoresRes) {}
+    rpc PostLocationDataToCMS (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
+    rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
 
 message IFetchStoreReq {
@@ -50,7 +52,7 @@ message IPostLocationDataToCMSRes {
     required bool store = 1;
 }
 
-message IPostLocationDataToCMSReq {
+message IKafkaReq {
     required string set = 1;
     optional IAerospike as = 2;
     optional ICms cms = 3;
@@ -59,6 +61,7 @@ message IPostLocationDataToCMSReq {
     optional int32 count = 6;
     optional string q = 7;
     optional string error = 8;
+    required bool inQ = 9;
 }
 
 message IValidateCoordinateReq {
@@ -144,4 +147,8 @@ message IMdb {
     optional bool get = 4;
     optional bool sync = 5;
     optional string argv = 6;
+}
+
+message IKafkaRes {
+    required string data = 1;
 }

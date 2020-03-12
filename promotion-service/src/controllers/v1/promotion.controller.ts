@@ -12,7 +12,7 @@ export class PromotionController {
     * @method GRPC
     * @param {string} data  actuall array of promotions
     */
-    async syncPromoFromKafka(payload: IPromotionGrpcRequest.IKafkaBody) {
+    async syncPromoFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv);
             await ENTITY.PromotionE.removeAllPromotions();

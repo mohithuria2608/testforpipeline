@@ -30,7 +30,7 @@ class AerospikeClass {
             if (!this.client) {
                 try {
                     const defaultPolicy = {
-                        totalTimeout: 1000
+                        totalTimeout: config.get("aerospike.config.timeout")
                     }
                     let aerospikeConfig = {
 
@@ -51,10 +51,11 @@ class AerospikeClass {
                             scan: defaultPolicy,
                             write: defaultPolicy,
                         },
-                        maxConnsPerNode: 1000
+                        maxConnsPerNode: config.get("aerospike.config.maxConnsPerNode")
                     }
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
+                        global.healthcheck.as = true
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         if (ENTITY.ConfigE.sindex && ENTITY.ConfigE.sindex.length > 0)
                             this.bootstrapIndex(ENTITY.ConfigE.sindex)

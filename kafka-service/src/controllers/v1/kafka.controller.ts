@@ -1,7 +1,7 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { kafkaProducerE } from '../../kafka'
-import { userService, menuService, promotionService, orderService, syncService, logService, locationService, paymentService } from "../../grpc/client"
+import { userService, menuService, promotionService, orderService, syncService, logService, locationService, paymentService, homeService } from "../../grpc/client"
 
 export class KafkaController {
 
@@ -274,7 +274,10 @@ export class KafkaController {
                             payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HOME
                         messages['q'] = topic
-                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        if (payload.inQ)
+                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        else
+                            await homeService.sync(messages)
                     }
                     break;
                 }
@@ -292,7 +295,10 @@ export class KafkaController {
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
                         messages['q'] = topic
-                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        if (payload.inQ)
+                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        else
+                            await locationService.postLocationDataToCMS(messages)
                     }
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
                         messages = { ...payload }
@@ -493,8 +499,6 @@ export class KafkaController {
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
-                        else
-                            await locationService.postLocationDataToCMS(messages)
                     }
                     break;
                 }
