@@ -408,7 +408,8 @@ export const DATABASE = {
         CONFIG: {
             GENERAL: "general",
             PAYMENT: "payment",
-            SHIPMENT: "shipment"
+            SHIPMENT: "shipment",
+            COUNTRY_SPECIFIC: "country-specific"
         },
 
         TOKEN: {
@@ -633,11 +634,26 @@ export const DATABASE = {
         },
 
         TRANSACTION: {
-            AUTHORIZATION: 'AUTHORIZATION',
-            VOID_AUTHORIZATION: 'VOID_AUTHORIZATION', // Reverse payment
-            CAPTURE: 'CAPTURE',
-            REFUND: 'REFUND',
-            FAILED: 'FAILED'
+            AUTHORIZATION: {
+                AS: 'AUTHORIZATION',
+                CMS: 'Order'
+            },
+            VOID_AUTHORIZATION: {
+                AS: 'VOID_AUTHORIZATION', // Reverse payment
+                CMS: 'Void'
+            },
+            CAPTURE: {
+                AS: 'CAPTURE',
+                CMS: 'Capture'
+            },
+            REFUND: {
+                AS: 'REFUND',
+                CMS: ""
+            },
+            FAILED: {
+                AS: 'FAILED',
+                CMS: ""
+            }
         }
     },
 
@@ -1418,6 +1434,14 @@ export const STATUS_MSG = {
             message: 'Multiple payments were initiated for the given order, use noonpay order id to get the status',
             type: 'MULTIPLE_PAYMENTS_INITIATED',
             actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
+        },
+        0: {
+            statusCode: 6051,
+            httpCode: 400,
+            message: 'Banking error',
+            type: 'BANKING_ERROR',
+            actionHint: '',
+            useNoonPayMessage: true
         },
     },
     SDM_ORDER_VALIDATION: {

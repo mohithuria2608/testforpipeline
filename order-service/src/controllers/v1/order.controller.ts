@@ -85,11 +85,21 @@ export class OrderController {
                 if (order && order._id)
                     paymentRetry = true
             } else {
-                if (getCurrentCart.items && getCurrentCart.items.length == 0) {
-                    let midRes: any = { ...getCurrentCart }
-                    midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
-                    midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
-                    return { cartValidate: getCurrentCart }
+                let midOrder = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: hash }, {}, { lean: true })
+                if (midOrder && midOrder._id) {
+                    return {
+                        orderPlaced: {
+                            noonpayRedirectionUrl: "",
+                            orderInfo: midOrder
+                        }
+                    }
+                } else {
+                    if (getCurrentCart.items && getCurrentCart.items.length == 0) {
+                        let midRes: any = { ...getCurrentCart }
+                        midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
+                        midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
+                        return { cartValidate: getCurrentCart }
+                    }
                 }
             }
             let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
@@ -173,7 +183,7 @@ export class OrderController {
                     storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                     paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
                     channel: "Mobile",
-                    locale: "en",
+                    locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? "en" : "ar",
                 })
                 noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
@@ -189,7 +199,7 @@ export class OrderController {
                 CMS.TransactionCMSE.createTransaction({
                     order_id: order.cmsOrderRef,
                     message: initiatePaymentObj.paymentStatus,
-                    type: initiatePaymentObj.paymentStatus,
+                    type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
                     payment_data: {
                         id: initiatePaymentObj.noonpayOrderId.toString(),
                         data: JSON.stringify(initiatePaymentObj)

@@ -166,7 +166,7 @@ export class UserEntity extends BaseEntity {
                 userUpdate['brand'] = payload.brand
             if (payload.country)
                 userUpdate['country'] = payload.country
-            if (payload.email)
+            if (payload.email && payload.email!="")
                 userUpdate['email'] = payload.email
             if (payload.fullPhnNo)
                 userUpdate['fullPhnNo'] = payload.fullPhnNo
@@ -184,7 +184,7 @@ export class UserEntity extends BaseEntity {
                 userUpdate['phnVerified'] = payload.phnVerified
             if (payload.emailVerified != undefined)
                 userUpdate['emailVerified'] = payload.emailVerified
-            if (payload.name)
+            if (payload.name && payload.name!="")
                 userUpdate['name'] = payload.name
             if (payload.socialKey)
                 userUpdate['socialKey'] = payload.socialKey

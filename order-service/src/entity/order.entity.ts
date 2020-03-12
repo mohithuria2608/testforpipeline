@@ -669,7 +669,7 @@ export class OrderClass extends BaseEntity {
                                         //         }, { new: true })
                                         //         CMS.OrderCMSE.updateOrder({
                                         //             order_id: order.cmsOrderRef,
-                                        //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION,
+                                        //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
                                         //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                         //         })
                                         //     } else {
@@ -691,12 +691,12 @@ export class OrderClass extends BaseEntity {
                                         //             $addToSet: {
                                         //                 transLogs: status
                                         //             },
-                                        //             "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION
+                                        //             "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
                                         //         }, { new: true })
                                         //         CMS.TransactionCMSE.createTransaction({
                                         //             order_id: order.cmsOrderRef,
                                         //             message: status.transactions[0].type,
-                                        //             type: status.transactions[0].type,
+                                        //             type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
                                         //             payment_data: {
                                         //                 id: status.transactions[0].id.toString(),
                                         //                 data: JSON.stringify(status)
@@ -704,7 +704,7 @@ export class OrderClass extends BaseEntity {
                                         //         })
                                         //         CMS.OrderCMSE.updateOrder({
                                         //             order_id: order.cmsOrderRef,
-                                        //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION,
+                                        //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
                                         //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                         //         })
                                         //     }
@@ -747,7 +747,7 @@ export class OrderClass extends BaseEntity {
                                                         consolelog(process.cwd(), "order step 14 :       ", parseInt(sdmOrder.Status), true)
                                                         if (parseInt(sdmOrder.Status) == 96) {
                                                             consolelog(process.cwd(), "order step 15 :       ", parseInt(sdmOrder.Status), true)
-                                                            if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION) {
+                                                            if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
                                                                 consolelog(process.cwd(), "order step 16 :       ", parseInt(sdmOrder.Status), true)
                                                                 if (order.paymentMethodAddedOnSdm == 0) {
                                                                     consolelog(process.cwd(), "order step 17 :       ", parseInt(sdmOrder.Status), true)
@@ -812,7 +812,7 @@ export class OrderClass extends BaseEntity {
                                                         }, 10000)
                                                     } else {
                                                         consolelog(process.cwd(), "order step 23 :       ", parseInt(sdmOrder.Status), true)
-                                                        if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION) {
+                                                        if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
                                                             consolelog(process.cwd(), "order step 24 :       ", parseInt(sdmOrder.Status), true)
                                                             order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                                 status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
@@ -841,7 +841,7 @@ export class OrderClass extends BaseEntity {
                                                             CMS.TransactionCMSE.createTransaction({
                                                                 order_id: order.cmsOrderRef,
                                                                 message: status.transactions[0].type,
-                                                                type: status.transactions[0].type,
+                                                                type: Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.CMS,
                                                                 payment_data: {
                                                                     id: status.transactions[0].id.toString(),
                                                                     data: JSON.stringify(status)

@@ -103,6 +103,6 @@ declare namespace ICartRequest {
     interface IDataToHash {
         items: any,
         promo: number,
-        updatedAt: number
+        updatedAt: number,
     }
 }

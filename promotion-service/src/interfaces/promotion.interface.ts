@@ -3,6 +3,7 @@ declare namespace IPromotionRequest {
     interface IPromoData {
         couponId: string,
         couponCode: string,
+        couponCodeL?: string,
         promotionType: string,
         discountAmount: string,
         maximumQtyDiscountIsAppliedTo: string,

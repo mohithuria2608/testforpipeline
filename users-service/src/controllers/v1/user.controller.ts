@@ -221,7 +221,7 @@ export class UserController {
                 if (sdmAddress && sdmAddress.length > 0)
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
 
-            } else{
+            } else {
                 console.log("user not found => invalid otp")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
@@ -290,9 +290,10 @@ export class UserController {
             if (userObj && userObj.length > 0) {
                 userData = userObj[0]
                 let userUpdate: IUserRequest.IUserData = {
-                    id: userObj[0].id,
-                    name: payload.name,
+                    id: userObj[0].id
                 }
+                if (payload.name && payload.name != "")
+                    userUpdate['name'] = payload.name
                 if (userObj[0].phnVerified == 1) {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
@@ -306,7 +307,7 @@ export class UserController {
                         brand: headers.brand,
                         country: headers.country,
                     }
-                    if (payload.email) {
+                    if (payload.email && payload.email != "") {
                         userUpdate['email'] = payload.email
                         let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                         if (cmsUserByEmail && cmsUserByEmail.customerId) {
@@ -338,7 +339,7 @@ export class UserController {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
-                if (payload.email) {
+                if (payload.email && payload.email != "") {
                     let queryArg: IAerospike.Query = {
                         equal: {
                             bin: "email",
@@ -354,6 +355,9 @@ export class UserController {
                             id: userObj[0].id,
                             name: payload.name,
                         }
+                        if (name)
+                            userUpdate['name'] = payload.name
+
                         if (userObj[0].phnVerified == 1) {
                             userData = await ENTITY.UserE.buildUser(userUpdate)
                         } else {
@@ -452,8 +456,8 @@ export class UserController {
                         brand: headers.brand,
                         country: headers.country,
                         medium: payload.medium,
-                        name: payload.name,
-                        email: payload.email ? payload.email : "",
+                        name: (payload.name && payload.name != "") ? payload.name : "",
+                        email: (payload.email && payload.name != "") ? payload.email : "",
                     }
                     userData = await ENTITY.UserE.buildUser(tempUser)
                 }
@@ -837,7 +841,7 @@ export class UserController {
             let dataToUpdate = {
                 id: userData.id
             }
-            if (payload.name)
+            if (payload.name && payload.name != "")
                 dataToUpdate['name'] = payload.name
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
             return formatUserData(user, headers, auth.isGuest)

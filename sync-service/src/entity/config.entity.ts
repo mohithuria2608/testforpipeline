@@ -31,8 +31,12 @@ export class ConfigEntity extends BaseEntity {
         type: Joi.string().required().valid(
             Constant.DATABASE.TYPE.CONFIG.GENERAL,
             Constant.DATABASE.TYPE.CONFIG.PAYMENT,
-            Constant.DATABASE.TYPE.CONFIG.SHIPMENT).description("sk"),
+            Constant.DATABASE.TYPE.CONFIG.SHIPMENT,
+            Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC).description("sk"),
         store_code: Joi.string().required(),
+        /**
+         * @description : payment specific configs
+         */
         store_id: Joi.number().required(),
         noon_pay_config: Joi.object().keys({
             brand_code: Joi.string().required(),
@@ -50,6 +54,10 @@ export class ConfigEntity extends BaseEntity {
             code: Joi.string().required(),
             status: Joi.string().required(),
         }),
+
+        /**
+         * @description :payment configs
+         */
         free_shipping: Joi.object().keys({
             status: Joi.string().required(),
             title: Joi.string().required(),
@@ -62,7 +70,29 @@ export class ConfigEntity extends BaseEntity {
             title: Joi.string().required(),
             price: Joi.number().required(),
             code: Joi.string().required(),
-        })
+        }),
+
+
+        /**
+         * @description : country specific configs
+         */
+        country_code: Joi.string().required(),
+        country_name: Joi.string().required(),
+        concept_id: Joi.number().required(),
+        sdm_url: Joi.string().required(),
+        base_currency: Joi.string().required(),
+        licence: Joi.string().required(),
+        brand_kfc: Joi.string().required(),
+        ccode: Joi.string().required(),
+        language_en: Joi.string().required(),
+        language_ar: Joi.string().required(),
+        menus: Joi.array().items(
+            Joi.object().keys({
+                menu_id: Joi.number().required(),
+                menu_name: Joi.string().required(),
+                channel: Joi.string().required(),
+                template_id: Joi.number().required(),
+            }))
     })
 
     /**

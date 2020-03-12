@@ -37,7 +37,7 @@ export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAG
 
 export let sendError = function (error, language: string = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In error handler type of ", typeof JSON.stringify(error), false)
-    consolelog(process.cwd(), "In error handler direct ", JSON.stringify(error), false)
+    consolelog(process.cwd(), "In error handler direct ", error, false)
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
 
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
@@ -46,6 +46,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
         customError.message = error.details
         customError.message_Ar = error.details
         customError.message_En = error.details
+        error.code = error.code + ""
         switch (error.code) {
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.CANCELLED: {
                 consolelog(process.cwd(), "Unhandled grpc error type CANCELLED", JSON.stringify(error), true)
