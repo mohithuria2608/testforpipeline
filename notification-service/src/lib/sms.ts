@@ -52,4 +52,4 @@ export class SmsCLass {
     }
 }
 
-export const sms = new SmsCLass()
+export const smsLib = new SmsCLass()

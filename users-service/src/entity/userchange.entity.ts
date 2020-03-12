@@ -122,7 +122,7 @@ export class UserchangeEntity extends BaseEntity {
         }
     }
 
-    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, lang: string = 'En') {
+    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, language: string = 'En') {
         try {
             let isCreate = false
             let checkUserchange = await this.getUserchange({ userId: userId })
@@ -170,9 +170,9 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['otpExpAt'] = payload.otpExpAt
             if (payload.otpVerified)
                 dataToUpdateUserchange['otpVerified'] = payload.otpVerified
-            if (payload.name && payload.name!="")
+            if (payload.name && payload.name != "")
                 dataToUpdateUserchange['name'] = payload.name
-            if (payload.email && payload.email!="")
+            if (payload.email && payload.email != "")
                 dataToUpdateUserchange['email'] = payload.email
             if (payload.socialKey)
                 dataToUpdateUserchange['socialKey'] = payload.socialKey
@@ -209,10 +209,12 @@ export class UserchangeEntity extends BaseEntity {
             if (payload.chngEmailSdm != undefined)
                 dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
             if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
-                notificationService.sendSms({
-                    message: Constant.SMS_MSG.En.USER.OTP_VERIFICATION(payload.otp.toString()),
-                    destination: encodeURIComponent(payload.fullPhnNo)
-                })
+                notificationService.sendNotification({
+                    toSendMsg: true,
+                    msgCode: Constant.NOTIFICATION_CODE.USER.OTP_VERIFICATION,
+                    msgDestination: encodeURIComponent(payload.fullPhnNo),
+                    language: language
+                });
             }
             let putArg: IAerospike.Put = {
                 bins: dataToUpdateUserchange,

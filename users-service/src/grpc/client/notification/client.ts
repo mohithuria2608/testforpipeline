@@ -23,11 +23,11 @@ export class NotificationService {
         console.log(process.cwd(), 'GRPC connection established notification-service', config.get("grpc.notification.client"), true)
     }
 
-    async sendSms(payload: INotificationGrpcRequest.ISendSms): Promise<INotificationGrpcRequest.ISendSmsRes> {
+    async sendNotification(payload: INotificationGrpcRequest.ISendNotification): Promise<INotificationGrpcRequest.ISendNotificationRes> {
         return new Promise(async (resolve, reject) => {
             try {
-                await notificationServiceValidator.smsValidator(payload)
-                this.notificationClient.sms(payload, (error, res) => {
+                await notificationServiceValidator.notificationValidator(payload)
+                this.notificationClient.sendNotification(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully created default cart", JSON.stringify(res), false)
                         resolve(res)

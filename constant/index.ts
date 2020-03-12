@@ -673,26 +673,32 @@ export const DATABASE = {
     }
 };
 
+export const NOTIFICATION_CODE = {
+    USER: {
+        OTP_VERIFICATION: 'USER_OTP_VERIFICATION'
+    },
+    ORDER: {
+        DELIVERY_CONFIRM: 'ORDER_DELIVERY_CONFIRM',
+        PICKUP_CONFIRM: 'ORDER_PICKUP_CONFIRM',
+        ORDER_CANCEL: 'ORDER_ORDER_CANCEL',
+        ORDER_FAIL: 'ORDER_ORDER_FAIL',
+    }
+}
+
 export const SMS_MSG = {
     En: {
-        USER: {
-            OTP_VERIFICATION: (otp) => `${otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. rMXm+gJ4X0P`,
-        },
-        ORDER: {
-            DELIVERY_CONFIRMED: (data) => `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
-            PICKUP_CONFIRMED: (data) => `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
-            ORDER_CANCEL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`
-        }
+        USER_OTP_VERIFICATION: (otp) => `${otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. rMXm+gJ4X0P`,
+        ORDER_DELIVERY_CONFIRM: (data) => `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
+        ORDER_PICKUP_CONFIRM: (data) => `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
+        ORDER_ORDER_CANCEL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`,
+        ORDER_ORDER_FAIL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`,
     },
     Ar: {
-        USER: {
-            OTP_VERIFICATION: (otp) => `${otp} هو OTP لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة OTP مع أي شخص.`,
-        },
-        ORDER: {
-            DELIVERY_CONFIRMED: (data) => `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
-            PICKUP_CONFIRMED: (data) => `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
-            ORDER_CANCEL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`
-        }
+        USER_OTP_VERIFICATION: (otp) => `${otp} هو OTP لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة OTP مع أي شخص.`,
+        ORDER_DELIVERY_CONFIRM: (data) => `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
+        ORDER_PICKUP_CONFIRM: (data) => `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
+        ORDER_ORDER_CANCEL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`,
+        ORDER_ORDER_FAIL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`,
     }
 }
 
