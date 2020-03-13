@@ -113,8 +113,8 @@ export class AddressEntity extends BaseEntity {
                 sdmAddressRef: addressData.sdmAddressRef ? addressData.sdmAddressRef : 0,
                 cmsAddressRef: addressData.cmsAddressRef ? addressData.cmsAddressRef : 0,
                 countryId: 1, //store.countryId
-                storeId: 1219,// store.storeId
-                areaId: 16,// store.areaId
+                storeId: 1240,// 1219,// store.storeId
+                areaId: 1786,//16,// store.areaId
                 cityId: 17,// store.cityId
             };
 
