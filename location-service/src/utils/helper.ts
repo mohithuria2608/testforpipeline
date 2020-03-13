@@ -413,3 +413,38 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
     else
         return statsObj
 }
+
+export let checkStoreOnline = function (start, end) {
+    console.log("curTime",
+        new Date(),
+        new Date().getUTCHours(),
+        new Date().getUTCMinutes(),
+        new Date().getUTCSeconds(),
+        new Date().getUTCMilliseconds())
+    console.log("startTime",
+        start,
+        new Date(start).getTime(),
+        new Date(start).getUTCHours(),
+        new Date(start).getUTCMinutes(),
+        new Date(start).getUTCSeconds(),
+        new Date(start).getUTCMilliseconds()
+    )
+    console.log("endTime",
+        end,
+        new Date(end).getTime(),
+        new Date(end).getUTCHours(),
+        new Date(end).getUTCMinutes(),
+        new Date(end).getUTCSeconds(),
+        new Date(end).getUTCMilliseconds())
+    let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
+    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds()
+    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds()
+
+    console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
+    console.log(startTime < curTime)
+    console.log(curTime > endTime)
+    if (startTime < curTime && curTime < endTime)
+        return true
+    else
+        return false
+}

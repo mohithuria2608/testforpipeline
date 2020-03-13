@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, checkStoreOnline } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
 import * as Utils from "../../utils";
@@ -44,7 +44,7 @@ export class StoreController {
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
             if (store && store.length > 0) {
-                store[0]['isOnline'] = true
+                store[0]['isOnline'] = checkStoreOnline(store[0].startTime, store[0].endTime)
                 return store[0]
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
@@ -70,7 +70,7 @@ export class StoreController {
                 }
             }
             let res = await Aerospike.query(geoWithinArg)
-            res['isOnline'] = true
+            res['isOnline'] = checkStoreOnline(res.startTime, res.endTime)
             return res
         } catch (error) {
             consolelog(process.cwd(), "validateCoords", JSON.stringify(error), false)
