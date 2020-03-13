@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, checkStoreOnline } from '../../utils'
 import * as ENTITY from '../../entity'
 import { storeController } from './store.controller'
 import { cityController } from './city.controller';
@@ -32,7 +32,8 @@ export class LocationController {
                         name_en: store[0].name_en,
                         name_ar: store[0].name_ar,
                     },
-                    isOnline: true,// store[0].isOnline
+                    // isOnline: checkStoreOnline(store[0].startTime, store[0].endTime)
+                    isOnline: store[0].isOnline
                 }
                 return res
             }
@@ -94,6 +95,7 @@ export class LocationController {
                                             c['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
                                             a['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
                                             s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
+                                            s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
                                             storeCollection.push(s)
                                         }
                                     }
