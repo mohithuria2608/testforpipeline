@@ -51,7 +51,6 @@ export class LocationController {
     * */
     async getPickupList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IPickupLocation) {
         try {
-            let self = this
             let preSelectedStore: IStoreRequest.IStore
             if (payload.lat && payload.lng) {
                 let temp = await storeController.validateCoords(payload)
@@ -83,35 +82,41 @@ export class LocationController {
             }
             if (city && city.length > 0) {
                 for (const c of city) {
-                    let areaCollection = []
-                    if (area && area.length > 0) {
-                        for (const a of area) {
-                            if (a.cityId == c.cityId) {
-                                let storeCollection = []
-                                if (store && store.length > 0) {
-                                    for (const s of store) {
-                                        delete s.geoFence
-                                        if (s.areaId == a.areaId) {
-                                            c['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
-                                            a['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
-                                            s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
-                                            s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
-                                            storeCollection.push(s)
+                    if (c) {
+                        let areaCollection = []
+                        if (area && area.length > 0) {
+                            for (const a of area) {
+                                if (a) {
+                                    if (a.cityId == c.cityId) {
+                                        let storeCollection = []
+                                        if (store && store.length > 0) {
+                                            for (const s of store) {
+                                                if (s) {
+                                                    delete s.geoFence
+                                                    if (s.areaId == a.areaId) {
+                                                        c['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
+                                                        a['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
+                                                        s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
+                                                        s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                                        storeCollection.push(s)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (storeCollection && storeCollection.length > 0) {
+                                            storeCollection.sort(compare)
+                                            a['store'] = storeCollection
+                                            areaCollection.push(a)
                                         }
                                     }
                                 }
-                                if (storeCollection && storeCollection.length > 0) {
-                                    storeCollection.sort(compare)
-                                    a['store'] = storeCollection
-                                    areaCollection.push(a)
-                                }
                             }
                         }
-                    }
-                    if (areaCollection && areaCollection.length > 0) {
-                        areaCollection.sort(compare)
-                        c['area'] = areaCollection
-                        res.push(c)
+                        if (areaCollection && areaCollection.length > 0) {
+                            areaCollection.sort(compare)
+                            c['area'] = areaCollection
+                            res.push(c)
+                        }
                     }
                 }
             }
