@@ -6,7 +6,6 @@ require('./grpc/server')
 import { bootstrap, consolelog, checkStoreOnline } from './utils'
 import middleware from './middlewares'
 import route from './route'
-import { startTimer } from "winston";
 
 
 

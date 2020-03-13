@@ -57,7 +57,6 @@ export class LocationController {
                 if (temp && temp.length > 0)
                     preSelectedStore = temp[0]
             }
-            // const promise = await Promise.all([,, ])
             const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
             const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
             const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
@@ -80,6 +79,7 @@ export class LocationController {
                 }
                 return comparison;
             }
+            console.log("111111111111111111")
             if (city && city.length > 0) {
                 for (const c of city) {
                     if (c) {
