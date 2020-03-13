@@ -642,8 +642,8 @@ export class OrderClass extends BaseEntity {
                 let recheck = true
                 let statusChanged = false
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, selFreeItem: 0, freeItems: 0 })
-                let oldStatus = order.sdmOrderStatus
                 if (order && order._id) {
+                    let oldStatus = order.sdmOrderStatus
                     consolelog(process.cwd(), "order step 0:       ", order.sdmOrderStatus, true)
                     if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
                         consolelog(process.cwd(), "order step 1:       ", order.sdmOrderStatus, true)
