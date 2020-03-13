@@ -985,10 +985,10 @@ export const start = (async () => {
       "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
       "conceptID": 3,
       "order": {
-        "AddressID": "10512559",//"10514480",//
+        "AddressID": "10514480",//"10512559",//,//
         "ConceptID": "3",
         "CountryID": 1,
-        "CustomerID": "7694266",//"7695133",// 
+        "CustomerID": "7695133",// "7694266",//"",// 
         "DeliveryChargeID": 279,
         "DistrictID": -1,
         "Entries": {
@@ -1112,7 +1112,7 @@ export const start = (async () => {
         "OrderMode": "1",
         "OrderType": 0,
         "ProvinceID": 7,
-        "StoreID": "1219",// "1240",//
+        "StoreID": "1240",// "1219",// "1240",//
         "StreetID": 315
       },
       "autoApprove": "true",
@@ -1120,8 +1120,8 @@ export const start = (async () => {
       "creditCardPaymentbool": "false",
       "menuTemplateID": "17"
     }
-    let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39837719 })
+    // let orderPlaced = await SDM.OrderSDME.createOrder(order)
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838140 })
 
   } catch (error) {
     console.error(error)
