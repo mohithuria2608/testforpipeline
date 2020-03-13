@@ -70,7 +70,7 @@ export class StoreController {
                 }
             }
             let res = await Aerospike.query(geoWithinArg)
-            res[0]['isOnline'] = checkStoreOnline(res.startTime, res.endTime)
+            res[0]['isOnline'] = checkStoreOnline(res[0].startTime, res[0].endTime)
             return res
         } catch (error) {
             consolelog(process.cwd(), "validateCoords", JSON.stringify(error), false)
