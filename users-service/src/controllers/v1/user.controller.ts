@@ -288,6 +288,7 @@ export class UserController {
             }
             let userObj: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             if (userObj && userObj.length > 0) {
+                console.log("step 1=====================>")
                 userData = userObj[0]
                 let userUpdate: IUserRequest.IUserData = {
                     id: userObj[0].id
@@ -295,8 +296,10 @@ export class UserController {
                 if (payload.name && payload.name != "")
                     userUpdate['name'] = payload.name
                 if (userObj[0].phnVerified == 1) {
+                    console.log("step 2=====================>")
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
+                    console.log("step 3=====================>")
                     let userchange: IUserchangeRequest.IUserchange = {
                         fullPhnNo: userData.fullPhnNo,
                         cCode: userData.cCode,
@@ -308,9 +311,11 @@ export class UserController {
                         country: headers.country,
                     }
                     if (payload.email && payload.email != "") {
-                        userUpdate['email'] = payload.email
+                        console.log("step 4=====================>")
+                        userchange['email'] = payload.email
                         let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                         if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                            console.log("step 5=====================>")
                             if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
                             userUpdate['phnVerified'] = 1
@@ -320,12 +325,14 @@ export class UserController {
                             userUpdate['fullPhnNo'] = cmsUserByEmail.phone
                             userUpdate['cCode'] = cmsUserByEmail.phone.slice(0, 4)
                             userUpdate['phnNo'] = cmsUserByEmail.phone.slice(4)
+                            userUpdate['email'] = payload.email
                             delete userchange['fullPhnNo']
                             delete userchange['cCode']
                             delete userchange['phnNo']
                             delete userchange['otp']
                             delete userchange['otpExpAt']
                             delete userchange['otpVerified']
+                            delete userchange['email']
                             if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
                                 userUpdate['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
                             if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
@@ -339,7 +346,30 @@ export class UserController {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
+                console.log("step 6=====================>")
+                let userId = ENTITY.UserE.ObjectId().toString()
+                let createUser: IUserRequest.IUserData = {
+                    id: userId,
+                    cartId: userId,
+                    profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
+                    phnVerified: 0,
+                    brand: headers.brand,
+                    country: headers.country,
+                    socialKey: payload.socialKey,
+                    medium: payload.medium,
+                    name: payload.name ? payload.name : undefined,
+                    email: payload.email ? payload.email : undefined,
+                }
+                let userchange: IUserchangeRequest.IUserchange = {
+                    brand: headers.brand,
+                    country: headers.country,
+                    socialKey: payload.socialKey,
+                    medium: payload.medium,
+                    name: payload.name ? payload.name : undefined,
+                    email: payload.email ? payload.email : undefined
+                }
                 if (payload.email && payload.email != "") {
+                    console.log("step 7=====================>")
                     let queryArg: IAerospike.Query = {
                         equal: {
                             bin: "email",
@@ -350,80 +380,22 @@ export class UserController {
                     }
                     userObj = await Aerospike.query(queryArg)
                     if (userObj && userObj.length > 0) {
-                        userData = userObj[0]
-                        let userUpdate: IUserRequest.IUserData = {
-                            id: userObj[0].id,
-                            name: payload.name,
-                        }
-                        if (name)
-                            userUpdate['name'] = payload.name
-
-                        if (userObj[0].phnVerified == 1) {
-                            userData = await ENTITY.UserE.buildUser(userUpdate)
-                        } else {
-                            let userchange: IUserchangeRequest.IUserchange = {
-                                fullPhnNo: userData.fullPhnNo,
-                                cCode: userData.cCode,
-                                phnNo: userData.phnNo,
-                                otp: Constant.SERVER.BY_PASS_OTP,
-                                otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
-                                otpVerified: 0,
-                                brand: headers.brand,
-                                country: headers.country,
-                                email: payload.email
-                            }
-                            let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
-                            if (cmsUserByEmail && cmsUserByEmail.customerId) {
-                                if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
-                                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
-                                userUpdate['phnVerified'] = 1
-                                userUpdate['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
-                                userUpdate['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
-                                userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                                userUpdate['fullPhnNo'] = cmsUserByEmail.phone
-                                userUpdate['cCode'] = cmsUserByEmail.phone.slice(0, 4)
-                                userUpdate['phnNo'] = cmsUserByEmail.phone.slice(4)
-                                delete userchange['fullPhnNo']
-                                delete userchange['cCode']
-                                delete userchange['phnNo']
-                                delete userchange['otp']
-                                delete userchange['otpExpAt']
-                                delete userchange['otpVerified']
-                                if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
-                                    userUpdate['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
-                                if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
-                                    userUpdate['sdmCorpRef'] = parseInt(cmsUserByEmail.SdmCorpRef)
-                                if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
-                                    userchange['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
-                                }
-                            } else {
-                                await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
-                            }
-                            userData = await ENTITY.UserE.buildUser(userUpdate)
-                        }
+                        console.log("step 8=====================>")
+                        userchange['id'] = userObj[0].id
+                        userData = await ENTITY.UserE.buildUser(userchange)
                     } else {
-                        let userId = ENTITY.UserE.ObjectId().toString()
-                        let createUser: IUserRequest.IUserData = {
-                            id: userId,
-                            cartId: userId,
-                            profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-                            phnVerified: 0,
-                            socialKey: payload.socialKey,
-                            brand: headers.brand,
-                            country: headers.country,
-                            medium: payload.medium,
-                            name: payload.name,
-                            email: payload.email ? payload.email : "",
-                        }
+                        console.log("step 9=====================>")
                         let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                         if (cmsUserByEmail && cmsUserByEmail.customerId) {
+                            console.log("step 10=====================>")
                             createUser['phnVerified'] = 1
                             createUser['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
-                            createUser['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
+                            createUser['name'] = (payload.name && payload.name != "") ? payload.name : cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
                             createUser['fullPhnNo'] = cmsUserByEmail.phone
                             createUser['cCode'] = cmsUserByEmail.phone.slice(0, 4)
                             createUser['phnNo'] = cmsUserByEmail.phone.slice(4)
                             createUser['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                            createUser['socialKey'] = payload.socialKey
                             if (cmsUserByEmail.SdmUserRef && (cmsUserByEmail.SdmUserRef != null || cmsUserByEmail.SdmUserRef != "null") && (cmsUserByEmail.SdmUserRef != "0"))
                                 createUser['sdmUserRef'] = parseInt(cmsUserByEmail.SdmUserRef)
                             if (cmsUserByEmail.SdmCorpRef && (cmsUserByEmail.SdmCorpRef != null || cmsUserByEmail.SdmCorpRef != "null") && (cmsUserByEmail.SdmCorpRef != "0"))
@@ -431,37 +403,17 @@ export class UserController {
                             if (cmsUserByEmail.address && cmsUserByEmail.address.length > 0) {
                                 createUser['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                             }
-                        } else {
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
-                            if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                                createUser['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
-                                createUser['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
-                                createUser['cmsUserRef'] = 0
-                            } else {
-                                createUser['sdmUserRef'] = 0
-                                createUser['sdmCorpRef'] = 0
-                                createUser['cmsUserRef'] = 0
-                            }
                         }
                         userData = await ENTITY.UserE.buildUser(createUser)
                     }
                 } else {
-                    let userId = ENTITY.UserE.ObjectId().toString()
-                    let tempUser: IUserRequest.IUserData = {
-                        id: userId,
-                        cartId: userId,
-                        profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-                        phnVerified: 0,
-                        socialKey: payload.socialKey,
-                        brand: headers.brand,
-                        country: headers.country,
-                        medium: payload.medium,
-                        name: (payload.name && payload.name != "") ? payload.name : "",
-                        email: (payload.email && payload.name != "") ? payload.email : "",
-                    }
-                    userData = await ENTITY.UserE.buildUser(tempUser)
+                    console.log("step 11=====================>")
+                    userData = await ENTITY.UserE.buildUser(createUser)
+                    await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
                 }
             }
+            console.log("step 12=====================>")
+
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
                 await this.validateUserOnSdm(userData, false)
             let sessionUpdate: ISessionRequest.ISession = {
@@ -596,7 +548,7 @@ export class UserController {
                             }
                             else {
                                 console.log('STEP : 13               MS : E , CMS ')
-                                userchangePayload['deleteUserId'] = auth.id
+                                userchangePayload['deleteUserId'] = ""
                                 userchangePayload['chngPhnSdm'] = 1
                                 userchangePayload['chngPhnCms'] = 1
                             }
