@@ -533,7 +533,8 @@ export class OrderClass extends BaseEntity {
                     toSendMsg: true,
                     msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
                     msgDestination: `${userData.cCode}${userData.phnNo}`,
-                    language: payload.language
+                    language: payload.language,
+                    payload: JSON.stringify({ msg: order })
                 });
 
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
@@ -744,7 +745,8 @@ export class OrderClass extends BaseEntity {
                                             toSendMsg: true,
                                             msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
                                             msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                            language: payload.language
+                                            language: payload.language,
+                                            payload: JSON.stringify({ msg: order })
                                         });
                                     }
                                     if (recheck && sdmOrder && sdmOrder.OrderID) {
@@ -805,7 +807,8 @@ export class OrderClass extends BaseEntity {
                                                                             toSendMsg: true,
                                                                             msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
                                                                             msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                                            language: payload.language
+                                                                            language: payload.language,
+                                                                            payload: JSON.stringify({ msg: order })
                                                                         });
                                                                     }
                                                                 }
@@ -890,7 +893,8 @@ export class OrderClass extends BaseEntity {
                                                             ? Constant.NOTIFICATION_CODE.ORDER.DELIVERY_CONFIRM
                                                             : Constant.NOTIFICATION_CODE.ORDER.PICKUP_CONFIRM,
                                                         msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                        language: payload.language
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order })
                                                     });
                                                     break;
                                                 }
@@ -967,7 +971,8 @@ export class OrderClass extends BaseEntity {
                                                         toSendMsg: true,
                                                         msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_CANCEL,
                                                         msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                        language: payload.language
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order })
                                                     });
                                                     break;
                                                 }
@@ -998,7 +1003,8 @@ export class OrderClass extends BaseEntity {
                                             toSendMsg: true,
                                             msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
                                             msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                            language: payload.language
+                                            language: payload.language,
+                                            payload: JSON.stringify({ msg: order })
                                         });
                                     }
                                 }

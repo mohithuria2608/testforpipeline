@@ -6,7 +6,8 @@ declare namespace INotificationGrpcRequest {
         emailCode?: string,
         msgDestination?: string,
         emailDestination?: string,
-        language: string
+        language: string,
+        payload: string
     }
 
     interface ISendNotificationRes {

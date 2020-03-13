@@ -10,8 +10,9 @@ export class NotificationController {
      */
     async sendNotification(payload: INotificationRequest.INotification) {
         if (payload.toSendMsg) {
+            let payloadData = JSON.parse(payload.payload);
             smsLib.sendSMS({
-                message: Constant.SMS_MSG[payload.language][payload.msgCode],
+                message: Constant.SMS_MSG[payload.language][payload.msgCode](payloadData.msg),
                 destination: payload.msgDestination
             });
         }

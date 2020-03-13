@@ -213,7 +213,8 @@ export class UserchangeEntity extends BaseEntity {
                     toSendMsg: true,
                     msgCode: Constant.NOTIFICATION_CODE.USER.OTP_VERIFICATION,
                     msgDestination: encodeURIComponent(payload.fullPhnNo),
-                    language: language
+                    language: language,
+                    payload: JSON.stringify({ msg: { otp: payload.otp } })
                 });
             }
             let putArg: IAerospike.Put = {

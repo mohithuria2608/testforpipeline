@@ -7,6 +7,7 @@ declare namespace INotificationRequest {
         emailCode?: string,
         msgDestination?: string,
         emailDestination?: string,
-        language: string
+        language: string,
+        payload: string
     }
 }

@@ -12,6 +12,7 @@ message ISendNotificationReq {
     optional string msgDestination = 5;
     optional string emailDestination = 6;
     required string language = 7;
+    optional string payload = 8;
 }
 
 message ISendNotificationRes { }
