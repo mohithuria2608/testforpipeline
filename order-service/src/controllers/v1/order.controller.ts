@@ -174,7 +174,7 @@ export class OrderController {
                     })
                     return { cartValidate: getCurrentCart }
                 }
-                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData, promo)
+                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData)
             }
             if (payload.paymentMethodId != Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({

@@ -553,8 +553,7 @@ export class OrderClass extends BaseEntity {
         cartData: ICartRequest.ICartData,
         address: IUserGrpcRequest.IFetchAddressRes,
         store: IStoreGrpcRequest.IStore,
-        userData: IUserRequest.IUserData,
-        promo: IPromotionGrpcRequest.IValidatePromotionRes) {
+        userData: IUserRequest.IUserData) {
         try {
             console.log("cartDaTa", cartData)
             let amount = cartData.amount
@@ -618,8 +617,8 @@ export class OrderClass extends BaseEntity {
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0
             }
-            if (promo) {
-                orderData['promo'] = promo
+            if (cartData.promo && cartData.promo.couponId) {
+                orderData['promo'] = cartData.promo
             } else
                 orderData['promo'] = {}
             if (cartData.selFreeItem && cartData.selFreeItem.ar && cartData.selFreeItem.ar.length > 0)
