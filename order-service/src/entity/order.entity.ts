@@ -978,7 +978,8 @@ export class OrderClass extends BaseEntity {
                                         }
                                     }
                                 }
-                                statusChanged = true
+                                if (order.sdmOrderStatus != parseInt(sdmOrder.Status))
+                                    statusChanged = true
                                 // } else {
                                 //     if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO &&
                                 //         (order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
