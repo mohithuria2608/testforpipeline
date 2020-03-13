@@ -7,14 +7,17 @@ import * as Constant from '../../../constant'
 export class NotificationServiceValidator {
     constructor() {
     }
-    async smsValidator(data: INotificationGrpcRequest.ISendSms) {
+    async smsValidator(data: INotificationGrpcRequest.ISendNotification) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    message: Joi.string().required(),
-                    destination: Joi.string().required(),
-                    type: Joi.number().required(),
-                    dlr: Joi.number().required(),
+                    toSendMsg: Joi.boolean(),
+                    toSendEmail: Joi.boolean(),
+                    msgCode: Joi.string(),
+                    emailCode: Joi.string(),
+                    msgDestination: Joi.string(),
+                    emailDestination: Joi.string(),
+                    language: Joi.string().valid(Constant.DATABASE.LANGUAGE.EN, Constant.DATABASE.LANGUAGE.AR)
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

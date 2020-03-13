@@ -17,27 +17,6 @@ export class SmsCLass {
 
     constructor() { }
 
-    singleSms(payload: ISmsRequest.ISingleSms) {
-        try {
-            // https://sms.rmlconnect.net/bulksms/bulksms?dlr=1&destination=971503934048&message=06450631062D0628062700200645062706460648062C&username=Adigital&password=vSqKeZdc&source=KFC&type=2
-            let url = `https://${this.host}/${this.endPoint}?username=${this.userName}&password=${this.password}&type=2&dlr=0&destination=${payload.destination}&source=${this.source}&message=${payload.message}`
-            let command = `curl -X GET ${url}`
-            consolelog(process.cwd(), 'singleSms command:', command, true)
-
-            exec(command, function (error, stdout, stderror) {
-                consolelog(process.cwd(), 'singleSms stdout:', stdout, true)
-                consolelog(process.cwd(), 'singleSms stderr:', JSON.stringify(error), false)
-                if (error !== null) {
-                    consolelog(process.cwd(), 'singleSms exec:', JSON.stringify(error), false)
-                }
-            });
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "sms", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
     async sendSMS(payload: ISmsRequest.ISingleSms) {
         return new Promise((resolve, reject) => {
             payload.message = Helper.utfConverter(payload.message);
@@ -73,4 +52,4 @@ export class SmsCLass {
     }
 }
 
-export const sms = new SmsCLass()
+export const smsLib = new SmsCLass()

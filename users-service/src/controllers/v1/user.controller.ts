@@ -574,7 +574,7 @@ export class UserController {
                             }
                         }
                         console.log("userchangePayload by phone : ", userchangePayload)
-                        await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload)
+                        await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload, headers.language)
                     } else {
                         console.log('STEP : 10               MS : ')
                         let queryArg: IAerospike.Query = {
@@ -601,7 +601,7 @@ export class UserController {
                                 userchangePayload['chngPhnCms'] = 1
                             }
                             console.log("userchangePayload by email : ", userchangePayload)
-                            await ENTITY.UserchangeE.buildUserchange(asUserByEmail[0].id, userchangePayload)
+                            await ENTITY.UserchangeE.buildUserchange(asUserByEmail[0].id, userchangePayload, headers.language)
                         } else {
                             let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                             if (cmsUserByEmail && cmsUserByEmail.customerId) {
@@ -670,7 +670,7 @@ export class UserController {
                                 }
                             }
                             console.log("userchangePayload by new user : ", userchangePayload)
-                            await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload)
+                            await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload, headers.language)
                         }
                     }
                     userData['fullPhnNo'] = fullPhnNo

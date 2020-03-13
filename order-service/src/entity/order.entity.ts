@@ -525,7 +525,17 @@ export class OrderClass extends BaseEntity {
                     updatedAt: new Date().getTime(),
                     sdmOrderStatus: -2,
                     validationRemarks: createOrder.ResultText
-                })
+                });
+
+                // send notification(sms + email) on order cancellation
+                let userData = await userService.fetchUser({ userId: payload.userId });
+                notificationService.sendNotification({
+                    toSendMsg: true,
+                    msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                    msgDestination: `${userData.cCode}${userData.phnNo}`,
+                    language: payload.language
+                });
+
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
             }
         } catch (error) {
@@ -726,7 +736,16 @@ export class OrderClass extends BaseEntity {
                                             order_id: order.cmsOrderRef,
                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
                                             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
-                                        })
+                                        });
+
+                                        // send notification(sms + email) on order failure
+                                        let userData = await userService.fetchUser({ userId: order.userId });
+                                        notificationService.sendNotification({
+                                            toSendMsg: true,
+                                            msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                                            msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                            language: payload.language
+                                        });
                                     }
                                     if (recheck && sdmOrder && sdmOrder.OrderID) {
                                         consolelog(process.cwd(), "order step 9:       ", order.sdmOrderStatus, true)
@@ -778,7 +797,16 @@ export class OrderClass extends BaseEntity {
                                                                             order_id: order.cmsOrderRef,
                                                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
                                                                             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
-                                                                        })
+                                                                        });
+
+                                                                        // send notification(sms + email) on order failure
+                                                                        let userData = await userService.fetchUser({ userId: order.userId });
+                                                                        notificationService.sendNotification({
+                                                                            toSendMsg: true,
+                                                                            msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                                                                            msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                                            language: payload.language
+                                                                        });
                                                                     }
                                                                 }
                                                             }
@@ -854,6 +882,16 @@ export class OrderClass extends BaseEntity {
                                                             })
                                                         }
                                                     }
+                                                    // send notification(sms + email) on order confirmaton
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        msgCode: (order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY)
+                                                            ? Constant.NOTIFICATION_CODE.ORDER.DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.ORDER.PICKUP_CONFIRM,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        language: payload.language
+                                                    });
                                                     break;
                                                 }
                                                 case 8: {
@@ -921,7 +959,16 @@ export class OrderClass extends BaseEntity {
                                                         order_id: order.cmsOrderRef,
                                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
                                                         order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS
-                                                    })
+                                                    });
+
+                                                    // send notification(sms + email) on order cancellation
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_CANCEL,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        language: payload.language
+                                                    });
                                                     break;
                                                 }
                                                 default: {
@@ -943,7 +990,16 @@ export class OrderClass extends BaseEntity {
                                             updatedAt: new Date().getTime(),
                                             sdmOrderStatus: -2,
                                             validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
-                                        })
+                                        });
+
+                                        // send notification(sms + email) on order failure
+                                        let userData = await userService.fetchUser({ userId: order.userId });
+                                        notificationService.sendNotification({
+                                            toSendMsg: true,
+                                            msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                                            msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                            language: payload.language
+                                        });
                                     }
                                 }
                                 if (payload.timeInterval != 0 && recheck)

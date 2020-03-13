@@ -100,6 +100,11 @@ export class StoreController {
         let storesData = await ENTITY.SyncStoreE.getList();
         await Utils.sendRequestToCMS('SYNC_STORE', storesData);
     }
+
+    /** sync to aerospike */
+    async syncToAS(payload) {
+        await ENTITY.StoreE.saveData(payload);
+    }
 }
 
 export const storeController = new StoreController();

@@ -34,6 +34,11 @@ export class AreaController {
         let areaData = await ENTITY.SyncAreaE.getList();
         await Utils.sendRequestToCMS('SYNC_AREA', areaData);
     }
+
+    /** sync to aerospike */
+    async syncToAS(payload) {
+        await ENTITY.AreaE.saveData(payload);
+    }
 }
 
 export const areaController = new AreaController();

@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import { sms } from '../../lib'
+import { notificationController } from '../../controllers'
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
 const PROTO_PATH = __dirname + config.get("directory.static.proto.notification.server")
@@ -17,13 +17,13 @@ const notificationProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server()
 
 server.addService(notificationProto.NotificationService.service, {
-    sms: async (call, callback) => {
+    sendNotification: async (call, callback) => {
         try {
-            consolelog(process.cwd(), "sms", JSON.stringify(call.request), true)
-            let res: {} = await sms.sendSMS(call.request)
+            consolelog(process.cwd(), "sendNotification", JSON.stringify(call.request), true)
+            let res = await notificationController.sendNotification(call.request)
             callback(null, res)
         } catch (error) {
-            consolelog(process.cwd(), "sms", JSON.stringify(error), false)
+            consolelog(process.cwd(), "sendNotification", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

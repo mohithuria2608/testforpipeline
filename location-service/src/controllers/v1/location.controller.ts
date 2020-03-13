@@ -128,9 +128,9 @@ export class LocationController {
     async postLocationToCMS(payload): Promise<any> {
         try {
             await Promise.all([
-                // cityController.postOnCMS(),
-                // areaController.postOnCMS(),
-                storeController.postOnCMS()
+                cityController.postOnCMS(),
+                areaController.postOnCMS(),
+                // storeController.postOnCMS(),
                 // countryController.postOnCMS()
             ]);
         } catch (error) {
@@ -146,9 +146,12 @@ export class LocationController {
     async syncLocationFromCMS(payload): Promise<any> {
         try {
             let syncData = JSON.parse(payload.as.argv);
-            // switch (syncData.type) {
-            //     case 'city': 
-            // }
+            switch (syncData.type) {
+                case 'city': await cityController.syncToAS(syncData.data);
+                case 'country': await countryController.syncToAS(syncData.data);
+                case 'area': await areaController.syncToAS(syncData.data);
+                case 'store': await storeController.syncToAS(syncData.data);
+            }
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
             return Promise.reject(error)

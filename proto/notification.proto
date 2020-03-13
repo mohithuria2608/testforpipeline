@@ -1,12 +1,17 @@
 syntax = "proto3";
 
 service NotificationService {
-    rpc Sms (ISmsReq) returns (ISmsRes) {}
+    rpc sendNotification (ISendNotificationReq) returns (ISendNotificationRes) {}
 }
 
-message ISmsReq {
-    required string message = 1;
-    required string destination = 2;
+message ISendNotificationReq {
+    optional bool toSendMsg = 1;
+    optional bool toSendEmail = 2;
+    optional string msgCode = 3;
+    optional string emailCode = 4;
+    optional string msgDestination = 5;
+    optional string emailDestination = 6;
+    required string language = 7;
 }
 
-message ISmsRes { }
+message ISendNotificationRes { }
