@@ -315,7 +315,7 @@ export class OrderController {
             } else if (sdmOrderRef && sdmOrderRef.length == 1)
                 sdmOrder = parseInt(sdmOrderRef[0])
             else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             let userData: IUserRequest.IUserData
             if (payload.cCode && payload.phnNo) {
                 userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
