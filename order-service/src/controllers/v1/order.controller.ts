@@ -368,7 +368,7 @@ export class OrderController {
         try {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
-            }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1 }, { lean: true })
+            }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
                     if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()) {
@@ -396,7 +396,7 @@ export class OrderController {
                                     status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                     updatedAt: new Date().getTime(),
                                     sdmOrderStatus: -2,
-                                    validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                    validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED,
                                 }, { new: true })
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
@@ -404,40 +404,46 @@ export class OrderController {
                                     order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                 })
                             } else {
-                                await paymentService.reversePayment({
-                                    noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                })
-                                let status = await paymentService.getPaymentStatus({
-                                    noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                })
-                                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                                let dataToUpdateOrder = {
                                     isActive: 0,
                                     status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                     updatedAt: new Date().getTime(),
-                                    validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                    validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED,
                                     sdmOrderStatus: -2,
-                                    $addToSet: {
-                                        transLogs: status
-                                    },
                                     "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
-                                }, { new: true })
-                                CMS.TransactionCMSE.createTransaction({
-                                    order_id: order.cmsOrderRef,
-                                    message: status.transactions[0].type,
-                                    type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
-                                    payment_data: {
-                                        id: status.transactions[0].id.toString(),
-                                        data: JSON.stringify(status)
+                                }
+                                let status
+                                if (order.payment && order.payment.status && order.payment.status != Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS) {
+                                    await paymentService.reversePayment({
+                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                    })
+                                    status = await paymentService.getPaymentStatus({
+                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                        paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                    })
+                                    dataToUpdateOrder['$addToSet'] = {
+                                        transLogs: status
                                     }
-                                })
+                                }
+                                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
                                     order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
                                 })
+                                if (status) {
+                                    CMS.TransactionCMSE.createTransaction({
+                                        order_id: order.cmsOrderRef,
+                                        message: status.transactions[0].type,
+                                        type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                        payment_data: {
+                                            id: status.transactions[0].id.toString(),
+                                            data: JSON.stringify(status)
+                                        }
+                                    })
+                                }
                             }
                         }
                     }
