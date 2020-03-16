@@ -531,10 +531,13 @@ export class OrderClass extends BaseEntity {
                 let userData = await userService.fetchUser({ userId: payload.userId });
                 notificationService.sendNotification({
                     toSendMsg: true,
-                    msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                    msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
                     msgDestination: `${userData.cCode}${userData.phnNo}`,
+                    toSendEmail: true,
+                    emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                    emailDestination: userData.email,
                     language: payload.language,
-                    payload: JSON.stringify({ msg: order })
+                    payload: JSON.stringify({ msg: order, email: order })
                 });
 
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
@@ -743,10 +746,13 @@ export class OrderClass extends BaseEntity {
                                         let userData = await userService.fetchUser({ userId: order.userId });
                                         notificationService.sendNotification({
                                             toSendMsg: true,
-                                            msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                                            msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
                                             msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                            toSendEmail: true,
+                                            emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                                            emailDestination: userData.email,
                                             language: payload.language,
-                                            payload: JSON.stringify({ msg: order })
+                                            payload: JSON.stringify({ msg: order, email: order })
                                         });
                                     }
                                     if (recheck && sdmOrder && sdmOrder.OrderID) {
@@ -805,10 +811,13 @@ export class OrderClass extends BaseEntity {
                                                                         let userData = await userService.fetchUser({ userId: order.userId });
                                                                         notificationService.sendNotification({
                                                                             toSendMsg: true,
-                                                                            msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                                                                            msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
                                                                             msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                                            toSendEmail: true,
+                                                                            emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                                                                            emailDestination: userData.email,
                                                                             language: payload.language,
-                                                                            payload: JSON.stringify({ msg: order })
+                                                                            payload: JSON.stringify({ msg: order, email: order })
                                                                         });
                                                                     }
                                                                 }
@@ -886,15 +895,19 @@ export class OrderClass extends BaseEntity {
                                                         }
                                                     }
                                                     // send notification(sms + email) on order confirmaton
+                                                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
                                                     let userData = await userService.fetchUser({ userId: order.userId });
                                                     notificationService.sendNotification({
                                                         toSendMsg: true,
-                                                        msgCode: (order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY)
-                                                            ? Constant.NOTIFICATION_CODE.ORDER.DELIVERY_CONFIRM
-                                                            : Constant.NOTIFICATION_CODE.ORDER.PICKUP_CONFIRM,
+                                                        toSendEmail: true,
+                                                        msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                                                        emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
                                                         msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
                                                         language: payload.language,
-                                                        payload: JSON.stringify({ msg: order })
+                                                        payload: JSON.stringify({ msg: order, email: order })
                                                     });
                                                     break;
                                                 }
@@ -969,10 +982,13 @@ export class OrderClass extends BaseEntity {
                                                     let userData = await userService.fetchUser({ userId: order.userId });
                                                     notificationService.sendNotification({
                                                         toSendMsg: true,
-                                                        msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_CANCEL,
+                                                        toSendEmail: true,
+                                                        msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
+                                                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
                                                         msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
                                                         language: payload.language,
-                                                        payload: JSON.stringify({ msg: order })
+                                                        payload: JSON.stringify({ msg: order, email: order })
                                                     });
                                                     break;
                                                 }
@@ -1001,10 +1017,13 @@ export class OrderClass extends BaseEntity {
                                         let userData = await userService.fetchUser({ userId: order.userId });
                                         notificationService.sendNotification({
                                             toSendMsg: true,
-                                            msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
+                                            msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
                                             msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                            toSendEmail: true,
+                                            emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                                            emailDestination: userData.email,
                                             language: payload.language,
-                                            payload: JSON.stringify({ msg: order })
+                                            payload: JSON.stringify({ msg: order, email: order })
                                         });
                                     }
                                 }

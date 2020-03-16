@@ -45,7 +45,7 @@ export class SmsCLass {
                         inQ: true
                     })
                     if (err) { reject(err); }
-                    else { resolve(b); }
+                    else { resolve({ success: true, data: b }); }
                 }
             );
         });

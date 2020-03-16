@@ -204,8 +204,18 @@ export class UserController {
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 console.log("userData", userData)
-                if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
+                if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                     await this.validateUserOnSdm(userData, false)
+
+                    // send welcome email on first time user create
+                    notificationService.sendNotification({
+                        toSendEmail: true,
+                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
+                        emailDestination: userData.email,
+                        language: headers.language,
+                        payload: JSON.stringify({ email: { user: userData, meta: {} } })
+                    });
+                }
 
                 if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
                     CMS.UserCMSE.updateCustomerOnCms(userData)
@@ -707,7 +717,6 @@ export class UserController {
                             userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
-                    console.log("hereeeeeeeeeeeeee", userData)
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
@@ -715,7 +724,15 @@ export class UserController {
                             argv: JSON.stringify(userData)
                         },
                         inQ: true
-                    })
+                    });
+                    // send welcome email
+                    notificationService.sendNotification({
+                        toSendEmail: true,
+                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
+                        emailDestination: userData.email,
+                        language: headers.language,
+                        payload: JSON.stringify({ email: { user: userData, meta: {} } })
+                    });
                     return formatUserData(userData, headers, auth.isGuest)
                 }
             } else {

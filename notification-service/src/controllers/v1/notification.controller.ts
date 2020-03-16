@@ -1,5 +1,6 @@
 import { smsLib, emailLib } from '../../lib'
 import * as Constant from "../../constant";
+import ejs from "ejs";
 
 export class NotificationController {
 
@@ -9,22 +10,30 @@ export class NotificationController {
      * @description : sends notification based on params
      */
     async sendNotification(payload: INotificationRequest.INotification) {
-        if (payload.toSendMsg) {
+        return new Promise(async (resolve, reject) => {
             let payloadData = JSON.parse(payload.payload);
-            smsLib.sendSMS({
-                message: Constant.SMS_MSG[payload.language][payload.msgCode](payloadData.msg),
-                destination: payload.msgDestination
-            });
-        }
-        if (payload.toSendEmail) {
-            emailLib.sendEmail({
-                message: 'KFC EMAIL TEST',
-                destination: payload.emailDestination,
-                subject: 'Test Subject'
-            });
-        }
+            if (payload.toSendMsg) {
+                await smsLib.sendSMS({
+                    message: Constant.NOTIFICATION_MSG.SMS[payload.language][payload.msgCode](payloadData.msg),
+                    destination: payload.msgDestination
+                });
+                resolve();
+            }
+            if (payload.toSendEmail) {
+                ejs.renderFile(`${__dirname}/../../../templates/${payload.language}/${payload.emailCode.toLowerCase()}.ejs`, payloadData.email, {}, function (err, emailer) {
+                    if (err) reject(err);
+                    else {
+                        emailLib.sendEmail({
+                            message: emailer,
+                            destination: payload.emailDestination,
+                            subject: Constant.NOTIFICATION_MSG.EMAIL[payload.language][payload.msgCode]
+                        });
+                        resolve();
+                    }
+                });
+            }
+        });
     }
-
 }
 
 export const notificationController = new NotificationController();

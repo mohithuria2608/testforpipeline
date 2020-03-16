@@ -211,7 +211,7 @@ export class UserchangeEntity extends BaseEntity {
             if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                 notificationService.sendNotification({
                     toSendMsg: true,
-                    msgCode: Constant.NOTIFICATION_CODE.USER.OTP_VERIFICATION,
+                    msgCode: Constant.NOTIFICATION_CODE.SMS.USER_OTP_VERIFICATION,
                     msgDestination: encodeURIComponent(payload.fullPhnNo),
                     language: language,
                     payload: JSON.stringify({ msg: { otp: payload.otp } })
