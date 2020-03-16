@@ -519,14 +519,18 @@ export class OrderClass extends BaseEntity {
                 }
                 return {}
             } else {
-                this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
+                let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
                     isActive: 0,
                     status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                     updatedAt: new Date().getTime(),
                     sdmOrderStatus: -2,
                     validationRemarks: createOrder.ResultText
                 });
-
+                CMS.OrderCMSE.updateOrder({
+                    order_id: order.cmsOrderRef,
+                    payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                })
                 // send notification(sms + email) on order cancellation
                 let userData = await userService.fetchUser({ userId: payload.userId });
                 notificationService.sendNotification({
@@ -668,6 +672,11 @@ export class OrderClass extends BaseEntity {
                                     // if (amount[0].amount != parseFloat(sdmOrder.Total)) {
                                     //     consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
                                     //     recheck = false
+                                    //     OrderSDME.cancelOrder({
+                                    //         sdmOrderRef: order.sdmOrderRef,
+                                    //         voidReason: 1,
+                                    //         validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
+                                    //     })
                                     //     if (order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                                     //         consolelog(process.cwd(), "order step 6:       ", sdmOrder.ValidationRemarks, true)
                                     //         order = await this.updateOneEntityMdb({ _id: order._id }, {

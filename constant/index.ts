@@ -1453,6 +1453,7 @@ export const STATUS_MSG = {
     SDM_ORDER_VALIDATION: {
         ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
         EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
-        MAX_PENDING_TIME_REACHED: "Maximum pending time reached"
+        MAX_PENDING_TIME_REACHED: "Maximum pending time reached",
+        PAYMENT_FAILURE: "Payment failure"
     }
 };

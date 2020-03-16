@@ -1121,8 +1121,12 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838140 })
-
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838313 })
+    // await SDM.OrderSDME.cancelOrder({
+    //   sdmOrderRef: 39838313,
+    //   voidReason: 1,
+    //   validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+    // })
   } catch (error) {
     console.error(error)
   }
