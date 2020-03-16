@@ -2,7 +2,7 @@
 import * as config from "config"
 import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
-import { consolelog, nameConstructor } from '../utils'
+import { consolelog, nameConstructor, deCryptData } from '../utils'
 import * as  _ from 'lodash';
 import { kafkaService } from '../grpc/client'
 
@@ -34,7 +34,7 @@ export class UserSDMEntity extends BaseSDM {
                         CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),
                         CUST_PHONENUMBER: payload.phnNo,
                         CUST_PHONETYPE: 2,
-                        PASSWORD: payload.password,
+                        PASSWORD: deCryptData(payload.password),
                         USERNAME: payload.email,
                         WCUST_FIRSTNAME: naemRes.firstName,
                         WCUST_IS_GUEST: false,
@@ -124,7 +124,7 @@ export class UserSDMEntity extends BaseSDM {
                         CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),
                         CUST_PHONENUMBER: payload.phnNo,
                         CUST_PHONETYPE: 2,
-                        PASSWORD: payload.password,
+                        PASSWORD: deCryptData(payload.password),
                         USERNAME: payload.email,
                         WCUST_FIRSTNAME: naemRes.firstName,
                         WCUST_IS_GUEST: false,
