@@ -77,7 +77,7 @@ export class OrderController {
             let dataToHash: ICartRequest.IDataToHash = {
                 items: payload.items,
                 promo: payload.couponCode ? 1 : 0,
-                updatedAt: getCurrentCart.updatedAt
+                updatedAt: payload.cartUpdatedAt
             }
             const hash = hashObj(dataToHash)
             console.log("cartUnique ================ ", getCurrentCart.cartUnique)
@@ -135,8 +135,8 @@ export class OrderController {
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
                 else {
-                    if (!getStore.isOnline)
-                        return Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND
+                    // if (!getStore.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
                 }
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
