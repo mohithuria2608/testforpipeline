@@ -39,6 +39,7 @@ export class WebhookNoonpayController {
                 } catch (error) {
                     isFailed = true
                     validationRemarks = error.details
+                    status = error.data
                 }
 
                 if (!isFailed && status && status.resultCode == 0 && status.transactions && status.transactions.length > 0) {
@@ -95,10 +96,10 @@ export class WebhookNoonpayController {
                     })
                     CMS.TransactionCMSE.createTransaction({
                         order_id: order.cmsOrderRef,
-                        message: status ? status.transactions[0].type : validationRemarks,
+                        message: (status && status.transactions && status.transactions.length > 0) ? status.transactions[0].type : validationRemarks,
                         type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
                         payment_data: {
-                            id: status ? status.transactions[0].id.toString() : order.cmsOrderRef,
+                            id: (status && status.transactions && status.transactions.length > 0) ? status.transactions[0].id.toString() : order.cmsOrderRef,
                             data: status ? JSON.stringify(status) : validationRemarks
                         }
                     })

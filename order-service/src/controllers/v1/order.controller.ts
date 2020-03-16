@@ -371,7 +371,7 @@ export class OrderController {
             }, { sdmOrderRef: 1, createdAt: 1, status: 1 }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
-                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime())
+                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()) {
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,
                             language: order.language,
@@ -382,6 +382,7 @@ export class OrderController {
                                 statusChanged: false
                             }).nextPingMs
                         })
+                    }
                     else {
                         if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
                             OrderSDME.cancelOrder({
@@ -389,7 +390,7 @@ export class OrderController {
                                 voidReason: 1,
                                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
                             })
-                            if (order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
+                            if (order.payment && order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                                     isActive: 0,
                                     status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
