@@ -636,23 +636,23 @@ export const DATABASE = {
         TRANSACTION: {
             AUTHORIZATION: {
                 AS: 'AUTHORIZATION',
-                CMS: 'Order'
+                CMS: 'order'
             },
             VOID_AUTHORIZATION: {
                 AS: 'VOID_AUTHORIZATION', // Reverse payment
-                CMS: 'Void'
+                CMS: 'void'
             },
             CAPTURE: {
                 AS: 'CAPTURE',
-                CMS: 'Capture'
+                CMS: 'capture'
             },
             REFUND: {
                 AS: 'REFUND',
-                CMS: ""
+                CMS: "refund"
             },
             FAILED: {
                 AS: 'FAILED',
-                CMS: ""
+                CMS: "void"
             }
         }
     },
