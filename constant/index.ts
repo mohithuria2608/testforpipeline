@@ -1339,7 +1339,12 @@ export const STATUS_MSG = {
             UNIMPLEMENTED: '12',
             INTERNAL: '13',
             UNAVAILABLE: '14',
-            DATA_LOSS: '15'
+            DATA_LOSS: '15',
+            /**
+             * @description : only for payment, not actual grpc error code
+             */
+            PAYMENT_AUTHORIZATION: '13',
+            PAYMENT_ERROR: '13'
         },
         ERROR: (code, type, message) => {
             return {
