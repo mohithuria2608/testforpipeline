@@ -15,10 +15,10 @@ export default async function () {
 
     for (let city of list) {
         // only save city with valid cityId
-        if (city.CTY_ID !== "-1") {
+        if (city.CTY_ID !== "-1" && city.CTY_CNTID === "1") {
             let cityData = {
                 sdmCityId: parseInt(city.CTY_ID),
-                countryId: parseInt(city.CTY_CNTID),
+                countryId: 'AE',
                 cityName: city.CTY_NAME,
                 cityNameAr: city.CTY_NAMEUN
             };

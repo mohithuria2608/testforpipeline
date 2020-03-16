@@ -36,7 +36,7 @@ async function getAreaDetail(areaId: number, storeId: number) {
         return {
             success: true,
             data: {
-                countryId: parseInt(single.AREA_COUNTRYID),
+                countryId: 'AE',
                 cityId: parseInt(single.AREA_CITYID),
                 areaName: single.AREA_NAME || "",
                 areaNameAr: single.AREA_NAMEUN || "",
@@ -44,11 +44,11 @@ async function getAreaDetail(areaId: number, storeId: number) {
                 streetId: parseInt(single.AREA_DEF_STREETID),
                 sdmAreaId: parseInt(single.AREA_ID),
                 provinceId: parseInt(single.AREA_PROVINCEID),
-                storeId: storeId,
-                areaPinCode: "1",
-                deliveryRefCode: "1",
-                validAreaType: "1"
-            } 
+                sdmStoreId: storeId,
+                areaPinCode: 1,
+                delRefCode: 1,
+                validAreaType: 1
+            }
         };
     } else return { success: false };
 }

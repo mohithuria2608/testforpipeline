@@ -3,7 +3,7 @@ global.healthcheck = {}
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
-import { bootstrap, consolelog } from './utils'
+import { bootstrap, consolelog, checkStoreOnline } from './utils'
 import middleware from './middlewares'
 import route from './route'
 
@@ -21,7 +21,6 @@ export const start = (async () => {
     const server = app.listen(port)
 
     await bootstrap(server)
-
   } catch (error) {
     console.error(error)
   }

@@ -78,6 +78,8 @@ export class AddressController {
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.length) {
+                    // if (!store[0].isOnline)
+                    //     return Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store[0].location.latitude
                     payload['lng'] = store[0].location.longitude
@@ -90,6 +92,8 @@ export class AddressController {
             } else if (payload.lat && payload.lng) {
                 store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.length) {
+                    // if (!store[0].isOnline)
+                    //     return Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE

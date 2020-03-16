@@ -3,7 +3,6 @@ import * as config from 'config'
 import * as request from "request";
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
-import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
@@ -38,7 +37,7 @@ export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAG
 
 export let sendError = function (error, language: string = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In error handler type of ", typeof JSON.stringify(error), false)
-    consolelog(process.cwd(), "In error handler direct ", JSON.stringify(error), false)
+    consolelog(process.cwd(), "In error handler direct ", error, false)
     consolelog(process.cwd(), "In error handler parsed ", JSON.stringify(error), false)
 
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
@@ -47,6 +46,7 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
         customError.message = error.details
         customError.message_Ar = error.details
         customError.message_En = error.details
+        error.code = error.code + ""
         switch (error.code) {
             case Constant.STATUS_MSG.GRPC_ERROR.TYPE.CANCELLED: {
                 consolelog(process.cwd(), "Unhandled grpc error type CANCELLED", JSON.stringify(error), true)
@@ -275,31 +275,13 @@ export let authorizationHeaderObj = Joi.object({
     authorization: Joi.string().required().description("bearer space accessToken")
 }).unknown()
 
-export let cryptData = async function (stringToCrypt: string) {
-    let hmac = crypto.createHmac('sha256', config.get('cryptoSecret'));
-    let crypted = hmac.update(stringToCrypt).digest('hex');
-    return crypted
-}
 
-export let deCryptData = async function (stringToCheck: string, dbString: string) {
-    let hmac = crypto.createHmac('sha256', config.get('cryptoSecret'));
-    let crypted = hmac.update(stringToCheck).digest('hex');
-    return (dbString == crypted) ? true : false
-}
 
-export let cipherText = async function (text) {
-    let cipher = crypto.createCipher('aes-128-ctr', config.get('cryptoSecret'))
-    let crypted = cipher.update(text, 'utf8', 'hex')
-    crypted += cipher.final('hex');
-    return crypted;
-}
 
-export let deCipherText = async function (text) {
-    var decipher = crypto.createDecipher('aes-128-ctr', config.get('cryptoSecret'))
-    var dec = decipher.update(text, 'hex', 'utf8')
-    dec += decipher.final('utf8');
-    return dec;
-}
+
+
+
+
 
 export let generateOtp = async function () {
     let otp = (Math.floor(1000 + Math.random() * 9000));
@@ -384,9 +366,9 @@ export let sendRequestToCMS = function (type, data) {
             case 'SYNC_CITY': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createcity"; break;
             case 'SYNC_AREA': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createarea"; break;
             case 'SYNC_STORE': requestUrl = "http://40.123.207.192/rest/V1/restaurant/create"; break;
+            case 'SYNC_COUNTRY': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createcountry"; break;
             default: reject(new Error('Invalid Request Entity Type'));
         }
-        console.log(Array.isArray(data), JSON.stringify(data[0]));
         request.post({
             headers: { 'content-type': 'application/json' },
             url: requestUrl,
@@ -411,4 +393,39 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
             return new Error(statsObj.message)
     else
         return statsObj
+}
+
+export let checkStoreOnline = function (start, end) {
+    console.log("curTime",
+        new Date(),
+        new Date().getUTCHours(),
+        new Date().getUTCMinutes(),
+        new Date().getUTCSeconds(),
+        new Date().getUTCMilliseconds())
+    console.log("startTime",
+        start,
+        new Date(start).getTime(),
+        new Date(start).getUTCHours(),
+        new Date(start).getUTCMinutes(),
+        new Date(start).getUTCSeconds(),
+        new Date(start).getUTCMilliseconds()
+    )
+    console.log("endTime",
+        end,
+        new Date(end).getTime(),
+        new Date(end).getUTCHours(),
+        new Date(end).getUTCMinutes(),
+        new Date(end).getUTCSeconds(),
+        new Date(end).getUTCMilliseconds())
+    let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
+    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds()
+    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds()
+
+    console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
+    console.log(startTime < curTime)
+    console.log(curTime > endTime)
+    if (startTime < curTime && curTime < endTime)
+        return true
+    else
+        return false
 }

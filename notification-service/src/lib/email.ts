@@ -18,4 +18,4 @@ export class EmailClass {
     }
 }
 
-export const email = new EmailClass(); 
+export const emailLib = new EmailClass(); 

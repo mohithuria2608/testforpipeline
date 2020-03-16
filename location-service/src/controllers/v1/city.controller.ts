@@ -34,6 +34,11 @@ export class CityController {
         let cityData = await ENTITY.SyncCityE.getList();
         await Utils.sendRequestToCMS('SYNC_CITY', cityData);
     }
+
+    /** sync to aerospike */
+    async syncToAS(payload) {
+        await ENTITY.CityE.saveData(payload);
+    }
 }
 
 export const cityController = new CityController();

@@ -159,11 +159,11 @@ const orderSchema = new Schema({
         },
         status: {
             type: String, enum: [
-                Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION,
-                Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION,
-                Constant.DATABASE.STATUS.TRANSACTION.CAPTURE,
-                Constant.DATABASE.STATUS.TRANSACTION.REFUND,
-                Constant.DATABASE.STATUS.TRANSACTION.FAILED,
+                Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS,
+                Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.AS,
+                Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
+                Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS,
             ]
         }
     },

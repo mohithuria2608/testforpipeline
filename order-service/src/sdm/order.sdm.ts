@@ -37,6 +37,7 @@ export class OrderSDMEntity extends BaseSDM {
 
     /**
     * @method SDK
+    * @description : get order details
     * */
     async getOrderDetail(payload: IOrderSdmRequest.IOrderDetail) {
         try {
@@ -95,6 +96,36 @@ export class OrderSDMEntity extends BaseSDM {
                 return false
         } catch (error) {
             consolelog(process.cwd(), 'processCreditCardOnSdm', JSON.stringify(error), false)
+            return (error)
+        }
+    }
+
+    /**
+    * @method SDK
+    * @description : get order details
+    * */
+    async cancelOrder(payload: IOrderSdmRequest.ICancelOrder) {
+        try {
+            let data = {
+                name: "CancelOrder",
+                req: {
+                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    language: "En",
+                    orderID: payload.sdmOrderRef,
+                    voidReason: payload.voidReason,
+                    voidRemarks: payload.validationRemarks
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.GetOrderDetailsResult
+            else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
+                return res.SDKResult
+            else
+                return Promise.reject(res)
+        } catch (error) {
+            consolelog(process.cwd(), 'cancelOrder', JSON.stringify(error), false)
             return (error)
         }
     }

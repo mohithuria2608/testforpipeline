@@ -1,11 +1,16 @@
 declare namespace INotificationGrpcRequest {
 
-    interface ISendSms {
-        message: string,
-        destination: string
+    interface ISendNotification {
+        toSendMsg?: boolean,
+        toSendEmail?: boolean,
+        msgCode?: string,
+        emailCode?: string,
+        msgDestination?: string,
+        emailDestination?: string,
+        language: string
     }
 
-    interface ISendSmsRes {
+    interface ISendNotificationRes {
 
     }
 }

@@ -3,7 +3,7 @@ import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseCMS } from './base.cms'
-import { consolelog, nameConstructor } from '../utils'
+import { consolelog, nameConstructor, cryptData, deCryptData } from '../utils'
 
 export class AddressCMSEntity extends BaseCMS {
     constructor() {
@@ -82,7 +82,7 @@ export class AddressCMSEntity extends BaseCMS {
                 "websiteId": "1",
                 "firstName": naemRes.firstName,
                 "lastName": naemRes.lastName,
-                "password": payload.password,
+                "password": deCryptData(payload.password),
                 "countryId": "AE", // donot change
                 "zip": "00000",
                 "city": payload.asAddress[0].description,

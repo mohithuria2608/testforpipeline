@@ -39,6 +39,21 @@ export class CountryEntity extends BaseEntity {
             return {}
         }
     }
+
+    async saveData(data) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: data,
+                set: this.set,
+                key: data.id,
+                create: true,
+            }
+            await Aerospike.put(putArg)
+            return {}
+        } catch (error) {
+            return {}
+        }
+    }
 }
 
 export const CountryE = new CountryEntity()

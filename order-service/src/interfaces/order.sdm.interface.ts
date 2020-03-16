@@ -11,4 +11,11 @@ declare namespace IOrderSdmRequest {
         sdmOrderRef: number,
         transaction: any
     }
+
+    interface ICancelOrder {
+        sdmOrderRef: number,
+        voidReason: number,
+        validationRemarks: string,
+        autoApprove?: string,
+    }
 }

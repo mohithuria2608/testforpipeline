@@ -14,7 +14,9 @@ export class PromotionController {
     */
     async syncPromoFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)
+            
+            let data = JSON.parse(payload.as.argv);
+            await ENTITY.PromotionE.removeAllPromotions();
             if (payload.as.create || payload.as.update || payload.as.get) {
                 for (let promotion of data) {
                     ENTITY.PromotionE.savePromotion(promotion, { createOrReplace: true });

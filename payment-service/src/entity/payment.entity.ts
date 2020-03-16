@@ -460,7 +460,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter authorization transaction details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION) { return t; } })) : []
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -501,7 +501,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter void transaction(reverse) details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION) { return t; } })) : undefined
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS) { return t; } })) : undefined
             }
             return result;
         } catch (error) {
@@ -544,7 +544,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter capture transaction details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.CAPTURE) { return t; } })) : []
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.AS) { return t; } })) : []
             }
             return result;
         } catch (error) {
@@ -589,7 +589,7 @@ export class PaymentClass extends BaseEntity {
                 channel: response.channel,
                 paymentDetails: response.paymentDetails,
                 // filter refund transaction details
-                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.REFUND) { return t; } })) : []
+                transactions: response.transactions && response.transactions.length > 0 ? (response.transactions.filter((t) => { if (t.type === Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS) { return t; } })) : []
             }
             return result;
         } catch (error) {
