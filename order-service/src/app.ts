@@ -1112,7 +1112,7 @@ export const start = (async () => {
         "OrderMode": "1",
         "OrderType": 0,
         "ProvinceID": 7,
-        "StoreID": "1240",// "1219",// "1240",//
+        "StoreID": "1240",// "1219"
         "StreetID": 315
       },
       "autoApprove": "true",

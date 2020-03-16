@@ -200,7 +200,6 @@ export class UserEntity extends BaseEntity {
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
 
-
             if (payload.cmsAddress && payload.cmsAddress.length > 0)
                 userUpdate['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)

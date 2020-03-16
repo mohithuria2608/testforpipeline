@@ -15,6 +15,7 @@ declare namespace IStoreGrpcRequest {
         areaId: number,
         streetId: number,
         districtId: number,
+        cityId: number,
         mapId: number,
         menuId: number,
         name_en: string,
