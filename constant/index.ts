@@ -636,23 +636,23 @@ export const DATABASE = {
         TRANSACTION: {
             AUTHORIZATION: {
                 AS: 'AUTHORIZATION',
-                CMS: 'Order'
+                CMS: 'order'
             },
             VOID_AUTHORIZATION: {
                 AS: 'VOID_AUTHORIZATION', // Reverse payment
-                CMS: 'Void'
+                CMS: 'void'
             },
             CAPTURE: {
                 AS: 'CAPTURE',
-                CMS: 'Capture'
+                CMS: 'capture'
             },
             REFUND: {
                 AS: 'REFUND',
-                CMS: ""
+                CMS: "refund"
             },
             FAILED: {
                 AS: 'FAILED',
-                CMS: ""
+                CMS: "void"
             }
         }
     },
@@ -1358,7 +1358,12 @@ export const STATUS_MSG = {
             UNIMPLEMENTED: '12',
             INTERNAL: '13',
             UNAVAILABLE: '14',
-            DATA_LOSS: '15'
+            DATA_LOSS: '15',
+            /**
+             * @description : only for payment, not actual grpc error code
+             */
+            PAYMENT_AUTHORIZATION: '13',
+            PAYMENT_ERROR: '13'
         },
         ERROR: (code, type, message) => {
             return {
@@ -1472,6 +1477,7 @@ export const STATUS_MSG = {
     SDM_ORDER_VALIDATION: {
         ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
         EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
-        MAX_PENDING_TIME_REACHED: "Maximum pending time reached"
+        MAX_PENDING_TIME_REACHED: "Maximum pending time reached",
+        PAYMENT_FAILURE: "Payment failure"
     }
 };

@@ -18,7 +18,7 @@ declare namespace IUserRequest {
         socialKey?: string,
         medium?: string,
         profileStep?: number,
-        password?: string,
+        password?: { iv: string, encryptedData: string },
         cartId?: string,
         createdAt?: number,
     }

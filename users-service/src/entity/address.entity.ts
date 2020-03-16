@@ -112,10 +112,10 @@ export class AddressEntity extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 sdmAddressRef: addressData.sdmAddressRef ? addressData.sdmAddressRef : 0,
                 cmsAddressRef: addressData.cmsAddressRef ? addressData.cmsAddressRef : 0,
-                countryId: 1, //store.countryId
-                storeId: 1219,// store.storeId
-                areaId: 16,// store.areaId
-                cityId: 17,// store.cityId
+                countryId: store.countryId,//1, //
+                storeId: store.storeId,// 1240,// 1219,// 
+                areaId: store.areaId,// 1786,//16,// 
+                cityId: store.cityId,// 17,// 
             };
 
             if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
@@ -150,12 +150,6 @@ export class AddressEntity extends BaseEntity {
                 let dataToUpdate = {
                     pickup: [address]
                 }
-                // let oldAdd: IAddressRequest.IAddress[] = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP })
-                // if (oldAdd && oldAdd.length > 0) {
-                //     if (deliveryAddress.storeId == store.storeId) {
-                //         return oldAdd[0]
-                //     }
-                // }
                 consolelog(process.cwd(), "pickupAddress", JSON.stringify(address), false)
                 let putArg: IAerospike.Put = {
                     bins: dataToUpdate,
@@ -166,7 +160,6 @@ export class AddressEntity extends BaseEntity {
                 consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
                 await Aerospike.put(putArg)
             }
-
             return address
         } catch (error) {
             consolelog(process.cwd(), "addAddress", error, false)

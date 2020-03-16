@@ -36,12 +36,16 @@ declare namespace ICommonRequest {
     }
 
      interface IError {
+        name?: string,
         statusCode: number,
         httpCode: number,
         type: string,
-        message: string
+        message: string,
         message_Ar: string
         message_En: string
+        actionHint?: string,
+        useNoonPayMessage?: boolean;
+        data?: any;
     }
     interface IActivityLogger {
         type: string,

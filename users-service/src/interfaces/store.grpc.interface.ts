@@ -15,6 +15,7 @@ declare namespace IStoreGrpcRequest {
         areaId: number,
         streetId: number,
         districtId: number,
+        cityId: number,
         mapId: number,
         menuId: number,
         name_en: string,
@@ -36,6 +37,7 @@ declare namespace IStoreGrpcRequest {
         address_en: string,
         address_ar: string,
         startTime: string,
-        endTime: string
+        endTime: string,
+        isOnline: boolean
     }
 }

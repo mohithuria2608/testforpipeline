@@ -3,7 +3,6 @@ const hash = require('object-hash');
 import * as config from 'config'
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
-import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
@@ -44,6 +43,8 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
     if (error && error.code && error.details) {
+        if (typeof JSON.parse(error.details) == 'object' && JSON.parse(error.details).hasOwnProperty("data"))
+            customError.data = JSON.parse(error.details).data
         customError.message = error.details
         customError.message_Ar = error.details
         customError.message_En = error.details
@@ -282,31 +283,13 @@ export let hashObj = function (data: any) {
     return hash(data)
 }
 
-export let cryptData = async function (stringToCrypt: string) {
-    let hmac = crypto.createHmac('sha256', config.get('cryptoSecret'));
-    let crypted = hmac.update(stringToCrypt).digest('hex');
-    return crypted
-}
 
-export let deCryptData = async function (stringToCheck: string, dbString: string) {
-    let hmac = crypto.createHmac('sha256', config.get('cryptoSecret'));
-    let crypted = hmac.update(stringToCheck).digest('hex');
-    return (dbString == crypted) ? true : false
-}
 
-export let cipherText = async function (text) {
-    let cipher = crypto.createCipher('aes-128-ctr', config.get('cryptoSecret'))
-    let crypted = cipher.update(text, 'utf8', 'hex')
-    crypted += cipher.final('hex');
-    return crypted;
-}
 
-export let deCipherText = async function (text) {
-    var decipher = crypto.createDecipher('aes-128-ctr', config.get('cryptoSecret'))
-    var dec = decipher.update(text, 'hex', 'utf8')
-    dec += decipher.final('utf8');
-    return dec;
-}
+
+
+
+
 
 export let generateOtp = async function () {
     let otp = (Math.floor(1000 + Math.random() * 9000));

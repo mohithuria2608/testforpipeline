@@ -19,7 +19,7 @@ export class UserCMSEntity extends BaseCMS {
                 "websiteId": "1",
                 "firstName": naemRes.firstName,
                 "lastName": naemRes.lastName,
-                "password": payload.password,
+                // "password": payload.password,
                 "sdmUserRef": payload.sdmUserRef ? payload.sdmUserRef : 0,
                 "sdmCorpRef": payload.sdmCorpRef ? payload.sdmCorpRef : 0
             }

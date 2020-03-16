@@ -114,7 +114,7 @@ export class UserchangeEntity extends BaseEntity {
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
             }
-            Aerospike.remove({ set: this.set, key: curUserchnage.id })
+            await Aerospike.remove({ set: this.set, key: curUserchnage.id })
             return {}
         } catch (error) {
             consolelog(process.cwd(), "validateOtpOnPhnChange", JSON.stringify(error), false)

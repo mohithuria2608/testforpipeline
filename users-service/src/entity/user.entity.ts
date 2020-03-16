@@ -3,7 +3,7 @@ import * as config from "config"
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog } from '../utils'
+import { consolelog, cryptData } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
@@ -66,7 +66,10 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        password: Joi.string(),
+        password: Joi.object().keys({
+            iv: Joi.string(),
+            encryptedData: Joi.string()
+        }),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required()
     });
@@ -166,7 +169,7 @@ export class UserEntity extends BaseEntity {
                 userUpdate['brand'] = payload.brand
             if (payload.country)
                 userUpdate['country'] = payload.country
-            if (payload.email && payload.email!="")
+            if (payload.email && payload.email != "")
                 userUpdate['email'] = payload.email
             if (payload.fullPhnNo)
                 userUpdate['fullPhnNo'] = payload.fullPhnNo
@@ -184,7 +187,7 @@ export class UserEntity extends BaseEntity {
                 userUpdate['phnVerified'] = payload.phnVerified
             if (payload.emailVerified != undefined)
                 userUpdate['emailVerified'] = payload.emailVerified
-            if (payload.name && payload.name!="")
+            if (payload.name && payload.name != "")
                 userUpdate['name'] = payload.name
             if (payload.socialKey)
                 userUpdate['socialKey'] = payload.socialKey
@@ -197,7 +200,6 @@ export class UserEntity extends BaseEntity {
             if (payload.createdAt)
                 userUpdate['createdAt'] = payload.createdAt
 
-
             if (payload.cmsAddress && payload.cmsAddress.length > 0)
                 userUpdate['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
@@ -205,11 +207,11 @@ export class UserEntity extends BaseEntity {
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
                 userUpdate['sdmAddress'] = payload.sdmAddress
 
-            userUpdate['password'] = "Password1"
             let checkUser = await this.getUser({ userId: payload.id })
             if (checkUser && checkUser.id) {
                 isCreate = false
             } else {
+                userUpdate['password'] = cryptData("Password1")
                 isCreate = true
                 userUpdate.cartId = userUpdate.id
                 this.createDefaultCart(userUpdate.id)

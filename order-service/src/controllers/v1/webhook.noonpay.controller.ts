@@ -4,6 +4,7 @@ import { consolelog } from '../../utils'
 import { paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import * as CMS from '../../cms'
+import { OrderSDME } from '../../sdm'
 
 export class WebhookNoonpayController {
 
@@ -38,6 +39,7 @@ export class WebhookNoonpayController {
                 } catch (error) {
                     isFailed = true
                     validationRemarks = error.details
+                    status = error.data
                 }
 
                 if (!isFailed && status && status.resultCode == 0 && status.transactions && status.transactions.length > 0) {
@@ -87,20 +89,25 @@ export class WebhookNoonpayController {
                     if (validationRemarks && validationRemarks != "")
                         dataToUpdateOrder['validationRemarks'] = validationRemarks
                     order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                    // CMS.TransactionCMSE.createTransaction({
-                    //     order_id: order.cmsOrderRef,
-                    //     message: status ? status.transactions[0].type : validationRemarks,
-                    //     type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
-                    //     payment_data: {
-                    //         id: status ? status.transactions[0].id.toString() : order.cmsOrderRef,
-                    //         data: status ? JSON.stringify(status) : validationRemarks
-                    //     }
-                    // })
-                    // CMS.OrderCMSE.updateOrder({
-                    //     order_id: order.cmsOrderRef,
-                    //     payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                    //     order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
-                    // })
+                    OrderSDME.cancelOrder({
+                        sdmOrderRef: order.sdmOrderRef,
+                        voidReason: 1,
+                        validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE
+                    })
+                    CMS.TransactionCMSE.createTransaction({
+                        order_id: order.cmsOrderRef,
+                        message: (status && status.transactions && status.transactions.length > 0) ? status.transactions[0].type : validationRemarks,
+                        type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                        payment_data: {
+                            id: (status && status.transactions && status.transactions.length > 0) ? status.transactions[0].id.toString() : order.cmsOrderRef,
+                            data: status ? JSON.stringify(status) : validationRemarks
+                        }
+                    })
+                    CMS.OrderCMSE.updateOrder({
+                        order_id: order.cmsOrderRef,
+                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                    })
                     redirectUrl = redirectUrl + "payment/failure"
                     console.log("redirectUrl=================>", redirectUrl)
                     return redirectUrl

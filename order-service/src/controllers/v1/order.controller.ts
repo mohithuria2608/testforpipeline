@@ -3,6 +3,8 @@ import { consolelog, hashObj, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import * as CMS from '../../cms'
+import { OrderSDME } from '../../sdm';
+
 
 export class OrderController {
 
@@ -75,7 +77,7 @@ export class OrderController {
             let dataToHash: ICartRequest.IDataToHash = {
                 items: payload.items,
                 promo: payload.couponCode ? 1 : 0,
-                updatedAt: getCurrentCart.updatedAt
+                updatedAt: payload.cartUpdatedAt
             }
             const hash = hashObj(dataToHash)
             console.log("cartUnique ================ ", getCurrentCart.cartUnique)
@@ -133,8 +135,8 @@ export class OrderController {
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
                 else {
-                    if (!getStore['isOnline'])
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    // if (!getStore.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
                 }
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
@@ -174,7 +176,7 @@ export class OrderController {
                     })
                     return { cartValidate: getCurrentCart }
                 }
-                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData, promo)
+                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData)
             }
             if (payload.paymentMethodId != Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                 let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
@@ -315,7 +317,7 @@ export class OrderController {
             } else if (sdmOrderRef && sdmOrderRef.length == 1)
                 sdmOrder = parseInt(sdmOrderRef[0])
             else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             let userData: IUserRequest.IUserData
             if (payload.cCode && payload.phnNo) {
                 userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
@@ -366,10 +368,10 @@ export class OrderController {
         try {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
                 status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
-            }, { sdmOrderRef: 1, createdAt: 1, status: 1 }, { lean: true })
+            }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
-                getPendingOrders.forEach(order => {
-                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime())
+                getPendingOrders.forEach(async order => {
+                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()) {
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,
                             language: order.language,
@@ -380,15 +382,69 @@ export class OrderController {
                                 statusChanged: false
                             }).nextPingMs
                         })
+                    }
                     else {
                         if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
-                            ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
-                                isActive: 0,
-                                status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                updatedAt: new Date().getTime(),
-                                sdmOrderStatus: -2,
+                            OrderSDME.cancelOrder({
+                                sdmOrderRef: order.sdmOrderRef,
+                                voidReason: 1,
                                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
                             })
+                            if (order.payment && order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
+                                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
+                                    isActive: 0,
+                                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                    updatedAt: new Date().getTime(),
+                                    sdmOrderStatus: -2,
+                                    validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED,
+                                }, { new: true })
+                                CMS.OrderCMSE.updateOrder({
+                                    order_id: order.cmsOrderRef,
+                                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                })
+                            } else {
+                                let dataToUpdateOrder = {
+                                    isActive: 0,
+                                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                    updatedAt: new Date().getTime(),
+                                    validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED,
+                                    sdmOrderStatus: -2,
+                                    "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
+                                }
+                                let status
+                                if (order.payment && order.payment.status && order.payment.status != Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS) {
+                                    await paymentService.reversePayment({
+                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                    })
+                                    status = await paymentService.getPaymentStatus({
+                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                        paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                    })
+                                    dataToUpdateOrder['$addToSet'] = {
+                                        transLogs: status
+                                    }
+                                }
+                                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                                CMS.OrderCMSE.updateOrder({
+                                    order_id: order.cmsOrderRef,
+                                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                })
+                                if (status) {
+                                    CMS.TransactionCMSE.createTransaction({
+                                        order_id: order.cmsOrderRef,
+                                        message: status.transactions[0].type,
+                                        type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                        payment_data: {
+                                            id: status.transactions[0].id.toString(),
+                                            data: JSON.stringify(status)
+                                        }
+                                    })
+                                }
+                            }
                         }
                     }
                 });

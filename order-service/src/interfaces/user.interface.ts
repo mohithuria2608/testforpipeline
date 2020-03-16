@@ -2,21 +2,25 @@ declare namespace IUserRequest {
 
     interface IUserData extends TempAddressArray {
         id?: string,
+        username?: string,
+        brand?: string,
+        country?: string,
+        email?: string,
+        fullPhnNo?: string,
+        cCode?: string,
+        phnNo?: string,
         sdmUserRef?: number,
         sdmCorpRef?: number,
         cmsUserRef?: number,
-        // isGuest: number,
-        name?: string,
-        cCode?: string,
-        phnNo?: string,
         phnVerified?: number,
-        email?: string,
-        profileStep?: number,
+        emailVerified?: number,
+        name?: string,
         socialKey?: string,
         medium?: string,
-        createdAt?: number,
+        profileStep?: number,
+        password?: { iv: string, encryptedData: string },
         cartId?: string,
-        password?: string,
+        createdAt?: number,
     }
 
     interface TempAddressArray {
