@@ -4,7 +4,6 @@ service LocationService {
     rpc FetchStore (IFetchStoreReq) returns (IFetchStoreRes) {}
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
     rpc SyncLocationFromCMS (ISyncLocationFromCMSReq) returns (ISyncLocationFromCMSRes) {}
-    rpc SyncStores (ISyncStoresReq) returns (ISyncStoresRes) {}
     rpc PostLocationDataToCMS (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
@@ -13,20 +12,12 @@ message IFetchStoreReq {
     required int32 storeId = 1;
 }
 
-message ISyncStoresReq {
-    optional string set = 1;
-    optional IAerospikeConfig as = 2;
-    optional int32 count = 3;
-}
 message IAerospikeConfig {
     optional bool create = 1;
     optional bool update = 2;
     optional bool reset = 3;
     optional bool get = 4;
     optional string argv = 5;
-}
-message ISyncStoresRes {
-    required bool store = 1;
 }
 
 message IFetchStoreRes {
