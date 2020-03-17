@@ -671,6 +671,7 @@ export class UserController {
                             userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
+                    userData['headers'] = headers
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
@@ -700,7 +701,8 @@ export class UserController {
 
     async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers?: ICommonRequest.IHeaders) {
         try {
-            userData['headers'] = headers
+            if (userData.headers && !headers)
+                headers = userData.headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             let updateOnSdm = false
             let updateOnCms = false
