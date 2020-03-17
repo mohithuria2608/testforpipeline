@@ -105,7 +105,7 @@ export class UserchangeEntity extends BaseEntity {
                 }
                 if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (curUserchnage.otp != payload.otp) {
+                if ((curUserchnage.otp != payload.otp) || (payload.otp == Constant.SERVER.BY_PASS_OTP)) {
                     console.log("incorrect otp => invalid otp")
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
                 }

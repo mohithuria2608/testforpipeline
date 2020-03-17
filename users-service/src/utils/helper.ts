@@ -306,7 +306,7 @@ export let deCryptData = function (text) {
     return mystr
 }
 
-export let generateOtp = async function () {
+export let generateOtp = function () {
     let otp = (Math.floor(1000 + Math.random() * 9000));
     return otp
 }

@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { formatUserData, consolelog } from '../../utils'
+import { formatUserData, consolelog, generateOtp } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import * as CMS from '../../cms';
@@ -58,6 +58,7 @@ export class GuestController {
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
+            const otp = generateOtp()
             let address
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
@@ -80,7 +81,7 @@ export class GuestController {
                 email: payload.email,
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
-                otp: Constant.SERVER.BY_PASS_OTP,
+                otp: otp,
                 cartId: userData.id,
                 otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                 otpVerified: 0,
