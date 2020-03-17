@@ -6,7 +6,7 @@ global.healthcheck = {}
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
-import { bootstrap, consolelog } from './utils'
+import { bootstrap, consolelog, deCryptData, cryptData } from './utils'
 import middleware from './middlewares'
 import route from './route'
 import { event } from './lib'
@@ -22,6 +22,12 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
+
+
+    var hw = cryptData("Some serious stuff")
+    console.log("hhhhhhhhhhhhhhhh", hw)
+    console.log("ggggggggggggggggggggg", deCryptData(hw))
+
 
     // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
 

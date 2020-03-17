@@ -111,12 +111,7 @@ message IUserData {
     optional string cartId = 15;
     required int32 sdmCorpRef = 16;
     required string fullPhnNo = 17;
-    required IPassword password = 18;
-}
-
-message IPassword {
-    required string iv = 1;
-    required string encryptedData = 2;
+    required string password = 18;
 }
 
 message IFetchAddressReq {

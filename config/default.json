@@ -187,7 +187,7 @@
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
-    "cryptoAlgo": "aes-256-cbc",
+    "cryptoAlgo": "aes-128-cbc",
     "jwtSecret": "cgfhfj",
     "jwtAlgo": "HS256",
     "sms": {

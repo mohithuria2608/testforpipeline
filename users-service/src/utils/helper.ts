@@ -290,19 +290,17 @@ export let authorizationHeaderObj = Joi.object({
 }).unknown()
 
 export let cryptData = function (text: string) {
-    let cipher = crypto.createCipheriv(config.get("cryptoAlgo"), Buffer.from(key), iv);
-    let encrypted = cipher.update(text);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+    var mykey = crypto.createCipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));
+    var mystr = mykey.update(text, 'utf8', 'hex')
+    mystr += mykey.final('hex');
+    return mystr
 }
 
 export let deCryptData = function (text) {
-    let iv = Buffer.from(text.iv, 'hex');
-    let encryptedText = Buffer.from(text.encryptedData, 'hex');
-    let decipher = crypto.createDecipheriv(config.get("cryptoAlgo"), Buffer.from(key), iv);
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted.toString();
+    var mykey = crypto.createDecipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));
+    var mystr = mykey.update(text, 'hex', 'utf8')
+    mystr += mykey.final('utf8');
+    return mystr
 }
 
 export let generateOtp = async function () {
