@@ -80,11 +80,16 @@ export default (router: Router) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IUserRequest.IAuthSocial = ctx.request.body;
-                    let res = await userController.socialAuthValidate(headers, payload);
-                    ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.SOCIAL_LOGIN, headers.language, res.response)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
+                    let res: any = await userController.socialAuthValidate(headers, payload);
+                    if (res.statusCode && res.httpCode) {
+                        ctx.status = res.httpCode;
+                        ctx.body = sendSuccess(res, headers.language, {})
+                    } else {
+                        ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken })
+                        let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.SOCIAL_LOGIN, headers.language, res.response)
+                        ctx.status = sendResponse.statusCode;
+                        ctx.body = sendResponse
+                    }
                 }
                 catch (error) {
                     throw error

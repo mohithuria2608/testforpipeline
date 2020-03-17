@@ -950,10 +950,10 @@ export const STATUS_MSG = {
                 "message_Ar": "هذا العنوان غير موجود",
                 "message_En": "This address does not exists"
             },
-            "PROFILE_SETUP_ALLREADY_COMPLETE": {
+            "PROFILE_SETUP_ALREADY_COMPLETE": {
                 "statusCode": 400,
                 "httpCode": 400,
-                "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
+                "type": "PROFILE_SETUP_ALREADY_COMPLETE",
                 "message": "Your profile is 100% complete",
                 "message_Ar": "حسابك مكتمل بنسبة %100",
                 "message_En": "Your profile is 100% complete"
@@ -981,22 +981,6 @@ export const STATUS_MSG = {
                 "message": "You have entered an incorrect OTP. Please try again",
                 "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
                 "message_En": "You have entered an incorrect OTP. Please try again"
-            },
-            "USER_PHONE_ALREADY_EXIST": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "USER_PHONE_ALREADY_EXIST",
-                "message": "This phone number is already is use",
-                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
-                "message_En": "This phone number is already is use"
-            },
-            "USER_EMAIL_ALREADY_EXIST": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "USER_ALREADY_EXIST",
-                "message": "This email is already is use",
-                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
-                "message_En": "This email is already is use"
             },
             "INVALID_ID": {
                 "statusCode": 400,
@@ -1491,6 +1475,26 @@ export const STATUS_MSG = {
                 "type": "DATA_CHANGED",
                 "message_Ar": "لقد حدثت بعض التعديلات في المعلومات، نحاول حاليًا تحديثها",
                 "message_En": "There is some update with the date. We are trying to refresh it"
+            }
+        },
+        "S215": {
+            "USER_PHONE_ALREADY_EXIST": {
+                "statusCode": 200,
+                "httpCode": 215,
+                "type": "USER_PHONE_ALREADY_EXIST",
+                "message": "This phone number is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This phone number is already is use"
+            },
+        },
+        "S216": {
+            "USER_EMAIL_ALREADY_EXIST": {
+                "statusCode": 200,
+                "httpCode": 216,
+                "type": "USER_EMAIL_ALREADY_EXIST",
+                "message": "This email is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This email is already is use"
             }
         }
     },

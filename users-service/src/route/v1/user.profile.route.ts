@@ -32,10 +32,15 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IUserRequest.ICreateProfile = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await userController.createProfile(headers, payload, auth);
-                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
+                    let res: any = await userController.createProfile(headers, payload, auth);
+                    if (res.statusCode && res.httpCode) {
+                        ctx.status = res.httpCode;
+                        ctx.body = sendSuccess(res, headers.language, {})
+                    } else {
+                        let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
+                        ctx.status = sendResponse.statusCode;
+                        ctx.body = sendResponse
+                    }
                 }
                 catch (error) {
                     throw error
