@@ -906,9 +906,9 @@ export const STATUS_MSG = {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "MIN_CART_VALUE_VOILATION",
-                "message": "Minimum order value should be 23 AED",
+                "message": "The minimum amount for an order is 23 Dhs. Please add more items to place the order",
                 "message_Ar": "الحد الأدنى للطلب يجب أن يكون 23 درهم",
-                "message_En": "Minimum order value should be 23 AED"
+                "message_En": "The minimum amount for an order is 23 Dhs. Please add more items to place the order"
             },
             "MAX_COD_CART_VALUE_VOILATION": {
                 "statusCode": 400,
