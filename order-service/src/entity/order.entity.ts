@@ -680,66 +680,67 @@ export class OrderClass extends BaseEntity {
                                     consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
                                     let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                                     console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
-                                    // if (amount[0].amount != parseFloat(sdmOrder.Total)) {
-                                    //     consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
-                                    //     recheck = false
-                                    //     OrderSDME.cancelOrder({
-                                    //         sdmOrderRef: order.sdmOrderRef,
-                                    //         voidReason: 1,
-                                    //         validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
-                                    //     })
-                                    //     if (order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
-                                    //         consolelog(process.cwd(), "order step 6:       ", sdmOrder.ValidationRemarks, true)
-                                    //         order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                    //             isActive: 0,
-                                    //             status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                    //             updatedAt: new Date().getTime(),
-                                    //             validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                    //         }, { new: true })
-                                    //         CMS.OrderCMSE.updateOrder({
-                                    //             order_id: order.cmsOrderRef,
-                                    //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
-                                    //             sdm_order_id: order.sdmOrderRef
-                                    //         })
-                                    //     } else {
-                                    //         consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
-                                    //         await paymentService.reversePayment({
-                                    //             noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                    //             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                    //         })
-                                    //         let status = await paymentService.getPaymentStatus({
-                                    //             noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                    //             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                    //             paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                    //         })
-                                    //         order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                    //             isActive: 0,
-                                    //             status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                    //             updatedAt: new Date().getTime(),
-                                    //             validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                    //             $addToSet: {
-                                    //                 transLogs: status
-                                    //             },
-                                    //             "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
-                                    //         }, { new: true })
-                                    //         CMS.TransactionCMSE.createTransaction({
-                                    //             order_id: order.cmsOrderRef,
-                                    //             message: status.transactions[0].type,
-                                    //             type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
-                                    //             payment_data: {
-                                    //                 id: status.transactions[0].id.toString(),
-                                    //                 data: JSON.stringify(status)
-                                    //             }
-                                    //         })
-                                    //         CMS.OrderCMSE.updateOrder({
-                                    //             order_id: order.cmsOrderRef,
-                                    //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
-                                    //             sdm_order_id: order.sdmOrderRef
-                                    //         })
-                                    //     }
-                                    // }
+                                    if (amount[0].amount != parseFloat(sdmOrder.Total)) {
+                                        consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
+                                        recheck = false
+                                        OrderSDME.cancelOrder({
+                                            sdmOrderRef: order.sdmOrderRef,
+                                            voidReason: 1,
+                                            validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                            language: order.language
+                                        })
+                                        if (order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
+                                            consolelog(process.cwd(), "order step 6:       ", sdmOrder.ValidationRemarks, true)
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                isActive: 0,
+                                                status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                                updatedAt: new Date().getTime(),
+                                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                            }, { new: true })
+                                            CMS.OrderCMSE.updateOrder({
+                                                order_id: order.cmsOrderRef,
+                                                payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                                order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                                sdm_order_id: order.sdmOrderRef
+                                            })
+                                        } else {
+                                            consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
+                                            await paymentService.reversePayment({
+                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                            })
+                                            let status = await paymentService.getPaymentStatus({
+                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                            })
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                                isActive: 0,
+                                                status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                                updatedAt: new Date().getTime(),
+                                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
+                                                $addToSet: {
+                                                    transLogs: status
+                                                },
+                                                "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
+                                            }, { new: true })
+                                            CMS.TransactionCMSE.createTransaction({
+                                                order_id: order.cmsOrderRef,
+                                                message: status.transactions[0].type,
+                                                type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                                payment_data: {
+                                                    id: status.transactions[0].id.toString(),
+                                                    data: JSON.stringify(status)
+                                                }
+                                            })
+                                            CMS.OrderCMSE.updateOrder({
+                                                order_id: order.cmsOrderRef,
+                                                payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                                order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                                sdm_order_id: order.sdmOrderRef
+                                            })
+                                        }
+                                    }
                                 }
                                 if (recheck && sdmOrder.ValidationRemarks &&
                                     (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
