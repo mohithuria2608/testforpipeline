@@ -52,8 +52,10 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
     if (error && error.code && error.details) {
-        if (typeof JSON.parse(error.details) == 'object' && JSON.parse(error.details).hasOwnProperty("data"))
-            customError.data = JSON.parse(error.details)
+        if (isJsonString(error.details)) {
+            if (JSON.parse(error.details).hasOwnProperty("data"))
+                customError.data = JSON.parse(error.details)
+        }
         customError.message = error.details
         customError.message_Ar = error.details
         customError.message_En = error.details
@@ -386,4 +388,13 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
             return new Error(statsObj.message)
     else
         return statsObj
+}
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }

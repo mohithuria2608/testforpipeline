@@ -212,7 +212,8 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                    sdm_order_id: order.sdmOrderRef
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
@@ -225,7 +226,8 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                    sdm_order_id: order.sdmOrderRef
                 })
                 ENTITY.CartE.resetCart(auth.id)
             }
@@ -404,7 +406,8 @@ export class OrderController {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    sdm_order_id: order.sdmOrderRef
                                 })
                             } else {
                                 let dataToUpdateOrder = {
@@ -434,7 +437,8 @@ export class OrderController {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    sdm_order_id: order.sdmOrderRef
                                 })
                                 if (status) {
                                     CMS.TransactionCMSE.createTransaction({

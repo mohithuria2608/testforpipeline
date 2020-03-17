@@ -505,6 +505,12 @@ export class OrderClass extends BaseEntity {
                     isActive: 1,
                     updatedAt: new Date().getTime()
                 }, { new: true })
+                CMS.OrderCMSE.updateOrder({
+                    order_id: order.cmsOrderRef,
+                    payment_status: "",
+                    order_status: "",
+                    sdm_order_id: order.sdmOrderRef
+                })
                 if (order && order._id) {
                     this.getSdmOrder({
                         sdmOrderRef: order.sdmOrderRef,
@@ -529,7 +535,8 @@ export class OrderClass extends BaseEntity {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                    sdm_order_id: order.sdmOrderRef
                 })
                 // send notification(sms + email) on order cancellation
                 let userData = await userService.fetchUser({ userId: payload.userId });
@@ -692,7 +699,8 @@ export class OrderClass extends BaseEntity {
                                     //         CMS.OrderCMSE.updateOrder({
                                     //             order_id: order.cmsOrderRef,
                                     //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                    //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    //             sdm_order_id: order.sdmOrderRef
                                     //         })
                                     //     } else {
                                     //         consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
@@ -727,7 +735,8 @@ export class OrderClass extends BaseEntity {
                                     //         CMS.OrderCMSE.updateOrder({
                                     //             order_id: order.cmsOrderRef,
                                     //             payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                    //             order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    //             sdm_order_id: order.sdmOrderRef
                                     //         })
                                     //     }
                                     // }
@@ -747,7 +756,8 @@ export class OrderClass extends BaseEntity {
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                        sdm_order_id: order.sdmOrderRef
                                     });
 
                                     // send notification(sms + email) on order failure
@@ -816,7 +826,8 @@ export class OrderClass extends BaseEntity {
                                                                     CMS.OrderCMSE.updateOrder({
                                                                         order_id: order.cmsOrderRef,
                                                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                                                        sdm_order_id: order.sdmOrderRef
                                                                     });
 
                                                                     // send notification(sms + email) on order failure
@@ -873,7 +884,8 @@ export class OrderClass extends BaseEntity {
                                                         CMS.OrderCMSE.updateOrder({
                                                             order_id: order.cmsOrderRef,
                                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS
+                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
+                                                            sdm_order_id: order.sdmOrderRef
                                                         })
                                                     }, 10000)
                                                 } else {
@@ -916,7 +928,8 @@ export class OrderClass extends BaseEntity {
                                                         CMS.OrderCMSE.updateOrder({
                                                             order_id: order.cmsOrderRef,
                                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS
+                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
+                                                            sdm_order_id: order.sdmOrderRef
                                                         })
                                                     }
                                                 }
@@ -942,7 +955,8 @@ export class OrderClass extends BaseEntity {
                                                 CMS.OrderCMSE.updateOrder({
                                                     order_id: order.cmsOrderRef,
                                                     payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                    order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS,
+                                                    sdm_order_id: order.sdmOrderRef
                                                 })
                                                 if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
                                                     recheck = false
@@ -959,7 +973,8 @@ export class OrderClass extends BaseEntity {
                                                     CMS.OrderCMSE.updateOrder({
                                                         order_id: order.cmsOrderRef,
                                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                        order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.CMS
+                                                        order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.CMS,
+                                                        sdm_order_id: order.sdmOrderRef
                                                     })
                                                 }
                                                 break;
@@ -978,7 +993,8 @@ export class OrderClass extends BaseEntity {
                                                 CMS.OrderCMSE.updateOrder({
                                                     order_id: order.cmsOrderRef,
                                                     payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                    order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.CMS
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.CMS,
+                                                    sdm_order_id: order.sdmOrderRef
                                                 })
                                                 break;
                                             }
@@ -997,7 +1013,8 @@ export class OrderClass extends BaseEntity {
                                                 CMS.OrderCMSE.updateOrder({
                                                     order_id: order.cmsOrderRef,
                                                     payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                                    order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
+                                                    sdm_order_id: order.sdmOrderRef
                                                 });
 
                                                 // send notification(sms + email) on order cancellation

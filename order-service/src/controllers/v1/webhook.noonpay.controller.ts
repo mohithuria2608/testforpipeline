@@ -66,7 +66,8 @@ export class WebhookNoonpayController {
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
-                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
+                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                            sdm_order_id: order.sdmOrderRef
                         })
                         redirectUrl = redirectUrl + "payment/success"
                         return redirectUrl
@@ -107,7 +108,8 @@ export class WebhookNoonpayController {
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
                         payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                        sdm_order_id: order.sdmOrderRef
                     })
                     redirectUrl = redirectUrl + "payment/failure"
                     console.log("redirectUrl=================>", redirectUrl)
