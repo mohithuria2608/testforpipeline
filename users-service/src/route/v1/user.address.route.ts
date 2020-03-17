@@ -23,10 +23,10 @@ export default (router: Router) => {
                     description: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     flatNum: Joi.string().max(12).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     tag: Joi.string().valid(
-                        Constant.DATABASE.TYPE.TAG.En.HOME,
-                        Constant.DATABASE.TYPE.TAG.En.OFFICE,
-                        Constant.DATABASE.TYPE.TAG.En.HOTEL,
-                        Constant.DATABASE.TYPE.TAG.En.OTHER
+                        Constant.DATABASE.TYPE.TAG.HOME,
+                        Constant.DATABASE.TYPE.TAG.OFFICE,
+                        Constant.DATABASE.TYPE.TAG.HOTEL,
+                        Constant.DATABASE.TYPE.TAG.OTHER
                     ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                 }
             }),

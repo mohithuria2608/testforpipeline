@@ -26,19 +26,20 @@ export class MiscController {
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
                         language: Constant.DATABASE.LANGUAGE.AR,
-                        defaultCCode: '+971',
+                        defaultCCode: Constant.SERVER.DEFAULT_CCODE,
                         phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
                         phnLength: 9,
-                        customerCare: "666666666",
-                        supportEmail: "kfc_uae@ag.com",
+                        customerCare: Constant.SERVER.CUSTOMER_CARE,
+                        supportEmail: Constant.SERVER.SUPPORT_EMAIL,
                         cashondelivery: 0,
                         minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
                 constants: {
-                    addressTag: Constant.DATABASE.TYPE.TAG[headers.language],
-                    cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT.FRONTEND_TYPE[headers.language]
+                    cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT.FRONTEND_TYPE[headers.language],
+                    orderStatus: Constant.DATABASE.STATUS.ORDER.FRONTEND_TEXT[headers.language],
+
                 }
             }
         } catch (error) {

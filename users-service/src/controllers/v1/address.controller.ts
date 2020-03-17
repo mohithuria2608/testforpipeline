@@ -85,7 +85,7 @@ export class AddressController {
                     payload['bldgName'] = store[0].location.description
                     payload['description'] = store[0].location.description
                     payload['flatNum'] = store[0].location.description
-                    payload['tag'] = Constant.DATABASE.TYPE.TAG.En.OTHER
+                    payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             } else if (payload.lat && payload.lng) {
@@ -151,7 +151,7 @@ export class AddressController {
                     payload['bldgName'] = ""
                     payload['description'] = ""
                     payload['flatNum'] = ""
-                    payload['tag'] = Constant.DATABASE.TYPE.TAG.En.OTHER
+                    payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             } else if (payload.lat && payload.lng) {

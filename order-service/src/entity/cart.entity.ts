@@ -181,10 +181,10 @@ export class CartClass extends BaseEntity {
             description: Joi.string(),
             flatNum: Joi.string(),
             tag: Joi.string().valid(
-                Constant.DATABASE.TYPE.TAG.En.HOME,
-                Constant.DATABASE.TYPE.TAG.En.OFFICE,
-                Constant.DATABASE.TYPE.TAG.En.HOTEL,
-                Constant.DATABASE.TYPE.TAG.En.OTHER),
+                Constant.DATABASE.TYPE.TAG.HOME,
+                Constant.DATABASE.TYPE.TAG.OFFICE,
+                Constant.DATABASE.TYPE.TAG.HOTEL,
+                Constant.DATABASE.TYPE.TAG.OTHER),
             addressType: Joi.string().valid(
                 Constant.DATABASE.TYPE.ADDRESS.PICKUP,
                 Constant.DATABASE.TYPE.ADDRESS.DELIVERY),

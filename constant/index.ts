@@ -127,6 +127,9 @@ export const SERVER = {
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
     AUTH_MECH: "Bearer",
     ADDR_SHOW_TIME: 3,//hr
+    CUSTOMER_CARE: "666666666",
+    SUPPORT_EMAIL: "kfc_uae@ag.com",
+    DEFAULT_CCODE: "+971"
 };
 
 export const DATABASE = {
@@ -452,18 +455,10 @@ export const DATABASE = {
         },
 
         TAG: {
-            En: {
-                HOME: "HOME",
-                OFFICE: "OFFICE",
-                HOTEL: "HOTEL",
-                OTHER: "OTHER"
-            },
-            Ar: {
-                HOME: "HOME Ar",
-                OFFICE: "OFFICE Ar",
-                HOTEL: "HOTEL Ar",
-                OTHER: "OTHER Ar"
-            }
+            HOME: "HOME",
+            OFFICE: "OFFICE",
+            HOTEL: "HOTEL",
+            OTHER: "OTHER"
         },
 
         ADDRESS: {
@@ -575,6 +570,84 @@ export const DATABASE = {
 
     STATUS: {
         ORDER: {
+            FRONTEND_TEXT: {
+                En: [
+                    {
+                        name: "PENDING",
+                        value: "Pending"
+                    },
+                    {
+                        name: "CONFIRMED",
+                        value: "Confirmed"
+                    },
+                    {
+                        name: "BEING_PREPARED",
+                        value: "Being prepared"
+                    },
+                    {
+                        name: "READY",
+                        value: "Ready"
+                    },
+                    {
+                        name: "ON_THE_WAY",
+                        value: "On the way"
+                    },
+                    {
+                        name: "DELIVERED",
+                        value: "Delivered"
+                    },
+                    {
+                        name: "CLOSED",
+                        value: "Closed"
+                    },
+                    {
+                        name: "CANCELED",
+                        value: "Canceled"
+                    },
+                    {
+                        name: "FAILURE",
+                        value: "Failure"
+                    }
+                ],
+                Ar: [
+                    {
+                        name: "PENDING",
+                        value: "Pending ar"
+                    },
+                    {
+                        name: "CONFIRMED",
+                        value: "Confirmed ar"
+                    },
+                    {
+                        name: "BEING_PREPARED",
+                        value: "Being prepared ar"
+                    },
+                    {
+                        name: "READY",
+                        value: "Ready ar"
+                    },
+                    {
+                        name: "ON_THE_WAY",
+                        value: "On the way ar"
+                    },
+                    {
+                        name: "DELIVERED",
+                        value: "Delivered ar"
+                    },
+                    {
+                        name: "CLOSED",
+                        value: "Closed ar"
+                    },
+                    {
+                        name: "CANCELED",
+                        value: "Canceled ar"
+                    },
+                    {
+                        name: "FAILURE",
+                        value: "Failure ar"
+                    }
+                ]
+            },
             CART: {
                 AS: "CART",
                 CMS: "",

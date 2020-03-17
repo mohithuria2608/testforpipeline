@@ -24,10 +24,10 @@ export class AddressEntity extends BaseEntity {
         bldgName: Joi.string(),
         flatNum: Joi.string(),
         tag: Joi.string().valid(
-            Constant.DATABASE.TYPE.TAG.En.HOME,
-            Constant.DATABASE.TYPE.TAG.En.OFFICE,
-            Constant.DATABASE.TYPE.TAG.En.HOTEL,
-            Constant.DATABASE.TYPE.TAG.En.OTHER),
+            Constant.DATABASE.TYPE.TAG.HOME,
+            Constant.DATABASE.TYPE.TAG.OFFICE,
+            Constant.DATABASE.TYPE.TAG.HOTEL,
+            Constant.DATABASE.TYPE.TAG.OTHER),
         addressType: Joi.string().valid(
             Constant.DATABASE.TYPE.ADDRESS.PICKUP,
             Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
@@ -454,7 +454,7 @@ export class AddressEntity extends BaseEntity {
                                 bldgName: sdmAddObj.ADDR_BLDGNAME,
                                 description: sdmAddObj.ADDR_DESC,
                                 flatNum: sdmAddObj.ADDR_FLATNUM,
-                                tag: Constant.DATABASE.TYPE.TAG.En.OTHER,
+                                tag: Constant.DATABASE.TYPE.TAG.OTHER,
                                 sdmAddressRef: parseInt(sdmAddObj.ADDR_ID)
                             }
                             let addressData = await this.addAddress(headers, userData, bin, addressPayload, store[0])
