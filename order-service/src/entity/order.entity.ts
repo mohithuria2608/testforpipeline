@@ -661,7 +661,7 @@ export class OrderClass extends BaseEntity {
                         consolelog(process.cwd(), "order step 2:       ", order.sdmOrderStatus, true)
                         if (order.sdmOrderRef && order.sdmOrderRef != 0) {
                             consolelog(process.cwd(), "order step 3:       ", order.sdmOrderStatus, true)
-                            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef })
+                            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language })
                             console.log(process.cwd(), "SDM order status", typeof sdmOrder.Status, parseInt(sdmOrder.Status), true)
                             if (sdmOrder.Status && typeof sdmOrder.Status) {
                                 // if (order.sdmOrderStatus != parseInt(sdmOrder.Status)) {
@@ -789,7 +789,11 @@ export class OrderClass extends BaseEntity {
                                                                 /**
                                                                 * @description : add payment object to sdm
                                                                 */
-                                                                let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({ sdmOrderRef: order.sdmOrderRef, transaction: order.transLogs[1] })
+                                                                let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({
+                                                                    sdmOrderRef: order.sdmOrderRef,
+                                                                    transaction: order.transLogs[1],
+                                                                    language: order.language
+                                                                })
                                                                 if (paymentObjAdded) {
                                                                     consolelog(process.cwd(), "order step 18 :       ", parseInt(sdmOrder.Status), true)
                                                                     order = await this.updateOneEntityMdb({ _id: order._id }, {

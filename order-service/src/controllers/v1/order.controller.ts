@@ -121,11 +121,13 @@ export class OrderController {
                 else {
                     if (!getAddress.cmsAddressRef || getAddress.cmsAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
+                        userData['headers'] = headers
                         await userService.creatAddressOnCms(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                     }
                     if (!getAddress.sdmAddressRef || getAddress.sdmAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
+                        userData['headers'] = headers
                         await userService.creatAddressOnSdm(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                     }
@@ -388,7 +390,8 @@ export class OrderController {
                             OrderSDME.cancelOrder({
                                 sdmOrderRef: order.sdmOrderRef,
                                 voidReason: 1,
-                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED,
+                                language: order.language
                             })
                             if (order.payment && order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {

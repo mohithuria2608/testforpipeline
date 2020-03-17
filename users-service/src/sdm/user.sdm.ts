@@ -22,7 +22,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "RegisterCustomer",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: "En",
+                    language: payload.headers.language ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_EMAIL: payload.email,
@@ -110,7 +110,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "UpdateCustomer",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: "En",
+                    language: payload.headers.language ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_CORPID: payload.sdmCorpRef,
@@ -176,7 +176,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "UpdateCustomerToken",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: "En",
+                    language: payload.headers.language ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     customerID: payload.sdmUserRef,
                     token: payload.socialKey
                 }
@@ -225,7 +225,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "GetCustomerByEmail",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: "En",
+                    language: payload.headers.language ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     email: payload.email,
                     conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }

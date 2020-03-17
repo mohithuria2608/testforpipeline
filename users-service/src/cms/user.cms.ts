@@ -46,7 +46,7 @@ export class UserCMSEntity extends BaseCMS {
         }
     }
 
-    async updateCustomerOnCms(payload: IUserRequest.IUserData): Promise<any> {
+    async updateCustomerOnCms( payload: IUserRequest.IUserData): Promise<any> {
         try {
             let formObj: IUserCMSRequest.IUpdateUser = {
                 "customerId": payload.cmsUserRef,

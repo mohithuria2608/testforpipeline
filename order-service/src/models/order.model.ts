@@ -113,10 +113,10 @@ const orderSchema = new Schema({
         cmsAddressRef: { type: Number, default: 0 },
         tag: {
             type: String, enaum: [
-                Constant.DATABASE.TYPE.TAG.HOME,
-                Constant.DATABASE.TYPE.TAG.OFFICE,
-                Constant.DATABASE.TYPE.TAG.HOTEL,
-                Constant.DATABASE.TYPE.TAG.OTHER]
+                Constant.DATABASE.TYPE.TAG.En.HOME,
+                Constant.DATABASE.TYPE.TAG.En.OFFICE,
+                Constant.DATABASE.TYPE.TAG.En.HOTEL,
+                Constant.DATABASE.TYPE.TAG.En.OTHER]
         },
         addressType: {
             type: String, enaum: [

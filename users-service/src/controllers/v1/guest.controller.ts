@@ -151,7 +151,7 @@ export class GuestController {
                         } else {
                             console.log('STEP : 7               MS : P, CMS :, ')
                             userchangePayload['chngEmailCms'] = 1
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                 console.log('STEP : 8               MS : P, CMS :, SDM : E    different user')
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
@@ -224,7 +224,7 @@ export class GuestController {
                         let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                         if (cmsUserByPhone && cmsUserByPhone.customerId) {
                             console.log('STEP : 20               MS :  , CMS : P')
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                 console.log('STEP : 21               MS :  , CMS : P , SDM : E  different user')
                                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
@@ -241,7 +241,7 @@ export class GuestController {
                             }
                         } else {
                             console.log('STEP : 23               MS :  , CMS :  , SDM : ')
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                 console.log('STEP : 23               MS :  , CMS :  , SDM : E')
                                 userchangePayload['id'] = auth.id

@@ -92,7 +92,8 @@ export class WebhookNoonpayController {
                     OrderSDME.cancelOrder({
                         sdmOrderRef: order.sdmOrderRef,
                         voidReason: 1,
-                        validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE
+                        validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE,
+                        language: order.language
                     })
                     CMS.TransactionCMSE.createTransaction({
                         order_id: order.cmsOrderRef,

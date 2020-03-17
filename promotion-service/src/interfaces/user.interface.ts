@@ -1,22 +1,33 @@
 declare namespace IUserRequest {
 
-    interface IUserData {
-        id: string,
-        sdmUserRef: number,
-        sdmCorpRef: number,
-        cmsUserRef: number,
-        // isGuest: number,
-        name: string,
-        cCode: string,
-        phnNo: string,
-        phnVerified: number,
-        email: string,
-        profileStep: number,
-        socialKey: string,
-        medium: string,
-        createdAt: number,
-        cartId: string,
-        password: string,
+    interface IUserData extends TempAddressArray {
+        id?: string,
+        username?: string,
+        brand?: string,
+        country?: string,
+        email?: string,
+        fullPhnNo?: string,
+        cCode?: string,
+        phnNo?: string,
+        sdmUserRef?: number,
+        sdmCorpRef?: number,
+        cmsUserRef?: number,
+        phnVerified?: number,
+        emailVerified?: number,
+        name?: string,
+        socialKey?: string,
+        medium?: string,
+        profileStep?: number,
+        password?: { iv: string, encryptedData: string },
+        cartId?: string,
+        createdAt?: number,
+        headers?: ICommonRequest.IHeaders
+    }
+
+    interface TempAddressArray {
+        asAddress?: any,
+        cmsAddress?: any,
+        sdmAddress?: any
     }
 
     interface IFetchUser {

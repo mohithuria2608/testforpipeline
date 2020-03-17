@@ -452,10 +452,18 @@ export const DATABASE = {
         },
 
         TAG: {
-            HOME: "HOME",
-            OFFICE: "OFFICE",
-            HOTEL: "HOTEL",
-            OTHER: "OTHER"
+            En: {
+                HOME: "HOME",
+                OFFICE: "OFFICE",
+                HOTEL: "HOTEL",
+                OTHER: "OTHER"
+            },
+            Ar: {
+                HOME: "HOME Ar",
+                OFFICE: "OFFICE Ar",
+                HOTEL: "HOTEL Ar",
+                OTHER: "OTHER Ar"
+            }
         },
 
         ADDRESS: {
@@ -498,6 +506,54 @@ export const DATABASE = {
             SHIPPING: "SHIPPING",
             TOTAL: "TOTAL",
         },
+
+        CART_AMOUNT_FN: (language: string, type: string) => {
+            let obj = {
+                SUB_TOTAL: {
+                    TYPE: "SUB_TOTAL",
+                    CODE: "SUB_TOTAL",
+                    NAME: {
+                        En: "Sub Total",
+                        Ar: "Sub Total ar",
+                    }
+                },
+                DISCOUNT: {
+                    TYPE: "DISCOUNT",
+                    CODE: "DISCOUNT",
+                    NAME: {
+                        En: "Discount",
+                        Ar: "Discount in ar",
+                    }
+                },
+                TAX: {
+                    TYPE: "TAX",
+                    CODE: "TAX",
+                    NAME: {
+                        En: "VAT",
+                        Ar: "VAT ar",
+                    }
+                },
+                SHIPPING: {
+                    TYPE: "SHIPPING",
+                    CODE: "SHIPPING",
+                    NAME: {
+                        En: "Delivery",
+                        Ar: "Delivery ar",
+                    }
+                },
+                TOTAL: {
+                    TYPE: "TOTAL",
+                    CODE: "TOTAL",
+                    NAME: {
+                        En: "Total",
+                        Ar: "Total ar",
+                    }
+                },
+            }
+            obj[type].NAME = obj[type].NAME[language]
+            return obj[type]
+        },
+
         FREQ_TYPE: {
             GET: "GET",
             GET_ONCE: "GET_ONCE",
