@@ -225,7 +225,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "GetCustomerByEmail",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: payload.headers.language ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    language: payload.language ? payload.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     email: payload.email,
                     conceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 }
