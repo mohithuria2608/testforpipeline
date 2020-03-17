@@ -28,5 +28,5 @@ echo "$template" | kubectl apply -f -
   
 kubectl apply -f ./Deployment_cicd/hpa.yaml 
 
-kubectl apply -f ./Deployment_cicd/ingress.yaml
+#kubectl apply -f ./Deployment_cicd/ingress.yaml
 
