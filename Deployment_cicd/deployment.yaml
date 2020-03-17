@@ -536,11 +536,11 @@ spec:
           name: grpc-location
         resources:
           limits:
-            cpu: "200m"
-            memory: "250Mi"
+            cpu: "1000m"
+            memory: "1000Mi"
           requests:
-            cpu: "200m"
-            memory: "250Mi"
+            cpu: "1000m"
+            memory: "1000Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
