@@ -27,7 +27,7 @@ export class PaymentController {
                     return [
                         {
                             "id": 1,
-                            "name": "Card",
+                            "name": Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD,
                             "image": "",
                             default: 1
                         }
@@ -38,13 +38,13 @@ export class PaymentController {
                     return [
                         {
                             "id": 1,
-                            "name": "Card",
+                            "name": Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD,
                             "image": "",
                             default: 0
                         },
                         {
                             "id": 0,
-                            "name": "Cash On Delivery",
+                            "name": Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD,
                             "image": "",
                             default: 1
                         }
