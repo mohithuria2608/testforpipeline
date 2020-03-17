@@ -399,8 +399,32 @@ export const DATABASE = {
         },
 
         PAYMENT_METHOD: {
-            CARD: "Card",
-            COD: "Cash On Delivery"
+            FRONTEND_TEXT: {
+                En: [
+                    {
+                        name: "CARD",
+                        value: "Card"
+                    },
+                    {
+                        name: "COD",
+                        value: "Cash On Delivery"
+                    }
+                ],
+                Ar: [
+                    {
+                        name: "CARD",
+                        value: "Card ar"
+                    },
+                    {
+                        name: "COD",
+                        value: "Cash On Delivery ar"
+                    }
+                ]
+            },
+            TYPE: {
+                CARD: "CARD",
+                COD: "COD"
+            }
         },
 
         PAYMENT_METHOD_ID: {

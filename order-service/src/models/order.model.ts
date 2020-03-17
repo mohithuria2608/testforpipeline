@@ -152,8 +152,8 @@ const orderSchema = new Schema({
         amount: { type: Number, default: 0 },
         name: {
             type: String, enum: [
-                Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD,
-                Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
+                Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD,
+                Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
             ]
         },
         status: {

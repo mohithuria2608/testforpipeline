@@ -197,7 +197,7 @@ export class OrderController {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: totalAmount[0].amount,
-                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
                     }
                 })
                 CMS.TransactionCMSE.createTransaction({
@@ -219,7 +219,7 @@ export class OrderController {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: totalAmount[0].amount,
-                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
                     }
                 })
                 CMS.OrderCMSE.updateOrder({
