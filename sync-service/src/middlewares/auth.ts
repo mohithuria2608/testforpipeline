@@ -14,11 +14,12 @@ export default (opts?): Middleware => {
             if (!authorization) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
-            const [tokenType, token] = authorization.split(/\s+/);
+            const token = authorization;
+            // const [tokenType, token] = authorization.split(/\s+/);
 
-            if (!token || tokenType.toLowerCase() !== settings.toLowerCase()) {
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
-            }
+            // if (!token || tokenType.toLowerCase() !== settings.toLowerCase()) {
+            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
+            // }
 
             let tokenData: ICommonRequest.AuthorizationObj = await authService.verifyToken({ token: token })
 
