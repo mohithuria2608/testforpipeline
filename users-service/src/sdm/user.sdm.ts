@@ -17,7 +17,7 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
-            console.log("deCryptData(payload.password),", payload.password)
+            console.log("deCryptData(payload.password)1,", payload.password)
 
             console.log("deCryptData(payload.password),", deCryptData(payload.password))
             let naemRes = nameConstructor(payload.name)
