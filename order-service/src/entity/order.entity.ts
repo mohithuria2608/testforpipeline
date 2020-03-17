@@ -541,7 +541,7 @@ export class OrderClass extends BaseEntity {
                     emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
                     emailDestination: userData.email,
                     language: payload.language,
-                    payload: JSON.stringify({ msg: order, email: order })
+                    payload: JSON.stringify({ msg: order, email: { order } })
                 });
 
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
@@ -760,7 +760,7 @@ export class OrderClass extends BaseEntity {
                                         emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
                                         emailDestination: userData.email,
                                         language: payload.language,
-                                        payload: JSON.stringify({ msg: order, email: order })
+                                        payload: JSON.stringify({ msg: order, email: { order } })
                                     });
                                 }
                                 if (recheck && sdmOrder && sdmOrder.OrderID) {
@@ -825,7 +825,7 @@ export class OrderClass extends BaseEntity {
                                                                         emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
                                                                         emailDestination: userData.email,
                                                                         language: payload.language,
-                                                                        payload: JSON.stringify({ msg: order, email: order })
+                                                                        payload: JSON.stringify({ msg: order, email: { order } })
                                                                     });
                                                                 }
                                                             }
@@ -847,7 +847,7 @@ export class OrderClass extends BaseEntity {
                                                     msgDestination: `${userData.cCode}${userData.phnNo}`,
                                                     emailDestination: userData.email,
                                                     language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: order })
+                                                    payload: JSON.stringify({ msg: order, email: { order } })
                                                 });
                                                 break;
                                             }
@@ -917,16 +917,21 @@ export class OrderClass extends BaseEntity {
                                                     }
                                                 }
                                                 // send notification(sms + email) on order confirmaton
-                                                // let userData = await userService.fetchUser({ userId: order.userId });
-                                                // notificationService.sendNotification({
-                                                //     toSendMsg: true,
-                                                //     msgCode: (order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY)
-                                                //         ? Constant.NOTIFICATION_CODE.ORDER.DELIVERY_CONFIRM
-                                                //         : Constant.NOTIFICATION_CODE.ORDER.PICKUP_CONFIRM,
-                                                //     msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                //     language: payload.language,
-                                                //     payload: JSON.stringify({ email: order })
-                                                // });
+                                                let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                                                let userData = await userService.fetchUser({ userId: order.userId });
+                                                notificationService.sendNotification({
+                                                    toSendMsg: true,
+                                                    toSendEmail: true,
+                                                    msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                                                        : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                                                    emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                                                        : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
+                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                    emailDestination: userData.email,
+                                                    language: payload.language,
+                                                    payload: JSON.stringify({ msg: order, email: { order } })
+                                                });
+
                                                 break;
                                             }
                                             case 8: {
@@ -1006,7 +1011,7 @@ export class OrderClass extends BaseEntity {
                                                     msgDestination: `${userData.cCode}${userData.phnNo}`,
                                                     emailDestination: userData.email,
                                                     language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: order })
+                                                    payload: JSON.stringify({ msg: order, email: { order } })
                                                 });
                                                 break;
                                             }
@@ -1032,16 +1037,6 @@ export class OrderClass extends BaseEntity {
                                 //             validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
                                 //         });
 
-                                //         // send notification(sms + email) on order failure
-                                //         let userData = await userService.fetchUser({ userId: order.userId });
-                                //         notificationService.sendNotification({
-                                //             toSendMsg: true,
-                                //             msgCode: Constant.NOTIFICATION_CODE.ORDER.ORDER_FAIL,
-                                //             msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                //             language: payload.language
-                                //         });
-                                //     }
-                                // }
                                 let userData = await userService.fetchUser({ userId: order.userId });
                                 notificationService.sendNotification({
                                     toSendMsg: true,
@@ -1051,7 +1046,7 @@ export class OrderClass extends BaseEntity {
                                     emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
                                     emailDestination: userData.email,
                                     language: payload.language,
-                                    payload: JSON.stringify({ msg: order, email: order })
+                                    payload: JSON.stringify({ msg: order, email: { order } })
                                 });
                                 if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO &&
                                     (order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) < new Date().getTime()) {

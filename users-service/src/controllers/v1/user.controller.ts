@@ -213,7 +213,7 @@ export class UserController {
                         emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
                         emailDestination: userData.email,
                         language: headers.language,
-                        payload: JSON.stringify({ email: { user: userData, meta: {} } })
+                        payload: JSON.stringify({ email: { user: userData } })
                     });
                 }
 
@@ -683,7 +683,7 @@ export class UserController {
                         emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
                         emailDestination: userData.email,
                         language: headers.language,
-                        payload: JSON.stringify({ email: { user: userData, meta: {} } })
+                        payload: JSON.stringify({ email: { user: userData } })
                     });
                     return formatUserData(userData, headers, auth.isGuest)
                 }

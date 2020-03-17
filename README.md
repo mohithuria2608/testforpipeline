@@ -53,6 +53,13 @@ Hands-on Microservices with TypeScript 3
 # AEROSPIKE DB
 * ssh aerospikeusr@40.123.212.40
 * GM2nGDQkN5yMdPZs
+
+# DEV MONGODB
+* 54.176.239.44:2798
+* americana_db
+* americana_dbusr
+* 96fMUpk2PGzbu8Hn
+
  
 # pm2 -qa environment SSH Credentials
 * ssh americana-qa@40.123.196.7

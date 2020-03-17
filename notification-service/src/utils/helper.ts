@@ -379,14 +379,62 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 export let utfConverter = function (input: string) {
     var encoded = utf8.encode(input);
     var output = "";
+    var bytes = [];
+    var codePoints = [];
 
     function convertIntoUtf16(utf16) {
         if (utf16.length == 1) return utf16[0].toString(16).padStart(4, '0');
         else return utf16[0].toString(16).padStart(4, '0') + utf16[1].toString(16).padStart(4, '0');
     }
 
-    for (var i = 0; i < encoded.length; i++) {
-        var byte = encoded[i].charCodeAt(0);
+    function bin(x) {
+        return parseInt(x, 2);
+    }
+
+    for (let j = 0; j < encoded.length; j++) {
+        bytes.push(encoded[j].charCodeAt(0));
+    }
+
+    for (let i = 0; i < bytes.length;) {
+        let byte = bytes[i];
+        if ((byte & bin("11110000")) == bin("11110000")) {
+            var byte4 = bytes[i];
+            var byte3 = bytes[i + 1];
+            var byte2 = bytes[i + 2];
+            var byte1 = bytes[i + 3];
+
+            codePoints.push(((byte4 & bin("00000111")) << 18) |
+                ((byte3 & bin("00111111")) << 12) |
+                ((byte2 & bin("00111111")) << 6) |
+                (byte1 & bin("00111111")));
+            i += 4;
+        }
+        else if ((byte & bin("11100000")) == bin("11100000")) {
+            var byte3 = bytes[i];
+            var byte2 = bytes[i + 1];
+            var byte1 = bytes[i + 2];
+            codePoints.push(((byte3 & bin("00001111")) << 12) |
+                ((byte2 & bin("00111111")) << 6) |
+                (byte1 & bin("00111111")));
+            i += 3;
+        }
+        else if ((byte & bin("11000000")) == bin("11000000")) {
+            var byte2 = bytes[i];
+            var byte1 = bytes[i + 1];
+            codePoints.push(((byte2 & bin("00011111")) << 6) |
+                (byte1 & bin("00111111")));
+            i += 2;
+        }
+        else if ((byte & 0x80) == 0) {
+            codePoints.push(byte); i++;
+        }
+        else {
+            throw new Error("Unrecognized byte at position " + (i + 1));
+        }
+    }
+
+    for (let i = 0; i < codePoints.length; i++) {
+        var byte = codePoints[i];
         if (byte <= 0xffff) output += convertIntoUtf16([byte]);
         else {
             let minus10000 = byte - 0x10000;

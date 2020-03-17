@@ -2,15 +2,13 @@ import * as ejs from "ejs";
 import { emailLib } from "../lib";
 
 export let bootstrap = async function (server) {
-
-    // ejs.renderFile(`${__dirname}/../../templates/user_welcome_email.ejs`, {}, {}, function (err, emailer) {
-    //     if (err) console.log(err);
-    //     emailLib.sendEmail({
-    //         message: emailer,
-    //         destination: 'abhishek.pathak@appinventiv.com',
-    //         subject: 'Test EJS Message'
-    //     });
-    // });
+    // console.log(__dirname);
+    // ejs.renderFile(`${__dirname}/../../templates/En/order_cancel_email.ejs`, { user: {}, meta: {} }, {}, function (err, emailer) {
+    //     if (err) console.log("ERRROR -> ", err);
+    //     else {
+    //         fs.writeFileSync('welcome.html', emailer, {});
+    //     }
+    // })
 
     return {}
 }
