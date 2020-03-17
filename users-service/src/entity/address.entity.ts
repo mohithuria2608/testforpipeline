@@ -258,7 +258,7 @@ export class AddressEntity extends BaseEntity {
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                language: userData.headers.language ? userData.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                language: (userData.headers && userData.headers.language) ? userData.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
                     ADDR_AREAID: 1786,//  16
