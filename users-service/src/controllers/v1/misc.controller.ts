@@ -37,7 +37,7 @@ export class MiscController {
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
                 constants: {
-                    cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT.FRONTEND_TYPE[headers.language],
+                    cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT.FRONTEND_TEXT[headers.language],
                     orderStatus: Constant.DATABASE.STATUS.ORDER.FRONTEND_TEXT[headers.language],
                     paymentMethod: Constant.DATABASE.TYPE.PAYMENT_METHOD.FRONTEND_TEXT[headers.language]
                 }

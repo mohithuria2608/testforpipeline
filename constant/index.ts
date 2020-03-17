@@ -413,11 +413,11 @@ export const DATABASE = {
                 Ar: [
                     {
                         name: "CARD",
-                        value: "Card ar"
+                        value: "بطاقة إئتمان"
                     },
                     {
                         name: "COD",
-                        value: "Cash On Delivery ar"
+                        value: "المبلغ المحدد نقداً"
                     }
                 ]
             },
@@ -526,7 +526,7 @@ export const DATABASE = {
                 SHIPPING: "SHIPPING",
                 TOTAL: "TOTAL",
             },
-            FRONTEND_TYPE: {
+            FRONTEND_TEXT: {
                 En: [
                     {
                         name: "SUB_TOTAL",
@@ -552,7 +552,7 @@ export const DATABASE = {
                 Ar: [
                     {
                         name: "SUB_TOTAL",
-                        value: "Sub Total ar"
+                        value: "المجموع الفرعي"
                     },
                     {
                         name: "DISCOUNT",
@@ -564,11 +564,11 @@ export const DATABASE = {
                     },
                     {
                         name: "SHIPPING",
-                        value: "Delivery ar"
+                        value: "رسوم النقل"
                     },
                     {
                         name: "TOTAL",
-                        value: "Total ar"
+                        value: "المجموع"
                     }
                 ]
             }
