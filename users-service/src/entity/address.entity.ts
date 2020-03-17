@@ -388,7 +388,7 @@ export class AddressEntity extends BaseEntity {
     * */
     async updateAddressOnCms(userData: IUserRequest.IUserData) {
         try {
-            consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData.asAddress), false)
+            consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData), false)
             let res = await CMS.AddressCMSE.updateAddresssOnCms(userData)
             return {}
         } catch (error) {

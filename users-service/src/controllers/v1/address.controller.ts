@@ -38,6 +38,7 @@ export class AddressController {
                 let data = JSON.parse(payload.sdm.argv)
                 let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
                 userData['asAddress'] = data.asAddress
+                userData['headers'] = data.headers
                 if (payload.sdm.create) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.addAddressOnSdm(userData)
