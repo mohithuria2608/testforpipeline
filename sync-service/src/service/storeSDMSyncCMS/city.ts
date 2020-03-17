@@ -19,6 +19,7 @@ export default async function () {
             let cityData = {
                 sdmCityId: parseInt(city.CTY_ID),
                 countryId: 'AE',
+                sdmCountryId: parseInt(city.CTY_CNTID),
                 cityName: city.CTY_NAME,
                 cityNameAr: city.CTY_NAMEUN
             };
