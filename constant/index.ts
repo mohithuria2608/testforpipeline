@@ -39,6 +39,7 @@ export enum SET_NAME {
     SYNC_STORE = "sync_store",
     SYNC_CITY = "sync_city",
     SYNC_AREA = "sync_area",
+    SYNC_WEB_AREA = "sync_web_area",
     SYNC_COUNTRY = "sync_country",
     LOGGER = "logger",
     APP_VERSION = "appversion",

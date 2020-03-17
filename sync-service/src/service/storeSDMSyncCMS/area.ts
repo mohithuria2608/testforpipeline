@@ -1,77 +1,79 @@
-/** area mapping */
+/** web area sequence mapping */
 
 import { Aerospike } from "../../aerospike";
 import * as Constant from "../../constant";
-import { SoapManager, generateRandomString, commonParams } from "../../utils";
+import { SoapManager, commonParams } from "../../utils";
 
 export default async function () {
 
+    let cities = await Aerospike.scan({ set: Constant.SET_NAME.SYNC_CITY });
+
     let params = { ...commonParams },
         listData: any = await SoapManager.requestData('GetStoresAreaList', params),
-        list = await listData.GetStoresAreaListResult.CC_STORE_AREA;
+        storeAreaList = await listData.GetStoresAreaListResult.CC_STORE_AREA;
 
     // reset the sync collection
-    await Aerospike.truncate({ set: 'sync_area' });
-
-    let batchSize = 50;
-    let totalRecords = list.length;
-    let batches: number[] = [];
-
-    while (totalRecords > 0) {
-        batches.push(totalRecords >= batchSize ? batchSize : totalRecords);
-        totalRecords -= batchSize;
-    }
-    await batchProcess(list, batches);
-    console.log("\t# Area Sequence Complete");
-}
-
-// gets the area detail
-async function getAreaDetail(areaId: number, storeId: number) {
-
-    let params = { ...commonParams, areaID: areaId },
-        singleData: any = await SoapManager.requestData('GetArea', params),
-        single = await singleData.GetAreaResult;
-
-    if (single && single.AREA_CITYID) {
-        return {
-            success: true,
-            data: {
-                countryId: 'AE',
-                cityId: parseInt(single.AREA_CITYID),
-                areaName: single.AREA_NAME || "",
-                areaNameAr: single.AREA_NAMEUN || "",
-                districtId: parseInt(single.AREA_DEF_DISTRICTID),
-                streetId: parseInt(single.AREA_DEF_STREETID),
-                sdmAreaId: parseInt(single.AREA_ID),
-                provinceId: parseInt(single.AREA_PROVINCEID),
-                sdmStoreId: storeId,
-                areaPinCode: 1,
-                delRefCode: 1,
-                validAreaType: 1
-            }
-        };
-    } else return { success: false };
-}
-
-// batch processing of area list
-async function batchProcess(list, batches) {
-    let start = 0;
-    for (let i = 0; i < batches.length; i++) {
-        let areaResolvers: any = [];
-        for (let j = start; j < start + batches[i]; j++) {
-            areaResolvers.push(getAreaDetail(parseInt(list[j].STR_AREAID), parseInt(list[j].STR_ID)));
+    await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_WEB_AREA });
+    await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_AREA });
+    
+    for (let storeArea of storeAreaList) {
+        let storeAreaData = {
+            sdmAreaId: parseInt(storeArea.STR_AREAID),
+            sdmStoreId: parseInt(storeArea.STR_ID)
         }
-        let areaList: any = await Promise.all(areaResolvers);
-        for (let area of areaList) {
-            if (area.success) {
-                await Aerospike.put({
-                    bins: area.data,
-                    set: Constant.SET_NAME.SYNC_AREA,
-                    key: area.data.sdmAreaId,
-                    createOrReplace: true
+        await Aerospike.put({
+            bins: storeAreaData,
+            set: Constant.SET_NAME.SYNC_WEB_AREA,
+            key: storeAreaData.sdmAreaId,
+            create: true
+        });
+    }
+
+
+    for (let city of cities) {
+        let params = { ...commonParams, lang: 'En', countryID: '1', provinceID: '7', cityID: city.sdmCityId };
+        delete params.language;
+        delete params.conceptID;
+        delete params.menuTemplateID;
+
+        let listData: any = await SoapManager.requestData('GetWebAreasList', params),
+            list = listData.GetWebAreasListResult.CC_WEB_AREA;
+
+        for (let webArea of list) {
+            // only save city with valid cityId
+            if (webArea.AREA_ACTIVE === "1") {
+                let storeAreaData = await Aerospike.get({
+                    set: Constant.SET_NAME.SYNC_WEB_AREA,
+                    key: parseInt(webArea.AREA_ID)
                 });
+                if (storeAreaData.sdmAreaId) {
+                    let webAreaData = {
+                        countryId: 'AE',
+                        sdmAreaId: parseInt(webArea.AREA_ID),
+                        cityId: parseInt(webArea.AREA_CITYID),
+                        areaName: webArea.AREA_NAME || "",
+                        areaNameAr: webArea.AREA_NAMEUN || "",
+                        districtId: -1,
+                        streetId: -1,
+                        provinceId: 7,
+                        sdmStoreId: storeAreaData.sdmStoreId,
+                        areaPinCode: 1,
+                        delRefCode: 1,
+                        validAreaType: 1
+                    };
+
+                    // save and insert data into database
+                    await Aerospike.put({
+                        bins: webAreaData,
+                        set: Constant.SET_NAME.SYNC_AREA,
+                        key: webAreaData.sdmAreaId,
+                        createOrReplace: true
+                    });
+                }
             }
         }
-        start += batches[i];
     }
+
+
+    console.log("\t# Area Sequence Complete");
 }

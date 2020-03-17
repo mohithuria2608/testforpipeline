@@ -110,11 +110,7 @@
                             Payment Failure
                         </td>
                     </tr>
-                    <tr>
-                        <td class="head2" style="color: #2b343c; font-size: 24px; font-weight: 600; padding: 40px 45px 15px; background: #ffffff; text-align: left">
-                            Hi, john doe,
-                        </td>
-                    </tr>
+                    <%- include('../common/hello_user', {user: user}); %>
                 </table>
             </td>
         </tr>
@@ -128,94 +124,11 @@
                             <table class="table-2" cellpadding="0" cellspacing="0" border="0" width="100%" style="background: #ffffff; padding: 0 45px 50px; font-size: 18px; color: #6b8090; letter-spacing: 0.3px; line-height: 1.7;">
                                 <tr>
                                     <td class="para1" style="padding-bottom: 30px; ">
-                                        Thank you for choosing KFC!
+                                        Your payment for this order was not completed. Please try after some time. Any payments if deducted will get refunded within 4-7 business days.
+                                    </td>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <table class="table-3" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top: solid 2px #eaf4fe; border-bottom: solid 2px #eaf4fe; margin-bottom: 40px;">
-                                            <tr>
-                                                <td width="251px" style="padding-top: 15px;" class="groupImg">
-                                                    <img src="images/group.png" style="max-width: 100%" alt="">
-                                                </td>
-                                                <td>
-                                                    <p class="para2" style="color: #213f5d; font-size: 22px; font-weight: 600; margin : 0">
-                                                        ORDER NO. UAE - 4682743 </p>
-                                                    <p style="color: #0c2136; font-weight: 600; margin : 0">
-                                                        31 Oct, 2019 | 18:30:31</p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="para1" style="padding-bottom: 30px; ">
-                                        Your payment for order #XXXXXXXX was not completed. Please try after some time.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="background : #eaf4fe; padding: 15px 30px; font-weight: 600; border: solid #d0e1f3; border-width: 1px 1px 0 1px">
-                                        Details</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table class="table-4" cellpadding="0" cellspacing="0" border="0" width="100%" style="padding: 25px 30px 0; border: solid #d0e1f3; border-width: 0 1px 1px 1px">
-                                            <tr>
-                                                <td style="color: #213f5d; font-weight: 600; padding: 0 0 10px;">
-                                                    Items </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="color: #213f5d; padding-bottom: 15px">
-                                                        <tr class="height" height="50px">
-                                                            <td>Twister BBQ Box </td>
-                                                            <td>1</td>
-                                                            <td class="width" style="text-align: right; width: 150px;">
-                                                                AED 17.20</td>
-                                                        </tr>
-                                                        <tr class="height" height="50px">
-                                                            <td>Twister BBQ Box </td>
-                                                            <td>1</td>
-                                                            <td class="width" style="text-align: right; width: 150px;">
-                                                                AED 17.20</td>
-                                                        </tr>
-                                                        <tr class="height" height="50px">
-                                                            <td>Twister BBQ Box </td>
-                                                            <td>1</td>
-                                                            <td class="width" style="text-align: right; width: 150px;">
-                                                                AED 17.20</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="background: #d0e1f3; height: 1px;">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <table class="table-6" cellpadding="0" cellspacing="0" border="0" width="100%" style="color: #213f5d; padding: 25px 0">
-                                                        <tr class="height" height="50px">
-                                                            <td style="text-align: right;">Sub Total </td>
-                                                            <td class="width" style="text-align: right; width: 180px;">
-                                                                AED 17.20</td>
-                                                        </tr>
-                                                        <tr class="height" height="50px">
-                                                            <td style="text-align: right;">vat @ 5%</td>
-                                                            <td class="width" style="text-align: right; width: 180px;">
-                                                                AED 17.20</td>
-                                                        </tr>
-                                                        <tr class="height" height="50px">
-                                                            <td style="color: #213f5d; font-weight: 600; text-align: right;">
-                                                                Grand Total
-                                                            </td>
-                                                            <td class="width" style="text-align: right; width: 180px;">
-                                                                AED 17.20</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
+                               
+                                <%- include('../common/order_meta', {meta:meta, order: order}); %>
+                                <%- include('../common/order_detail', {meta:meta, order:order, showAddress:false}); %>
                                 <%- include('../common/footer', {meta:meta}); %>
