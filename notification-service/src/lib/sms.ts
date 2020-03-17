@@ -46,7 +46,10 @@ export class SmsCLass {
         //                 inQ: true
         //             })
         //             if (err) { reject(err); }
-        //             else { resolve({ success: true, data: b }); }
+        //             else {
+        //                 console.log("--> ", b);
+        //                 resolve({ success: true, data: b });
+        //             }
         //         }
         //     );
         // });
