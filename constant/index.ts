@@ -127,6 +127,9 @@ export const SERVER = {
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
     AUTH_MECH: "Bearer",
     ADDR_SHOW_TIME: 3,//hr
+    CUSTOMER_CARE: "666666666",
+    SUPPORT_EMAIL: "kfc_uae@ag.com",
+    DEFAULT_CCODE: "+971"
 };
 
 export const DATABASE = {
@@ -396,8 +399,32 @@ export const DATABASE = {
         },
 
         PAYMENT_METHOD: {
-            CARD: "Card",
-            COD: "Cash On Delivery"
+            FRONTEND_TEXT: {
+                En: [
+                    {
+                        name: "CARD",
+                        value: "Card"
+                    },
+                    {
+                        name: "COD",
+                        value: "Cash On Delivery"
+                    }
+                ],
+                Ar: [
+                    {
+                        name: "CARD",
+                        value: "بطاقة إئتمان"
+                    },
+                    {
+                        name: "COD",
+                        value: "المبلغ المحدد نقداً"
+                    }
+                ]
+            },
+            TYPE: {
+                CARD: "CARD",
+                COD: "COD"
+            }
         },
 
         PAYMENT_METHOD_ID: {
@@ -492,12 +519,61 @@ export const DATABASE = {
         },
 
         CART_AMOUNT: {
-            SUB_TOTAL: "SUB_TOTAL",
-            DISCOUNT: "DISCOUNT",
-            TAX: "TAX",
-            SHIPPING: "SHIPPING",
-            TOTAL: "TOTAL",
+            TYPE: {
+                SUB_TOTAL: "SUB_TOTAL",
+                DISCOUNT: "DISCOUNT",
+                TAX: "TAX",
+                SHIPPING: "SHIPPING",
+                TOTAL: "TOTAL",
+            },
+            FRONTEND_TEXT: {
+                En: [
+                    {
+                        name: "SUB_TOTAL",
+                        value: "Sub Total"
+                    },
+                    {
+                        name: "DISCOUNT",
+                        value: "Discount"
+                    },
+                    {
+                        name: "TAX",
+                        value: "VAT"
+                    },
+                    {
+                        name: "SHIPPING",
+                        value: "Delivery"
+                    },
+                    {
+                        name: "TOTAL",
+                        value: "Total"
+                    }
+                ],
+                Ar: [
+                    {
+                        name: "SUB_TOTAL",
+                        value: "المجموع الفرعي"
+                    },
+                    {
+                        name: "DISCOUNT",
+                        value: "Discount ar"
+                    },
+                    {
+                        name: "TAX",
+                        value: "VAT ar"
+                    },
+                    {
+                        name: "SHIPPING",
+                        value: "رسوم النقل"
+                    },
+                    {
+                        name: "TOTAL",
+                        value: "المجموع"
+                    }
+                ]
+            }
         },
+
         FREQ_TYPE: {
             GET: "GET",
             GET_ONCE: "GET_ONCE",
@@ -518,6 +594,84 @@ export const DATABASE = {
 
     STATUS: {
         ORDER: {
+            FRONTEND_TEXT: {
+                En: [
+                    {
+                        name: "PENDING",
+                        value: "Pending"
+                    },
+                    {
+                        name: "CONFIRMED",
+                        value: "Confirmed"
+                    },
+                    {
+                        name: "BEING_PREPARED",
+                        value: "Being prepared"
+                    },
+                    {
+                        name: "READY",
+                        value: "Ready"
+                    },
+                    {
+                        name: "ON_THE_WAY",
+                        value: "On the way"
+                    },
+                    {
+                        name: "DELIVERED",
+                        value: "Delivered"
+                    },
+                    {
+                        name: "CLOSED",
+                        value: "Closed"
+                    },
+                    {
+                        name: "CANCELED",
+                        value: "Canceled"
+                    },
+                    {
+                        name: "FAILURE",
+                        value: "Failure"
+                    }
+                ],
+                Ar: [
+                    {
+                        name: "PENDING",
+                        value: "Pending ar"
+                    },
+                    {
+                        name: "CONFIRMED",
+                        value: "Confirmed ar"
+                    },
+                    {
+                        name: "BEING_PREPARED",
+                        value: "Being prepared ar"
+                    },
+                    {
+                        name: "READY",
+                        value: "Ready ar"
+                    },
+                    {
+                        name: "ON_THE_WAY",
+                        value: "On the way ar"
+                    },
+                    {
+                        name: "DELIVERED",
+                        value: "Delivered ar"
+                    },
+                    {
+                        name: "CLOSED",
+                        value: "Closed ar"
+                    },
+                    {
+                        name: "CANCELED",
+                        value: "Canceled ar"
+                    },
+                    {
+                        name: "FAILURE",
+                        value: "Failure ar"
+                    }
+                ]
+            },
             CART: {
                 AS: "CART",
                 CMS: "",
@@ -752,9 +906,9 @@ export const STATUS_MSG = {
                 "statusCode": 400,
                 "httpCode": 400,
                 "type": "MIN_CART_VALUE_VOILATION",
-                "message": "Minimum order value should be 23 AED",
+                "message": "The minimum amount for an order is 23 Dhs. Please add more items to place the order",
                 "message_Ar": "الحد الأدنى للطلب يجب أن يكون 23 درهم",
-                "message_En": "Minimum order value should be 23 AED"
+                "message_En": "The minimum amount for an order is 23 Dhs. Please add more items to place the order"
             },
             "MAX_COD_CART_VALUE_VOILATION": {
                 "statusCode": 400,
@@ -796,10 +950,10 @@ export const STATUS_MSG = {
                 "message_Ar": "هذا العنوان غير موجود",
                 "message_En": "This address does not exists"
             },
-            "PROFILE_SETUP_ALLREADY_COMPLETE": {
+            "PROFILE_SETUP_ALREADY_COMPLETE": {
                 "statusCode": 400,
                 "httpCode": 400,
-                "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
+                "type": "PROFILE_SETUP_ALREADY_COMPLETE",
                 "message": "Your profile is 100% complete",
                 "message_Ar": "حسابك مكتمل بنسبة %100",
                 "message_En": "Your profile is 100% complete"
@@ -827,22 +981,6 @@ export const STATUS_MSG = {
                 "message": "You have entered an incorrect OTP. Please try again",
                 "message_Ar": "لقد أدخلت رمزًا خاطئًا، يرجى المحاولة مرة أخرى",
                 "message_En": "You have entered an incorrect OTP. Please try again"
-            },
-            "USER_PHONE_ALREADY_EXIST": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "USER_PHONE_ALREADY_EXIST",
-                "message": "This phone number is already is use",
-                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
-                "message_En": "This phone number is already is use"
-            },
-            "USER_EMAIL_ALREADY_EXIST": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "USER_ALREADY_EXIST",
-                "message": "This email is already is use",
-                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
-                "message_En": "This email is already is use"
             },
             "INVALID_ID": {
                 "statusCode": 400,
@@ -1337,6 +1475,26 @@ export const STATUS_MSG = {
                 "type": "DATA_CHANGED",
                 "message_Ar": "لقد حدثت بعض التعديلات في المعلومات، نحاول حاليًا تحديثها",
                 "message_En": "There is some update with the date. We are trying to refresh it"
+            }
+        },
+        "S215": {
+            "USER_PHONE_ALREADY_EXIST": {
+                "statusCode": 200,
+                "httpCode": 215,
+                "type": "USER_PHONE_ALREADY_EXIST",
+                "message": "This phone number is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This phone number is already is use"
+            },
+        },
+        "S216": {
+            "USER_EMAIL_ALREADY_EXIST": {
+                "statusCode": 200,
+                "httpCode": 216,
+                "type": "USER_EMAIL_ALREADY_EXIST",
+                "message": "This email is already is use",
+                "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
+                "message_En": "This email is already is use"
             }
         }
     },

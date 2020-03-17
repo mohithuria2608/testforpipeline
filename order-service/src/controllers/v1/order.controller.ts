@@ -104,7 +104,7 @@ export class OrderController {
                     }
                 }
             }
-            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
@@ -121,11 +121,13 @@ export class OrderController {
                 else {
                     if (!getAddress.cmsAddressRef || getAddress.cmsAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
+                        userData['headers'] = headers
                         await userService.creatAddressOnCms(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                     }
                     if (!getAddress.sdmAddressRef || getAddress.sdmAddressRef == 0) {
                         userData['asAddress'] = JSON.stringify([getAddress])
+                        userData['headers'] = headers
                         await userService.creatAddressOnSdm(userData)
                         getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                     }
@@ -195,7 +197,7 @@ export class OrderController {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: totalAmount[0].amount,
-                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.CARD
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
                     }
                 })
                 CMS.TransactionCMSE.createTransaction({
@@ -210,20 +212,22 @@ export class OrderController {
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                    sdm_order_id: order.sdmOrderRef
                 })
             } else {
                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
                     payment: {
                         paymentMethodId: payload.paymentMethodId,
                         amount: totalAmount[0].amount,
-                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.COD
+                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
                     }
                 })
                 CMS.OrderCMSE.updateOrder({
                     order_id: order.cmsOrderRef,
                     payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS
+                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                    sdm_order_id: order.sdmOrderRef
                 })
                 ENTITY.CartE.resetCart(auth.id)
             }
@@ -340,7 +344,7 @@ export class OrderController {
                 if (order && order._id) {
                     if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
+                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]
                     order['nextPing'] = getFrequency({
                         status: order.status,
                         type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
@@ -388,7 +392,8 @@ export class OrderController {
                             OrderSDME.cancelOrder({
                                 sdmOrderRef: order.sdmOrderRef,
                                 voidReason: 1,
-                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+                                validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED,
+                                language: order.language
                             })
                             if (order.payment && order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
                                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
@@ -401,7 +406,8 @@ export class OrderController {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    sdm_order_id: order.sdmOrderRef
                                 })
                             } else {
                                 let dataToUpdateOrder = {
@@ -431,7 +437,8 @@ export class OrderController {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    sdm_order_id: order.sdmOrderRef
                                 })
                                 if (status) {
                                     CMS.TransactionCMSE.createTransaction({

@@ -8,16 +8,15 @@ export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
             consolelog(process.cwd(), 'authorization', ctx.header.authorization, true)
-            let settings = {
-                tokenType: "Bearer"
-            }
+
+            let settings = Constant.SERVER.AUTH_MECH
             let authorization = ctx.header.authorization;
             if (!authorization) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
             }
             const [tokenType, token] = authorization.split(/\s+/);
 
-            if (!token || tokenType.toLowerCase() !== settings.tokenType.toLowerCase()) {
+            if (!token || tokenType.toLowerCase() !== settings.toLowerCase()) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.ACCESS_TOKEN_EXPIRED)
             }
 

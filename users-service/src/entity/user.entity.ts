@@ -66,10 +66,7 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
-        password: Joi.object().keys({
-            iv: Joi.string(),
-            encryptedData: Joi.string()
-        }),
+        password: Joi.string(),
         cartId: Joi.string().required(),
         createdAt: Joi.number().required()
     });

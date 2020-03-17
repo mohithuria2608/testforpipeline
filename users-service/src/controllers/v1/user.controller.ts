@@ -205,7 +205,7 @@ export class UserController {
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                    await this.validateUserOnSdm(userData, false)
+                    await this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
                     notificationService.sendNotification({
@@ -220,16 +220,18 @@ export class UserController {
                 if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
                     CMS.UserCMSE.updateCustomerOnCms(userData)
 
-                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm))
+                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm)) {
+                    userData['headers'] = headers
                     SDM.UserSDME.updateCustomerOnSdm(userData)
+                }
 
                 if (asAddress && asAddress.length > 0) {
                 }
                 if (cmsAddress && cmsAddress.length > 0)
-                    ENTITY.AddressE.createCmsAddOnAs(userData, cmsAddress)
+                    ENTITY.AddressE.createCmsAddOnAs(headers, userData, cmsAddress)
 
                 if (sdmAddress && sdmAddress.length > 0)
-                    ENTITY.AddressE.createSdmAddOnCmsAndAs(userData, sdmAddress)
+                    ENTITY.AddressE.createSdmAddOnCmsAndAs(headers, userData, sdmAddress)
 
             } else {
                 console.log("user not found => invalid otp")
@@ -252,9 +254,9 @@ export class UserController {
                 let bin = userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP ? Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP : Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (deleteUserId && deleteUserId != "") {
                     let userDataToSend = await ENTITY.UserE.getUser({ userId: deleteUserId })
-                    await ENTITY.AddressE.updateAddress({ addressId: userchange[0].address.id }, bin, userDataToSend, true)
+                    await ENTITY.AddressE.updateAddress(headers, { addressId: userchange[0].address.id }, bin, userDataToSend, true)
                 } else
-                    await ENTITY.AddressE.updateAddress({ addressId: userchange[0].address.id }, bin, userData, true)
+                    await ENTITY.AddressE.updateAddress(headers, { addressId: userchange[0].address.id }, bin, userData, true)
                 await addressController.syncOldAddress(headers, userData.id, {
                     addressId: userchange[0].address.id,
                     storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.storeId : undefined,
@@ -327,7 +329,7 @@ export class UserController {
                         if (cmsUserByEmail && cmsUserByEmail.customerId) {
                             console.log("step 5=====================>")
                             if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != userData.fullPhnNo)
-                                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+                                return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             userUpdate['phnVerified'] = 1
                             userUpdate['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
                             userUpdate['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
@@ -425,7 +427,7 @@ export class UserController {
             console.log("step 12=====================>")
 
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
-                await this.validateUserOnSdm(userData, false)
+                await this.validateUserOnSdm(userData, false, headers)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
                 userId: userData.id,
@@ -460,7 +462,7 @@ export class UserController {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             if (userData && userData.id) {
                 if (userData && userData.id && userData.profileStep && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALLREADY_COMPLETE)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.PROFILE_SETUP_ALREADY_COMPLETE)
                 if (userData.fullPhnNo && userData.fullPhnNo != "" && userData.fullPhnNo != fullPhnNo)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_PHONE_NO)
                 if (userData.socialKey && userData.medium) {
@@ -512,20 +514,20 @@ export class UserController {
                             let asUserByEmail = await Aerospike.query(queryArg)
                             if (asUserByEmail && asUserByEmail.length > 0) {
                                 console.log('STEP : 4               MS : P/E  , different user')
-                                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+                                return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log('STEP : 5               MS : P')
                                 let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                                 if (cmsUserByEmail && cmsUserByEmail.customerId) {
                                     console.log('STEP : 6               MS : P, CMS : E  different user')
-                                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                    return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                                 } else {
                                     console.log('STEP : 7               MS : P, CMS :, ')
                                     userchangePayload['chngEmailCms'] = 1
-                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
                                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                         console.log('STEP : 8               MS : P, CMS :, SDM : E    different user')
-                                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                        return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                                     } else {
                                         console.log('STEP : 9               MS : P, CMS :, SDM :    update email')
                                         userchangePayload['deleteUserId'] = auth.id
@@ -554,7 +556,7 @@ export class UserController {
                             let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                             if (cmsUserByPhone && cmsUserByPhone.customerId) {
                                 console.log('STEP : 12               MS : E , CMS : P   different user')
-                                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                             }
                             else {
                                 console.log('STEP : 13               MS : E , CMS ')
@@ -580,7 +582,7 @@ export class UserController {
                                     let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                                     if (cmsUserByPhone && cmsUserByPhone.customerId) {
                                         console.log('STEP : 17               MS :  , CMS : P   different user')
-                                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_PHONE_ALREADY_EXIST)
+                                        return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                                     }
                                     else {
                                         console.log('STEP : 18               MS :  , CMS :')
@@ -595,10 +597,10 @@ export class UserController {
                                 let cmsUserByPhone: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
                                 if (cmsUserByPhone && cmsUserByPhone.customerId) {
                                     console.log('STEP : 20               MS :  , CMS : P')
-                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
                                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                         console.log('STEP : 21               MS :  , CMS : P , SDM : E  different user')
-                                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                                        return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                                     }
                                     else {
                                         console.log('STEP : 22               MS :  , CMS : P , SDM : ')
@@ -612,7 +614,7 @@ export class UserController {
                                     }
                                 } else {
                                     console.log('STEP : 23               MS :  , CMS :  , SDM : ')
-                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email })
+                                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
                                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                         console.log('STEP : 23               MS :  , CMS :  , SDM : E')
                                         userchangePayload['id'] = auth.id
@@ -653,7 +655,7 @@ export class UserController {
                     let cmsUserByEmail: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ email: payload.email })
                     if (cmsUserByEmail && cmsUserByEmail.customerId) {
                         if (cmsUserByEmail['phone'] && cmsUserByEmail['phone'] != fullPhnNo)
-                            return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_EMAIL_ALREADY_EXIST)
+                            return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         userUpdate['phnVerified'] = 1
                         userUpdate['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
                         userUpdate['name'] = cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
@@ -669,6 +671,7 @@ export class UserController {
                             userUpdate['cmsAddress'] = cmsUserByEmail.address.slice(0, 6)
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
+                    userData['headers'] = headers
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
@@ -696,8 +699,10 @@ export class UserController {
         }
     }
 
-    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean) {
+    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers?: ICommonRequest.IHeaders) {
         try {
+            if (userData.headers && !headers)
+                headers = userData.headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             let updateOnSdm = false
             let updateOnCms = false
@@ -720,7 +725,7 @@ export class UserController {
                     createOnCms = true
             }
             if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
-                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email })
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true
                     updateAs['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)

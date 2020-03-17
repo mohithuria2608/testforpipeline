@@ -6,9 +6,9 @@
                 "type": "INVALID_LOCATION",
                 "message": "Invalid location"
             },
-            "PROFILE_SETUP_ALLREADY_COMPLETE": {
+            "PROFILE_SETUP_ALREADY_COMPLETE": {
                 "statusCode": 400,
-                "type": "PROFILE_SETUP_ALLREADY_COMPLETE",
+                "type": "PROFILE_SETUP_ALREADY_COMPLETE",
                 "message": "Profile setup is already complete"
             },
             "OTP_SESSION_EXPIRED": {

@@ -95,7 +95,7 @@ export class AddressEntity extends BaseEntity {
      * @description Add address on aerospike
      * @method INTERNAL
      * */
-    async addAddress(userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
+    async addAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
             console.log("addressData", JSON.stringify(addressData))
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
@@ -174,7 +174,7 @@ export class AddressEntity extends BaseEntity {
      * @param userData 
      * @param isDelete 
      */
-    async updateAddress(addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
+    async updateAddress(headers: ICommonRequest.IHeaders, addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
             let listaddress = await this.getAddress({ userId: userData.id, bin: bin })
             console.log("listaddress", listaddress)
@@ -253,12 +253,12 @@ export class AddressEntity extends BaseEntity {
                 userData.asAddress[0].bldgName = ""
                 userData.asAddress[0].description = ""
                 userData.asAddress[0].flatNum = ""
-                userData.asAddress[0].addressType = "PICKUP"
+                userData.asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP
             }
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                language: "En",
+                language: (userData.headers && userData.headers.language) ? userData.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
                     ADDR_AREAID: 1786,//  16
@@ -315,9 +315,9 @@ export class AddressEntity extends BaseEntity {
 
             let sdmAdd = await SDM.AddressSDME.createAddress(addressSdmData)
             let bin = userData.asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-            let asAddr = await this.updateAddress({ addressId: userData.asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
+            let asAddr = await this.updateAddress(userData.headers, { addressId: userData.asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
             if (asAddr.cmsAddressRef) {
-                userData.asAddress = [asAddr]
+                userData['asAddress'] = [asAddr]
                 kafkaService.kafkaSync({
                     set: this.set,
                     cms: {
@@ -370,7 +370,7 @@ export class AddressEntity extends BaseEntity {
                                     bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                             })
                             if (bin != "")
-                                await this.updateAddress(updateAddressOnAs, bin, userData, false)
+                                await this.updateAddress(userData.headers, updateAddressOnAs, bin, userData, false)
                         }
                     }
                 }
@@ -388,7 +388,7 @@ export class AddressEntity extends BaseEntity {
     * */
     async updateAddressOnCms(userData: IUserRequest.IUserData) {
         try {
-            consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData.asAddress), false)
+            consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData), false)
             let res = await CMS.AddressCMSE.updateAddresssOnCms(userData)
             return {}
         } catch (error) {
@@ -397,7 +397,7 @@ export class AddressEntity extends BaseEntity {
         }
     }
 
-    async createCmsAddOnAs(userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.ICmsAddress[]) {
+    async createCmsAddOnAs(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, cmsAddress: IAddressCMSRequest.ICmsAddress[]) {
         try {
             for (const obj of cmsAddress) {
                 if (obj.addressId && obj.sdmAddressRef) {
@@ -415,9 +415,10 @@ export class AddressEntity extends BaseEntity {
                             sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
                             cmsAddressRef: parseInt(obj.addressId),
                         }
-                        let asAdd = await this.addAddress(userData, bin, add, store[0])
+                        let asAdd = await this.addAddress(headers, userData, bin, add, store[0])
                         if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
-                            userData.asAddress = [asAdd]
+                            userData['asAddress'] = [asAdd]
+                            userData['headers'] = headers
                             kafkaService.kafkaSync({
                                 set: this.set,
                                 sdm: {
@@ -437,7 +438,7 @@ export class AddressEntity extends BaseEntity {
         }
     }
 
-    async createSdmAddOnCmsAndAs(userData: IUserRequest.IUserData, sdmAddress) {
+    async createSdmAddOnCmsAndAs(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, sdmAddress) {
         try {
             let asAddress = [];
             for (const sdmAddObj of sdmAddress) {
@@ -456,7 +457,7 @@ export class AddressEntity extends BaseEntity {
                                 tag: Constant.DATABASE.TYPE.TAG.OTHER,
                                 sdmAddressRef: parseInt(sdmAddObj.ADDR_ID)
                             }
-                            let addressData = await this.addAddress(userData, bin, addressPayload, store[0])
+                            let addressData = await this.addAddress(headers, userData, bin, addressPayload, store[0])
                             asAddress.push(addressData)
                         }
                     }
@@ -464,7 +465,8 @@ export class AddressEntity extends BaseEntity {
             }
             if (asAddress && asAddress.length > 0) {
                 if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                    userData.asAddress = asAddress
+                    userData['asAddress'] = asAddress
+                    userData['headers'] = headers
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {

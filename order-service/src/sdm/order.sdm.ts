@@ -46,7 +46,7 @@ export class OrderSDMEntity extends BaseSDM {
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     conceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                    language: "En",
+                    language: payload.language.toLowerCase().trim(),
                     orderID: payload.sdmOrderRef,
                     menuTemplateID: Constant.SERVER.SDM.MENU_TEMPLATE_ID
                 }
@@ -71,7 +71,7 @@ export class OrderSDMEntity extends BaseSDM {
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     conceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                    language: "En",
+                    language: payload.language.toLowerCase().trim(),
                     orderID: payload.sdmOrderRef,
                     paymentType: 2,
                     paymentSubType: 1,
@@ -111,7 +111,7 @@ export class OrderSDMEntity extends BaseSDM {
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                     conceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                    language: "En",
+                    language: payload.language.toLowerCase(),
                     orderID: payload.sdmOrderRef,
                     voidReason: payload.voidReason,
                     voidRemarks: payload.validationRemarks

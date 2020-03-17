@@ -122,7 +122,7 @@ export class UserchangeEntity extends BaseEntity {
         }
     }
 
-    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, language: string = 'En') {
+    async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, language: string = Constant.DATABASE.LANGUAGE.EN) {
         try {
             let isCreate = false
             let checkUserchange = await this.getUserchange({ userId: userId })

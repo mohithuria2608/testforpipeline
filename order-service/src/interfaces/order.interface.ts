@@ -44,11 +44,11 @@ declare namespace IOrderRequest {
     }
 
     interface IAmount {
-        type: string
-        name: string
-        code: string
-        amount: number,
-        sequence: number,
+        type?: string
+        code?: string
+        amount?: number,
+        sequence?: number,
+        action?: string
     }
 
     interface IStore {

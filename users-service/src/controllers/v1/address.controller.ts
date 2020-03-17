@@ -37,7 +37,8 @@ export class AddressController {
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
                 let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
-                userData.asAddress = data.asAddress
+                userData['asAddress'] = data.asAddress
+                userData['headers'] = data.headers
                 if (payload.sdm.create) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.addAddressOnSdm(userData)
@@ -70,8 +71,6 @@ export class AddressController {
     * */
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
-            if (payload.tag)
-                payload.tag = payload.tag.toUpperCase()
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let type = ""
             let store: IStoreGrpcRequest.IStore[]
@@ -100,9 +99,10 @@ export class AddressController {
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
-            let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store[0])
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                userData.asAddress = [addressData]
+                userData['asAddress'] = [addressData]
+                userData['headers'] = headers
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
                     cms: {
@@ -163,9 +163,10 @@ export class AddressController {
             } else
                 return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
 
-            let addressData = await ENTITY.AddressE.addAddress(userData, type, payload, store[0])
+            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store[0])
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                userData.asAddress = [addressData]
+                userData['asAddress'] = [addressData]
+                userData['headers'] = headers
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
                     cms: {
@@ -206,10 +207,11 @@ export class AddressController {
                 } else
                     return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
             }
-            let updatedAdd = await ENTITY.AddressE.updateAddress(payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
+            let updatedAdd = await ENTITY.AddressE.updateAddress(headers, payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
 
             if (updatedAdd.cmsAddressRef && updatedAdd.cmsAddressRef != 0) {
                 userData['asAddress'] = [updatedAdd]
+                userData['headers'] = headers
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
                     cms: {
@@ -252,7 +254,7 @@ export class AddressController {
     async deleteAddressById(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IDeleteAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            return await ENTITY.AddressE.updateAddress({ addressId: payload.addressId }, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, true)
+            return await ENTITY.AddressE.updateAddress(headers, { addressId: payload.addressId }, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, true)
         } catch (error) {
             consolelog(process.cwd(), "deleteAddressById", JSON.stringify(error), false)
             return Promise.reject(error)

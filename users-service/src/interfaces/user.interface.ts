@@ -18,9 +18,10 @@ declare namespace IUserRequest {
         socialKey?: string,
         medium?: string,
         profileStep?: number,
-        password?: { iv: string, encryptedData: string },
+        password?: string,
         cartId?: string,
         createdAt?: number,
+        headers?: ICommonRequest.IHeaders
     }
 
     interface TempAddressArray {

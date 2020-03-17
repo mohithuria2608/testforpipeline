@@ -202,7 +202,6 @@ export class CartClass extends BaseEntity {
         amount: Joi.array().items(
             Joi.object().keys({
                 type: Joi.string().required(),
-                name: Joi.string().required(),
                 code: Joi.string().required(),
                 amount: Joi.number().required(),
                 sequence: Joi.number().required(),
@@ -210,7 +209,6 @@ export class CartClass extends BaseEntity {
             })),
         vat: Joi.object().keys({
             type: Joi.string().required(),
-            name: Joi.string().required(),
             code: Joi.string().required(),
             amount: Joi.number().required(),
             sequence: Joi.number().required(),
@@ -595,12 +593,11 @@ export class CartClass extends BaseEntity {
             dataToUpdate['storeOnline'] = payload.storeOnline ? 1 : 0
             let amount = []
             amount.push({
-                type: Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
-                name: "Sub Total",
-                code: "SUB_TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,
+                code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,
                 amount: payload.cmsCart.subtotal,
                 sequence: 1,
-                action: "add"
+                action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
             })
             if (payload.cmsCart.coupon_code && payload.cmsCart.coupon_code != "") {
                 dataToUpdate['promo'] = payload.promo
@@ -614,36 +611,37 @@ export class CartClass extends BaseEntity {
                     if (payload.cmsCart.free_items && payload.cmsCart.free_items != "") {
                         let freeItemSku = payload.cmsCart.free_items.split(",").map(obj => { return obj.trim() })
                         if (freeItemSku && freeItemSku.length > 0) {
-                            let freeItems_En = await menuService.fetchHidden({
+                            let freeItems_En = menuService.fetchHidden({
                                 menuId: 1,
                                 language: Constant.DATABASE.LANGUAGE.EN,
                                 type: Constant.DATABASE.TYPE.MENU.FREE
                             })
-                            let freeItems_Ar = await menuService.fetchHidden({
+                            let freeItems_Ar = menuService.fetchHidden({
                                 menuId: 1,
                                 language: Constant.DATABASE.LANGUAGE.AR,
                                 type: Constant.DATABASE.TYPE.MENU.FREE
                             })
-                            console.log("reeItems_En.products", freeItems_En[0].products, freeItems_En[0].products.length)
-                            if (freeItems_En && freeItems_En.length > 0) {
-                                if (freeItems_En[0].products && freeItems_En[0].products.length > 0)
-                                    freeItems_En = freeItems_En[0].products.filter(obj => { return (freeItemSku.indexOf(obj.sdmId.toString()) >= 0) })
+                            let menus = await Promise.all([freeItems_En, freeItems_Ar])
+                            console.log("freeItems_En.products", menus[0][0].products, menus[0][0].products.length)
+                            if (menus[0] && menus[0].length > 0) {
+                                if (menus[0][0].products && menus[0][0].products.length > 0)
+                                    menus[0] = menus[0][0].products.filter(obj => { return (freeItemSku.indexOf(obj.sdmId.toString()) >= 0) })
                                 else
-                                    freeItems_En = []
+                                    menus[0] = []
                             } else
-                                freeItems_En = []
+                                menus[0] = []
 
-                            if (freeItems_Ar && freeItems_Ar.length > 0) {
-                                if (freeItems_Ar[0].products && freeItems_Ar[0].products.length > 0)
-                                    freeItems_Ar = freeItems_Ar[0].products.filter(obj => { return freeItemSku.indexOf(obj.sdmId.toString()) >= 0 })
+                            if (menus[1] && menus[1].length > 0) {
+                                if (menus[1][0].products && menus[1][0].products.length > 0)
+                                    menus[1] = menus[1][0].products.filter(obj => { return freeItemSku.indexOf(obj.sdmId.toString()) >= 0 })
                                 else
-                                    freeItems_Ar = []
+                                    menus[1] = []
                             }
                             else
-                                freeItems_Ar = []
+                                menus[1] = []
                             dataToUpdate['freeItems'] = {
-                                ar: freeItems_Ar,
-                                en: freeItems_En
+                                en: menus[0],
+                                ar: menus[1]
                             }
                         } else {
                             dataToUpdate['selFreeItem'] = {
@@ -660,12 +658,11 @@ export class CartClass extends BaseEntity {
                 }
                 if (payload.cmsCart.discount_amount != 0)
                     amount.push({
-                        type: Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
-                        name: "Discount",
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT,
                         code: payload.cmsCart.coupon_code,
                         amount: payload.cmsCart.discount_amount,
                         sequence: 2,
-                        action: "subtract"
+                        action: Constant.DATABASE.ACTION.CART_AMOUNT.SUBTRACT
                     })
                 dataToUpdate['couponApplied'] = 1
             } else {
@@ -682,41 +679,37 @@ export class CartClass extends BaseEntity {
             }
             if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
                 dataToUpdate['vat'] = {
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
-                    name: payload.cmsCart.tax[0].tax_name,
-                    code: payload.cmsCart.tax[0].tax_name,
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
+                    code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     amount: payload.cmsCart.tax[0].amount,
                     sequence: 0,
-                    action: "add"
+                    action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
                 }
             } else {
                 dataToUpdate['vat'] = {
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TAX,
-                    name: "VAT",
-                    code: "VAT",
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
+                    code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     amount: 0,
                     sequence: 0,
-                    action: "add"
+                    action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
                 }
             }
             if (payload.cmsCart.shipping && payload.cmsCart.shipping.length > 0) {
                 if (payload.cmsCart.shipping[0].price > 0)
                     amount.push({
-                        type: Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
-                        name: "Delivery",
-                        code: payload.cmsCart.shipping[0].method_code,
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
+                        code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
                         amount: payload.cmsCart.shipping[0].price,
                         sequence: 3,
-                        action: "add"
+                        action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD,
                     })
             }
             amount.push({
-                type: Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
-                name: "Total",
-                code: "TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL,
+                code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL,
                 amount: payload.cmsCart.grandtotal,
                 sequence: 4,
-                action: "add"
+                action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
             })
             dataToUpdate['amount'] = amount
             if (payload.cmsCart.not_available && payload.cmsCart.not_available.length > 0) {

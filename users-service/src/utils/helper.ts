@@ -47,8 +47,10 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
     if (error && error.code && error.details) {
-        if (typeof JSON.parse(error.details) == 'object' && JSON.parse(error.details).hasOwnProperty("data"))
-            customError.data = JSON.parse(error.details).data
+        if (isJsonString(error.details)) {
+            if (JSON.parse(error.details).hasOwnProperty("data"))
+                customError.data = JSON.parse(error.details)
+        }
         customError.message = error.details
         customError.message_Ar = error.details
         customError.message_En = error.details
@@ -259,28 +261,29 @@ export let sendSuccess = function (successMsg, language, data) {
     if (typeof data === 'object' && data.hasOwnProperty('statusCode') && data.hasOwnProperty('message')) {
         return {
             statusCode: data.statusCode,
+            httpCode: data.httpCode,
             message: data[key] ? data[key] : data.message,
             type: data.type,
             data: data.data || null
         }
-
     }
     else if (successMsg != null && typeof successMsg === 'object' && successMsg.hasOwnProperty('statusCode') && successMsg.hasOwnProperty('message')) {
         successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT
         return {
             statusCode: successMsg.statusCode,
+            httpCode: successMsg.httpCode,
             message: successMsg[key],
-            data: data || null,
-            type: (successMsg.type) ? successMsg.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type
+            type: (successMsg.type) ? successMsg.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type,
+            data: data || null
         }
-
     } else {
         successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT[key]
         return {
             statusCode: 200,
+            httpCode: 200,
             message: successMsg,
+            type: (data.type) ? data.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type,
             data: data || null,
-            type: (data.type) ? data.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type
         }
     }
 }
@@ -290,19 +293,17 @@ export let authorizationHeaderObj = Joi.object({
 }).unknown()
 
 export let cryptData = function (text: string) {
-    let cipher = crypto.createCipheriv(config.get("cryptoAlgo"), Buffer.from(key), iv);
-    let encrypted = cipher.update(text);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+    var mykey = crypto.createCipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));
+    var mystr = mykey.update(text, 'utf8', 'hex')
+    mystr += mykey.final('hex');
+    return mystr
 }
 
 export let deCryptData = function (text) {
-    let iv = Buffer.from(text.iv, 'hex');
-    let encryptedText = Buffer.from(text.encryptedData, 'hex');
-    let decipher = crypto.createDecipheriv(config.get("cryptoAlgo"), Buffer.from(key), iv);
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted.toString();
+    var mykey = crypto.createDecipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));
+    var mystr = mykey.update(text, 'hex', 'utf8')
+    mystr += mykey.final('utf8');
+    return mystr
 }
 
 export let generateOtp = async function () {
@@ -336,6 +337,7 @@ export let formatUserData = function (userObj: IUserRequest.IUserData, headers: 
         delete userObj['sdmAddress']
         delete userObj['cmsAddress']
         delete userObj['asAddress']
+        delete userObj['headers']
         return userObj
     } catch (error) {
         consolelog(process.cwd(), 'formatUserData', JSON.stringify(error), false)
@@ -435,4 +437,13 @@ export let nameConstructor = function (name) {
     let firstName = splitName.length == 1 ? splitName[0] : splitName.slice(0, splitName.length - 1).join(" ")
     let lastName = splitName.length > 1 ? splitName[splitName.length - 1] : "."
     return { firstName, lastName }
+}
+
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }

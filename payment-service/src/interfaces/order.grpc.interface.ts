@@ -20,11 +20,13 @@ declare namespace IOrderGrpcRequest {
     }
 
     interface IAmount {
-        type: string
-        name: string
-        code: string
-        amount: number
+        type?: string
+        code?: string
+        amount?: number,
+        sequence?: number,
+        action?: string
     }
+    
     interface IAddress {
         addressId: string,
         sdmAddressRef: number,
