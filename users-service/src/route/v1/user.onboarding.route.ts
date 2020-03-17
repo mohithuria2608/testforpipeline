@@ -50,7 +50,13 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IUserRequest.IAuthVerifyOtp = ctx.request.body;
                     let res = await userController.verifyOtp(headers, payload);
-                    ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken, cartId: res.response['cartId'] })
+                    ctx.set({
+                        'accessToken': res.accessToken,
+                        'refreshToken': res.refreshToken,
+                        cartId: res.response['cartId'],
+                        phnNo: res.response['phnNo'],
+                        cCode: res.response['cCode'],
+                    })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, headers.language, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
