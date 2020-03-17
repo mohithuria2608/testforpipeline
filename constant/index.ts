@@ -500,58 +500,59 @@ export const DATABASE = {
         },
 
         CART_AMOUNT: {
-            SUB_TOTAL: "SUB_TOTAL",
-            DISCOUNT: "DISCOUNT",
-            TAX: "TAX",
-            SHIPPING: "SHIPPING",
-            TOTAL: "TOTAL",
-        },
-
-        CART_AMOUNT_FN: (language: string, type: string) => {
-            let obj = {
-                SUB_TOTAL: {
-                    TYPE: "SUB_TOTAL",
-                    CODE: "SUB_TOTAL",
-                    NAME: {
-                        En: "Sub Total",
-                        Ar: "Sub Total ar",
+            TYPE: {
+                SUB_TOTAL: "SUB_TOTAL",
+                DISCOUNT: "DISCOUNT",
+                TAX: "TAX",
+                SHIPPING: "SHIPPING",
+                TOTAL: "TOTAL",
+            },
+            FRONTEND_TYPE: {
+                En: [
+                    {
+                        name: "SUB_TOTAL",
+                        value: "Sub Total"
+                    },
+                    {
+                        name: "DISCOUNT",
+                        value: "Discount"
+                    },
+                    {
+                        name: "TAX",
+                        value: "VAT"
+                    },
+                    {
+                        name: "SHIPPING",
+                        value: "Delivery"
+                    },
+                    {
+                        name: "TOTAL",
+                        value: "Total"
                     }
-                },
-                DISCOUNT: {
-                    TYPE: "DISCOUNT",
-                    CODE: "DISCOUNT",
-                    NAME: {
-                        En: "Discount",
-                        Ar: "Discount in ar",
+                ],
+                Ar: [
+                    {
+                        name: "SUB_TOTAL",
+                        value: "Sub Total ar"
+                    },
+                    {
+                        name: "DISCOUNT",
+                        value: "Discount ar"
+                    },
+                    {
+                        name: "TAX",
+                        value: "VAT ar"
+                    },
+                    {
+                        name: "SHIPPING",
+                        value: "Delivery ar"
+                    },
+                    {
+                        name: "TOTAL",
+                        value: "Total ar"
                     }
-                },
-                TAX: {
-                    TYPE: "TAX",
-                    CODE: "TAX",
-                    NAME: {
-                        En: "VAT",
-                        Ar: "VAT ar",
-                    }
-                },
-                SHIPPING: {
-                    TYPE: "SHIPPING",
-                    CODE: "SHIPPING",
-                    NAME: {
-                        En: "Delivery",
-                        Ar: "Delivery ar",
-                    }
-                },
-                TOTAL: {
-                    TYPE: "TOTAL",
-                    CODE: "TOTAL",
-                    NAME: {
-                        En: "Total",
-                        Ar: "Total ar",
-                    }
-                },
+                ]
             }
-            obj[type].NAME = obj[type].NAME[language]
-            return obj[type]
         },
 
         FREQ_TYPE: {

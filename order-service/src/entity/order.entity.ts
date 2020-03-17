@@ -446,7 +446,7 @@ export class OrderClass extends BaseEntity {
                 payload.promo.posId &&
                 !payload.isFreeItem
             ) {
-                let discountAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT })
+                let discountAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
                 Comps = {
                     KeyValueOfdecimalCCompkckD9yn_P: {
                         Key: payload.promo.posId,
@@ -566,7 +566,7 @@ export class OrderClass extends BaseEntity {
             console.log("cartDaTa", cartData)
             let amount = cartData.amount
             if (cartData.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
-                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING })
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
             }
             let items = cartData.items
             if (headers.language == Constant.DATABASE.LANGUAGE.EN)
@@ -671,7 +671,7 @@ export class OrderClass extends BaseEntity {
                                 }, { new: true })
                                 if (recheck && sdmOrder.Total) {
                                     consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
-                                    let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+                                    let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                                     console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
                                     // if (amount[0].amount != parseFloat(sdmOrder.Total)) {
                                     //     consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)

@@ -72,7 +72,6 @@ const orderSchema = new Schema({
     items: { type: Schema.Types.Mixed, required: true },
     amount: [{
         sequence: { type: Number, },
-        name: { type: String },
         code: { type: String },
         action: {
             type: String, enum: [
@@ -83,10 +82,10 @@ const orderSchema = new Schema({
         amount: { type: Number, default: 0 },
         type: {
             type: String, enum: [
-                Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL,
-                Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT,
-                Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING,
-                Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL,
+                Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,
+                Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT,
+                Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
+                Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL,
             ]
         }
     }],
@@ -103,7 +102,7 @@ const orderSchema = new Schema({
         amount: { type: Number, default: 0 },
         type: {
             type: String, enum: [
-                Constant.DATABASE.TYPE.CART_AMOUNT.TAX
+                Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX
             ]
         }
     },

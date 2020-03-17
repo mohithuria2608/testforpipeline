@@ -38,7 +38,7 @@ export class MiscController {
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
                 constants: {
                     addressTag: Constant.DATABASE.TYPE.TAG[headers.language],
-                    cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT
+                    cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT.FRONTEND_TYPE[headers.language]
                 }
             }
         } catch (error) {

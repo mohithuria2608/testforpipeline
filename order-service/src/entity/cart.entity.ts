@@ -202,7 +202,6 @@ export class CartClass extends BaseEntity {
         amount: Joi.array().items(
             Joi.object().keys({
                 type: Joi.string().required(),
-                name: Joi.string().required(),
                 code: Joi.string().required(),
                 amount: Joi.number().required(),
                 sequence: Joi.number().required(),
@@ -210,7 +209,6 @@ export class CartClass extends BaseEntity {
             })),
         vat: Joi.object().keys({
             type: Joi.string().required(),
-            name: Joi.string().required(),
             code: Joi.string().required(),
             amount: Joi.number().required(),
             sequence: Joi.number().required(),
@@ -595,9 +593,8 @@ export class CartClass extends BaseEntity {
             dataToUpdate['storeOnline'] = payload.storeOnline ? 1 : 0
             let amount = []
             amount.push({
-                type: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL).TYPE,
-                name: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL).NAME,
-                code: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.SUB_TOTAL).CODE,
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,
+                code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,
                 amount: payload.cmsCart.subtotal,
                 sequence: 1,
                 action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
@@ -661,8 +658,7 @@ export class CartClass extends BaseEntity {
                 }
                 if (payload.cmsCart.discount_amount != 0)
                     amount.push({
-                        type: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT).TYPE,
-                        name: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.DISCOUNT).NAME,
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT,
                         code: payload.cmsCart.coupon_code,
                         amount: payload.cmsCart.discount_amount,
                         sequence: 2,
@@ -683,18 +679,16 @@ export class CartClass extends BaseEntity {
             }
             if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
                 dataToUpdate['vat'] = {
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TAX).TYPE,
-                    name: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TAX).NAME,//payload.cmsCart.tax[0].tax_name,
-                    code: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TAX).CODE,//payload.cmsCart.tax[0].tax_name,
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
+                    code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     amount: payload.cmsCart.tax[0].amount,
                     sequence: 0,
                     action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
                 }
             } else {
                 dataToUpdate['vat'] = {
-                    type: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TAX).TYPE,
-                    name: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TAX).NAME,
-                    code: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TAX).CODE,
+                    type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
+                    code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     amount: 0,
                     sequence: 0,
                     action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
@@ -703,18 +697,16 @@ export class CartClass extends BaseEntity {
             if (payload.cmsCart.shipping && payload.cmsCart.shipping.length > 0) {
                 if (payload.cmsCart.shipping[0].price > 0)
                     amount.push({
-                        type: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING).TYPE,
-                        name: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING).NAME,//"Delivery",
-                        code: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.SHIPPING).CODE,// payload.cmsCart.shipping[0].method_code,
+                        type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
+                        code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
                         amount: payload.cmsCart.shipping[0].price,
                         sequence: 3,
                         action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD,
                     })
             }
             amount.push({
-                type: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL).TYPE,
-                name: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL).NAME,// "Total",
-                code: Constant.DATABASE.TYPE.CART_AMOUNT_FN(payload.headers.language, Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL).CODE,// "TOTAL",
+                type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL,
+                code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL,
                 amount: payload.cmsCart.grandtotal,
                 sequence: 4,
                 action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD

@@ -16,7 +16,7 @@ export class PaymentController {
         try {
             let cart = await orderService.getCart({ cartId: payload.cartId })
             if (cart && cart.cartId && cart.amount && cart.amount.length > 0) {
-                let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+                let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                 let storeCode = Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                 if (amount[0].amount < Constant.SERVER.MIN_CART_VALUE) {
                     console.log("1")

@@ -104,7 +104,7 @@ export class OrderController {
                     }
                 }
             }
-            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })
+            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
@@ -342,7 +342,7 @@ export class OrderController {
                 if (order && order._id) {
                     if (payload.cCode && payload.phnNo && (userData.id != order.userId))
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TOTAL })[0]
+                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]
                     order['nextPing'] = getFrequency({
                         status: order.status,
                         type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
