@@ -35,7 +35,8 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IAddressRequest.IRegisterAddress = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await addressController.registerAddress(headers, payload, auth);
+                    let res: any = await addressController.registerAddress(headers, payload, auth);
+                    ctx.set({ 'addressId': res.id })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
