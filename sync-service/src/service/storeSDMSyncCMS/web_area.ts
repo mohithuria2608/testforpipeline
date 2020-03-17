@@ -10,7 +10,7 @@ export default async function () {
 
     for (let city of cities) {
 
-        let params = { ...commonParams, lang: 'En', provinceID: '7', countryID: '1', cityID: "18"/* +city.sdmCityId */ };
+        let params = { ...commonParams, lang: 'En', countryID: '1', provinceID: '7', cityID: "18"/* +city.sdmCityId */ };
         delete params.language;
         delete params.conceptID;
         delete params.menuTemplateID;
