@@ -16,7 +16,9 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.CONFIG.GENERAL,
                         Constant.DATABASE.TYPE.CONFIG.PAYMENT,
                         Constant.DATABASE.TYPE.CONFIG.SHIPMENT,
-                        Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                        Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC,
+                        Constant.DATABASE.TYPE.CONFIG.KAFKA,
+                        Constant.DATABASE.TYPE.CONFIG.ORDER_STATUS).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     action: Joi.string().required().valid(Constant.DATABASE.TYPE.SYNC_ACTION.RESET).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     data: Joi.any().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }

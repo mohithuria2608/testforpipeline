@@ -1,4 +1,3 @@
-
 export enum MICROSERVICE {
     AUTH = "auth",
     USER = "user",
@@ -106,9 +105,6 @@ export const SERVER = {
         CONCEPT_ID: 3,
         MENU_TEMPLATE_ID: 17
     },
-    DEFAULT_USER_NAME: 'App User',
-    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
-    INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
     USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
@@ -437,7 +433,9 @@ export const DATABASE = {
             GENERAL: "general",
             PAYMENT: "payment",
             SHIPMENT: "shipment",
-            COUNTRY_SPECIFIC: "country-specific"
+            COUNTRY_SPECIFIC: "country-specific",
+            KAFKA: "kafka",
+            ORDER_STATUS: "order-status"
         },
 
         TOKEN: {
@@ -1480,8 +1478,8 @@ export const STATUS_MSG = {
         },
         "S215": {
             "USER_PHONE_ALREADY_EXIST": {
-                "statusCode": 200,
-                "httpCode": 215,
+                "statusCode": 215,
+                "httpCode": 200,
                 "type": "USER_PHONE_ALREADY_EXIST",
                 "message": "This phone number is already is use",
                 "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
@@ -1490,8 +1488,8 @@ export const STATUS_MSG = {
         },
         "S216": {
             "USER_EMAIL_ALREADY_EXIST": {
-                "statusCode": 200,
-                "httpCode": 216,
+                "statusCode": 216,
+                "httpCode": 200,
                 "type": "USER_EMAIL_ALREADY_EXIST",
                 "message": "This email is already is use",
                 "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
@@ -1640,3 +1638,31 @@ export const STATUS_MSG = {
         PAYMENT_FAILURE: "Payment failure"
     }
 };
+
+
+
+// class ConstantClass {
+
+//     static obj;
+
+//     constructor() { }
+
+//     public STATUS_MSG =
+
+//     static makeObject() {
+//         if (!ConstantClass.obj) {
+//             ConstantClass.obj = new ConstantClass();
+//         }
+//         return ConstantClass.obj;
+//     }
+
+//     async init() {
+//         try {
+
+//         } catch (error) {
+//             return Promise.reject(error)
+//         }
+//     }
+// }
+
+// export const ConstantC = ConstantClass.makeObject();

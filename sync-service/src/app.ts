@@ -10,7 +10,6 @@ import route from './route'
 
 const app = new Koa()
 
-
 app.use(middleware());
 app.use(route());
 
