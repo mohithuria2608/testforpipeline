@@ -5,6 +5,7 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { addressController } from '../../controllers';
 import { COMMON_HEADERS } from './common.joi.validator';
+import * as ENTITY from '../../entity'
 
 export default (router: Router) => {
     router
@@ -36,7 +37,16 @@ export default (router: Router) => {
                     let payload: IAddressRequest.IRegisterAddress = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res: any = await addressController.registerAddress(headers, payload, auth);
-                    ctx.set({ 'addressId': res.id })
+                    if (process.env.NODE_ENV == "staging") {
+                        let cart = await ENTITY.LoadE.getCart(auth.id)
+                        ENTITY.LoadE.createOneEntityMdb({
+                            cartId: auth.id,
+                            deviceId: headers.deviceid,
+                            accessToken: ctx.header.authorization,
+                            addressId: res.id,
+                            cartUpdatedAt: cart.updatedAt
+                        })
+                    }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

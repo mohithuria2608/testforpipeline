@@ -1,5 +1,5 @@
 {
-    "env": "staging",
+    "env": "production",
     "server": {
         "auth": {
             "url": "http://americanauat.appskeeper.com/auth-service/",

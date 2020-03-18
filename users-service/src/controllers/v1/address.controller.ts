@@ -116,7 +116,6 @@ export class AddressController {
                     inQ: true
                 })
             }
-
             return addressData
         } catch (error) {
             consolelog(process.cwd(), "registerAddress", JSON.stringify(error), false)
