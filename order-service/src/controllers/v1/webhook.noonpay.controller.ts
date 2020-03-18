@@ -22,7 +22,7 @@ export class WebhookNoonpayController {
             let redirectUrl = config.get("server.order.url")
             let order = await ENTITY.OrderE.getOneEntityMdb({
                 "transLogs.noonpayOrderId": payload.orderId
-            }, { transLogs: 1 }, { lean: true })
+            }, { transLogs: 1, status: 1, payment: 1, userId: 1, cmsOrderRef: 1, sdmOrderRef: 1, language: 1, }, { lean: true })
             if (order && order._id) {
                 /**
                  * @description step 1 get noonpay order status
