@@ -705,6 +705,8 @@ export class OrderClass extends BaseEntity {
                                             })
                                         } else {
                                             consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
+                                            let transLogs = [];
+                                            let reverseStatus;
                                             try {
                                                 await paymentService.reversePayment({
                                                     noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
@@ -713,44 +715,61 @@ export class OrderClass extends BaseEntity {
                                             } catch (revError) {
                                                 if (revError.data) {
                                                     if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
-
+                                                        transLogs.push(revError.data)
                                                     } else if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
-
+                                                        transLogs.push(revError.data)
                                                     } else {
-                                                        return Promise.reject(revError)
+                                                        consolelog(process.cwd(), "unhandled payment error reverse", "", false)
                                                     }
                                                 }
                                             }
-                                            let status = await paymentService.getPaymentStatus({
-                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
-                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                            })
-                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                            try {
+                                                reverseStatus = await paymentService.getPaymentStatus({
+                                                    noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                                })
+                                                transLogs.push(reverseStatus)
+                                            } catch (statusError) {
+                                                if (statusError.data) {
+                                                    if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                        transLogs.push(statusError.data)
+                                                    } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                        transLogs.push(statusError.data)
+                                                    } else {
+                                                        consolelog(process.cwd(), "unhandled payment error reverse status", "", false)
+                                                    }
+                                                }
+                                            }
+                                            let dataToUpdateOrder = {
                                                 isActive: 0,
                                                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                                 updatedAt: new Date().getTime(),
                                                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                                $addToSet: {
-                                                    transLogs: status
-                                                },
                                                 "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
-                                            }, { new: true })
-                                            CMS.TransactionCMSE.createTransaction({
-                                                order_id: order.cmsOrderRef,
-                                                message: status.transactions[0].type,
-                                                type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
-                                                payment_data: {
-                                                    id: status.transactions[0].id.toString(),
-                                                    data: JSON.stringify(status)
+                                            }
+                                            if (transLogs && transLogs.length > 0)
+                                                dataToUpdateOrder['$addToSet'] = {
+                                                    transLogs: { $each: transLogs }
                                                 }
-                                            })
-                                            CMS.OrderCMSE.updateOrder({
-                                                order_id: order.cmsOrderRef,
-                                                payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                                order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
-                                                sdm_order_id: order.sdmOrderRef
-                                            })
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                                            if (reverseStatus && order && order._id) {
+                                                CMS.TransactionCMSE.createTransaction({
+                                                    order_id: order.cmsOrderRef,
+                                                    message: reverseStatus.transactions[0].type,
+                                                    type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                                    payment_data: {
+                                                        id: reverseStatus.transactions[0].id.toString(),
+                                                        data: JSON.stringify(reverseStatus)
+                                                    }
+                                                })
+                                                CMS.OrderCMSE.updateOrder({
+                                                    order_id: order.cmsOrderRef,
+                                                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                                    sdm_order_id: order.sdmOrderRef
+                                                })
+                                            }
                                         }
                                     }
                                 }
@@ -909,41 +928,72 @@ export class OrderClass extends BaseEntity {
                                                             status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                             updatedAt: new Date().getTime(),
                                                         }, { new: true })
-                                                        await paymentService.capturePayment({
-                                                            noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
-                                                            orderId: order.transLogs[1].orderId,
-                                                            amount: order.transLogs[1].amount,
-                                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                                        })
-                                                        let status = await paymentService.getPaymentStatus({
-                                                            noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
-                                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                                            paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                        })
-                                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                            status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                                            "payment.transactionId": status.transactions[0].id,
-                                                            "payment.status": status.transactions[0].type,
-                                                            $addToSet: {
-                                                                transLogs: status
-                                                            },
-                                                            updatedAt: new Date().getTime()
-                                                        }, { new: true })
-                                                        CMS.TransactionCMSE.createTransaction({
-                                                            order_id: order.cmsOrderRef,
-                                                            message: status.transactions[0].type,
-                                                            type: Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.CMS,
-                                                            payment_data: {
-                                                                id: status.transactions[0].id.toString(),
-                                                                data: JSON.stringify(status)
+                                                        let transLogs = [];
+                                                        let captureStatus;
+                                                        try {
+                                                            await paymentService.capturePayment({
+                                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                                orderId: order.transLogs[1].orderId,
+                                                                amount: order.transLogs[1].amount,
+                                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                                            })
+                                                        } catch (captureError) {
+                                                            if (captureError.data) {
+                                                                if (captureError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                                    transLogs.push(captureError.data)
+                                                                } else if (captureError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                                    transLogs.push(captureError.data)
+                                                                } else {
+                                                                    consolelog(process.cwd(), "unhandled payment error capture", "", false)
+                                                                }
                                                             }
-                                                        })
-                                                        CMS.OrderCMSE.updateOrder({
-                                                            order_id: order.cmsOrderRef,
-                                                            payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
-                                                            sdm_order_id: order.sdmOrderRef
-                                                        })
+                                                        }
+                                                        try {
+                                                            captureStatus = await paymentService.getPaymentStatus({
+                                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                            })
+                                                            transLogs.push(captureStatus)
+                                                        } catch (statusError) {
+                                                            if (statusError.data) {
+                                                                if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                                    transLogs.push(statusError.data)
+                                                                } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                                    transLogs.push(statusError.data)
+                                                                } else {
+                                                                    consolelog(process.cwd(), "unhandled payment error capture status", "", false)
+                                                                }
+                                                            }
+                                                        }
+                                                        let dataToUpdateOrder = {
+                                                            status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                                            "payment.transactionId": captureStatus.transactions[0].id,
+                                                            "payment.status": captureStatus.transactions[0].type,
+                                                            updatedAt: new Date().getTime()
+                                                        }
+                                                        if (transLogs && transLogs.length > 0)
+                                                            dataToUpdateOrder['$addToSet'] = {
+                                                                transLogs: { $each: transLogs }
+                                                            }
+                                                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                                                        if (captureStatus && order && order._id) {
+                                                            CMS.TransactionCMSE.createTransaction({
+                                                                order_id: order.cmsOrderRef,
+                                                                message: captureStatus.transactions[0].type,
+                                                                type: Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.CMS,
+                                                                payment_data: {
+                                                                    id: captureStatus.transactions[0].id.toString(),
+                                                                    data: JSON.stringify(captureStatus)
+                                                                }
+                                                            })
+                                                            CMS.OrderCMSE.updateOrder({
+                                                                order_id: order.cmsOrderRef,
+                                                                payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                                order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
+                                                                sdm_order_id: order.sdmOrderRef
+                                                            })
+                                                        }
                                                     }
                                                 }
                                                 // send notification(sms + email) on order confirmaton
