@@ -572,7 +572,7 @@ export class OrderClass extends BaseEntity {
         try {
             console.log("cartDaTa", cartData)
             let amount = cartData.amount
-            if (cartData.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+            if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
             }
             let items = cartData.items
@@ -581,7 +581,7 @@ export class OrderClass extends BaseEntity {
             else
                 items = items.concat(cartData.selFreeItem.ar)
             let orderData = {
-                orderType: cartData.orderType,
+                orderType: address.addressType,
                 cartId: cartData.cartId,
                 cartUnique: cartData.cartUnique,
                 cmsCartRef: cartData.cmsCartRef,
