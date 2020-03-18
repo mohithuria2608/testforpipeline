@@ -41,9 +41,6 @@ export default (router: Router) => {
                 ctx.status = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.httpCode
         })
         .get('/faq',
-            validate({
-                headers: JOI.COMMON_HEADERS,
-            }),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;

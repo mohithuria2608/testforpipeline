@@ -43,7 +43,8 @@ export enum SET_NAME {
     LOGGER = "logger",
     APP_VERSION = "appversion",
     FAILQ = "failq",
-    PING_SERVICE = "ping-service"
+    PING_SERVICE = "ping-service",
+    LOAD = "load"
 };
 
 export enum KAFKA_TOPIC {
