@@ -40,7 +40,7 @@ export default (router: Router) => {
             else
                 ctx.status = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.httpCode
         })
-        .get('/v1/faq',
+        .get('/faq',
             validate({
                 headers: JOI.COMMON_HEADERS,
             }),
