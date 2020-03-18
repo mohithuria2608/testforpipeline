@@ -457,7 +457,7 @@ export class OrderController {
                                     }
                                     if (transLogs && transLogs.length > 0)
                                         dataToUpdateOrder['$addToSet'] = {
-                                            transLogs: { $each: transLogs }
+                                            transLogs: { $each: transLogs.reverse() }
                                         }
                                 }
                                 order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })

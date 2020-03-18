@@ -57,7 +57,7 @@ export class WebhookNoonpayController {
                     if (!isFailed && webHookStatus && webHookStatus.resultCode == 0 && webHookStatus.transactions && webHookStatus.transactions.length > 0) {
                         let dataToUpdateOrder = {
                             $addToSet: {
-                                transLogs: { $each: transLogs }
+                                transLogs: { $each: transLogs.reverse() }
                             },
                             "payment.transactionId": webHookStatus.transactions[0].id,
                             "payment.status": webHookStatus.transactions[0].type
@@ -138,7 +138,7 @@ export class WebhookNoonpayController {
                         }
                         if (transLogs && transLogs.length > 0)
                             dataToUpdateOrder['$addToSet'] = {
-                                transLogs: { $each: transLogs }
+                                transLogs: { $each: transLogs.reverse() }
                             }
                         order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     }
@@ -152,7 +152,7 @@ export class WebhookNoonpayController {
                     }
                     if (transLogs && transLogs.length > 0)
                         dataToUpdateOrder['$addToSet'] = {
-                            transLogs: { $each: transLogs }
+                            transLogs: { $each: transLogs.reverse() }
                         }
                     if (validationRemarks && validationRemarks != "")
                         dataToUpdateOrder['validationRemarks'] = validationRemarks

@@ -750,7 +750,7 @@ export class OrderClass extends BaseEntity {
                                             }
                                             if (transLogs && transLogs.length > 0)
                                                 dataToUpdateOrder['$addToSet'] = {
-                                                    transLogs: { $each: transLogs }
+                                                    transLogs: { $each: transLogs.reverse() }
                                                 }
                                             order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                                             if (reverseStatus && order && order._id) {
@@ -974,7 +974,7 @@ export class OrderClass extends BaseEntity {
                                                         }
                                                         if (transLogs && transLogs.length > 0)
                                                             dataToUpdateOrder['$addToSet'] = {
-                                                                transLogs: { $each: transLogs }
+                                                                transLogs: { $each: transLogs.reverse() }
                                                             }
                                                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                                                         if (captureStatus && order && order._id) {
