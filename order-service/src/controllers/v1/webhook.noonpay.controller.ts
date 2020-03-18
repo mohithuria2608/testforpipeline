@@ -88,12 +88,16 @@ export class WebhookNoonpayController {
                         }
                     }
                 } else {
+                    consolelog(process.cwd(), "step 1", isFailed, true)
+
                     if (!isFailed) {
+                        consolelog(process.cwd(), "step 2", isFailed, true)
+
                         let transLogs = [];
                         let reverseStatus;
                         try {
                             await paymentService.reversePayment({
-                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                noonpayOrderId: parseInt(order.transLogs[0].noonpayOrderId),
                                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                             })
                         } catch (revError) {
@@ -109,7 +113,7 @@ export class WebhookNoonpayController {
                         }
                         try {
                             reverseStatus = await paymentService.getPaymentStatus({
-                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                noonpayOrderId: parseInt(order.transLogs[0].noonpayOrderId),
                                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                                 paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
                             })
