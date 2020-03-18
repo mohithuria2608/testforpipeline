@@ -40,9 +40,13 @@ export class CmsConfigController {
                 case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
+                            console.log("dataToSave==111111111111=======>", typeof data.data)
+
                             if (data.data && data.data.length > 0) {
                                 let configToSync = []
                                 for (const config of data.data) {
+                                    console.log("dataToSave==config=======>", config)
+
                                     let dataToSave: IConfigRequest.IConfig = {
                                         id: data.type,
                                         type: data.type,
@@ -72,6 +76,7 @@ export class CmsConfigController {
                                         },
                                         createdAt: new Date().getTime()
                                     }
+                                    console.log("dataToSave=========>", dataToSave)
                                     configToSync.push(dataToSave)
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
