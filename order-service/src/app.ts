@@ -2,6 +2,9 @@ if (process.env.NODE_ENV == 'staging')
   require('newrelic');
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 global.healthcheck = {}
+global.configSync = {
+  general: 0
+}
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
@@ -30,569 +33,677 @@ export const start = (async () => {
 
     let stock: any = [
       {
+        "promoId": -1,
+        "originalTypeId": "simple",
+        "image": "/imagestemp/110032.png",
+        "langMenuIdCatIdProductId": "En#1#34#1677",
         "qty": 1,
+        "imageThumbnail": "/imagestemp/110032.png",
+        "orignalPrice": 20,
+        "catId": 34,
+        "langMenuIdCatId": "En#1#34",
+        "inSide": 0,
+        "name": "Kentucky Burger Fillet",
+        "position": 5,
+        "language": "En",
+        "metaKeyword": [
+          "KENTUCKY BURGER FILLET"
+        ],
         "associative": 0,
+        "taxClassId": 2,
+        "id": 1677,
         "bundleProductOptions": [
           {
-            "compId": 1,
-            "imageThumbnail": "/imagestemp/0.png",
-            "ingredient": 0,
-            "isDependent": 0,
             "isModifier": 0,
-            "maximumQty": 2,
-            "minimumQty": 2,
+            "minimumQty": 0,
             "position": 1,
             "productLinks": [
               {
                 "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1642,
-                "imageThumbnail": "/imagestemp/413002.png",
-                "modGroupId": -1,
-                "name": "Super Mega Deal - Original",
-                "option_id": 1436,
+                "option_id": 0,
+                "dependentSteps": [],
                 "position": 1,
-                "price": 0,
-                "sdmId": 413002,
-                "selected": 1,
-                "selection_id": 11190,
                 "selectionQty": 1,
-                "sku": 413002,
+                "name": "American Cheese",
+                "selection_id": 0,
+                "imageThumbnail": "/imagestemp/810001.png",
+                "sdmId": 0,
+                "modGroupId": 10028,
+                "id": 76,
+                "sku": 810001,
                 "subOptions": [
-
+                  {
+                    "option_id": 0,
+                    "price": 2,
+                    "product_id": 1717,
+                    "selection_id": 0,
+                    "sdmId": 810001,
+                    "modGroupId": 0,
+                    "id": 227,
+                    "sku": 810001,
+                    "name": "Regular",
+                    "selected": 1,
+                    "title": "Regular"
+                  },
+                  {
+                    "option_id": 0,
+                    "price": 4,
+                    "product_id": 1718,
+                    "selection_id": 0,
+                    "sdmId": 810001,
+                    "modGroupId": 0,
+                    "id": 228,
+                    "sku": 810001,
+                    "name": "Extra",
+                    "selected": 0,
+                    "title": "Extra"
+                  }
                 ],
-                "title": "Super Mega Deal - Original"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1643,
-                "imageThumbnail": "/imagestemp/413003.png",
-                "modGroupId": -1,
-                "name": "Super Mega Deal - Spicy",
-                "option_id": 1436,
-                "position": 2,
                 "price": 0,
-                "sdmId": 413003,
                 "selected": 0,
-                "selection_id": 11191,
-                "selectionQty": 1,
-                "sku": 413003,
-                "subOptions": [
-
-                ],
-                "title": "Super Mega Deal - Spicy"
+                "title": "American Cheese"
               },
               {
                 "default": 0,
-                "dependentSteps": [
-                  2
+                "option_id": 0,
+                "dependentSteps": [],
+                "position": 2,
+                "selectionQty": 1,
+                "name": "Lettuce",
+                "selection_id": 0,
+                "imageThumbnail": "/imagestemp/811701.png",
+                "sdmId": 0,
+                "modGroupId": 10027,
+                "id": 77,
+                "sku": 811701,
+                "subOptions": [
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1721,
+                    "selection_id": 0,
+                    "sdmId": 811701,
+                    "modGroupId": 0,
+                    "id": 230,
+                    "sku": 811701,
+                    "name": "Regular",
+                    "selected": 1,
+                    "title": "Regular"
+                  },
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1722,
+                    "selection_id": 0,
+                    "sdmId": 811701,
+                    "modGroupId": 0,
+                    "id": 231,
+                    "sku": 811701,
+                    "name": "Extra",
+                    "selected": 0,
+                    "title": "Extra"
+                  }
                 ],
-                "id": 1772,
-                "imageThumbnail": "/imagestemp/413004.png",
-                "modGroupId": -1,
-                "name": "Super Mega Deal - Mix",
-                "option_id": 1436,
+                "price": 0,
+                "selected": 0,
+                "title": "Lettuce"
+              },
+              {
+                "default": 0,
+                "option_id": 0,
+                "dependentSteps": [],
                 "position": 3,
-                "price": 0,
-                "sdmId": 413004,
-                "selected": 0,
-                "selection_id": 12342,
                 "selectionQty": 1,
-                "sku": 413004,
+                "name": "Tomato",
+                "selection_id": 0,
+                "imageThumbnail": "/imagestemp/811703.png",
+                "sdmId": 0,
+                "modGroupId": 10027,
+                "id": 78,
+                "sku": 811703,
                 "subOptions": [
-
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1725,
+                    "selection_id": 0,
+                    "sdmId": 811703,
+                    "modGroupId": 0,
+                    "id": 233,
+                    "sku": 811703,
+                    "name": "Regular",
+                    "selected": 1,
+                    "title": "Regular"
+                  },
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1726,
+                    "selection_id": 0,
+                    "sdmId": 811703,
+                    "modGroupId": 0,
+                    "id": 234,
+                    "sku": 811703,
+                    "name": "Extra",
+                    "selected": 0,
+                    "title": "Extra"
+                  }
                 ],
-                "title": "Super Mega Deal - Mix"
-              }
-            ],
-            "subtitle": "Choose Your Favorite Flavor",
-            "title": "Choose Your Favorite Flavor",
-            "type": "radio"
-          },
-          {
-            "compId": 1,
-            "imageThumbnail": "/imagestemp/0.png",
-            "ingredient": 0,
-            "isDependent": 1,
-            "isModifier": 1,
-            "maximumQty": 12,
-            "minimumQty": 12,
-            "position": 2,
-            "productLinks": [
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1645,
-                "imageThumbnail": "/imagestemp/910002.png",
-                "modGroupId": 10217,
-                "name": "Chicken Pc - Spicy",
-                "option_id": 1628,
-                "position": 1,
                 "price": 0,
-                "sdmId": 910002,
-                "selected": 1,
-                "selection_id": 12288,
-                "selectionQty": 6,
-                "sku": 910002,
-                "subOptions": [
-
-                ],
-                "title": "Chicken Pc - Spicy"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1644,
-                "imageThumbnail": "/imagestemp/910001.png",
-                "modGroupId": 10217,
-                "name": "Chicken Pc - Original",
-                "option_id": 1628,
-                "position": 2,
-                "price": 0,
-                "sdmId": 910001,
                 "selected": 0,
-                "selection_id": 12289,
-                "selectionQty": 6,
-                "sku": 910001,
-                "subOptions": [
-
-                ],
-                "title": "Chicken Pc - Original"
+                "title": "Tomato"
               }
             ],
-            "subtitle": "Select 12 Pieces Of Your Favorite Flavor",
-            "title": "Select 12 Pieces Of Your Favorite Flavor",
-            "type": "stepper"
-          },
-          {
-            "compId": 2,
-            "imageThumbnail": "/imagestemp/0.png",
-            "ingredient": 0,
+            "ingredient": 1,
             "isDependent": 0,
-            "isModifier": 0,
             "maximumQty": 0,
-            "minimumQty": 0,
-            "position": 3,
-            "productLinks": [
-              {
-                "default": 1,
-                "dependentSteps": [
-
-                ],
-                "id": 1632,
-                "imageThumbnail": "/imagestemp/510005.png",
-                "modGroupId": -1,
-                "name": "Family Fries",
-                "option_id": 1437,
-                "position": 1,
-                "price": 0,
-                "sdmId": 510005,
-                "selected": 1,
-                "selection_id": 11193,
-                "selectionQty": 1,
-                "sku": 510005,
-                "subOptions": [
-
-                ],
-                "title": "Family Fries"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1635,
-                "imageThumbnail": "/imagestemp/510014.png",
-                "modGroupId": -1,
-                "name": "Family Fries Spicy",
-                "option_id": 1437,
-                "position": 2,
-                "price": 3,
-                "sdmId": 510014,
-                "selected": 0,
-                "selection_id": 11194,
-                "selectionQty": 1,
-                "sku": 510014,
-                "subOptions": [
-
-                ],
-                "title": "Family Fries Spicy"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1629,
-                "imageThumbnail": "/imagestemp/510030.png",
-                "modGroupId": -1,
-                "name": "Loaded Fries Family",
-                "option_id": 1437,
-                "position": 3,
-                "price": 5,
-                "sdmId": 510030,
-                "selected": 0,
-                "selection_id": 11195,
-                "selectionQty": 1,
-                "sku": 510030,
-                "subOptions": [
-
-                ],
-                "title": "Loaded Fries Family"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1638,
-                "imageThumbnail": "/imagestemp/510074.png",
-                "modGroupId": -1,
-                "name": "Family Dipper Fries",
-                "option_id": 1437,
-                "position": 4,
-                "price": 6,
-                "sdmId": 510074,
-                "selected": 0,
-                "selection_id": 11196,
-                "selectionQty": 1,
-                "sku": 510074,
-                "subOptions": [
-
-                ],
-                "title": "Family Dipper Fries"
-              }
-            ],
-            "subtitle": " Select Your Favorite Side Item",
-            "title": " Select Your Favorite Side Item",
-            "type": "radio"
+            "title": "Choose Your Condiments",
+            "type": "checkbox",
+            "imageThumbnail": "/imagestemp/110032.png",
+            "subtitle": "Choose Your Condiments",
+            "compId": 0
           }
         ],
-        "catId": 21,
-        "configurableProductOptions": [
-
-        ],
-        "description": "12 chicken pcs & Family fries",
-        "finalPrice": 49,
-        "id": 1728,
-        "image": "/imagestemp/900067.png",
-        "imageSmall": "/imagestemp/900067.png",
-        "imageThumbnail": "/imagestemp/900067.png",
-        "inSide": 1,
-        "langMenuId": "En#1",
-        "langMenuIdCatId": "En#1#21",
-        "langMenuIdCatIdProductId": "En#1#21#1728",
-        "langMenuIdProductId": "En#1#1728",
-        "language": "En",
-        "menuId": 1,
-        "metaKeyword": [
-          "Super Mega Deal"
-        ],
-        "name": "Super Mega Deal",
-        "originalTypeId": "bundle",
-        "orignalPrice": 49,
-        "position": 3,
-        "promoId": 55,
-        "sdmId": 67,
-        "selectedItem": 0,
-        "sellingPrice": 49,
-        "sku": 900067,
-        "specialPrice": 49,
-        "taxClassId": 2,
+        "description": "New Kentucky Burger with double chicken patty, potato chips, Turkey ham and melting cheese putting ...",
         "tempBundleProductOptions": [
           {
-            "compId": 1,
-            "imageThumbnail": "/imagestemp/0.png",
-            "ingredient": 0,
-            "isDependent": 0,
             "isModifier": 0,
-            "maximumQty": 2,
-            "minimumQty": 2,
+            "minimumQty": 0,
             "position": 1,
             "productLinks": [
               {
                 "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1642,
-                "imageThumbnail": "/imagestemp/413002.png",
-                "modGroupId": -1,
-                "name": "Super Mega Deal - Original",
-                "option_id": 1436,
+                "option_id": 0,
+                "dependentSteps": [],
                 "position": 1,
-                "price": 0,
-                "sdmId": 413002,
-                "selected": 1,
-                "selection_id": 11190,
                 "selectionQty": 1,
-                "sku": 413002,
+                "name": "American Cheese",
+                "selection_id": 0,
+                "imageThumbnail": "/imagestemp/810001.png",
+                "sdmId": 0,
+                "modGroupId": 10028,
+                "id": 76,
+                "sku": 810001,
                 "subOptions": [
-
+                  {
+                    "option_id": 0,
+                    "price": 2,
+                    "product_id": 1717,
+                    "selection_id": 0,
+                    "sdmId": 810001,
+                    "modGroupId": 0,
+                    "id": 227,
+                    "sku": 810001,
+                    "name": "Regular",
+                    "selected": 1,
+                    "title": "Regular"
+                  },
+                  {
+                    "option_id": 0,
+                    "price": 4,
+                    "product_id": 1718,
+                    "selection_id": 0,
+                    "sdmId": 810001,
+                    "modGroupId": 0,
+                    "id": 228,
+                    "sku": 810001,
+                    "name": "Extra",
+                    "selected": 0,
+                    "title": "Extra"
+                  }
                 ],
-                "title": "Super Mega Deal - Original"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1643,
-                "imageThumbnail": "/imagestemp/413003.png",
-                "modGroupId": -1,
-                "name": "Super Mega Deal - Spicy",
-                "option_id": 1436,
-                "position": 2,
                 "price": 0,
-                "sdmId": 413003,
                 "selected": 0,
-                "selection_id": 11191,
-                "selectionQty": 1,
-                "sku": 413003,
-                "subOptions": [
-
-                ],
-                "title": "Super Mega Deal - Spicy"
+                "title": "American Cheese"
               },
               {
                 "default": 0,
-                "dependentSteps": [
-                  2
+                "option_id": 0,
+                "dependentSteps": [],
+                "position": 2,
+                "selectionQty": 1,
+                "name": "Lettuce",
+                "selection_id": 0,
+                "imageThumbnail": "/imagestemp/811701.png",
+                "sdmId": 0,
+                "modGroupId": 10027,
+                "id": 77,
+                "sku": 811701,
+                "subOptions": [
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1721,
+                    "selection_id": 0,
+                    "sdmId": 811701,
+                    "modGroupId": 0,
+                    "id": 230,
+                    "sku": 811701,
+                    "name": "Regular",
+                    "selected": 1,
+                    "title": "Regular"
+                  },
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1722,
+                    "selection_id": 0,
+                    "sdmId": 811701,
+                    "modGroupId": 0,
+                    "id": 231,
+                    "sku": 811701,
+                    "name": "Extra",
+                    "selected": 0,
+                    "title": "Extra"
+                  }
                 ],
-                "id": 1772,
-                "imageThumbnail": "/imagestemp/413004.png",
-                "modGroupId": -1,
-                "name": "Super Mega Deal - Mix",
-                "option_id": 1436,
+                "price": 0,
+                "selected": 0,
+                "title": "Lettuce"
+              },
+              {
+                "default": 0,
+                "option_id": 0,
+                "dependentSteps": [],
                 "position": 3,
-                "price": 0,
-                "sdmId": 413004,
-                "selected": 0,
-                "selection_id": 12342,
                 "selectionQty": 1,
-                "sku": 413004,
+                "name": "Tomato",
+                "selection_id": 0,
+                "imageThumbnail": "/imagestemp/811703.png",
+                "sdmId": 0,
+                "modGroupId": 10027,
+                "id": 78,
+                "sku": 811703,
                 "subOptions": [
-
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1725,
+                    "selection_id": 0,
+                    "sdmId": 811703,
+                    "modGroupId": 0,
+                    "id": 233,
+                    "sku": 811703,
+                    "name": "Regular",
+                    "selected": 1,
+                    "title": "Regular"
+                  },
+                  {
+                    "option_id": 0,
+                    "price": 0,
+                    "product_id": 1726,
+                    "selection_id": 0,
+                    "sdmId": 811703,
+                    "modGroupId": 0,
+                    "id": 234,
+                    "sku": 811703,
+                    "name": "Extra",
+                    "selected": 0,
+                    "title": "Extra"
+                  }
                 ],
-                "title": "Super Mega Deal - Mix"
-              }
-            ],
-            "subtitle": "Choose Your Favorite Flavor",
-            "title": "Choose Your Favorite Flavor",
-            "type": "radio"
-          },
-          {
-            "compId": 1,
-            "imageThumbnail": "/imagestemp/0.png",
-            "ingredient": 0,
-            "isDependent": 1,
-            "isModifier": 1,
-            "maximumQty": 12,
-            "minimumQty": 12,
-            "position": 2,
-            "productLinks": [
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1645,
-                "imageThumbnail": "/imagestemp/910002.png",
-                "modGroupId": 10217,
-                "name": "Chicken Pc - Spicy",
-                "option_id": 1628,
-                "position": 1,
                 "price": 0,
-                "sdmId": 910002,
-                "selected": 1,
-                "selection_id": 12288,
-                "selectionQty": 6,
-                "sku": 910002,
-                "subOptions": [
-
-                ],
-                "title": "Chicken Pc - Spicy"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1644,
-                "imageThumbnail": "/imagestemp/910001.png",
-                "modGroupId": 10217,
-                "name": "Chicken Pc - Original",
-                "option_id": 1628,
-                "position": 2,
-                "price": 0,
-                "sdmId": 910001,
                 "selected": 0,
-                "selection_id": 12289,
-                "selectionQty": 6,
-                "sku": 910001,
-                "subOptions": [
-
-                ],
-                "title": "Chicken Pc - Original"
+                "title": "Tomato"
               }
             ],
-            "subtitle": "Select 12 Pieces Of Your Favorite Flavor",
-            "title": "Select 12 Pieces Of Your Favorite Flavor",
-            "type": "stepper"
-          },
-          {
-            "compId": 2,
-            "imageThumbnail": "/imagestemp/0.png",
-            "ingredient": 0,
+            "ingredient": 1,
             "isDependent": 0,
-            "isModifier": 0,
             "maximumQty": 0,
-            "minimumQty": 0,
-            "position": 3,
-            "productLinks": [
-              {
-                "default": 1,
-                "dependentSteps": [
-
-                ],
-                "id": 1632,
-                "imageThumbnail": "/imagestemp/510005.png",
-                "modGroupId": -1,
-                "name": "Family Fries",
-                "option_id": 1437,
-                "position": 1,
-                "price": 0,
-                "sdmId": 510005,
-                "selected": 1,
-                "selection_id": 11193,
-                "selectionQty": 1,
-                "sku": 510005,
-                "subOptions": [
-
-                ],
-                "title": "Family Fries"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1635,
-                "imageThumbnail": "/imagestemp/510014.png",
-                "modGroupId": -1,
-                "name": "Family Fries Spicy",
-                "option_id": 1437,
-                "position": 2,
-                "price": 3,
-                "sdmId": 510014,
-                "selected": 0,
-                "selection_id": 11194,
-                "selectionQty": 1,
-                "sku": 510014,
-                "subOptions": [
-
-                ],
-                "title": "Family Fries Spicy"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1629,
-                "imageThumbnail": "/imagestemp/510030.png",
-                "modGroupId": -1,
-                "name": "Loaded Fries Family",
-                "option_id": 1437,
-                "position": 3,
-                "price": 5,
-                "sdmId": 510030,
-                "selected": 0,
-                "selection_id": 11195,
-                "selectionQty": 1,
-                "sku": 510030,
-                "subOptions": [
-
-                ],
-                "title": "Loaded Fries Family"
-              },
-              {
-                "default": 0,
-                "dependentSteps": [
-
-                ],
-                "id": 1638,
-                "imageThumbnail": "/imagestemp/510074.png",
-                "modGroupId": -1,
-                "name": "Family Dipper Fries",
-                "option_id": 1437,
-                "position": 4,
-                "price": 6,
-                "sdmId": 510074,
-                "selected": 0,
-                "selection_id": 11196,
-                "selectionQty": 1,
-                "sku": 510074,
-                "subOptions": [
-
-                ],
-                "title": "Family Dipper Fries"
-              }
-            ],
-            "subtitle": " Select Your Favorite Side Item",
-            "title": " Select Your Favorite Side Item",
-            "type": "radio"
+            "title": "Choose Your Condiments",
+            "type": "checkbox",
+            "imageThumbnail": "/imagestemp/110032.png",
+            "subtitle": "Choose Your Condiments",
+            "compId": 0
           }
         ],
+        "configurableProductOptions": [],
+        "finalPrice": 20,
+        "imageSmall": "/imagestemp/110032.png",
+        "langMenuId": "En#1",
+        "langMenuIdProductId": "En#1#1677",
+        "menuId": 1,
+        "sdmId": 110032,
+        "selectedItem": 0,
+        "sellingPrice": 20,
+        "sku": 110032,
+        "specialPrice": 20,
         "typeId": "bundle",
         "viewIdentifier": 0,
         "virtualGroup": 16298,
         "visibility": 4
       },
       {
-        "qty": 1,
-        "associative": 0,
-        "bundleProductOptions": [
-
-        ],
-        "catId": 38,
         "configurableProductOptions": [
-
+          {
+            "position": 1,
+            "tempOptions": [
+              {
+                "isSelected": 0,
+                "position": 1,
+                "title": "Regular",
+                "id": 16285
+              },
+              {
+                "isSelected": 0,
+                "position": 2,
+                "title": "Medium",
+                "id": 16287
+              },
+              {
+                "isSelected": 0,
+                "position": 3,
+                "title": "Large",
+                "id": 16286
+              },
+              {
+                "isSelected": 1,
+                "position": 4,
+                "title": "Family",
+                "id": 16294
+              }
+            ],
+            "subtitle": "Choice of Size",
+            "id": 144,
+            "options": [
+              {
+                "isSelected": 0,
+                "position": 1,
+                "title": "Regular",
+                "id": 16285
+              },
+              {
+                "isSelected": 0,
+                "position": 2,
+                "title": "Medium",
+                "id": 16287
+              },
+              {
+                "isSelected": 0,
+                "position": 3,
+                "title": "Large",
+                "id": 16286
+              },
+              {
+                "isSelected": 1,
+                "position": 4,
+                "title": "Family",
+                "id": 16294
+              }
+            ],
+            "selIndex": 1,
+            "title": "Choice of Size"
+          }
         ],
-        "description": "",
-        "finalPrice": 0,
-        "id": 1645,
-        "image": "/m/e/menuchickenpc.png",
-        "imageSmall": "/m/e/menuchickenpc.png",
-        "imageThumbnail": "/imagestemp/910002.png",
+        "tempItemList": [
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Potato Dipper- Regular",
+            "selectedItem": 0,
+            "specialPrice": 8.5,
+            "imageThumbnail": "/imagestemp/510071.png",
+            "visibility": 0,
+            "finalPrice": 8.5,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510071,
+            "title": "Potato Dipper- Regular",
+            "sel2Value": -1,
+            "sel1Value": 16285,
+            "id": 1639,
+            "description": "",
+            "sku": 510071,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          },
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Medium Dipper Fries",
+            "selectedItem": 0,
+            "specialPrice": 9.5,
+            "imageThumbnail": "/imagestemp/510072.png",
+            "visibility": 0,
+            "finalPrice": 9.5,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510072,
+            "title": "Medium Dipper Fries",
+            "sel2Value": -1,
+            "sel1Value": 16287,
+            "id": 1640,
+            "description": "",
+            "sku": 510072,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          },
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Large Dipper Fries",
+            "selectedItem": 0,
+            "specialPrice": 10.5,
+            "imageThumbnail": "/imagestemp/510073.png",
+            "visibility": 0,
+            "finalPrice": 10.5,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510073,
+            "title": "Large Dipper Fries",
+            "sel2Value": -1,
+            "sel1Value": 16286,
+            "id": 1641,
+            "description": "",
+            "sku": 510073,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          },
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Family Dipper Fries",
+            "selectedItem": 0,
+            "specialPrice": 15,
+            "imageThumbnail": "/imagestemp/510074.png",
+            "visibility": 0,
+            "finalPrice": 15,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510074,
+            "title": "Family Dipper Fries",
+            "sel2Value": -1,
+            "sel1Value": 16294,
+            "id": 1638,
+            "description": "",
+            "sku": 510074,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          }
+        ],
+        "originalTypeId": "configurable",
+        "langMenuId": "En#1",
+        "imageThumbnail": "/imagestemp/5000083.png",
+        "qty": 4,
+        "id": 1708,
+        "bundleProductOptions": [],
+        "visibility": 4,
+        "specialPrice": 9.5,
+        "position": 1,
+        "finalPrice": 9.5,
         "inSide": 0,
+        "typeId": "configurable",
+        "viewIdentifier": 0,
+        "name": "Dipper Fries",
+        "catId": 36,
+        "menuId": 1,
+        "imageSmall": "/imagestemp/5000083.png",
+        "langMenuIdProductId": "En#1#1708",
+        "associative": 0,
+        "image": "/imagestemp/5000083.png",
+        "description": "",
+        "langMenuIdCatId": "En#1#36",
+        "promoId": -1,
+        "sdmId": 5000083,
         "items": [
-
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Potato Dipper- Regular",
+            "selectedItem": 0,
+            "specialPrice": 8.5,
+            "imageThumbnail": "/imagestemp/510071.png",
+            "visibility": 0,
+            "finalPrice": 8.5,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510071,
+            "title": "Potato Dipper- Regular",
+            "sel2Value": -1,
+            "sel1Value": 16285,
+            "id": 1639,
+            "description": "",
+            "sku": 510071,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          },
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Medium Dipper Fries",
+            "selectedItem": 0,
+            "specialPrice": 9.5,
+            "imageThumbnail": "/imagestemp/510072.png",
+            "visibility": 0,
+            "finalPrice": 9.5,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510072,
+            "title": "Medium Dipper Fries",
+            "sel2Value": -1,
+            "sel1Value": 16287,
+            "id": 1640,
+            "description": "",
+            "sku": 510072,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          },
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Large Dipper Fries",
+            "selectedItem": 0,
+            "specialPrice": 10.5,
+            "imageThumbnail": "/imagestemp/510073.png",
+            "visibility": 0,
+            "finalPrice": 10.5,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510073,
+            "title": "Large Dipper Fries",
+            "sel2Value": -1,
+            "sel1Value": 16286,
+            "id": 1641,
+            "description": "",
+            "sku": 510073,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          },
+          {
+            "metaKeyword": [],
+            "taxClassId": 0,
+            "position": 0,
+            "promoId": 0,
+            "name": "Family Dipper Fries",
+            "selectedItem": 0,
+            "specialPrice": 15,
+            "imageThumbnail": "/imagestemp/510074.png",
+            "visibility": 0,
+            "finalPrice": 15,
+            "virtualGroup": 0,
+            "typeId": "simple",
+            "sdmId": 510074,
+            "title": "Family Dipper Fries",
+            "sel2Value": -1,
+            "sel1Value": 16294,
+            "id": 1638,
+            "description": "",
+            "sku": 510074,
+            "catId": 0,
+            "associative": 0,
+            "inSide": 0,
+            "sel3Value": -1
+          }
         ],
+        "langMenuIdCatIdProductId": "En#1#36#1708",
+        "language": "En",
+        "metaKeyword": [
+          "Dipper Fries"
+        ],
+        "orignalPrice": 60,
+        "selectedItem": 510074,
+        "sellingPrice": 60,
+        "sku": 5000083,
+        "taxClassId": 2,
+        "virtualGroup": 16298
+      },
+      {
+        "items": [],
         "metaKeyword": [
           "Chicken Pc - Spicy"
         ],
-        "name": "Chicken Pc - Spicy",
         "originalTypeId": "simple",
+        "configurableProductOptions": [],
         "position": 0,
         "promoId": -1,
-        "sdmId": 910002,
+        "name": "Chicken Pc - Spicy",
+        "imageSmall": "/m/e/menuchickenpc.png",
         "selectedItem": 0,
-        "sku": 910002,
         "specialPrice": 0,
-        "taxClassId": 2,
-        "typeId": "simple",
+        "catId": 38,
+        "visibility": 4,
+        "finalPrice": 0,
         "virtualGroup": 0,
-        "visibility": 4
+        "typeId": "simple",
+        "qty": 1,
+        "sdmId": 910002,
+        "id": 1645,
+        "description": "",
+        "sku": 910002,
+        "imageThumbnail": "/imagestemp/910002.png",
+        "associative": 0,
+        "bundleProductOptions": [],
+        "image": "/m/e/menuchickenpc.png",
+        "inSide": 0,
+        "taxClassId": 2
       }
     ]
     let Entries = {
@@ -997,114 +1108,62 @@ export const start = (async () => {
               "DealID": 0,
               "Entries": {
                 "CEntry": [
-                  {
-                    "ID": 0,
-                    "ItemID": 810001,
-                    "ModCode": "WITH",
-                    "ModgroupID": 10028,
-                    "Name": "American Cheese",
-                    "OrdrMode": "OM_SAVED",
-                    "Weight": 0
-                  },
-                  {
-                    "ID": 0,
-                    "ItemID": 811701,
-                    "ModCode": "WITH",
-                    "ModgroupID": 10027,
-                    "Name": "Lettuce",
-                    "OrdrMode": "OM_SAVED",
-                    "Weight": 0
-                  },
-                  {
-                    "ID": 0,
-                    "ItemID": 811703,
-                    "ModCode": "WITH",
-                    "ModgroupID": 10027,
-                    "Name": "Tomato",
-                    "OrdrMode": "OM_SAVED",
-                    "Weight": 0
-                  }
-                ]
-              },
-              "ID": 0,
-              "ItemID": 110005,
-              "ModCode": "NONE",
-              "Name": "Mighty Zinger",
-              "QCComponent": 1,
-              "QCInstanceID": 329,
-              "QCLevel": 0,
-              "QCProID": 65
-            },
-            {
-              "DealID": 0,
-              "Entries": {
-                "CEntry": [
-                  {
-                    "ID": 0,
-                    "ItemID": 811701,
-                    "ModCode": "WITH",
-                    "ModgroupID": 10027,
-                    "Name": "Lettuce",
-                    "OrdrMode": "OM_SAVED",
-                    "Weight": 0
-                  },
-                  {
-                    "ID": 0,
-                    "ItemID": 811703,
-                    "ModCode": "WITH",
-                    "ModgroupID": 10027,
-                    "Name": "Tomato",
-                    "OrdrMode": "OM_SAVED",
-                    "Weight": 0
-                  }
-                ]
-              },
-              "ID": 0,
-              "ItemID": 110003,
-              "ModCode": "NONE",
-              "Name": "Twister Sandwich - Original",
-              "QCComponent": 2,
-              "QCInstanceID": 329,
-              "QCLevel": 0,
-              "QCProID": 65
-            },
-            {
-              "DealID": 0,
-              "ID": 0,
-              "ItemID": 510050,
-              "ModCode": "NONE",
-              "Name": "Medium Fries",
-              "QCComponent": 3,
-              "QCInstanceID": 329,
-              "QCLevel": 0,
-              "QCProID": 65
-            },
-            {
-              "DealID": 0,
-              "ID": 0,
-              "ItemID": 600003,
-              "ModCode": "NONE",
-              "Name": "Pepsi Medium",
-              "QCComponent": 4,
-              "QCInstanceID": 329,
-              "QCLevel": 0,
-              "QCProID": 65
-            },
-            {
-              "DealID": 0,
-              "Entries": {
-                "CEntry": [
 
                 ]
               },
               "ID": 0,
-              "ItemID": 910010,
+              "ItemID": 110032,
               "ModCode": "NONE",
-              "Name": "Chicken Pc (S) Ges",
+              "Name": "Kentucky Burger Fillet",
               "QCComponent": -1,
-              "QCInstanceID": 594,
+              "QCInstanceID": 137,
               "QCLevel": 0,
               "QCProID": -1
+            },
+            {
+              "ItemID": 510074,
+              "Level": 0,
+              "ModCode": "NONE",
+              "Name": "Family Dipper Fries",
+              "OrdrMode": "OM_SAVED",
+              "Price": 15,
+              "Status": "NOTAPPLIED"
+            },
+            {
+              "ItemID": 510074,
+              "Level": 0,
+              "ModCode": "NONE",
+              "Name": "Family Dipper Fries",
+              "OrdrMode": "OM_SAVED",
+              "Price": 15,
+              "Status": "NOTAPPLIED"
+            },
+            {
+              "ItemID": 510074,
+              "Level": 0,
+              "ModCode": "NONE",
+              "Name": "Family Dipper Fries",
+              "OrdrMode": "OM_SAVED",
+              "Price": 15,
+              "Status": "NOTAPPLIED"
+            },
+            {
+              "ItemID": 510074,
+              "Level": 0,
+              "ModCode": "NONE",
+              "Name": "Family Dipper Fries",
+              "OrdrMode": "OM_SAVED",
+              "Price": 15,
+              "Status": "NOTAPPLIED"
+            },
+            {
+              "ItemID": 910002,
+              "Level": 0,
+              "ModCode": "NONE",
+              "Name": "Chicken Pc - Spicy",
+              "OrdrMode": "OM_SAVED",
+              "Price": 0,
+              "Status": "NOTAPPLIED"
             }
           ]
         },
@@ -1121,7 +1180,7 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838313 })
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838613, language: "En" })
     // await SDM.OrderSDME.cancelOrder({
     //   sdmOrderRef: 39838313,
     //   voidReason: 1,

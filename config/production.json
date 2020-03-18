@@ -1,0 +1,221 @@
+{
+    "env": "staging",
+    "server": {
+        "auth": {
+            "url": "http://americanauat.appskeeper.com/auth-service/",
+            "port": 4000
+        },
+        "user": {
+            "url": "http://americanauat.appskeeper.com/user-service/",
+            "port": 4001
+        },
+        "menu": {
+            "url": "http://americanauat.appskeeper.com/menu-service/",
+            "port": 4002
+        },
+        "order": {
+            "url": "http://americanauat.appskeeper.com/order-service/",
+            "port": 4003
+        },
+        "sync": {
+            "url": "http://americanauat.appskeeper.com/sync-service/",
+            "port": 4004
+        },
+        "deeplink": {
+            "url": "http://americanauat.appskeeper.com/deeplink-service/",
+            "port": 4005
+        },
+        "kafka": {
+            "url": "http://americanauat.appskeeper.com/kafka-service/",
+            "port": 4006
+        },
+        "location": {
+            "url": "http://americanauat.appskeeper.com/location-service/",
+            "port": 4007
+        },
+        "notification": {
+            "url": "http://americanauat.appskeeper.com/notification-service/",
+            "port": 4008
+        },
+        "payment": {
+            "url": "http://americanauat.appskeeper.com/payment-service/",
+            "port": 4009
+        },
+        "promotion": {
+            "url": "http://americana.appskeeper.com/promotion-service/",
+            "port": 4010
+        },
+        "upload": {
+            "url": "http://americana.appskeeper.com/upload-service/",
+            "port": 4011
+        },
+        "log": {
+            "url": "http://americanauat.appskeeper.com/log-service/",
+            "port": 4012
+        },
+        "home": {
+            "url": "http://americanauat.appskeeper.com/home-service/",
+            "port": 4013
+        }
+    },
+    "grpc": {
+        "configuration": {
+            "keepalive_timeout_ms": 1500
+        },
+        "auth": {
+            "server": "0.0.0.0:50051",
+            "client": "10.2.0.7:50051"
+        },
+        "user": {
+            "server": "0.0.0.0:50052",
+            "client": "10.2.0.18:50052"
+        },
+        "menu": {
+            "server": "0.0.0.0:50053",
+            "client": "10.2.0.12:50053"
+        },
+        "order": {
+            "server": "0.0.0.0:50054",
+            "client": "10.2.0.17:50054"
+        },
+        "sync": {
+            "server": "0.0.0.0:50055",
+            "client": "10.2.0.21:50055"
+        },
+        "deeplink": {
+            "server": "0.0.0.0:50056",
+            "client": "10.2.0.19:50056"
+        },
+        "kafka": {
+            "server": "0.0.0.0:50057",
+            "client": "10.2.0.20:50057"
+        },
+        "location": {
+            "server": "0.0.0.0:50058",
+            "client": "10.2.0.22:50058"
+        },
+        "notification": {
+            "server": "0.0.0.0:50059",
+            "client": "10.2.0.23:50059"
+        },
+        "payment": {
+            "server": "0.0.0.0:50060",
+            "client": "10.2.0.24:50060"
+        },
+        "promotion": {
+            "server": "0.0.0.0:50061",
+            "client": "10.2.0.25:50061"
+        },
+        "upload": {
+            "server": "0.0.0.0:50062",
+            "client": "10.2.0.26:50062"
+        },
+        "log": {
+            "server": "0.0.0.0:50063",
+            "client": "10.2.0.27:50063"
+        },
+        "home": {
+            "server": "0.0.0.0:50064",
+            "client": "10.2.0.28:50064"
+        }
+    },
+    "directory": {
+        "static": {
+            "proto": {
+                "auth": {
+                    "server": "/../../../proto/auth.proto",
+                    "client": "/../../../../proto/auth.proto"
+                },
+                "user": {
+                    "server": "/../../../proto/user.proto",
+                    "client": "/../../../../proto/user.proto"
+                },
+                "menu": {
+                    "server": "/../../../proto/menu.proto",
+                    "client": "/../../../../proto/menu.proto"
+                },
+                "kafka": {
+                    "server": "/../../../proto/kafka.proto",
+                    "client": "/../../../../proto/kafka.proto"
+                },
+                "location": {
+                    "server": "/../../../proto/location.proto",
+                    "client": "/../../../../proto/location.proto"
+                },
+                "order": {
+                    "server": "/../../../proto/order.proto",
+                    "client": "/../../../../proto/order.proto"
+                },
+                "sync": {
+                    "server": "/../../../proto/sync.proto",
+                    "client": "/../../../../proto/sync.proto"
+                },
+                "notification": {
+                    "server": "/../../../proto/notification.proto",
+                    "client": "/../../../../proto/notification.proto"
+                },
+                "payment": {
+                    "server": "/../../../proto/payment.proto",
+                    "client": "/../../../../proto/payment.proto"
+                },
+                "upload": {
+                    "server": "/../../../proto/upload.proto",
+                    "client": "/../../../../proto/upload.proto"
+                },
+                "promotion": {
+                    "server": "/../../../proto/promotion.proto",
+                    "client": "/../../../../proto/promotion.proto"
+                },
+                "log": {
+                    "server": "/../../../proto/log.proto",
+                    "client": "/../../../../proto/log.proto"
+                },
+                "home": {
+                    "server": "/../../../proto/home.proto",
+                    "client": "/../../../../proto/home.proto"
+                }
+            }
+        }
+    },
+    "blobBaseUrl": {
+        "product": "http://40.123.205.1/pub/media/catalog/product/",
+        "home": "http://40.123.205.1/pub/media/homepage/",
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
+    },
+    "cryptoSecret": "d6F3Efeq",
+    "cryptoAlgo": "aes-256-cbc",
+    "jwtSecret": "cgfhfj",
+    "jwtAlgo": "HS256",
+    "sms": {
+        "host": "sms.rmlconnect.net",
+        "port": "2345",
+        "userName": "Adigital",
+        "password": "vSqKeZdc",
+        "endPoint": "bulksms/bulksms",
+        "source": "KFC"
+    },
+    "kafka": {
+        "url": "10.2.4.4:9092,10.2.4.5:9092,10.2.4.6:9092"
+    },
+    "aerospike": {
+        "hosts": "aerospike.aerospikedb.svc.cluster.local:3000",
+        "username": "",
+        "password": "",
+        "config": {
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
+        }
+    },
+    "mongo": {
+        "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",
+        "hosts": "10.2.0.5",
+        "username": "americana_dbusr_uat",
+        "password": "AppInvDbUser"
+    },
+    "cms": {
+        "baseUrl": "https://magentouat.appskeeper.com/rest/V1/"
+    },
+    "sdm": {
+        "baseUrl": "https://sdkliveuae.americana.com.sa:2200/?wsdl"
+    }
+}

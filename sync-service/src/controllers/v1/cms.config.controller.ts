@@ -4,6 +4,7 @@ import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService } from '../../grpc/client'
+import { configuration } from '../../configuration';
 
 export class CmsConfigController {
 
@@ -39,7 +40,8 @@ export class CmsConfigController {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
                             if (data.data && data.data.length > 0) {
-                                data.data.map(async config => {
+                                let configToSync = []
+                                for (const config of data.data) {
                                     let dataToSave: IConfigRequest.IConfig = {
                                         id: ENTITY.ConfigE.ObjectId().toString(),
                                         type: data.type,
@@ -66,9 +68,10 @@ export class CmsConfigController {
                                             deeplink_fallback: config.deeplink_fallback ? config.deeplink_fallback : Constant.SERVER.DEEPLINK_FALLBACK,
                                             auth_mech: config.auth_mech ? config.auth_mech : Constant.SERVER.AUTH_MECH,
                                             addr_show_time: config.addr_show_time ? parseInt(config.addr_show_time) : Constant.SERVER.ADDR_SHOW_TIME,
-                                        }
+                                        },
+                                        createdAt: new Date().getTime()
                                     }
-
+                                    configToSync.push(dataToSave)
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
@@ -76,7 +79,8 @@ export class CmsConfigController {
                                         createOrReplace: true,
                                     }
                                     await Aerospike.put(putArg)
-                                })
+                                }
+                                await configuration.init();
                                 let pingServices: IKafkaGrpcRequest.IKafkaBody = {
                                     set: Constant.SET_NAME.PING_SERVICE,
                                     as: {
@@ -84,10 +88,22 @@ export class CmsConfigController {
                                         argv: JSON.stringify({
                                             set: Constant.SET_NAME.CONFIG,
                                             service: [
-                                                Constant.MICROSERVICE.PAYMENT,
+                                                Constant.MICROSERVICE.AUTH,
+                                                Constant.MICROSERVICE.USER,
+                                                Constant.MICROSERVICE.MENU,
                                                 Constant.MICROSERVICE.ORDER,
-                                                Constant.MICROSERVICE.USER
-                                            ]
+                                                Constant.MICROSERVICE.PROMOTION,
+                                                Constant.MICROSERVICE.PAYMENT,
+                                                Constant.MICROSERVICE.KAFKA,
+                                                Constant.MICROSERVICE.DEEPLINK,
+                                                Constant.MICROSERVICE.HOME,
+                                                Constant.MICROSERVICE.LOG,
+                                                Constant.MICROSERVICE.NOTIFICATION,
+                                                Constant.MICROSERVICE.UPLOAD,
+                                                Constant.MICROSERVICE.LOCATION,
+                                            ],
+                                            type: Constant.DATABASE.TYPE.CONFIG.GENERAL,
+                                            data: configToSync
                                         })
                                     },
                                     inQ: true

@@ -1640,29 +1640,54 @@ export const STATUS_MSG = {
 };
 
 
+interface IGeneral {
+    cms_page_data: [{
+        title: string,
+        identifier: string,
+    }],
+    ttl_for_cart: number,
+    initial_user_ttl: number,
+    initial_guest_ttl: number,
+    bypass_otp: number,
+    otp_expire: number,
+    access_token_expire_time: number,
+    refresh_token_expire_time: number,
+    cms_auth_exp: number,
+    reg_ex_for_validation: string,
+    country_codes: string,
+    support: string,
+    customer_care_email: string,
+    user_change_ttl: number,
+    max_pending_state: number,
+    minimum_cart_price: number,
+    payment_api_timeout: number,
+    payment_api_key_prefix: string,
+    display_color: boolean,
+    deeplink_fallback: string,
+    auth_mech: string,
+    addr_show_time: number,
+}
+export const generalConfigSync = function (config: IGeneral, date: number) {
+    SERVER.DEFAULT_CART_TTL = config.ttl_for_cart;
+    SERVER.BY_PASS_OTP = config.bypass_otp;
+    SERVER.OTP_EXPIRE_TIME = config.otp_expire;
+    SERVER.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
+    SERVER.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.CUSTOMER_CARE = config.support;
+    SERVER.SUPPORT_EMAIL = config.customer_care_email;
+    SERVER.USERCHANGE_TTL = config.user_change_ttl;
+    SERVER.MAX_PENDING_STATE_TIME = config.max_pending_state;
+    SERVER.MIN_CART_VALUE = config.minimum_cart_price;
+    SERVER.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.DEEPLINK_FALLBACK = config.deeplink_fallback;
+    SERVER.ADDR_SHOW_TIME = config.addr_show_time;
+    SERVER.AUTH_MECH = config.auth_mech;
+    SERVER.DISPLAY_COLOR = config.display_color;
+    // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
 
-// class ConstantClass {
-
-//     static obj;
-
-//     constructor() { }
-
-//     public STATUS_MSG =
-
-//     static makeObject() {
-//         if (!ConstantClass.obj) {
-//             ConstantClass.obj = new ConstantClass();
-//         }
-//         return ConstantClass.obj;
-//     }
-
-//     async init() {
-//         try {
-
-//         } catch (error) {
-//             return Promise.reject(error)
-//         }
-//     }
-// }
-
-// export const ConstantC = ConstantClass.makeObject();
+    
+    global.configSync.general = date;
+    return {}
+}

@@ -30,7 +30,7 @@ export class SyncService {
                 this.syncClient.fetchConfig({ store_code: payload.store_code }, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully fetched config", JSON.stringify(res), false)
-                        resolve(res.config)
+                        resolve(JSON.parse(res.config))
                     } else {
                         consolelog(process.cwd(), "Error in fetched config", JSON.stringify(error), false)
                         reject(error)

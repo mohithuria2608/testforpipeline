@@ -3,6 +3,9 @@ if (process.env.NODE_ENV == 'staging')
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 // process.env.AEROSPIKE_DEBUG_STACKTRACES = "1";
 global.healthcheck = {}
+global.configSync = {
+  general: 0
+}
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
