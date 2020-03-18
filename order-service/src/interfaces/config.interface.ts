@@ -2,7 +2,7 @@ declare namespace IConfigRequest {
 
     interface IConfig {
         type: string,
-        id: number,
+        id: string,
 
         store_code?: string,
 

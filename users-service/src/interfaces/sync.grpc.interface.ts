@@ -7,7 +7,7 @@ declare namespace ISyncGrpcRequest {
 
     interface IConfig {
         type: string,
-        id: number,
+        id: string,
 
         store_code?: string,
 

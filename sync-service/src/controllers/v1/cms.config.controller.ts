@@ -5,6 +5,7 @@ import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService } from '../../grpc/client'
 import { configuration } from '../../configuration';
+import { type } from 'os';
 
 export class CmsConfigController {
 
@@ -43,7 +44,7 @@ export class CmsConfigController {
                                 let configToSync = []
                                 for (const config of data.data) {
                                     let dataToSave: IConfigRequest.IConfig = {
-                                        id: ENTITY.ConfigE.ObjectId().toString(),
+                                        id: data.type,
                                         type: data.type,
                                         general: {
                                             cms_page_data: config.cms_page_data,

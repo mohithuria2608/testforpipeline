@@ -27,7 +27,7 @@ export class SyncService {
         return new Promise(async (resolve, reject) => {
             try {
                 await syncServiceValidator.fetchConfigValidator(payload)
-                this.syncClient.fetchConfig({ store_code: payload.store_code }, (error, res) => {
+                this.syncClient.fetchConfig(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully fetched config", JSON.stringify(res), false)
                         resolve(JSON.parse(res.config))

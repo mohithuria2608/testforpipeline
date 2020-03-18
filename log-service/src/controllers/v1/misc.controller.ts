@@ -24,11 +24,13 @@ export class MiscController {
                             config = await syncService.fetchConfig({ store_code: argv.store_code })
                         } else if (argv.type) {
                             config = await syncService.fetchConfig({ type: argv.type })
-                            switch (argv.type) {
-                                case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
-                                    if (config.createdAt != global.configSync.general)
-                                        Constant.generalConfigSync(config.general, config.createdAt)
-                                    break;
+                            if (config && config.length > 0) {
+                                switch (argv.type) {
+                                    case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
+                                        if (config[0].createdAt != global.configSync.general)
+                                            Constant.generalConfigSync(config[0].general, config[0].createdAt)
+                                        break;
+                                    }
                                 }
                             }
                         }

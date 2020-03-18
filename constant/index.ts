@@ -1752,6 +1752,6 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
 
 
     global.configSync.general = date;
-    console.log("--------------------MIN_CART_VALUE--------------------", SERVER.MIN_CART_VALUE, config.minimum_cart_price)
+    console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
     return {}
 }
