@@ -779,12 +779,82 @@ export const DATABASE = {
         PAYMENT: {
             INITIATED: 'INITIATED',
             AUTHORIZED: 'AUTHORIZED',
-            CANCELLED: 'CANCELLED', // Reverse payment
+            CANCELLED: 'CANCELLED', // Order has been cancelled by the user.
             CAPTURED: 'CAPTURED',
-            REFUNDED: 'REFUNDED',
             EXPIRED: 'EXPIRED',
             FAILED: 'FAILED',
+            PARTIALLY_CAPTURED: 'PARTIALLY_CAPTURED',
+            PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED',
+            REFUNDED: 'REFUNDED',
+            PAYMENT_INFO_ADDED: 'PAYMENT_INFO_ADDED',
+            '3DS_ENROLL_CHECKED': '3DS_ENROLL_CHECKED',
+            '3DS_RESULT_VERIFIED': '3DS_RESULT_VERIFIED',
+            MARKED_FOR_REVIEW: 'MARKED_FOR_REVIEW',
+            AUTHENTICATED: 'AUTHENTICATED',
+            PARTIALLY_REVERSED: 'PARTIALLY_REVERSED',
+            TOKENIZED: 'TOKENIZED',
+            REVERSED: 'REVERSED', // Order has been fully reversed (total authorized amount).
+            REJECTED: 'REJECTED',
+            PENDING: 'PENDING'
         },
+
+        /**
+         * INITIATED - Order has been initiated with the amount, reference, billing, shipping and other basic details.
+         * 
+         * AUTHORIZED - Order has been authorized (amount on hold on the user card) successfully with the amount provided during the
+         * initiate API. Merchant should always either call Capture Operation (for the amount to be settled to relevant
+         * bank account) or Reverse Operation (release the hold on amount) so the user does not complain about the
+         * amount which is on hold.
+         * 
+         * CANCELLED - Order has been cancelled by the user.
+         * 
+         * CAPTURED - Order has been captured successfully and merchant should see the funds in the relevant bank account as per
+         * the settlement schedule (usually T+1 [transaction day +1]).
+         * 
+         * FAILED - Order has been failed due to some error (could be internal or external) and no further operations can be
+         * performed.
+         * 
+         * PARTIALLY_CAPTURED - Order has been partially captured (partial amount of total authorized amount). Rest of the authorized amount
+         * either could be auto reversed (if the configuration/external system does not support follow-on captures) or
+         * available for the follow-on captures or reversal (if the configuration/external system does support).
+         * 
+         * PARTIALLY_REFUNDED - Order has been partially refunded (partial amount of total captured amount).
+         * 
+         * REFUNDED - Order has been fully refunded.
+         * 
+         * PAYMENT_INFO_ADDED - Order payment mechanism (CARD, PAYPAL, APPLE PAY) has been selected.
+         * 
+         * 3DS_ENROLL_CHECKED - User card has been checked for the 3D secure validation (card could be enrolled for 3D secure or could not be
+         * enrolled).
+         * 
+         * 3DS_RESULT_VERIFIED - User has been successfully verified with the 3D secure.
+         * 
+         * MARKED_FOR_REVIEW - Order was marked for review due to fraud evaluation (applicable only if the fraud evaluation engine is enabled).
+         * 
+         * AUTHENTICATED - Order has been authenticated and is ready for the Authorize/Sale operation. This status is only applicable for the
+         * wallet payment mechanism e.g. APPLE PAY, SUMSUNG PAY.
+         * 
+         * PARTIALLY_REVERSED - Order has been partially reversed (partial amount of total authorized amount).
+         * 
+         * TOKENIZED - Order has been tokenized successfully (only applicable to tokenization API).
+         * 
+         * EXPIRED - Order has been expired due to provided validity expiry (value can be passed during the INITIATE operation) or
+         * no activity for long time (will only be applicable if no financial operation has been performed on the order e.g.
+         * Authorize, Capture)
+         * 
+         * REVERSED - Order has been fully reversed (total authorized amount).
+         * 
+         * REJECTED - Order has been rejected during the fraud evaluation (only applicable if the fraud evaluation engine is enabled).
+         * 
+         * PENDING - Order is in pending status due to connectivity issue with external system or some internal issue and transaction
+         * status cannot be determined immediately. In this case, noon payments support/technical team proactively
+         * reacts to determine the exact transaction status (the time to resolve the pending status could be longer due to
+         * external systems involved in the transaction flow). Merchants are requested to contact the noon payments
+         * support/technical team if they found the order in pending status for long time.
+         * NOTE:
+         * Transaction may not be failed in the pending status so merchants should take the relevant action after the
+         * pending status resolved.
+         */
 
         TRANSACTION: {
             AUTHORIZATION: {
@@ -1621,15 +1691,7 @@ export const STATUS_MSG = {
             message: 'Multiple payments were initiated for the given order, use noonpay order id to get the status',
             type: 'MULTIPLE_PAYMENTS_INITIATED',
             actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
-        },
-        0: {
-            statusCode: 6051,
-            httpCode: 400,
-            message: 'Banking error',
-            type: 'BANKING_ERROR',
-            actionHint: '',
-            useNoonPayMessage: true
-        },
+        }
     },
     SDM_ORDER_VALIDATION: {
         ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
