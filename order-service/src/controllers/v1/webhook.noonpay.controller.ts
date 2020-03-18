@@ -92,7 +92,7 @@ export class WebhookNoonpayController {
 
                     if (!isFailed) {
                         consolelog(process.cwd(), "step 2", isFailed, true)
-
+                        isFailed = true
                         let transLogs = [];
                         let reverseStatus;
                         try {
