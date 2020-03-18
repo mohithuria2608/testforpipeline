@@ -635,39 +635,39 @@ export const DATABASE = {
                 Ar: [
                     {
                         name: "PENDING",
-                        value: "Pending ar"
+                        value: "قيد الانتظار"
                     },
                     {
                         name: "CONFIRMED",
-                        value: "Confirmed ar"
+                        value: "تم التأكيد"
                     },
                     {
                         name: "BEING_PREPARED",
-                        value: "Being prepared ar"
+                        value: "جاري التجهيز"
                     },
                     {
                         name: "READY",
-                        value: "Ready ar"
+                        value: "جاهز"
                     },
                     {
                         name: "ON_THE_WAY",
-                        value: "On the way ar"
+                        value: "في الطريق"
                     },
                     {
                         name: "DELIVERED",
-                        value: "Delivered ar"
+                        value: "تم توصيله"
                     },
                     {
                         name: "CLOSED",
-                        value: "Closed ar"
+                        value: "مغلق"
                     },
                     {
                         name: "CANCELED",
-                        value: "Canceled ar"
+                        value: "تم إلغاؤه"
                     },
                     {
                         name: "FAILURE",
-                        value: "Failure ar"
+                        value: "فشل"
                     }
                 ]
             },
@@ -1595,7 +1595,7 @@ export const STATUS_MSG = {
         ERROR: (code, type, message) => {
             return {
                 code: parseInt(code),
-                details: `${type} : ${message}`
+                details: message
             }
         }
     },
@@ -1749,7 +1749,7 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
     SERVER.DISPLAY_COLOR = config.display_color;
     // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
 
-    
+
     global.configSync.general = date;
     return {}
 }

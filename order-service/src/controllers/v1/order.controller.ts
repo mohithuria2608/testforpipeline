@@ -420,12 +420,25 @@ export class OrderController {
                                 }
                                 let status
                                 if (order.payment && order.payment.status && order.payment.status != Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS) {
-                                    await paymentService.reversePayment({
-                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                    })
+                                    try {
+                                        await paymentService.reversePayment({
+                                            noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                        })
+                                    } catch (revError) {
+                                        if (revError.data) {
+                                            if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+
+                                            } else if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+
+                                            } else {
+                                                return Promise.reject(revError)
+                                            }
+                                        }
+                                    }
+
                                     status = await paymentService.getPaymentStatus({
-                                        noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                        noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                         storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                                         paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
                                     })

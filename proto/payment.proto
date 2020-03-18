@@ -5,6 +5,7 @@ service PaymentService {
     rpc InitiatePayment (IInitiatePaymentReq) returns (IInitiatePaymentRes) {}
     rpc GetPaymentStatus (IGetPaymentStatusReq) returns (IGetPaymentStatusRes) {}
     rpc CapturePayment (ICapturePaymentReq) returns (ICapturePaymentRes) {}
+    rpc ReversePayment (IReversePaymentReq) returns (IReversePaymentRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
 
@@ -93,6 +94,13 @@ message ICapturePaymentReq {
 }
 
 message ICapturePaymentRes { }
+
+message IReversePaymentReq {
+    required int64 noonpayOrderId = 1;
+    required string storeCode = 2;
+}
+
+message IReversePaymentRes { }
 
 message IKafkaReq {
     required string set = 1;

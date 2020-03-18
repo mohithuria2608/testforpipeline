@@ -705,12 +705,24 @@ export class OrderClass extends BaseEntity {
                                             })
                                         } else {
                                             consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
-                                            await paymentService.reversePayment({
-                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                            })
+                                            try {
+                                                await paymentService.reversePayment({
+                                                    noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                                })
+                                            } catch (revError) {
+                                                if (revError.data) {
+                                                    if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+
+                                                    } else if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+
+                                                    } else {
+                                                        return Promise.reject(revError)
+                                                    }
+                                                }
+                                            }
                                             let status = await paymentService.getPaymentStatus({
-                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                                                 paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
                                             })
@@ -898,13 +910,13 @@ export class OrderClass extends BaseEntity {
                                                             updatedAt: new Date().getTime(),
                                                         }, { new: true })
                                                         await paymentService.capturePayment({
-                                                            noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                            noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                                             orderId: order.transLogs[1].orderId,
                                                             amount: order.transLogs[1].amount,
                                                             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                                                         })
                                                         let status = await paymentService.getPaymentStatus({
-                                                            noonpayOrderId: order.transLogs[1].noonpayOrderId,
+                                                            noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                                             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                                                             paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                                         })

@@ -33,677 +33,2347 @@ export const start = (async () => {
 
     let stock: any = [
       {
-        "promoId": -1,
-        "originalTypeId": "simple",
-        "image": "/imagestemp/110032.png",
-        "langMenuIdCatIdProductId": "En#1#34#1677",
         "qty": 1,
-        "imageThumbnail": "/imagestemp/110032.png",
-        "orignalPrice": 20,
-        "catId": 34,
-        "langMenuIdCatId": "En#1#34",
-        "inSide": 0,
-        "name": "Kentucky Burger Fillet",
-        "position": 5,
-        "language": "En",
-        "metaKeyword": [
-          "KENTUCKY BURGER FILLET"
-        ],
         "associative": 0,
-        "taxClassId": 2,
-        "id": 1677,
         "bundleProductOptions": [
           {
+            "compId": 1,
+            "imageThumbnail": "/imagestemp/0.png",
+            "ingredient": 0,
+            "isDependent": 0,
             "isModifier": 0,
+            "maximumQty": 0,
             "minimumQty": 0,
             "position": 1,
             "productLinks": [
               {
-                "default": 0,
-                "option_id": 0,
-                "dependentSteps": [],
+                "default": 1,
+                "dependentSteps": [
+                  2
+                ],
+                "id": 1659,
+                "imageThumbnail": "/imagestemp/110005.png",
+                "modGroupId": -1,
+                "name": "Mighty Zinger",
+                "option_id": 1616,
                 "position": 1,
-                "selectionQty": 1,
-                "name": "American Cheese",
-                "selection_id": 0,
-                "imageThumbnail": "/imagestemp/810001.png",
-                "sdmId": 0,
-                "modGroupId": 10028,
-                "id": 76,
-                "sku": 810001,
-                "subOptions": [
-                  {
-                    "option_id": 0,
-                    "price": 2,
-                    "product_id": 1717,
-                    "selection_id": 0,
-                    "sdmId": 810001,
-                    "modGroupId": 0,
-                    "id": 227,
-                    "sku": 810001,
-                    "name": "Regular",
-                    "selected": 1,
-                    "title": "Regular"
-                  },
-                  {
-                    "option_id": 0,
-                    "price": 4,
-                    "product_id": 1718,
-                    "selection_id": 0,
-                    "sdmId": 810001,
-                    "modGroupId": 0,
-                    "id": 228,
-                    "sku": 810001,
-                    "name": "Extra",
-                    "selected": 0,
-                    "title": "Extra"
-                  }
-                ],
                 "price": 0,
-                "selected": 0,
-                "title": "American Cheese"
-              },
-              {
-                "default": 0,
-                "option_id": 0,
-                "dependentSteps": [],
-                "position": 2,
+                "sdmId": 110005,
+                "selected": 1,
+                "selection_id": 12278,
                 "selectionQty": 1,
-                "name": "Lettuce",
-                "selection_id": 0,
-                "imageThumbnail": "/imagestemp/811701.png",
-                "sdmId": 0,
-                "modGroupId": 10027,
-                "id": 77,
-                "sku": 811701,
+                "sku": 110005,
                 "subOptions": [
-                  {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1721,
-                    "selection_id": 0,
-                    "sdmId": 811701,
-                    "modGroupId": 0,
-                    "id": 230,
-                    "sku": 811701,
-                    "name": "Regular",
-                    "selected": 1,
-                    "title": "Regular"
-                  },
-                  {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1722,
-                    "selection_id": 0,
-                    "sdmId": 811701,
-                    "modGroupId": 0,
-                    "id": 231,
-                    "sku": 811701,
-                    "name": "Extra",
-                    "selected": 0,
-                    "title": "Extra"
-                  }
+                  
                 ],
-                "price": 0,
-                "selected": 0,
-                "title": "Lettuce"
-              },
-              {
-                "default": 0,
-                "option_id": 0,
-                "dependentSteps": [],
-                "position": 3,
-                "selectionQty": 1,
-                "name": "Tomato",
-                "selection_id": 0,
-                "imageThumbnail": "/imagestemp/811703.png",
-                "sdmId": 0,
-                "modGroupId": 10027,
-                "id": 78,
-                "sku": 811703,
-                "subOptions": [
-                  {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1725,
-                    "selection_id": 0,
-                    "sdmId": 811703,
-                    "modGroupId": 0,
-                    "id": 233,
-                    "sku": 811703,
-                    "name": "Regular",
-                    "selected": 1,
-                    "title": "Regular"
-                  },
-                  {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1726,
-                    "selection_id": 0,
-                    "sdmId": 811703,
-                    "modGroupId": 0,
-                    "id": 234,
-                    "sku": 811703,
-                    "name": "Extra",
-                    "selected": 0,
-                    "title": "Extra"
-                  }
-                ],
-                "price": 0,
-                "selected": 0,
-                "title": "Tomato"
+                "title": "Mighty Zinger"
               }
             ],
-            "ingredient": 1,
-            "isDependent": 0,
-            "maximumQty": 0,
-            "title": "Choose Your Condiments",
-            "type": "checkbox",
-            "imageThumbnail": "/imagestemp/110032.png",
-            "subtitle": "Choose Your Condiments",
-            "compId": 0
-          }
-        ],
-        "description": "New Kentucky Burger with double chicken patty, potato chips, Turkey ham and melting cheese putting ...",
-        "tempBundleProductOptions": [
+            "subtitle": "Select Your favorite Sandwich",
+            "title": "Select Your favorite Sandwich",
+            "type": "radio"
+          },
           {
-            "isModifier": 0,
+            "compId": 1,
+            "imageThumbnail": "/imagestemp/0.png",
+            "ingredient": 1,
+            "isDependent": 1,
+            "isModifier": 1,
+            "maximumQty": 0,
             "minimumQty": 0,
-            "position": 1,
+            "position": 2,
             "productLinks": [
               {
                 "default": 0,
-                "option_id": 0,
-                "dependentSteps": [],
-                "position": 1,
-                "selectionQty": 1,
-                "name": "American Cheese",
-                "selection_id": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1719,
                 "imageThumbnail": "/imagestemp/810001.png",
-                "sdmId": 0,
                 "modGroupId": 10028,
-                "id": 76,
+                "name": "American Cheese",
+                "option_id": 1438,
+                "position": 1,
+                "price": 0,
+                "sdmId": 810001,
+                "selected": 1,
+                "selection_id": 0,
+                "selectionQty": 0,
                 "sku": 810001,
                 "subOptions": [
                   {
-                    "option_id": 0,
-                    "price": 2,
-                    "product_id": 1717,
-                    "selection_id": 0,
-                    "sdmId": 810001,
-                    "modGroupId": 0,
-                    "id": 227,
-                    "sku": 810001,
+                    "id": 1717,
+                    "modGroupId": 10028,
                     "name": "Regular",
+                    "option_id": 1719,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 810001,
                     "selected": 1,
+                    "selection_id": 12467,
+                    "sku": 810001,
                     "title": "Regular"
                   },
                   {
-                    "option_id": 0,
-                    "price": 4,
-                    "product_id": 1718,
-                    "selection_id": 0,
-                    "sdmId": 810001,
-                    "modGroupId": 0,
-                    "id": 228,
-                    "sku": 810001,
+                    "id": 1718,
+                    "modGroupId": 10028,
                     "name": "Extra",
+                    "option_id": 1719,
+                    "price": 2,
+                    "product_id": 0,
+                    "sdmId": 810001,
                     "selected": 0,
+                    "selection_id": 12468,
+                    "sku": 810001,
                     "title": "Extra"
                   }
                 ],
-                "price": 0,
-                "selected": 0,
                 "title": "American Cheese"
               },
               {
                 "default": 0,
-                "option_id": 0,
-                "dependentSteps": [],
-                "position": 2,
-                "selectionQty": 1,
-                "name": "Lettuce",
-                "selection_id": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1723,
                 "imageThumbnail": "/imagestemp/811701.png",
-                "sdmId": 0,
                 "modGroupId": 10027,
-                "id": 77,
+                "name": "Lettuce",
+                "option_id": 1438,
+                "position": 2,
+                "price": 0,
+                "sdmId": 811701,
+                "selected": 1,
+                "selection_id": 0,
+                "selectionQty": 0,
                 "sku": 811701,
                 "subOptions": [
                   {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1721,
-                    "selection_id": 0,
-                    "sdmId": 811701,
-                    "modGroupId": 0,
-                    "id": 230,
-                    "sku": 811701,
+                    "id": 1721,
+                    "modGroupId": 10027,
                     "name": "Regular",
+                    "option_id": 1723,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811701,
                     "selected": 1,
+                    "selection_id": 12469,
+                    "sku": 811701,
                     "title": "Regular"
                   },
                   {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1722,
-                    "selection_id": 0,
-                    "sdmId": 811701,
-                    "modGroupId": 0,
-                    "id": 231,
-                    "sku": 811701,
+                    "id": 1722,
+                    "modGroupId": 10027,
                     "name": "Extra",
+                    "option_id": 1723,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811701,
                     "selected": 0,
+                    "selection_id": 12470,
+                    "sku": 811701,
                     "title": "Extra"
                   }
                 ],
-                "price": 0,
-                "selected": 0,
                 "title": "Lettuce"
               },
               {
                 "default": 0,
-                "option_id": 0,
-                "dependentSteps": [],
-                "position": 3,
-                "selectionQty": 1,
-                "name": "Tomato",
-                "selection_id": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1727,
                 "imageThumbnail": "/imagestemp/811703.png",
-                "sdmId": 0,
                 "modGroupId": 10027,
-                "id": 78,
+                "name": "Tomato",
+                "option_id": 1438,
+                "position": 4,
+                "price": 0,
+                "sdmId": 811703,
+                "selected": 1,
+                "selection_id": 0,
+                "selectionQty": 0,
                 "sku": 811703,
                 "subOptions": [
                   {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1725,
-                    "selection_id": 0,
-                    "sdmId": 811703,
-                    "modGroupId": 0,
-                    "id": 233,
-                    "sku": 811703,
+                    "id": 1725,
+                    "modGroupId": 10027,
                     "name": "Regular",
+                    "option_id": 1727,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811703,
                     "selected": 1,
+                    "selection_id": 12471,
+                    "sku": 811703,
                     "title": "Regular"
                   },
                   {
-                    "option_id": 0,
-                    "price": 0,
-                    "product_id": 1726,
-                    "selection_id": 0,
-                    "sdmId": 811703,
-                    "modGroupId": 0,
-                    "id": 234,
-                    "sku": 811703,
+                    "id": 1726,
+                    "modGroupId": 10027,
                     "name": "Extra",
+                    "option_id": 1727,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811703,
                     "selected": 0,
+                    "selection_id": 12472,
+                    "sku": 811703,
                     "title": "Extra"
                   }
                 ],
-                "price": 0,
-                "selected": 0,
                 "title": "Tomato"
               }
             ],
-            "ingredient": 1,
-            "isDependent": 0,
-            "maximumQty": 0,
-            "title": "Choose Your Condiments",
-            "type": "checkbox",
-            "imageThumbnail": "/imagestemp/110032.png",
             "subtitle": "Choose Your Condiments",
-            "compId": 0
+            "title": "Choose Your Condiments",
+            "type": "checkbox"
+          },
+          {
+            "compId": 2,
+            "imageThumbnail": "/imagestemp/0.png",
+            "ingredient": 0,
+            "isDependent": 0,
+            "isModifier": 0,
+            "maximumQty": 0,
+            "minimumQty": 0,
+            "position": 3,
+            "productLinks": [
+              {
+                "default": 1,
+                "dependentSteps": [
+                  4
+                ],
+                "id": 1648,
+                "imageThumbnail": "/imagestemp/110003.png",
+                "modGroupId": -1,
+                "name": "Twister Sandwich - Original",
+                "option_id": 1439,
+                "position": 1,
+                "price": 0,
+                "sdmId": 110003,
+                "selected": 1,
+                "selection_id": 11208,
+                "selectionQty": 1,
+                "sku": 110003,
+                "subOptions": [
+                  
+                ],
+                "title": "Twister Sandwich - Original"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  4
+                ],
+                "id": 1649,
+                "imageThumbnail": "/imagestemp/110002.png",
+                "modGroupId": -1,
+                "name": "Twister Sandwich - Spicy",
+                "option_id": 1439,
+                "position": 2,
+                "price": 0,
+                "sdmId": 110002,
+                "selected": 0,
+                "selection_id": 11209,
+                "selectionQty": 1,
+                "sku": 110002,
+                "subOptions": [
+                  
+                ],
+                "title": "Twister Sandwich - Spicy"
+              }
+            ],
+            "subtitle": "Select Your Second Sandwich",
+            "title": "Select Your Second Sandwich",
+            "type": "radio"
+          },
+          {
+            "compId": 2,
+            "imageThumbnail": "/imagestemp/0.png",
+            "ingredient": 1,
+            "isDependent": 1,
+            "isModifier": 1,
+            "maximumQty": 0,
+            "minimumQty": 0,
+            "position": 4,
+            "productLinks": [
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1723,
+                "imageThumbnail": "/imagestemp/811701.png",
+                "modGroupId": 10027,
+                "name": "Lettuce",
+                "option_id": 1614,
+                "position": 1,
+                "price": 0,
+                "sdmId": 811701,
+                "selected": 1,
+                "selection_id": 0,
+                "selectionQty": 0,
+                "sku": 811701,
+                "subOptions": [
+                  {
+                    "id": 1721,
+                    "modGroupId": 10027,
+                    "name": "Regular",
+                    "option_id": 1723,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811701,
+                    "selected": 1,
+                    "selection_id": 12475,
+                    "sku": 811701,
+                    "title": "Regular"
+                  },
+                  {
+                    "id": 1722,
+                    "modGroupId": 10027,
+                    "name": "Extra",
+                    "option_id": 1723,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811701,
+                    "selected": 0,
+                    "selection_id": 12476,
+                    "sku": 811701,
+                    "title": "Extra"
+                  }
+                ],
+                "title": "Lettuce"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1727,
+                "imageThumbnail": "/imagestemp/811703.png",
+                "modGroupId": 10027,
+                "name": "Tomato",
+                "option_id": 1614,
+                "position": 3,
+                "price": 0,
+                "sdmId": 811703,
+                "selected": 1,
+                "selection_id": 0,
+                "selectionQty": 0,
+                "sku": 811703,
+                "subOptions": [
+                  {
+                    "id": 1725,
+                    "modGroupId": 10027,
+                    "name": "Regular",
+                    "option_id": 1727,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811703,
+                    "selected": 1,
+                    "selection_id": 12477,
+                    "sku": 811703,
+                    "title": "Regular"
+                  },
+                  {
+                    "id": 1726,
+                    "modGroupId": 10027,
+                    "name": "Extra",
+                    "option_id": 1727,
+                    "price": 0,
+                    "product_id": 0,
+                    "sdmId": 811703,
+                    "selected": 0,
+                    "selection_id": 12478,
+                    "sku": 811703,
+                    "title": "Extra"
+                  }
+                ],
+                "title": "Tomato"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1719,
+                "imageThumbnail": "/imagestemp/810001.png",
+                "modGroupId": 10028,
+                "name": "American Cheese",
+                "option_id": 1614,
+                "position": 5,
+                "price": 0,
+                "sdmId": 810001,
+                "selected": 0,
+                "selection_id": 0,
+                "selectionQty": 0,
+                "sku": 810001,
+                "subOptions": [
+                  {
+                    "id": 1717,
+                    "modGroupId": 10028,
+                    "name": "Regular",
+                    "option_id": 1719,
+                    "price": 2,
+                    "product_id": 0,
+                    "sdmId": 810001,
+                    "selected": 0,
+                    "selection_id": 12473,
+                    "sku": 810001,
+                    "title": "Regular"
+                  },
+                  {
+                    "id": 1718,
+                    "modGroupId": 10028,
+                    "name": "Extra",
+                    "option_id": 1719,
+                    "price": 4,
+                    "product_id": 0,
+                    "sdmId": 810001,
+                    "selected": 0,
+                    "selection_id": 12474,
+                    "sku": 810001,
+                    "title": "Extra"
+                  }
+                ],
+                "title": "American Cheese"
+              }
+            ],
+            "subtitle": "Choose Your Condiments",
+            "title": "Choose Your Condiments",
+            "type": "checkbox"
+          },
+          {
+            "compId": 3,
+            "imageThumbnail": "/imagestemp/0.png",
+            "ingredient": 0,
+            "isDependent": 0,
+            "isModifier": 0,
+            "maximumQty": 0,
+            "minimumQty": 0,
+            "position": 5,
+            "productLinks": [
+              {
+                "default": 1,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1633,
+                "imageThumbnail": "/imagestemp/510050.png",
+                "modGroupId": -1,
+                "name": "Medium Fries",
+                "option_id": 1440,
+                "position": 1,
+                "price": 0,
+                "sdmId": 510050,
+                "selected": 1,
+                "selection_id": 11210,
+                "selectionQty": 1,
+                "sku": 510050,
+                "subOptions": [
+                  
+                ],
+                "title": "Medium Fries"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1619,
+                "imageThumbnail": "/imagestemp/510001.png",
+                "modGroupId": -1,
+                "name": "Coleslaw Salad Small",
+                "option_id": 1440,
+                "position": 2,
+                "price": 0,
+                "sdmId": 510001,
+                "selected": 0,
+                "selection_id": 11212,
+                "selectionQty": 1,
+                "sku": 510001,
+                "subOptions": [
+                  
+                ],
+                "title": "Coleslaw Salad Small"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1637,
+                "imageThumbnail": "/imagestemp/510051.png",
+                "modGroupId": -1,
+                "name": "Medium Fries Spicy",
+                "option_id": 1440,
+                "position": 3,
+                "price": 1,
+                "sdmId": 510051,
+                "selected": 0,
+                "selection_id": 11211,
+                "selectionQty": 1,
+                "sku": 510051,
+                "subOptions": [
+                  
+                ],
+                "title": "Medium Fries Spicy"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1639,
+                "imageThumbnail": "/imagestemp/510071.png",
+                "modGroupId": -1,
+                "name": "Potato Dipper- Regular",
+                "option_id": 1440,
+                "position": 4,
+                "price": 1,
+                "sdmId": 510071,
+                "selected": 0,
+                "selection_id": 11214,
+                "selectionQty": 1,
+                "sku": 510071,
+                "subOptions": [
+                  
+                ],
+                "title": "Potato Dipper- Regular"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1628,
+                "imageThumbnail": "/imagestemp/510036.png",
+                "modGroupId": -1,
+                "name": "Loaded Fries Regular",
+                "option_id": 1440,
+                "position": 5,
+                "price": 3,
+                "sdmId": 510036,
+                "selected": 0,
+                "selection_id": 11213,
+                "selectionQty": 1,
+                "sku": 510036,
+                "subOptions": [
+                  
+                ],
+                "title": "Loaded Fries Regular"
+              }
+            ],
+            "subtitle": "Select your favorite side item",
+            "title": "Select your favorite side item",
+            "type": "radio"
+          },
+          {
+            "compId": 4,
+            "imageThumbnail": "/imagestemp/0.png",
+            "ingredient": 0,
+            "isDependent": 0,
+            "isModifier": 0,
+            "maximumQty": 0,
+            "minimumQty": 0,
+            "position": 6,
+            "productLinks": [
+              {
+                "default": 1,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1605,
+                "imageThumbnail": "/imagestemp/600003.png",
+                "modGroupId": -1,
+                "name": "Pepsi Medium",
+                "option_id": 1441,
+                "position": 1,
+                "price": 0,
+                "sdmId": 600003,
+                "selected": 1,
+                "selection_id": 11217,
+                "selectionQty": 1,
+                "sku": 600003,
+                "subOptions": [
+                  
+                ],
+                "title": "Pepsi Medium"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1617,
+                "imageThumbnail": "/imagestemp/600009.png",
+                "modGroupId": -1,
+                "name": "Mirinda Medium",
+                "option_id": 1441,
+                "position": 2,
+                "price": 0,
+                "sdmId": 600009,
+                "selected": 0,
+                "selection_id": 11218,
+                "selectionQty": 1,
+                "sku": 600009,
+                "subOptions": [
+                  
+                ],
+                "title": "Mirinda Medium"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1612,
+                "imageThumbnail": "/imagestemp/600016.png",
+                "modGroupId": -1,
+                "name": "7Up Medium",
+                "option_id": 1441,
+                "position": 3,
+                "price": 0,
+                "sdmId": 600016,
+                "selected": 0,
+                "selection_id": 11219,
+                "selectionQty": 1,
+                "sku": 600016,
+                "subOptions": [
+                  
+                ],
+                "title": "7Up Medium"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1607,
+                "imageThumbnail": "/imagestemp/600006.png",
+                "modGroupId": -1,
+                "name": "Diet Pepsi Medium",
+                "option_id": 1441,
+                "position": 4,
+                "price": 0,
+                "sdmId": 600006,
+                "selected": 0,
+                "selection_id": 11220,
+                "selectionQty": 1,
+                "sku": 600006,
+                "subOptions": [
+                  
+                ],
+                "title": "Diet Pepsi Medium"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1614,
+                "imageThumbnail": "/imagestemp/600013.png",
+                "modGroupId": -1,
+                "name": "Mountain Dew Medium",
+                "option_id": 1441,
+                "position": 5,
+                "price": 0,
+                "sdmId": 600013,
+                "selected": 0,
+                "selection_id": 11221,
+                "selectionQty": 1,
+                "sku": 600013,
+                "subOptions": [
+                  
+                ],
+                "title": "Mountain Dew Medium"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1652,
+                "imageThumbnail": "/imagestemp/610011.png",
+                "modGroupId": -1,
+                "name": "Small Aquafina",
+                "option_id": 1441,
+                "position": 6,
+                "price": 0,
+                "sdmId": 610011,
+                "selected": 0,
+                "selection_id": 11223,
+                "selectionQty": 1,
+                "sku": 610011,
+                "subOptions": [
+                  
+                ],
+                "title": "Small Aquafina"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1600,
+                "imageThumbnail": "/imagestemp/610021.png",
+                "modGroupId": -1,
+                "name": "Mojito Krusher",
+                "option_id": 1441,
+                "position": 7,
+                "price": 5.5,
+                "sdmId": 610021,
+                "selected": 0,
+                "selection_id": 11222,
+                "selectionQty": 1,
+                "sku": 610021,
+                "subOptions": [
+                  
+                ],
+                "title": "Mojito Krusher"
+              },
+              {
+                "default": 0,
+                "dependentSteps": [
+                  
+                ],
+                "id": 1599,
+                "imageThumbnail": "/imagestemp/610020.png",
+                "modGroupId": -1,
+                "name": "Fresh Orange Juice",
+                "option_id": 1441,
+                "position": 8,
+                "price": 8.5,
+                "sdmId": 610020,
+                "selected": 0,
+                "selection_id": 11224,
+                "selectionQty": 1,
+                "sku": 610020,
+                "subOptions": [
+                  
+                ],
+                "title": "Fresh Orange Juice"
+              }
+            ],
+            "subtitle": "Select your favorite beverage",
+            "title": "Select your favorite beverage",
+            "type": "radio"
           }
         ],
-        "configurableProductOptions": [],
-        "finalPrice": 20,
-        "imageSmall": "/imagestemp/110032.png",
-        "langMenuId": "En#1",
-        "langMenuIdProductId": "En#1#1677",
-        "menuId": 1,
-        "sdmId": 110032,
-        "selectedItem": 0,
-        "sellingPrice": 20,
-        "sku": 110032,
-        "specialPrice": 20,
-        "typeId": "bundle",
-        "viewIdentifier": 0,
-        "virtualGroup": 16298,
-        "visibility": 4
-      },
-      {
+        "catId": 21,
         "configurableProductOptions": [
           {
-            "position": 1,
-            "tempOptions": [
-              {
-                "isSelected": 0,
-                "position": 1,
-                "title": "Regular",
-                "id": 16285
-              },
-              {
-                "isSelected": 0,
-                "position": 2,
-                "title": "Medium",
-                "id": 16287
-              },
-              {
-                "isSelected": 0,
-                "position": 3,
-                "title": "Large",
-                "id": 16286
-              },
-              {
-                "isSelected": 1,
-                "position": 4,
-                "title": "Family",
-                "id": 16294
-              }
-            ],
-            "subtitle": "Choice of Size",
             "id": 144,
             "options": [
               {
-                "isSelected": 0,
+                "id": 16287,
+                "isSelected": 1,
                 "position": 1,
-                "title": "Regular",
-                "id": 16285
+                "title": "Medium"
               },
               {
+                "id": 16286,
                 "isSelected": 0,
                 "position": 2,
-                "title": "Medium",
-                "id": 16287
-              },
-              {
-                "isSelected": 0,
-                "position": 3,
-                "title": "Large",
-                "id": 16286
-              },
-              {
-                "isSelected": 1,
-                "position": 4,
-                "title": "Family",
-                "id": 16294
+                "title": "Large"
               }
             ],
+            "position": 1,
             "selIndex": 1,
+            "subtitle": "Choice of Size",
             "title": "Choice of Size"
           }
         ],
-        "tempItemList": [
-          {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Potato Dipper- Regular",
-            "selectedItem": 0,
-            "specialPrice": 8.5,
-            "imageThumbnail": "/imagestemp/510071.png",
-            "visibility": 0,
-            "finalPrice": 8.5,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510071,
-            "title": "Potato Dipper- Regular",
-            "sel2Value": -1,
-            "sel1Value": 16285,
-            "id": 1639,
-            "description": "",
-            "sku": 510071,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Medium Dipper Fries",
-            "selectedItem": 0,
-            "specialPrice": 9.5,
-            "imageThumbnail": "/imagestemp/510072.png",
-            "visibility": 0,
-            "finalPrice": 9.5,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510072,
-            "title": "Medium Dipper Fries",
-            "sel2Value": -1,
-            "sel1Value": 16287,
-            "id": 1640,
-            "description": "",
-            "sku": 510072,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Large Dipper Fries",
-            "selectedItem": 0,
-            "specialPrice": 10.5,
-            "imageThumbnail": "/imagestemp/510073.png",
-            "visibility": 0,
-            "finalPrice": 10.5,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510073,
-            "title": "Large Dipper Fries",
-            "sel2Value": -1,
-            "sel1Value": 16286,
-            "id": 1641,
-            "description": "",
-            "sku": 510073,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Family Dipper Fries",
-            "selectedItem": 0,
-            "specialPrice": 15,
-            "imageThumbnail": "/imagestemp/510074.png",
-            "visibility": 0,
-            "finalPrice": 15,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510074,
-            "title": "Family Dipper Fries",
-            "sel2Value": -1,
-            "sel1Value": 16294,
-            "id": 1638,
-            "description": "",
-            "sku": 510074,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
-          }
-        ],
-        "originalTypeId": "configurable",
-        "langMenuId": "En#1",
-        "imageThumbnail": "/imagestemp/5000083.png",
-        "qty": 4,
-        "id": 1708,
-        "bundleProductOptions": [],
-        "visibility": 4,
-        "specialPrice": 9.5,
-        "position": 1,
-        "finalPrice": 9.5,
-        "inSide": 0,
-        "typeId": "configurable",
-        "viewIdentifier": 0,
-        "name": "Dipper Fries",
-        "catId": 36,
-        "menuId": 1,
-        "imageSmall": "/imagestemp/5000083.png",
-        "langMenuIdProductId": "En#1#1708",
-        "associative": 0,
-        "image": "/imagestemp/5000083.png",
-        "description": "",
-        "langMenuIdCatId": "En#1#36",
-        "promoId": -1,
-        "sdmId": 5000083,
+        "description": "Mighty Zinger + Twister + Fries + Pepsi",
+        "finalPrice": 28,
+        "id": 16,
+        "image": "/imagestemp/900070.png",
+        "imageSmall": "/imagestemp/900070.png",
+        "imageThumbnail": "/imagestemp/900070.png",
+        "inSide": 1,
         "items": [
           {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Potato Dipper- Regular",
-            "selectedItem": 0,
-            "specialPrice": 8.5,
-            "imageThumbnail": "/imagestemp/510071.png",
-            "visibility": 0,
-            "finalPrice": 8.5,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510071,
-            "title": "Potato Dipper- Regular",
-            "sel2Value": -1,
-            "sel1Value": 16285,
-            "id": 1639,
-            "description": "",
-            "sku": 510071,
-            "catId": 0,
             "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Medium Dipper Fries",
-            "selectedItem": 0,
-            "specialPrice": 9.5,
-            "imageThumbnail": "/imagestemp/510072.png",
-            "visibility": 0,
-            "finalPrice": 9.5,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510072,
-            "title": "Medium Dipper Fries",
-            "sel2Value": -1,
+            "bundleProductOptions": [
+              {
+                "compId": 1,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 1,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      2
+                    ],
+                    "id": 1659,
+                    "imageThumbnail": "/imagestemp/110005.png",
+                    "modGroupId": -1,
+                    "name": "Mighty Zinger",
+                    "option_id": 1616,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 110005,
+                    "selected": 1,
+                    "selection_id": 12278,
+                    "selectionQty": 1,
+                    "sku": 110005,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mighty Zinger"
+                  }
+                ],
+                "subtitle": "Select Your favorite Sandwich",
+                "title": "Select Your favorite Sandwich",
+                "type": "radio"
+              },
+              {
+                "compId": 1,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 1,
+                "isDependent": 1,
+                "isModifier": 1,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 2,
+                "productLinks": [
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1719,
+                    "imageThumbnail": "/imagestemp/810001.png",
+                    "modGroupId": 10028,
+                    "name": "American Cheese",
+                    "option_id": 1438,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 810001,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 810001,
+                    "subOptions": [
+                      {
+                        "id": 1717,
+                        "modGroupId": 10028,
+                        "name": "Regular",
+                        "option_id": 1719,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 1,
+                        "selection_id": 12467,
+                        "sku": 810001,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1718,
+                        "modGroupId": 10028,
+                        "name": "Extra",
+                        "option_id": 1719,
+                        "price": 2,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 0,
+                        "selection_id": 12468,
+                        "sku": 810001,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "American Cheese"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1723,
+                    "imageThumbnail": "/imagestemp/811701.png",
+                    "modGroupId": 10027,
+                    "name": "Lettuce",
+                    "option_id": 1438,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 811701,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811701,
+                    "subOptions": [
+                      {
+                        "id": 1721,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 1,
+                        "selection_id": 12469,
+                        "sku": 811701,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1722,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 0,
+                        "selection_id": 12470,
+                        "sku": 811701,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Lettuce"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1727,
+                    "imageThumbnail": "/imagestemp/811703.png",
+                    "modGroupId": 10027,
+                    "name": "Tomato",
+                    "option_id": 1438,
+                    "position": 4,
+                    "price": 0,
+                    "sdmId": 811703,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811703,
+                    "subOptions": [
+                      {
+                        "id": 1725,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 1,
+                        "selection_id": 12471,
+                        "sku": 811703,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1726,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 0,
+                        "selection_id": 12472,
+                        "sku": 811703,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Tomato"
+                  }
+                ],
+                "subtitle": "Choose Your Condiments",
+                "title": "Choose Your Condiments",
+                "type": "checkbox"
+              },
+              {
+                "compId": 2,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 3,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      4
+                    ],
+                    "id": 1648,
+                    "imageThumbnail": "/imagestemp/110003.png",
+                    "modGroupId": -1,
+                    "name": "Twister Sandwich - Original",
+                    "option_id": 1439,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 110003,
+                    "selected": 1,
+                    "selection_id": 11208,
+                    "selectionQty": 1,
+                    "sku": 110003,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Twister Sandwich - Original"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      4
+                    ],
+                    "id": 1649,
+                    "imageThumbnail": "/imagestemp/110002.png",
+                    "modGroupId": -1,
+                    "name": "Twister Sandwich - Spicy",
+                    "option_id": 1439,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 110002,
+                    "selected": 0,
+                    "selection_id": 11209,
+                    "selectionQty": 1,
+                    "sku": 110002,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Twister Sandwich - Spicy"
+                  }
+                ],
+                "subtitle": "Select Your Second Sandwich",
+                "title": "Select Your Second Sandwich",
+                "type": "radio"
+              },
+              {
+                "compId": 2,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 1,
+                "isDependent": 1,
+                "isModifier": 1,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 4,
+                "productLinks": [
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1723,
+                    "imageThumbnail": "/imagestemp/811701.png",
+                    "modGroupId": 10027,
+                    "name": "Lettuce",
+                    "option_id": 1614,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 811701,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811701,
+                    "subOptions": [
+                      {
+                        "id": 1721,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 1,
+                        "selection_id": 12475,
+                        "sku": 811701,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1722,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 0,
+                        "selection_id": 12476,
+                        "sku": 811701,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Lettuce"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1727,
+                    "imageThumbnail": "/imagestemp/811703.png",
+                    "modGroupId": 10027,
+                    "name": "Tomato",
+                    "option_id": 1614,
+                    "position": 3,
+                    "price": 0,
+                    "sdmId": 811703,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811703,
+                    "subOptions": [
+                      {
+                        "id": 1725,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 1,
+                        "selection_id": 12477,
+                        "sku": 811703,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1726,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 0,
+                        "selection_id": 12478,
+                        "sku": 811703,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Tomato"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1719,
+                    "imageThumbnail": "/imagestemp/810001.png",
+                    "modGroupId": 10028,
+                    "name": "American Cheese",
+                    "option_id": 1614,
+                    "position": 5,
+                    "price": 0,
+                    "sdmId": 810001,
+                    "selected": 0,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 810001,
+                    "subOptions": [
+                      {
+                        "id": 1717,
+                        "modGroupId": 10028,
+                        "name": "Regular",
+                        "option_id": 1719,
+                        "price": 2,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 0,
+                        "selection_id": 12473,
+                        "sku": 810001,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1718,
+                        "modGroupId": 10028,
+                        "name": "Extra",
+                        "option_id": 1719,
+                        "price": 4,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 0,
+                        "selection_id": 12474,
+                        "sku": 810001,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "American Cheese"
+                  }
+                ],
+                "subtitle": "Choose Your Condiments",
+                "title": "Choose Your Condiments",
+                "type": "checkbox"
+              },
+              {
+                "compId": 3,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 5,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1633,
+                    "imageThumbnail": "/imagestemp/510050.png",
+                    "modGroupId": -1,
+                    "name": "Medium Fries",
+                    "option_id": 1440,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 510050,
+                    "selected": 1,
+                    "selection_id": 11210,
+                    "selectionQty": 1,
+                    "sku": 510050,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Medium Fries"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1619,
+                    "imageThumbnail": "/imagestemp/510001.png",
+                    "modGroupId": -1,
+                    "name": "Coleslaw Salad Small",
+                    "option_id": 1440,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 510001,
+                    "selected": 0,
+                    "selection_id": 11212,
+                    "selectionQty": 1,
+                    "sku": 510001,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Coleslaw Salad Small"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1637,
+                    "imageThumbnail": "/imagestemp/510051.png",
+                    "modGroupId": -1,
+                    "name": "Medium Fries Spicy",
+                    "option_id": 1440,
+                    "position": 3,
+                    "price": 1,
+                    "sdmId": 510051,
+                    "selected": 0,
+                    "selection_id": 11211,
+                    "selectionQty": 1,
+                    "sku": 510051,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Medium Fries Spicy"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1639,
+                    "imageThumbnail": "/imagestemp/510071.png",
+                    "modGroupId": -1,
+                    "name": "Potato Dipper- Regular",
+                    "option_id": 1440,
+                    "position": 4,
+                    "price": 1,
+                    "sdmId": 510071,
+                    "selected": 0,
+                    "selection_id": 11214,
+                    "selectionQty": 1,
+                    "sku": 510071,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Potato Dipper- Regular"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1628,
+                    "imageThumbnail": "/imagestemp/510036.png",
+                    "modGroupId": -1,
+                    "name": "Loaded Fries Regular",
+                    "option_id": 1440,
+                    "position": 5,
+                    "price": 3,
+                    "sdmId": 510036,
+                    "selected": 0,
+                    "selection_id": 11213,
+                    "selectionQty": 1,
+                    "sku": 510036,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Loaded Fries Regular"
+                  }
+                ],
+                "subtitle": "Select your favorite side item",
+                "title": "Select your favorite side item",
+                "type": "radio"
+              },
+              {
+                "compId": 4,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 6,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1605,
+                    "imageThumbnail": "/imagestemp/600003.png",
+                    "modGroupId": -1,
+                    "name": "Pepsi Medium",
+                    "option_id": 1441,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 600003,
+                    "selected": 1,
+                    "selection_id": 11217,
+                    "selectionQty": 1,
+                    "sku": 600003,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Pepsi Medium"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1617,
+                    "imageThumbnail": "/imagestemp/600009.png",
+                    "modGroupId": -1,
+                    "name": "Mirinda Medium",
+                    "option_id": 1441,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 600009,
+                    "selected": 0,
+                    "selection_id": 11218,
+                    "selectionQty": 1,
+                    "sku": 600009,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mirinda Medium"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1612,
+                    "imageThumbnail": "/imagestemp/600016.png",
+                    "modGroupId": -1,
+                    "name": "7Up Medium",
+                    "option_id": 1441,
+                    "position": 3,
+                    "price": 0,
+                    "sdmId": 600016,
+                    "selected": 0,
+                    "selection_id": 11219,
+                    "selectionQty": 1,
+                    "sku": 600016,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "7Up Medium"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1607,
+                    "imageThumbnail": "/imagestemp/600006.png",
+                    "modGroupId": -1,
+                    "name": "Diet Pepsi Medium",
+                    "option_id": 1441,
+                    "position": 4,
+                    "price": 0,
+                    "sdmId": 600006,
+                    "selected": 0,
+                    "selection_id": 11220,
+                    "selectionQty": 1,
+                    "sku": 600006,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Diet Pepsi Medium"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1614,
+                    "imageThumbnail": "/imagestemp/600013.png",
+                    "modGroupId": -1,
+                    "name": "Mountain Dew Medium",
+                    "option_id": 1441,
+                    "position": 5,
+                    "price": 0,
+                    "sdmId": 600013,
+                    "selected": 0,
+                    "selection_id": 11221,
+                    "selectionQty": 1,
+                    "sku": 600013,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mountain Dew Medium"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1652,
+                    "imageThumbnail": "/imagestemp/610011.png",
+                    "modGroupId": -1,
+                    "name": "Small Aquafina",
+                    "option_id": 1441,
+                    "position": 6,
+                    "price": 0,
+                    "sdmId": 610011,
+                    "selected": 0,
+                    "selection_id": 11223,
+                    "selectionQty": 1,
+                    "sku": 610011,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Small Aquafina"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1600,
+                    "imageThumbnail": "/imagestemp/610021.png",
+                    "modGroupId": -1,
+                    "name": "Mojito Krusher",
+                    "option_id": 1441,
+                    "position": 7,
+                    "price": 5.5,
+                    "sdmId": 610021,
+                    "selected": 0,
+                    "selection_id": 11222,
+                    "selectionQty": 1,
+                    "sku": 610021,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mojito Krusher"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1599,
+                    "imageThumbnail": "/imagestemp/610020.png",
+                    "modGroupId": -1,
+                    "name": "Fresh Orange Juice",
+                    "option_id": 1441,
+                    "position": 8,
+                    "price": 8.5,
+                    "sdmId": 610020,
+                    "selected": 0,
+                    "selection_id": 11224,
+                    "selectionQty": 1,
+                    "sku": 610020,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Fresh Orange Juice"
+                  }
+                ],
+                "subtitle": "Select your favorite beverage",
+                "title": "Select your favorite beverage",
+                "type": "radio"
+              }
+            ],
+            "catId": 0,
+            "configurableProductOptions": [
+              {
+                "id": 144,
+                "options": [
+                  {
+                    "id": 16287,
+                    "isSelected": 1,
+                    "position": 1,
+                    "title": "Medium"
+                  },
+                  {
+                    "id": 16286,
+                    "isSelected": 0,
+                    "position": 2,
+                    "title": "Large"
+                  }
+                ],
+                "position": 1,
+                "selIndex": 1,
+                "subtitle": "Choice of Size",
+                "title": "Choice of Size"
+              }
+            ],
+            "description": "",
+            "finalPrice": 28,
+            "id": 1729,
+            "image": "/m/e/menumightytwist_1.png",
+            "imageSmall": "/m/e/menumightytwist_1.png",
+            "imageThumbnail": "/imagestemp/900070.png",
+            "inSide": 1,
+            "metaKeyword": [
+              "Mighty Twist - Medium"
+            ],
+            "name": "Mighty Twist - Medium",
+            "position": 4,
+            "promoId": 65,
+            "sdmId": 70,
             "sel1Value": 16287,
-            "id": 1640,
-            "description": "",
-            "sku": 510072,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
+            "sel2Value": -1,
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 900070,
+            "specialPrice": 28,
+            "taxClassId": 2,
+            "title": "Mighty Twist - Medium",
+            "typeId": "bundle",
+            "virtualGroup": 16298,
+            "visibility": 4
           },
           {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Large Dipper Fries",
-            "selectedItem": 0,
-            "specialPrice": 10.5,
-            "imageThumbnail": "/imagestemp/510073.png",
-            "visibility": 0,
-            "finalPrice": 10.5,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510073,
-            "title": "Large Dipper Fries",
-            "sel2Value": -1,
+            "associative": 0,
+            "bundleProductOptions": [
+              {
+                "compId": 1,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 1,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      2
+                    ],
+                    "id": 1659,
+                    "imageThumbnail": "/imagestemp/110005.png",
+                    "modGroupId": -1,
+                    "name": "Mighty Zinger",
+                    "option_id": 1617,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 110005,
+                    "selected": 1,
+                    "selection_id": 12279,
+                    "selectionQty": 1,
+                    "sku": 110005,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mighty Zinger"
+                  }
+                ],
+                "subtitle": "Select Your favorite Sandwich",
+                "title": "Select Your favorite Sandwich",
+                "type": "radio"
+              },
+              {
+                "compId": 1,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 1,
+                "isDependent": 1,
+                "isModifier": 1,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 2,
+                "productLinks": [
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1719,
+                    "imageThumbnail": "/imagestemp/810001.png",
+                    "modGroupId": 10028,
+                    "name": "American Cheese",
+                    "option_id": 1442,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 810001,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 810001,
+                    "subOptions": [
+                      {
+                        "id": 1717,
+                        "modGroupId": 10028,
+                        "name": "Regular",
+                        "option_id": 1719,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 1,
+                        "selection_id": 12461,
+                        "sku": 810001,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1718,
+                        "modGroupId": 10028,
+                        "name": "Extra",
+                        "option_id": 1719,
+                        "price": 2,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 0,
+                        "selection_id": 12462,
+                        "sku": 810001,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "American Cheese"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1723,
+                    "imageThumbnail": "/imagestemp/811701.png",
+                    "modGroupId": 10027,
+                    "name": "Lettuce",
+                    "option_id": 1442,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 811701,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811701,
+                    "subOptions": [
+                      {
+                        "id": 1721,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 1,
+                        "selection_id": 12463,
+                        "sku": 811701,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1722,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 0,
+                        "selection_id": 12464,
+                        "sku": 811701,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Lettuce"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1727,
+                    "imageThumbnail": "/imagestemp/811703.png",
+                    "modGroupId": 10027,
+                    "name": "Tomato",
+                    "option_id": 1442,
+                    "position": 4,
+                    "price": 0,
+                    "sdmId": 811703,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811703,
+                    "subOptions": [
+                      {
+                        "id": 1725,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 1,
+                        "selection_id": 12465,
+                        "sku": 811703,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1726,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 0,
+                        "selection_id": 12466,
+                        "sku": 811703,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Tomato"
+                  }
+                ],
+                "subtitle": "Choose your condiments",
+                "title": "Choose your condiments",
+                "type": "checkbox"
+              },
+              {
+                "compId": 2,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 3,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      4
+                    ],
+                    "id": 1648,
+                    "imageThumbnail": "/imagestemp/110003.png",
+                    "modGroupId": -1,
+                    "name": "Twister Sandwich - Original",
+                    "option_id": 1443,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 110003,
+                    "selected": 1,
+                    "selection_id": 11234,
+                    "selectionQty": 1,
+                    "sku": 110003,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Twister Sandwich - Original"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      4
+                    ],
+                    "id": 1649,
+                    "imageThumbnail": "/imagestemp/110002.png",
+                    "modGroupId": -1,
+                    "name": "Twister Sandwich - Spicy",
+                    "option_id": 1443,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 110002,
+                    "selected": 0,
+                    "selection_id": 11235,
+                    "selectionQty": 1,
+                    "sku": 110002,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Twister Sandwich - Spicy"
+                  }
+                ],
+                "subtitle": "Select Your Second Sandwich",
+                "title": "Select Your Second Sandwich",
+                "type": "radio"
+              },
+              {
+                "compId": 2,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 1,
+                "isDependent": 1,
+                "isModifier": 1,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 4,
+                "productLinks": [
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1723,
+                    "imageThumbnail": "/imagestemp/811701.png",
+                    "modGroupId": 10027,
+                    "name": "Lettuce",
+                    "option_id": 1615,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 811701,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811701,
+                    "subOptions": [
+                      {
+                        "id": 1721,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 1,
+                        "selection_id": 12481,
+                        "sku": 811701,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1722,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1723,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811701,
+                        "selected": 0,
+                        "selection_id": 12482,
+                        "sku": 811701,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Lettuce"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1727,
+                    "imageThumbnail": "/imagestemp/811703.png",
+                    "modGroupId": 10027,
+                    "name": "Tomato",
+                    "option_id": 1615,
+                    "position": 3,
+                    "price": 0,
+                    "sdmId": 811703,
+                    "selected": 1,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 811703,
+                    "subOptions": [
+                      {
+                        "id": 1725,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 1,
+                        "selection_id": 12483,
+                        "sku": 811703,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1726,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 1727,
+                        "price": 0,
+                        "product_id": 0,
+                        "sdmId": 811703,
+                        "selected": 0,
+                        "selection_id": 12484,
+                        "sku": 811703,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "Tomato"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1719,
+                    "imageThumbnail": "/imagestemp/810001.png",
+                    "modGroupId": 10028,
+                    "name": "American Cheese",
+                    "option_id": 1615,
+                    "position": 5,
+                    "price": 0,
+                    "sdmId": 810001,
+                    "selected": 0,
+                    "selection_id": 0,
+                    "selectionQty": 0,
+                    "sku": 810001,
+                    "subOptions": [
+                      {
+                        "id": 1717,
+                        "modGroupId": 10028,
+                        "name": "Regular",
+                        "option_id": 1719,
+                        "price": 2,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 0,
+                        "selection_id": 12479,
+                        "sku": 810001,
+                        "title": "Regular"
+                      },
+                      {
+                        "id": 1718,
+                        "modGroupId": 10028,
+                        "name": "Extra",
+                        "option_id": 1719,
+                        "price": 4,
+                        "product_id": 0,
+                        "sdmId": 810001,
+                        "selected": 0,
+                        "selection_id": 12480,
+                        "sku": 810001,
+                        "title": "Extra"
+                      }
+                    ],
+                    "title": "American Cheese"
+                  }
+                ],
+                "subtitle": "Choose your condiments",
+                "title": "Choose your condiments",
+                "type": "checkbox"
+              },
+              {
+                "compId": 3,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 5,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1631,
+                    "imageThumbnail": "/imagestemp/510006.png",
+                    "modGroupId": -1,
+                    "name": "Large Fries",
+                    "option_id": 1444,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 510006,
+                    "selected": 1,
+                    "selection_id": 11236,
+                    "selectionQty": 1,
+                    "sku": 510006,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Large Fries"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1619,
+                    "imageThumbnail": "/imagestemp/510001.png",
+                    "modGroupId": -1,
+                    "name": "Coleslaw Salad Small",
+                    "option_id": 1444,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 510001,
+                    "selected": 0,
+                    "selection_id": 11238,
+                    "selectionQty": 1,
+                    "sku": 510001,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Coleslaw Salad Small"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1634,
+                    "imageThumbnail": "/imagestemp/510013.png",
+                    "modGroupId": -1,
+                    "name": "Large Fries Spicy",
+                    "option_id": 1444,
+                    "position": 3,
+                    "price": 1,
+                    "sdmId": 510013,
+                    "selected": 0,
+                    "selection_id": 11237,
+                    "selectionQty": 1,
+                    "sku": 510013,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Large Fries Spicy"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1639,
+                    "imageThumbnail": "/imagestemp/510071.png",
+                    "modGroupId": -1,
+                    "name": "Potato Dipper- Regular",
+                    "option_id": 1444,
+                    "position": 4,
+                    "price": 1,
+                    "sdmId": 510071,
+                    "selected": 0,
+                    "selection_id": 11240,
+                    "selectionQty": 1,
+                    "sku": 510071,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Potato Dipper- Regular"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1628,
+                    "imageThumbnail": "/imagestemp/510036.png",
+                    "modGroupId": -1,
+                    "name": "Loaded Fries Regular",
+                    "option_id": 1444,
+                    "position": 5,
+                    "price": 3,
+                    "sdmId": 510036,
+                    "selected": 0,
+                    "selection_id": 11239,
+                    "selectionQty": 1,
+                    "sku": 510036,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Loaded Fries Regular"
+                  }
+                ],
+                "subtitle": "Select your favorite side item",
+                "title": "Select your favorite side item",
+                "type": "radio"
+              },
+              {
+                "compId": 4,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "isDependent": 0,
+                "isModifier": 0,
+                "maximumQty": 0,
+                "minimumQty": 0,
+                "position": 6,
+                "productLinks": [
+                  {
+                    "default": 1,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1606,
+                    "imageThumbnail": "/imagestemp/600004.png",
+                    "modGroupId": -1,
+                    "name": "Pepsi Large",
+                    "option_id": 1445,
+                    "position": 1,
+                    "price": 0,
+                    "sdmId": 600004,
+                    "selected": 1,
+                    "selection_id": 11243,
+                    "selectionQty": 1,
+                    "sku": 600004,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Pepsi Large"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1618,
+                    "imageThumbnail": "/imagestemp/600010.png",
+                    "modGroupId": -1,
+                    "name": "Mirinda Large",
+                    "option_id": 1445,
+                    "position": 2,
+                    "price": 0,
+                    "sdmId": 600010,
+                    "selected": 0,
+                    "selection_id": 11244,
+                    "selectionQty": 1,
+                    "sku": 600010,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mirinda Large"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1610,
+                    "imageThumbnail": "/imagestemp/600017.png",
+                    "modGroupId": -1,
+                    "name": "7Up Large",
+                    "option_id": 1445,
+                    "position": 3,
+                    "price": 0,
+                    "sdmId": 600017,
+                    "selected": 0,
+                    "selection_id": 11245,
+                    "selectionQty": 1,
+                    "sku": 600017,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "7Up Large"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1609,
+                    "imageThumbnail": "/imagestemp/600007.png",
+                    "modGroupId": -1,
+                    "name": "Diet Pepsi Large",
+                    "option_id": 1445,
+                    "position": 4,
+                    "price": 0,
+                    "sdmId": 600007,
+                    "selected": 0,
+                    "selection_id": 11246,
+                    "selectionQty": 1,
+                    "sku": 600007,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Diet Pepsi Large"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1615,
+                    "imageThumbnail": "/imagestemp/600014.png",
+                    "modGroupId": -1,
+                    "name": "Mountain Dew Large",
+                    "option_id": 1445,
+                    "position": 5,
+                    "price": 0,
+                    "sdmId": 600014,
+                    "selected": 0,
+                    "selection_id": 11247,
+                    "selectionQty": 1,
+                    "sku": 600014,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mountain Dew Large"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1652,
+                    "imageThumbnail": "/imagestemp/610011.png",
+                    "modGroupId": -1,
+                    "name": "Small Aquafina",
+                    "option_id": 1445,
+                    "position": 6,
+                    "price": 0,
+                    "sdmId": 610011,
+                    "selected": 0,
+                    "selection_id": 11249,
+                    "selectionQty": 1,
+                    "sku": 610011,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Small Aquafina"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1600,
+                    "imageThumbnail": "/imagestemp/610021.png",
+                    "modGroupId": -1,
+                    "name": "Mojito Krusher",
+                    "option_id": 1445,
+                    "position": 7,
+                    "price": 5.5,
+                    "sdmId": 610021,
+                    "selected": 0,
+                    "selection_id": 11248,
+                    "selectionQty": 1,
+                    "sku": 610021,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Mojito Krusher"
+                  },
+                  {
+                    "default": 0,
+                    "dependentSteps": [
+                      
+                    ],
+                    "id": 1599,
+                    "imageThumbnail": "/imagestemp/610020.png",
+                    "modGroupId": -1,
+                    "name": "Fresh Orange Juice",
+                    "option_id": 1445,
+                    "position": 8,
+                    "price": 8.5,
+                    "sdmId": 610020,
+                    "selected": 0,
+                    "selection_id": 11250,
+                    "selectionQty": 1,
+                    "sku": 610020,
+                    "subOptions": [
+                      
+                    ],
+                    "title": "Fresh Orange Juice"
+                  }
+                ],
+                "subtitle": "Select your favorite beverage",
+                "title": "Select your favorite beverage",
+                "type": "radio"
+              }
+            ],
+            "catId": 0,
+            "configurableProductOptions": [
+              {
+                "id": 144,
+                "options": [
+                  {
+                    "id": 16287,
+                    "isSelected": 1,
+                    "position": 1,
+                    "title": "Medium"
+                  },
+                  {
+                    "id": 16286,
+                    "isSelected": 0,
+                    "position": 2,
+                    "title": "Large"
+                  }
+                ],
+                "position": 1,
+                "selIndex": 1,
+                "subtitle": "Choice of Size",
+                "title": "Choice of Size"
+              }
+            ],
+            "description": "",
+            "finalPrice": 29.5,
+            "id": 1730,
+            "image": "/m/e/menumightytwist.png",
+            "imageSmall": "/m/e/menumightytwist.png",
+            "imageThumbnail": "/imagestemp/900071.png",
+            "inSide": 1,
+            "metaKeyword": [
+              "Mighty Twist - Large"
+            ],
+            "name": "Mighty Twist - Large",
+            "position": 5,
+            "promoId": 65,
+            "sdmId": 71,
             "sel1Value": 16286,
-            "id": 1641,
-            "description": "",
-            "sku": 510073,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "taxClassId": 0,
-            "position": 0,
-            "promoId": 0,
-            "name": "Family Dipper Fries",
-            "selectedItem": 0,
-            "specialPrice": 15,
-            "imageThumbnail": "/imagestemp/510074.png",
-            "visibility": 0,
-            "finalPrice": 15,
-            "virtualGroup": 0,
-            "typeId": "simple",
-            "sdmId": 510074,
-            "title": "Family Dipper Fries",
             "sel2Value": -1,
-            "sel1Value": 16294,
-            "id": 1638,
-            "description": "",
-            "sku": 510074,
-            "catId": 0,
-            "associative": 0,
-            "inSide": 0,
-            "sel3Value": -1
+            "sel3Value": -1,
+            "selectedItem": 0,
+            "sku": 900071,
+            "specialPrice": 29.5,
+            "taxClassId": 2,
+            "title": "Mighty Twist - Large",
+            "typeId": "bundle",
+            "virtualGroup": 16298,
+            "visibility": 4
           }
         ],
-        "langMenuIdCatIdProductId": "En#1#36#1708",
+        "langMenuId": "En#1",
+        "langMenuIdCatId": "En#1#21",
+        "langMenuIdCatIdProductId": "En#1#21#16",
+        "langMenuIdProductId": "En#1#16",
         "language": "En",
+        "menuId": 1,
         "metaKeyword": [
-          "Dipper Fries"
+          "Mighty Twist - Medium"
         ],
-        "orignalPrice": 60,
-        "selectedItem": 510074,
-        "sellingPrice": 60,
-        "sku": 5000083,
-        "taxClassId": 2,
-        "virtualGroup": 16298
-      },
-      {
-        "items": [],
-        "metaKeyword": [
-          "Chicken Pc - Spicy"
-        ],
-        "originalTypeId": "simple",
-        "configurableProductOptions": [],
-        "position": 0,
-        "promoId": -1,
-        "name": "Chicken Pc - Spicy",
-        "imageSmall": "/m/e/menuchickenpc.png",
-        "selectedItem": 0,
+        "name": "Mighty Twist",
+        "originalTypeId": "bundle_group",
+        "orignalPrice": 28,
+        "position": 4,
+        "promoId": 65,
+        "sdmId": 70,
+        "selectedItem": 900070,
+        "sellingPrice": 28,
+        "sku": 900070,
         "specialPrice": 0,
-        "catId": 38,
-        "visibility": 4,
-        "finalPrice": 0,
-        "virtualGroup": 0,
-        "typeId": "simple",
-        "qty": 1,
-        "sdmId": 910002,
-        "id": 1645,
-        "description": "",
-        "sku": 910002,
-        "imageThumbnail": "/imagestemp/910002.png",
-        "associative": 0,
-        "bundleProductOptions": [],
-        "image": "/m/e/menuchickenpc.png",
-        "inSide": 0,
-        "taxClassId": 2
+        "taxClassId": 2,
+        "typeId": "bundle_group",
+        "viewIdentifier": 0,
+        "virtualGroup": 16298,
+        "visibility": 4
       }
     ]
     let Entries = {
@@ -1102,68 +2772,104 @@ export const start = (async () => {
         "CustomerID": "7695133",// "7694266",//"",// 
         "DeliveryChargeID": 279,
         "DistrictID": -1,
-        "Entries": {
+        "Entries":{
           "CEntry": [
             {
               "DealID": 0,
               "Entries": {
                 "CEntry": [
-
+                  {
+                    "ID": 0,
+                    "ItemID": 810001,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10028,
+                    "Name": "American Cheese",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  },
+                  {
+                    "ID": 0,
+                    "ItemID": 811701,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Lettuce",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  },
+                  {
+                    "ID": 0,
+                    "ItemID": 811703,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Tomato",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  }
                 ]
               },
               "ID": 0,
-              "ItemID": 110032,
+              "ItemID": 110005,
               "ModCode": "NONE",
-              "Name": "Kentucky Burger Fillet",
-              "QCComponent": -1,
-              "QCInstanceID": 137,
+              "Name": "Mighty Zinger",
+              "QCComponent": 1,
+              "QCInstanceID": 564,
               "QCLevel": 0,
-              "QCProID": -1
+              "QCProID": 65
             },
             {
-              "ItemID": 510074,
-              "Level": 0,
+              "DealID": 0,
+              "Entries": {
+                "CEntry": [
+                  {
+                    "ID": 0,
+                    "ItemID": 811701,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Lettuce",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  },
+                  {
+                    "ID": 0,
+                    "ItemID": 811703,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Tomato",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  }
+                ]
+              },
+              "ID": 0,
+              "ItemID": 110003,
               "ModCode": "NONE",
-              "Name": "Family Dipper Fries",
-              "OrdrMode": "OM_SAVED",
-              "Price": 15,
-              "Status": "NOTAPPLIED"
+              "Name": "Twister Sandwich - Original",
+              "QCComponent": 2,
+              "QCInstanceID": 564,
+              "QCLevel": 0,
+              "QCProID": 65
             },
             {
-              "ItemID": 510074,
-              "Level": 0,
+              "DealID": 0,
+              "ID": 0,
+              "ItemID": 510050,
               "ModCode": "NONE",
-              "Name": "Family Dipper Fries",
-              "OrdrMode": "OM_SAVED",
-              "Price": 15,
-              "Status": "NOTAPPLIED"
+              "Name": "Medium Fries",
+              "QCComponent": 3,
+              "QCInstanceID": 564,
+              "QCLevel": 0,
+              "QCProID": 65
             },
             {
-              "ItemID": 510074,
-              "Level": 0,
+              "DealID": 0,
+              "ID": 0,
+              "ItemID": 600003,
               "ModCode": "NONE",
-              "Name": "Family Dipper Fries",
-              "OrdrMode": "OM_SAVED",
-              "Price": 15,
-              "Status": "NOTAPPLIED"
-            },
-            {
-              "ItemID": 510074,
-              "Level": 0,
-              "ModCode": "NONE",
-              "Name": "Family Dipper Fries",
-              "OrdrMode": "OM_SAVED",
-              "Price": 15,
-              "Status": "NOTAPPLIED"
-            },
-            {
-              "ItemID": 910002,
-              "Level": 0,
-              "ModCode": "NONE",
-              "Name": "Chicken Pc - Spicy",
-              "OrdrMode": "OM_SAVED",
-              "Price": 0,
-              "Status": "NOTAPPLIED"
+              "Name": "Pepsi Medium",
+              "QCComponent": 4,
+              "QCInstanceID": 564,
+              "QCLevel": 0,
+              "QCProID": 65
             }
           ]
         },
@@ -1179,8 +2885,8 @@ export const start = (async () => {
       "creditCardPaymentbool": "false",
       "menuTemplateID": "17"
     }
-    // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838613, language: "En" })
+    let orderPlaced = await SDM.OrderSDME.createOrder(order)
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838630, language: "En" })
     // await SDM.OrderSDME.cancelOrder({
     //   sdmOrderRef: 39838313,
     //   voidReason: 1,
