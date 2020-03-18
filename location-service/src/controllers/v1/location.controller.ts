@@ -54,10 +54,10 @@ export class LocationController {
                                                 if (s) {
                                                     delete s.geoFence
                                                     if (s.areaId == a.areaId) {
-                                                        c['isSelected'] = false
-                                                        a['isSelected'] = false
-                                                        s['isSelected'] = false
-                                                        s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                                        // c['isSelected'] = false
+                                                        // a['isSelected'] = false
+                                                        // s['isSelected'] = false
+                                                        // s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
                                                         storeCollection.push(s)
                                                     }
                                                 }
@@ -81,7 +81,6 @@ export class LocationController {
                 }
             }
             res.sort(compare)
-            console.log("ressssssssss", JSON.stringify(res))
             await ENTITY.PickupE.bootstrapPickup(res)
             return {}
         } catch (error) {
@@ -132,14 +131,28 @@ export class LocationController {
     * */
     async getPickupList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IPickupLocation) {
         try {
-
             let getArgv = {
                 set: ENTITY.PickupE.set,
                 key: "pickup"
             }
             let pickup = await Aerospike.get(getArgv)
-            if (pickup && pickup.pickup && pickup.pickup.length > 0)
+            if (pickup && pickup.pickup && pickup.pickup.length > 0) {
+                pickup.pickup.map(c => {
+                    c['isSelected'] = false
+                    if (c.area && c.area.length > 0) {
+                        c.area.map(a => {
+                            a['isSelected'] = false
+                            if (a.store && a.store.length > 0) {
+                                a.store.map(s => {
+                                    s['isSelected'] = false
+                                    s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                })
+                            }
+                        })
+                    }
+                })
                 return pickup.pickup
+            }
             else
                 return []
         } catch (error) {
