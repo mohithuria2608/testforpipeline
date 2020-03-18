@@ -51,11 +51,9 @@ export class WebhookNoonpayController {
                         }
                     }
                 }
-                if (
-                    order.status != Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO ||
-                    order.status != Constant.DATABASE.STATUS.ORDER.CLOSED.MONGO ||
-                    order.status != Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO
-                ) {
+                consolelog(process.cwd(), "isFailed", isFailed, true)
+                consolelog(process.cwd(), "order.status", order.status, true)
+                if (order.status != Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO) {
                     if (!isFailed && webHookStatus && webHookStatus.resultCode == 0 && webHookStatus.transactions && webHookStatus.transactions.length > 0) {
                         let dataToUpdateOrder = {
                             $addToSet: {
