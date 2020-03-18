@@ -76,7 +76,6 @@ export class StoreEntity extends BaseEntity {
                 key: data.id,
                 create: true,
             }
-
             await Aerospike.put(putArg)
             return {}
         } catch (error) {

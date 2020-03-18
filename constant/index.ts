@@ -35,6 +35,7 @@ export enum SET_NAME {
     AREA = "area",
     CITY = "city",
     STORE = "store",
+    PICKUP = "pickup",
     SYNC_STORE = "sync_store",
     SYNC_CITY = "sync_city",
     SYNC_AREA = "sync_area",
