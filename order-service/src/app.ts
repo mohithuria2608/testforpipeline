@@ -2818,7 +2818,7 @@ export const start = (async () => {
               "QCProID": 55
             },
             {
-              "ItemID": 910001,
+              "ItemID": 910011,
               "Level": 0,
               "ModCode": "NONE",
               "Name": "Chicken Pc - Original",
@@ -2840,8 +2840,8 @@ export const start = (async () => {
       "creditCardPaymentbool": "false",
       "menuTemplateID": "17"
     }
-    let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838815, language: "En" })
+    // let orderPlaced = await SDM.OrderSDME.createOrder(order)
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838830, language: "En" })
     // await SDM.OrderSDME.cancelOrder({
     //   sdmOrderRef: 39838313,
     //   voidReason: 1,

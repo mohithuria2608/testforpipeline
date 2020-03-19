@@ -140,6 +140,9 @@ export class WebhookNoonpayController {
                                 transLogs: { $each: transLogs.reverse() }
                             }
                         order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                        redirectUrl = redirectUrl + "payment/failure"
+                        console.log("redirectUrl=================>", redirectUrl)
+                        return redirectUrl
                     }
                 }
                 if (isFailed) {
