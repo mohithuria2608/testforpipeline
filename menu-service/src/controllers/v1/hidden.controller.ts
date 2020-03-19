@@ -59,9 +59,12 @@ export class HiddenController {
     async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv);
-            switch (data.data[0].language) {
-                case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HiddenEnE.postHiddenMenu(data.data[0]); break;
-                case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HiddenArE.postHiddenMenu(data.data[0]); break;
+            if (data) {
+                data = JSON.parse(data.data)
+                switch (data[0].language) {
+                    case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HiddenEnE.postHiddenMenu(data[0]); break;
+                    case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HiddenArE.postHiddenMenu(data[0]); break;
+                }
             }
             return {}
         } catch (error) {
