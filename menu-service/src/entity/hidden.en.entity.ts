@@ -55,7 +55,7 @@ export class HiddenEnClass extends BaseEntity {
      * */
     async postHiddenMenu(data) {
         try {
-            console.log("data------------------------",data)
+            console.log("data------------------------", data)
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
@@ -80,7 +80,10 @@ export class HiddenEnClass extends BaseEntity {
                 set: this.set
             }
             let hidden = await Aerospike.get(getArg)
-            return hidden.categories
+            if (hidden && hidden.categories)
+                return hidden.categories
+            else
+                return []
         } catch (error) {
             consolelog(process.cwd(), "getHiddenProducts en", JSON.stringify(error), false)
             return Promise.reject(error)

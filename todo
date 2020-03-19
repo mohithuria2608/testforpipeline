@@ -33,7 +33,7 @@
 
 ---> sdm replicate dynamic
 ---> category id dynamic 20,3
----> 
+---> let hidden = menu.filter(elem => { return elem.name == "Upsell" })
 
 
 
