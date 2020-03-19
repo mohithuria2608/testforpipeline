@@ -625,7 +625,7 @@ export class CartClass extends BaseEntity {
                             let menus = await Promise.all([freeItems_En, freeItems_Ar])
                             console.log("freeItems_En.products", menus[0][0].products, menus[0][0].products.length)
                             if (menus[0] && menus[0].length > 0) {
-                                if (menus[0][0].products && menus[0][0].products.length > 0)
+                                if (menus[0][0] && menus[0][0].products && menus[0][0].products.length > 0)
                                     menus[0] = menus[0][0].products.filter(obj => { return (freeItemSku.indexOf(obj.sdmId.toString()) >= 0) })
                                 else
                                     menus[0] = []
@@ -633,7 +633,7 @@ export class CartClass extends BaseEntity {
                                 menus[0] = []
 
                             if (menus[1] && menus[1].length > 0) {
-                                if (menus[1][0].products && menus[1][0].products.length > 0)
+                                if (menus[1][0] && menus[1][0].products && menus[1][0].products.length > 0)
                                     menus[1] = menus[1][0].products.filter(obj => { return freeItemSku.indexOf(obj.sdmId.toString()) >= 0 })
                                 else
                                     menus[1] = []
