@@ -694,7 +694,7 @@ export class OrderClass extends BaseEntity {
                                     console.log("amountToCompare", amountToCompare, sdmOrder.Total)
 
                                     if (
-                                        ((sdmOrder.OrderMode == "1") && (amountToCompare == parseFloat(sdmOrder.Total) || amountToCompare[0].amount == parseFloat(sdmOrder.Total))) ||
+                                        ((sdmOrder.OrderMode == "1") && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
                                         ((sdmOrder.OrderMode == "2") && (amountToCompare == parseFloat(sdmOrder.Total)))
                                     ) {
                                         order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
