@@ -679,10 +679,10 @@ export class OrderClass extends BaseEntity {
                                 }, { new: true })
                                 if (recheck && sdmOrder.Total && !order.amountValidationPassed) {
                                     consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
-                                    let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-                                    let amountToCompare = amount[0].amount
+                                    let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
+                                    let amountToCompare = totalAmount[0].amount
                                     console.log("sdmOrder.OrderMode", sdmOrder.OrderMode)
-                                    console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
+                                    console.log("amount validation", totalAmount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
                                     if (sdmOrder.OrderMode == "1") {
                                         /**
                                          *@description Delivery order
@@ -693,7 +693,12 @@ export class OrderClass extends BaseEntity {
                                     }
                                     console.log("amountToCompare", amountToCompare, sdmOrder.Total)
 
-                                    if (amountToCompare != parseFloat(sdmOrder.Total)) {
+                                    if (
+                                        ((sdmOrder.OrderMode == "1") && (amountToCompare == parseFloat(sdmOrder.Total) || amountToCompare[0].amount == parseFloat(sdmOrder.Total))) ||
+                                        ((sdmOrder.OrderMode == "2") && (amountToCompare == parseFloat(sdmOrder.Total)))
+                                    ) {
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
+                                    } else {
                                         consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
                                         recheck = false
                                         OrderSDME.cancelOrder({
@@ -784,9 +789,8 @@ export class OrderClass extends BaseEntity {
                                                 })
                                             }
                                         }
-                                    } else {
-                                        order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
                                     }
+
                                 }
                                 if (recheck && sdmOrder.ValidationRemarks &&
                                     (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
