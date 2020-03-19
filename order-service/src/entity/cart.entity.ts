@@ -623,8 +623,8 @@ export class CartClass extends BaseEntity {
                                 type: Constant.DATABASE.TYPE.MENU.FREE
                             })
                             let menus = await Promise.all([freeItems_En, freeItems_Ar])
-                            console.log("freeItems_En.products", menus[0][0].products, menus[0][0].products.length)
                             if (menus[0] && menus[0].length > 0) {
+                                console.log("freeItems_En.products", menus[0][0].products, menus[0][0].products.length)
                                 if (menus[0][0] && menus[0][0].products && menus[0][0].products.length > 0)
                                     menus[0] = menus[0][0].products.filter(obj => { return (freeItemSku.indexOf(obj.sdmId.toString()) >= 0) })
                                 else
