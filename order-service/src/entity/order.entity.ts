@@ -630,7 +630,8 @@ export class OrderClass extends BaseEntity {
                 trackUntil: 0,
                 isActive: 1,
                 changePaymentMode: 0,
-                paymentMethodAddedOnSdm: 0
+                paymentMethodAddedOnSdm: 0,
+                amountValidationPassed: false
             }
             if (cartData.promo && cartData.promo.couponId) {
                 orderData['promo'] = cartData.promo
@@ -676,7 +677,7 @@ export class OrderClass extends BaseEntity {
                                     updatedAt: new Date().getTime(),
                                     sdmOrderStatus: parseInt(sdmOrder.Status)
                                 }, { new: true })
-                                if (recheck && sdmOrder.Total) {
+                                if (recheck && sdmOrder.Total && !order.amountValidationPassed) {
                                     consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
                                     let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                                     let amountToCompare = amount[0].amount
@@ -784,6 +785,8 @@ export class OrderClass extends BaseEntity {
                                                 })
                                             }
                                         }
+                                    } else {
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
                                     }
                                 }
                                 if (recheck && sdmOrder.ValidationRemarks &&
