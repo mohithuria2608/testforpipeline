@@ -682,7 +682,6 @@ export class OrderClass extends BaseEntity {
                                     let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                                     let amountToCompare = amount[0].amount
                                     console.log("sdmOrder.OrderMode", sdmOrder.OrderMode)
-
                                     console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
                                     if (sdmOrder.OrderMode == "1") {
                                         /**
