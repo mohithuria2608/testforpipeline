@@ -29,7 +29,10 @@ export class MenuService {
             this.menuClient.fetchMenu({ menuId: payload.menuId, language: payload.language }, (error, res) => {
                 if (!error) {
                     consolelog(process.cwd(), "successfully fetched Menu", "", false)
-                    resolve(JSON.parse(res.menu))
+                    if (res.menu)
+                        resolve(JSON.parse(res.menu))
+                    else
+                        resolve({})
                 } else {
                     consolelog(process.cwd(), "Error in fetching Menu", JSON.stringify(error), false)
                     reject(sendError(error))
@@ -43,7 +46,10 @@ export class MenuService {
             this.menuClient.fetchHidden({ menuId: payload.menuId, language: payload.language, type: payload.type }, (error, res) => {
                 if (!error) {
                     consolelog(process.cwd(), "successfully fetched Hidden Menu", res.menu, false)
-                    resolve(JSON.parse(res.menu))
+                    if (res.menu)
+                        resolve(JSON.parse(res.menu))
+                    else
+                        resolve([])
                 } else {
                     consolelog(process.cwd(), "Error in fetching Hidden Menu", JSON.stringify(error), false)
                     reject(sendError(error))
