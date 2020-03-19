@@ -1832,3 +1832,102 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
     console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
     return {}
 }
+
+interface IKafka {
+    sdm: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        order_config: {
+            max_try: IMaxRetry
+        }
+    },
+    cms: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        order_config: {
+            max_try: IMaxRetry
+        }
+    },
+    as: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        configuration_config: {
+            max_try: IMaxRetry
+        },
+        app_config: {
+            max_try: IMaxRetry
+        }
+    }
+}
+
+interface IMaxRetry {
+    create: number,
+    update: number,
+    get: number,
+    sync: number,
+    reset: number
+}
+export const kafkaConfigSync = function (config: IGeneral, date: number) {
+    SERVER.DEFAULT_CART_TTL = config.ttl_for_cart;
+    SERVER.BY_PASS_OTP = config.bypass_otp;
+    SERVER.OTP_EXPIRE_TIME = config.otp_expire;
+    SERVER.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
+    SERVER.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.CUSTOMER_CARE = config.support;
+    SERVER.SUPPORT_EMAIL = config.customer_care_email;
+    SERVER.USERCHANGE_TTL = config.user_change_ttl;
+    SERVER.MAX_PENDING_STATE_TIME = config.max_pending_state;
+    SERVER.MIN_CART_VALUE = config.minimum_cart_price;
+    SERVER.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.DEEPLINK_FALLBACK = config.deeplink_fallback;
+    SERVER.ADDR_SHOW_TIME = config.addr_show_time;
+    SERVER.AUTH_MECH = config.auth_mech;
+    SERVER.DISPLAY_COLOR = config.display_color;
+    // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
+
+
+    global.configSync.kafka = date;
+    console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
+    return {}
+}

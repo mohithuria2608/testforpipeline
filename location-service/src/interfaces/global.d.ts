@@ -6,7 +6,8 @@ declare namespace NodeJS {
             sdm?: boolean,
         },
         configSync: {
-            general?: number
+            general?: number,
+            kafka?: number
         }
     }
 }
