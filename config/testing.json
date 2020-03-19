@@ -216,6 +216,6 @@
         "baseUrl": "http://40.123.205.1/rest/V1/"
     },
     "sdm": {
-        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"
+        "baseUrl": "https://sdkliveuae.americana.com.sa:2200/?wsdl"
     }
 }

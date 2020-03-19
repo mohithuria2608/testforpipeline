@@ -790,7 +790,6 @@ export class OrderClass extends BaseEntity {
                                             }
                                         }
                                     }
-
                                 }
                                 if (recheck && sdmOrder.ValidationRemarks &&
                                     (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&

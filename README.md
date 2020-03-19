@@ -99,3 +99,9 @@ Hands-on Microservices with TypeScript 3
 
 # Aerospike error codes
 * https://github.com/aerospike/aerospike-client-java/blob/master/client/src/com/aerospike/client/ResultCode.java
+
+# dev sdm url 
+* https://sdkliveuae.americana.com.sa:2200/?wsdl
+
+# prod sdm url
+* https://sdkliveuae.americana.com.sa:2200/?wsdl
