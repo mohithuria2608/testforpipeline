@@ -261,10 +261,10 @@ export class AddressEntity extends BaseEntity {
                 language: (userData.headers && userData.headers.language) ? userData.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
-                    ADDR_AREAID: 1786,//  16
+                    ADDR_AREAID: userData.asAddress[0].areaId,// 1786,//  16
                     ADDR_BLDGNAME: userData.asAddress[0].bldgName,
                     ADDR_BLDGNUM: userData.asAddress[0].flatNum,
-                    ADDR_CITYID: 17,
+                    ADDR_CITYID: userData.asAddress[0].cityId,// 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
                     ADDR_CUSTID: userData.sdmUserRef,
