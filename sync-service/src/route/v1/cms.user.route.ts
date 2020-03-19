@@ -8,7 +8,7 @@ import { JOI_CMS_HEADERS } from './common.joi.validator'
 
 export default (router: Router) => {
     router
-        .post('/',
+        .post('/cms',
             validate({
                 headers: JOI_CMS_HEADERS,
                 body: {

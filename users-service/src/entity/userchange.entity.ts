@@ -96,6 +96,7 @@ export class UserchangeEntity extends BaseEntity {
     */
     async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, curUserchnage: IUserchangeRequest.IUserchange) {
         try {
+            console.log("curUserchnage===========>", JSON.stringify(curUserchnage))
             if (curUserchnage && curUserchnage.id) {
                 if (curUserchnage.fullPhnNo) {
                     if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo)) {
