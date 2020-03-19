@@ -60,7 +60,7 @@ export class HiddenController {
         try {
             let data = JSON.parse(payload.as.argv);
             if (data) {
-                data = JSON.parse(data.data)
+                data = (typeof data.data == 'string') ? JSON.parse(data.data) : data.data
                 switch (data[0].language) {
                     case Constant.DATABASE.LANGUAGE.EN: await ENTITY.HiddenEnE.postHiddenMenu(data[0]); break;
                     case Constant.DATABASE.LANGUAGE.AR: await ENTITY.HiddenArE.postHiddenMenu(data[0]); break;
