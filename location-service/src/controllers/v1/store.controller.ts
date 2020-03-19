@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog, checkStoreOnline } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -15,8 +16,10 @@ export class StoreController {
      * */
     async bootstrapStore() {
         try {
+            let jsonPostfix = config.get("sdm.type")
+            consolelog(process.cwd(), "store jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.StoreE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/store.json', 'utf-8');
+            let rawdata = fs.readFileSync(__dirname + `/../../../model/store_${jsonPostfix}.json`, 'utf-8');
             let stores = JSON.parse(rawdata);
             for (const store of stores) {
                 await ENTITY.StoreE.bootstrapStore(store)

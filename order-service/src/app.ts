@@ -30,7 +30,6 @@ export const start = (async () => {
 
     // await ENTITY.CartE.createCartOnCMS({}, { cmsUserRef: 12 })
 
-
     let stock: any = [
       {
         "sdmId": 70,
@@ -2841,7 +2840,7 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838874, language: "En" })
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 39838890, language: "En" })
     // await SDM.OrderSDME.cancelOrder({
     //   sdmOrderRef: 39838313,
     //   voidReason: 1,

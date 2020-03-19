@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -15,8 +16,10 @@ export class CountryController {
      * */
     async bootstrapCountry() {
         try {
+            let jsonPostfix = config.get("sdm.type")
+            consolelog(process.cwd(), "country jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.CountryE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/country.json', 'utf-8');
+            let rawdata = fs.readFileSync(__dirname + `/../../../model/country_${jsonPostfix}.json`, 'utf-8');
             let countries = JSON.parse(rawdata);
             for (const country of countries) {
                 await ENTITY.CountryE.bootstrapCountry(country)

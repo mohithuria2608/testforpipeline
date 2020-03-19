@@ -198,9 +198,9 @@
         "url": "20.46.146.2:9092"
     },
     "aerospike": {
-        "hosts": "40.123.212.40:3000",
-        "username": "aerospikeusr",
-        "password": "GM2nGDQkN5yMdPZs",
+        "hosts": "localhost:3000",
+        "username": "",
+        "password": "",
         "config": {
             "timeout": 10000,
             "maxConnsPerNode": 10000
@@ -216,6 +216,8 @@
         "baseUrl": "http://40.123.205.1/rest/V1/"
     },
     "sdm": {
-        "baseUrl": "https://sdkliveuae.americana.com.sa:2200/?wsdl"
-    }
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
+        "type": "uat"
+    },
+    "categoryId": 20
 }

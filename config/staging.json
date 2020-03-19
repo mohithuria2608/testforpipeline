@@ -216,6 +216,8 @@
         "baseUrl": "https://magentouat.appskeeper.com/rest/V1/"
     },
     "sdm": {
-        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl"
-    }
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
+        "type": "uat"
+    },
+    "categoryId": 20
 }

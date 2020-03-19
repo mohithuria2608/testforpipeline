@@ -1,4 +1,5 @@
 'use strict';
+import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
@@ -530,7 +531,7 @@ export class CartClass extends BaseEntity {
             let req = {
                 cms_user_id: userData.cmsUserRef,
                 website_id: 1,
-                category_id: 3,
+                category_id: config.get("categoryId"),
                 cart_items: cart,
                 order_type: orderType
             }

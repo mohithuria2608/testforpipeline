@@ -1,4 +1,4 @@
-
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -16,8 +16,10 @@ export class AreaController {
      * */
     async bootstrapArea() {
         try {
+            let jsonPostfix = config.get("sdm.type")
+            consolelog(process.cwd(), "area jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.AreaE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/area.json', 'utf-8');
+            let rawdata = fs.readFileSync(__dirname + `/../../../model/area_${jsonPostfix}.json`, 'utf-8');
             let areas = JSON.parse(rawdata);
             for (const area of areas) {
                 await ENTITY.AreaE.bootstrapArea(area)

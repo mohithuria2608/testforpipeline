@@ -900,20 +900,22 @@ export class OrderClass extends BaseEntity {
                                                         consolelog(process.cwd(), "order step 20 :       ", parseInt(sdmOrder.Status), true)
                                                     }
                                                 }
-                                                let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
-                                                let userData = await userService.fetchUser({ userId: order.userId });
-                                                notificationService.sendNotification({
-                                                    toSendMsg: true,
-                                                    toSendEmail: true,
-                                                    msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
-                                                    emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
-                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                    emailDestination: userData.email,
-                                                    language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: { order } })
-                                                });
+                                                if (oldStatus != parseInt(sdmOrder.Status)) {
+                                                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        toSendEmail: true,
+                                                        msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                                                        emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order, email: { order } })
+                                                    });
+                                                }
                                                 break;
                                             }
                                             case 2: {
@@ -1015,20 +1017,22 @@ export class OrderClass extends BaseEntity {
                                                     }
                                                 }
                                                 // send notification(sms + email) on order confirmaton
-                                                let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
-                                                let userData = await userService.fetchUser({ userId: order.userId });
-                                                notificationService.sendNotification({
-                                                    toSendMsg: true,
-                                                    toSendEmail: true,
-                                                    msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
-                                                    emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
-                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                    emailDestination: userData.email,
-                                                    language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: { order } })
-                                                });
+                                                if (oldStatus != parseInt(sdmOrder.Status)) {
+                                                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        toSendEmail: true,
+                                                        msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                                                        emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order, email: { order } })
+                                                    });
+                                                }
 
                                                 break;
                                             }
@@ -1102,19 +1106,20 @@ export class OrderClass extends BaseEntity {
                                                     order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
                                                     sdm_order_id: order.sdmOrderRef
                                                 });
-
-                                                // send notification(sms + email) on order cancellation
-                                                let userData = await userService.fetchUser({ userId: order.userId });
-                                                notificationService.sendNotification({
-                                                    toSendMsg: true,
-                                                    toSendEmail: true,
-                                                    msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
-                                                    emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
-                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                    emailDestination: userData.email,
-                                                    language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: { order } })
-                                                });
+                                                if (oldStatus != parseInt(sdmOrder.Status)) {
+                                                    // send notification(sms + email) on order cancellation
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        toSendEmail: true,
+                                                        msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
+                                                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order, email: { order } })
+                                                    });
+                                                }
                                                 break;
                                             }
                                             default: {
