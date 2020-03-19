@@ -26,26 +26,4 @@ declare namespace IAddressCMSRequest {
         sdmAreaRef: string,
         sdmCityRef: string,
     }
-
-    interface ICreateAddress {
-        customerId: number,
-        websiteId: number,
-        address: ICmsAddress[]
-    }
-
-    interface IUpdateAddress extends ICmsAddress {
-        customerId: string,
-        websiteId: string
-    }
-
-    interface IDeleteAddress {
-        cmsUserRef: number,
-        cmsAddressRef: number
-    }
-
-    interface IDeleteAddressReq {
-        customerId: string,
-        addressId: string,
-        websiteId: string,
-    }
 }

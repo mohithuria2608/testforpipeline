@@ -128,7 +128,8 @@ export const SERVER = {
     ADDR_SHOW_TIME: 3,//hr
     CUSTOMER_CARE: "666666666",
     SUPPORT_EMAIL: "kfc_uae@ag.com",
-    DEFAULT_CCODE: "+971"
+    DEFAULT_CCODE: "+971",
+    CHUNK_SIZE_USER_MIGRATION: 50000,
 };
 
 export const DATABASE = {
