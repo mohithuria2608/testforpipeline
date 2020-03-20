@@ -4,6 +4,10 @@ declare namespace NodeJS {
         healthcheck: {
             as?: boolean,
             sdm?: boolean,
+        },
+        configSync: {
+            general?: number,
+            kafka?: number
         }
     }
 }

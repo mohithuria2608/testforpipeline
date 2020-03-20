@@ -6,6 +6,7 @@ import { kafkaService, notificationService } from '../../grpc/client';
 import { addressController } from '../../controllers';
 import * as CMS from '../../cms';
 import * as SDM from '../../sdm';
+import { parse } from 'path';
 
 export class UserController {
     constructor() { }
@@ -19,7 +20,7 @@ export class UserController {
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.sync)) {
                 let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
-
+                    await ENTITY.UserE.buildUser(data)
                 }
                 if (payload.as.update) {
                     data['id'] = data.userId
@@ -827,6 +828,8 @@ export class UserController {
             return Promise.reject(error)
         }
     }
+
+
 }
 
 export const userController = new UserController();

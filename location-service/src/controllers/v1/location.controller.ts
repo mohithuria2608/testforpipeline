@@ -5,9 +5,89 @@ import { storeController } from './store.controller'
 import { cityController } from './city.controller';
 import { areaController } from './area.controller';
 import { countryController } from './country.controller';
+import { Aerospike } from '../../aerospike';
 export class LocationController {
 
     constructor() { }
+
+    /**
+     * @method BOOTSTRAP
+     * @description : Post bulk area data
+     * */
+    async bootstrapPickup() {
+        try {
+            await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
+
+            const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
+            const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
+            const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
+
+            consolelog(process.cwd(), "city", city.length, true)
+            consolelog(process.cwd(), "area", area.length, true)
+            consolelog(process.cwd(), "store", store.length, true)
+            let res = []
+
+            function compare(a, b) {
+                // Use toUpperCase() to ignore character casing
+                const bandA = a.name_en.toUpperCase();
+                const bandB = b.name_en.toUpperCase();
+
+                let comparison = 0;
+                if (bandA > bandB) {
+                    comparison = 1;
+                } else if (bandA < bandB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
+            if (city && city.length > 0) {
+                for (const c of city) {
+                    if (c) {
+                        let areaCollection = []
+                        if (area && area.length > 0) {
+                            for (const a of area) {
+                                if (a) {
+                                    if (a.cityId == c.cityId) {
+                                        let storeCollection = []
+                                        if (store && store.length > 0) {
+                                            for (const s of store) {
+                                                if (s) {
+                                                    delete s.geoFence
+                                                    if (s.areaId == a.areaId) {
+                                                        // c['isSelected'] = false
+                                                        // a['isSelected'] = false
+                                                        // s['isSelected'] = false
+                                                        // s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                                        storeCollection.push(s)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (storeCollection && storeCollection.length > 0) {
+                                            storeCollection.sort(compare)
+                                            a['store'] = storeCollection
+                                            areaCollection.push(a)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (areaCollection && areaCollection.length > 0) {
+                            areaCollection.sort(compare)
+                            c['area'] = areaCollection
+                            res.push(c)
+                        }
+                    }
+                }
+            }
+            res.sort(compare)
+            await ENTITY.PickupE.bootstrapPickup(res)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapPickup", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 
     /**
      * @method GET
@@ -51,77 +131,30 @@ export class LocationController {
     * */
     async getPickupList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IPickupLocation) {
         try {
-            let preSelectedStore: IStoreRequest.IStore
-            if (payload.lat && payload.lng) {
-                let temp = await storeController.validateCoords(payload)
-                if (temp && temp.length > 0)
-                    preSelectedStore = temp[0]
+            let getArgv = {
+                set: ENTITY.PickupE.set,
+                key: "pickup"
             }
-            const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
-            const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
-            const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
-
-            consolelog(process.cwd(), "city", city.length, true)
-            consolelog(process.cwd(), "area", area.length, true)
-            consolelog(process.cwd(), "store", store.length, true)
-            let res = []
-
-            function compare(a, b) {
-                // Use toUpperCase() to ignore character casing
-                const bandA = a.name_en.toUpperCase();
-                const bandB = b.name_en.toUpperCase();
-
-                let comparison = 0;
-                if (bandA > bandB) {
-                    comparison = 1;
-                } else if (bandA < bandB) {
-                    comparison = -1;
-                }
-                return comparison;
-            }
-            console.log("111111111111111111")
-            if (city && city.length > 0) {
-                for (const c of city) {
-                    if (c) {
-                        let areaCollection = []
-                        if (area && area.length > 0) {
-                            for (const a of area) {
-                                if (a) {
-                                    if (a.cityId == c.cityId) {
-                                        let storeCollection = []
-                                        if (store && store.length > 0) {
-                                            for (const s of store) {
-                                                if (s) {
-                                                    delete s.geoFence
-                                                    if (s.areaId == a.areaId) {
-                                                        c['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
-                                                        a['isSelected'] = (preSelectedStore && preSelectedStore.areaId && (preSelectedStore.areaId == a.areaId)) ? true : false
-                                                        s['isSelected'] = (preSelectedStore && preSelectedStore.storeId && (preSelectedStore.storeId == s.storeId)) ? true : false
-                                                        s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
-                                                        storeCollection.push(s)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (storeCollection && storeCollection.length > 0) {
-                                            storeCollection.sort(compare)
-                                            a['store'] = storeCollection
-                                            areaCollection.push(a)
-                                        }
-                                    }
-                                }
+            let pickup = await Aerospike.get(getArgv)
+            if (pickup && pickup.pickup && pickup.pickup.length > 0) {
+                pickup.pickup.map(c => {
+                    c['isSelected'] = false
+                    if (c.area && c.area.length > 0) {
+                        c.area.map(a => {
+                            a['isSelected'] = false
+                            if (a.store && a.store.length > 0) {
+                                a.store.map(s => {
+                                    s['isSelected'] = false
+                                    s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                })
                             }
-                        }
-                        if (areaCollection && areaCollection.length > 0) {
-                            areaCollection.sort(compare)
-                            c['area'] = areaCollection
-                            res.push(c)
-                        }
+                        })
                     }
-                }
+                })
+                return pickup.pickup
             }
-            res.sort(compare)
-            return res
+            else
+                return []
         } catch (error) {
             consolelog(process.cwd(), "getPickupList", JSON.stringify(error), false)
             return Promise.reject(error)

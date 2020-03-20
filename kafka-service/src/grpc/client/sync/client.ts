@@ -41,6 +41,52 @@ export class SyncService {
             }
         })
     }
+    async fetchConfig(payload: ISyncGrpcRequest.IFetchConfig): Promise<ISyncGrpcRequest.IConfig> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await syncServiceValidator.fetchConfigValidator(payload)
+                this.syncClient.fetchConfig(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully fetched config", JSON.stringify(res), false)
+                        if (JSON.parse(res.config).length > 0) {
+                            resolve(JSON.parse(res.config[0]))
+                        } else
+                            resolve(JSON.parse(res.config))
+                    } else {
+                        consolelog(process.cwd(), "Error in fetched config", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+    async fetchAppversion(payload: ISyncGrpcRequest.IFetchAppversion): Promise<ISyncGrpcRequest.IAppversion[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await syncServiceValidator.fetchAppversionValidator(payload)
+                let req = {
+                    isActive: payload.isActive
+                }
+                if (payload.deviceType)
+                    req['deviceType'] = payload.deviceType
+                if (payload.type)
+                    req['type'] = payload.type
+                this.syncClient.fetchAppversion(req, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully fetched app version", JSON.stringify(res), false)
+                        resolve(JSON.parse(res.appversion))
+                    } else {
+                        consolelog(process.cwd(), "Error in fetching  app version", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const syncService = new SyncService();

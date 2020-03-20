@@ -135,97 +135,72 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
-            if (payload.sdmUserRef && payload.sdmUserRef != 0 && (payload.sdmCorpRef == 0 || payload.sdmCorpRef == null))
-                kafkaService.kafkaSync({
-                    set: Constant.SET_NAME.LOGGER,
-                    mdb: {
-                        create: true,
-                        argv: JSON.stringify({
-                            type: "ISSUE",
-                            info: {
-                                request: {
-                                    body: payload
-                                },
-                                response: {}
-                            },
-                            description: "SDM CORP FAILURE",
-                            options: {
-                                env: Constant.SERVER.ENV[config.get("env")],
-                            },
-                            createdAt: new Date().getTime(),
-                        })
-                    },
-                    inQ: true
-                })
-            let isCreate = false
-            let userUpdate: IUserRequest.IUserData = {}
-            userUpdate['id'] = payload.id
+            let checkUser: IUserRequest.IUserData = await this.getUser({ userId: payload.id })
+            if (checkUser && checkUser.id) {
+            } else {
+                checkUser = {}
+                checkUser['id'] = payload.id
+                checkUser['password'] = cryptData("Password1")
+                checkUser['cartId'] = payload.id
+                this.createDefaultCart(payload.id)
+            }
             if (payload.username)
-                userUpdate['username'] = payload.username
+                checkUser['username'] = payload.username
             if (payload.brand)
-                userUpdate['brand'] = payload.brand
+                checkUser['brand'] = payload.brand
             if (payload.country)
-                userUpdate['country'] = payload.country
+                checkUser['country'] = payload.country
             if (payload.email && payload.email != "")
-                userUpdate['email'] = payload.email
+                checkUser['email'] = payload.email
             if (payload.fullPhnNo)
-                userUpdate['fullPhnNo'] = payload.fullPhnNo
+                checkUser['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)
-                userUpdate['cCode'] = payload.cCode
+                checkUser['cCode'] = payload.cCode
             if (payload.phnNo)
-                userUpdate['phnNo'] = payload.phnNo
+                checkUser['phnNo'] = payload.phnNo
             if (payload.sdmUserRef != undefined)
-                userUpdate['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
+                checkUser['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
             if (payload.sdmCorpRef != undefined)
-                userUpdate['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
+                checkUser['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
             if (payload.cmsUserRef != undefined)
-                userUpdate['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
+                checkUser['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
             if (payload.phnVerified != undefined)
-                userUpdate['phnVerified'] = payload.phnVerified
+                checkUser['phnVerified'] = payload.phnVerified
             if (payload.emailVerified != undefined)
-                userUpdate['emailVerified'] = payload.emailVerified
+                checkUser['emailVerified'] = payload.emailVerified
             if (payload.name && payload.name != "")
-                userUpdate['name'] = payload.name
+                checkUser['name'] = payload.name
             if (payload.socialKey)
-                userUpdate['socialKey'] = payload.socialKey
+                checkUser['socialKey'] = payload.socialKey
             if (payload.socialKey)
-                userUpdate['medium'] = payload.medium
+                checkUser['medium'] = payload.medium
             if (payload.profileStep != undefined)
-                userUpdate['profileStep'] = payload.profileStep
+                checkUser['profileStep'] = payload.profileStep
             if (payload.cartId)
-                userUpdate['cartId'] = payload.cartId
+                checkUser['cartId'] = payload.cartId
             if (payload.createdAt)
-                userUpdate['createdAt'] = payload.createdAt
+                checkUser['createdAt'] = payload.createdAt
 
             if (payload.cmsAddress && payload.cmsAddress.length > 0)
-                userUpdate['cmsAddress'] = payload.cmsAddress
+                checkUser['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
-                userUpdate['asAddress'] = payload.asAddress
+                checkUser['asAddress'] = payload.asAddress
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
-                userUpdate['sdmAddress'] = payload.sdmAddress
+                checkUser['sdmAddress'] = payload.sdmAddress
 
-            let checkUser = await this.getUser({ userId: payload.id })
-            if (checkUser && checkUser.id) {
-                isCreate = false
-            } else {
-                userUpdate['password'] = cryptData("Password1")
-                isCreate = true
-                userUpdate.cartId = userUpdate.id
-                this.createDefaultCart(userUpdate.id)
-            }
             let putArg: IAerospike.Put = {
-                bins: userUpdate,
+                bins: checkUser,
                 set: this.set,
                 key: payload.id,
-                // createOrReplace: true
+                createOrReplace: true
             }
-            if (isCreate)
-                putArg['create'] = true
-            else
-                putArg['update'] = true
+            // if (isCreate)
+            //     putArg['create'] = true
+            // else
+            //     putArg['update'] = true
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: payload.id })
-            return user
+            // let user = await this.getUser({ userId: payload.id })
+            return checkUser
         } catch (error) {
             consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -379,11 +354,13 @@ export class UserEntity extends BaseEntity {
      */
     async updateUserOnCms(payload: IUserRequest.IUserData) {
         try {
-            let res = await CMS.UserCMSE.updateCustomerOnCms(payload)
-            consolelog(process.cwd(), "updateUserOnCms", res, false)
+            if (payload.cmsUserRef) {
+                let res = await CMS.UserCMSE.updateCustomerOnCms(payload)
+                consolelog(process.cwd(), "updateUserOnCms", res, false)
+            }
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "updateUserOnCms", JSON.stringify(error), false)
+            consolelog(process.cwd(), "updateUserOnCms", error, false)
             return Promise.reject(error)
         }
     }

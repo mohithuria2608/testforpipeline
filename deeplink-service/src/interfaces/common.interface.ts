@@ -49,6 +49,8 @@ declare namespace ICommonRequest {
     interface IPingService {
         set: string,
         service: string[],
-        store_code: string
+        store_code?: string,
+        type?: string,
+        data?: ISyncGrpcRequest.IConfig
     }
 }

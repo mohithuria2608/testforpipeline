@@ -1,4 +1,3 @@
-
 export enum MICROSERVICE {
     AUTH = "auth",
     USER = "user",
@@ -36,6 +35,7 @@ export enum SET_NAME {
     AREA = "area",
     CITY = "city",
     STORE = "store",
+    PICKUP = "pickup",
     SYNC_STORE = "sync_store",
     SYNC_CITY = "sync_city",
     SYNC_AREA = "sync_area",
@@ -44,7 +44,8 @@ export enum SET_NAME {
     LOGGER = "logger",
     APP_VERSION = "appversion",
     FAILQ = "failq",
-    PING_SERVICE = "ping-service"
+    PING_SERVICE = "ping-service",
+    LOAD = "load"
 };
 
 export enum KAFKA_TOPIC {
@@ -106,9 +107,6 @@ export const SERVER = {
         CONCEPT_ID: 3,
         MENU_TEMPLATE_ID: 17
     },
-    DEFAULT_USER_NAME: 'App User',
-    INITIAL_USER_TTL: 7 * 24 * 60 * 60,//seconds
-    INITIAL_GUEST_USER_TTL: 24 * 60 * 60,//seconds
     DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
     USERCHANGE_TTL: 15 * 60,//seconds
     BY_PASS_OTP: 1212,
@@ -130,7 +128,8 @@ export const SERVER = {
     ADDR_SHOW_TIME: 3,//hr
     CUSTOMER_CARE: "666666666",
     SUPPORT_EMAIL: "kfc_uae@ag.com",
-    DEFAULT_CCODE: "+971"
+    DEFAULT_CCODE: "+971",
+    CHUNK_SIZE_USER_MIGRATION: 50000,
 };
 
 export const DATABASE = {
@@ -437,7 +436,9 @@ export const DATABASE = {
             GENERAL: "general",
             PAYMENT: "payment",
             SHIPMENT: "shipment",
-            COUNTRY_SPECIFIC: "country-specific"
+            COUNTRY_SPECIFIC: "country-specific",
+            KAFKA: "kafka",
+            ORDER_STATUS: "order-status"
         },
 
         TOKEN: {
@@ -637,39 +638,39 @@ export const DATABASE = {
                 Ar: [
                     {
                         name: "PENDING",
-                        value: "Pending ar"
+                        value: "قيد الانتظار"
                     },
                     {
                         name: "CONFIRMED",
-                        value: "Confirmed ar"
+                        value: "تم التأكيد"
                     },
                     {
                         name: "BEING_PREPARED",
-                        value: "Being prepared ar"
+                        value: "جاري التجهيز"
                     },
                     {
                         name: "READY",
-                        value: "Ready ar"
+                        value: "جاهز"
                     },
                     {
                         name: "ON_THE_WAY",
-                        value: "On the way ar"
+                        value: "في الطريق"
                     },
                     {
                         name: "DELIVERED",
-                        value: "Delivered ar"
+                        value: "تم توصيله"
                     },
                     {
                         name: "CLOSED",
-                        value: "Closed ar"
+                        value: "مغلق"
                     },
                     {
                         name: "CANCELED",
-                        value: "Canceled ar"
+                        value: "تم إلغاؤه"
                     },
                     {
                         name: "FAILURE",
-                        value: "Failure ar"
+                        value: "فشل"
                     }
                 ]
             },
@@ -781,12 +782,82 @@ export const DATABASE = {
         PAYMENT: {
             INITIATED: 'INITIATED',
             AUTHORIZED: 'AUTHORIZED',
-            CANCELLED: 'CANCELLED', // Reverse payment
+            CANCELLED: 'CANCELLED', // Order has been cancelled by the user.
             CAPTURED: 'CAPTURED',
-            REFUNDED: 'REFUNDED',
             EXPIRED: 'EXPIRED',
             FAILED: 'FAILED',
+            PARTIALLY_CAPTURED: 'PARTIALLY_CAPTURED',
+            PARTIALLY_REFUNDED: 'PARTIALLY_REFUNDED',
+            REFUNDED: 'REFUNDED',
+            PAYMENT_INFO_ADDED: 'PAYMENT_INFO_ADDED',
+            '3DS_ENROLL_CHECKED': '3DS_ENROLL_CHECKED',
+            '3DS_RESULT_VERIFIED': '3DS_RESULT_VERIFIED',
+            MARKED_FOR_REVIEW: 'MARKED_FOR_REVIEW',
+            AUTHENTICATED: 'AUTHENTICATED',
+            PARTIALLY_REVERSED: 'PARTIALLY_REVERSED',
+            TOKENIZED: 'TOKENIZED',
+            REVERSED: 'REVERSED', // Order has been fully reversed (total authorized amount).
+            REJECTED: 'REJECTED',
+            PENDING: 'PENDING'
         },
+
+        /**
+         * INITIATED - Order has been initiated with the amount, reference, billing, shipping and other basic details.
+         * 
+         * AUTHORIZED - Order has been authorized (amount on hold on the user card) successfully with the amount provided during the
+         * initiate API. Merchant should always either call Capture Operation (for the amount to be settled to relevant
+         * bank account) or Reverse Operation (release the hold on amount) so the user does not complain about the
+         * amount which is on hold.
+         * 
+         * CANCELLED - Order has been cancelled by the user.
+         * 
+         * CAPTURED - Order has been captured successfully and merchant should see the funds in the relevant bank account as per
+         * the settlement schedule (usually T+1 [transaction day +1]).
+         * 
+         * FAILED - Order has been failed due to some error (could be internal or external) and no further operations can be
+         * performed.
+         * 
+         * PARTIALLY_CAPTURED - Order has been partially captured (partial amount of total authorized amount). Rest of the authorized amount
+         * either could be auto reversed (if the configuration/external system does not support follow-on captures) or
+         * available for the follow-on captures or reversal (if the configuration/external system does support).
+         * 
+         * PARTIALLY_REFUNDED - Order has been partially refunded (partial amount of total captured amount).
+         * 
+         * REFUNDED - Order has been fully refunded.
+         * 
+         * PAYMENT_INFO_ADDED - Order payment mechanism (CARD, PAYPAL, APPLE PAY) has been selected.
+         * 
+         * 3DS_ENROLL_CHECKED - User card has been checked for the 3D secure validation (card could be enrolled for 3D secure or could not be
+         * enrolled).
+         * 
+         * 3DS_RESULT_VERIFIED - User has been successfully verified with the 3D secure.
+         * 
+         * MARKED_FOR_REVIEW - Order was marked for review due to fraud evaluation (applicable only if the fraud evaluation engine is enabled).
+         * 
+         * AUTHENTICATED - Order has been authenticated and is ready for the Authorize/Sale operation. This status is only applicable for the
+         * wallet payment mechanism e.g. APPLE PAY, SUMSUNG PAY.
+         * 
+         * PARTIALLY_REVERSED - Order has been partially reversed (partial amount of total authorized amount).
+         * 
+         * TOKENIZED - Order has been tokenized successfully (only applicable to tokenization API).
+         * 
+         * EXPIRED - Order has been expired due to provided validity expiry (value can be passed during the INITIATE operation) or
+         * no activity for long time (will only be applicable if no financial operation has been performed on the order e.g.
+         * Authorize, Capture)
+         * 
+         * REVERSED - Order has been fully reversed (total authorized amount).
+         * 
+         * REJECTED - Order has been rejected during the fraud evaluation (only applicable if the fraud evaluation engine is enabled).
+         * 
+         * PENDING - Order is in pending status due to connectivity issue with external system or some internal issue and transaction
+         * status cannot be determined immediately. In this case, noon payments support/technical team proactively
+         * reacts to determine the exact transaction status (the time to resolve the pending status could be longer due to
+         * external systems involved in the transaction flow). Merchants are requested to contact the noon payments
+         * support/technical team if they found the order in pending status for long time.
+         * NOTE:
+         * Transaction may not be failed in the pending status so merchants should take the relevant action after the
+         * pending status resolved.
+         */
 
         TRANSACTION: {
             AUTHORIZATION: {
@@ -825,6 +896,81 @@ export const DATABASE = {
             ADD: "add",
             SUBTRACT: "subtract"
         }
+    },
+
+    FAQ: {
+        Ar: [{
+            "category": "FAQs",
+            "questionair": [{
+                "ques": "كيف سأعرف متى تم استلام طلبي من المطعم؟",
+                "ans": "بمجرد تقديم طلبك، ستُظهر صفحة تأكيد طلب الشراء، الوقت الذي استلم فيه المطعم طلبك، إلى جانب الوقت المتوقع لتحضير أو تسليم طلبك. كما أنك ستستلم رسالة تأكيد طلب الشراء على عنوان البريد الإلكتروني الذي قمت بذكره عند التسجيل. وفي حال كنت غير متأكد من الطلب الذي قمت بتقديمه، بإمكانك دائماً الاتصال بالمطعم مباشرةً."
+            },
+            {
+                "ques": "ما هي خيارات الدفع المتاحة عند طلب الشراء من خلال التطبيق؟",
+                "ans": "يمكنك الدفع إلكترونياً باستخدام بطاقة الائتمانية أوالدفع نقداً عند استلام الطلب.A3:D4"
+            },
+            {
+                "ques": "هل بإمكاني حفظ معلومات بطاقتي الائتمانية من أجل طلبات الشراء في المستقبل؟",
+                "ans": "لا. للحفاظ على خصوصيتك، يتم التعامل مع جميع معلومات بطاقة الائتمان الخاصة بك من خلال بوابة البنك المضمونة و لا يتم حفظ أي معلومة على تطبيق دجاج كنتاكي."
+            },
+            {
+                "ques": "أين بإمكاني تغيير معلومات حسابي؟",
+                "ans": "حالما تقوم بتسجيل الدخول إلى التطبيق باستخدام رقم الجوال الخاص بك، اضغط على \"حسابي\" من القائمة العلوية، حيث بإمكانك تغيير معلومات حسابك من هناك."
+            },
+            {
+                "ques": "هل رسوم التوصيل عند استخدام التطبيق أعلى من رسوم التوصيل المعتادة؟",
+                "ans": "كلا، رسوم التوصيل موحدة بالنسبة للمطعم الذي يستلم الطلب ويوصله إليك، لا يوجد أي فرق بالرسوم."
+            },
+            {
+                "ques": "كيف بإمكاني معرفة رسوم خدمة التوصيل التي سأدفعها؟",
+                "ans": "رسوم التوصيل مدرجة بالتفصيل في قسم ملخص الطلب."
+            },
+            {
+                "ques": "هل هناك حد أدنى لمبلغ طلب الشراء بالنسبة لمعظم طلبات التوصيل؟",
+                "ans": "هناك حد أدنى لمبلغ طلبات الشراء عبر الإنترنت أو بواسطة الهاتف بالنسبة لطلبات التوصيل، وهو 24 درهم. بالإضافة الي رسم التوصيل"
+            },
+            {
+                "ques": "كيف بإمكاني تقديم ملاحظاتي حول تجربتي في مطعم \"دجاج كنتاكي\"؟",
+                "ans": "يسعى مطعم \"دجاج كنتاكي\" دائماً لضمان حصولك على تجربة تناول طعام رائعة ومتميزة في سلسلة فروعه وأثناء استخدامك لتطبيق الجوال. إذا كنت ترغب في إبداء أية ملاحظات حول تجربتك معنا، أدخل إلى القائمة الجانبية للتطبيق ، واضغط على \"الاتصال بالدعم\"."
+            }
+            ]
+        }],
+        En: [{
+            "category": "FAQs",
+            "questionair": [{
+                "ques": "How will I know when the restaurant received my Order?",
+                "ans": "Once you submit your order, the Order Confirmation page will show the time your order was received along with an estimated time that your order will be ready for carryout or delivery. You will also receive a confirmation email at the email address you provided at registration. And if you're still unsure about your order, you can always call the restaurant directly."
+            },
+            {
+                "ques": "What payment options are available through Mobile Application Ordering?",
+                "ans": "You can choose to pay online using your credit card or cash on delivery."
+            },
+            {
+                "ques": "Can I save my credit card information for future purchases?",
+                "ans": "No. For security purposes, all your credit card information are handled through a secured bank gateway and are never saved on the KFC application."
+            },
+            {
+                "ques": "Where can I change my account info?",
+                "ans": "Once you've signed in to the application with your phone number , Click on Your name from the top hamburger menu. You can change your account information there."
+            },
+            {
+                "ques": "Are delivery charges higher for customers who order from KFC application?",
+                "ans": "No. The transportation fee is always the same online as it is offline for the restaurant taking and delivering your order. There is no difference."
+            },
+            {
+                "ques": "How can I tell how much I’m being charged for delivery service?",
+                "ans": "The transtportation fee is listed at checkout in the itemized portion of the cart summary."
+            },
+            {
+                "ques": "Is there a set minimum amount for most delivery orders?",
+                "ans": "For delivery orders placed online or by phone there is a minimum order amount of Dhs. 24 “transportation fee applies”"
+            },
+            {
+                "ques": "How can I give feedback to KFC about my restaurant experience?",
+                "ans": "KFC wants to ensure that you have a terrific experience in our restaurants and in our mobile application. If you would like to provide feedback, From the Side menu, click on \"Call Support\""
+            }
+            ]
+        }]
     }
 };
 
@@ -1492,8 +1638,8 @@ export const STATUS_MSG = {
         },
         "S215": {
             "USER_PHONE_ALREADY_EXIST": {
-                "statusCode": 200,
-                "httpCode": 215,
+                "statusCode": 215,
+                "httpCode": 200,
                 "type": "USER_PHONE_ALREADY_EXIST",
                 "message": "This phone number is already is use",
                 "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
@@ -1502,8 +1648,8 @@ export const STATUS_MSG = {
         },
         "S216": {
             "USER_EMAIL_ALREADY_EXIST": {
-                "statusCode": 200,
-                "httpCode": 216,
+                "statusCode": 216,
+                "httpCode": 200,
                 "type": "USER_EMAIL_ALREADY_EXIST",
                 "message": "This email is already is use",
                 "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
@@ -1539,7 +1685,7 @@ export const STATUS_MSG = {
         ERROR: (code, type, message) => {
             return {
                 code: parseInt(code),
-                details: `${type} : ${message}`
+                details: message
             }
         }
     },
@@ -1635,15 +1781,7 @@ export const STATUS_MSG = {
             message: 'Multiple payments were initiated for the given order, use noonpay order id to get the status',
             type: 'MULTIPLE_PAYMENTS_INITIATED',
             actionHint: DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID
-        },
-        0: {
-            statusCode: 6051,
-            httpCode: 400,
-            message: 'Banking error',
-            type: 'BANKING_ERROR',
-            actionHint: '',
-            useNoonPayMessage: true
-        },
+        }
     },
     SDM_ORDER_VALIDATION: {
         ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
@@ -1652,3 +1790,156 @@ export const STATUS_MSG = {
         PAYMENT_FAILURE: "Payment failure"
     }
 };
+
+
+interface IGeneral {
+    cms_page_data: [{
+        title: string,
+        identifier: string,
+    }],
+    ttl_for_cart: number,
+    initial_user_ttl: number,
+    initial_guest_ttl: number,
+    bypass_otp: number,
+    otp_expire: number,
+    access_token_expire_time: number,
+    refresh_token_expire_time: number,
+    cms_auth_exp: number,
+    reg_ex_for_validation: string,
+    country_codes: string,
+    support: string,
+    customer_care_email: string,
+    user_change_ttl: number,
+    max_pending_state: number,
+    minimum_cart_price: number,
+    payment_api_timeout: number,
+    payment_api_key_prefix: string,
+    display_color: boolean,
+    deeplink_fallback: string,
+    auth_mech: string,
+    addr_show_time: number,
+}
+export const generalConfigSync = function (config: IGeneral, date: number) {
+    SERVER.DEFAULT_CART_TTL = config.ttl_for_cart;
+    SERVER.BY_PASS_OTP = config.bypass_otp;
+    SERVER.OTP_EXPIRE_TIME = config.otp_expire;
+    SERVER.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
+    SERVER.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.CUSTOMER_CARE = config.support;
+    SERVER.SUPPORT_EMAIL = config.customer_care_email;
+    SERVER.USERCHANGE_TTL = config.user_change_ttl;
+    SERVER.MAX_PENDING_STATE_TIME = config.max_pending_state;
+    SERVER.MIN_CART_VALUE = config.minimum_cart_price;
+    SERVER.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.DEEPLINK_FALLBACK = config.deeplink_fallback;
+    SERVER.ADDR_SHOW_TIME = config.addr_show_time;
+    SERVER.AUTH_MECH = config.auth_mech;
+    SERVER.DISPLAY_COLOR = config.display_color;
+    // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
+
+
+    global.configSync.general = date;
+    console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
+    return {}
+}
+
+interface IKafka {
+    sdm: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        order_config: {
+            max_try: IMaxRetry
+        }
+    },
+    cms: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        order_config: {
+            max_try: IMaxRetry
+        }
+    },
+    as: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        configuration_config: {
+            max_try: IMaxRetry
+        },
+        app_config: {
+            max_try: IMaxRetry
+        }
+    }
+}
+
+interface IMaxRetry {
+    create: number,
+    update: number,
+    get: number,
+    sync: number,
+    reset: number
+}
+export const kafkaConfigSync = function (config: IGeneral, date: number) {
+    SERVER.DEFAULT_CART_TTL = config.ttl_for_cart;
+    SERVER.BY_PASS_OTP = config.bypass_otp;
+    SERVER.OTP_EXPIRE_TIME = config.otp_expire;
+    SERVER.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
+    SERVER.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.CUSTOMER_CARE = config.support;
+    SERVER.SUPPORT_EMAIL = config.customer_care_email;
+    SERVER.USERCHANGE_TTL = config.user_change_ttl;
+    SERVER.MAX_PENDING_STATE_TIME = config.max_pending_state;
+    SERVER.MIN_CART_VALUE = config.minimum_cart_price;
+    SERVER.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
+    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    SERVER.DEEPLINK_FALLBACK = config.deeplink_fallback;
+    SERVER.ADDR_SHOW_TIME = config.addr_show_time;
+    SERVER.AUTH_MECH = config.auth_mech;
+    SERVER.DISPLAY_COLOR = config.display_color;
+    // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
+
+
+    global.configSync.kafka = date;
+    console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
+    return {}
+}

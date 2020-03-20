@@ -62,7 +62,10 @@ export class HiddenArClass extends BaseEntity {
                 set: this.set
             }
             let hidden = await Aerospike.get(getArg)
-            return hidden.categories
+            if (hidden && hidden.categories)
+                return hidden.categories
+            else
+                return []
         } catch (error) {
             consolelog(process.cwd(), "getHiddenProducts ar", JSON.stringify(error), false)
             return Promise.reject(error)

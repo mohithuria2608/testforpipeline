@@ -1,5 +1,8 @@
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 global.healthcheck = {}
+global.configSync = {
+  general: 0
+}
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')

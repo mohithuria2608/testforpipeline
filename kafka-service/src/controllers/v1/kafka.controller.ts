@@ -88,9 +88,6 @@ export class KafkaController {
                                 messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC
                             else
                                 messages['count'] = 1
-
-
-                            messages['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
                         }
                         else if (payload.count < 0) {
                             break;

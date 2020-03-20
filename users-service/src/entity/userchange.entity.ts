@@ -96,6 +96,7 @@ export class UserchangeEntity extends BaseEntity {
     */
     async validateOtpOnPhnChange(payload: IUserRequest.IAuthVerifyOtp, curUserchnage: IUserchangeRequest.IUserchange) {
         try {
+            console.log("curUserchnage===========>", JSON.stringify(curUserchnage))
             if (curUserchnage && curUserchnage.id) {
                 if (curUserchnage.fullPhnNo) {
                     if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo)) {
@@ -123,31 +124,25 @@ export class UserchangeEntity extends BaseEntity {
 
     async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, language: string = Constant.DATABASE.LANGUAGE.EN) {
         try {
-            let isCreate = false
-            let checkUserchange = await this.getUserchange({ userId: userId })
-            if (checkUserchange && checkUserchange.id) {
-                userId = checkUserchange.id
-            } else {
+            if (payload.fullPhnNo && payload.otp && payload.otpExpAt) {
                 let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "fullPhnNo",
+                        value: payload.fullPhnNo
+                    },
                     set: this.set,
                     background: false,
                 }
-                if (payload.phnNo && payload.cCode) {
-                    const fullPhnNo = payload.cCode + payload.phnNo;
-                    queryArg['equal'] = {
-                        bin: "fullPhnNo",
-                        value: fullPhnNo
+                let checkUserChange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
+                if (checkUserChange && checkUserChange.length > 0) {
+                    console.log("old checkUserChange===========>", JSON.stringify(checkUserChange))
+                    if (checkUserChange[0].id && checkUserChange[0].otp && checkUserChange[0].otpExpAt) {
+                        await Aerospike.remove({ set: this.set, key: checkUserChange[0].id })
+                        if (checkUserChange[0].otpExpAt > new Date().getTime()) {
+                            payload.otp = checkUserChange[0].otp
+                            payload.otpExpAt = checkUserChange[0].otpExpAt
+                        }
                     }
-                    let userchangeByPhnNo = await Aerospike.query(queryArg)
-                    if (userchangeByPhnNo && userchangeByPhnNo.length > 0) {
-                        checkUserchange = userchangeByPhnNo[0]
-                        userId = checkUserchange.id
-                    } else {
-                        isCreate = true
-                    }
-                }
-                else {
-                    isCreate = true
                 }
             }
             let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
@@ -220,18 +215,11 @@ export class UserchangeEntity extends BaseEntity {
                 bins: dataToUpdateUserchange,
                 set: this.set,
                 key: dataToUpdateUserchange['id'],
+                createOrReplace: true
             }
-            if (isCreate) {
-                putArg['ttl'] = Constant.SERVER.USERCHANGE_TTL
-                putArg['create'] = true
-            }
-            else
-                putArg['update'] = true
-
             consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
             await Aerospike.put(putArg)
-            let getUserchange: IUserchangeRequest.IUserchange = await this.getUserchange({ userId: dataToUpdateUserchange['id'] })
-            return getUserchange
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserchange", JSON.stringify(error), false)
             return Promise.reject(error)

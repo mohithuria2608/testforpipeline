@@ -74,7 +74,7 @@ export class PaymentService {
     async reversePayment(payload: IPaymentGrpcRequest.IReversePayment): Promise<IPaymentGrpcRequest.IRefundPaymentRes> {
         return new Promise(async (resolve, reject) => {
             await paymentServiceValidator.reversePaymentValidator(payload)
-            this.paymentClient.capturePayment(payload, (error, res) => {
+            this.paymentClient.reversePayment(payload, (error, res) => {
                 if (!error) {
                     consolelog(process.cwd(), "successfully reversed payment", JSON.stringify(res), false)
                     resolve(res)

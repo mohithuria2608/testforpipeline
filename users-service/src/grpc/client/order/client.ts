@@ -41,6 +41,25 @@ export class OrderService {
             }
         })
     }
+
+    async getCart(payload: IOrderGrpcRequest.IGetOrder): Promise<IOrderGrpcRequest.IGetOrderRes> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await orderServiceValidator.getCartValidator(payload)
+                this.orderClient.getCart(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully received cart", JSON.stringify(res.cart), false)
+                        resolve(JSON.parse(res.cart))
+                    } else {
+                        consolelog(process.cwd(), "Error in receiveing cart", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const orderService = new OrderService();

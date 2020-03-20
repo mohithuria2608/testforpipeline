@@ -12,7 +12,8 @@ export class SyncServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    store_code: Joi.string().required(),
+                    store_code: Joi.string(),
+                    type: Joi.string(),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

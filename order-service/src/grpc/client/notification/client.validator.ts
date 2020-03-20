@@ -17,7 +17,8 @@ export class NotificationServiceValidator {
                     emailCode: Joi.string(),
                     msgDestination: Joi.string(),
                     emailDestination: Joi.string(),
-                    language: Joi.string().valid(Constant.DATABASE.LANGUAGE.EN, Constant.DATABASE.LANGUAGE.AR)
+                    language: Joi.string().valid(Constant.DATABASE.LANGUAGE.EN, Constant.DATABASE.LANGUAGE.AR),
+                    payload: Joi.string()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

@@ -106,24 +106,28 @@ export class OrderSDMEntity extends BaseSDM {
     * */
     async cancelOrder(payload: IOrderSdmRequest.ICancelOrder) {
         try {
-            let data = {
-                name: "CancelOrder",
-                req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                    language: payload.language.toLowerCase(),
-                    orderID: payload.sdmOrderRef,
-                    voidReason: payload.voidReason,
-                    voidRemarks: payload.validationRemarks
+            if (payload.sdmOrderRef) {
+                let data = {
+                    name: "CancelOrder",
+                    req: {
+                        licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                        conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                        language: payload.language.toLowerCase(),
+                        orderID: payload.sdmOrderRef,
+                        voidReason: payload.voidReason,
+                        voidRemarks: payload.validationRemarks
+                    }
                 }
+                let res = await this.requestData(data.name, data.req)
+                if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                    return res.GetOrderDetailsResult
+                else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
+                    return res.SDKResult
+                else
+                    return Promise.reject(res)
+            } else {
+                return {}
             }
-            let res = await this.requestData(data.name, data.req)
-            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
-                return res.GetOrderDetailsResult
-            else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
-                return res.SDKResult
-            else
-                return Promise.reject(res)
         } catch (error) {
             consolelog(process.cwd(), 'cancelOrder', JSON.stringify(error), false)
             return (error)

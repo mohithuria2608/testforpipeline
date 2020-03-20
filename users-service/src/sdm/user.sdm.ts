@@ -49,28 +49,6 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.RegisterCustomerResult.CUST_CORPID == 0 || res.RegisterCustomerResult.CUST_CORPID == "0" || res.RegisterCustomerResult.CUST_CORPID == null || res.RegisterCustomerResult.CUST_CORPID == "null")
-                    kafkaService.kafkaSync({
-                        set: Constant.SET_NAME.LOGGER,
-                        mdb: {
-                            create: true,
-                            argv: JSON.stringify({
-                                type: "ISSUE",
-                                info: {
-                                    request: {
-                                        body: data
-                                    },
-                                    response: res.RegisterCustomerResult
-                                },
-                                description: data.name,
-                                options: {
-                                    env: Constant.SERVER.ENV[config.get("env")],
-                                },
-                                createdAt: new Date().getTime(),
-                            })
-                        },
-                        inQ: true
-                    })
                 return res.RegisterCustomerResult
             }
             else
@@ -87,28 +65,6 @@ export class UserSDMEntity extends BaseSDM {
     async updateCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
             let naemRes = nameConstructor(payload.name)
-            if (payload.sdmCorpRef == 0 || payload.sdmCorpRef == null)
-                kafkaService.kafkaSync({
-                    set: Constant.SET_NAME.LOGGER,
-                    mdb: {
-                        create: true,
-                        argv: JSON.stringify({
-                            type: "ISSUE",
-                            info: {
-                                request: {
-                                    body: payload
-                                },
-                                response: {}
-                            },
-                            description: "SDM CORP FAILURE",
-                            options: {
-                                env: Constant.SERVER.ENV[config.get("env")],
-                            },
-                            createdAt: new Date().getTime(),
-                        })
-                    },
-                    inQ: true
-                })
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
@@ -138,28 +94,6 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.UpdateCustomerResult.CUST_CORPID == 0 || res.UpdateCustomerResult.CUST_CORPID == "0" || res.UpdateCustomerResult.CUST_CORPID == null || res.UpdateCustomerResult.CUST_CORPID == "null")
-                    kafkaService.kafkaSync({
-                        set: Constant.SET_NAME.LOGGER,
-                        mdb: {
-                            create: true,
-                            argv: JSON.stringify({
-                                type: "ISSUE",
-                                info: {
-                                    request: {
-                                        body: data
-                                    },
-                                    response: res.UpdateCustomerResult
-                                },
-                                description: data.name,
-                                options: {
-                                    env: Constant.SERVER.ENV[config.get("env")],
-                                },
-                                createdAt: new Date().getTime(),
-                            })
-                        },
-                        inQ: true
-                    })
                 return res.UpdateCustomerResult
             }
             else
@@ -186,28 +120,6 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.UpdateCustomerTokenResult.CUST_CORPID == 0 || res.UpdateCustomerTokenResult.CUST_CORPID == "0" || res.UpdateCustomerTokenResult.CUST_CORPID == null || res.UpdateCustomerTokenResult.CUST_CORPID == "null")
-                    kafkaService.kafkaSync({
-                        set: Constant.SET_NAME.LOGGER,
-                        mdb: {
-                            create: true,
-                            argv: JSON.stringify({
-                                type: "ISSUE",
-                                info: {
-                                    request: {
-                                        body: data
-                                    },
-                                    response: res.UpdateCustomerTokenResult
-                                },
-                                description: data.name,
-                                options: {
-                                    env: Constant.SERVER.ENV[config.get("env")],
-                                },
-                                createdAt: new Date().getTime(),
-                            })
-                        },
-                        inQ: true
-                    })
                 return res.UpdateCustomerTokenResult
             }
             else
@@ -235,28 +147,6 @@ export class UserSDMEntity extends BaseSDM {
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
-                if (res.GetCustomerByEmailResult.CUST_CORPID == 0 || res.GetCustomerByEmailResult.CUST_CORPID == "0" || res.GetCustomerByEmailResult.CUST_CORPID == null || res.GetCustomerByEmailResult.CUST_CORPID == "null")
-                    kafkaService.kafkaSync({
-                        set: Constant.SET_NAME.LOGGER,
-                        mdb: {
-                            create: true,
-                            argv: JSON.stringify({
-                                type: "ISSUE",
-                                info: {
-                                    request: {
-                                        body: data
-                                    },
-                                    response: res.GetCustomerByEmailResult
-                                },
-                                description: data.name,
-                                options: {
-                                    env: Constant.SERVER.ENV[config.get("env")],
-                                },
-                                createdAt: new Date().getTime(),
-                            })
-                        },
-                        inQ: true
-                    })
                 return res.GetCustomerByEmailResult
             }
             else

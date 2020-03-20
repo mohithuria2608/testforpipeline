@@ -490,8 +490,8 @@ export class OrderClass extends BaseEntity {
                 order: order,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: payload.cmsOrderRef,
-                orderNotes2: payload._id,
+                orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + payload.cmsOrderRef : payload.cmsOrderRef,
+                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + payload._id : payload._id,
                 creditCardPaymentbool: (payload['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
                 isSuspended: (payload['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
                 menuTemplateID: 17,
@@ -572,7 +572,7 @@ export class OrderClass extends BaseEntity {
         try {
             console.log("cartDaTa", cartData)
             let amount = cartData.amount
-            if (cartData.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+            if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
             }
             let items = cartData.items
@@ -581,7 +581,7 @@ export class OrderClass extends BaseEntity {
             else
                 items = items.concat(cartData.selFreeItem.ar)
             let orderData = {
-                orderType: cartData.orderType,
+                orderType: address.addressType,
                 cartId: cartData.cartId,
                 cartUnique: cartData.cartUnique,
                 cmsCartRef: cartData.cmsCartRef,
@@ -630,7 +630,8 @@ export class OrderClass extends BaseEntity {
                 trackUntil: 0,
                 isActive: 1,
                 changePaymentMode: 0,
-                paymentMethodAddedOnSdm: 0
+                paymentMethodAddedOnSdm: 0,
+                amountValidationPassed: false
             }
             if (cartData.promo && cartData.promo.couponId) {
                 orderData['promo'] = cartData.promo
@@ -676,11 +677,28 @@ export class OrderClass extends BaseEntity {
                                     updatedAt: new Date().getTime(),
                                     sdmOrderStatus: parseInt(sdmOrder.Status)
                                 }, { new: true })
-                                if (recheck && sdmOrder.Total) {
+                                if (recheck && sdmOrder.Total && !order.amountValidationPassed) {
                                     consolelog(process.cwd(), "order step 4:       ", sdmOrder.ValidationRemarks, true)
-                                    let amount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-                                    console.log("amount validation", amount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
-                                    if (amount[0].amount != parseFloat(sdmOrder.Total)) {
+                                    let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
+                                    let amountToCompare = totalAmount[0].amount
+                                    console.log("sdmOrder.OrderMode", sdmOrder.OrderMode)
+                                    console.log("amount validation", totalAmount[0].amount, sdmOrder.Total, typeof sdmOrder.Total)
+                                    if (sdmOrder.OrderMode == "1") {
+                                        /**
+                                         *@description Delivery order
+                                         */
+                                        let deliveryCharge = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
+                                        console.log("deliveryCharge", deliveryCharge)
+                                        amountToCompare = amountToCompare - deliveryCharge[0].amount
+                                    }
+                                    console.log("amountToCompare", amountToCompare, sdmOrder.Total)
+
+                                    if (
+                                        ((sdmOrder.OrderMode == "1") && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
+                                        ((sdmOrder.OrderMode == "2") && (amountToCompare == parseFloat(sdmOrder.Total)))
+                                    ) {
+                                        order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
+                                    } else {
                                         consolelog(process.cwd(), "order step 5:       ", sdmOrder.ValidationRemarks, true)
                                         recheck = false
                                         OrderSDME.cancelOrder({
@@ -705,40 +723,71 @@ export class OrderClass extends BaseEntity {
                                             })
                                         } else {
                                             consolelog(process.cwd(), "order step 7:       ", sdmOrder.ValidationRemarks, true)
-                                            await paymentService.reversePayment({
-                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                            })
-                                            let status = await paymentService.getPaymentStatus({
-                                                noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                            })
-                                            order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                            let transLogs = [];
+                                            let reverseStatus;
+                                            try {
+                                                await paymentService.reversePayment({
+                                                    noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                                })
+                                            } catch (revError) {
+                                                if (revError.data) {
+                                                    if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                        transLogs.push(revError.data)
+                                                    } else if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                        transLogs.push(revError.data)
+                                                    } else {
+                                                        consolelog(process.cwd(), "unhandled payment error reverse", "", false)
+                                                    }
+                                                }
+                                            }
+                                            try {
+                                                reverseStatus = await paymentService.getPaymentStatus({
+                                                    noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                                })
+                                                transLogs.push(reverseStatus)
+                                            } catch (statusError) {
+                                                if (statusError.data) {
+                                                    if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                        transLogs.push(statusError.data)
+                                                    } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                        transLogs.push(statusError.data)
+                                                    } else {
+                                                        consolelog(process.cwd(), "unhandled payment error reverse status", "", false)
+                                                    }
+                                                }
+                                            }
+                                            let dataToUpdateOrder = {
                                                 isActive: 0,
                                                 status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
                                                 updatedAt: new Date().getTime(),
                                                 validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH,
-                                                $addToSet: {
-                                                    transLogs: status
-                                                },
                                                 "payment.status": Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
-                                            }, { new: true })
-                                            CMS.TransactionCMSE.createTransaction({
-                                                order_id: order.cmsOrderRef,
-                                                message: status.transactions[0].type,
-                                                type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
-                                                payment_data: {
-                                                    id: status.transactions[0].id.toString(),
-                                                    data: JSON.stringify(status)
+                                            }
+                                            if (transLogs && transLogs.length > 0)
+                                                dataToUpdateOrder['$addToSet'] = {
+                                                    transLogs: { $each: transLogs.reverse() }
                                                 }
-                                            })
-                                            CMS.OrderCMSE.updateOrder({
-                                                order_id: order.cmsOrderRef,
-                                                payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                                order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
-                                                sdm_order_id: order.sdmOrderRef
-                                            })
+                                            order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                                            if (reverseStatus && order && order._id) {
+                                                CMS.TransactionCMSE.createTransaction({
+                                                    order_id: order.cmsOrderRef,
+                                                    message: reverseStatus.transactions[0].type,
+                                                    type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                                    payment_data: {
+                                                        id: reverseStatus.transactions[0].id.toString(),
+                                                        data: JSON.stringify(reverseStatus)
+                                                    }
+                                                })
+                                                CMS.OrderCMSE.updateOrder({
+                                                    order_id: order.cmsOrderRef,
+                                                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                                    sdm_order_id: order.sdmOrderRef
+                                                })
+                                            }
                                         }
                                     }
                                 }
@@ -851,20 +900,22 @@ export class OrderClass extends BaseEntity {
                                                         consolelog(process.cwd(), "order step 20 :       ", parseInt(sdmOrder.Status), true)
                                                     }
                                                 }
-                                                let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
-                                                let userData = await userService.fetchUser({ userId: order.userId });
-                                                notificationService.sendNotification({
-                                                    toSendMsg: true,
-                                                    toSendEmail: true,
-                                                    msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
-                                                    emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
-                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                    emailDestination: userData.email,
-                                                    language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: { order } })
-                                                });
+                                                if (oldStatus != parseInt(sdmOrder.Status)) {
+                                                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        toSendEmail: true,
+                                                        msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                                                        emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order, email: { order } })
+                                                    });
+                                                }
                                                 break;
                                             }
                                             case 2: {
@@ -897,58 +948,91 @@ export class OrderClass extends BaseEntity {
                                                             status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
                                                             updatedAt: new Date().getTime(),
                                                         }, { new: true })
-                                                        await paymentService.capturePayment({
-                                                            noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                            orderId: order.transLogs[1].orderId,
-                                                            amount: order.transLogs[1].amount,
-                                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                                        })
-                                                        let status = await paymentService.getPaymentStatus({
-                                                            noonpayOrderId: order.transLogs[1].noonpayOrderId,
-                                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                                            paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                        })
-                                                        order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                                            status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                                            "payment.transactionId": status.transactions[0].id,
-                                                            "payment.status": status.transactions[0].type,
-                                                            $addToSet: {
-                                                                transLogs: status
-                                                            },
-                                                            updatedAt: new Date().getTime()
-                                                        }, { new: true })
-                                                        CMS.TransactionCMSE.createTransaction({
-                                                            order_id: order.cmsOrderRef,
-                                                            message: status.transactions[0].type,
-                                                            type: Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.CMS,
-                                                            payment_data: {
-                                                                id: status.transactions[0].id.toString(),
-                                                                data: JSON.stringify(status)
+                                                        let transLogs = [];
+                                                        let captureStatus;
+                                                        try {
+                                                            await paymentService.capturePayment({
+                                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                                orderId: order.transLogs[1].orderId,
+                                                                amount: order.transLogs[1].amount,
+                                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                                            })
+                                                        } catch (captureError) {
+                                                            if (captureError.data) {
+                                                                if (captureError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                                    transLogs.push(captureError.data)
+                                                                } else if (captureError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                                    transLogs.push(captureError.data)
+                                                                } else {
+                                                                    consolelog(process.cwd(), "unhandled payment error capture", "", false)
+                                                                }
                                                             }
-                                                        })
-                                                        CMS.OrderCMSE.updateOrder({
-                                                            order_id: order.cmsOrderRef,
-                                                            payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
-                                                            sdm_order_id: order.sdmOrderRef
-                                                        })
+                                                        }
+                                                        try {
+                                                            captureStatus = await paymentService.getPaymentStatus({
+                                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                            })
+                                                            transLogs.push(captureStatus)
+                                                        } catch (statusError) {
+                                                            if (statusError.data) {
+                                                                if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                                    transLogs.push(statusError.data)
+                                                                } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                                    transLogs.push(statusError.data)
+                                                                } else {
+                                                                    consolelog(process.cwd(), "unhandled payment error capture status", "", false)
+                                                                }
+                                                            }
+                                                        }
+                                                        let dataToUpdateOrder = {
+                                                            status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                                            "payment.transactionId": captureStatus.transactions[0].id,
+                                                            "payment.status": captureStatus.transactions[0].type,
+                                                            updatedAt: new Date().getTime()
+                                                        }
+                                                        if (transLogs && transLogs.length > 0)
+                                                            dataToUpdateOrder['$addToSet'] = {
+                                                                transLogs: { $each: transLogs.reverse() }
+                                                            }
+                                                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                                                        if (captureStatus && order && order._id) {
+                                                            CMS.TransactionCMSE.createTransaction({
+                                                                order_id: order.cmsOrderRef,
+                                                                message: captureStatus.transactions[0].type,
+                                                                type: Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.CMS,
+                                                                payment_data: {
+                                                                    id: captureStatus.transactions[0].id.toString(),
+                                                                    data: JSON.stringify(captureStatus)
+                                                                }
+                                                            })
+                                                            CMS.OrderCMSE.updateOrder({
+                                                                order_id: order.cmsOrderRef,
+                                                                payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                                                                order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
+                                                                sdm_order_id: order.sdmOrderRef
+                                                            })
+                                                        }
                                                     }
                                                 }
                                                 // send notification(sms + email) on order confirmaton
-                                                let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
-                                                let userData = await userService.fetchUser({ userId: order.userId });
-                                                notificationService.sendNotification({
-                                                    toSendMsg: true,
-                                                    toSendEmail: true,
-                                                    msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
-                                                    emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
-                                                        : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
-                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                    emailDestination: userData.email,
-                                                    language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: { order } })
-                                                });
+                                                if (oldStatus != parseInt(sdmOrder.Status)) {
+                                                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        toSendEmail: true,
+                                                        msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                                                        emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                                                            : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order, email: { order } })
+                                                    });
+                                                }
 
                                                 break;
                                             }
@@ -1022,19 +1106,20 @@ export class OrderClass extends BaseEntity {
                                                     order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
                                                     sdm_order_id: order.sdmOrderRef
                                                 });
-
-                                                // send notification(sms + email) on order cancellation
-                                                let userData = await userService.fetchUser({ userId: order.userId });
-                                                notificationService.sendNotification({
-                                                    toSendMsg: true,
-                                                    toSendEmail: true,
-                                                    msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
-                                                    emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
-                                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                                    emailDestination: userData.email,
-                                                    language: payload.language,
-                                                    payload: JSON.stringify({ msg: order, email: { order } })
-                                                });
+                                                if (oldStatus != parseInt(sdmOrder.Status)) {
+                                                    // send notification(sms + email) on order cancellation
+                                                    let userData = await userService.fetchUser({ userId: order.userId });
+                                                    notificationService.sendNotification({
+                                                        toSendMsg: true,
+                                                        toSendEmail: true,
+                                                        msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
+                                                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
+                                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                                        emailDestination: userData.email,
+                                                        language: payload.language,
+                                                        payload: JSON.stringify({ msg: order, email: { order } })
+                                                    });
+                                                }
                                                 break;
                                             }
                                             default: {

@@ -20,7 +20,7 @@ declare namespace ICommonRequest {
         page?: number,
     }
 
-     interface IError {
+    interface IError {
         name?: string,
         statusCode: number,
         httpCode: number,
@@ -44,6 +44,8 @@ declare namespace ICommonRequest {
     interface IPingService {
         set: string,
         service: string[],
-        store_code: string
+        store_code?: string,
+        type?: string,
+        data?: IConfigRequest.IConfig
     }
 }

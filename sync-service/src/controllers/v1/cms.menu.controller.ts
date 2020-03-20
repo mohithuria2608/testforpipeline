@@ -13,19 +13,21 @@ export class CmsMenuController {
      */
     async postMenu(headers: ICommonRequest.IHeaders, payload: ICmsMenuRequest.ICmsMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let menuChange = {
-                set: ENTITY.MenuE.set,
-                as: {
-                    create: true,
-                    argv: JSON.stringify(payload.data)
-                },
-                inQ: true
+            if (payload.data) {
+                let menuChange = {
+                    set: ENTITY.MenuE.set,
+                    as: {
+                        create: true,
+                        argv: JSON.stringify(payload.data)
+                    },
+                    inQ: true
+                }
+                if (payload.action == "update") {
+                    menuChange['as']['update'] = true
+                    delete menuChange['as']['create']
+                }
+                kafkaService.kafkaSync(menuChange)
             }
-            if (payload.action == "update") {
-                menuChange['as']['update'] = true
-                delete menuChange['as']['create']
-            }
-            kafkaService.kafkaSync(menuChange)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "postMenu", JSON.stringify(error), false)

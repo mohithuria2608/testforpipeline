@@ -1,8 +1,6 @@
 
 declare namespace IAddressCMSRequest {
 
-    interface IHeader { }
-
     interface ICmsAddress {
         addressId: string,
         firstName: string,

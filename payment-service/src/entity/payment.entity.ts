@@ -82,16 +82,8 @@ export class PaymentClass extends BaseEntity {
             type: 'DEFAULT',
             actionHint: ''
         },
-        PENDING_AUTHORIZATION: {
-            statusCode: 7001,
-            httpCode: 400,
-            name: 'PaymentError',
-            message: 'Awaiting payment authorization.',
-            type: 'PENDING_AUTHORIZATION',
-            actionHint: ''
-        },
         PAYMENT_ORDER_EXPIRED: {
-            statusCode: 7002,
+            statusCode: 7001,
             httpCode: 400,
             name: 'PaymentError',
             message: 'Payment initiation expired.',
@@ -99,23 +91,71 @@ export class PaymentClass extends BaseEntity {
             actionHint: ''
         },
         PAYMENT_ORDER_CANCELLED: {
-            statusCode: 7003,
+            statusCode: 7002,
             httpCode: 400,
             name: 'PaymentError',
             message: 'Payment cancelled.',
             type: 'PAYMENT_ORDER_CANCELLED',
             actionHint: ''
         },
-        PENDING_CANCELLATION: {
-            statusCode: 7004,
+        PAYMENT_ORDER_FAILED: {
+            statusCode: 7003,
             httpCode: 400,
             name: 'PaymentError',
-            message: 'Awaiting payment cancellation.',
-            type: 'PENDING_CANCELLATION',
+            message: 'Payment Failed',
+            type: 'PAYMENT_ORDER_FAILED',
+            actionHint: ''
+        },
+        UNHANDLED_PAYMENT_ORDER_STATUS: {
+            statusCode: 7010,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Unhandled Payment order status',
+            type: 'UNHANDLED_PAYMENT_ORDER_STATUS',
+            actionHint: ''
+        },
+        PAYMENT_ORDER_PENDING: {
+            statusCode: 7011,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Payment order status is Pending',
+            type: 'PAYMENT_ORDER_PENDING',
+            actionHint: ''
+        },
+        PAYMENT_ORDER_MARKED_FOR_REVIEW: {
+            statusCode: 7012,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Payment marked for review by Fraud Detection System',
+            type: 'PAYMENT_ORDER_MARKED_FOR_REVIEW',
+            actionHint: ''
+        },
+        PAYMENT_ORDER_REJECTED: {
+            statusCode: 7013,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Payment Rejected by the Fraud Detection System',
+            type: 'PAYMENT_ORDER_REJECTED',
+            actionHint: ''
+        },
+        PENDING_AUTHORIZATION: {
+            statusCode: 7014,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Awaiting payment authorization.',
+            type: 'PENDING_AUTHORIZATION',
+            actionHint: ''
+        },
+        PENDING_PAYMENT_REVERSAL: {
+            statusCode: 7015,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Awaiting payment reversal.',
+            type: 'PENDING_PAYMENT_REVERSAL',
             actionHint: ''
         },
         PENDING_PAYMENT_CAPTURE: {
-            statusCode: 7005,
+            statusCode: 7016,
             httpCode: 400,
             name: 'PaymentError',
             message: 'Awaiting payment capture.',
@@ -123,13 +163,45 @@ export class PaymentClass extends BaseEntity {
             actionHint: ''
         },
         PENDING_PAYMENT_REFUND: {
-            statusCode: 7006,
+            statusCode: 7017,
             httpCode: 400,
             name: 'PaymentError',
             message: 'Awaiting payment refund.',
             type: 'PENDING_PAYMENT_REFUND',
             actionHint: ''
         },
+        PAYMENT_REVERSED: {
+            statusCode: 7018,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Payment reversed, can\'t perform Capture',
+            type: 'PAYMENT_REVERSED',
+            actionHint: ''
+        },
+        INVALID_PAYMENT_STATUS_FOR_CAPTURE: {
+            statusCode: 7019,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Invalid Payment order status for CAPTURE operation',
+            type: 'INVALID_PAYMENT_STATUS_FOR_CAPTURE',
+            actionHint: ''
+        },
+        INVALID_PAYMENT_STATUS_FOR_REVERSE: {
+            statusCode: 7020,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Invalid Payment order status for REVERSE operation',
+            type: 'INVALID_PAYMENT_STATUS_FOR_REVERSE',
+            actionHint: ''
+        },
+        INVALID_PAYMENT_STATUS_FOR_REFUND: {
+            statusCode: 7021,
+            httpCode: 400,
+            name: 'PaymentError',
+            message: 'Invalid Payment order status for REFUND operation',
+            type: 'INVALID_PAYMENT_STATUS_FOR_REFUND',
+            actionHint: ''
+        }
     });
 
     private static readonly INITIATE_PAYMENT_REQUEST_SCHEMA = Joi.object({
@@ -208,21 +280,21 @@ export class PaymentClass extends BaseEntity {
     /**
      * @description Returns custom error objects corresponding to noonpay error codes
      */
-    private getErrorObject(nonzeroResponse: any) {
+    private getErrorObject(paymentResponse: any) {
         let err: ICommonRequest.IError;
-        if (Constant.STATUS_MSG.NOONPAY_ERROR[nonzeroResponse.resultCode]) {
-            err = cloneObject(Constant.STATUS_MSG.NOONPAY_ERROR[nonzeroResponse.resultCode]);
+        if (Constant.STATUS_MSG.NOONPAY_ERROR[paymentResponse.resultCode]) {
+            err = cloneObject(Constant.STATUS_MSG.NOONPAY_ERROR[paymentResponse.resultCode]);
             if (err.useNoonPayMessage) {
-                err.message = nonzeroResponse.message;
+                err.message = paymentResponse.message;
                 delete err.useNoonPayMessage;
             }
         } else {
             err = cloneObject(Constant.STATUS_MSG.NOONPAY_ERROR.default);
-            err.message = nonzeroResponse.message;
+            err.message = paymentResponse.message;
         }
         // attach noonpay response object
-        if (nonzeroResponse && nonzeroResponse.resultCode !== undefined) {
-            err.data = nonzeroResponse;
+        if (paymentResponse && paymentResponse.resultCode !== undefined) {
+            err.data = paymentResponse;
         }
         err.name = 'PaymentError';
         console.log('---------error object', err);
@@ -370,10 +442,10 @@ export class PaymentClass extends BaseEntity {
                 paymentStatus: response.result.order.status,
                 creationTime: response.result.order.creationTime,
                 amount: response.result.order.amount,
-                totalAuthorizedAmount: response.result.order.totalAuthorizedAmount,
-                totalCapturedAmount: response.result.order.totalCapturedAmount,
-                totalRefundedAmount: response.result.order.totalRefundedAmount,
-                totalReversedAmount: response.result.order.totalReversedAmount,
+                totalAuthorizedAmount: response.result.order.totalAuthorizedAmount || 0,
+                totalCapturedAmount: response.result.order.totalCapturedAmount || 0,
+                totalRefundedAmount: response.result.order.totalRefundedAmount || 0,
+                totalReversedAmount: response.result.order.totalReversedAmount || 0,
                 currency: response.result.order.currency,
                 noonPayOrderCategory: response.result.order.category,
                 channel: response.result.order.channel,
@@ -381,14 +453,35 @@ export class PaymentClass extends BaseEntity {
                 transactions: response.result.transactions,
                 noonpayRedirectionUrl: response.result.checkoutData ? response.result.checkoutData.postUrl : ''
             };
-            if (response.resultCode === 0 && response.result.order.status !== Constant.DATABASE.STATUS.PAYMENT.FAILED) {
-                return result;
+            if (response.resultCode === 0) {
+                // response.result.order.status !== Constant.DATABASE.STATUS.PAYMENT.FAILED
+                switch (response.result.order.status) {
+                    case Constant.DATABASE.STATUS.PAYMENT.EXPIRED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED);
+                    case Constant.DATABASE.STATUS.PAYMENT.CANCELLED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED);
+                    case Constant.DATABASE.STATUS.PAYMENT.FAILED:
+                        // result.message = response.result.order.errorMessage;
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_FAILED);
+                    case Constant.DATABASE.STATUS.PAYMENT.PENDING:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_PENDING);
+                    case Constant.DATABASE.STATUS.PAYMENT.MARKED_FOR_REVIEW:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_MARKED_FOR_REVIEW);
+                    case Constant.DATABASE.STATUS.PAYMENT.REJECTED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_REJECTED);
+                    case Constant.DATABASE.STATUS.PAYMENT.INITIATED:
+                    case Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED:
+                    case Constant.DATABASE.STATUS.PAYMENT.CAPTURED:
+                    case Constant.DATABASE.STATUS.PAYMENT.REVERSED:
+                    case Constant.DATABASE.STATUS.PAYMENT.REFUNDED:
+                        return result;
+                    default:
+                        consolelog(process.cwd(), 'Payment Unhandled ORDER STATUS', response, true);
+                        throw PaymentClass.CUSTOM_ERRORS.UNHANDLED_PAYMENT_ORDER_STATUS;
+                }
             } else {
                 // some error
                 consolelog(process.cwd(), 'Payment ORDER STATUS, non-zero resultCode or order status failed', response, true);
-                if (response.result.order.status === Constant.DATABASE.STATUS.PAYMENT.FAILED) {
-                    result.message = response.result.order.errorMessage;
-                }
                 return Promise.reject(this.getErrorObject(result));
             }
         } catch (error) {
@@ -441,8 +534,6 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
-                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
                 resultCode: response.resultCode,
@@ -469,7 +560,7 @@ export class PaymentClass extends BaseEntity {
         }
     }
     /**
-     * @description Get Noonpay order CANCELLED status using either noonpayOrderId or orderId (CMS)
+     * @description Get Noonpay order REVERSED status using either noonpayOrderId or orderId (CMS)
      * @param payload IPaymentGrpcRequest.IGetPaymentStatus
      */
     public async getReverseStatus(payload: IPaymentGrpcRequest.IGetPaymentStatus): Promise<IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes> {
@@ -480,10 +571,8 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
-                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
             } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED) {
-                throw PaymentClass.CUSTOM_ERRORS.PENDING_CANCELLATION;
+                throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_REVERSAL;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
                 resultCode: response.resultCode,
@@ -521,12 +610,10 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
-                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.CANCELLED) {
-                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED;
             } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.REVERSED) {
+                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_REVERSED;
             }
             let result: IPaymentGrpcRequest.IGetPaymentAuthorizationStatusRes = {
                 resultCode: response.resultCode,
@@ -564,12 +651,10 @@ export class PaymentClass extends BaseEntity {
             let response: IPaymentGrpcRequest.IGetPaymentStatusRes = await this.getPaymentStatus(payload);
             if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.INITIATED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_AUTHORIZATION;
-            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.EXPIRED) {
-                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED;
-            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.CANCELLED) {
-                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED;
             } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
+            } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.REVERSED) {
+                throw PaymentClass.CUSTOM_ERRORS.PAYMENT_REVERSED;
             } else if (response.paymentStatus === Constant.DATABASE.STATUS.PAYMENT.CAPTURED) {
                 throw PaymentClass.CUSTOM_ERRORS.PENDING_PAYMENT_CAPTURE;
             }
@@ -633,7 +718,7 @@ export class PaymentClass extends BaseEntity {
                 json: true,
                 timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
-            console.log('--Payment CAPTURE');
+            console.log('--Payment CAPTURE', JSON.stringify(response));
             let result = {
                 resultCode: response.resultCode,
                 message: response.message,
@@ -654,11 +739,35 @@ export class PaymentClass extends BaseEntity {
             // TODO: Update Payment status
             // To be done at order service
             if (response.resultCode === 0) {
-                return result;
+                switch (response.result.order.status) {
+                    case Constant.DATABASE.STATUS.PAYMENT.EXPIRED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED);
+                    case Constant.DATABASE.STATUS.PAYMENT.CANCELLED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED);
+                    case Constant.DATABASE.STATUS.PAYMENT.FAILED:
+                        // result.message = response.result.order.errorMessage;
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_FAILED);
+                    case Constant.DATABASE.STATUS.PAYMENT.PENDING:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_PENDING);
+                    case Constant.DATABASE.STATUS.PAYMENT.MARKED_FOR_REVIEW:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_MARKED_FOR_REVIEW);
+                    case Constant.DATABASE.STATUS.PAYMENT.REJECTED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_REJECTED);
+                    case Constant.DATABASE.STATUS.PAYMENT.INITIATED:
+                    case Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED:
+                    case Constant.DATABASE.STATUS.PAYMENT.REVERSED:
+                    case Constant.DATABASE.STATUS.PAYMENT.REFUNDED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.INVALID_PAYMENT_STATUS_FOR_CAPTURE);
+                    case Constant.DATABASE.STATUS.PAYMENT.CAPTURED:
+                        return result;
+                    default:
+                        consolelog(process.cwd(), 'Payment Unhandled ORDER STATUS', response, true);
+                        throw PaymentClass.CUSTOM_ERRORS.UNHANDLED_PAYMENT_ORDER_STATUS;
+                }
             } else {
                 // some error
                 consolelog(process.cwd(), 'Payment CAPTURE, non-zero resultCode', response, true);
-                return Promise.reject(result);
+                return Promise.reject(this.getErrorObject(result));
             }
         } catch (error) {
             error = error && error.error ? error.error : error;
@@ -700,13 +809,13 @@ export class PaymentClass extends BaseEntity {
                 json: true,
                 timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
             });
-            console.log('--Payment REVERSE');
+            console.log('--Payment REVERSE', JSON.stringify(response));
             let result = {
                 resultCode: response.resultCode,
                 message: response.message,
                 noonpayOrderId: response.result.order.id,
                 orderId: response.result.order.reference,
-                paymentStatus: response.result.order.status, // CANCELLED in this case
+                paymentStatus: response.result.order.status, // REVERSED in this case
                 creationTime: response.result.transaction.creationTime, // capture payment timestamp
                 amount: response.result.order.amount,
                 totalAuthorizedAmount: response.result.order.totalAuthorizedAmount,
@@ -721,11 +830,35 @@ export class PaymentClass extends BaseEntity {
             // TODO: Update Payment status
             // To be done at order service
             if (response.resultCode === 0) {
-                return result;
+                switch (response.result.order.status) {
+                    case Constant.DATABASE.STATUS.PAYMENT.EXPIRED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED);
+                    case Constant.DATABASE.STATUS.PAYMENT.CANCELLED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED);
+                    case Constant.DATABASE.STATUS.PAYMENT.FAILED:
+                        // result.message = response.result.order.errorMessage;
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_FAILED);
+                    case Constant.DATABASE.STATUS.PAYMENT.PENDING:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_PENDING);
+                    case Constant.DATABASE.STATUS.PAYMENT.MARKED_FOR_REVIEW:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_MARKED_FOR_REVIEW);
+                    case Constant.DATABASE.STATUS.PAYMENT.REJECTED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_REJECTED);
+                    case Constant.DATABASE.STATUS.PAYMENT.INITIATED:
+                    case Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED:
+                    case Constant.DATABASE.STATUS.PAYMENT.CAPTURED:
+                    case Constant.DATABASE.STATUS.PAYMENT.REFUNDED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.INVALID_PAYMENT_STATUS_FOR_REVERSE);
+                    case Constant.DATABASE.STATUS.PAYMENT.REVERSED:
+                        return result;
+                    default:
+                        consolelog(process.cwd(), 'Payment Unhandled ORDER STATUS', response, true);
+                        throw PaymentClass.CUSTOM_ERRORS.UNHANDLED_PAYMENT_ORDER_STATUS;
+                }
             } else {
                 // some error
                 consolelog(process.cwd(), 'Payment REVERSE, non-zero resultCode', response, true);
-                return Promise.reject(result);
+                return Promise.reject(this.getErrorObject(result));
             }
         } catch (error) {
             error = error && error.error ? error.error : error;
@@ -793,11 +926,35 @@ export class PaymentClass extends BaseEntity {
             // TODO: Update Payment status
             // To be done at order service
             if (response.resultCode === 0) {
-                return result;
+                switch (response.result.order.status) {
+                    case Constant.DATABASE.STATUS.PAYMENT.EXPIRED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_EXPIRED);
+                    case Constant.DATABASE.STATUS.PAYMENT.CANCELLED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_CANCELLED);
+                    case Constant.DATABASE.STATUS.PAYMENT.FAILED:
+                        // result.message = response.result.order.errorMessage;
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_FAILED);
+                    case Constant.DATABASE.STATUS.PAYMENT.PENDING:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_PENDING);
+                    case Constant.DATABASE.STATUS.PAYMENT.MARKED_FOR_REVIEW:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_MARKED_FOR_REVIEW);
+                    case Constant.DATABASE.STATUS.PAYMENT.REJECTED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.PAYMENT_ORDER_REJECTED);
+                    case Constant.DATABASE.STATUS.PAYMENT.INITIATED:
+                    case Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED:
+                    case Constant.DATABASE.STATUS.PAYMENT.CAPTURED:
+                    case Constant.DATABASE.STATUS.PAYMENT.REVERSED:
+                        return Promise.reject(PaymentClass.CUSTOM_ERRORS.INVALID_PAYMENT_STATUS_FOR_REFUND);
+                    case Constant.DATABASE.STATUS.PAYMENT.REFUNDED:
+                        return result;
+                    default:
+                        consolelog(process.cwd(), 'Payment Unhandled ORDER STATUS', response, true);
+                        throw PaymentClass.CUSTOM_ERRORS.UNHANDLED_PAYMENT_ORDER_STATUS;
+                }
             } else {
                 // some error
                 consolelog(process.cwd(), 'Payment REFUND, non-zero resultCode', response, true);
-                return Promise.reject(result);
+                return Promise.reject(this.getErrorObject(result));
             }
         } catch (error) {
             error = error && error.error ? error.error : error;

@@ -50,11 +50,11 @@ Hands-on Microservices with TypeScript 3
 * jy9ypeF8DQf2ZTLT
 * https://americananode.appskeeper.com/
 
-# AEROSPIKE DB
+# DEV and QA AEROSPIKE DB
 * ssh aerospikeusr@40.123.212.40
 * GM2nGDQkN5yMdPZs
 
-# DEV MONGODB
+# DEV and QA MONGODB
 * 54.176.239.44:2798
 * americana_db
 * americana_dbusr
@@ -99,3 +99,9 @@ Hands-on Microservices with TypeScript 3
 
 # Aerospike error codes
 * https://github.com/aerospike/aerospike-client-java/blob/master/client/src/com/aerospike/client/ResultCode.java
+
+# dev sdm url 
+* https://sdkliveuae.americana.com.sa:2200/?wsdl
+
+# prod sdm url
+* https://sdkliveuae.americana.com.sa:2200/?wsdl

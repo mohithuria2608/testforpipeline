@@ -1,6 +1,9 @@
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 // process.env.AEROSPIKE_DEBUG_STACKTRACES = "1";
 global.healthcheck = {}
+global.configSync = {
+  general: 0
+}
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
@@ -9,7 +12,6 @@ import middleware from './middlewares'
 import route from './route'
 
 const app = new Koa()
-
 
 app.use(middleware());
 app.use(route());

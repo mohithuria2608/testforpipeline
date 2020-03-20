@@ -27,7 +27,8 @@ export interface Iorder extends Document {
     trackUntil: number,
     validationRemarks: string,
     promo: any,
-    isFreeItem: any
+    isFreeItem: any,
+    amountValidationPassed: boolean
 };
 
 const orderSchema = new Schema({
@@ -175,7 +176,8 @@ const orderSchema = new Schema({
     trackUntil: { type: Number, required: true },
     validationRemarks: { type: String },
     promo: { type: Schema.Types.Mixed },
-    isFreeItem: { type: Boolean }
+    isFreeItem: { type: Boolean },
+    amountValidationPassed: { type: Boolean, default: false, required: true }
 });
 
 export let order = model<Iorder>('order', orderSchema)

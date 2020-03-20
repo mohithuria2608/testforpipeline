@@ -1,6 +1,18 @@
 declare namespace ICmsUserRequest {
-    interface ICmsUser {
+    interface ICmsUserMigrate {
         action: string,
-        data: any,
+        data: ICmsUser[],
+    }
+
+    interface ICmsUser {
+        customerId: string,
+        email: string,
+        firstName: string,
+        lastName: string,
+        phone: string,
+        SdmUserRef: string,
+        SdmCorpRef: string,
+        alternatePhone: string[],
+        address: IAddressCMSRequest.ICmsAddress[]
     }
 }

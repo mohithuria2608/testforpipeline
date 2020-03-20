@@ -24,6 +24,7 @@ declare namespace IOrderRequest {
         isFreeItem: boolean,
         trackUntil: number,
         validationRemarks: string,
+        amountValidationPassed: boolean
     }
 
     interface IAddress {

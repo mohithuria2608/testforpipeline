@@ -1,0 +1,36 @@
+[{
+	"category": "FAQs",
+	"questionair": [{
+			"ques": "How will I know when the restaurant received my Order?",
+			"ans": "Once you submit your order, the Order Confirmation page will show the time your order was received along with an estimated time that your order will be ready for carryout or delivery. You will also receive a confirmation email at the email address you provided at registration. And if you're still unsure about your order, you can always call the restaurant directly."
+		},
+		{
+			"ques": "What payment options are available through Mobile Application Ordering?",
+			"ans": "You can choose to pay online using your credit card or cash on delivery."
+		},
+		{
+			"ques": "Can I save my credit card information for future purchases?",
+			"ans": "No. For security purposes, all your credit card information are handled through a secured bank gateway and are never saved on the KFC application."
+		},
+		{
+			"ques": "Where can I change my account info?",
+			"ans": "Once you've signed in to the application with your phone number , Click on Your name from the top hamburger menu. You can change your account information there."
+		},
+		{
+			"ques": "Are delivery charges higher for customers who order from KFC application?",
+			"ans": "No. The transportation fee is always the same online as it is offline for the restaurant taking and delivering your order. There is no difference."
+		},
+		{
+			"ques": "How can I tell how much I’m being charged for delivery service?",
+			"ans": "The transtportation fee is listed at checkout in the itemized portion of the cart summary."
+		},
+		{
+			"ques": "Is there a set minimum amount for most delivery orders?",
+			"ans": "For delivery orders placed online or by phone there is a minimum order amount of Dhs. 24 “transportation fee applies”"
+		},
+		{
+			"ques": "How can I give feedback to KFC about my restaurant experience?",
+			"ans": "KFC wants to ensure that you have a terrific experience in our restaurants and in our mobile application. If you would like to provide feedback, From the Side menu, click on \"Call Support\""
+		}
+	]
+}]

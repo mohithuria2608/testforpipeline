@@ -22,6 +22,22 @@ export class OrderServiceValidator {
             }
         })
     }
+
+    async getCartValidator(data: IOrderGrpcRequest.IGetOrder) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                    cartId: Joi.string().required()
+                })
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(error.message)
+                resolve({})
+            } catch (error) {
+                reject(validatorErr(error.message))
+            }
+        })
+    }
 }
 
 

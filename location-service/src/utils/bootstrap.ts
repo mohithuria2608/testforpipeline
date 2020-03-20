@@ -1,11 +1,12 @@
 import { Aerospike } from "../aerospike";
-import { countryController, cityController, areaController, storeController } from '../controllers';
+import { countryController, cityController, areaController, storeController, locationController } from '../controllers';
 
 export let bootstrap = async function (server) {
     await Aerospike.init();
-    countryController.bootstrapCountry()
-    cityController.bootstrapCity()
-    areaController.bootstrapArea()
-    storeController.bootstrapStore()
+    await countryController.bootstrapCountry()
+    await cityController.bootstrapCity()
+    await areaController.bootstrapArea()
+    await storeController.bootstrapStore()
+    locationController.bootstrapPickup()
     return {}
 }
