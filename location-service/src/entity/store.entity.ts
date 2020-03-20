@@ -80,6 +80,8 @@ export class StoreEntity extends BaseEntity {
             await Aerospike.put(putArg)
             return {}
         } catch (error) {
+            consolelog(process.cwd(), "data.storeId", data.storeId, false)
+            consolelog(process.cwd(), "error", error, false)
             return {}
         }
     }
