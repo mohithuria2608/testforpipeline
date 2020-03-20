@@ -33,7 +33,7 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
-                        expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+                        expiretime = Constant.SERVER.ACCESS_TOKEN_EXPIRE_TIME
                         tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                         break;
                     } else

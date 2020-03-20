@@ -51,7 +51,7 @@ export const start = (async () => {
                 "id": 1659,
                 "sdmId": 110005,
                 "subOptions": [
-
+                  
                 ],
                 "position": 1,
                 "imageThumbnail": "/imagestemp/110005.png",
@@ -127,7 +127,7 @@ export const start = (async () => {
                 "modGroupId": 10028,
                 "selectionQty": 0,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "American Cheese"
@@ -174,7 +174,7 @@ export const start = (async () => {
                 "modGroupId": 10027,
                 "selectionQty": 0,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "Lettuce"
@@ -221,7 +221,7 @@ export const start = (async () => {
                 "modGroupId": 10027,
                 "selectionQty": 0,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "Tomato"
@@ -246,7 +246,7 @@ export const start = (async () => {
                 "id": 1648,
                 "sdmId": 110003,
                 "subOptions": [
-
+                  
                 ],
                 "position": 1,
                 "imageThumbnail": "/imagestemp/110003.png",
@@ -268,7 +268,7 @@ export const start = (async () => {
                 "id": 1649,
                 "sdmId": 110002,
                 "subOptions": [
-
+                  
                 ],
                 "position": 2,
                 "imageThumbnail": "/imagestemp/110002.png",
@@ -344,7 +344,7 @@ export const start = (async () => {
                 "modGroupId": 10027,
                 "selectionQty": 0,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "Lettuce"
@@ -391,7 +391,7 @@ export const start = (async () => {
                 "modGroupId": 10027,
                 "selectionQty": 0,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "Tomato"
@@ -438,7 +438,7 @@ export const start = (async () => {
                 "modGroupId": 10028,
                 "selectionQty": 0,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "American Cheese"
@@ -463,7 +463,7 @@ export const start = (async () => {
                 "id": 1633,
                 "sdmId": 510050,
                 "subOptions": [
-
+                  
                 ],
                 "position": 1,
                 "imageThumbnail": "/imagestemp/510050.png",
@@ -476,7 +476,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "Medium Fries"
@@ -485,7 +485,7 @@ export const start = (async () => {
                 "id": 1619,
                 "sdmId": 510001,
                 "subOptions": [
-
+                  
                 ],
                 "position": 2,
                 "imageThumbnail": "/imagestemp/510001.png",
@@ -498,7 +498,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Coleslaw Salad Small"
@@ -507,7 +507,7 @@ export const start = (async () => {
                 "id": 1637,
                 "sdmId": 510051,
                 "subOptions": [
-
+                  
                 ],
                 "position": 3,
                 "imageThumbnail": "/imagestemp/510051.png",
@@ -520,7 +520,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Medium Fries Spicy"
@@ -529,7 +529,7 @@ export const start = (async () => {
                 "id": 1639,
                 "sdmId": 510071,
                 "subOptions": [
-
+                  
                 ],
                 "position": 4,
                 "imageThumbnail": "/imagestemp/510071.png",
@@ -542,7 +542,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Potato Dipper- Regular"
@@ -551,7 +551,7 @@ export const start = (async () => {
                 "id": 1628,
                 "sdmId": 510036,
                 "subOptions": [
-
+                  
                 ],
                 "position": 5,
                 "imageThumbnail": "/imagestemp/510036.png",
@@ -564,7 +564,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Loaded Fries Regular"
@@ -589,7 +589,7 @@ export const start = (async () => {
                 "id": 1605,
                 "sdmId": 600003,
                 "subOptions": [
-
+                  
                 ],
                 "position": 1,
                 "imageThumbnail": "/imagestemp/600003.png",
@@ -602,7 +602,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 1,
                 "name": "Pepsi Medium"
@@ -611,7 +611,7 @@ export const start = (async () => {
                 "id": 1617,
                 "sdmId": 600009,
                 "subOptions": [
-
+                  
                 ],
                 "position": 2,
                 "imageThumbnail": "/imagestemp/600009.png",
@@ -624,7 +624,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Mirinda Medium"
@@ -633,7 +633,7 @@ export const start = (async () => {
                 "id": 1612,
                 "sdmId": 600016,
                 "subOptions": [
-
+                  
                 ],
                 "position": 3,
                 "imageThumbnail": "/imagestemp/600016.png",
@@ -646,7 +646,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "7Up Medium"
@@ -655,7 +655,7 @@ export const start = (async () => {
                 "id": 1607,
                 "sdmId": 600006,
                 "subOptions": [
-
+                  
                 ],
                 "position": 4,
                 "imageThumbnail": "/imagestemp/600006.png",
@@ -668,7 +668,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Diet Pepsi Medium"
@@ -677,7 +677,7 @@ export const start = (async () => {
                 "id": 1614,
                 "sdmId": 600013,
                 "subOptions": [
-
+                  
                 ],
                 "position": 5,
                 "imageThumbnail": "/imagestemp/600013.png",
@@ -690,7 +690,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Mountain Dew Medium"
@@ -699,7 +699,7 @@ export const start = (async () => {
                 "id": 1652,
                 "sdmId": 610011,
                 "subOptions": [
-
+                  
                 ],
                 "position": 6,
                 "imageThumbnail": "/imagestemp/610011.png",
@@ -712,7 +712,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Small Aquafina"
@@ -721,7 +721,7 @@ export const start = (async () => {
                 "id": 1600,
                 "sdmId": 610021,
                 "subOptions": [
-
+                  
                 ],
                 "position": 7,
                 "imageThumbnail": "/imagestemp/610021.png",
@@ -734,7 +734,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Mojito Krusher"
@@ -743,7 +743,7 @@ export const start = (async () => {
                 "id": 1599,
                 "sdmId": 610020,
                 "subOptions": [
-
+                  
                 ],
                 "position": 8,
                 "imageThumbnail": "/imagestemp/610020.png",
@@ -756,7 +756,7 @@ export const start = (async () => {
                 "modGroupId": -1,
                 "selectionQty": 1,
                 "dependentSteps": [
-
+                  
                 ],
                 "selected": 0,
                 "name": "Fresh Orange Juice"
@@ -768,7 +768,7 @@ export const start = (async () => {
             "name": "Select Your Favorite Beverage"
           }
         ],
-        "originalPrice": 28,
+        "originalPrice": 30,
         "items": [
           {
             "sdmId": 70,
@@ -791,7 +791,7 @@ export const start = (async () => {
                     "id": 1659,
                     "sdmId": 110005,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/110005.png",
@@ -835,7 +835,7 @@ export const start = (async () => {
                         "sku": 810001,
                         "id": 1717,
                         "price": 0,
-                        "selected": 1,
+                        "selected": 0,
                         "title": "Regular",
                         "sdmId": 810001,
                         "modGroupId": 10028,
@@ -848,7 +848,7 @@ export const start = (async () => {
                         "sku": 810001,
                         "id": 1718,
                         "price": 2,
-                        "selected": 0,
+                        "selected": 1,
                         "title": "Extra",
                         "sdmId": 810001,
                         "modGroupId": 10028,
@@ -867,7 +867,7 @@ export const start = (async () => {
                     "modGroupId": 10028,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "American Cheese"
@@ -914,7 +914,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Lettuce"
@@ -961,7 +961,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Tomato"
@@ -986,7 +986,7 @@ export const start = (async () => {
                     "id": 1648,
                     "sdmId": 110003,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/110003.png",
@@ -1008,7 +1008,7 @@ export const start = (async () => {
                     "id": 1649,
                     "sdmId": 110002,
                     "subOptions": [
-
+                      
                     ],
                     "position": 2,
                     "imageThumbnail": "/imagestemp/110002.png",
@@ -1084,7 +1084,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Lettuce"
@@ -1131,7 +1131,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Tomato"
@@ -1178,7 +1178,7 @@ export const start = (async () => {
                     "modGroupId": 10028,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "American Cheese"
@@ -1203,7 +1203,7 @@ export const start = (async () => {
                     "id": 1633,
                     "sdmId": 510050,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/510050.png",
@@ -1216,7 +1216,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Medium Fries"
@@ -1225,7 +1225,7 @@ export const start = (async () => {
                     "id": 1619,
                     "sdmId": 510001,
                     "subOptions": [
-
+                      
                     ],
                     "position": 2,
                     "imageThumbnail": "/imagestemp/510001.png",
@@ -1238,7 +1238,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Coleslaw Salad Small"
@@ -1247,7 +1247,7 @@ export const start = (async () => {
                     "id": 1637,
                     "sdmId": 510051,
                     "subOptions": [
-
+                      
                     ],
                     "position": 3,
                     "imageThumbnail": "/imagestemp/510051.png",
@@ -1260,7 +1260,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Medium Fries Spicy"
@@ -1269,7 +1269,7 @@ export const start = (async () => {
                     "id": 1639,
                     "sdmId": 510071,
                     "subOptions": [
-
+                      
                     ],
                     "position": 4,
                     "imageThumbnail": "/imagestemp/510071.png",
@@ -1282,7 +1282,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Potato Dipper- Regular"
@@ -1291,7 +1291,7 @@ export const start = (async () => {
                     "id": 1628,
                     "sdmId": 510036,
                     "subOptions": [
-
+                      
                     ],
                     "position": 5,
                     "imageThumbnail": "/imagestemp/510036.png",
@@ -1304,7 +1304,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Loaded Fries Regular"
@@ -1329,7 +1329,7 @@ export const start = (async () => {
                     "id": 1605,
                     "sdmId": 600003,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/600003.png",
@@ -1342,7 +1342,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Pepsi Medium"
@@ -1351,7 +1351,7 @@ export const start = (async () => {
                     "id": 1617,
                     "sdmId": 600009,
                     "subOptions": [
-
+                      
                     ],
                     "position": 2,
                     "imageThumbnail": "/imagestemp/600009.png",
@@ -1364,7 +1364,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Mirinda Medium"
@@ -1373,7 +1373,7 @@ export const start = (async () => {
                     "id": 1612,
                     "sdmId": 600016,
                     "subOptions": [
-
+                      
                     ],
                     "position": 3,
                     "imageThumbnail": "/imagestemp/600016.png",
@@ -1386,7 +1386,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "7Up Medium"
@@ -1395,7 +1395,7 @@ export const start = (async () => {
                     "id": 1607,
                     "sdmId": 600006,
                     "subOptions": [
-
+                      
                     ],
                     "position": 4,
                     "imageThumbnail": "/imagestemp/600006.png",
@@ -1408,7 +1408,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Diet Pepsi Medium"
@@ -1417,7 +1417,7 @@ export const start = (async () => {
                     "id": 1614,
                     "sdmId": 600013,
                     "subOptions": [
-
+                      
                     ],
                     "position": 5,
                     "imageThumbnail": "/imagestemp/600013.png",
@@ -1430,7 +1430,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Mountain Dew Medium"
@@ -1439,7 +1439,7 @@ export const start = (async () => {
                     "id": 1652,
                     "sdmId": 610011,
                     "subOptions": [
-
+                      
                     ],
                     "position": 6,
                     "imageThumbnail": "/imagestemp/610011.png",
@@ -1452,7 +1452,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Small Aquafina"
@@ -1461,7 +1461,7 @@ export const start = (async () => {
                     "id": 1600,
                     "sdmId": 610021,
                     "subOptions": [
-
+                      
                     ],
                     "position": 7,
                     "imageThumbnail": "/imagestemp/610021.png",
@@ -1474,7 +1474,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Mojito Krusher"
@@ -1483,7 +1483,7 @@ export const start = (async () => {
                     "id": 1599,
                     "sdmId": 610020,
                     "subOptions": [
-
+                      
                     ],
                     "position": 8,
                     "imageThumbnail": "/imagestemp/610020.png",
@@ -1496,7 +1496,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Fresh Orange Juice"
@@ -1577,7 +1577,7 @@ export const start = (async () => {
                     "id": 1659,
                     "sdmId": 110005,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/110005.png",
@@ -1653,7 +1653,7 @@ export const start = (async () => {
                     "modGroupId": 10028,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "American Cheese"
@@ -1700,7 +1700,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Lettuce"
@@ -1747,7 +1747,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Tomato"
@@ -1772,7 +1772,7 @@ export const start = (async () => {
                     "id": 1648,
                     "sdmId": 110003,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/110003.png",
@@ -1794,7 +1794,7 @@ export const start = (async () => {
                     "id": 1649,
                     "sdmId": 110002,
                     "subOptions": [
-
+                      
                     ],
                     "position": 2,
                     "imageThumbnail": "/imagestemp/110002.png",
@@ -1870,7 +1870,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Lettuce"
@@ -1917,7 +1917,7 @@ export const start = (async () => {
                     "modGroupId": 10027,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Tomato"
@@ -1964,7 +1964,7 @@ export const start = (async () => {
                     "modGroupId": 10028,
                     "selectionQty": 0,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "American Cheese"
@@ -1989,7 +1989,7 @@ export const start = (async () => {
                     "id": 1631,
                     "sdmId": 510006,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/510006.png",
@@ -2002,7 +2002,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Large Fries"
@@ -2011,7 +2011,7 @@ export const start = (async () => {
                     "id": 1619,
                     "sdmId": 510001,
                     "subOptions": [
-
+                      
                     ],
                     "position": 2,
                     "imageThumbnail": "/imagestemp/510001.png",
@@ -2024,7 +2024,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Coleslaw Salad Small"
@@ -2033,7 +2033,7 @@ export const start = (async () => {
                     "id": 1634,
                     "sdmId": 510013,
                     "subOptions": [
-
+                      
                     ],
                     "position": 3,
                     "imageThumbnail": "/imagestemp/510013.png",
@@ -2046,7 +2046,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Large Fries Spicy"
@@ -2055,7 +2055,7 @@ export const start = (async () => {
                     "id": 1639,
                     "sdmId": 510071,
                     "subOptions": [
-
+                      
                     ],
                     "position": 4,
                     "imageThumbnail": "/imagestemp/510071.png",
@@ -2068,7 +2068,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Potato Dipper- Regular"
@@ -2077,7 +2077,7 @@ export const start = (async () => {
                     "id": 1628,
                     "sdmId": 510036,
                     "subOptions": [
-
+                      
                     ],
                     "position": 5,
                     "imageThumbnail": "/imagestemp/510036.png",
@@ -2090,7 +2090,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Loaded Fries Regular"
@@ -2115,7 +2115,7 @@ export const start = (async () => {
                     "id": 1606,
                     "sdmId": 600004,
                     "subOptions": [
-
+                      
                     ],
                     "position": 1,
                     "imageThumbnail": "/imagestemp/600004.png",
@@ -2128,7 +2128,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 1,
                     "name": "Pepsi Large"
@@ -2137,7 +2137,7 @@ export const start = (async () => {
                     "id": 1618,
                     "sdmId": 600010,
                     "subOptions": [
-
+                      
                     ],
                     "position": 2,
                     "imageThumbnail": "/imagestemp/600010.png",
@@ -2150,7 +2150,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Mirinda Large"
@@ -2159,7 +2159,7 @@ export const start = (async () => {
                     "id": 1610,
                     "sdmId": 600017,
                     "subOptions": [
-
+                      
                     ],
                     "position": 3,
                     "imageThumbnail": "/imagestemp/600017.png",
@@ -2172,7 +2172,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "7Up Large"
@@ -2181,7 +2181,7 @@ export const start = (async () => {
                     "id": 1609,
                     "sdmId": 600007,
                     "subOptions": [
-
+                      
                     ],
                     "position": 4,
                     "imageThumbnail": "/imagestemp/600007.png",
@@ -2194,7 +2194,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Diet Pepsi Large"
@@ -2203,7 +2203,7 @@ export const start = (async () => {
                     "id": 1615,
                     "sdmId": 600014,
                     "subOptions": [
-
+                      
                     ],
                     "position": 5,
                     "imageThumbnail": "/imagestemp/600014.png",
@@ -2216,7 +2216,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Mountain Dew Large"
@@ -2225,7 +2225,7 @@ export const start = (async () => {
                     "id": 1652,
                     "sdmId": 610011,
                     "subOptions": [
-
+                      
                     ],
                     "position": 6,
                     "imageThumbnail": "/imagestemp/610011.png",
@@ -2238,7 +2238,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Small Aquafina"
@@ -2247,7 +2247,7 @@ export const start = (async () => {
                     "id": 1600,
                     "sdmId": 610021,
                     "subOptions": [
-
+                      
                     ],
                     "position": 7,
                     "imageThumbnail": "/imagestemp/610021.png",
@@ -2260,7 +2260,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Mojito Krusher"
@@ -2269,7 +2269,7 @@ export const start = (async () => {
                     "id": 1599,
                     "sdmId": 610020,
                     "subOptions": [
-
+                      
                     ],
                     "position": 8,
                     "imageThumbnail": "/imagestemp/610020.png",
@@ -2282,7 +2282,7 @@ export const start = (async () => {
                     "modGroupId": -1,
                     "selectionQty": 1,
                     "dependentSteps": [
-
+                      
                     ],
                     "selected": 0,
                     "name": "Fresh Orange Juice"
@@ -2353,7 +2353,7 @@ export const start = (async () => {
         "name": "Mighty Twist",
         "baseSpecialPrice": 0,
         "id": 16,
-        "specialPrice": 28,
+        "specialPrice": 30,
         "configurableProductOptions": [
           {
             "position": 1,
@@ -2381,21 +2381,22 @@ export const start = (async () => {
           }
         ],
         "qty": 1,
-        "sellingPrice": 28,
+        "sellingPrice": 30,
         "originalTypeId": "bundle_group",
         "associative": 0,
-        "menuId": 0,
+        "menuId": 5,
         "metaKeyword": [
           "Mighty Twist - Medium"
         ],
         "typeId": "bundle_group",
         "selectedItem": 900070,
         "imageThumbnail": "/imagestemp/900070.png",
-        "finalPrice": 28,
+        "finalPrice": 30,
         "virtualGroup": 16298,
         "inSide": 1
       }
     ]
+  
     let Entries = {
       CEntry: []
     }
@@ -2606,23 +2607,42 @@ export const start = (async () => {
                                    */
                                   if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
                                     dependentSteps.productLinks.forEach(dspl => {
-                                      let ItemID = 0
                                       if (dspl.subOptions && dspl.subOptions.length > 0) {
                                         dspl.subOptions.forEach(dsplso => {
-                                          if (dsplso.selected == 1)
-                                            ItemID = dsplso.sdmId
+                                          if (dsplso.sdmId && dsplso.selected == 1) {
+                                            if (dsplso.title == "None") { }
+                                            else if (dsplso.title == "Regular") {
+                                              obj.Entries.CEntry.push({
+                                                ID: 0,
+                                                ItemID: dsplso.sdmId,
+                                                ModCode: "WITH",
+                                                ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                Name: dspl.name,
+                                                OrdrMode: "OM_SAVED",
+                                                Weight: 0,
+                                              })
+                                            } else if (dsplso.title == "Extra") {
+                                              obj.Entries.CEntry.push({
+                                                ID: 0,
+                                                ItemID: dsplso.sdmId,
+                                                ModCode: "WITH",
+                                                ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                Name: dspl.name,
+                                                OrdrMode: "OM_SAVED",
+                                                Weight: 0,
+                                              }, {
+                                                ID: 0,
+                                                ItemID: dsplso.sdmId,
+                                                ModCode: "WITH",
+                                                ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                Name: dspl.name,
+                                                OrdrMode: "OM_SAVED",
+                                                Weight: 0,
+                                              })
+                                            }
+                                          }
                                         })
                                       }
-                                      if (ItemID)
-                                        obj.Entries.CEntry.push({
-                                          ID: 0,
-                                          ItemID: ItemID,
-                                          ModCode: "WITH",
-                                          ModgroupID: dspl.modGroupId,
-                                          Name: dspl.name,
-                                          OrdrMode: "OM_SAVED",
-                                          Weight: 0
-                                        })
                                     })
                                   }
                                   Entries.CEntry.push(obj)
@@ -2689,24 +2709,42 @@ export const start = (async () => {
                           }
                           if (bpo.productLinks && bpo.productLinks.length > 0) {
                             bpo.productLinks.forEach(bpopl => {
-                              let ItemID = 0
                               if (bpopl.subOptions && bpopl.subOptions.length > 0) {
                                 bpopl.subOptions.forEach(bpoplso => {
-                                  console.log("mongo", bpoplso)
-                                  if (bpoplso.selected == 1)
-                                    ItemID = bpoplso.sdmId
+                                  if (bpoplso.sdmId && bpoplso.selected == 1) {
+                                    if (bpoplso.title == "None") { }
+                                    else if (bpoplso.title == "Regular") {
+                                      lastProductAddedInCentry.Entries.CEntry.push({
+                                        ID: 0,
+                                        ItemID: bpoplso.sdmId,
+                                        ModCode: "WITH",
+                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                        Name: bpopl.name,
+                                        OrdrMode: "OM_SAVED",
+                                        Weight: 0,
+                                      })
+                                    } else if (bpoplso.title == "Extra") {
+                                      lastProductAddedInCentry.Entries.CEntry.push({
+                                        ID: 0,
+                                        ItemID: bpoplso.sdmId,
+                                        ModCode: "WITH",
+                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                        Name: bpopl.name,
+                                        OrdrMode: "OM_SAVED",
+                                        Weight: 0,
+                                      }, {
+                                        ID: 0,
+                                        ItemID: bpoplso.sdmId,
+                                        ModCode: "WITH",
+                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                        Name: bpopl.name,
+                                        OrdrMode: "OM_SAVED",
+                                        Weight: 0,
+                                      })
+                                    }
+                                  }
                                 })
                               }
-                              if (ItemID)
-                                lastProductAddedInCentry.Entries.CEntry.push({
-                                  ID: 0,
-                                  ItemID: ItemID,
-                                  ModCode: "WITH",
-                                  ModgroupID: bpopl.modGroupId,
-                                  Name: bpopl.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0
-                                })
                             })
                           }
                           Entries.CEntry[Entries.CEntry.length - 1] = { ...lastProductAddedInCentry }
@@ -2796,34 +2834,100 @@ export const start = (async () => {
           "CEntry": [
             {
               "DealID": 0,
+              "Entries": {
+                "CEntry": [
+                  {
+                    "ID": 0,
+                    "ItemID": 810001,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10028,
+                    "Name": "American Cheese",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  },
+                  {
+                    "ID": 0,
+                    "ItemID": 811701,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Lettuce",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  },
+                  {
+                    "ID": 0,
+                    "ItemID": 811703,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Tomato",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  }
+                ]
+              },
               "ID": 0,
-              "ItemID": 413002,
+              "ItemID": 110005,
               "ModCode": "NONE",
-              "Name": "Super Mega Deal - Original",
+              "Name": "Mighty Zinger",
               "QCComponent": 1,
-              "QCInstanceID": 119,
+              "QCInstanceID": 797,
               "QCLevel": 0,
-              "QCProID": 55
+              "QCProID": 65
+            },
+            {
+              "DealID": 0,
+              "Entries": {
+                "CEntry": [
+                  {
+                    "ID": 0,
+                    "ItemID": 811701,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Lettuce",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  },
+                  {
+                    "ID": 0,
+                    "ItemID": 811703,
+                    "ModCode": "WITH",
+                    "ModgroupID": 10027,
+                    "Name": "Tomato",
+                    "OrdrMode": "OM_SAVED",
+                    "Weight": 0
+                  }
+                ]
+              },
+              "ID": 0,
+              "ItemID": 110003,
+              "ModCode": "NONE",
+              "Name": "Twister Sandwich - Original",
+              "QCComponent": 2,
+              "QCInstanceID": 797,
+              "QCLevel": 0,
+              "QCProID": 65
             },
             {
               "DealID": 0,
               "ID": 0,
-              "ItemID": 510005,
+              "ItemID": 510050,
               "ModCode": "NONE",
-              "Name": "Family Fries",
-              "QCComponent": 2,
-              "QCInstanceID": 119,
+              "Name": "Medium Fries",
+              "QCComponent": 3,
+              "QCInstanceID": 797,
               "QCLevel": 0,
-              "QCProID": 55
+              "QCProID": 65
             },
             {
-              "ItemID": 910011,
-              "Level": 0,
+              "DealID": 0,
+              "ID": 0,
+              "ItemID": 600003,
               "ModCode": "NONE",
-              "Name": "Chicken Pc - Original",
-              "OrdrMode": "OM_SAVED",
-              "Price": 0,
-              "Status": "NOTAPPLIED"
+              "Name": "Pepsi Medium",
+              "QCComponent": 4,
+              "QCInstanceID": 797,
+              "QCLevel": 0,
+              "QCProID": 65
             }
           ]
         },
