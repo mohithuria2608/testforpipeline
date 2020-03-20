@@ -50,7 +50,7 @@ Hands-on Microservices with TypeScript 3
 * jy9ypeF8DQf2ZTLT
 * https://americananode.appskeeper.com/
 
-# DEV and QA AEROSPIKE DB
+# DEV AEROSPIKE DB
 * ssh aerospikeusr@40.123.212.40
 * GM2nGDQkN5yMdPZs
 
