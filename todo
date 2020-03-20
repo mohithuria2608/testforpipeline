@@ -43,3 +43,59 @@
 
 ----> LIVE stores without geofence => 70
 ----> LIVE stores with invalid geofence => 613(576), 493(469), 81(963)
+
+
+1. //////////////////////512 order status not updating in mongo///////////////////////
+{"level":"info","message":"order-service--------------sdk response : --------------{\"GetOrderDetailsResult\":{\"AddressID\":\"13282004\",\"AreaID\":\"1081\",\"AuthBy\":null,\"AuthReq\":\"0\",\"AuthReqReason\":\"0\",\"AuthReqRemarks\":null,\"AuthReqRemarksUn\":null,\"AuthTime\":\"9000-01-01T00:00:00\",\"BackupStoreID\":\"-1\",\"Balance\":\"0\",\"CancelAllowed\":\"true\",\"CancelBy\":\"loay\",\"CancelTime\":\"2020-03-20T16:55:34\",\"Change\":\"0\",\"CheckNumber\":\"80065\",\"CityID\":\"24\",\"Comps\":null,\"ConceptID\":\"3\",\"CountryID\":\"1\",\"CreateBy\":\"Web\",\"CreateTime\":\"2020-03-20T16:43:36\",\"CustomerID\":\"8563127\",\"DOB\":\"20200320\",\"DateOfTrans\":\"2020-03-20T16:43:36\",\"DeliveryChargeID\":\"279\",\"DiscountTotal\":\"0\",\"Discounts\":null,\"DistrictID\":\"1021\",\"DriverID\":\"0\",\"DriverName\":null,\"DueTime\":\"2020-03-20T17:10:36\",\"EditAllowed\":\"true\",\"Entries\":null,\"ExclusiveTaxesTotal\":\"0\",\"ExtendedAttributes\":null,\"ExternalStatus\":\"2\",\"FirstSendTime\":\"2020-03-20T16:43:36\",\"GrossTotal\":\"0\",\"InclusiveTaxesTotal\":\"0\",\"IsAuth\":\"0\",\"IsExternal\":\"1\",\"LastSendTime\":\"2020-03-20T16:43:36\",\"LoyaltyCardNumber\":null,\"LoyaltyRemarks\":null,\"Notes\":{\"CNote\":[{\"NT_DOB\":\"20200320\",\"NT_FREE_TEXT\":\"Test Orders - Appinventiv 509\",\"NT_ID\":\"70385793\",\"NT_MANDATORY\":\"1\",\"NT_NOTEID\":\"13\",\"NT_NOTE_GROUPID\":\"11\",\"NT_ORDERID\":\"48601160\",\"NT_SOURCE\":\"2\"},{\"NT_DOB\":\"20200320\",\"NT_FREE_TEXT\":\"Internet\",\"NT_ID\":\"70385794\",\"NT_MANDATORY\":\"1\",\"NT_NOTEID\":\"13\",\"NT_NOTE_GROUPID\":\"11\",\"NT_ORDERID\":\"48601160\",\"NT_SOURCE\":\"2\"},{\"NT_DOB\":\"20200320\",\"NT_FREE_TEXT\":\"Test Orders - Appinventiv 5e74ba76539f9b740914e816\",\"NT_ID\":\"70385795\",\"NT_MANDATORY\":\"1\",\"NT_NOTEID\":\"75\",\"NT_NOTE_GROUPID\":\"35\",\"NT_ORDERID\":\"48601160\",\"NT_SOURCE\":\"2\"}]},\"OrderID\":\"48601160\",\"OrderMode\":\"2\",\"OrderName\":null,\"OrderType\":\"0\",\"OriginalStoreID\":\"-1\",\"OverridePromiseTime\":\"27\",\"PaidOnline\":\"0\",\"PaymentAmount\":\"0\",\"PaymentMethod\":null,\"PaymentMethodUn\":null,\"Payments\":null,\"PromiseTime\":\"27\",\"ProvinceID\":\"7\",\"RejectReason\":\"-1\",\"Remarks\":null,\"SalesAmount\":\"24.75\",\"ServiceCharge\":\"0\",\"Source\":\"2\",\"Status\":\"512\",\"StatusTime\":\"2020-03-20T16:56:31\",\"StoreDOB\":\"20200320\",\"StoreDueTime\":\"2020-03-20T17:02:26\",\"StoreID\":\"97\",\"StoreName\":\"KFC - Wahda\",\"StoreNumber\":\"12709\",\"StoreOrderMode\":\"2\",\"StoreWebName\":null,\"StoreWebNameUN\":null,\"StreetID\":\"1\",\"SubTotal\":\"0\",\"SuspendReason\":\"-1\",\"Total\":\"0\",\"TransferBy\":null,\"TransferFromOrderID\":\"0\",\"TransferFromStoreID\":\"0\",\"TransferTime\":\"9000-01-01T00:00:00\",\"TransferToOrderID\":\"0\",\"TransferToStoreID\":\"0\",\"UpdateBy\":\"loay\",\"UpdateTime\":\"2020-03-20T16:56:54\",\"ValidateStore\":\"1\",\"ValidationRemarks\":null,\"VoidReason\":\"5\",\"ZoneID\":\"0\"},\"SDKResult\":{\"ExternalCode\":\"0\",\"ResultCode\":\"Success\",\"ResultText\":\". Order ID returned = 48601160\"}}","timestamp":"2020-03-20T13:28:10.729Z"}
+
+
+2. //////////////////////void reason 5 to cancel order after in kitchen///////////////////////
+{\"GetOrderDetailsResult\":{\"AddressID\":\"13282613\",\"AreaID\":\"930\",\"AuthBy\":null,\"AuthReq\":\"0\",\"AuthReqReason\":\"0\",\"AuthReqRemarks\":null,\"AuthReqRemarksUn\":null,\"AuthTime\":\"9000-01-01T00:00:00\",\"BackupStoreID\":\"-1\",\"Balance\":\"0\",\"CancelAllowed\":\"true\",\"CancelBy\":\"samirajocson\",\"CancelTime\":\"2020-03-20T17:31:29\",\"Change\":\"0\",\"CheckNumber\":\"80101\",\"CityID\":\"24\",\"Comps\":null,\"ConceptID\":\"3\",\"CountryID\":\"1\",\"CreateBy\":\"Web\",\"CreateTime\":\"2020-03-20T17:29:15\",\"CustomerID\":\"8563143\",\"DOB\":\"20200320\",\"DateOfTrans\":\"2020-03-20T17:29:15\",\"DeliveryChargeID\":\"-1\",\"DiscountTotal\":\"0\",\"Discounts\":null,\"DistrictID\":\"1021\",\"DriverID\":\"0\",\"DriverName\":null,\"DueTime\":\"2020-03-20T17:59:15\",\"EditAllowed\":\"true\",\"Entries\":null,\"ExclusiveTaxesTotal\":\"0.31\",\"ExtendedAttributes\":null,\"ExternalStatus\":\"2\",\"FirstSendTime\":\"2020-03-20T17:29:15\",\"GrossTotal\":\"24.5\",\"InclusiveTaxesTotal\":\"0\",\"IsAuth\":\"0\",\"IsExternal\":\"1\",\"LastSendTime\":\"2020-03-20T17:29:15\",\"LoyaltyCardNumber\":null,\"LoyaltyRemarks\":null,\"Notes\":{\"CNote\":[{\"NT_DOB\":\"20200320\",\"NT_FREE_TEXT\":\"Test Orders - Appinventiv 513\",\"NT_ID\":\"70388743\",\"NT_MANDATORY\":\"1\",\"NT_NOTEID\":\"13\",\"NT_NOTE_GROUPID\":\"11\",\"NT_ORDERID\":\"48602444\",\"NT_SOURCE\":\"2\"},{\"NT_DOB\":\"20200320\",\"NT_FREE_TEXT\":\"Internet\",\"NT_ID\":\"70388744\",\"NT_MANDATORY\":\"1\",\"NT_NOTEID\":\"13\",\"NT_NOTE_GROUPID\":\"11\",\"NT_ORDERID\":\"48602444\",\"NT_SOURCE\":\"2\"},{\"NT_DOB\":\"20200320\",\"NT_FREE_TEXT\":\"Test Orders - Appinventiv 5e74c5272291b88f1e235d76\",\"NT_ID\":\"70388745\",\"NT_MANDATORY\":\"1\",\"NT_NOTEID\":\"75\",\"NT_NOTE_GROUPID\":\"35\",\"NT_ORDERID\":\"48602444\",\"NT_SOURCE\":\"2\"}]},\"OrderID\":\"48602444\",\"OrderMode\":\"1\",\"OrderName\":null,\"OrderType\":\"0\",\"OriginalStoreID\":\"-1\",\"OverridePromiseTime\":\"30\",\"PaidOnline\":\"0\",\"PaymentAmount\":\"0\",\"PaymentMethod\":null,\"PaymentMethodUn\":null,\"Payments\":null,\"PromiseTime\":\"30\",\"ProvinceID\":\"7\",\"RejectReason\":\"-1\",\"Remarks\":null,\"SalesAmount\":\"24.5\",\"ServiceCharge\":\"6.19\",\"Source\":\"23\",\"Status\":\"4096\",\"StatusTime\":\"2020-03-20T17:29:31\",\"StoreDOB\":\"20200320\",\"StoreDueTime\":\"2020-03-20T17:57:50\",\"StoreID\":\"49\",\"StoreName\":\"KFC - Drive Thru\",\"StoreNumber\":\"12710\",\"StoreOrderMode\":\"3\",\"StoreWebName\":null,\"StoreWebNameUN\":null,\"StreetID\":\"1\",\"SubTotal\":\"24.5\",\"SuspendReason\":\"-1\",\"Total\":\"31\",\"TransferBy\":null,\"TransferFromOrderID\":\"0\",\"TransferFromStoreID\":\"0\",\"TransferTime\":\"9000-01-01T00:00:00\",\"TransferToOrderID\":\"0\",\"TransferToStoreID\":\"0\",\"UpdateBy\":\"samirajocson\",\"UpdateTime\":\"2020-03-20T17:31:29\",\"ValidateStore\":\"1\",\"ValidationRemarks\":null,\"VoidReason\":\"5\",\"ZoneID\":\"0\"},\"SDKResult\":{\"ExternalCode\":\"0\",\"ResultCode\":\"Success\",\"ResultText\":\". Order ID returned = 48602444\"}}
+
+
+3./////////////////REPEATING/////////////////
+
+KResult\":{\"ExternalCode\":\"0\",\"ResultCode\":\"Success\",\"ResultText\":\". Order ID returned = 48602844\"}}","timestamp":"2020-03-20T13:46:35.618Z"}
+10|order  | /var/www/html/api/order-service SDM order status string 2 true
+10|order  | Mongoose: orders.findOneAndUpdate({ _id: ObjectId("5e74c8cc2291b88f1e235d7b") }, { '$set': { sdmOrderStatus: 2, updatedAt: 1584711995620 } }, { w: 'majority', wtimeout: 5000, upsert: false, remove: false, projection: {}, returnOriginal: false })
+10|order  | {"level":"error","message":"order-service--------------successfully produced order request on kafka --------------{\"data\":\"success\"}","timestamp":"2020-03-20T13:46:35.624Z"}
+10|order  | {"level":"info","message":"order-service--------------order step 4:       --------------null","timestamp":"2020-03-20T13:46:35.886Z"}
+10|order  | sdmOrder.OrderMode 2
+10|order  | amount validation 54 67.5 string
+10|order  | {"level":"info","message":"order-service--------------order step 9:       --------------2","timestamp":"2020-03-20T13:46:35.890Z"}
+10|order  | {"level":"info","message":"order-service--------------order step 10:       --------------2","timestamp":"2020-03-20T13:46:35.890Z"}
+10|order  | {"level":"info","message":"order-service--------------order step 11:       --------------2","timestamp":"2020-03-20T13:46:35.891Z"}
+10|order  | {"level":"info","message":"order-service--------------order step 21 :       --------------2","timestamp":"2020-03-20T13:46:35.892Z"}
+10|order  | {"level":"info","message":"order-service--------------order step 22 :       --------------2","timestamp":"2020-03-20T13:46:35.892Z"}
+10|order  | Mongoose: orders.findOneAndUpdate({ _id: ObjectId("5e74c8cc2291b88f1e235d7b") }, { '$set': { updatedAt: 1584711995892, status: 'CONFIRMED' } }, { w: 'majority', wtimeout: 5000, upsert: false, remove: false, projection: {}, returnOriginal: false })
+
+10|order  | {"level":"error","message":"order-service--------------successfully fetched user by id--------------{\"id\":\"5e74b5177448c1719d383868\",\"sdmUserRef\":8563127,\"cmsUserRef\":11,\"isGuest\":false,\"name\":\"Test Order-SM\",\"cCode\":\"+971\",\"phnNo\":\"523232323\",\"phnVerified\":true,\"email\":\"sayak.mukherjee2@cognizant.com\",\"profileStep\":1,\"socialKey\":\"\",\"medium\":\"\",\"createdAt\":0,\"cartId\":\"5e74b5177448c1719d383868\",\"sdmCorpRef\":10241704,\"fullPhnNo\":\"+971523232323\",\"password\":\"d7353e7de05447eb5faa20b321b19e4e\"}","timestamp":"2020-03-20T13:46:36.159Z"}
+10|order  | {"level":"info","message":"order-service--------------final orderstatus   =====>--------------CONFIRMED","timestamp":"2020-03-20T13:46:36.162Z"}
+10|order  | {"level":"info","message":"order-service--------------final recheck       =====>--------------true","timestamp":"2020-03-20T13:46:36.162Z"}
+10|order  | {"level":"info","message":"order-service--------------final timeInterval  =====>--------------35000","timestamp":"2020-03-20T13:46:36.163Z"}
+10|order  | {"level":"error","message":"order-service--------------successfully produced order request on kafka --------------{\"data\":\"success\"}","timestamp":"2020-03-20T13:46:36.169Z"}
+10|order  | {"level":"error","message":"order-service--------------successfully created default cart--------------{}","timestamp":"2020-03-20T13:46:36.446Z"}
+
+
+
+
+10|order  | Mongoose: orders.findOneAndUpdate({ _id: ObjectId("5e74c8cc2291b88f1e235d7b") }, { '$set': { updatedAt: 1584712006156, status: 'BEING_PREPARED' } }, { w: 'majority', wtimeout: 5000, upsert: false, remove: false, projection: {}, returnOriginal: false })
+10|order  | {"level":"info","message":"order-service--------------In request manager options--------------{\"method\":\"POST\",\"url\":\"http://40.123.207.192/rest/V1/custom-order/update-attribute\",\"headers\":{},\"agentOptions\":{\"rejectUnauthorized\":false},\"body\":{\"order_id\":514,\"payment_status\":\"CAPTURED\",\"order_status\":\"being_prepared\",\"sdm_order_id\":48602844},\"json\":true}","timestamp":"2020-03-20T13:46:46.420Z"}
+10|order  | {"level":"info","message":"order-service--------------In request manager body--------------[{\"success\":true}]","timestamp":"2020-03-20T13:46:46.653Z"}
+10|order  | {"level":"error","message":"order-service--------------successfully produced order request on kafka --------------{\"data\":\"success\"}","timestamp":"2020-03-20T13:46:46.655Z"}
+
+
+
+
+
+4.//////////////////////SMS REPEATING///////////////////////
+
+
+
+
+
+
+5./////////////////////MENU WHITE SCREEN AFTER CHANGING LANGUAGE/////////////////
+
+
+6.

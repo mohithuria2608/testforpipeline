@@ -225,7 +225,10 @@
     },
     "sdm": {
         "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
-        "type": "uat"
+        "type": "uat",
+        "cred": {
+            "licenseCode": "PizzaHutApp"
+        }
     },
     "categoryId": 20
 }
