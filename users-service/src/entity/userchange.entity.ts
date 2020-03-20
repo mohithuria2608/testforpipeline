@@ -135,6 +135,7 @@ export class UserchangeEntity extends BaseEntity {
                 }
                 let checkUserChange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
                 if (checkUserChange && checkUserChange.length > 0) {
+                    console.log("old checkUserChange===========>", JSON.stringify(checkUserChange))
                     if (checkUserChange[0].id && checkUserChange[0].otp && checkUserChange[0].otpExpAt) {
                         await Aerospike.remove({ set: this.set, key: checkUserChange[0].id })
                         if (checkUserChange[0].otpExpAt > new Date().getTime()) {
