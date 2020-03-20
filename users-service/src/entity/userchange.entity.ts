@@ -124,6 +124,26 @@ export class UserchangeEntity extends BaseEntity {
 
     async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, language: string = Constant.DATABASE.LANGUAGE.EN) {
         try {
+            if (payload.fullPhnNo && payload.otp && payload.otpExpAt) {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "fullPhnNo",
+                        value: payload.fullPhnNo
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let checkUserChange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
+                if (checkUserChange && checkUserChange.length > 0) {
+                    if (checkUserChange[0].id && checkUserChange[0].otp && checkUserChange[0].otpExpAt) {
+                        await Aerospike.remove({ set: this.set, key: checkUserChange[0].id })
+                        if (checkUserChange[0].otpExpAt > new Date().getTime()) {
+                            payload.otp = checkUserChange[0].otp
+                            payload.otpExpAt = checkUserChange[0].otpExpAt
+                        }
+                    }
+                }
+            }
             let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
                 id: userId
             }
