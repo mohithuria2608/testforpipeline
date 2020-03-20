@@ -103,7 +103,7 @@ export const SERVER = {
         APP_ADDRESS: ""
     },
     SDM: {
-        LICENSE_CODE: "AmericanaWeb",
+        LICENSE_CODE: "PizzaHutApp",// "AmericanaWeb",
         CONCEPT_ID: 3,
         MENU_TEMPLATE_ID: 17
     },

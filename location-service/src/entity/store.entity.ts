@@ -81,6 +81,7 @@ export class StoreEntity extends BaseEntity {
             return {}
         } catch (error) {
             consolelog(process.cwd(), "data.storeId", data.storeId, false)
+            consolelog(process.cwd(), "data.mapId", data.mapId, false)
             consolelog(process.cwd(), "error", error, false)
             return {}
         }
