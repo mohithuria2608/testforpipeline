@@ -8,7 +8,7 @@ const soap = require('soap');
 
 export class SoapManagerClass {
 
-    private baseSOAPUrl = 'https://sdkuatuae.americana.com.sa:1995/?wsdl';
+    private baseSOAPUrl = 'https://sdkliveuae.americana.com.sa:2200/?wsdl';
     private client;
 
     constructor() { }

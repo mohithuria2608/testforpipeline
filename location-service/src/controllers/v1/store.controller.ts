@@ -108,7 +108,20 @@ export class StoreController {
 
     /** sync to aerospike */
     async syncToAS(payload) {
-        await ENTITY.StoreE.saveData(payload);
+        try {
+            for (let store of payload) {
+                if (store.geoFence && store.geoFence.length) {
+                    for (let fence of store.geoFence) {
+                        let storeData = { ...store, ...fence };
+                        storeData.geoFence = ENTITY.StoreE.createGeoFence(storeData.latitude, storeData.longitude);
+                        delete storeData.latitude; delete storeData.longitude;
+                        await ENTITY.StoreE.syncStoreData(storeData);
+                    }
+                }
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 

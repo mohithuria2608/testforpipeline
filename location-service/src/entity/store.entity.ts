@@ -1,6 +1,7 @@
 'use strict';
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
+import * as fs from "fs";
 import * as Constant from '../constant'
 import { consolelog, generateRandomString } from '../utils'
 import { Aerospike } from '../aerospike'
@@ -110,18 +111,52 @@ export class StoreEntity extends BaseEntity {
         return [storeDataEn, storeDataAr];
     }
 
-    async saveData(data) {
+    async syncStoreData(data) {
         try {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.id,
-                create: true,
+                key: data.sdmStoreId,
+                createOrReplace: true,
             }
-            await Aerospike.put(putArg)
-            return {}
+            return Aerospike.put(putArg)
         } catch (error) {
+            console.log("ERROR -> ", error);
             return {}
+        }
+    }
+
+    async getAllStores() {
+        try {
+            let storesList = await Aerospike.scan({ set: this.set });
+            let finalStoresList = [];
+            for (let store of storesList) {
+                if (store.geoFence && store.geoFence.length) {
+                    for (let fence of store.geoFence) {
+                        let storeData = { ...store, ...fence };
+                        storeData.geoFence = this.createGeoFence(storeData.latitude, storeData.longitude);
+                        delete storeData.latitude; delete storeData.longitude;
+                        finalStoresList.push(storeData);
+                    }
+                } else finalStoresList.push(store);
+            }
+            fs.writeFileSync('newStoresList.json', JSON.stringify(finalStoresList));
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    createGeoFence(lats, longs) {
+        let coords: any = [];
+        lats = lats.split(',');
+        longs = longs.split(',');
+        for (let i = 0; i < lats.length; i++) {
+            coords.push([parseFloat(longs[i]), parseFloat(lats[i])]);
+        }
+        coords.push(coords[0]);
+        return {
+            type: 'Polygon',
+            coordinates: [coords]
         }
     }
 }

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        img {
+            display: block;
+        }
+
+        @media screen and (max-width: 500px) {
+            .table-1 {
+                padding: 0 20px !important;
+            }
+
+            .table-2 {
+                font-size: 14px !important;
+                padding: 0 25px 30px !important;
+            }
+
+            .table-4 {
+                padding-bottom: 35px !important;
+            }
+
+            .head1 {
+                font-size: 26px !important;
+                padding: 25px 0 25px !important;
+            }
+
+            .head2 {
+                font-size: 18px !important;
+                padding: 30px 20px 15px !important;
+            }
+
+            .para1 {
+                padding-bottom: 15px !important;
+            }
+
+            .table-3 {
+                margin-bottom: 20px !important;
+                padding: 15px 15px !important;
+            }
+
+            .para4 {
+                padding: 8px 15px !important;
+            }
+
+            .para2 {
+                padding: 0 0 20px 0 !important;
+            }
+
+            .para3 {
+                padding-top: 15px !important;
+            }
+
+            .height {
+                height: 30px !important;
+            }
+
+            .width {
+                width: 120px !important;
+            }
+
+            .logo {
+                width: 80px !important;
+            }
+
+            .style1 {
+                height: 20px !important;
+                width: 30px !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="padding: 0; margin: 0;">
+    <!-- table _1 -->
+    <table cellpadding="0" cellspacing="0" border="0"
+        style="margin: 0 auto; min-width:320px; max-width:800px; width:100%; font-family: Arial,sans-serif;  background: #ffffff;">
+        <tr>
+            <td>
+                <table class="table-1" cellpadding="0" cellspacing="0" border="0" width="100%"
+                    style="background: #E8002A; padding: 0 40px; text-align: center;">
+                    <tr>
+                        <td>
+                            <table class="table-4" cellpadding="0" cellspacing="0" border="0" width="100%"
+                                style="padding-bottom: 50px;">
+                                <tr>
+                                    <td class="style1" height="30px" width="35px"
+                                        style="background: #ffffff; display: inline-block;">
+                                    </td>
+                                    <td width="25px" style="display: inline-block;"></td>
+                                    <td class="style1" height="30px" width="35px"
+                                        style="background: #ffffff; display: inline-block;">
+                                    </td>
+                                    <td width="25px" style="display: inline-block;"></td>
+                                    <td class="style1" height="30px" width="35px"
+                                        style="background: #ffffff; display: inline-block;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="<%= meta.baseImageUrl %>images/logo.png" width="111px" alt="Logo" class="logo"
+                                style="margin: 0 auto;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head1"
+                            style="color: #ffffff; font-size: 35px; font-weight: 600; padding: 30px 0 30px;">
+                            Welcome to KFC
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="head2"
+                            style="color: #2b343c; font-size: 24px; font-weight: 600; padding: 40px 45px 15px; background: #ffffff; text-align: left">
+                            Hi, <%= user.name %>,
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <!-- table _2 -->
+                <table class="table-1" cellpadding="0" cellspacing="0" border="0" width="100%"
+                    style="background: #f1f3f6; padding: 0 40px;">
+                    <tr>
+                        <td>
+                            <!-- table _3 -->
+                            <table class="table-2" cellpadding="0" cellspacing="0" border="0" width="100%"
+                                style="background: #ffffff; padding: 0 45px 50px; font-size: 18px; color: #6b8090; letter-spacing: 0.3px; line-height: 1.7;">
+                                <tr>
+                                    <td class="para1" style="padding-bottom: 40px;">
+                                        KFC, pioneered by Colonel Harland Sanders, has grown to become one of the
+                                        largest quick service food service systems in the world.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="para4" style="background : #eaf4fe; padding: 15px 30px;">
+                                        Your account has been created with below details:
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table class="table-3" cellpadding="0" cellspacing="0" border="0" width="100%"
+                                            style="background: #f6fafd; padding: 5px 30px 0;">
+                                            <tr class="height" height="50px">
+                                                <td class="width" width="180px"
+                                                    style="color: #2b343c; font-weight: 600;">
+                                                    Name:
+                                                </td>
+                                                <td style="text-align: right; "><%= user.name %></td>
+                                            </tr>
+                                            <tr class="height" height="50px">
+                                                <td class="width" width="180px"
+                                                    style="color: #2b343c; font-weight: 600; ">
+                                                    Mobile Number:
+                                                </td>
+                                                <td style="text-align: right;"><%= user.fullPhnNo %></td>
+                                            </tr>
+                                            <tr class="height" height="50px">
+                                                <td class="width" width="180px"
+                                                    style="color: #2b343c; font-weight: 600; ">Email Address:
+                                                </td>
+                                                <td style="text-align: right;"><%= user.email %></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="para2" style="padding: 40px 0;">Now enjoy ordering food whenever you want
+                                        and get it delivered at your doorstep.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="<%= meta.ctaLink %>"
+                                            style="display: inline-block; background: #e4002b; color: #ffffff; border-radius: 2px; padding: 15px 30px; text-decoration: none; font-weight: 600;">
+                                            START ORDER</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="para3" style="padding-top: 30px;">You can also login with the above
+                                        credentials onto our different platforms like msite and website. While doing
+                                        that you can use the password mentioned below and can anytime change the
+                                        password later.
+                                    </td>
+                                </tr>
+                                <%- include('../common/footer', {meta:meta}); %>

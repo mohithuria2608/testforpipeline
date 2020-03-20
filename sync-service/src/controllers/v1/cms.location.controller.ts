@@ -19,9 +19,9 @@ export class CmsLocationController {
                 set: ENTITY.LocationE.set,
                 as: {
                     create: true,
-                    argv: JSON.stringify(payload)
+                    argv: JSON.stringify(payload.data)
                 },
-                inQ: true
+                inQ: false // bypass queue, because data is too large. change to true
             }
             if (payload.action == "update") {
                 locationData['as']['update'] = true

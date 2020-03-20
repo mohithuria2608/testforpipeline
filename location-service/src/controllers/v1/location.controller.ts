@@ -135,10 +135,10 @@ export class LocationController {
     async postLocationToCMS(payload): Promise<any> {
         try {
             await Promise.all([
+                // countryController.postOnCMS(),
                 cityController.postOnCMS(),
                 areaController.postOnCMS(),
-                // storeController.postOnCMS(),
-                // countryController.postOnCMS()
+                storeController.postOnCMS()
             ]);
         } catch (error) {
             consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)

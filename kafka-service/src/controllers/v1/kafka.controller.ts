@@ -309,7 +309,10 @@ export class KafkaController {
                             payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION
                         messages['q'] = topic
-                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        if (payload.inQ)
+                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        else
+                            await locationService.syncLocationFromCMS(messages)
                     }
                     break;
                 }

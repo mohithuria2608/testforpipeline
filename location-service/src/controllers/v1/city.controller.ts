@@ -37,7 +37,10 @@ export class CityController {
 
     /** sync to aerospike */
     async syncToAS(payload) {
-        await ENTITY.CityE.saveData(payload);
+        for (let city of payload) {
+            city.id = `1_${city.sdmCityId}`;
+            await ENTITY.CityE.saveData(city);
+        }
     }
 }
 

@@ -37,7 +37,10 @@ export class AreaController {
 
     /** sync to aerospike */
     async syncToAS(payload) {
-        await ENTITY.AreaE.saveData(payload);
+        for (let area of payload) {
+            area.id = `1_${area.cityId}_${area.sdmAreaId}`;
+            await ENTITY.AreaE.saveData(area);
+        }
     }
 }
 

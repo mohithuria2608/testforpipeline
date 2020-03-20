@@ -21,7 +21,6 @@ class ASLocationConsumer extends BaseConsumer {
 
     private async syncLocationFromCMS(message: IKafkaRequest.IKafkaBody) {
         try {
-            console.log("-----------> ", message);
             let res = await locationService.syncLocationFromCMS(message)
             return res
         } catch (error) {

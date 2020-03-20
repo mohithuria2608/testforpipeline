@@ -15,7 +15,7 @@ export default async function () {
     // reset the sync collection
     await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_WEB_AREA });
     await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_AREA });
-    
+
     for (let storeArea of storeAreaList) {
         let storeAreaData = {
             sdmAreaId: parseInt(storeArea.STR_AREAID),
@@ -49,6 +49,7 @@ export default async function () {
                 if (storeAreaData.sdmAreaId) {
                     let webAreaData = {
                         countryId: 'AE',
+                        sdmCountryId: 1,
                         sdmAreaId: parseInt(webArea.AREA_ID),
                         cityId: parseInt(webArea.AREA_CITYID),
                         areaName: webArea.AREA_NAME || "",

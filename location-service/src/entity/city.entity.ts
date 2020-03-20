@@ -47,10 +47,9 @@ export class CityEntity extends BaseEntity {
                 bins: data,
                 set: this.set,
                 key: data.id,
-                create: true,
+                createOrReplace: true,
             }
-            await Aerospike.put(putArg)
-            return {}
+            return Aerospike.put(putArg)
         } catch (error) {
             return {}
         }
