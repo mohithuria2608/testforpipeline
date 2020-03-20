@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog, formatUserData } from '../../utils'
+import { consolelog, formatUserData, generateOtp } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService, notificationService } from '../../grpc/client';
@@ -56,6 +56,7 @@ export class UserController {
     * */
     async loginSendOtp(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSendOtp) {
         try {
+            const otp = generateOtp()
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo
             let queryArg: IAerospike.Query = {
@@ -70,7 +71,7 @@ export class UserController {
             if (checkUser && checkUser.length > 0) {
                 let userchangePayload: IUserchangeRequest.IUserchange = {
                     fullPhnNo: fullPhnNo,
-                    otp: Constant.SERVER.BY_PASS_OTP,
+                    otp: otp,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0
@@ -84,7 +85,7 @@ export class UserController {
                     phnNo: payload.phnNo,
                     brand: headers.brand,
                     country: headers.country,
-                    otp: Constant.SERVER.BY_PASS_OTP,
+                    otp: otp,
                     otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0,
@@ -287,6 +288,7 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
+            const otp = generateOtp()
             let userData: IUserRequest.IUserData = {}
             let queryArg: IAerospike.Query = {
                 udf: {
@@ -316,7 +318,7 @@ export class UserController {
                         fullPhnNo: userData.fullPhnNo,
                         cCode: userData.cCode,
                         phnNo: userData.phnNo,
-                        otp: Constant.SERVER.BY_PASS_OTP,
+                        otp: otp,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         brand: headers.brand,
@@ -457,6 +459,7 @@ export class UserController {
     * */
     async createProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.ICreateProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
+            const otp = generateOtp()
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
@@ -485,7 +488,7 @@ export class UserController {
                         phnNo: payload.phnNo,
                         medium: userData.medium,
                         socialKey: userData.socialKey,
-                        otp: Constant.SERVER.BY_PASS_OTP,
+                        otp: otp,
                         cartId: userData.id,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
