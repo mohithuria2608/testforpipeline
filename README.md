@@ -64,7 +64,7 @@ Hands-on Microservices with TypeScript 3
 # TESTING 
 * ssh :
     * ssh americana-qa@40.123.196.7
-    * 99eL78gctCEbaYVC
+    *   
     * http://americanaqa.appskeeper.com/
 
 * aerospike

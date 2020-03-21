@@ -943,7 +943,7 @@ export class OrderClass extends BaseEntity {
 
     async validationRemarksHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            console.log("validation remarks check order mode", sdmOrder.ValidationRemarks)
+            console.log("validation remarks check ", sdmOrder.ValidationRemarks)
             if (recheck && sdmOrder.ValidationRemarks &&
                 (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
                 sdmOrder.ValidationRemarks != Constant.STATUS_MSG.SDM_ORDER_VALIDATION.EXCEED_ORDER_AMOUNT
