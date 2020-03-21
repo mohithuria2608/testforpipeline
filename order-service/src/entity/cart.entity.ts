@@ -531,7 +531,7 @@ export class CartClass extends BaseEntity {
             let req = {
                 cms_user_id: userData.cmsUserRef,
                 website_id: 1,
-                category_id: config.get("categoryId"),
+                category_id: config.get("cms.categoryId"),
                 cart_items: cart,
                 order_type: orderType
             }
@@ -730,7 +730,7 @@ export class CartClass extends BaseEntity {
                 let dataToHash: ICartRequest.IDataToHash = {
                     items: dataToUpdate['items'],
                     promo: dataToUpdate['couponApplied'],
-                    updatedAt: updatedAt
+                    updatedAt: updatedAt,
                 }
                 dataToUpdate['cartUnique'] = hashObj(dataToHash)
             }

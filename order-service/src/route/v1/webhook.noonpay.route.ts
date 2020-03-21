@@ -21,9 +21,8 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IWebhookNoonpayRequest.IOrderProcessPayment = ctx.request.query;
-                    let res = await webhookNoonpayController.authorizePayment(headers, payload);
+                    let res = await webhookNoonpayController.authorizePayment(payload);
                     ctx.redirect(res)
                     // ctx.status = sendResponse.statusCode;
                     // ctx.body = sendResponse

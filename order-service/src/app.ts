@@ -2200,25 +2200,3 @@ export const start = (async () => {
     console.error(error)
   }
 })()
-
-
-// <a:ItemID>910011</a:ItemID>
-// <a:Level>0</a:Level>
-// <a:LongName>Chicken Pc (S) Ges</a:LongName>
-// <a:LongnameUn/>
-// <a:ModCode>NONE</a:ModCode>
-// <a:ModgroupID>-1</a:ModgroupID>
-// <a:Name>Chicken Pc (S) Ges</a:Name>
-// <a:Noun>-1</a:Noun>
-
-
-// <q247:CEntry>
-//    <q247:ID>340143046</q247:ID>
-//    <q247:ItemID>910011</q247:ItemID>
-//    <q247:ModCode>NONE</q247:ModCode>
-//    <q247:Name>Chicken Pc (S) Ges</q247:Name>
-//    <q247:QCComponent>0</q247:QCComponent>
-//    <q247:QCInstanceID>0</q247:QCInstanceID>
-//    <q247:QCLevel>0</q247:QCLevel>
-//    <q247:QCProID>0</q247:QCProID>
-// </q247:CEntry>

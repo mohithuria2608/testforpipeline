@@ -43,7 +43,7 @@ export class HiddenController {
                 case Constant.DATABASE.LANGUAGE.EN: menu = await ENTITY.HiddenEnE.getHiddenProducts(payload); break;
                 case Constant.DATABASE.LANGUAGE.AR: menu = await ENTITY.HiddenArE.getHiddenProducts(payload); break;
             }
-            let hidden = menu.filter(elem => { return elem.name == "Upsell" })
+            let hidden = menu.filter(elem => { return elem.name == Constant.DATABASE.TYPE.MENU_CATEGORY.UPSELL })
             return (hidden && hidden.length > 0) ? hidden[0].products : []
         } catch (error) {
             consolelog(process.cwd(), "fetchHiddenProducts", JSON.stringify(error), false)
@@ -91,7 +91,6 @@ export class HiddenController {
                     return (obj.name == Constant.DATABASE.TYPE.MENU_CATEGORY[payload.type])
                 })
             }
-            console.log("menu...............", JSON.stringify(menu))
             return { menu: JSON.stringify(menu) }
         } catch (error) {
             consolelog(process.cwd(), "grpcFetchHidden", JSON.stringify(error), false)

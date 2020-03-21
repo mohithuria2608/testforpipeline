@@ -213,7 +213,8 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "baseUrl": "http://40.123.207.192/rest/V1/"
+        "baseUrl": "http://40.123.207.192/rest/V1/",
+        "categoryId": 20
     },
     "sdm": {
         "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
@@ -221,6 +222,5 @@
         "cred": {
             "licenseCode": "PizzaHutApp"
         }
-    },
-    "categoryId": 3
+    }
 }

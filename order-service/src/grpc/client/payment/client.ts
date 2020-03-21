@@ -31,9 +31,6 @@ export class PaymentService {
                     consolelog(process.cwd(), "successfully initiated payment", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    /**
-                     * @todo : handle failure of payment
-                     */
                     consolelog(process.cwd(), "Error in initiating payment", JSON.stringify(error), false)
                     reject(sendError(error))
                 }

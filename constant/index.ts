@@ -130,6 +130,8 @@ export const SERVER = {
     SUPPORT_EMAIL: "kfc_uae@ag.com",
     DEFAULT_CCODE: "+971",
     CHUNK_SIZE_USER_MIGRATION: 50000,
+    PAYMENT_SUCCESS_FALLBACK: "payment/success",
+    PAYMENT_FAILURE_FALLBACK: "payment/failure"
 };
 
 export const DATABASE = {
@@ -1787,7 +1789,8 @@ export const STATUS_MSG = {
         ORDER_AMOUNT_MISMATCH: "Order amount mismatch",
         EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
         MAX_PENDING_TIME_REACHED: "Maximum pending time reached",
-        PAYMENT_FAILURE: "Payment failure"
+        PAYMENT_FAILURE: "Payment failure",
+        PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm"
     }
 };
 

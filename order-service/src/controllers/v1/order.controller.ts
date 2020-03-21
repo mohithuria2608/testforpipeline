@@ -65,27 +65,28 @@ export class OrderController {
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
-            if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
+            if (!userData.sdmUserRef || userData.sdmUserRef == 0)
                 userData = await userService.createUserOnSdm(userData)
-            }
-            if (!userData.cmsUserRef || userData.cmsUserRef == 0) {
+            if (!userData.cmsUserRef || userData.cmsUserRef == 0)
                 userData = await userService.createUserOnCms(userData)
-            }
             let order: IOrderRequest.IOrderData
             let paymentRetry = false
             let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            let dataToHash: ICartRequest.IDataToHash = {
+            let dataToHashToCheckCart: ICartRequest.IDataToHash = {
                 items: payload.items,
                 promo: payload.couponCode ? 1 : 0,
-                updatedAt: payload.cartUpdatedAt
+                updatedAt: payload.cartUpdatedAt,
             }
-            const hash = hashObj(dataToHash)
+            const hash = hashObj(dataToHashToCheckCart)
             console.log("cartUnique ================ ", getCurrentCart.cartUnique)
             console.log("cartUnique ---------------- ", hash)
             if (hash == getCurrentCart.cartUnique) {
                 order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
-                if (order && order._id)
-                    paymentRetry = true
+                if (order && order._id) {
+                    if (order.address.addressId == payload.addressId) {
+                        paymentRetry = true
+                    }
+                }
             } else {
                 let midOrder = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: hash }, {}, { lean: true })
                 if (midOrder && midOrder._id) {
@@ -109,7 +110,6 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
-            let noonpayRedirectionUrl = ""
             if (!paymentRetry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
@@ -162,7 +162,6 @@ export class OrderController {
                     payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
                 }
                 let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
-
                 if (cmsOrder && !cmsOrder['order_id']) {
                     getCurrentCart = await ENTITY.CartE.updateCart({
                         headers: headers,
@@ -179,70 +178,27 @@ export class OrderController {
                     return { cartValidate: getCurrentCart }
                 }
                 order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData)
+                if (order && order._id)
+                    ENTITY.OrderE.syncOrder(order)
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
-            if (payload.paymentMethodId != Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
-                let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                    orderId: order.cmsOrderRef.toString(),
-                    amount: totalAmount[0].amount,
-                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                    paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
-                    channel: "Mobile",
-                    locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? "en" : "ar",
-                })
-                noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
-                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
-                    $addToSet: {
-                        transLogs: initiatePaymentObj
-                    },
-                    payment: {
-                        paymentMethodId: payload.paymentMethodId,
-                        amount: totalAmount[0].amount,
-                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
+            let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(headers, payload.paymentMethodId, order, totalAmount[0].amount)
+            if (initiatePayment.order && initiatePayment.order._id) {
+                order = initiatePayment.order
+                if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
+                    ENTITY.CartE.resetCart(auth.id)
+                return {
+                    orderPlaced: {
+                        noonpayRedirectionUrl: initiatePayment.noonpayRedirectionUrl,
+                        orderInfo: order
                     }
-                })
-                CMS.TransactionCMSE.createTransaction({
-                    order_id: order.cmsOrderRef,
-                    message: initiatePaymentObj.paymentStatus,
-                    type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
-                    payment_data: {
-                        id: initiatePaymentObj.noonpayOrderId.toString(),
-                        data: JSON.stringify(initiatePaymentObj)
-                    }
-                })
-                CMS.OrderCMSE.updateOrder({
-                    order_id: order.cmsOrderRef,
-                    payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
-                    sdm_order_id: order.sdmOrderRef
-                })
-            } else {
-                order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, {
-                    payment: {
-                        paymentMethodId: payload.paymentMethodId,
-                        amount: totalAmount[0].amount,
-                        name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
-                    }
-                })
-                CMS.OrderCMSE.updateOrder({
-                    order_id: order.cmsOrderRef,
-                    payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
-                    sdm_order_id: order.sdmOrderRef
-                })
-                ENTITY.CartE.resetCart(auth.id)
-            }
-            ENTITY.OrderE.syncOrder(order)
-
-            return {
-                orderPlaced: {
-                    noonpayRedirectionUrl: noonpayRedirectionUrl,
-                    orderInfo: order
                 }
-            }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+
         } catch (error) {
             consolelog(process.cwd(), "postOrder", error, false)
-
-            consolelog(process.cwd(), "postOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -365,8 +321,7 @@ export class OrderController {
     }
 
     /**
-     * @JUGAAD
-     * @description : @todo : remove this
+     * @description : Bootstraping pending orders after server restart
      */
     async bootstrapPendingOrders() {
         try {
@@ -387,11 +342,8 @@ export class OrderController {
                             }).nextPingMs
                         })
                     }
-                    else {
-                        if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
-                            ENTITY.OrderE.maxPendingReachedHandler(order)
-                        }
-                    }
+                    else
+                        ENTITY.OrderE.maxPendingReachedHandler(order)
                 });
             }
             return {}
