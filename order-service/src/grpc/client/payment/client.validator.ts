@@ -94,6 +94,23 @@ export class PaymentServiceValidator {
             }
         })
     }
+
+    async refundPaymentValidator(data: IPaymentGrpcRequest.IRefundPayment) {
+        return new Promise((resolve, reject) => {
+            try {
+                let dataToValidate = Joi.object().keys({
+                    noonpayOrderId: Joi.number().required(),
+                    storeCode: Joi.string().required()
+                });
+                const { error, value } = dataToValidate.validate(data, { abortEarly: true })
+                if (error)
+                    reject(error.message)
+                resolve({})
+            } catch (error) {
+                reject(validatorErr(error.message))
+            }
+        })
+    }
 }
 
 

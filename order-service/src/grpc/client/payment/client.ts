@@ -71,7 +71,7 @@ export class PaymentService {
         })
     }
 
-    async reversePayment(payload: IPaymentGrpcRequest.IReversePayment): Promise<IPaymentGrpcRequest.IRefundPaymentRes> {
+    async reversePayment(payload: IPaymentGrpcRequest.IReversePayment): Promise<IPaymentGrpcRequest.IReversePaymentRes> {
         return new Promise(async (resolve, reject) => {
             await paymentServiceValidator.reversePaymentValidator(payload)
             this.paymentClient.reversePayment(payload, (error, res) => {
@@ -80,6 +80,21 @@ export class PaymentService {
                     resolve(res)
                 } else {
                     consolelog(process.cwd(), "Error in reversing payment", JSON.stringify(error), false)
+                    reject(sendError(error))
+                }
+            })
+        })
+    }
+
+    async refundPayment(payload: IPaymentGrpcRequest.IRefundPayment): Promise<IPaymentGrpcRequest.IRefundPaymentRes> {
+        return new Promise(async (resolve, reject) => {
+            await paymentServiceValidator.refundPaymentValidator(payload)
+            this.paymentClient.refundPayment(payload, (error, res) => {
+                if (!error) {
+                    consolelog(process.cwd(), "successfully refund payment", JSON.stringify(res), false)
+                    resolve(res)
+                } else {
+                    consolelog(process.cwd(), "Error in refunding payment", JSON.stringify(error), false)
                     reject(sendError(error))
                 }
             })
