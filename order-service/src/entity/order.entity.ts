@@ -749,9 +749,8 @@ export class OrderClass extends BaseEntity {
                     }
                     if (recheck) {
                         if (order.sdmOrderRef && order.sdmOrderRef != 0) {
-                            consolelog(process.cwd(), "SDM ORDER DETAIL 1:       ", order.sdmOrderStatus, true)
                             let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language })
-                            consolelog(process.cwd(), "SDM ORDER DETAIL 2:       ", order.sdmOrderStatus, true)
+                            consolelog(process.cwd(), `current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
                             if (sdmOrder.Status && typeof sdmOrder.Status) {
                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                     updatedAt: new Date().getTime(),
