@@ -742,7 +742,7 @@ export class OrderClass extends BaseEntity {
                 let order = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, selFreeItem: 0, freeItems: 0 })
                 if (order && order._id) {
                     let oldSdmStatus = order.sdmOrderStatus
-                    consolelog(process.cwd(), `old sdm status : ${oldSdmStatus}`, "", true)
+                    consolelog(process.cwd(), `old sdm status : ${order.sdmOrderRef} : ${oldSdmStatus}`, "", true)
                     if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
                         consolelog(process.cwd(), `stop fetching order detail from sdm after 30 mins : ${new Date()}`, "", true)
                         recheck = false
@@ -1005,7 +1005,7 @@ export class OrderClass extends BaseEntity {
         try {
             consolelog(process.cwd(), ` CONFIRMED : current sdm status : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`, "", true)
             if (order && order._id) {
-                if ((oldSdmStatus < parseInt(sdmOrder.Status)) && (oldSdmStatus != parseInt(sdmOrder.Status))) {
+                if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     consolelog(process.cwd(), "CONFIRMED 1 :       ", parseInt(sdmOrder.Status), true)
                     if (order.payment) {
                         switch (order.payment.paymentMethodId) {
