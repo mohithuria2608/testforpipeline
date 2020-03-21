@@ -99,3 +99,18 @@ KResult\":{\"ExternalCode\":\"0\",\"ResultCode\":\"Success\",\"ResultText\":\". 
 
 
 6.
+
+
+
+db.orders.find({
+    sdmOrderRef:{$in:[48603468,48603448,48603187,48602844,48602444,48601712,48601654,48601639,48601160,48600930,48600831]}
+})
+   .projection({
+      payment:1,
+    //   sdmOrderStatus:1,
+      sdmOrderRef:1,
+      status:1,
+      items:1,
+   })
+   .sort({_id:-1})
+   .limit(100)

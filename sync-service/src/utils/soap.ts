@@ -3,12 +3,13 @@
  * @description defines methods for soap manager lib
  * @created 2020-02-09 19:43:44
 */
+import * as config from "config"
 import * as Constant from '../constant';
 const soap = require('soap');
 
 export class SoapManagerClass {
 
-    private baseSOAPUrl = 'https://sdkliveuae.americana.com.sa:2200/?wsdl';
+    private baseSOAPUrl = config.get("sdm.baseUrl");
     private client;
 
     constructor() { }

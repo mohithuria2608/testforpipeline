@@ -12,6 +12,11 @@ declare namespace IOrderRequest {
         sdmUserRef: number,
         country: string,
         status: string,
+        sdmOrderStatus: number,
+        transLogs: any,
+        isActive: number,
+        changePaymentMode: number,
+        paymentMethodAddedOnSdm: number,
         createdAt: number,
         updatedAt: number,
         items: any,
@@ -24,7 +29,14 @@ declare namespace IOrderRequest {
         isFreeItem: boolean,
         trackUntil: number,
         validationRemarks: string,
-        amountValidationPassed: boolean
+        amountValidationPassed: boolean,
+        orderConfirmationNotified: boolean,
+        payment: {
+            paymentMethodId: number,
+            amount: number,
+            name: string,
+            status: string
+        },
     }
 
     interface IAddress {

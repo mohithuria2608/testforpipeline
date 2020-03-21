@@ -103,7 +103,7 @@ Hands-on Microservices with TypeScript 3
 * 207 server : https://bloobstorage.blob.core.windows.net/americana/models/kfc_uae_1_En.json
 
 # dev sdm url 
-* https://sdkliveuae.americana.com.sa:2200/?wsdl
+* https://sdkuatuae.americana.com.sa:1995/?wsdl
 
 # prod sdm url
 * https://sdkliveuae.americana.com.sa:2200/?wsdl

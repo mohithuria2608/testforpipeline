@@ -2,34 +2,79 @@ import { Schema, Document, model } from 'mongoose'
 import * as Constant from '../constant';
 
 export interface Iorder extends Document {
+    orderType: string,
     cartId: string,
     cartUnique: string
-    orderType: string,
     cmsCartRef: number,
     sdmOrderRef: number,
     cmsOrderRef: number,
     userId: string,
     sdmUserRef: number,
     country: string,
-    language: string,
     status: string,
     sdmOrderStatus: number,
-    items: any,
-    amount: any,
-    address: any,
-    store: any,
     transLogs: any,
     isActive: number,
     changePaymentMode: number,
     paymentMethodAddedOnSdm: number,
     createdAt: number,
     updatedAt: number,
+    items: any,
+    itemsHash: string
+    address: IAddress,
+    store: IStore,
+    amount: IAmount[],
+    language: string,
+    promo: IPromotionGrpcRequest.IValidatePromotionRes,
+    isFreeItem: boolean,
     trackUntil: number,
     validationRemarks: string,
-    promo: any,
-    isFreeItem: any,
-    amountValidationPassed: boolean
+    amountValidationPassed: boolean,
+    orderConfirmationNotified: boolean,
+    payment: {
+        paymentMethodId: number,
+        amount: number,
+        name: string,
+        status: string
+    },
 };
+
+interface IAddress {
+    addressId: string,
+    sdmAddressRef: number,
+    cmsAddressRef: number,
+    countryId: number,
+    storeId: number,
+    areaId: number,
+    cityId: number,
+    tag: string,
+    bldgName: string,
+    description: string,
+    flatNum: string,
+    addressType: string,
+    lat: number,
+    lng: number,
+}
+
+interface IAmount {
+    type?: string
+    code?: string
+    amount?: number,
+    sequence?: number,
+    action?: string
+}
+
+interface IStore {
+    storeId: number,
+    countryId: number,
+    areaId: number,
+    cityId: number,
+    location: any,
+    address_en: string,
+    address_ar: string,
+    name_en: string,
+    name_ar: string
+}
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
@@ -177,7 +222,8 @@ const orderSchema = new Schema({
     validationRemarks: { type: String },
     promo: { type: Schema.Types.Mixed },
     isFreeItem: { type: Boolean },
-    amountValidationPassed: { type: Boolean, default: false, required: true }
+    amountValidationPassed: { type: Boolean, default: false, required: true },
+    orderConfirmationNotified: { type: Boolean, default: false, required: true },
 });
 
 export let order = model<Iorder>('order', orderSchema)
