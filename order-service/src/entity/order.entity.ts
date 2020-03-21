@@ -818,7 +818,7 @@ export class OrderClass extends BaseEntity {
                                         }
                                         default: {
                                             recheck = false
-                                            consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                            consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
                                             break;
                                         }
                                     }
@@ -841,7 +841,7 @@ export class OrderClass extends BaseEntity {
                             } else
                                 recheck = false
 
-                            consolelog(process.cwd(), `final orderstatus: ${order.status}, recheck: ${recheck}, timeInterval: ${payload.timeInterval}`, "", true)
+                            consolelog(process.cwd(), `final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}, timeInterval: ${payload.timeInterval}`, "", true)
                             if (recheck) {
                                 kafkaService.kafkaSync({
                                     set: this.set,
@@ -926,7 +926,7 @@ export class OrderClass extends BaseEntity {
 
     async sdmPendingOrderHandler(recheck: boolean, oldSdmStatus: number, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            consolelog(process.cwd(), ` PENDING : current sdm status : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`, "", true)
+            consolelog(process.cwd(), ` PENDING : current sdm status: ${order.sdmOrderRef} : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`, "", true)
             if (order && order._id) {
                 if (order.payment) {
                     switch (order.payment.paymentMethodId) {
@@ -987,7 +987,7 @@ export class OrderClass extends BaseEntity {
                             break;
                         }
                         default: {
-                            consolelog(process.cwd(), `Unhandled Payment method order id : ${order._id}`, "", true)
+                            consolelog(process.cwd(), `Unhandled Payment method order id : ${order.sdmOrderRef} : ${order._id}`, "", true)
                             break;
                         }
                     }

@@ -29,7 +29,7 @@ export class NotificationService {
                 await notificationServiceValidator.notificationValidator(payload)
                 this.notificationClient.sendNotification(payload, (error, res) => {
                     if (!error) {
-                        consolelog(process.cwd(), "successfully created default cart", JSON.stringify(res), false)
+                        consolelog(process.cwd(), `successfully sent notification ${payload.msgCode}`, JSON.stringify(res), false)
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in creating created default cart", JSON.stringify(error), false)
