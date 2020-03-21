@@ -1082,88 +1082,85 @@ export class OrderClass extends BaseEntity {
     async sdmPendingOrderHandler(recheck: boolean, oldSdmStatus: number, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
             console.log(` PENDING : current sdm status : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`)
-            if (oldSdmStatus != parseInt(sdmOrder.Status)) {
-                if (order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD) {
-                    consolelog(process.cwd(), "PENDING 1:       ", parseInt(sdmOrder.Status), true)
-                    if (parseInt(sdmOrder.Status) == 96) {
-                        consolelog(process.cwd(), "PENDING 2:       ", parseInt(sdmOrder.Status), true)
-                        if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
-                            consolelog(process.cwd(), "PENDING 3:       ", parseInt(sdmOrder.Status), true)
-                            if (order.paymentMethodAddedOnSdm == 0) {
-                                consolelog(process.cwd(), "PENDING 4:       ", parseInt(sdmOrder.Status), true)
+            if (order.payment.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD) {
+                consolelog(process.cwd(), "PENDING 1:       ", parseInt(sdmOrder.Status), true)
+                if (parseInt(sdmOrder.Status) == 96) {
+                    consolelog(process.cwd(), "PENDING 2:       ", parseInt(sdmOrder.Status), true)
+                    if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
+                        consolelog(process.cwd(), "PENDING 3:       ", parseInt(sdmOrder.Status), true)
+                        if (order.paymentMethodAddedOnSdm == 0) {
+                            consolelog(process.cwd(), "PENDING 4:       ", parseInt(sdmOrder.Status), true)
+                            /**
+                            * @description : add payment object to sdm
+                            */
+                            let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({
+                                sdmOrderRef: order.sdmOrderRef,
+                                transaction: order.transLogs[1],
+                                language: order.language
+                            })
+                            if (paymentObjAdded) {
+                                consolelog(process.cwd(), "PENDING 5:       ", parseInt(sdmOrder.Status), true)
+                                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                    paymentMethodAddedOnSdm: 1,
+                                    updatedAt: new Date().getTime(),
+                                }, { new: true })
+                            }
+                            else {
+                                consolelog(process.cwd(), "PENDING 6:       ", parseInt(sdmOrder.Status), true)
                                 /**
-                                * @description : add payment object to sdm
+                                * @description : in case of failure while adding payment object
                                 */
-                                let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({
-                                    sdmOrderRef: order.sdmOrderRef,
-                                    transaction: order.transLogs[1],
-                                    language: order.language
-                                })
-                                if (paymentObjAdded) {
-                                    consolelog(process.cwd(), "PENDING 5:       ", parseInt(sdmOrder.Status), true)
-                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                        paymentMethodAddedOnSdm: 1,
-                                        updatedAt: new Date().getTime(),
-                                    }, { new: true })
-                                }
-                                else {
-                                    consolelog(process.cwd(), "PENDING 6:       ", parseInt(sdmOrder.Status), true)
-                                    /**
-                                    * @description : in case of failure while adding payment object
-                                    */
-                                    recheck = false
-                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
-                                        changePaymentMode: true,
-                                        updatedAt: new Date().getTime(),
-                                    }, { new: true })
+                                recheck = false
+                                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                                    changePaymentMode: true,
+                                    updatedAt: new Date().getTime(),
+                                }, { new: true })
 
-                                    CMS.OrderCMSE.updateOrder({
-                                        order_id: order.cmsOrderRef,
-                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
-                                        sdm_order_id: order.sdmOrderRef
-                                    });
+                                CMS.OrderCMSE.updateOrder({
+                                    order_id: order.cmsOrderRef,
+                                    payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    sdm_order_id: order.sdmOrderRef
+                                });
 
-                                    // send notification(sms + email) on order failure
-                                    let userData = await userService.fetchUser({ userId: order.userId });
-                                    notificationService.sendNotification({
-                                        toSendMsg: true,
-                                        msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
-                                        msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                        toSendEmail: true,
-                                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
-                                        emailDestination: userData.email,
-                                        language: order.language,
-                                        payload: JSON.stringify({ msg: order, email: { order } })
-                                    });
-                                }
+                                // send notification(sms + email) on order failure
+                                let userData = await userService.fetchUser({ userId: order.userId });
+                                notificationService.sendNotification({
+                                    toSendMsg: true,
+                                    msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
+                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                    toSendEmail: true,
+                                    emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                                    emailDestination: userData.email,
+                                    language: order.language,
+                                    payload: JSON.stringify({ msg: order, email: { order } })
+                                });
                             }
                         }
                     }
-                    else if (parseInt(sdmOrder.Status) == 0) {
-                        consolelog(process.cwd(), "PENDING 7:       ", parseInt(sdmOrder.Status), true)
-                    }
                 }
-                if (!order.orderConfirmationNotified) {
-                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
-                    let userData = await userService.fetchUser({ userId: order.userId });
-                    notificationService.sendNotification({
-                        toSendMsg: true,
-                        toSendEmail: true,
-                        msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
-                            : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
-                        emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
-                            : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
-                        msgDestination: `${userData.cCode}${userData.phnNo}`,
-                        emailDestination: userData.email,
-                        language: order.language,
-                        payload: JSON.stringify({ msg: order, email: { order } })
-                    });
-                    order = await this.updateOneEntityMdb({ _id: order._id }, { orderConfirmationNotified: true }, { new: true })
+                else if (parseInt(sdmOrder.Status) == 0) {
+                    consolelog(process.cwd(), "PENDING 7:       ", parseInt(sdmOrder.Status), true)
                 }
             }
-
+            if (!order.orderConfirmationNotified) {
+                let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                let userData = await userService.fetchUser({ userId: order.userId });
+                notificationService.sendNotification({
+                    toSendMsg: true,
+                    toSendEmail: true,
+                    msgCode: isDelivery ? Constant.NOTIFICATION_CODE.SMS.ORDER_DELIVERY_CONFIRM
+                        : Constant.NOTIFICATION_CODE.SMS.ORDER_PICKUP_CONFIRM,
+                    emailCode: isDelivery ? Constant.NOTIFICATION_CODE.EMAIL.ORDER_DELIVERY_CONFIRM
+                        : Constant.NOTIFICATION_CODE.EMAIL.ORDER_PICKUP_CONFIRM,
+                    msgDestination: `${userData.cCode}${userData.phnNo}`,
+                    emailDestination: userData.email,
+                    language: order.language,
+                    payload: JSON.stringify({ msg: order, email: { order } })
+                });
+                order = await this.updateOneEntityMdb({ _id: order._id }, { orderConfirmationNotified: true }, { new: true })
+            }
             return { recheck, order }
         } catch (error) {
             consolelog(process.cwd(), "sdmPendingOrderHandler", JSON.stringify(error), false)
