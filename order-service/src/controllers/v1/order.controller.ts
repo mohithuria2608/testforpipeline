@@ -178,14 +178,11 @@ export class OrderController {
                     return { cartValidate: getCurrentCart }
                 }
                 order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData)
-                if (order && order._id)
-                    ENTITY.OrderE.syncOrder(order)
-                else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(headers, payload.paymentMethodId, order, totalAmount[0].amount)
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
+                ENTITY.OrderE.syncOrder(order)
                 if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                     ENTITY.CartE.resetCart(auth.id)
                 return {
