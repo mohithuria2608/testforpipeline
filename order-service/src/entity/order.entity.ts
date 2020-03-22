@@ -224,7 +224,6 @@ export class OrderClass extends BaseEntity {
                                 product.items.forEach(i => {
                                     if (i['sku'] == product.selectedItem) {
                                         if (i.bundleProductOptions && i.bundleProductOptions.length > 0) {
-                                            let positionIndex = i.bundleProductOptions[0].position
                                             i.bundleProductOptions.forEach(bpo => {
                                                 let QCComponent = bpo.compId
                                                 if (bpo.isDependent == 0 && bpo.productLinks && bpo.productLinks.length > 0) {
@@ -233,8 +232,6 @@ export class OrderClass extends BaseEntity {
                                                             if (pl.selected == 1) {
                                                                 console.log("11111111111111111")
                                                                 if (pl.dependentSteps && pl.dependentSteps.length > 0) {
-                                                                    console.log("2222222222222222222222222222222222222222222")
-
                                                                     let obj = {
                                                                         DealID: 0,
                                                                         Entries: {
@@ -249,87 +246,78 @@ export class OrderClass extends BaseEntity {
                                                                         QCLevel: 0,
                                                                         QCProID: i.promoId,
                                                                     }
-                                                                    let dependentSteps = i.bundleProductOptions[(positionIndex == 0) ? pl.dependentSteps[0] : (pl.dependentSteps[0] - 1)]
-                                                                    console.log("333333333333333333333333", dependentSteps)
-
-                                                                    if (dependentSteps.ingredient == 1 || dependentSteps.isModifier == 1) {
-                                                                        console.log("333333333333333333333333aaaaaaaaaaaaaaaaaaaa", dependentSteps)
-                                                                        if (dependentSteps['type'] == "stepper") {
-                                                                            console.log("666666666666666666666666666666")
-                                                                            /**
-                                                                             * @description (type == "stepper") : "name": "Dinner Meal", 
-                                                                             */
-                                                                            dependentSteps.productLinks.forEach(dspl => {
-                                                                                if (dspl.selectionQty > 0) {
-                                                                                    let count = dspl.selectionQty
-                                                                                    while (count != 0) {
+                                                                    product.bundleProductOptions.forEach(plbpo => {
+                                                                        if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
+                                                                            if (plbpo.type == "stepper") {
+                                                                                plbpo.productLinks.forEach(plbpopl => {
+                                                                                    let instanceId2 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+                                                                                    for (let i = 0; i < plbpopl.selectionQty; i++) {
                                                                                         obj.Entries.CEntry.push({
                                                                                             DealID: 0,
                                                                                             ID: 0,
-                                                                                            ItemID: dspl.sdmId,
+                                                                                            ItemID: plbpopl.sdmId,
                                                                                             ModCode: "NONE",
-                                                                                            Name: dspl.name,
+                                                                                            Name: plbpopl.name,
                                                                                             QCComponent: QCComponent,
-                                                                                            QCInstanceID: instanceId,
+                                                                                            QCInstanceID: instanceId2,
                                                                                             QCLevel: 0,
-                                                                                            QCProID: i.promoId,
-                                                                                        })
-                                                                                        count = count - 1
-                                                                                    }
-                                                                                }
-                                                                            })
-                                                                        } else {
-                                                                            /**
-                                                                             * @description (ingredient == 1) :  "name": "Twister Meal"
-                                                                             * @description (isModifier == 1) :  "name": "Mighty Twist"
-                                                                             */
-                                                                            if (dependentSteps.productLinks && dependentSteps.productLinks.length > 0) {
-                                                                                console.log("444444444444444444444444444")
-                                                                                dependentSteps.productLinks.forEach(dspl => {
-                                                                                    console.log("55555555555555555555555555555")
-                                                                                    if (dspl.subOptions && dspl.subOptions.length > 0) {
-                                                                                        dspl.subOptions.forEach(dsplso => {
-                                                                                            if (dsplso.sdmId && dsplso.selected == 1) {
-                                                                                                if (dsplso.title == "None") {
-                                                                                                    console.log("none")
-                                                                                                }
-                                                                                                else if (dsplso.title == "Regular") {
-                                                                                                    obj.Entries.CEntry.push({
-                                                                                                        ID: 0,
-                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                        ModCode: "WITH",
-                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                        Name: dspl.name,
-                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                        Weight: 0,
-                                                                                                    })
-                                                                                                } else if (dsplso.title == "Extra") {
-                                                                                                    obj.Entries.CEntry.push({
-                                                                                                        ID: 0,
-                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                        ModCode: "WITH",
-                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                        Name: dspl.name,
-                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                        Weight: 0,
-                                                                                                    }, {
-                                                                                                        ID: 0,
-                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                        ModCode: "WITH",
-                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                        Name: dspl.name,
-                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                        Weight: 0,
-                                                                                                    })
-                                                                                                }
-                                                                                            }
+                                                                                            QCProID: product.promoId,
                                                                                         })
                                                                                     }
                                                                                 })
+                                                                            } else {
+                                                                                /**
+                                                                                 * @description (ingredient == 1) :  "name": "Twister Meal"
+                                                                                 * @description (isModifier == 1) :  "name": "Mighty Twist"
+                                                                                 */
+                                                                                if (plbpo.productLinks && plbpo.productLinks.length > 0) {
+                                                                                    console.log("444444444444444444444444444")
+                                                                                    plbpo.productLinks.forEach(dspl => {
+                                                                                        console.log("55555555555555555555555555555")
+                                                                                        if (dspl.subOptions && dspl.subOptions.length > 0) {
+                                                                                            dspl.subOptions.forEach(dsplso => {
+                                                                                                if (dsplso.sdmId && dsplso.selected == 1) {
+                                                                                                    if (dsplso.title == "None") {
+                                                                                                        console.log("none")
+                                                                                                    }
+                                                                                                    else if (dsplso.title == "Regular") {
+                                                                                                        obj.Entries.CEntry.push({
+                                                                                                            ID: 0,
+                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                            ModCode: "WITH",
+                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                            Name: dspl.name,
+                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                            Weight: 0,
+                                                                                                        })
+                                                                                                    } else if (dsplso.title == "Extra") {
+                                                                                                        obj.Entries.CEntry.push({
+                                                                                                            ID: 0,
+                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                            ModCode: "WITH",
+                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                            Name: dspl.name,
+                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                            Weight: 0,
+                                                                                                        }, {
+                                                                                                            ID: 0,
+                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                            ModCode: "WITH",
+                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                            Name: dspl.name,
+                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                            Weight: 0,
+                                                                                                        })
+                                                                                                    }
+                                                                                                }
+                                                                                            })
+                                                                                        }
+                                                                                    })
+                                                                                }
                                                                             }
                                                                         }
-                                                                        Entries.CEntry.push(obj)
-                                                                    }
+                                                                    })
+                                                                    Entries.CEntry.push(obj)
                                                                 } else {
                                                                     console.log("777777777777777777777777777777")
 
