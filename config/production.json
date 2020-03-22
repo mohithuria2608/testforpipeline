@@ -217,7 +217,7 @@
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkliveuae.americana.com.sa:2200/?wsdl",
+        "baseUrl": "https://sdkliveuae.americana.com.sa:1998/?wsdl",
         "type": "live",
         "cred": {
             "licenseCode": "PizzaHutApp"

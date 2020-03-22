@@ -276,7 +276,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             }
         },
@@ -688,7 +688,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             CONFIRMED: {
@@ -699,7 +699,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             BEING_PREPARED: {
@@ -710,7 +710,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             READY: {
@@ -721,7 +721,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             ON_THE_WAY: {
@@ -732,7 +732,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             DELIVERED: {
@@ -743,7 +743,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             CLOSED: {
@@ -754,7 +754,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             CANCELED: {
@@ -765,7 +765,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
             FAILURE: {
@@ -776,7 +776,7 @@ export const DATABASE = {
                     GET: 5000,
                     GET_ONCE: 0,
                     GET_MAX: 65000,
-                    NEXT_PING: 15,
+                    NEXT_PING: 30,
                 }
             },
         },

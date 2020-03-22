@@ -106,7 +106,7 @@ Hands-on Microservices with TypeScript 3
 * https://sdkuatuae.americana.com.sa:1995/?wsdl
 
 # prod sdm url
-* https://sdkliveuae.americana.com.sa:2200/?wsdl
+* https://sdkliveuae.americana.com.sa:1998/?wsdl
 
 
 # retry option for kafka
