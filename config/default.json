@@ -222,7 +222,7 @@
     },
     "cms": {
         "baseUrl": "http://40.123.205.1/rest/V1/",
-        "categoryId": 20
+        "categoryId": 3
     },
     "sdm": {
         "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
