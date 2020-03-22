@@ -246,7 +246,7 @@ export class OrderClass extends BaseEntity {
                                                                         QCLevel: 0,
                                                                         QCProID: i.promoId,
                                                                     }
-                                                                    product.bundleProductOptions.forEach(plbpo => {
+                                                                    i.bundleProductOptions.forEach(plbpo => {
                                                                         if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
                                                                             if (plbpo.type == "stepper") {
                                                                                 plbpo.productLinks.forEach(plbpopl => {

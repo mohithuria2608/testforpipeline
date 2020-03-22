@@ -32,252 +32,987 @@ export const start = (async () => {
 
     let stock: any = [
       {
-        "items" : [ ],
-        "baseSpecialPrice" : 49,
-        "baseFinalPrice" : 49,
-        "originalTypeId" : "bundle",
-        "taxClassId" : 2,
-        "position" : 3,
-        "promoId" : 55,
-        "name" : "Super Mega Deal",
-        "imageSmall" : "/m/e/menusuperdinnermeal_4.png",
-        "selectedItem" : 0,
-        "specialPrice" : 49,
-        "associative" : 0,
-        "visibility" : 4,
-        "finalPrice" : 49,
-        "virtualGroup" : 16298,
-        "typeId" : "bundle",
-        "qty" : 1,
-        "sdmId" : 67,
-        "originalPrice" : 49,
-        "sellingPrice" : 49,
-        "menuId" : 5,
-        "id" : 1728,
-        "description" : "12 chicken pcs & Family fries",
-        "sku" : 900067,
-        "bundleProductOptions" : [
+        "sdmId": 45,
+        "description": "Twister Box description",
+        "position": 9,
+        "sku": 900045,
+        "originalPrice": 30.5,
+        "items": [
           {
-            "isModifier" : 0,
-            "minimumQty" : 2,
-            "position" : 1,
-            "productLinks" : [
+            "sdmId": 45,
+            "description": "",
+            "position": 9,
+            "sku": 900045,
+            "title": "Twister Box - Large",
+            "bundleProductOptions": [
               {
-                "default" : 0,
-                "option_id" : 1436,
-                "dependentSteps" : [ ],
-                "position" : 1,
-                "selectionQty" : 1,
-                "name" : "Super Mega Deal - Original",
-                "selection_id" : 11190,
-                "imageThumbnail" : "/imagestemp/413002.png",
-                "sdmId" : 413002,
-                "title" : "Super Mega Deal - Original",
-                "id" : 1642,
-                "sku" : 413002,
-                "subOptions" : [ ],
-                "price" : 0,
-                "modGroupId" : -1,
-                "selected" : 1
-              },
-              {
-                "default" : 0,
-                "option_id" : 1436,
-                "dependentSteps" : [ ],
-                "position" : 2,
-                "selectionQty" : 1,
-                "name" : "Super Mega Deal - Spicy",
-                "selection_id" : 11191,
-                "imageThumbnail" : "/imagestemp/413003.png",
-                "sdmId" : 413003,
-                "title" : "Super Mega Deal - Spicy",
-                "id" : 1643,
-                "sku" : 413003,
-                "subOptions" : [ ],
-                "price" : 0,
-                "modGroupId" : -1,
-                "selected" : 0
-              },
-              {
-                "default" : 0,
-                "option_id" : 1436,
-                "dependentSteps" : [
-                  2
+                "subtitle": "Twister Box",
+                "position": 1,
+                "isDependent": 0,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "minimumQty": 0,
+                "type": "radio",
+                "title": "Twister Box",
+                "productLinks": [
+                  {
+                    "id": 320,
+                    "sdmId": 911503,
+                    "subOptions": [
+
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/911503.png",
+                    "default": 1,
+                    "sku": 911503,
+                    "option_id": 989,
+                    "price": 0,
+                    "selection_id": 5659,
+                    "title": "Twister Box",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Twister Box"
+                  }
                 ],
-                "position" : 3,
-                "selectionQty" : 1,
-                "name" : "Super Mega Deal - Mix",
-                "selection_id" : 12342,
-                "imageThumbnail" : "/imagestemp/413004.png",
-                "sdmId" : 413004,
-                "title" : "Super Mega Deal - Mix",
-                "id" : 1772,
-                "sku" : 413004,
-                "subOptions" : [ ],
-                "price" : 0,
-                "modGroupId" : -1,
-                "selected" : 0
+                "isModifier": 0,
+                "compId": 1,
+                "maximumQty": 0,
+                "name": "Twister Box"
+              },
+              {
+                "subtitle": "Choice of Chicken",
+                "position": 2,
+                "isDependent": 0,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "minimumQty": 0,
+                "type": "radio",
+                "title": "Choice of Chicken",
+                "productLinks": [
+                  {
+                    "id": 283,
+                    "sdmId": 910001,
+                    "subOptions": [
+
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/910001.png",
+                    "default": 1,
+                    "sku": 910001,
+                    "option_id": 990,
+                    "price": 0,
+                    "selection_id": 5660,
+                    "title": "Chicken Pc - Original",
+                    "modGroupId": 10217,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Chicken Pc - Original"
+                  },
+                  {
+                    "id": 284,
+                    "sdmId": 910002,
+                    "subOptions": [
+
+                    ],
+                    "position": 2,
+                    "imageThumbnail": "/imagestemp/910002.png",
+                    "default": 0,
+                    "sku": 910002,
+                    "option_id": 990,
+                    "price": 0,
+                    "selection_id": 5661,
+                    "title": "Chicken Pc - Spicy",
+                    "modGroupId": 10217,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Chicken Pc - Spicy"
+                  }
+                ],
+                "isModifier": 0,
+                "compId": 2,
+                "maximumQty": 0,
+                "name": "Choice of Chicken"
+              },
+              {
+                "subtitle": "Choice of Sandwich",
+                "position": 3,
+                "isDependent": 0,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "minimumQty": 0,
+                "type": "radio",
+                "title": "Choice of Sandwich",
+                "productLinks": [
+                  {
+                    "id": 289,
+                    "sdmId": 110002,
+                    "subOptions": [
+
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/110002.png",
+                    "default": 1,
+                    "sku": 110002,
+                    "option_id": 991,
+                    "price": 0,
+                    "selection_id": 5662,
+                    "title": "Twister Sandwich - Spicy",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+                      4
+                    ],
+                    "selected": 1,
+                    "name": "Twister Sandwich - Spicy"
+                  },
+                  {
+                    "id": 288,
+                    "sdmId": 110003,
+                    "subOptions": [
+
+                    ],
+                    "position": 2,
+                    "imageThumbnail": "/imagestemp/110003.png",
+                    "default": 0,
+                    "sku": 110003,
+                    "option_id": 991,
+                    "price": 0,
+                    "selection_id": 5663,
+                    "title": "Twister Sandwich - Original",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+                      4
+                    ],
+                    "selected": 0,
+                    "name": "Twister Sandwich - Original"
+                  }
+                ],
+                "isModifier": 0,
+                "compId": 3,
+                "maximumQty": 0,
+                "name": "Choice of Sandwich"
+              },
+              {
+                "subtitle": "Add Some Cheese",
+                "position": 4,
+                "isDependent": 1,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 1,
+                "minimumQty": 0,
+                "type": "checkbox",
+                "title": "Add Some Cheese",
+                "productLinks": [
+                  {
+                    "id": 369,
+                    "sdmId": 811701,
+                    "subOptions": [
+                      {
+                        "product_id": 0,
+                        "selection_id": 5666,
+                        "sku": 811701,
+                        "id": 367,
+                        "price": 0,
+                        "selected": 1,
+                        "title": "Regular",
+                        "sdmId": 811701,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 369
+                      },
+                      {
+                        "product_id": 0,
+                        "selection_id": 5667,
+                        "sku": 811701,
+                        "id": 368,
+                        "price": 0,
+                        "selected": 0,
+                        "title": "Extra",
+                        "sdmId": 811701,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 369
+                      }
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/811701.png",
+                    "default": 0,
+                    "sku": 811701,
+                    "option_id": 992,
+                    "price": 0,
+                    "selection_id": 0,
+                    "title": "Lettuce",
+                    "modGroupId": 10027,
+                    "selectionQty": 0,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Lettuce"
+                  },
+                  {
+                    "id": 372,
+                    "sdmId": 811703,
+                    "subOptions": [
+                      {
+                        "product_id": 0,
+                        "selection_id": 5668,
+                        "sku": 811703,
+                        "id": 370,
+                        "price": 0,
+                        "selected": 1,
+                        "title": "Regular",
+                        "sdmId": 811703,
+                        "modGroupId": 10027,
+                        "name": "Regular",
+                        "option_id": 372
+                      },
+                      {
+                        "product_id": 0,
+                        "selection_id": 5669,
+                        "sku": 811703,
+                        "id": 371,
+                        "price": 0,
+                        "selected": 0,
+                        "title": "Extra",
+                        "sdmId": 811703,
+                        "modGroupId": 10027,
+                        "name": "Extra",
+                        "option_id": 372
+                      }
+                    ],
+                    "position": 3,
+                    "imageThumbnail": "/imagestemp/811703.png",
+                    "default": 0,
+                    "sku": 811703,
+                    "option_id": 992,
+                    "price": 0,
+                    "selection_id": 0,
+                    "title": "Tomato",
+                    "modGroupId": 10027,
+                    "selectionQty": 0,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Tomato"
+                  },
+                  {
+                    "id": 366,
+                    "sdmId": 810001,
+                    "subOptions": [
+                      {
+                        "product_id": 0,
+                        "selection_id": 5664,
+                        "sku": 810001,
+                        "id": 364,
+                        "price": 2,
+                        "selected": 0,
+                        "title": "Regular",
+                        "sdmId": 810001,
+                        "modGroupId": 10028,
+                        "name": "Regular",
+                        "option_id": 366
+                      },
+                      {
+                        "product_id": 0,
+                        "selection_id": 5665,
+                        "sku": 810001,
+                        "id": 365,
+                        "price": 4,
+                        "selected": 1,
+                        "title": "Extra",
+                        "sdmId": 810001,
+                        "modGroupId": 10028,
+                        "name": "Extra",
+                        "option_id": 366
+                      }
+                    ],
+                    "position": 5,
+                    "imageThumbnail": "/imagestemp/810001.png",
+                    "default": 0,
+                    "sku": 810001,
+                    "option_id": 992,
+                    "price": 0,
+                    "selection_id": 0,
+                    "title": "American Cheese",
+                    "modGroupId": 10028,
+                    "selectionQty": 0,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "American Cheese"
+                  }
+                ],
+                "isModifier": 1,
+                "compId": 3,
+                "maximumQty": 0,
+                "name": "Add Some Cheese"
+              },
+              {
+                "subtitle": "Choice of first side item",
+                "position": 5,
+                "isDependent": 0,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "minimumQty": 0,
+                "type": "radio",
+                "title": "Choice of first side item",
+                "productLinks": [
+                  {
+                    "id": 269,
+                    "sdmId": 510006,
+                    "subOptions": [
+
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/510006.png",
+                    "default": 1,
+                    "sku": 510006,
+                    "option_id": 993,
+                    "price": 0,
+                    "selection_id": 5670,
+                    "title": "Large Fries",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Large Fries"
+                  },
+                  {
+                    "id": 257,
+                    "sdmId": 510001,
+                    "subOptions": [
+
+                    ],
+                    "position": 2,
+                    "imageThumbnail": "/imagestemp/510001.png",
+                    "default": 0,
+                    "sku": 510001,
+                    "option_id": 993,
+                    "price": 0,
+                    "selection_id": 5672,
+                    "title": "Coleslaw Salad Small",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Coleslaw Salad Small"
+                  },
+                  {
+                    "id": 272,
+                    "sdmId": 510013,
+                    "subOptions": [
+
+                    ],
+                    "position": 3,
+                    "imageThumbnail": "/imagestemp/510013.png",
+                    "default": 0,
+                    "sku": 510013,
+                    "option_id": 993,
+                    "price": 1,
+                    "selection_id": 5671,
+                    "title": "Large Fries Spicy",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Large Fries Spicy"
+                  },
+                  {
+                    "id": 279,
+                    "sdmId": 510073,
+                    "subOptions": [
+
+                    ],
+                    "position": 4,
+                    "imageThumbnail": "/imagestemp/510073.png",
+                    "default": 0,
+                    "sku": 510073,
+                    "option_id": 993,
+                    "price": 1,
+                    "selection_id": 5674,
+                    "title": "Large Dipper Fries",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Large Dipper Fries"
+                  },
+                  {
+                    "id": 266,
+                    "sdmId": 510036,
+                    "subOptions": [
+
+                    ],
+                    "position": 5,
+                    "imageThumbnail": "/imagestemp/510036.png",
+                    "default": 0,
+                    "sku": 510036,
+                    "option_id": 993,
+                    "price": 3,
+                    "selection_id": 5673,
+                    "title": "Loaded Fries Regular",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Loaded Fries Regular"
+                  },
+                  {
+                    "id": 291,
+                    "sdmId": 510079,
+                    "subOptions": [
+
+                    ],
+                    "position": 6,
+                    "imageThumbnail": "/imagestemp/510079.png",
+                    "default": 0,
+                    "sku": 510079,
+                    "option_id": 993,
+                    "price": 3,
+                    "selection_id": 5676,
+                    "title": "Regular Loaded Fries Pepper - Chili Sauce",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Regular Loaded Fries Pepper - Chili Sauce"
+                  },
+                  {
+                    "id": 290,
+                    "sdmId": 510075,
+                    "subOptions": [
+
+                    ],
+                    "position": 7,
+                    "imageThumbnail": "/imagestemp/510075.png",
+                    "default": 0,
+                    "sku": 510075,
+                    "option_id": 993,
+                    "price": 5,
+                    "selection_id": 5675,
+                    "title": "Cheese Potato Dipper",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Cheese Potato Dipper"
+                  },
+                  {
+                    "id": 241,
+                    "sdmId": 510085,
+                    "subOptions": [
+
+                    ],
+                    "position": 8,
+                    "imageThumbnail": "/imagestemp/510085.png",
+                    "default": 0,
+                    "sku": 510085,
+                    "option_id": 993,
+                    "price": 5,
+                    "selection_id": 5677,
+                    "title": "Supreme Loaded Fries",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Supreme Loaded Fries"
+                  }
+                ],
+                "isModifier": 0,
+                "compId": 4,
+                "maximumQty": 0,
+                "name": "Choice of first side item"
+              },
+              {
+                "subtitle": "Choice of second side item",
+                "position": 6,
+                "isDependent": 0,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "minimumQty": 0,
+                "type": "radio",
+                "title": "Choice of second side item",
+                "productLinks": [
+                  {
+                    "id": 257,
+                    "sdmId": 510001,
+                    "subOptions": [
+
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/510001.png",
+                    "default": 1,
+                    "sku": 510001,
+                    "option_id": 994,
+                    "price": 0,
+                    "selection_id": 5678,
+                    "title": "Coleslaw Salad Small",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Coleslaw Salad Small"
+                  },
+                  {
+                    "id": 268,
+                    "sdmId": 510004,
+                    "subOptions": [
+
+                    ],
+                    "position": 2,
+                    "imageThumbnail": "/imagestemp/510004.png",
+                    "default": 0,
+                    "sku": 510004,
+                    "option_id": 994,
+                    "price": 2,
+                    "selection_id": 5679,
+                    "title": "Regular Fries",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Regular Fries"
+                  },
+                  {
+                    "id": 277,
+                    "sdmId": 510071,
+                    "subOptions": [
+
+                    ],
+                    "position": 3,
+                    "imageThumbnail": "/imagestemp/510071.png",
+                    "default": 0,
+                    "sku": 510071,
+                    "option_id": 994,
+                    "price": 2,
+                    "selection_id": 5682,
+                    "title": "Potato Dipper- Regular",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Potato Dipper- Regular"
+                  },
+                  {
+                    "id": 274,
+                    "sdmId": 510012,
+                    "subOptions": [
+
+                    ],
+                    "position": 4,
+                    "imageThumbnail": "/imagestemp/510012.png",
+                    "default": 0,
+                    "sku": 510012,
+                    "option_id": 994,
+                    "price": 3,
+                    "selection_id": 5680,
+                    "title": "Regular Fries Spicy",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Regular Fries Spicy"
+                  },
+                  {
+                    "id": 266,
+                    "sdmId": 510036,
+                    "subOptions": [
+
+                    ],
+                    "position": 5,
+                    "imageThumbnail": "/imagestemp/510036.png",
+                    "default": 0,
+                    "sku": 510036,
+                    "option_id": 994,
+                    "price": 5,
+                    "selection_id": 5681,
+                    "title": "Loaded Fries Regular",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Loaded Fries Regular"
+                  },
+                  {
+                    "id": 290,
+                    "sdmId": 510075,
+                    "subOptions": [
+
+                    ],
+                    "position": 6,
+                    "imageThumbnail": "/imagestemp/510075.png",
+                    "default": 0,
+                    "sku": 510075,
+                    "option_id": 994,
+                    "price": 7,
+                    "selection_id": 5683,
+                    "title": "Cheese Potato Dipper",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Cheese Potato Dipper"
+                  }
+                ],
+                "isModifier": 0,
+                "compId": 5,
+                "maximumQty": 0,
+                "name": "Choice of second side item"
+              },
+              {
+                "subtitle": "Choice of Beverages",
+                "position": 7,
+                "isDependent": 0,
+                "imageThumbnail": "/imagestemp/0.png",
+                "ingredient": 0,
+                "minimumQty": 0,
+                "type": "radio",
+                "title": "Choice of Beverages",
+                "productLinks": [
+                  {
+                    "id": 244,
+                    "sdmId": 600004,
+                    "subOptions": [
+
+                    ],
+                    "position": 1,
+                    "imageThumbnail": "/imagestemp/600004.png",
+                    "default": 1,
+                    "sku": 600004,
+                    "option_id": 995,
+                    "price": 0,
+                    "selection_id": 5684,
+                    "title": "Pepsi Large",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 1,
+                    "name": "Pepsi Large"
+                  },
+                  {
+                    "id": 256,
+                    "sdmId": 600010,
+                    "subOptions": [
+
+                    ],
+                    "position": 2,
+                    "imageThumbnail": "/imagestemp/600010.png",
+                    "default": 0,
+                    "sku": 600010,
+                    "option_id": 995,
+                    "price": 0,
+                    "selection_id": 5685,
+                    "title": "Mirinda Large",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Mirinda Large"
+                  },
+                  {
+                    "id": 248,
+                    "sdmId": 600017,
+                    "subOptions": [
+
+                    ],
+                    "position": 3,
+                    "imageThumbnail": "/imagestemp/600017.png",
+                    "default": 0,
+                    "sku": 600017,
+                    "option_id": 995,
+                    "price": 0,
+                    "selection_id": 5686,
+                    "title": "7Up Large",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "7Up Large"
+                  },
+                  {
+                    "id": 247,
+                    "sdmId": 600007,
+                    "subOptions": [
+
+                    ],
+                    "position": 4,
+                    "imageThumbnail": "/imagestemp/600007.png",
+                    "default": 0,
+                    "sku": 600007,
+                    "option_id": 995,
+                    "price": 0,
+                    "selection_id": 5687,
+                    "title": "Diet Pepsi Large",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Diet Pepsi Large"
+                  },
+                  {
+                    "id": 253,
+                    "sdmId": 600014,
+                    "subOptions": [
+
+                    ],
+                    "position": 5,
+                    "imageThumbnail": "/imagestemp/600014.png",
+                    "default": 0,
+                    "sku": 600014,
+                    "option_id": 995,
+                    "price": 0,
+                    "selection_id": 5688,
+                    "title": "Mountain Dew Large",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Mountain Dew Large"
+                  },
+                  {
+                    "id": 292,
+                    "sdmId": 610011,
+                    "subOptions": [
+
+                    ],
+                    "position": 6,
+                    "imageThumbnail": "/imagestemp/610011.png",
+                    "default": 0,
+                    "sku": 610011,
+                    "option_id": 995,
+                    "price": 0,
+                    "selection_id": 5690,
+                    "title": "Small Aquafina",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Small Aquafina"
+                  },
+                  {
+                    "id": 294,
+                    "sdmId": 610019,
+                    "subOptions": [
+
+                    ],
+                    "position": 7,
+                    "imageThumbnail": "/imagestemp/610019.png",
+                    "default": 0,
+                    "sku": 610019,
+                    "option_id": 995,
+                    "price": 3,
+                    "selection_id": 5692,
+                    "title": "Lemon Mint Ice Tea",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Lemon Mint Ice Tea"
+                  },
+                  {
+                    "id": 237,
+                    "sdmId": 610021,
+                    "subOptions": [
+
+                    ],
+                    "position": 8,
+                    "imageThumbnail": "/imagestemp/610021.png",
+                    "default": 0,
+                    "sku": 610021,
+                    "option_id": 995,
+                    "price": 7.5,
+                    "selection_id": 5689,
+                    "title": "Mojito Krusher",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Mojito Krusher"
+                  },
+                  {
+                    "id": 236,
+                    "sdmId": 610020,
+                    "subOptions": [
+
+                    ],
+                    "position": 9,
+                    "imageThumbnail": "/imagestemp/610020.png",
+                    "default": 0,
+                    "sku": 610020,
+                    "option_id": 995,
+                    "price": 8.5,
+                    "selection_id": 5691,
+                    "title": "Fresh Orange Juice",
+                    "modGroupId": -1,
+                    "selectionQty": 1,
+                    "dependentSteps": [
+
+                    ],
+                    "selected": 0,
+                    "name": "Fresh Orange Juice"
+                  }
+                ],
+                "isModifier": 0,
+                "compId": 6,
+                "maximumQty": 0,
+                "name": "Choice of Beverages"
               }
             ],
-            "name" : "Choose Your Favorite Flavor",
-            "imageThumbnail" : "/imagestemp/0.png",
-            "isDependent" : 0,
-            "maximumQty" : 2,
-            "subtitle" : "Choose Your Favorite Flavor",
-            "type" : "radio",
-            "title" : "Choose Your Favorite Flavor",
-            "ingredient" : 0,
-            "compId" : 1
-          },
-          {
-            "isModifier" : 1,
-            "minimumQty" : 12,
-            "position" : 2,
-            "productLinks" : [
+            "image": "/d/u/dummy-product.png",
+            "imageSmall": "/d/u/dummy-product.png",
+            "sel1Value": 16286,
+            "sel2Value": -1,
+            "visibility": 4,
+            "sel3Value": -1,
+            "promoId": 27,
+            "taxClassId": 2,
+            "name": "Twister Box - Large",
+            "id": 403,
+            "specialPrice": 26.5,
+            "configurableProductOptions": [
               {
-                "default" : 0,
-                "option_id" : 1628,
-                "dependentSteps" : [ ],
-                "position" : 1,
-                "selectionQty" : 6,
-                "name" : "Chicken Pc - Spicy",
-                "selection_id" : 12288,
-                "imageThumbnail" : "/imagestemp/910002.png",
-                "sdmId" : 910002,
-                "title" : "Chicken Pc - Spicy",
-                "id" : 1645,
-                "sku" : 910002,
-                "subOptions" : [ ],
-                "price" : 0,
-                "modGroupId" : 10217,
-                "selected" : 1
-              },
-              {
-                "default" : 0,
-                "option_id" : 1628,
-                "dependentSteps" : [ ],
-                "position" : 2,
-                "selectionQty" : 6,
-                "name" : "Chicken Pc - Original",
-                "selection_id" : 12289,
-                "imageThumbnail" : "/imagestemp/910001.png",
-                "sdmId" : 910001,
-                "title" : "Chicken Pc - Original",
-                "id" : 1644,
-                "sku" : 910001,
-                "subOptions" : [ ],
-                "price" : 0,
-                "modGroupId" : 10217,
-                "selected" : 0
+                "position": 1,
+                "subtitle": "Choice of Size",
+                "id": 144,
+                "title": "Choice of Size",
+                "options": [
+                  {
+                    "isSelected": 1,
+                    "id": 16287,
+                    "title": "Medium",
+                    "name": "Medium",
+                    "position": 1
+                  },
+                  {
+                    "isSelected": 0,
+                    "id": 16286,
+                    "title": "Large",
+                    "name": "Large",
+                    "position": 2
+                  }
+                ],
+                "name": "",
+                "selIndex": 1
               }
             ],
-            "name" : "Select 12 Pieces Of Your Favorite Flavor",
-            "imageThumbnail" : "/imagestemp/0.png",
-            "isDependent" : 1,
-            "maximumQty" : 12,
-            "subtitle" : "Select 12 Pieces Of Your Favorite Flavor",
-            "type" : "stepper",
-            "title" : "Select 12 Pieces Of Your Favorite Flavor",
-            "ingredient" : 0,
-            "compId" : 1
-          },
-          {
-            "isModifier" : 0,
-            "minimumQty" : 0,
-            "position" : 3,
-            "productLinks" : [
-              {
-                "default" : 1,
-                "option_id" : 1437,
-                "dependentSteps" : [ ],
-                "position" : 1,
-                "selectionQty" : 1,
-                "name" : "Family Fries",
-                "selection_id" : 11193,
-                "imageThumbnail" : "/imagestemp/510005.png",
-                "sdmId" : 510005,
-                "title" : "Family Fries",
-                "id" : 1632,
-                "sku" : 510005,
-                "subOptions" : [ ],
-                "price" : 0,
-                "modGroupId" : -1,
-                "selected" : 1
-              },
-              {
-                "default" : 0,
-                "option_id" : 1437,
-                "dependentSteps" : [ ],
-                "position" : 2,
-                "selectionQty" : 1,
-                "name" : "Family Fries Spicy",
-                "selection_id" : 11194,
-                "imageThumbnail" : "/imagestemp/510014.png",
-                "sdmId" : 510014,
-                "title" : "Family Fries Spicy",
-                "id" : 1635,
-                "sku" : 510014,
-                "subOptions" : [ ],
-                "price" : 3,
-                "modGroupId" : -1,
-                "selected" : 0
-              },
-              {
-                "default" : 0,
-                "option_id" : 1437,
-                "dependentSteps" : [ ],
-                "position" : 3,
-                "selectionQty" : 1,
-                "name" : "Loaded Fries Family",
-                "selection_id" : 11195,
-                "imageThumbnail" : "/imagestemp/510030.png",
-                "sdmId" : 510030,
-                "title" : "Loaded Fries Family",
-                "id" : 1629,
-                "sku" : 510030,
-                "subOptions" : [ ],
-                "price" : 5,
-                "modGroupId" : -1,
-                "selected" : 0
-              },
-              {
-                "default" : 0,
-                "option_id" : 1437,
-                "dependentSteps" : [ ],
-                "position" : 4,
-                "selectionQty" : 1,
-                "name" : "Family Dipper Fries",
-                "selection_id" : 11196,
-                "imageThumbnail" : "/imagestemp/510074.png",
-                "sdmId" : 510074,
-                "title" : "Family Dipper Fries",
-                "id" : 1638,
-                "sku" : 510074,
-                "subOptions" : [ ],
-                "price" : 6,
-                "modGroupId" : -1,
-                "selected" : 0
-              }
+            "associative": 0,
+            "metaKeyword": [
+              "Twister Box - Large"
             ],
-            "name" : " Select Your Favorite Side Item",
-            "imageThumbnail" : "/imagestemp/0.png",
-            "isDependent" : 0,
-            "maximumQty" : 0,
-            "subtitle" : " Select Your Favorite Side Item",
-            "type" : "radio",
-            "title" : " Select Your Favorite Side Item",
-            "ingredient" : 0,
-            "compId" : 2
+            "typeId": "bundle",
+            "selectedItem": 0,
+            "imageThumbnail": "/imagestemp/900045.png",
+            "finalPrice": 26.5,
+            "virtualGroup": 0,
+            "inSide": 1
           }
         ],
-        "imageThumbnail" : "/imagestemp/900067.png",
-        "catId" : 21,
-        "image" : "/m/e/menusuperdinnermeal_4.png",
-        "configurableProductOptions" : [ ],
-        "metaKeyword" : [
-          "Super Mega Deal"
+        "baseFinalPrice": 25,
+        "catId": 21,
+        "visibility": 4,
+        "promoId": 27,
+        "taxClassId": 2,
+        "name": "Twister Box",
+        "baseSpecialPrice": 0,
+        "id": 14,
+        "specialPrice": 30.5,
+        "configurableProductOptions": [
+          {
+            "position": 1,
+            "subtitle": "Choice of Size",
+            "id": 144,
+            "title": "Choice of Size",
+            "options": [
+              {
+                "isSelected": 0,
+                "id": 16287,
+                "title": "Medium",
+                "name": "Medium",
+                "position": 1
+              },
+              {
+                "isSelected": 1,
+                "id": 16286,
+                "title": "Large",
+                "name": "Large",
+                "position": 2
+              }
+            ],
+            "name": "",
+            "selIndex": 1
+          }
         ],
-        "inSide" : 1
+        "qty": 1,
+        "sellingPrice": 30.5,
+        "originalTypeId": "bundle_group",
+        "associative": 0,
+        "menuId": 0,
+        "metaKeyword": [
+          "Twister Box - Large"
+        ],
+        "typeId": "bundle_group",
+        "selectedItem": 900045,
+        "imageThumbnail": "/imagestemp/900045.png",
+        "virtualGroup": 0,
+        "finalPrice": 30.5,
+        "inSide": 1
       }
     ]
 
@@ -483,7 +1218,7 @@ export const start = (async () => {
                                   QCLevel: 0,
                                   QCProID: i.promoId,
                                 }
-                                product.bundleProductOptions.forEach(plbpo => {
+                                i.bundleProductOptions.forEach(plbpo => {
                                   if (pl.dependentSteps.indexOf(plbpo.position) >= 0) {
                                     if (plbpo.type == "stepper") {
                                       plbpo.productLinks.forEach(plbpopl => {
@@ -510,7 +1245,7 @@ export const start = (async () => {
                                       if (plbpo.productLinks && plbpo.productLinks.length > 0) {
                                         console.log("444444444444444444444444444")
                                         plbpo.productLinks.forEach(dspl => {
-                                          console.log("55555555555555555555555555555")
+                                          console.log("55555555555555555555555555555", dspl)
                                           if (dspl.subOptions && dspl.subOptions.length > 0) {
                                             dspl.subOptions.forEach(dsplso => {
                                               if (dsplso.sdmId && dsplso.selected == 1) {
