@@ -230,7 +230,6 @@ export class OrderClass extends BaseEntity {
                                                     if (bpo.ingredient == 0) {
                                                         bpo.productLinks.forEach(pl => {
                                                             if (pl.selected == 1) {
-                                                                console.log("11111111111111111")
                                                                 if (pl.dependentSteps && pl.dependentSteps.length > 0) {
                                                                     let obj = {
                                                                         DealID: 0,
@@ -271,14 +270,11 @@ export class OrderClass extends BaseEntity {
                                                                                  * @description (isModifier == 1) :  "name": "Mighty Twist"
                                                                                  */
                                                                                 if (plbpo.productLinks && plbpo.productLinks.length > 0) {
-                                                                                    console.log("444444444444444444444444444")
                                                                                     plbpo.productLinks.forEach(dspl => {
-                                                                                        console.log("55555555555555555555555555555")
                                                                                         if (dspl.subOptions && dspl.subOptions.length > 0) {
                                                                                             dspl.subOptions.forEach(dsplso => {
                                                                                                 if (dsplso.sdmId && dsplso.selected == 1) {
                                                                                                     if (dsplso.title == "None") {
-                                                                                                        console.log("none")
                                                                                                     }
                                                                                                     else if (dsplso.title == "Regular") {
                                                                                                         obj.Entries.CEntry.push({
@@ -319,8 +315,6 @@ export class OrderClass extends BaseEntity {
                                                                     })
                                                                     Entries.CEntry.push(obj)
                                                                 } else {
-                                                                    console.log("777777777777777777777777777777")
-
                                                                     let count = pl.selectionQty
                                                                     while (count != 0) {
                                                                         Entries.CEntry.push({
@@ -537,7 +531,6 @@ export class OrderClass extends BaseEntity {
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)
-            console.log("create order", createOrder, typeof createOrder)
             if (createOrder && typeof createOrder == 'string') {
                 let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
                     orderId: createOrder,
@@ -585,7 +578,6 @@ export class OrderClass extends BaseEntity {
         store: IStoreGrpcRequest.IStore,
         userData: IUserRequest.IUserData) {
         try {
-            console.log("cartDaTa", cartData)
             let amount = cartData.amount
             if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
@@ -868,7 +860,7 @@ export class OrderClass extends BaseEntity {
 
     async amountValidationHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            console.log("Amount validation check order mode", sdmOrder.OrderMode)
+            consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode}`, "", true)
             let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
             let amountToCompare = totalAmount[0].amount
             consolelog(process.cwd(), `amountValidationHandler 1 : totalAmount : ${totalAmount[0].amount}, sdmTotal : ${sdmOrder.Total}`, "", true)
@@ -902,7 +894,7 @@ export class OrderClass extends BaseEntity {
 
     async validationRemarksHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            console.log("validation remarks check ", sdmOrder.ValidationRemarks)
+            consolelog(process.cwd(), `validation remarks check : ${sdmOrder.ValidationRemarks}`, "", true)
             if (recheck && sdmOrder.ValidationRemarks &&
                 (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
                 sdmOrder.ValidationRemarks != Constant.STATUS_MSG.SDM_ORDER_VALIDATION.EXCEED_ORDER_AMOUNT
