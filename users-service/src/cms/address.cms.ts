@@ -12,7 +12,7 @@ export class AddressCMSEntity extends BaseCMS {
 
     async createAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
-            let naemRes = nameConstructor(payload.name)
+            let naemRes = nameConstructor(payload.name.trim())
             let address = []
             if (payload.asAddress && typeof payload.asAddress == 'string')
                 payload.asAddress = JSON.parse(payload.asAddress)
@@ -75,7 +75,7 @@ export class AddressCMSEntity extends BaseCMS {
 
     async updateAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
-            let naemRes = nameConstructor(payload.name)
+            let naemRes = nameConstructor(payload.name.trim())
             let formObj: IAddressCMSRequest.IUpdateAddress = {
                 "customerId": payload.cmsUserRef.toString(),
                 "addressId": payload.asAddress[0].cmsAddressRef.toString(),

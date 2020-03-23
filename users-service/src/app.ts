@@ -11,7 +11,7 @@ global.configSync = {
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
-import { bootstrap, nameConstructor } from './utils'
+import { bootstrap } from './utils'
 import middleware from './middlewares'
 import route from './route'
 import { event } from './lib'
@@ -27,7 +27,6 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
-    console.log(nameConstructor("testsd")) 
     // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
 
     // event.emit('logger', {

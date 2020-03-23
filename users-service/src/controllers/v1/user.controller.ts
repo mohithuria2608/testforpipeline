@@ -308,8 +308,8 @@ export class UserController {
                 let userUpdate: IUserRequest.IUserData = {
                     id: userObj[0].id
                 }
-                if (payload.name && payload.name != "")
-                    userUpdate['name'] = payload.name
+                if (payload.name.trim() && payload.name.trim() != "")
+                    userUpdate['name'] = payload.name.trim()
                 if (userObj[0].phnVerified == 1) {
                     console.log("step 2=====================>")
                     userData = await ENTITY.UserE.buildUser(userUpdate)
@@ -372,7 +372,7 @@ export class UserController {
                     country: headers.country,
                     socialKey: payload.socialKey,
                     medium: payload.medium,
-                    name: payload.name ? payload.name : undefined,
+                    name: payload.name.trim() ? payload.name.trim() : undefined,
                     email: payload.email ? payload.email : undefined,
                 }
                 let userchange: IUserchangeRequest.IUserchange = {
@@ -380,7 +380,7 @@ export class UserController {
                     country: headers.country,
                     socialKey: payload.socialKey,
                     medium: payload.medium,
-                    name: payload.name ? payload.name : undefined,
+                    name: payload.name.trim() ? payload.name.trim() : undefined,
                     email: payload.email ? payload.email : undefined
                 }
                 if (payload.email && payload.email != "") {
@@ -405,7 +405,7 @@ export class UserController {
                             console.log("step 10=====================>")
                             createUser['phnVerified'] = 1
                             createUser['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
-                            createUser['name'] = (payload.name && payload.name != "") ? payload.name : cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
+                            createUser['name'] = (payload.name.trim() && payload.name.trim() != "") ? payload.name.trim() : cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
                             createUser['fullPhnNo'] = cmsUserByEmail.phone
                             createUser['cCode'] = cmsUserByEmail.phone.slice(0, 4)
                             createUser['phnNo'] = cmsUserByEmail.phone.slice(4)
@@ -483,7 +483,7 @@ export class UserController {
                     let userchangePayload = {
                         username: username,
                         fullPhnNo: fullPhnNo,
-                        name: payload.name,
+                        name: payload.name.trim(),
                         email: payload.email,
                         cCode: payload.cCode,
                         phnNo: payload.phnNo,
@@ -651,7 +651,7 @@ export class UserController {
                 } else {
                     let userUpdate: IUserRequest.IUserData = {
                         id: userData.id,
-                        name: payload.name,
+                        name: payload.name.trim(),
                         email: payload.email,
                         profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.FIRST,
                         emailVerified: 1,
@@ -819,8 +819,8 @@ export class UserController {
             let dataToUpdate = {
                 id: userData.id
             }
-            if (payload.name && payload.name != "")
-                dataToUpdate['name'] = payload.name
+            if (payload.name.trim() && payload.name.trim() != "")
+                dataToUpdate['name'] = payload.name.trim()
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
             return formatUserData(user, headers, auth.isGuest)
         } catch (error) {

@@ -17,8 +17,7 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
-            let naemRes = nameConstructor(payload.name)
-            console.log("naemRes============>", naemRes)
+            let naemRes = nameConstructor(payload.name.trim())
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
@@ -62,7 +61,7 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async updateCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
-            let naemRes = nameConstructor(payload.name)
+            let naemRes = nameConstructor(payload.name.trim())
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
