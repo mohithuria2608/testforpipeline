@@ -74,20 +74,22 @@ export const start = (async () => {
               product.bundleProductOptions.forEach(bpo => {
                 if (bpo && bpo.productLinks.length > 0) {
                   bpo.productLinks.forEach(pl => {
+                    let plDefaultSdm = false
                     if (pl.selected == 1) {
-                      let defaultSdm = false
                       if (pl.subOptions && pl.subOptions.length > 0) {
                         pl.subOptions.forEach(dsplso => {
                           if (dsplso.is_sdm_default == 1)
-                            defaultSdm = true
+                            plDefaultSdm = true
                         })
+                        let checkSendNone = false
                         pl.subOptions.forEach(so => {
                           if (so.selected == 1) {
+                            checkSendNone = true
                             if (so.title == "None") { }
                             else if (so.title == "Regular") {
                               if (so.sdmId) {
                                 if (so.is_sdm_default != undefined) {
-                                  if (!defaultSdm)
+                                  if (!plDefaultSdm)
                                     obj.Entries.CEntry.push({
                                       ID: 0,
                                       ItemID: so.sdmId,
@@ -102,7 +104,7 @@ export const start = (async () => {
                             } else if (so.title == "Extra") {
                               if (so.sdmId) {
                                 if (so.is_sdm_default != undefined) {
-                                  if (defaultSdm)
+                                  if (plDefaultSdm)
                                     obj.Entries.CEntry.push({
                                       ID: 0,
                                       ItemID: so.sdmId,
@@ -145,6 +147,17 @@ export const start = (async () => {
                             }
                           }
                         })
+                        if (plDefaultSdm && !checkSendNone) {
+                          // obj.Entries.CEntry.push({
+                          //   ID: 0,
+                          //   ItemID: dsplso.sdmId,
+                          //   ModCode: "WITH",
+                          //   ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                          //   Name: dspl.name,
+                          //   OrdrMode: "OM_SAVED",
+                          //   Weight: 0,
+                          // })
+                        }
                       }
                     }
                   })
@@ -295,20 +308,26 @@ export const start = (async () => {
                                        */
                                       if (plbpo.productLinks && plbpo.productLinks.length > 0) {
                                         plbpo.productLinks.forEach(dspl => {
-                                          let defaultSdm = false
+                                          console.log("product name", dspl)
+
+                                          let plDefaultSdm = false
                                           if (dspl.subOptions && dspl.subOptions.length > 0) {
                                             dspl.subOptions.forEach(dsplso => {
                                               if (dsplso.is_sdm_default == 1)
-                                                defaultSdm = true
+                                                plDefaultSdm = true
                                             })
+                                            console.log("plDefaultSdm", plDefaultSdm)
+                                            let checkSendNone = false
                                             dspl.subOptions.forEach(dsplso => {
                                               if (dsplso.sdmId && dsplso.selected == 1) {
+                                                checkSendNone = true
+                                                console.log("product name", dspl.name)
                                                 if (dsplso.title == "None") {
                                                 }
                                                 else if (dsplso.title == "Regular") {
                                                   if (dsplso.sdmId) {
                                                     if (dsplso.is_sdm_default != undefined) {
-                                                      if (!defaultSdm)
+                                                      if (!plDefaultSdm)
                                                         obj.Entries.CEntry.push({
                                                           ID: 0,
                                                           ItemID: dsplso.sdmId,
@@ -323,7 +342,7 @@ export const start = (async () => {
                                                 } else if (dsplso.title == "Extra") {
                                                   if (dsplso.sdmId) {
                                                     if (dsplso.is_sdm_default != undefined) {
-                                                      if (defaultSdm)
+                                                      if (plDefaultSdm)
                                                         obj.Entries.CEntry.push({
                                                           ID: 0,
                                                           ItemID: dsplso.sdmId,
@@ -366,6 +385,17 @@ export const start = (async () => {
                                                 }
                                               }
                                             })
+                                            if (plDefaultSdm && !checkSendNone) {
+                                              // obj.Entries.CEntry.push({
+                                              //   ID: 0,
+                                              //   ItemID: dsplso.sdmId,
+                                              //   ModCode: "WITH",
+                                              //   ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                              //   Name: dspl.name,
+                                              //   OrdrMode: "OM_SAVED",
+                                              //   Weight: 0,
+                                              // })
+                                            }
                                           }
                                         })
                                       }
@@ -412,19 +442,21 @@ export const start = (async () => {
                           }
                           if (bpo.productLinks && bpo.productLinks.length > 0) {
                             bpo.productLinks.forEach(bpopl => {
+                              let plDefaultSdm = false
                               if (bpopl.subOptions && bpopl.subOptions.length > 0) {
-                                let defaultSdm = false
                                 bpopl.subOptions.forEach(dsplso => {
                                   if (dsplso.is_sdm_default == 1)
-                                    defaultSdm = true
+                                    plDefaultSdm = true
                                 })
+                                let checkSendNone = false
                                 bpopl.subOptions.forEach(bpoplso => {
                                   if (bpoplso.sdmId && bpoplso.selected == 1) {
+                                    checkSendNone = true
                                     if (bpoplso.title == "None") { }
                                     else if (bpoplso.title == "Regular") {
                                       if (bpoplso.sdmId) {
                                         if (bpoplso.is_sdm_default != undefined) {
-                                          if (!defaultSdm)
+                                          if (!plDefaultSdm)
                                             lastProductAddedInCentry.Entries.CEntry.push({
                                               ID: 0,
                                               ItemID: bpoplso.sdmId,
@@ -439,7 +471,7 @@ export const start = (async () => {
                                     } else if (bpoplso.title == "Extra") {
                                       if (bpoplso.sdmId) {
                                         if (bpoplso.is_sdm_default != undefined) {
-                                          if (defaultSdm)
+                                          if (plDefaultSdm)
                                             lastProductAddedInCentry.Entries.CEntry.push({
                                               ID: 0,
                                               ItemID: bpoplso.sdmId,
@@ -483,6 +515,17 @@ export const start = (async () => {
                                     }
                                   }
                                 })
+                                if (plDefaultSdm && !checkSendNone) {
+                                  // obj.Entries.CEntry.push({
+                                  //   ID: 0,
+                                  //   ItemID: dsplso.sdmId,
+                                  //   ModCode: "WITH",
+                                  //   ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                  //   Name: dspl.name,
+                                  //   OrdrMode: "OM_SAVED",
+                                  //   Weight: 0,
+                                  // })
+                                }
                               }
                             })
                           }
