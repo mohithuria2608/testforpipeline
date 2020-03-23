@@ -32,149 +32,7 @@ export const start = (async () => {
 
     // await ENTITY.CartE.createCartOnCMS({}, { cmsUserRef: 12 })
 
-    let stock: any = [
-      {
-        "items": [
-          {
-            "metaKeyword": [],
-            "position": 0,
-            "name": "Family Dipper Fries",
-            "specialPrice": 15,
-            "imageThumbnail": "/imagestemp/510074.png",
-            "finalPrice": 15,
-            "typeId": "simple",
-            "sdmId": 510074,
-            "title": "Family Dipper Fries",
-            "sel2Value": -1,
-            "sel1Value": 16294,
-            "id": 276,
-            "description": "",
-            "sku": 510074,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "position": 0,
-            "name": "Potato Dipper- Regular",
-            "specialPrice": 8.5,
-            "imageThumbnail": "/imagestemp/510071.png",
-            "finalPrice": 8.5,
-            "typeId": "simple",
-            "sdmId": 510071,
-            "title": "Potato Dipper- Regular",
-            "sel2Value": -1,
-            "sel1Value": 16285,
-            "id": 277,
-            "description": "",
-            "sku": 510071,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "position": 0,
-            "name": "Medium Dipper Fries",
-            "specialPrice": 9.5,
-            "imageThumbnail": "/imagestemp/510072.png",
-            "finalPrice": 9.5,
-            "typeId": "simple",
-            "sdmId": 510072,
-            "title": "Medium Dipper Fries",
-            "sel2Value": -1,
-            "sel1Value": 16287,
-            "id": 278,
-            "description": "",
-            "sku": 510072,
-            "sel3Value": -1
-          },
-          {
-            "metaKeyword": [],
-            "position": 0,
-            "name": "Large Dipper Fries",
-            "specialPrice": 10.5,
-            "imageThumbnail": "/imagestemp/510073.png",
-            "finalPrice": 10.5,
-            "typeId": "simple",
-            "sdmId": 510073,
-            "title": "Large Dipper Fries",
-            "sel2Value": -1,
-            "sel1Value": 16286,
-            "id": 279,
-            "description": "",
-            "sku": 510073,
-            "sel3Value": -1
-          }
-        ],
-        "baseSpecialPrice": 9.5,
-        "metaKeyword": [
-          "Dipper Fries"
-        ],
-        "originalTypeId": "configurable",
-        "configurableProductOptions": [
-          {
-            "position": 1,
-            "name": "Choose your Size",
-            "subtitle": "Choose your Size",
-            "id": 144,
-            "options": [
-              {
-                "isSelected": 0,
-                "position": 1,
-                "name": "Regular",
-                "title": "Regular",
-                "id": 16285
-              },
-              {
-                "isSelected": 0,
-                "position": 2,
-                "name": "Medium",
-                "title": "Medium",
-                "id": 16287
-              },
-              {
-                "isSelected": 0,
-                "position": 3,
-                "name": "Large",
-                "title": "Large",
-                "id": 16286
-              },
-              {
-                "isSelected": 1,
-                "position": 4,
-                "name": "Family",
-                "title": "Family",
-                "id": 16294
-              }
-            ],
-            "title": "Choose your Size",
-            "selIndex": 1
-          }
-        ],
-        "position": 1,
-        "promoId": -1,
-        "name": "Dipper Fries",
-        "selectedItem": 510072,
-        "specialPrice": 15,
-        "catId": 7,
-        "visibility": 4,
-        "finalPrice": 15,
-        "virtualGroup": 0,
-        "typeId": "configurable",
-        "qty": 2,
-        "sdmId": 5000083,
-        "originalPrice": 30,
-        "sellingPrice": 30,
-        "menuId": 1,
-        "id": 363,
-        "description": "",
-        "sku": 5000083,
-        "bundleProductOptions": [],
-        "imageThumbnail": "/imagestemp/5000083.png",
-        "taxClassId": 2,
-        "baseFinalPrice": 9.5,
-        "associative": 0,
-        "inSide": 0
-      }
-    ]
+    let stock: any = []
 
     let Entries = {
       CEntry: []
@@ -221,35 +79,81 @@ export const start = (async () => {
                           if (so.selected == 1) {
                             if (so.title == "None") { }
                             else if (so.title == "Regular") {
-                              if (so.sdmId)
-                                obj.Entries.CEntry.push({
-                                  ID: 0,
-                                  ItemID: so.sdmId,
-                                  ModCode: "WITH",
-                                  ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
-                                  Name: so.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0,
-                                })
+                              if (so.sdmId) {
+                                if (so.is_sdm_default != undefined) {
+                                  if (so.is_sdm_default == 0)
+                                    obj.Entries.CEntry.push({
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    })
+                                } else {
+                                  obj.Entries.CEntry.push({
+                                    ID: 0,
+                                    ItemID: so.sdmId,
+                                    ModCode: "WITH",
+                                    ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                    Name: so.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Weight: 0,
+                                  })
+                                }
+                              }
                             } else if (so.title == "Extra") {
-                              if (so.sdmId)
-                                obj.Entries.CEntry.push({
-                                  ID: 0,
-                                  ItemID: so.sdmId,
-                                  ModCode: "WITH",
-                                  ModgroupID: pl.modGroupId,
-                                  Name: so.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0,
-                                }, {
-                                  ID: 0,
-                                  ItemID: so.sdmId,
-                                  ModCode: "WITH",
-                                  ModgroupID: pl.modGroupId,
-                                  Name: so.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0,
-                                })
+                              if (so.sdmId) {
+                                if (so.is_sdm_default != undefined) {
+                                  if (so.is_sdm_default == 0)
+                                    obj.Entries.CEntry.push({
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    }, {
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    })
+                                  else
+                                    obj.Entries.CEntry.push({
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    })
+                                } else {
+                                  obj.Entries.CEntry.push({
+                                    ID: 0,
+                                    ItemID: so.sdmId,
+                                    ModCode: "WITH",
+                                    ModgroupID: pl.modGroupId,
+                                    Name: so.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Weight: 0,
+                                  }, {
+                                    ID: 0,
+                                    ItemID: so.sdmId,
+                                    ModCode: "WITH",
+                                    ModgroupID: pl.modGroupId,
+                                    Name: so.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Weight: 0,
+                                  })
+                                }
+                              }
                             }
                           }
                         })
@@ -362,7 +266,6 @@ export const start = (async () => {
                         if (bpo.ingredient == 0) {
                           bpo.productLinks.forEach(pl => {
                             if (pl.selected == 1) {
-                              console.log("11111111111111111")
                               if (pl.dependentSteps && pl.dependentSteps.length > 0) {
                                 let obj = {
                                   DealID: 0,
@@ -403,43 +306,88 @@ export const start = (async () => {
                                        * @description (isModifier == 1) :  "name": "Mighty Twist"
                                        */
                                       if (plbpo.productLinks && plbpo.productLinks.length > 0) {
-                                        console.log("444444444444444444444444444")
                                         plbpo.productLinks.forEach(dspl => {
-                                          console.log("55555555555555555555555555555", dspl)
                                           if (dspl.subOptions && dspl.subOptions.length > 0) {
                                             dspl.subOptions.forEach(dsplso => {
                                               if (dsplso.sdmId && dsplso.selected == 1) {
                                                 if (dsplso.title == "None") {
-                                                  console.log("none")
                                                 }
                                                 else if (dsplso.title == "Regular") {
-                                                  obj.Entries.CEntry.push({
-                                                    ID: 0,
-                                                    ItemID: dsplso.sdmId,
-                                                    ModCode: "WITH",
-                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                    Name: dspl.name,
-                                                    OrdrMode: "OM_SAVED",
-                                                    Weight: 0,
-                                                  })
+                                                  if (dsplso.sdmId) {
+                                                    if (dsplso.is_sdm_default != undefined) {
+                                                      if (dsplso.is_sdm_default == 0)
+                                                        obj.Entries.CEntry.push({
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        })
+                                                    } else {
+                                                      obj.Entries.CEntry.push({
+                                                        ID: 0,
+                                                        ItemID: dsplso.sdmId,
+                                                        ModCode: "WITH",
+                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                        Name: dspl.name,
+                                                        OrdrMode: "OM_SAVED",
+                                                        Weight: 0,
+                                                      })
+                                                    }
+                                                  }
                                                 } else if (dsplso.title == "Extra") {
-                                                  obj.Entries.CEntry.push({
-                                                    ID: 0,
-                                                    ItemID: dsplso.sdmId,
-                                                    ModCode: "WITH",
-                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                    Name: dspl.name,
-                                                    OrdrMode: "OM_SAVED",
-                                                    Weight: 0,
-                                                  }, {
-                                                    ID: 0,
-                                                    ItemID: dsplso.sdmId,
-                                                    ModCode: "WITH",
-                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                    Name: dspl.name,
-                                                    OrdrMode: "OM_SAVED",
-                                                    Weight: 0,
-                                                  })
+                                                  if (dsplso.sdmId) {
+                                                    if (dsplso.is_sdm_default != undefined) {
+                                                      if (dsplso.is_sdm_default == 0)
+                                                        obj.Entries.CEntry.push({
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        }, {
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        })
+                                                      else
+                                                        obj.Entries.CEntry.push({
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        })
+                                                    } else {
+                                                      obj.Entries.CEntry.push({
+                                                        ID: 0,
+                                                        ItemID: dsplso.sdmId,
+                                                        ModCode: "WITH",
+                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                        Name: dspl.name,
+                                                        OrdrMode: "OM_SAVED",
+                                                        Weight: 0,
+                                                      }, {
+                                                        ID: 0,
+                                                        ItemID: dsplso.sdmId,
+                                                        ModCode: "WITH",
+                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                        Name: dspl.name,
+                                                        OrdrMode: "OM_SAVED",
+                                                        Weight: 0,
+                                                      })
+                                                    }
+                                                  }
                                                 }
                                               }
                                             })
@@ -451,8 +399,6 @@ export const start = (async () => {
                                 })
                                 Entries.CEntry.push(obj)
                               } else {
-                                console.log("777777777777777777777777777777")
-
                                 let count = pl.selectionQty
                                 while (count != 0) {
                                   Entries.CEntry.push({
@@ -496,33 +442,81 @@ export const start = (async () => {
                                   if (bpoplso.sdmId && bpoplso.selected == 1) {
                                     if (bpoplso.title == "None") { }
                                     else if (bpoplso.title == "Regular") {
-                                      lastProductAddedInCentry.Entries.CEntry.push({
-                                        ID: 0,
-                                        ItemID: bpoplso.sdmId,
-                                        ModCode: "WITH",
-                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                        Name: bpopl.name,
-                                        OrdrMode: "OM_SAVED",
-                                        Weight: 0,
-                                      })
+                                      if (bpoplso.sdmId) {
+                                        if (bpoplso.is_sdm_default != undefined) {
+                                          if (bpoplso.is_sdm_default == 0)
+                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            })
+                                        } else {
+                                          lastProductAddedInCentry.Entries.CEntry.push({
+                                            ID: 0,
+                                            ItemID: bpoplso.sdmId,
+                                            ModCode: "WITH",
+                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                            Name: bpopl.name,
+                                            OrdrMode: "OM_SAVED",
+                                            Weight: 0,
+                                          })
+                                        }
+                                      }
                                     } else if (bpoplso.title == "Extra") {
-                                      lastProductAddedInCentry.Entries.CEntry.push({
-                                        ID: 0,
-                                        ItemID: bpoplso.sdmId,
-                                        ModCode: "WITH",
-                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                        Name: bpopl.name,
-                                        OrdrMode: "OM_SAVED",
-                                        Weight: 0,
-                                      }, {
-                                        ID: 0,
-                                        ItemID: bpoplso.sdmId,
-                                        ModCode: "WITH",
-                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                        Name: bpopl.name,
-                                        OrdrMode: "OM_SAVED",
-                                        Weight: 0,
-                                      })
+                                      if (bpoplso.sdmId) {
+                                        if (bpoplso.is_sdm_default != undefined) {
+                                          if (bpoplso.is_sdm_default == 0)
+                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            }, {
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            })
+                                          else
+                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            })
+                                        } else {
+                                          lastProductAddedInCentry.Entries.CEntry.push({
+                                            ID: 0,
+                                            ItemID: bpoplso.sdmId,
+                                            ModCode: "WITH",
+                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                            Name: bpopl.name,
+                                            OrdrMode: "OM_SAVED",
+                                            Weight: 0,
+                                          }, {
+                                            ID: 0,
+                                            ItemID: bpoplso.sdmId,
+                                            ModCode: "WITH",
+                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                            Name: bpopl.name,
+                                            OrdrMode: "OM_SAVED",
+                                            Weight: 0,
+                                          })
+                                        }
+                                      }
                                     }
                                   }
                                 })
