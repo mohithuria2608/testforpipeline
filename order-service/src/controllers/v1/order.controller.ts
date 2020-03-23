@@ -184,7 +184,7 @@ export class OrderController {
                 order = initiatePayment.order
                 ENTITY.OrderE.syncOrder(order)
                 if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
-                    ENTITY.CartE.resetCart(auth.id)
+                    ENTITY.CartE.resetCart(getCurrentCart.cartId)
                 return {
                     orderPlaced: {
                         noonpayRedirectionUrl: initiatePayment.noonpayRedirectionUrl,
