@@ -1518,7 +1518,7 @@ export class OrderClass extends BaseEntity {
         try {
             let nextPage
             let limit = 21
-            let skip = (limit * (payload.page - 1));
+            let skip = (limit * (parseInt(payload.page.toString()) - 1));
             let pipeline = [];
 
             let match = { userId: auth.id }
@@ -1561,7 +1561,7 @@ export class OrderClass extends BaseEntity {
                 }
             ])
             let getOrderHistory: IOrderRequest.IOrderData[] = await this.aggregateMdb(pipeline, { lean: true })
-            nextPage = (getOrderHistory.length == limit) ? (payload.page + 1) : -1
+            nextPage = (getOrderHistory.length == limit) ? (parseInt(payload.page.toString()) + 1) : -1
             return {
                 list: getOrderHistory,
                 nextPage: nextPage,

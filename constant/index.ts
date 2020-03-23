@@ -2047,7 +2047,7 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
     }
     if (config.cms) {
         if (config.cms.user_config) {
-            if (config.as.user_config.max_try) {
+            if (config.cms.user_config.max_try) {
                 if (config.cms.user_config.max_try.create)
                     DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE = config.cms.user_config.max_try.create
                 if (config.cms.user_config.max_try.update)
@@ -2118,7 +2118,98 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
         }
     }
     if (config.sdm) {
-
+        if (config.sdm.user_config) {
+            if (config.sdm.user_config.max_try) {
+                if (config.sdm.user_config.max_try.create)
+                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE = config.sdm.user_config.max_try.create
+                if (config.sdm.user_config.max_try.update)
+                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE = config.sdm.user_config.max_try.update
+                if (config.sdm.user_config.max_try.get)
+                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.GET = config.sdm.user_config.max_try.get
+                if (config.sdm.user_config.max_try.sync)
+                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.SYNC = config.sdm.user_config.max_try.sync
+                if (config.sdm.user_config.max_try.reset)
+                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.RESET = config.sdm.user_config.max_try.reset
+            }
+        }
+        if (config.sdm.address_config) {
+            if (config.sdm.address_config.max_try) {
+                if (config.sdm.address_config.max_try.create)
+                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE = config.sdm.address_config.max_try.create
+                if (config.sdm.address_config.max_try.update)
+                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE = config.sdm.address_config.max_try.update
+                if (config.sdm.address_config.max_try.get)
+                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.GET = config.sdm.address_config.max_try.get
+                if (config.sdm.address_config.max_try.sync)
+                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.SYNC = config.sdm.address_config.max_try.sync
+                if (config.sdm.address_config.max_try.reset)
+                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.RESET = config.sdm.address_config.max_try.reset
+            }
+        }
+        if (config.sdm.menu_config) {
+            if (config.sdm.menu_config.max_try) {
+                if (config.sdm.menu_config.max_try.create)
+                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE = config.sdm.menu_config.max_try.create
+                if (config.sdm.menu_config.max_try.update)
+                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE = config.sdm.menu_config.max_try.update
+                if (config.sdm.menu_config.max_try.get)
+                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.GET = config.sdm.menu_config.max_try.get
+                if (config.sdm.menu_config.max_try.sync)
+                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.SYNC = config.sdm.menu_config.max_try.sync
+                if (config.sdm.menu_config.max_try.reset)
+                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.RESET = config.sdm.menu_config.max_try.reset
+            }
+        }
+        if (config.sdm.promotion_config) {
+            if (config.sdm.promotion_config.max_try) {
+                if (config.sdm.promotion_config.max_try.create)
+                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.CREATE = config.sdm.promotion_config.max_try.create
+                if (config.sdm.promotion_config.max_try.update)
+                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.UPDATE = config.sdm.promotion_config.max_try.update
+                if (config.sdm.promotion_config.max_try.get)
+                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.GET = config.sdm.promotion_config.max_try.get
+                if (config.sdm.promotion_config.max_try.sync)
+                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.SYNC = config.sdm.promotion_config.max_try.sync
+                if (config.sdm.promotion_config.max_try.reset)
+                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.RESET = config.sdm.promotion_config.max_try.reset
+            }
+        }
+        if (config.sdm.hidden_config) {
+            if (config.sdm.hidden_config.max_try) {
+                if (config.sdm.hidden_config.max_try.create)
+                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.CREATE = config.sdm.hidden_config.max_try.create
+                if (config.sdm.hidden_config.max_try.update)
+                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.UPDATE = config.sdm.hidden_config.max_try.update
+                if (config.sdm.hidden_config.max_try.get)
+                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.GET = config.sdm.hidden_config.max_try.get
+                if (config.sdm.hidden_config.max_try.sync)
+                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.SYNC = config.sdm.hidden_config.max_try.sync
+                if (config.sdm.hidden_config.max_try.reset)
+                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.RESET = config.sdm.hidden_config.max_try.reset
+            }
+        }
+        if (config.sdm.order_config) {
+            if (config.sdm.order_config.max_try) {
+                if (config.sdm.order_config.max_try.create)
+                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE = config.sdm.order_config.max_try.create
+                if (config.sdm.order_config.max_try.update)
+                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.UPDATE = config.sdm.order_config.max_try.update
+                if (config.sdm.order_config.max_try.get)
+                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.GET = config.sdm.order_config.max_try.get
+                if (config.sdm.order_config.max_try.sync)
+                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.SYNC = config.sdm.order_config.max_try.sync
+                if (config.sdm.order_config.max_try.reset)
+                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.RESET = config.sdm.order_config.max_try.reset
+            }
+            // ORDER: {
+            //     INTERVAL: {
+            //         GET: 5000,
+            //         GET_ONCE: 0,
+            //         GET_MAX: 65000,
+            //         NEXT_PING: 30,
+            //     }
+            // }
+        }
     }
     global.configSync.kafka = date;
     return {}
