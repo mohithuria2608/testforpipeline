@@ -40,7 +40,7 @@ export default (router: Router) => {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
                     phnNo: Joi.string().min(9).max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
                     email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
-                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
+                    name: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
                     isGuest: Joi.number().valid(0, 1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
                     addressId: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.type)).required(),
                     addressType: Joi.string().valid(

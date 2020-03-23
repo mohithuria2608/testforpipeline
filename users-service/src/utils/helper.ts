@@ -434,8 +434,10 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 
 export let nameConstructor = function (name) {
     let splitName = name.split(" ")
+    console.log("naemRes============>", splitName.length)
+
     let firstName = splitName.length == 1 ? splitName[0] : splitName.slice(0, splitName.length - 1).join(" ")
-    let lastName = splitName.length > 1 ? splitName[splitName.length - 1] : ","
+    let lastName = splitName.length > 1 ? splitName[splitName.length - 1] : "."
     return { firstName, lastName }
 }
 
