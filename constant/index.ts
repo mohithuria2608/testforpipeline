@@ -1944,6 +1944,7 @@ interface IMaxRetry {
     sync: number,
     reset: number
 }
+
 export const kafkaConfigSync = function (config: IKafka, date: number) {
     if (config.as) {
         if (config.as.user_config) {
@@ -2049,15 +2050,15 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
         if (config.cms.user_config) {
             if (config.cms.user_config.max_try) {
                 if (config.cms.user_config.max_try.create)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE = config.cms.user_config.max_try.create
+                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE = config.cms.user_config.max_try.create
                 if (config.cms.user_config.max_try.update)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE = config.cms.user_config.max_try.update
+                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE = config.cms.user_config.max_try.update
                 if (config.cms.user_config.max_try.get)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.GET = config.cms.user_config.max_try.get
+                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.GET = config.cms.user_config.max_try.get
                 if (config.cms.user_config.max_try.sync)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC = config.cms.user_config.max_try.sync
+                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.SYNC = config.cms.user_config.max_try.sync
                 if (config.cms.user_config.max_try.reset)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.RESET = config.cms.user_config.max_try.reset
+                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.RESET = config.cms.user_config.max_try.reset
             }
         }
         if (config.cms.address_config) {
