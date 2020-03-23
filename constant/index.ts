@@ -566,11 +566,11 @@ export const DATABASE = {
                     },
                     {
                         name: "DISCOUNT",
-                        value: "Discount ar"
+                        value: "خدمة التوصيل"
                     },
                     {
                         name: "TAX",
-                        value: "VAT ar"
+                        value: "ضريبة مضافة"
                     },
                     {
                         name: "SHIPPING",
