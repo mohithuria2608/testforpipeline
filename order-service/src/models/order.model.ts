@@ -37,6 +37,7 @@ export interface Iorder extends Document {
         name: string,
         status: string
     },
+    env: number
 };
 
 interface IAddress {
@@ -224,6 +225,7 @@ const orderSchema = new Schema({
     isFreeItem: { type: Boolean },
     amountValidationPassed: { type: Boolean, default: false, required: true },
     orderConfirmationNotified: { type: Boolean, default: false, required: true },
+    env: { type: Number, required: true },
 });
 
 export let order = model<Iorder>('order', orderSchema)

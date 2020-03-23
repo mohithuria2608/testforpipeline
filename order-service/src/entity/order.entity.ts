@@ -1,4 +1,5 @@
 'use strict';
+import * as config from "config"
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog, getFrequency } from '../utils'
@@ -793,7 +794,8 @@ export class OrderClass extends BaseEntity {
                 changePaymentMode: 0,
                 paymentMethodAddedOnSdm: 0,
                 amountValidationPassed: false,
-                orderConfirmationNotified: false
+                orderConfirmationNotified: false,
+                env: Constant.SERVER.ENV[config.get("env")]
             }
             if (cartData.promo && cartData.promo.couponId) {
                 orderData['promo'] = cartData.promo

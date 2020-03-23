@@ -28,9 +28,6 @@ export const start = (async () => {
   try {
     const port = config.get("server.order.port")
     const server = app.listen(port)
-    // let a: IMenuGrpcRequest.IFetchMenuRes
-
-    // await ENTITY.CartE.createCartOnCMS({}, { cmsUserRef: 12 })
 
     let stock: any = [
     ]
@@ -631,7 +628,7 @@ export const start = (async () => {
     // await SDM.OrderSDME.cancelOrder({
     //   language: "en",
     //   sdmOrderRef: 48698051,
-    //   voidReason: 5,
+    //   voidReason: 1,
     //   validationRemarks: "TEST ORDER",// Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
     // })
   } catch (error) {
