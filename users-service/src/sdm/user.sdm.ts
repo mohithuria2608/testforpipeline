@@ -17,10 +17,8 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
-            console.log("deCryptData(payload.password)1,", payload.password)
-
-            console.log("deCryptData(payload.password),", deCryptData(payload.password))
             let naemRes = nameConstructor(payload.name)
+            console.log("naemRes============>", naemRes)
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
@@ -69,7 +67,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "UpdateCustomer",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language:  (payload.headers && payload.headers.language)? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    language: (payload.headers && payload.headers.language) ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_CORPID: payload.sdmCorpRef,
@@ -113,7 +111,7 @@ export class UserSDMEntity extends BaseSDM {
                 name: "UpdateCustomerToken",
                 req: {
                     licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language:  (payload.headers && payload.headers.language) ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    language: (payload.headers && payload.headers.language) ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
                     customerID: payload.sdmUserRef,
                     token: payload.socialKey
                 }
