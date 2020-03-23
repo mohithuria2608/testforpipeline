@@ -500,8 +500,14 @@ export const DATABASE = {
         },
 
         ORDER: {
-            PICKUP: "PICKUP",
-            DELIVERY: "DELIVERY"
+            DELIVERY: {
+                AS: "DELIVERY",
+                SDM: 1
+            },
+            PICKUP: {
+                AS: "PICKUP",
+                SDM: 2,
+            }
         },
 
         DEEPLINK_REDIRECTION: {

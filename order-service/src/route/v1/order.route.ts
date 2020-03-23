@@ -17,7 +17,7 @@ export default (router: Router) => {
                 headers: JOI.COMMON_HEADERS,
                 body: {
                     addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
-                    orderType: Joi.string().required().valid(Constant.DATABASE.TYPE.ORDER.DELIVERY, Constant.DATABASE.TYPE.ORDER.PICKUP).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    orderType: Joi.string().required().valid(Constant.DATABASE.TYPE.ORDER.DELIVERY.AS, Constant.DATABASE.TYPE.ORDER.PICKUP.AS).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     paymentMethodId: Joi.number().required().valid(Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
                     curMenuId: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),

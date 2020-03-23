@@ -112,7 +112,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             if (!paymentRetry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-                if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
                     addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                 let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
 

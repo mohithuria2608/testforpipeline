@@ -20,7 +20,7 @@ export class CartController {
      * */
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
-            payload.orderType = payload.orderType ? payload.orderType : Constant.DATABASE.TYPE.ORDER.DELIVERY
+            payload.orderType = payload.orderType ? payload.orderType : Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
             let storeOnline = true
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })

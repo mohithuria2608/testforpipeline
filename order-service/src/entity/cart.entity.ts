@@ -171,7 +171,7 @@ export class CartClass extends BaseEntity {
         status: Joi.string().valid(
             Constant.DATABASE.STATUS.ORDER.CART.AS,
         ).required(),
-        orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP, Constant.DATABASE.TYPE.ORDER.DELIVERY),
+        orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP.AS, Constant.DATABASE.TYPE.ORDER.DELIVERY.AS),
         updatedAt: Joi.number().required(),
         createdAt: Joi.number().required(),
         address: Joi.object().keys({

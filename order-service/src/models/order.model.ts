@@ -81,8 +81,8 @@ const orderSchema = new Schema({
     cartUnique: { type: String },
     orderType: {
         type: String, required: true, enum: [
-            Constant.DATABASE.TYPE.ORDER.PICKUP,
-            Constant.DATABASE.TYPE.ORDER.DELIVERY
+            Constant.DATABASE.TYPE.ORDER.PICKUP.AS,
+            Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
         ]
     },
     cmsCartRef: { type: Number, required: true },

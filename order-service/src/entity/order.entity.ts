@@ -507,7 +507,7 @@ export class OrderClass extends BaseEntity {
                 // DueTime: "",
                 Entries: this.createCEntries(payload.items),
                 OrderID: 0,
-                OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY) ? 1 : 2,
+                OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM : Constant.DATABASE.TYPE.ORDER.PICKUP.SDM,
                 OrderType: 0,
                 ProvinceID: 7,
                 StoreID: payload.address.storeId,
@@ -579,7 +579,7 @@ export class OrderClass extends BaseEntity {
         userData: IUserRequest.IUserData) {
         try {
             let amount = cartData.amount
-            if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP) {
+            if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS) {
                 amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
             }
             let items = cartData.items
@@ -864,7 +864,7 @@ export class OrderClass extends BaseEntity {
             let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
             let amountToCompare = totalAmount[0].amount
             consolelog(process.cwd(), `amountValidationHandler 1 : totalAmount : ${totalAmount[0].amount}, sdmTotal : ${sdmOrder.Total}`, "", true)
-            if (sdmOrder.OrderMode == "1") {
+            if (parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) {
                 /**
                  *@description Delivery order
                  */
@@ -875,8 +875,8 @@ export class OrderClass extends BaseEntity {
             consolelog(process.cwd(), `amountValidationHandler 3 : amountToCompare : ${amountToCompare}, sdmOrder.Total : ${sdmOrder.Total}`, "", true)
 
             if (
-                ((sdmOrder.OrderMode == "1") && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
-                ((sdmOrder.OrderMode == "2") && (amountToCompare == parseFloat(sdmOrder.Total)))
+                ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
+                ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.PICKUP.SDM) && (amountToCompare == parseFloat(sdmOrder.Total)))
             ) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
             } else {
@@ -1113,7 +1113,7 @@ export class OrderClass extends BaseEntity {
                 }
                 if (!order.orderConfirmationNotified) {
                     // send notification(sms + email) on order confirmation
-                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY;
+                    let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY.AS;
                     let userData = await userService.fetchUser({ userId: order.userId });
                     notificationService.sendNotification({
                         toSendMsg: true,
@@ -1153,7 +1153,7 @@ export class OrderClass extends BaseEntity {
                         order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS,
                         sdm_order_id: order.sdmOrderRef
                     })
-                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
                         recheck = false
                 }
             }
