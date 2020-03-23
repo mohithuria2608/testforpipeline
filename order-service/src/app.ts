@@ -148,15 +148,15 @@ export const start = (async () => {
                           }
                         })
                         if (plDefaultSdm && !checkSendNone) {
-                          // obj.Entries.CEntry.push({
-                          //   ID: 0,
-                          //   ItemID: dsplso.sdmId,
-                          //   ModCode: "WITH",
-                          //   ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                          //   Name: dspl.name,
-                          //   OrdrMode: "OM_SAVED",
-                          //   Weight: 0,
-                          // })
+                          obj.Entries.CEntry.push({
+                            ID: 0,
+                            ItemID: pl.subOptions[0].sdmId,
+                            ModCode: "NONE",
+                            ModgroupID: pl.subOptions[0].modGroupId ? pl.subOptions[0].modGroupId : -1,
+                            Name: pl.name,
+                            OrdrMode: "OM_SAVED",
+                            Weight: 0,
+                          })
                         }
                       }
                     }
@@ -386,15 +386,15 @@ export const start = (async () => {
                                               }
                                             })
                                             if (plDefaultSdm && !checkSendNone) {
-                                              // obj.Entries.CEntry.push({
-                                              //   ID: 0,
-                                              //   ItemID: dsplso.sdmId,
-                                              //   ModCode: "WITH",
-                                              //   ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                              //   Name: dspl.name,
-                                              //   OrdrMode: "OM_SAVED",
-                                              //   Weight: 0,
-                                              // })
+                                              obj.Entries.CEntry.push({
+                                                ID: 0,
+                                                ItemID: dspl.subOptions[0].sdmId,
+                                                ModCode: "NONE",
+                                                ModgroupID: dspl.subOptions[0].modGroupId ? dspl.subOptions[0].modGroupId : -1,
+                                                Name: dspl.name,
+                                                OrdrMode: "OM_SAVED",
+                                                Weight: 0,
+                                              })
                                             }
                                           }
                                         })
@@ -516,15 +516,15 @@ export const start = (async () => {
                                   }
                                 })
                                 if (plDefaultSdm && !checkSendNone) {
-                                  // obj.Entries.CEntry.push({
-                                  //   ID: 0,
-                                  //   ItemID: dsplso.sdmId,
-                                  //   ModCode: "WITH",
-                                  //   ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                  //   Name: dspl.name,
-                                  //   OrdrMode: "OM_SAVED",
-                                  //   Weight: 0,
-                                  // })
+                                  lastProductAddedInCentry.Entries.CEntry.push({
+                                    ID: 0,
+                                    ItemID: bpopl.subOptions[0].sdmId,
+                                    ModCode: "NONE",
+                                    ModgroupID: bpopl.subOptions[0].modGroupId ? bpopl.subOptions[0].modGroupId : -1,
+                                    Name: bpopl.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Weight: 0,
+                                  })
                                 }
                               }
                             })
@@ -611,7 +611,7 @@ export const start = (async () => {
         "ConceptID": "3",
         "CountryID": 1,
         "CustomerID": "7695133",//"7694266",//"",// 
-        "DeliveryChargeID": 279,
+        "DeliveryChargeID": Constant.SERVER.DELIVERY_CHARGE_ID,
         "DistrictID": -1,
         "Entries": Entries,
         "OrderID": 0,
@@ -627,11 +627,12 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 48694474, language: "En" })
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 48698051, language: "En" })
     // await SDM.OrderSDME.cancelOrder({
-    //   sdmOrderRef: 39838313,
-    //   voidReason: 1,
-    //   validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+    //   language: "en",
+    //   sdmOrderRef: 48698051,
+    //   voidReason: 5,
+    //   validationRemarks: "TEST ORDER",// Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
     // })
   } catch (error) {
     console.error(error)

@@ -131,7 +131,8 @@ export const SERVER = {
     DEFAULT_CCODE: "+971",
     CHUNK_SIZE_USER_MIGRATION: 50000,
     PAYMENT_SUCCESS_FALLBACK: "payment/success",
-    PAYMENT_FAILURE_FALLBACK: "payment/failure"
+    PAYMENT_FAILURE_FALLBACK: "payment/failure",
+    DELIVERY_CHARGE_ID: 279
 };
 
 export const DATABASE = {
