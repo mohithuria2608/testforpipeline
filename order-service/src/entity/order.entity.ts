@@ -606,7 +606,7 @@ export class OrderClass extends BaseEntity {
                 CountryID: 1,//payload.store.countryId
                 CustomerID: payload.sdmUserRef,
                 // DateOfTrans: "",
-                DeliveryChargeID: 279,
+                DeliveryChargeID: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? 279 : undefined,
                 DistrictID: -1,
                 // DueTime: "",
                 Entries: this.createCEntries(payload.items),
@@ -698,7 +698,7 @@ export class OrderClass extends BaseEntity {
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
                 cmsOrderRef: cmsOrderRef,
-                userId: cartData.userId,
+                userId: userData.id,
                 sdmUserRef: userData.sdmUserRef,
                 country: headers.country,
                 language: headers.language,
