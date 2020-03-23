@@ -57,7 +57,7 @@ export class UserCMSEntity extends BaseCMS {
                 formObj['email'] = payload.email
             if (payload.fullPhnNo)
                 formObj['phone'] = payload.fullPhnNo
-            if (payload.name.trim() && payload.name.trim() != "") {
+            if (payload.name && payload.name != "") {
                 let naemRes = nameConstructor(payload.name.trim())
                 formObj['firstName'] = naemRes.firstName
                 formObj['lastName'] = naemRes.lastName

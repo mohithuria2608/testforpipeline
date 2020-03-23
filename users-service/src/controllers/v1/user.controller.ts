@@ -308,7 +308,7 @@ export class UserController {
                 let userUpdate: IUserRequest.IUserData = {
                     id: userObj[0].id
                 }
-                if (payload.name.trim() && payload.name.trim() != "")
+                if (payload.name && payload.name != "")
                     userUpdate['name'] = payload.name.trim()
                 if (userObj[0].phnVerified == 1) {
                     console.log("step 2=====================>")
@@ -405,7 +405,7 @@ export class UserController {
                             console.log("step 10=====================>")
                             createUser['phnVerified'] = 1
                             createUser['cmsUserRef'] = parseInt(cmsUserByEmail.customerId)
-                            createUser['name'] = (payload.name.trim() && payload.name.trim() != "") ? payload.name.trim() : cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
+                            createUser['name'] = (payload.name && payload.name != "") ? payload.name.trim() : cmsUserByEmail.firstName + " " + cmsUserByEmail.lastName
                             createUser['fullPhnNo'] = cmsUserByEmail.phone
                             createUser['cCode'] = cmsUserByEmail.phone.slice(0, 4)
                             createUser['phnNo'] = cmsUserByEmail.phone.slice(4)
@@ -819,7 +819,7 @@ export class UserController {
             let dataToUpdate = {
                 id: userData.id
             }
-            if (payload.name.trim() && payload.name.trim() != "")
+            if (payload.name && payload.name != "")
                 dataToUpdate['name'] = payload.name.trim()
             let user = await ENTITY.UserE.buildUser(dataToUpdate)
             return formatUserData(user, headers, auth.isGuest)
