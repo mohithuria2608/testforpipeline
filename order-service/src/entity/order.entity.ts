@@ -101,16 +101,6 @@ export class OrderClass extends BaseEntity {
                                                                                 OrdrMode: "OM_SAVED",
                                                                                 Weight: 0,
                                                                             })
-                                                                    } else {
-                                                                        obj.Entries.CEntry.push({
-                                                                            ID: 0,
-                                                                            ItemID: so.sdmId,
-                                                                            ModCode: "WITH",
-                                                                            ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
-                                                                            Name: so.name,
-                                                                            OrdrMode: "OM_SAVED",
-                                                                            Weight: 0,
-                                                                        })
                                                                     }
                                                                 }
                                                             } else if (so.title == "Extra") {
@@ -146,14 +136,6 @@ export class OrderClass extends BaseEntity {
                                                                             })
                                                                     } else {
                                                                         obj.Entries.CEntry.push({
-                                                                            ID: 0,
-                                                                            ItemID: so.sdmId,
-                                                                            ModCode: "WITH",
-                                                                            ModgroupID: pl.modGroupId,
-                                                                            Name: so.name,
-                                                                            OrdrMode: "OM_SAVED",
-                                                                            Weight: 0,
-                                                                        }, {
                                                                             ID: 0,
                                                                             ItemID: so.sdmId,
                                                                             ModCode: "WITH",
@@ -335,16 +317,6 @@ export class OrderClass extends BaseEntity {
                                                                                                                         OrdrMode: "OM_SAVED",
                                                                                                                         Weight: 0,
                                                                                                                     })
-                                                                                                            } else {
-                                                                                                                obj.Entries.CEntry.push({
-                                                                                                                    ID: 0,
-                                                                                                                    ItemID: dsplso.sdmId,
-                                                                                                                    ModCode: "WITH",
-                                                                                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                    Name: dspl.name,
-                                                                                                                    OrdrMode: "OM_SAVED",
-                                                                                                                    Weight: 0,
-                                                                                                                })
                                                                                                             }
                                                                                                         }
                                                                                                     } else if (dsplso.title == "Extra") {
@@ -380,14 +352,6 @@ export class OrderClass extends BaseEntity {
                                                                                                                     })
                                                                                                             } else {
                                                                                                                 obj.Entries.CEntry.push({
-                                                                                                                    ID: 0,
-                                                                                                                    ItemID: dsplso.sdmId,
-                                                                                                                    ModCode: "WITH",
-                                                                                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                    Name: dspl.name,
-                                                                                                                    OrdrMode: "OM_SAVED",
-                                                                                                                    Weight: 0,
-                                                                                                                }, {
                                                                                                                     ID: 0,
                                                                                                                     ItemID: dsplso.sdmId,
                                                                                                                     ModCode: "WITH",
@@ -464,16 +428,6 @@ export class OrderClass extends BaseEntity {
                                                                                                 OrdrMode: "OM_SAVED",
                                                                                                 Weight: 0,
                                                                                             })
-                                                                                    } else {
-                                                                                        lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                            ID: 0,
-                                                                                            ItemID: bpoplso.sdmId,
-                                                                                            ModCode: "WITH",
-                                                                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                            Name: bpopl.name,
-                                                                                            OrdrMode: "OM_SAVED",
-                                                                                            Weight: 0,
-                                                                                        })
                                                                                     }
                                                                                 }
                                                                             } else if (bpoplso.title == "Extra") {
@@ -509,14 +463,6 @@ export class OrderClass extends BaseEntity {
                                                                                             })
                                                                                     } else {
                                                                                         lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                            ID: 0,
-                                                                                            ItemID: bpoplso.sdmId,
-                                                                                            ModCode: "WITH",
-                                                                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                            Name: bpopl.name,
-                                                                                            OrdrMode: "OM_SAVED",
-                                                                                            Weight: 0,
-                                                                                        }, {
                                                                                             ID: 0,
                                                                                             ItemID: bpoplso.sdmId,
                                                                                             ModCode: "WITH",
