@@ -684,9 +684,18 @@ export const DATABASE = {
             },
             CART: {
                 AS: "CART",
+                MONGO: "",
                 CMS: "",
+                SDM: [],
+                FREQ: {
+                    GET: 0,
+                    GET_ONCE: 0,
+                    GET_MAX: 0,
+                    NEXT_PING: 0,
+                }
             },
             PENDING: {
+                AS: "",
                 MONGO: "PENDING",
                 CMS: "pending",
                 SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
@@ -698,6 +707,7 @@ export const DATABASE = {
                 }
             },
             CONFIRMED: {
+                AS: "",
                 MONGO: "CONFIRMED",
                 CMS: "processing",
                 SDM: [2], //@description : in kitchen
@@ -709,6 +719,7 @@ export const DATABASE = {
                 }
             },
             BEING_PREPARED: {
+                AS: "",
                 MONGO: "BEING_PREPARED",
                 CMS: "being_prepared",
                 SDM: [2], //@description : in kitchen
@@ -720,6 +731,7 @@ export const DATABASE = {
                 }
             },
             READY: {
+                AS: "",
                 MONGO: "READY",
                 CMS: "ready",
                 SDM: [8], //@description : ready
@@ -731,6 +743,7 @@ export const DATABASE = {
                 }
             },
             ON_THE_WAY: {
+                AS: "",
                 MONGO: "ON_THE_WAY",
                 CMS: "shipped",
                 SDM: [16, 32], //@description : assigned/shipped
@@ -742,6 +755,7 @@ export const DATABASE = {
                 }
             },
             DELIVERED: {
+                AS: "",
                 MONGO: "DELIVERED",
                 CMS: "complete",
                 SDM: [64, 128, 2048], //@description : delivered
@@ -753,6 +767,7 @@ export const DATABASE = {
                 }
             },
             CLOSED: {
+                AS: "",
                 MONGO: "",
                 CMS: "closed",
                 SDM: [],
@@ -764,6 +779,7 @@ export const DATABASE = {
                 }
             },
             CANCELED: {
+                AS: "",
                 MONGO: "CANCELED",
                 CMS: "canceled",
                 SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
@@ -775,6 +791,7 @@ export const DATABASE = {
                 }
             },
             FAILURE: {
+                AS: "",
                 MONGO: "FAILURE",
                 CMS: "failed",
                 SDM: [-2], //@description : for development purpose, not sdm actual value
@@ -1928,8 +1945,411 @@ interface IMaxRetry {
     reset: number
 }
 export const kafkaConfigSync = function (config: IKafka, date: number) {
+    if (config.as) {
+        if (config.as.user_config) {
+            if (config.as.user_config.max_try) {
+                if (config.as.user_config.max_try.create)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE = config.as.user_config.max_try.create
+                if (config.as.user_config.max_try.update)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE = config.as.user_config.max_try.update
+                if (config.as.user_config.max_try.get)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.GET = config.as.user_config.max_try.get
+                if (config.as.user_config.max_try.sync)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC = config.as.user_config.max_try.sync
+                if (config.as.user_config.max_try.reset)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.RESET = config.as.user_config.max_try.reset
+            }
+        }
+        if (config.as.address_config) {
+            if (config.as.address_config.max_try) {
+                if (config.as.address_config.max_try.create)
+                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE = config.as.address_config.max_try.create
+                if (config.as.address_config.max_try.update)
+                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE = config.as.address_config.max_try.update
+                if (config.as.address_config.max_try.get)
+                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.GET = config.as.address_config.max_try.get
+                if (config.as.address_config.max_try.sync)
+                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.SYNC = config.as.address_config.max_try.sync
+                if (config.as.address_config.max_try.reset)
+                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.RESET = config.as.address_config.max_try.reset
+            }
+        }
+        if (config.as.menu_config) {
+            if (config.as.menu_config.max_try) {
+                if (config.as.menu_config.max_try.create)
+                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE = config.as.menu_config.max_try.create
+                if (config.as.menu_config.max_try.update)
+                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE = config.as.menu_config.max_try.update
+                if (config.as.menu_config.max_try.get)
+                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.GET = config.as.menu_config.max_try.get
+                if (config.as.menu_config.max_try.sync)
+                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.SYNC = config.as.menu_config.max_try.sync
+                if (config.as.menu_config.max_try.reset)
+                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.RESET = config.as.menu_config.max_try.reset
+            }
+        }
+        if (config.as.promotion_config) {
+            if (config.as.promotion_config.max_try) {
+                if (config.as.promotion_config.max_try.create)
+                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE = config.as.promotion_config.max_try.create
+                if (config.as.promotion_config.max_try.update)
+                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE = config.as.promotion_config.max_try.update
+                if (config.as.promotion_config.max_try.get)
+                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.GET = config.as.promotion_config.max_try.get
+                if (config.as.promotion_config.max_try.sync)
+                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.SYNC = config.as.promotion_config.max_try.sync
+                if (config.as.promotion_config.max_try.reset)
+                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.RESET = config.as.promotion_config.max_try.reset
+            }
+        }
+        if (config.as.hidden_config) {
+            if (config.as.hidden_config.max_try) {
+                if (config.as.hidden_config.max_try.create)
+                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE = config.as.hidden_config.max_try.create
+                if (config.as.hidden_config.max_try.update)
+                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE = config.as.hidden_config.max_try.update
+                if (config.as.hidden_config.max_try.get)
+                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.GET = config.as.hidden_config.max_try.get
+                if (config.as.hidden_config.max_try.sync)
+                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.SYNC = config.as.hidden_config.max_try.sync
+                if (config.as.hidden_config.max_try.reset)
+                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.RESET = config.as.hidden_config.max_try.reset
+            }
+        }
+        if (config.as.configuration_config) {
+            if (config.as.configuration_config.max_try) {
+                if (config.as.configuration_config.max_try.create)
+                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE = config.as.configuration_config.max_try.create
+                if (config.as.configuration_config.max_try.update)
+                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE = config.as.configuration_config.max_try.update
+                if (config.as.configuration_config.max_try.get)
+                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.GET = config.as.configuration_config.max_try.get
+                if (config.as.configuration_config.max_try.sync)
+                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.SYNC = config.as.configuration_config.max_try.sync
+                if (config.as.configuration_config.max_try.reset)
+                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.RESET = config.as.configuration_config.max_try.reset
+            }
+        }
+        if (config.as.app_config) {
+            if (config.as.app_config.max_try) {
+                if (config.as.app_config.max_try.create)
+                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE = config.as.app_config.max_try.create
+                if (config.as.app_config.max_try.update)
+                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE = config.as.app_config.max_try.update
+                if (config.as.app_config.max_try.get)
+                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.GET = config.as.app_config.max_try.get
+                if (config.as.app_config.max_try.sync)
+                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.SYNC = config.as.app_config.max_try.sync
+                if (config.as.app_config.max_try.reset)
+                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET = config.as.app_config.max_try.reset
+            }
+        }
+    }
+    if (config.cms) {
+        if (config.cms.user_config) {
+            if (config.as.user_config.max_try) {
+                if (config.cms.user_config.max_try.create)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE = config.cms.user_config.max_try.create
+                if (config.cms.user_config.max_try.update)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE = config.cms.user_config.max_try.update
+                if (config.cms.user_config.max_try.get)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.GET = config.cms.user_config.max_try.get
+                if (config.cms.user_config.max_try.sync)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC = config.cms.user_config.max_try.sync
+                if (config.cms.user_config.max_try.reset)
+                    DATABASE.KAFKA.AS.USER.MAX_RETRY.RESET = config.cms.user_config.max_try.reset
+            }
+        }
+        if (config.cms.address_config) {
+            if (config.cms.address_config.max_try) {
+                if (config.cms.address_config.max_try.create)
+                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE = config.cms.address_config.max_try.create
+                if (config.cms.address_config.max_try.update)
+                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE = config.cms.address_config.max_try.update
+                if (config.cms.address_config.max_try.get)
+                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.GET = config.cms.address_config.max_try.get
+                if (config.cms.address_config.max_try.sync)
+                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.SYNC = config.cms.address_config.max_try.sync
+                if (config.cms.address_config.max_try.reset)
+                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.RESET = config.cms.address_config.max_try.reset
+            }
+        }
+        if (config.cms.menu_config) {
+            if (config.cms.menu_config.max_try) {
+                if (config.cms.menu_config.max_try.create)
+                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE = config.cms.menu_config.max_try.create
+                if (config.cms.menu_config.max_try.update)
+                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE = config.cms.menu_config.max_try.update
+                if (config.cms.menu_config.max_try.get)
+                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.GET = config.cms.menu_config.max_try.get
+                if (config.cms.menu_config.max_try.sync)
+                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.SYNC = config.cms.menu_config.max_try.sync
+                if (config.cms.menu_config.max_try.reset)
+                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.RESET = config.cms.menu_config.max_try.reset
+            }
+        }
+        if (config.cms.promotion_config) {
+            if (config.cms.promotion_config.max_try) {
+                if (config.cms.promotion_config.max_try.create)
+                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.CREATE = config.cms.promotion_config.max_try.create
+                if (config.cms.promotion_config.max_try.update)
+                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.UPDATE = config.cms.promotion_config.max_try.update
+                if (config.cms.promotion_config.max_try.get)
+                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.GET = config.cms.promotion_config.max_try.get
+                if (config.cms.promotion_config.max_try.sync)
+                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.SYNC = config.cms.promotion_config.max_try.sync
+                if (config.cms.promotion_config.max_try.reset)
+                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.RESET = config.cms.promotion_config.max_try.reset
+            }
+        }
+        if (config.cms.hidden_config) {
+            if (config.cms.hidden_config.max_try) {
+                if (config.cms.hidden_config.max_try.create)
+                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.CREATE = config.cms.hidden_config.max_try.create
+                if (config.cms.hidden_config.max_try.update)
+                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.UPDATE = config.cms.hidden_config.max_try.update
+                if (config.cms.hidden_config.max_try.get)
+                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.GET = config.cms.hidden_config.max_try.get
+                if (config.cms.hidden_config.max_try.sync)
+                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.SYNC = config.cms.hidden_config.max_try.sync
+                if (config.cms.hidden_config.max_try.reset)
+                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.RESET = config.cms.hidden_config.max_try.reset
+            }
+        }
+    }
+    if (config.sdm) {
 
+    }
     global.configSync.kafka = date;
-    console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
+    return {}
+}
+
+interface IOrderStatus {
+    cart_config: IStatus,
+    pending_config: IStatus,
+    confirmed_config: IStatus,
+    prepared_config: IStatus,
+    ready_config: IStatus,
+    ontheway_config: IStatus,
+    delivered_config: IStatus,
+    closed_config: IStatus,
+    cancelled_config: IStatus,
+    failure_config: IStatus
+}
+interface IStatus {
+    as: string,
+    mongo: string,
+    cms: string,
+    sdm: number[],
+    freq: {
+        get: number,
+        geet_once: number,
+        get_max: number,
+        next_ping: number
+    }
+}
+
+export const orderStatusConfigSync = function (config: IOrderStatus, date: number) {
+    if (config.cart_config) {
+        if (config.cart_config.as)
+            DATABASE.STATUS.ORDER.CART.AS = config.cart_config.as
+        if (config.cart_config.mongo)
+            DATABASE.STATUS.ORDER.CART.MONGO = config.cart_config.mongo
+        if (config.cart_config.cms)
+            DATABASE.STATUS.ORDER.CART.CMS = config.cart_config.cms
+        if (config.cart_config.sdm)
+            DATABASE.STATUS.ORDER.CART.SDM = config.cart_config.sdm
+        if (config.cart_config.freq) {
+            if (config.cart_config.freq.get)
+                DATABASE.STATUS.ORDER.CART.FREQ.GET = config.cart_config.freq.get
+            if (config.cart_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.CART.FREQ.GET_ONCE = config.cart_config.freq.geet_once
+            if (config.cart_config.freq.get_max)
+                DATABASE.STATUS.ORDER.CART.FREQ.GET_MAX = config.cart_config.freq.get_max
+            if (config.cart_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.CART.FREQ.NEXT_PING = config.cart_config.freq.next_ping
+        }
+    }
+    if (config.pending_config) {
+        if (config.pending_config.as)
+            DATABASE.STATUS.ORDER.PENDING.AS = config.pending_config.as
+        if (config.pending_config.mongo)
+            DATABASE.STATUS.ORDER.PENDING.MONGO = config.pending_config.mongo
+        if (config.pending_config.cms)
+            DATABASE.STATUS.ORDER.PENDING.CMS = config.pending_config.cms
+        if (config.pending_config.sdm)
+            DATABASE.STATUS.ORDER.PENDING.SDM = config.pending_config.sdm
+        if (config.pending_config.freq) {
+            if (config.pending_config.freq.get)
+                DATABASE.STATUS.ORDER.PENDING.FREQ.GET = config.pending_config.freq.get
+            if (config.pending_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.PENDING.FREQ.GET_ONCE = config.pending_config.freq.geet_once
+            if (config.pending_config.freq.get_max)
+                DATABASE.STATUS.ORDER.PENDING.FREQ.GET_MAX = config.pending_config.freq.get_max
+            if (config.pending_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.PENDING.FREQ.NEXT_PING = config.pending_config.freq.next_ping
+        }
+    }
+    if (config.confirmed_config) {
+        if (config.confirmed_config.as)
+            DATABASE.STATUS.ORDER.CONFIRMED.AS = config.confirmed_config.as
+        if (config.confirmed_config.mongo)
+            DATABASE.STATUS.ORDER.CONFIRMED.MONGO = config.confirmed_config.mongo
+        if (config.confirmed_config.cms)
+            DATABASE.STATUS.ORDER.CONFIRMED.CMS = config.confirmed_config.cms
+        if (config.confirmed_config.sdm)
+            DATABASE.STATUS.ORDER.CONFIRMED.SDM = config.confirmed_config.sdm
+        if (config.confirmed_config.freq) {
+            if (config.confirmed_config.freq.get)
+                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.GET = config.confirmed_config.freq.get
+            if (config.confirmed_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.GET_ONCE = config.confirmed_config.freq.geet_once
+            if (config.confirmed_config.freq.get_max)
+                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.GET_MAX = config.confirmed_config.freq.get_max
+            if (config.confirmed_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.NEXT_PING = config.confirmed_config.freq.next_ping
+        }
+    }
+    if (config.prepared_config) {
+        if (config.prepared_config.as)
+            DATABASE.STATUS.ORDER.BEING_PREPARED.AS = config.prepared_config.as
+        if (config.prepared_config.mongo)
+            DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO = config.prepared_config.mongo
+        if (config.prepared_config.cms)
+            DATABASE.STATUS.ORDER.BEING_PREPARED.CMS = config.prepared_config.cms
+        if (config.prepared_config.sdm)
+            DATABASE.STATUS.ORDER.BEING_PREPARED.SDM = config.prepared_config.sdm
+        if (config.prepared_config.freq) {
+            if (config.prepared_config.freq.get)
+                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.GET = config.prepared_config.freq.get
+            if (config.prepared_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.GET_ONCE = config.prepared_config.freq.geet_once
+            if (config.prepared_config.freq.get_max)
+                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.GET_MAX = config.prepared_config.freq.get_max
+            if (config.prepared_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.NEXT_PING = config.prepared_config.freq.next_ping
+        }
+    }
+    if (config.ready_config) {
+        if (config.ready_config.as)
+            DATABASE.STATUS.ORDER.READY.AS = config.ready_config.as
+        if (config.ready_config.mongo)
+            DATABASE.STATUS.ORDER.READY.MONGO = config.ready_config.mongo
+        if (config.ready_config.cms)
+            DATABASE.STATUS.ORDER.READY.CMS = config.ready_config.cms
+        if (config.ready_config.sdm)
+            DATABASE.STATUS.ORDER.READY.SDM = config.ready_config.sdm
+        if (config.ready_config.freq) {
+            if (config.ready_config.freq.get)
+                DATABASE.STATUS.ORDER.READY.FREQ.GET = config.ready_config.freq.get
+            if (config.ready_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.READY.FREQ.GET_ONCE = config.ready_config.freq.geet_once
+            if (config.ready_config.freq.get_max)
+                DATABASE.STATUS.ORDER.READY.FREQ.GET_MAX = config.ready_config.freq.get_max
+            if (config.ready_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.READY.FREQ.NEXT_PING = config.ready_config.freq.next_ping
+        }
+    }
+    if (config.ontheway_config) {
+        if (config.ontheway_config.as)
+            DATABASE.STATUS.ORDER.ON_THE_WAY.AS = config.ontheway_config.as
+        if (config.ontheway_config.mongo)
+            DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO = config.ontheway_config.mongo
+        if (config.ontheway_config.cms)
+            DATABASE.STATUS.ORDER.ON_THE_WAY.CMS = config.ontheway_config.cms
+        if (config.ontheway_config.sdm)
+            DATABASE.STATUS.ORDER.ON_THE_WAY.SDM = config.ontheway_config.sdm
+        if (config.ontheway_config.freq) {
+            if (config.ontheway_config.freq.get)
+                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.GET = config.ontheway_config.freq.get
+            if (config.ontheway_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.GET_ONCE = config.ontheway_config.freq.geet_once
+            if (config.ontheway_config.freq.get_max)
+                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.GET_MAX = config.ontheway_config.freq.get_max
+            if (config.ontheway_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.NEXT_PING = config.ontheway_config.freq.next_ping
+        }
+    }
+    if (config.delivered_config) {
+        if (config.delivered_config.as)
+            DATABASE.STATUS.ORDER.DELIVERED.AS = config.delivered_config.as
+        if (config.delivered_config.mongo)
+            DATABASE.STATUS.ORDER.DELIVERED.MONGO = config.delivered_config.mongo
+        if (config.delivered_config.cms)
+            DATABASE.STATUS.ORDER.DELIVERED.CMS = config.delivered_config.cms
+        if (config.delivered_config.sdm)
+            DATABASE.STATUS.ORDER.DELIVERED.SDM = config.delivered_config.sdm
+        if (config.delivered_config.freq) {
+            if (config.delivered_config.freq.get)
+                DATABASE.STATUS.ORDER.DELIVERED.FREQ.GET = config.delivered_config.freq.get
+            if (config.delivered_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.DELIVERED.FREQ.GET_ONCE = config.delivered_config.freq.geet_once
+            if (config.delivered_config.freq.get_max)
+                DATABASE.STATUS.ORDER.DELIVERED.FREQ.GET_MAX = config.delivered_config.freq.get_max
+            if (config.delivered_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.DELIVERED.FREQ.NEXT_PING = config.delivered_config.freq.next_ping
+        }
+    }
+    if (config.closed_config) {
+        if (config.closed_config.as)
+            DATABASE.STATUS.ORDER.CLOSED.AS = config.closed_config.as
+        if (config.closed_config.mongo)
+            DATABASE.STATUS.ORDER.CLOSED.MONGO = config.closed_config.mongo
+        if (config.closed_config.cms)
+            DATABASE.STATUS.ORDER.CLOSED.CMS = config.closed_config.cms
+        if (config.closed_config.sdm)
+            DATABASE.STATUS.ORDER.CLOSED.SDM = config.closed_config.sdm
+        if (config.closed_config.freq) {
+            if (config.closed_config.freq.get)
+                DATABASE.STATUS.ORDER.CLOSED.FREQ.GET = config.closed_config.freq.get
+            if (config.closed_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.CLOSED.FREQ.GET_ONCE = config.closed_config.freq.geet_once
+            if (config.closed_config.freq.get_max)
+                DATABASE.STATUS.ORDER.CLOSED.FREQ.GET_MAX = config.closed_config.freq.get_max
+            if (config.closed_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.CLOSED.FREQ.NEXT_PING = config.closed_config.freq.next_ping
+        }
+    }
+    if (config.cancelled_config) {
+        if (config.cancelled_config.as)
+            DATABASE.STATUS.ORDER.CANCELED.AS = config.cancelled_config.as
+        if (config.cancelled_config.mongo)
+            DATABASE.STATUS.ORDER.CANCELED.MONGO = config.cancelled_config.mongo
+        if (config.cancelled_config.cms)
+            DATABASE.STATUS.ORDER.CANCELED.CMS = config.cancelled_config.cms
+        if (config.cancelled_config.sdm)
+            DATABASE.STATUS.ORDER.CANCELED.SDM = config.cancelled_config.sdm
+        if (config.cancelled_config.freq) {
+            if (config.cancelled_config.freq.get)
+                DATABASE.STATUS.ORDER.CANCELED.FREQ.GET = config.cancelled_config.freq.get
+            if (config.cancelled_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.CANCELED.FREQ.GET_ONCE = config.cancelled_config.freq.geet_once
+            if (config.cancelled_config.freq.get_max)
+                DATABASE.STATUS.ORDER.CANCELED.FREQ.GET_MAX = config.cancelled_config.freq.get_max
+            if (config.cancelled_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.CANCELED.FREQ.NEXT_PING = config.cancelled_config.freq.next_ping
+        }
+    }
+    if (config.failure_config) {
+        if (config.failure_config.as)
+            DATABASE.STATUS.ORDER.FAILURE.AS = config.failure_config.as
+        if (config.failure_config.mongo)
+            DATABASE.STATUS.ORDER.FAILURE.MONGO = config.failure_config.mongo
+        if (config.failure_config.cms)
+            DATABASE.STATUS.ORDER.FAILURE.CMS = config.failure_config.cms
+        if (config.failure_config.sdm)
+            DATABASE.STATUS.ORDER.FAILURE.SDM = config.failure_config.sdm
+        if (config.failure_config.freq) {
+            if (config.failure_config.freq.get)
+                DATABASE.STATUS.ORDER.FAILURE.FREQ.GET = config.failure_config.freq.get
+            if (config.failure_config.freq.geet_once)
+                DATABASE.STATUS.ORDER.FAILURE.FREQ.GET_ONCE = config.failure_config.freq.geet_once
+            if (config.failure_config.freq.get_max)
+                DATABASE.STATUS.ORDER.FAILURE.FREQ.GET_MAX = config.failure_config.freq.get_max
+            if (config.failure_config.freq.next_ping)
+                DATABASE.STATUS.ORDER.FAILURE.FREQ.NEXT_PING = config.failure_config.freq.next_ping
+        }
+    }
+    global.configSync.orderStatus = date;
     return {}
 }
