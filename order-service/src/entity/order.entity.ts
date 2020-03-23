@@ -84,14 +84,19 @@ export class OrderClass extends BaseEntity {
                                     if (bpo && bpo.productLinks.length > 0) {
                                         bpo.productLinks.forEach(pl => {
                                             if (pl.selected == 1) {
+                                                let defaultSdm = false
                                                 if (pl.subOptions && pl.subOptions.length > 0) {
+                                                    pl.subOptions.forEach(dsplso => {
+                                                        if (dsplso.is_sdm_default == 1)
+                                                            defaultSdm = true
+                                                    })
                                                     pl.subOptions.forEach(so => {
                                                         if (so.selected == 1) {
                                                             if (so.title == "None") { }
                                                             else if (so.title == "Regular") {
                                                                 if (so.sdmId) {
                                                                     if (so.is_sdm_default != undefined) {
-                                                                        if (so.is_sdm_default == 0)
+                                                                        if (!defaultSdm)
                                                                             obj.Entries.CEntry.push({
                                                                                 ID: 0,
                                                                                 ItemID: so.sdmId,
@@ -106,16 +111,8 @@ export class OrderClass extends BaseEntity {
                                                             } else if (so.title == "Extra") {
                                                                 if (so.sdmId) {
                                                                     if (so.is_sdm_default != undefined) {
-                                                                        if (so.is_sdm_default == 0)
+                                                                        if (defaultSdm)
                                                                             obj.Entries.CEntry.push({
-                                                                                ID: 0,
-                                                                                ItemID: so.sdmId,
-                                                                                ModCode: "WITH",
-                                                                                ModgroupID: pl.modGroupId,
-                                                                                Name: so.name,
-                                                                                OrdrMode: "OM_SAVED",
-                                                                                Weight: 0,
-                                                                            }, {
                                                                                 ID: 0,
                                                                                 ItemID: so.sdmId,
                                                                                 ModCode: "WITH",
@@ -126,6 +123,14 @@ export class OrderClass extends BaseEntity {
                                                                             })
                                                                         else
                                                                             obj.Entries.CEntry.push({
+                                                                                ID: 0,
+                                                                                ItemID: so.sdmId,
+                                                                                ModCode: "WITH",
+                                                                                ModgroupID: pl.modGroupId,
+                                                                                Name: so.name,
+                                                                                OrdrMode: "OM_SAVED",
+                                                                                Weight: 0,
+                                                                            }, {
                                                                                 ID: 0,
                                                                                 ItemID: so.sdmId,
                                                                                 ModCode: "WITH",
@@ -299,7 +304,12 @@ export class OrderClass extends BaseEntity {
                                                                                  */
                                                                                 if (plbpo.productLinks && plbpo.productLinks.length > 0) {
                                                                                     plbpo.productLinks.forEach(dspl => {
+                                                                                        let defaultSdm = false
                                                                                         if (dspl.subOptions && dspl.subOptions.length > 0) {
+                                                                                            dspl.subOptions.forEach(dsplso => {
+                                                                                                if (dsplso.is_sdm_default == 1)
+                                                                                                    defaultSdm = true
+                                                                                            })
                                                                                             dspl.subOptions.forEach(dsplso => {
                                                                                                 if (dsplso.sdmId && dsplso.selected == 1) {
                                                                                                     if (dsplso.title == "None") {
@@ -307,7 +317,7 @@ export class OrderClass extends BaseEntity {
                                                                                                     else if (dsplso.title == "Regular") {
                                                                                                         if (dsplso.sdmId) {
                                                                                                             if (dsplso.is_sdm_default != undefined) {
-                                                                                                                if (dsplso.is_sdm_default == 0)
+                                                                                                                if (!defaultSdm)
                                                                                                                     obj.Entries.CEntry.push({
                                                                                                                         ID: 0,
                                                                                                                         ItemID: dsplso.sdmId,
@@ -322,16 +332,8 @@ export class OrderClass extends BaseEntity {
                                                                                                     } else if (dsplso.title == "Extra") {
                                                                                                         if (dsplso.sdmId) {
                                                                                                             if (dsplso.is_sdm_default != undefined) {
-                                                                                                                if (dsplso.is_sdm_default == 0)
+                                                                                                                if (defaultSdm)
                                                                                                                     obj.Entries.CEntry.push({
-                                                                                                                        ID: 0,
-                                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                                        ModCode: "WITH",
-                                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                        Name: dspl.name,
-                                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                                        Weight: 0,
-                                                                                                                    }, {
                                                                                                                         ID: 0,
                                                                                                                         ItemID: dsplso.sdmId,
                                                                                                                         ModCode: "WITH",
@@ -342,6 +344,14 @@ export class OrderClass extends BaseEntity {
                                                                                                                     })
                                                                                                                 else
                                                                                                                     obj.Entries.CEntry.push({
+                                                                                                                        ID: 0,
+                                                                                                                        ItemID: dsplso.sdmId,
+                                                                                                                        ModCode: "WITH",
+                                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                                        Name: dspl.name,
+                                                                                                                        OrdrMode: "OM_SAVED",
+                                                                                                                        Weight: 0,
+                                                                                                                    }, {
                                                                                                                         ID: 0,
                                                                                                                         ItemID: dsplso.sdmId,
                                                                                                                         ModCode: "WITH",
@@ -412,13 +422,18 @@ export class OrderClass extends BaseEntity {
                                                         if (bpo.productLinks && bpo.productLinks.length > 0) {
                                                             bpo.productLinks.forEach(bpopl => {
                                                                 if (bpopl.subOptions && bpopl.subOptions.length > 0) {
+                                                                    let defaultSdm = false
+                                                                    bpopl.subOptions.forEach(dsplso => {
+                                                                        if (dsplso.is_sdm_default == 1)
+                                                                            defaultSdm = true
+                                                                    })
                                                                     bpopl.subOptions.forEach(bpoplso => {
                                                                         if (bpoplso.sdmId && bpoplso.selected == 1) {
                                                                             if (bpoplso.title == "None") { }
                                                                             else if (bpoplso.title == "Regular") {
                                                                                 if (bpoplso.sdmId) {
                                                                                     if (bpoplso.is_sdm_default != undefined) {
-                                                                                        if (bpoplso.is_sdm_default == 0)
+                                                                                        if (!defaultSdm)
                                                                                             lastProductAddedInCentry.Entries.CEntry.push({
                                                                                                 ID: 0,
                                                                                                 ItemID: bpoplso.sdmId,
@@ -433,16 +448,8 @@ export class OrderClass extends BaseEntity {
                                                                             } else if (bpoplso.title == "Extra") {
                                                                                 if (bpoplso.sdmId) {
                                                                                     if (bpoplso.is_sdm_default != undefined) {
-                                                                                        if (bpoplso.is_sdm_default == 0)
+                                                                                        if (defaultSdm)
                                                                                             lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                                ID: 0,
-                                                                                                ItemID: bpoplso.sdmId,
-                                                                                                ModCode: "WITH",
-                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                                Name: bpopl.name,
-                                                                                                OrdrMode: "OM_SAVED",
-                                                                                                Weight: 0,
-                                                                                            }, {
                                                                                                 ID: 0,
                                                                                                 ItemID: bpoplso.sdmId,
                                                                                                 ModCode: "WITH",
@@ -460,7 +467,16 @@ export class OrderClass extends BaseEntity {
                                                                                                 Name: bpopl.name,
                                                                                                 OrdrMode: "OM_SAVED",
                                                                                                 Weight: 0,
+                                                                                            }, {
+                                                                                                ID: 0,
+                                                                                                ItemID: bpoplso.sdmId,
+                                                                                                ModCode: "WITH",
+                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                                                                                Name: bpopl.name,
+                                                                                                OrdrMode: "OM_SAVED",
+                                                                                                Weight: 0,
                                                                                             })
+
                                                                                     } else {
                                                                                         lastProductAddedInCentry.Entries.CEntry.push({
                                                                                             ID: 0,
