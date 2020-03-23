@@ -3,6 +3,8 @@
 * ms not responding state handling
 * health check on ms
 * sdm replicate dynamic
+* api gateway
+* aerospike configuration optimization
 
 
 ----> UAT stores without geofence => 30, 44, 47, 58, 92
