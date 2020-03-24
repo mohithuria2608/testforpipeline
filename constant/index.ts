@@ -1677,9 +1677,9 @@ export const STATUS_MSG = {
                 "statusCode": 216,
                 "httpCode": 200,
                 "type": "USER_EMAIL_ALREADY_EXIST",
-                "message": "This email is already is use",
+                "message": "This email is already registered. Please use another email Id or login through the registered phone no./email Id",
                 "message_Ar": "رقم الهاتف الذي أدخلته مستخدم من قبل",
-                "message_En": "This email is already is use"
+                "message_En": "This email is already registered. Please use another email Id or login through the registered phone no./email Id"
             }
         }
     },
