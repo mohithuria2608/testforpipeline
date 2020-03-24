@@ -823,7 +823,7 @@ export class OrderClass extends BaseEntity {
             }
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
-                    dataToUpdateOrder['payment.name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
+                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
                     if (paymentRetry)
                         dataToUpdateOrder['transLogs'] = []
                     order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
@@ -836,7 +836,7 @@ export class OrderClass extends BaseEntity {
                     break;
                 }
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
-                    dataToUpdateOrder['payment.name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
+                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
                     let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                         orderId: order.cmsOrderRef.toString(),
                         amount: totalAmount,
