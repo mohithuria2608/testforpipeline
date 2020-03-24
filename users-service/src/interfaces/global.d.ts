@@ -9,6 +9,8 @@ declare namespace NodeJS {
             general?: number,
             kafka?: number,
             orderStatus?: number,
+            payment?: number,
+            shipment?: number
         }
     }
 }

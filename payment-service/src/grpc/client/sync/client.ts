@@ -23,17 +23,14 @@ export class SyncService {
         console.log(process.cwd(), 'GRPC connection established sync-service', config.get("grpc.sync.client"), true)
     }
 
-    async fetchConfig(payload: ISyncGrpcRequest.IFetchConfig): Promise<ISyncGrpcRequest.IConfig> {
+    async fetchConfig(payload: ISyncGrpcRequest.IFetchConfig): Promise<ISyncGrpcRequest.IConfig[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 await syncServiceValidator.fetchConfigValidator(payload)
                 this.syncClient.fetchConfig(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully fetched config", JSON.stringify(res), false)
-                        if (JSON.parse(res.config).length > 0) {
-                            resolve(JSON.parse(res.config[0]))
-                        } else
-                            resolve(JSON.parse(res.config))
+                        resolve(JSON.parse(res.config))
                     } else {
                         consolelog(process.cwd(), "Error in fetched config", JSON.stringify(error), false)
                         reject(error)

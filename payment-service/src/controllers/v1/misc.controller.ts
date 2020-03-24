@@ -19,11 +19,16 @@ export class MiscController {
                 consolelog(process.cwd(), "Pinged by  :::", set, true)
                 switch (set) {
                     case Constant.SET_NAME.CONFIG: {
-                        let config
                         if (argv.store_code) {
-                            config = await syncService.fetchConfig({ store_code: argv.store_code })
+                            let config: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ store_code: argv.store_code, type: Constant.DATABASE.TYPE.CONFIG.PAYMENT })
+                            if (config && config.length > 0) {
+                                if (config[0].payment) {
+                                    if (config[0].createdAt != global.configSync.payment)
+                                        Constant.paymentConfigSync(config[0].store_code, config[0].payment, config[0].createdAt)
+                                }
+                            }
                         } else if (argv.type) {
-                            config = await syncService.fetchConfig({ type: argv.type })
+                            let config: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ type: argv.type })
                             if (config && config.length > 0) {
                                 switch (argv.type) {
                                     case Constant.DATABASE.TYPE.CONFIG.GENERAL: {

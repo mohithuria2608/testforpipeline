@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, configIdGenerator } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService } from '../../grpc/client'
 import { configuration } from '../../configuration';
-import { type } from 'os';
+import { config } from 'winston';
 
 export class CmsConfigController {
 
@@ -72,7 +72,6 @@ export class CmsConfigController {
                                         },
                                         createdAt: new Date().getTime()
                                     }
-                                    console.log("dataToSave=========>", dataToSave)
                                     configToSync.push(dataToSave)
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
@@ -82,7 +81,7 @@ export class CmsConfigController {
                                     }
                                     await Aerospike.put(putArg)
                                 }
-                                await configuration.init();
+                                await configuration.init({ type: data.type, bootstrap: false });
                                 let pingServices: IKafkaGrpcRequest.IKafkaBody = {
                                     set: Constant.SET_NAME.PING_SERVICE,
                                     as: {
@@ -121,6 +120,114 @@ export class CmsConfigController {
                     }
                     break;
                 }
+                case Constant.DATABASE.TYPE.CONFIG.KAFKA: {
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
+                        if (payload.as.reset) {
+                            if (data.data && data.data.length > 0) {
+                                let configToSync = []
+                                for (const config of data.data) {
+                                    let dataToSave: IConfigRequest.IConfig = {
+                                        id: data.type,
+                                        type: data.type,
+                                        kafka: {},
+                                        createdAt: new Date().getTime()
+                                    }
+                                    configToSync.push(dataToSave)
+                                    let putArg: IAerospike.Put = {
+                                        bins: dataToSave,
+                                        set: ENTITY.ConfigE.set,
+                                        key: dataToSave['id'],
+                                        createOrReplace: true,
+                                    }
+                                    await Aerospike.put(putArg)
+                                }
+                                await configuration.init({ type: data.type, bootstrap: false });
+                                let pingServices: IKafkaGrpcRequest.IKafkaBody = {
+                                    set: Constant.SET_NAME.PING_SERVICE,
+                                    as: {
+                                        create: true,
+                                        argv: JSON.stringify({
+                                            set: Constant.SET_NAME.CONFIG,
+                                            service: [
+                                                Constant.MICROSERVICE.AUTH,
+                                                Constant.MICROSERVICE.USER,
+                                                Constant.MICROSERVICE.MENU,
+                                                Constant.MICROSERVICE.ORDER,
+                                                Constant.MICROSERVICE.PROMOTION,
+                                                Constant.MICROSERVICE.PAYMENT,
+                                                Constant.MICROSERVICE.KAFKA,
+                                                Constant.MICROSERVICE.DEEPLINK,
+                                                Constant.MICROSERVICE.HOME,
+                                                Constant.MICROSERVICE.LOG,
+                                                Constant.MICROSERVICE.NOTIFICATION,
+                                                Constant.MICROSERVICE.UPLOAD,
+                                                Constant.MICROSERVICE.LOCATION,
+                                            ],
+                                            type: Constant.DATABASE.TYPE.CONFIG.KAFKA,
+                                            data: configToSync
+                                        })
+                                    },
+                                    inQ: true
+                                }
+                                kafkaService.kafkaSync(pingServices)
+                            } else {
+                                return Promise.reject("Unhandled error while saving kafka configs from cms")
+                            }
+                        }
+                        else if (payload.as.get) {
+                            await ENTITY.ConfigE.getConfig(data)
+                        }
+                    }
+                    break;
+                }
+                case Constant.DATABASE.TYPE.CONFIG.ORDER_STATUS: {
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
+                        if (payload.as.reset) {
+                            if (data.data && data.data.length > 0) {
+                                let configToSync = []
+                                for (const config of data.data) {
+                                    let dataToSave: IConfigRequest.IConfig = {
+                                        id: data.type,
+                                        type: data.type,
+                                        orderStatus: {},
+                                        createdAt: new Date().getTime()
+                                    }
+                                    configToSync.push(dataToSave)
+                                    let putArg: IAerospike.Put = {
+                                        bins: dataToSave,
+                                        set: ENTITY.ConfigE.set,
+                                        key: dataToSave['id'],
+                                        createOrReplace: true,
+                                    }
+                                    await Aerospike.put(putArg)
+                                }
+                                await configuration.init({ type: data.type, bootstrap: false });
+                                let pingServices: IKafkaGrpcRequest.IKafkaBody = {
+                                    set: Constant.SET_NAME.PING_SERVICE,
+                                    as: {
+                                        create: true,
+                                        argv: JSON.stringify({
+                                            set: Constant.SET_NAME.CONFIG,
+                                            service: [
+                                                Constant.MICROSERVICE.ORDER
+                                            ],
+                                            type: Constant.DATABASE.TYPE.CONFIG.ORDER_STATUS,
+                                            data: configToSync
+                                        })
+                                    },
+                                    inQ: true
+                                }
+                                kafkaService.kafkaSync(pingServices)
+                            } else {
+                                return Promise.reject("Unhandled error while saving order status configs from cms")
+                            }
+                        }
+                        else if (payload.as.get) {
+                            await ENTITY.ConfigE.getConfig(data)
+                        }
+                    }
+                    break;
+                }
                 case Constant.DATABASE.TYPE.CONFIG.PAYMENT: {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
@@ -128,19 +235,19 @@ export class CmsConfigController {
                                 let store_code = data.data['store_code']
                                 data.data.map(async config => {
                                     console.log("config", config)
-                                    let dataToSave = {
-                                        id: data.type + "_" + config.store_code,
-                                        type: data.type
+                                    let dataToSave: IConfigRequest.IConfig = {
+                                        id: configIdGenerator(data.type, config.store_code),
+                                        type: data.type,
+                                        store_code: config.store_code,
+                                        store_id: config.store_id,
+                                        payment: {
+                                            channel: config.channel,
+                                            decimal: config.decimal,
+                                            noon_pay_config: config.noon_pay_config,
+                                            cod_info: config.cod_info
+                                        },
+                                        createdAt: new Date().getTime()
                                     }
-                                    if (config.store_code)
-                                        dataToSave['store_code'] = config.store_code
-                                    if (config.store_id)
-                                        dataToSave['store_id'] = config.store_id
-                                    if (config.noon_pay_config)
-                                        dataToSave['noon_pay_config'] = config.noon_pay_config
-                                    if (config.cod_info)
-                                        dataToSave['cod_info'] = config.cod_info
-
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
@@ -149,6 +256,7 @@ export class CmsConfigController {
                                     }
                                     await Aerospike.put(putArg)
                                 })
+                                await configuration.init({ store_code: data.data[0].store_code, bootstrap: false });
                                 let pingServices: IKafkaGrpcRequest.IKafkaBody = {
                                     set: Constant.SET_NAME.PING_SERVICE,
                                     as: {
@@ -182,18 +290,17 @@ export class CmsConfigController {
                             if (data.data && data.data.length > 0) {
                                 let store_code = data.data['store_code']
                                 data.data.map(async config => {
-                                    let dataToSave = {
-                                        id: data.type + "_" + config.store_code,
+                                    let dataToSave: IConfigRequest.IConfig = {
+                                        id: configIdGenerator(data.type, config.store_code),
                                         type: data.type,
+                                        store_code: config.store_code,
+                                        store_id: config.store_id,
+                                        shipment: {
+                                            free_shipping: config.free_shipping,
+                                            flat_rate: config.flat_rate,
+                                        },
+                                        createdAt: new Date().getTime()
                                     }
-                                    if (config.store_code)
-                                        dataToSave['store_code'] = config.store_code
-                                    if (config.store_id)
-                                        dataToSave['store_id'] = config.store_id
-                                    if (config.free_shipping)
-                                        dataToSave['free_shipping'] = config.free_shipping
-                                    if (config.flat_rate)
-                                        dataToSave['flat_rate'] = config.flat_rate
                                     let putArg: IAerospike.Put = {
                                         bins: dataToSave,
                                         set: ENTITY.ConfigE.set,
@@ -202,6 +309,7 @@ export class CmsConfigController {
                                     }
                                     await Aerospike.put(putArg)
                                 })
+                                await configuration.init({ store_code: data.data[0].store_code, bootstrap: false });
                                 let pingServices: IKafkaGrpcRequest.IKafkaBody = {
                                     set: Constant.SET_NAME.PING_SERVICE,
                                     as: {
@@ -235,8 +343,9 @@ export class CmsConfigController {
                                 let store_code = data.data['store_code']
                                 data.data.map(async config => {
                                     let dataToSave = {
-                                        id: data.type + "_" + config.store_code,
+                                        id: configIdGenerator(data.type, config.store_code),
                                         type: data.type,
+                                        createdAt: new Date().getTime()
                                     }
                                     if (config.country_code)
                                         dataToSave['country_code'] = config.country_code

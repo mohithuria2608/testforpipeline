@@ -5,12 +5,13 @@ declare namespace IConfigRequest {
         id: string,
 
         store_code?: string,
+        store_id?: string,
 
         general?: IGeneral
         kafka?: IKafka
         orderStatus?: IOrderStatus
         payment?: IPayment
-        shipping?: IShipping
+        shipment?: IShipment
         countrySpecific?: ICountrySpecific,
 
         createdAt: number
@@ -44,7 +45,7 @@ declare namespace IConfigRequest {
         addr_show_time: number,
     }
     interface IKafka {
-        sdm: {
+        sdm?: {
             user_config: {
                 max_try: IMaxRetry
             },
@@ -64,7 +65,7 @@ declare namespace IConfigRequest {
                 max_try: IMaxRetry
             }
         },
-        cms: {
+        cms?: {
             user_config: {
                 max_try: IMaxRetry
             },
@@ -84,7 +85,7 @@ declare namespace IConfigRequest {
                 max_try: IMaxRetry
             }
         },
-        as: {
+        as?: {
             user_config: {
                 max_try: IMaxRetry
             },
@@ -118,16 +119,16 @@ declare namespace IConfigRequest {
     }
 
     interface IOrderStatus {
-        cart_config: IStatus,
-        pending_config: IStatus,
-        confirmed_config: IStatus,
-        prepared_config: IStatus,
-        ready_config: IStatus,
-        ontheway_config: IStatus,
-        delivered_config: IStatus,
-        closed_config: IStatus,
-        cancelled_config: IStatus,
-        failure_config: IStatus
+        cart_config?: IStatus,
+        pending_config?: IStatus,
+        confirmed_config?: IStatus,
+        prepared_config?: IStatus,
+        ready_config?: IStatus,
+        ontheway_config?: IStatus,
+        delivered_config?: IStatus,
+        closed_config?: IStatus,
+        cancelled_config?: IStatus,
+        failure_config?: IStatus
     }
     interface IStatus {
         as: string,
@@ -143,7 +144,8 @@ declare namespace IConfigRequest {
     }
 
     interface IPayment {
-        store_id: string,
+        channel: string,
+        decimal: number,
         noon_pay_config: {
             brand_code: string,
             country_code: string,
@@ -162,7 +164,7 @@ declare namespace IConfigRequest {
         }
     }
 
-    interface IShipping {
+    interface IShipment {
         free_shipping: {
             status: string,
             title: string,

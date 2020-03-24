@@ -111,8 +111,11 @@ declare namespace ICmsConfigRequest {
         cancelled_config: IStatus,
         failure_config: IStatus
 
-        store_code?: string,
+        store_code: string,
         store_id: string,
+
+        channel: string,
+        decimal: number,
         noon_pay_config: {
             brand_code: string,
             country_code: string,
