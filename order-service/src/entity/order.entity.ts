@@ -1685,7 +1685,10 @@ export class OrderClass extends BaseEntity {
             let skip = (limit * (parseInt(payload.page.toString()) - 1));
             let pipeline = [];
 
-            let match = { userId: auth.id }
+            let match = {
+                userId: auth.id,
+                sdmOrderRef: { $ne: 0 }
+            }
             if (payload.isActive == 1) {
                 match['$or'] = [
                     {
