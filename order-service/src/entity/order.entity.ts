@@ -1687,7 +1687,9 @@ export class OrderClass extends BaseEntity {
             let pipeline = [];
 
             let match = {
-                userId: auth.id
+                userId: auth.id,
+                "payment.paymentMethodId": { $exists: true },
+                sdmOrderStatus: { $gte: 0 }
             }
             let or = []
 
