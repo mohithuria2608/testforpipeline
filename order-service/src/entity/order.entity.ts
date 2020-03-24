@@ -1026,7 +1026,8 @@ export class OrderClass extends BaseEntity {
                  */
                 let deliveryCharge = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
                 consolelog(process.cwd(), `amountValidationHandler 2 : deliveryCharge : ${deliveryCharge}`, "", true)
-                amountToCompare = amountToCompare - deliveryCharge[0].amount
+                if (deliveryCharge && deliveryCharge.length > 0)
+                    amountToCompare = amountToCompare - deliveryCharge[0].amount
             }
             consolelog(process.cwd(), `amountValidationHandler 3 : amountToCompare : ${amountToCompare}, sdmOrder.Total : ${sdmOrder.Total}`, "", true)
 
