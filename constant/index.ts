@@ -759,7 +759,7 @@ export const DATABASE = {
                 AS: "",
                 MONGO: "DELIVERED",
                 CMS: "complete",
-                SDM: [64, 128, 2048], //@description : delivered
+                SDM: [64, 128, 2048], //@description : [64 : delivered] , [128 : closed], [2048 : force closed(like pending orders will finally it reaches this state)]
                 FREQ: {
                     GET: 5000,
                     GET_ONCE: 0,
@@ -769,14 +769,14 @@ export const DATABASE = {
             },
             CLOSED: {
                 AS: "",
-                MONGO: "",
+                MONGO: "DELIVERED",
                 CMS: "closed",
-                SDM: [],
+                SDM: [], //@description :
                 FREQ: {
-                    GET: 5000,
+                    GET: 0,
                     GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
+                    GET_MAX: 0,
+                    NEXT_PING: 0,
                 }
             },
             CANCELED: {
@@ -791,6 +791,9 @@ export const DATABASE = {
                     NEXT_PING: 30,
                 }
             },
+            // 4096 : request for cancel ===> then it goes to 512 ===> final cancelled
+            // 8192 : force cancelled (requested by the customer) ====> 512
+            // 1024 : some issue in the pos
             FAILURE: {
                 AS: "",
                 MONGO: "FAILURE",

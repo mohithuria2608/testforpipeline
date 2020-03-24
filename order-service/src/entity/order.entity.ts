@@ -1351,21 +1351,23 @@ export class OrderClass extends BaseEntity {
         try {
             consolelog(process.cwd(), ` DELIVERED : current sdm status : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`, "", true)
             if (order && order._id) {
-                if ((oldSdmStatus < parseInt(sdmOrder.Status)) && (oldSdmStatus != parseInt(sdmOrder.Status))) {
-                    consolelog(process.cwd(), "DELIVERED 1 :       ", parseInt(sdmOrder.Status), true)
-                    recheck = false
-                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                        isActive: 0,
-                        status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
-                        updatedAt: new Date().getTime(),
-                        trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
-                    }, { new: true })
-                    CMS.OrderCMSE.updateOrder({
-                        order_id: order.cmsOrderRef,
-                        payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                        order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.CMS,
-                        sdm_order_id: order.sdmOrderRef
-                    })
+                if (oldSdmStatus != parseInt(sdmOrder.Status)) {
+                    if (order.status != Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO) {
+                        consolelog(process.cwd(), "DELIVERED 1 :       ", parseInt(sdmOrder.Status), true)
+                        recheck = false
+                        order = await this.updateOneEntityMdb({ _id: order._id }, {
+                            isActive: 0,
+                            status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
+                            updatedAt: new Date().getTime(),
+                            trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
+                        }, { new: true })
+                        CMS.OrderCMSE.updateOrder({
+                            order_id: order.cmsOrderRef,
+                            payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
+                            order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.CMS,
+                            sdm_order_id: order.sdmOrderRef
+                        })
+                    }
                 }
             }
             return { recheck, order }
@@ -1379,10 +1381,10 @@ export class OrderClass extends BaseEntity {
         try {
             consolelog(process.cwd(), ` CANCELED : current sdm status : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`, "", true)
             if (order && order._id) {
-                if ((oldSdmStatus < parseInt(sdmOrder.Status)) && (oldSdmStatus != parseInt(sdmOrder.Status))) {
+                if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     consolelog(process.cwd(), "CANCELED 1 :       ", parseInt(sdmOrder.Status), true)
                     recheck = false
-                    if (order.payment) {
+                    if (order.status != Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO) {
                         let dataToUpdateOrder = {
                             isActive: 0,
                             status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
