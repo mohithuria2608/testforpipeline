@@ -104,6 +104,7 @@ const orderSchema = new Schema({
     },
     status: {
         type: String, enum: [
+            Constant.DATABASE.STATUS.ORDER.CART.MONGO,
             Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
             Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
             Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,

@@ -685,7 +685,7 @@ export const DATABASE = {
             },
             CART: {
                 AS: "CART",
-                MONGO: "",
+                MONGO: "CART",
                 CMS: "",
                 SDM: [],
                 FREQ: {

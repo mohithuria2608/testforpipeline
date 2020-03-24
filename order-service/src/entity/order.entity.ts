@@ -753,7 +753,7 @@ export class OrderClass extends BaseEntity {
                 sdmUserRef: userData.sdmUserRef,
                 country: headers.country,
                 language: headers.language,
-                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
+                status: Constant.DATABASE.STATUS.ORDER.CART.MONGO,
                 sdmOrderStatus: -1,
                 items: items,
                 amount: amount,
@@ -819,7 +819,8 @@ export class OrderClass extends BaseEntity {
                     paymentMethodId: paymentMethodId,
                     amount: totalAmount,
                     name: ""
-                }
+                },
+                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
             }
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
