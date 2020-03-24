@@ -998,17 +998,29 @@ export const NOTIFICATION_MSG = {
     SMS: {
         En: {
             USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. rMXm+gJ4X0P`,
-            ORDER_DELIVERY_CONFIRM: (data) => `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
-            ORDER_PICKUP_CONFIRM: (data) => `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`,
+            ORDER_DELIVERY_CONFIRM: (data) => {
+                data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
+                return `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`
+            },
+            ORDER_PICKUP_CONFIRM: (data) => {
+                data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
+                return `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount} AED.`
+            },
             ORDER_CANCEL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`,
             ORDER_FAIL: (data) => `Your order failed due to unavoidable reasons. Please try after some time.`,
         },
         Ar: {
-            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هو OTP لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة OTP مع أي شخص. rMXm+gJ4X0P`,
-            ORDER_DELIVERY_CONFIRM: (data) => `شكرًا لاختيارك دجاج كنتاكي. سنقوم بإيصال طلبك إلى منزلك ساخن وطازج. من المتوقع أن يصلك الطلب خلال 20 دقيقة. رقم الطلب: ${data.sdmOrderRef}. المبلغ: ${data.amount} درهم`,
-            ORDER_PICKUP_CONFIRM: (data) => `شكرًا لاختيارك دجاج كنتاكي. تم تأكيد طلبك وسيكون جاهز للاستلام خلال 30  دقيقة. رقم الطلب: ${data.sdmOrderRef}. المبلغ: ${data.amount} درهم`,
-            ORDER_CANCEL: (data) => `تم إلغاء الطلب رقم ${data.sdmOrderRef}. إي أموال تم سحبها سيتم إرجاعها خلال 4 إلى 7 أيام عمل`,
-            ORDER_FAIL: (data) => `عذرًا لم نتمكن من إكمال الطلب. . يرجى المحاولة مجددًا بعد قليل`,
+            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. rMXm+gJ4X0P`,
+            ORDER_DELIVERY_CONFIRM: (data) => {
+                data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
+                return `شكرًا لاختيارك دجاج كنتاكي. سنقوم بإيصال طلبك إلى منزلك ساخن وطازج. من المتوقع أن يصلك الطلب خلال 20 >قيقة. رقم الطلب: ${data.sdmOrderRef} المبلغ ${data.amount} درهم.`
+            },
+            ORDER_PICKUP_CONFIRM: (data) => {
+                data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
+                return `شكرًا لاختيارك دجاج كنتاكي. تم تأكيد طلبك وسيكون جاهز للاستلام خلال 30  دقيقة. رقم الطلب ${data.sdmOrderRef}. المبلغ: ${data.amount} درهم.`;
+            },
+            ORDER_CANCEL: (data) => `تم إلغاء الطلب رقم ${data.sdmOrderRef}. إي أموال تم سحبها سيتم إرجاعها خلال 4 إلى 7 أيام عمل.`,
+            ORDER_FAIL: (data) => `عذرًا لم نتمكن من إكمال الطلب. يرجى المحاولة مجددًا بعد قليل`
         }
 
     },
