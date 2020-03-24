@@ -36,7 +36,7 @@ export class CartClass extends BaseEntity {
     public itemSchema = Joi.object().keys({
         id: Joi.number().required().description("pk"),
         position: Joi.number().required(),
-        name: Joi.string().required(),
+        name: Joi.string().trim().required(),
         description: Joi.string().required(),
         inSide: Joi.string().required(),
         finalPrice: Joi.number().required(),
@@ -48,7 +48,7 @@ export class CartClass extends BaseEntity {
             Joi.object().keys({
                 id: Joi.number().required(),
                 position: Joi.number().required(),
-                name: Joi.string().required(),
+                name: Joi.string().trim().required(),
                 description: Joi.string().required(),
                 inSide: Joi.string().required(),
                 finalPrice: Joi.number().required(),
@@ -69,13 +69,13 @@ export class CartClass extends BaseEntity {
                                 position: Joi.number().required(),
                                 price: Joi.number().required(),
                                 id: Joi.number().required(),
-                                name: Joi.string().required(),
+                                name: Joi.string().trim().required(),
                                 selectionQty: Joi.number().required(),
                                 subOptions: Joi.array().items(
                                     Joi.object().keys({
                                         price: Joi.number().required(),
                                         selected: Joi.number().required(),
-                                        name: Joi.string().required()
+                                        name: Joi.string().trim().required()
                                     })),
                                 selected: Joi.number().required(),
                                 default: Joi.string().required(),
@@ -122,13 +122,13 @@ export class CartClass extends BaseEntity {
                         position: Joi.number().required(),
                         price: Joi.number().required(),
                         id: Joi.number().required(),
-                        name: Joi.string().required(),
+                        name: Joi.string().trim().required(),
                         selectionQty: Joi.number().required(),
                         subOptions: Joi.array().items(
                             Joi.object().keys({
                                 price: Joi.number().required(),
                                 selected: Joi.number().required(),
-                                name: Joi.string().required()
+                                name: Joi.string().trim().required()
                             })),
                         selected: Joi.number().required(),
                         default: Joi.string().required(),
@@ -171,7 +171,7 @@ export class CartClass extends BaseEntity {
         status: Joi.string().valid(
             Constant.DATABASE.STATUS.ORDER.CART.AS,
         ).required(),
-        orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP, Constant.DATABASE.TYPE.ORDER.DELIVERY),
+        orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP.AS, Constant.DATABASE.TYPE.ORDER.DELIVERY.AS),
         updatedAt: Joi.number().required(),
         createdAt: Joi.number().required(),
         address: Joi.object().keys({

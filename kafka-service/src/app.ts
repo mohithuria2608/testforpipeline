@@ -2,7 +2,9 @@ if (process.env.NODE_ENV == 'staging')
   require('newrelic');
 require('events').EventEmitter.defaultMaxListeners = 15;
 global.configSync = {
-  general: 0
+  general: 0,
+  kafka: 0,
+  orderStatus: 0
 }
 import * as config from "config"
 import * as Koa from 'koa'

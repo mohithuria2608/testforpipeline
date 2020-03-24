@@ -74,9 +74,10 @@ export class BaseEntity {
         }
     }
 
-    async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore[]> {
+    async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore> {
         try {
-            return await locationService.validateCoordinate({ lat, lng })
+            let validatedStore = await locationService.validateCoordinate({ lat, lng })
+            return validatedStore
         } catch (error) {
             consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
             return Promise.reject(error)

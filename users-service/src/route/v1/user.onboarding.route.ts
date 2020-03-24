@@ -78,7 +78,7 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
                         Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
                     ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_SOCIAL_INFO.type)),
-                    name: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
+                    name: Joi.string().trim().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
                     email: Joi.string().email().lowercase().allow(null).allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type))
                 }
             }),

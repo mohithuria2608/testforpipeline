@@ -7,7 +7,8 @@ declare namespace NodeJS {
         },
         configSync: {
             general?: number,
-            kafka?: number
+            kafka?: number,
+            orderStatus?: number,
         }
     }
 }

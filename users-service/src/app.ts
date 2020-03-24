@@ -4,12 +4,14 @@ process.env.ALLOW_CONFIG_MUTATIONS = "true";
 // process.env.AEROSPIKE_DEBUG_STACKTRACES = "1";
 global.healthcheck = {}
 global.configSync = {
-  general: 0
+  general: 0,
+  kafka: 0,
+  orderStatus: 0
 }
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
-import { bootstrap, consolelog, generateOtp } from './utils'
+import { bootstrap } from './utils'
 import middleware from './middlewares'
 import route from './route'
 import { event } from './lib'
@@ -25,7 +27,6 @@ export const start = (async () => {
   try {
     const port = config.get("server.user.port")
     const server = app.listen(port)
-
     // AGGREGATE americana.check_social_key("KFC","UAE","FB",465869130981340) ON user
 
     // event.emit('logger', {

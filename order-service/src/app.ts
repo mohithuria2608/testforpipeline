@@ -3,7 +3,9 @@ if (process.env.NODE_ENV == 'staging')
 process.env.ALLOW_CONFIG_MUTATIONS = "true";
 global.healthcheck = {}
 global.configSync = {
-  general: 0
+  general: 0,
+  kafka: 0,
+  orderStatus: 0
 }
 import * as config from "config"
 import * as Koa from 'koa'
@@ -26,12 +28,8 @@ export const start = (async () => {
   try {
     const port = config.get("server.order.port")
     const server = app.listen(port)
-    // let a: IMenuGrpcRequest.IFetchMenuRes
-
-    // await ENTITY.CartE.createCartOnCMS({}, { cmsUserRef: 12 })
 
     let stock: any = [
-     
     ]
 
     let Entries = {
@@ -73,44 +71,90 @@ export const start = (async () => {
               product.bundleProductOptions.forEach(bpo => {
                 if (bpo && bpo.productLinks.length > 0) {
                   bpo.productLinks.forEach(pl => {
+                    let plDefaultSdm = false
                     if (pl.selected == 1) {
                       if (pl.subOptions && pl.subOptions.length > 0) {
+                        pl.subOptions.forEach(dsplso => {
+                          if (dsplso.is_sdm_default == 1)
+                            plDefaultSdm = true
+                        })
+                        let checkSendNone = false
                         pl.subOptions.forEach(so => {
                           if (so.selected == 1) {
+                            checkSendNone = true
                             if (so.title == "None") { }
                             else if (so.title == "Regular") {
-                              if (so.sdmId)
-                                obj.Entries.CEntry.push({
-                                  ID: 0,
-                                  ItemID: so.sdmId,
-                                  ModCode: "WITH",
-                                  ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
-                                  Name: so.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0,
-                                })
+                              if (so.sdmId) {
+                                if (so.is_sdm_default != undefined) {
+                                  if (!plDefaultSdm)
+                                    obj.Entries.CEntry.push({
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId ? pl.modGroupId : -1,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    })
+                                }
+                              }
                             } else if (so.title == "Extra") {
-                              if (so.sdmId)
-                                obj.Entries.CEntry.push({
-                                  ID: 0,
-                                  ItemID: so.sdmId,
-                                  ModCode: "WITH",
-                                  ModgroupID: pl.modGroupId,
-                                  Name: so.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0,
-                                }, {
-                                  ID: 0,
-                                  ItemID: so.sdmId,
-                                  ModCode: "WITH",
-                                  ModgroupID: pl.modGroupId,
-                                  Name: so.name,
-                                  OrdrMode: "OM_SAVED",
-                                  Weight: 0,
-                                })
+                              if (so.sdmId) {
+                                if (so.is_sdm_default != undefined) {
+                                  if (plDefaultSdm)
+                                    obj.Entries.CEntry.push({
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    })
+                                  else
+                                    obj.Entries.CEntry.push({
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    }, {
+                                      ID: 0,
+                                      ItemID: so.sdmId,
+                                      ModCode: "WITH",
+                                      ModgroupID: pl.modGroupId,
+                                      Name: so.name,
+                                      OrdrMode: "OM_SAVED",
+                                      Weight: 0,
+                                    })
+                                } else {
+                                  obj.Entries.CEntry.push({
+                                    ID: 0,
+                                    ItemID: so.sdmId,
+                                    ModCode: "WITH",
+                                    ModgroupID: pl.modGroupId,
+                                    Name: so.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Weight: 0,
+                                  })
+                                }
+                              }
                             }
                           }
                         })
+                        if (plDefaultSdm && !checkSendNone) {
+                          obj.Entries.CEntry.push({
+                            ID: 0,
+                            ItemID: pl.subOptions[0].sdmId,
+                            ModCode: "NONE",
+                            ModgroupID: pl.subOptions[0].modGroupId ? pl.subOptions[0].modGroupId : -1,
+                            Name: pl.name,
+                            OrdrMode: "OM_SAVED",
+                            Weight: 0,
+                          })
+                        }
                       }
                     }
                   })
@@ -220,7 +264,6 @@ export const start = (async () => {
                         if (bpo.ingredient == 0) {
                           bpo.productLinks.forEach(pl => {
                             if (pl.selected == 1) {
-                              console.log("11111111111111111")
                               if (pl.dependentSteps && pl.dependentSteps.length > 0) {
                                 let obj = {
                                   DealID: 0,
@@ -261,46 +304,95 @@ export const start = (async () => {
                                        * @description (isModifier == 1) :  "name": "Mighty Twist"
                                        */
                                       if (plbpo.productLinks && plbpo.productLinks.length > 0) {
-                                        console.log("444444444444444444444444444")
                                         plbpo.productLinks.forEach(dspl => {
-                                          console.log("55555555555555555555555555555", dspl)
+                                          console.log("product name", dspl)
+
+                                          let plDefaultSdm = false
                                           if (dspl.subOptions && dspl.subOptions.length > 0) {
                                             dspl.subOptions.forEach(dsplso => {
+                                              if (dsplso.is_sdm_default == 1)
+                                                plDefaultSdm = true
+                                            })
+                                            console.log("plDefaultSdm", plDefaultSdm)
+                                            let checkSendNone = false
+                                            dspl.subOptions.forEach(dsplso => {
                                               if (dsplso.sdmId && dsplso.selected == 1) {
+                                                checkSendNone = true
+                                                console.log("product name", dspl.name)
                                                 if (dsplso.title == "None") {
-                                                  console.log("none")
                                                 }
                                                 else if (dsplso.title == "Regular") {
-                                                  obj.Entries.CEntry.push({
-                                                    ID: 0,
-                                                    ItemID: dsplso.sdmId,
-                                                    ModCode: "WITH",
-                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                    Name: dspl.name,
-                                                    OrdrMode: "OM_SAVED",
-                                                    Weight: 0,
-                                                  })
+                                                  if (dsplso.sdmId) {
+                                                    if (dsplso.is_sdm_default != undefined) {
+                                                      if (!plDefaultSdm)
+                                                        obj.Entries.CEntry.push({
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        })
+                                                    }
+                                                  }
                                                 } else if (dsplso.title == "Extra") {
-                                                  obj.Entries.CEntry.push({
-                                                    ID: 0,
-                                                    ItemID: dsplso.sdmId,
-                                                    ModCode: "WITH",
-                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                    Name: dspl.name,
-                                                    OrdrMode: "OM_SAVED",
-                                                    Weight: 0,
-                                                  }, {
-                                                    ID: 0,
-                                                    ItemID: dsplso.sdmId,
-                                                    ModCode: "WITH",
-                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                    Name: dspl.name,
-                                                    OrdrMode: "OM_SAVED",
-                                                    Weight: 0,
-                                                  })
+                                                  if (dsplso.sdmId) {
+                                                    if (dsplso.is_sdm_default != undefined) {
+                                                      if (plDefaultSdm)
+                                                        obj.Entries.CEntry.push({
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        })
+                                                      else
+                                                        obj.Entries.CEntry.push({
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        }, {
+                                                          ID: 0,
+                                                          ItemID: dsplso.sdmId,
+                                                          ModCode: "WITH",
+                                                          ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                          Name: dspl.name,
+                                                          OrdrMode: "OM_SAVED",
+                                                          Weight: 0,
+                                                        })
+                                                    } else {
+                                                      obj.Entries.CEntry.push({
+                                                        ID: 0,
+                                                        ItemID: dsplso.sdmId,
+                                                        ModCode: "WITH",
+                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                        Name: dspl.name,
+                                                        OrdrMode: "OM_SAVED",
+                                                        Weight: 0,
+                                                      })
+                                                    }
+                                                  }
                                                 }
                                               }
                                             })
+                                            if (plDefaultSdm && !checkSendNone) {
+                                              obj.Entries.CEntry.push({
+                                                ID: 0,
+                                                ItemID: dspl.subOptions[0].sdmId,
+                                                ModCode: "NONE",
+                                                ModgroupID: dspl.subOptions[0].modGroupId ? dspl.subOptions[0].modGroupId : -1,
+                                                Name: dspl.name,
+                                                OrdrMode: "OM_SAVED",
+                                                Weight: 0,
+                                              })
+                                            }
                                           }
                                         })
                                       }
@@ -309,8 +401,6 @@ export const start = (async () => {
                                 })
                                 Entries.CEntry.push(obj)
                               } else {
-                                console.log("777777777777777777777777777777")
-
                                 let count = pl.selectionQty
                                 while (count != 0) {
                                   Entries.CEntry.push({
@@ -349,41 +439,90 @@ export const start = (async () => {
                           }
                           if (bpo.productLinks && bpo.productLinks.length > 0) {
                             bpo.productLinks.forEach(bpopl => {
+                              let plDefaultSdm = false
                               if (bpopl.subOptions && bpopl.subOptions.length > 0) {
+                                bpopl.subOptions.forEach(dsplso => {
+                                  if (dsplso.is_sdm_default == 1)
+                                    plDefaultSdm = true
+                                })
+                                let checkSendNone = false
                                 bpopl.subOptions.forEach(bpoplso => {
                                   if (bpoplso.sdmId && bpoplso.selected == 1) {
+                                    checkSendNone = true
                                     if (bpoplso.title == "None") { }
                                     else if (bpoplso.title == "Regular") {
-                                      lastProductAddedInCentry.Entries.CEntry.push({
-                                        ID: 0,
-                                        ItemID: bpoplso.sdmId,
-                                        ModCode: "WITH",
-                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                        Name: bpopl.name,
-                                        OrdrMode: "OM_SAVED",
-                                        Weight: 0,
-                                      })
+                                      if (bpoplso.sdmId) {
+                                        if (bpoplso.is_sdm_default != undefined) {
+                                          if (!plDefaultSdm)
+                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            })
+                                        }
+                                      }
                                     } else if (bpoplso.title == "Extra") {
-                                      lastProductAddedInCentry.Entries.CEntry.push({
-                                        ID: 0,
-                                        ItemID: bpoplso.sdmId,
-                                        ModCode: "WITH",
-                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                        Name: bpopl.name,
-                                        OrdrMode: "OM_SAVED",
-                                        Weight: 0,
-                                      }, {
-                                        ID: 0,
-                                        ItemID: bpoplso.sdmId,
-                                        ModCode: "WITH",
-                                        ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                        Name: bpopl.name,
-                                        OrdrMode: "OM_SAVED",
-                                        Weight: 0,
-                                      })
+                                      if (bpoplso.sdmId) {
+                                        if (bpoplso.is_sdm_default != undefined) {
+                                          if (plDefaultSdm)
+                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            })
+                                          else
+                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            }, {
+                                              ID: 0,
+                                              ItemID: bpoplso.sdmId,
+                                              ModCode: "WITH",
+                                              ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                              Name: bpopl.name,
+                                              OrdrMode: "OM_SAVED",
+                                              Weight: 0,
+                                            })
+
+                                        } else {
+                                          lastProductAddedInCentry.Entries.CEntry.push({
+                                            ID: 0,
+                                            ItemID: bpoplso.sdmId,
+                                            ModCode: "WITH",
+                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                            Name: bpopl.name,
+                                            OrdrMode: "OM_SAVED",
+                                            Weight: 0,
+                                          })
+                                        }
+                                      }
                                     }
                                   }
                                 })
+                                if (plDefaultSdm && !checkSendNone) {
+                                  lastProductAddedInCentry.Entries.CEntry.push({
+                                    ID: 0,
+                                    ItemID: bpopl.subOptions[0].sdmId,
+                                    ModCode: "NONE",
+                                    ModgroupID: bpopl.subOptions[0].modGroupId ? bpopl.subOptions[0].modGroupId : -1,
+                                    Name: bpopl.name,
+                                    OrdrMode: "OM_SAVED",
+                                    Weight: 0,
+                                  })
+                                }
                               }
                             })
                           }
@@ -468,8 +607,8 @@ export const start = (async () => {
         "AddressID": "10514480",//"10512559",//,//
         "ConceptID": "3",
         "CountryID": 1,
-        "CustomerID": "7695133",// "7694266",//"",// 
-        "DeliveryChargeID": 279,
+        "CustomerID": "7695133",//"7694266",//"",// 
+        "DeliveryChargeID": Constant.SERVER.DELIVERY_CHARGE_ID,
         "DistrictID": -1,
         "Entries": Entries,
         "OrderID": 0,
@@ -485,11 +624,12 @@ export const start = (async () => {
       "menuTemplateID": "17"
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 48601160, language: "En" })
+    let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 48714070, language: "En" })
     // await SDM.OrderSDME.cancelOrder({
-    //   sdmOrderRef: 39838313,
+    //   language: "en",
+    //   sdmOrderRef: 48698051,
     //   voidReason: 1,
-    //   validationRemarks: Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
+    //   validationRemarks: "TEST ORDER",// Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED
     // })
   } catch (error) {
     console.error(error)

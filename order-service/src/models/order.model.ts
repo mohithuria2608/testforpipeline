@@ -37,6 +37,7 @@ export interface Iorder extends Document {
         name: string,
         status: string
     },
+    env: number
 };
 
 interface IAddress {
@@ -81,8 +82,8 @@ const orderSchema = new Schema({
     cartUnique: { type: String },
     orderType: {
         type: String, required: true, enum: [
-            Constant.DATABASE.TYPE.ORDER.PICKUP,
-            Constant.DATABASE.TYPE.ORDER.DELIVERY
+            Constant.DATABASE.TYPE.ORDER.PICKUP.AS,
+            Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
         ]
     },
     cmsCartRef: { type: Number, required: true },
@@ -224,6 +225,7 @@ const orderSchema = new Schema({
     isFreeItem: { type: Boolean },
     amountValidationPassed: { type: Boolean, default: false, required: true },
     orderConfirmationNotified: { type: Boolean, default: false, required: true },
+    env: { type: Number, required: true },
 });
 
 export let order = model<Iorder>('order', orderSchema)

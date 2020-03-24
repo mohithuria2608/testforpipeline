@@ -112,7 +112,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             if (!paymentRetry) {
                 let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-                if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP)
+                if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
                     addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                 let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
 
@@ -134,12 +134,13 @@ export class OrderController {
                 }
 
                 let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
-                if (!getStore.hasOwnProperty("id"))
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
-                else {
+                if (getStore && getStore.id && getStore.id != "") {
+                    // if (!getStore.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     // if (!getStore.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
-                }
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
                 if (payload.couponCode && payload.items && payload.items.length > 0) {
@@ -184,7 +185,7 @@ export class OrderController {
                 order = initiatePayment.order
                 ENTITY.OrderE.syncOrder(order)
                 if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
-                    ENTITY.CartE.resetCart(auth.id)
+                    ENTITY.CartE.resetCart(getCurrentCart.cartId)
                 return {
                     orderPlaced: {
                         noonpayRedirectionUrl: initiatePayment.noonpayRedirectionUrl,

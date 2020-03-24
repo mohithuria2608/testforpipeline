@@ -10,7 +10,7 @@ export default (router: Router) => {
     router
         .post('/cms',
             validate({
-                headers: JOI_CMS_HEADERS,
+                // headers: JOI_CMS_HEADERS,
                 body: {
                     action: Joi.string().required().valid(Constant.DATABASE.TYPE.SYNC_ACTION.CREATE).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     data: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))

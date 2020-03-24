@@ -165,7 +165,7 @@ export class UserchangeEntity extends BaseEntity {
             if (payload.otpVerified)
                 dataToUpdateUserchange['otpVerified'] = payload.otpVerified
             if (payload.name && payload.name != "")
-                dataToUpdateUserchange['name'] = payload.name
+                dataToUpdateUserchange['name'] = payload.name.trim()
             if (payload.email && payload.email != "")
                 dataToUpdateUserchange['email'] = payload.email
             if (payload.socialKey)

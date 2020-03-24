@@ -77,7 +77,7 @@ export class GuestController {
             let userchangePayload: IUserchangeRequest.IUserchange = {
                 username: username,
                 fullPhnNo: fullPhnNo,
-                name: payload.name,
+                name: payload.name.trim(),
                 email: payload.email,
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
@@ -265,7 +265,7 @@ export class GuestController {
                     await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload, headers.language)
                 }
             }
-            userData['name'] = payload.name
+            userData['name'] = payload.name.trim()
             userData['email'] = payload.email
             userData['fullPhnNo'] = payload.cCode + payload.phnNo
             userData['phnNo'] = payload.phnNo

@@ -403,7 +403,7 @@ export class AddressEntity extends BaseEntity {
                 if (obj.addressId && obj.sdmAddressRef) {
                     let bin = obj['addressType']
                     let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
-                    if (store && store.length) {
+                    if (store && store.id && store.id != "") {
                         let add = {
                             lat: parseFloat(obj.latitude),
                             lng: parseFloat(obj.longitude),
@@ -415,7 +415,7 @@ export class AddressEntity extends BaseEntity {
                             sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
                             cmsAddressRef: parseInt(obj.addressId),
                         }
-                        let asAdd = await this.addAddress(headers, userData, bin, add, store[0])
+                        let asAdd = await this.addAddress(headers, userData, bin, add, store)
                         if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
                             userData['asAddress'] = [asAdd]
                             userData['headers'] = headers
@@ -445,9 +445,9 @@ export class AddressEntity extends BaseEntity {
                 if (sdmAddObj.WADDR_STATUS && sdmAddObj.WADDR_STATUS == '1') {
                     let bin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                     if (sdmAddObj.ADDR_MAPCODE.X && sdmAddObj.ADDR_MAPCODE.Y) {
-                        let store: IStoreGrpcRequest.IStore[]
+                        let store: IStoreGrpcRequest.IStore
                         store = await this.validateCoordinate(parseFloat(sdmAddObj.ADDR_MAPCODE.X), parseFloat(sdmAddObj.ADDR_MAPCODE.Y))
-                        if (store && store.length) {
+                        if (store && store.id && store.id != "") {
                             let addressPayload: IAddressRequest.IRegisterAddress = {
                                 lat: parseFloat(sdmAddObj.ADDR_MAPCODE.X),
                                 lng: parseFloat(sdmAddObj.ADDR_MAPCODE.Y),
@@ -457,7 +457,7 @@ export class AddressEntity extends BaseEntity {
                                 tag: Constant.DATABASE.TYPE.TAG.OTHER,
                                 sdmAddressRef: parseInt(sdmAddObj.ADDR_ID)
                             }
-                            let addressData = await this.addAddress(headers, userData, bin, addressPayload, store[0])
+                            let addressData = await this.addAddress(headers, userData, bin, addressPayload, store)
                             asAddress.push(addressData)
                         }
                     }

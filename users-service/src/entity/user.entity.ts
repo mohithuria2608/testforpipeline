@@ -169,7 +169,7 @@ export class UserEntity extends BaseEntity {
             if (payload.emailVerified != undefined)
                 checkUser['emailVerified'] = payload.emailVerified
             if (payload.name && payload.name != "")
-                checkUser['name'] = payload.name
+                checkUser['name'] = payload.name.trim()
             if (payload.socialKey)
                 checkUser['socialKey'] = payload.socialKey
             if (payload.socialKey)

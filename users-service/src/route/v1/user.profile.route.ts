@@ -19,7 +19,7 @@ export default (router: Router) => {
                     cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY_CODE.type)),
                     phnNo: Joi.string().min(9).max(9).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_PHONE_NO.type)),
                     email: Joi.string().email().lowercase().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_EMAIL.type)),
-                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
+                    name: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
 
                     /**
                      * @description allow these keys
@@ -54,7 +54,7 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    name: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
+                    name: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_NAME.type)),
                 }
             }),
             async (ctx) => {

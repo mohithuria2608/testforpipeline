@@ -14,7 +14,7 @@ export class HiddenEnClass extends BaseEntity {
     public categorySchema = Joi.object().keys({
         id: Joi.number().required().description("pk"),
         position: Joi.number().required(),
-        name: Joi.string().required(),
+        name: Joi.string().trim().required(),
         products: Joi.array().items(this.productSchema)
     })
 

@@ -12,7 +12,7 @@ export class UserCMSEntity extends BaseCMS {
 
     async createCustomerOnCms(payload: IUserRequest.IUserData): Promise<any> {
         try {
-            let naemRes = nameConstructor(payload.name)
+            let naemRes = nameConstructor(payload.name.trim())
             let formObj: IUserCMSRequest.ICreateUser = {
                 "email": payload.email,
                 "phone": payload.fullPhnNo,
@@ -58,7 +58,7 @@ export class UserCMSEntity extends BaseCMS {
             if (payload.fullPhnNo)
                 formObj['phone'] = payload.fullPhnNo
             if (payload.name && payload.name != "") {
-                let naemRes = nameConstructor(payload.name)
+                let naemRes = nameConstructor(payload.name.trim())
                 formObj['firstName'] = naemRes.firstName
                 formObj['lastName'] = naemRes.lastName
             }

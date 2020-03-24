@@ -399,7 +399,7 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let checkStoreOnline = function (start, end) {
+export let checkOnlineStore = function (start, end) {
     // console.log("curTime",
     //     new Date(),
     //     new Date().getUTCHours(),

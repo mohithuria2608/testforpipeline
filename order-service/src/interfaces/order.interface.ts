@@ -37,6 +37,7 @@ declare namespace IOrderRequest {
             name: string,
             status: string
         },
+        env: number
     }
 
     interface IAddress {
