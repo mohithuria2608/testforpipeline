@@ -137,8 +137,8 @@ export class OrderController {
                 if (!getStore.hasOwnProperty("id"))
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
                 else {
-                    // if (!getStore.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
+                    if (!getStore.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
                 }
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
