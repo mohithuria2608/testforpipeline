@@ -1119,14 +1119,6 @@ export const STATUS_MSG = {
                 "message_Ar": "الكوبون الذي أدخلته لم يعد صالحًا",
                 "message_En": "This promo does not exists any longer"
             },
-            "INVALID_STORE": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "INVALID_STORE",
-                "message": "This store is unserviceable at the moment",
-                "message_Ar": "هذا المطعم خارج الخدمة في الوقت الحالي",
-                "message_En": "This store is unserviceable at the moment"
-            },
             "INVALID_ADDRESS": {
                 "statusCode": 400,
                 "httpCode": 400,
@@ -1285,14 +1277,6 @@ export const STATUS_MSG = {
                 "message_Ar": "العربة لم تعد موجودة",
                 "message_En": "This cart no longer exists"
             },
-            "STORE_NOT_FOUND": {
-                "statusCode": 409,
-                "httpCode": 409,
-                "message": "This store is unserviceable at the moment",
-                "type": "STORE_NOT_FOUND",
-                "message_Ar": "هذا المطعم غير متاح الآن",
-                "message_En": "This store is unserviceable at the moment"
-            },
             "PROMO_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,
@@ -1319,6 +1303,16 @@ export const STATUS_MSG = {
                 "message_Ar": "يجب عليك تحديث التطبيق لآخر نسخة لكي تتمكن من الاستمرار في استخدامه",
                 "message_En": "You need to update the application with the latest version in order to continue using it"
             }
+        },
+        "E411": {
+            "STORE_NOT_WORKING": {
+                "statusCode": 411,
+                "httpCode": 411,
+                "message": "The store is currently offline, please feel free to explore menu.",
+                "type": "STORE_NOT_WORKING",
+                "message_Ar": "هذا المطعم غير متاح الآن",
+                "message_En": "The store is currently offline, please feel free to explore menu."
+            },
         },
         "E422": {
             "INVALID_COUNTRY_CODE": {

@@ -1,6 +1,6 @@
 import * as config from 'config'
 import * as Constant from '../../constant'
-import { consolelog, checkStoreOnline } from '../../utils'
+import { consolelog, checkOnlineStore } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as fs from 'fs'
 import * as Utils from "../../utils";
@@ -47,10 +47,10 @@ export class StoreController {
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
             if (store && store.length > 0) {
-                store[0]['isOnline'] = checkStoreOnline(store[0].startTime, store[0].endTime)
+                store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime)
                 return store[0]
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "fetchStore", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -62,7 +62,7 @@ export class StoreController {
      * @param {number=} lat : latitude
      * @param {number=} lng : longitude
      * */
-    async validateCoords(payload: IStoreRequest.IValidateCoordinates): Promise<IStoreRequest.IStore[]> {
+    async validateCoords(payload: IStoreRequest.IValidateCoordinates): Promise<IStoreRequest.IStore> {
         try {
             let geoWithinArg: IAerospike.Query = {
                 set: ENTITY.StoreE.set,
@@ -74,12 +74,11 @@ export class StoreController {
             }
             let res = await Aerospike.query(geoWithinArg)
             if (res && res.length > 0) {
-                res[0]['isOnline'] = checkStoreOnline(res[0].startTime, res[0].endTime)
-                return res
+                res[0]['isOnline'] = checkOnlineStore(res[0].startTime, res[0].endTime)
+                return res[0]
             }
             else
-                return []
-
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "validateCoords", JSON.stringify(error), false)
             return Promise.reject(error)

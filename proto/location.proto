@@ -61,7 +61,7 @@ message IValidateCoordinateReq {
 }
 
 message IValidateCoordinateRes {
-    repeated IStore store = 1;
+    required IStore store = 1;
 }
 
 message IStore {

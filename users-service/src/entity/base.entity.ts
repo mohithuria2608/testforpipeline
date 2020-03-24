@@ -1,3 +1,4 @@
+import * as Constant from '../constant'
 import * as mongoose from "mongoose";
 import { consolelog } from '../utils';
 import { authService, locationService, orderService } from '../grpc/client';
@@ -36,13 +37,10 @@ export class BaseEntity {
     /**
      * @description Validate latitude and longitude from location service
      */
-    async fetchStore(storeId: number, language: string): Promise<IStoreGrpcRequest.IStore[]> {
+    async fetchStore(storeId: number, language: string): Promise<IStoreGrpcRequest.IStore> {
         try {
             let store = await locationService.fetchStore({ storeId, language })
-            if (store && store.id)
-                return [store]
-            else
-                []
+            return store
         } catch (error) {
             consolelog(process.cwd(), "fetchStore", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -53,9 +51,10 @@ export class BaseEntity {
     /**
      * @description Validate latitude and longitude from location service
      */
-    async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore[]> {
+    async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore> {
         try {
-            return await locationService.validateCoordinate({ lat, lng })
+            let validatedStore = await locationService.validateCoordinate({ lat, lng })
+            return validatedStore
         } catch (error) {
             consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
             return Promise.reject(error)

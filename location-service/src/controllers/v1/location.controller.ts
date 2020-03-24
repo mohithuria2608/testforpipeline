@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog, checkStoreOnline } from '../../utils'
+import { consolelog, checkOnlineStore } from '../../utils'
 import * as ENTITY from '../../entity'
 import { storeController } from './store.controller'
 import { cityController } from './city.controller';
@@ -57,7 +57,7 @@ export class LocationController {
                                                         // c['isSelected'] = false
                                                         // a['isSelected'] = false
                                                         // s['isSelected'] = false
-                                                        // s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                                        // s['isOnline'] = checkOnlineStore(s.startTime, s.endTime)
                                                         storeCollection.push(s)
                                                     }
                                                 }
@@ -96,24 +96,23 @@ export class LocationController {
      * */
     async validateLocation(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IValidateLocation) {
         try {
-            let store: IStoreRequest.IStore[] = await storeController.validateCoords(payload)
+            let store: IStoreRequest.IStore = await storeController.validateCoords(payload)
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
-            if (store && store.length > 0) {
+            if (store && store.id && store.id != "") {
                 let res = {
-                    menuId: store[0].menuId,
+                    menuId: store.menuId,
                     store: {
-                        storeId: store[0].storeId,
-                        countryId: store[0].countryId,
-                        areaId: store[0].areaId,
-                        cityId: store[0].cityId,
-                        location: store[0].location,
-                        address_en: store[0].address_en,
-                        address_ar: store[0].address_ar,
-                        name_en: store[0].name_en,
-                        name_ar: store[0].name_ar,
-                    },
-                    // isOnline: checkStoreOnline(store[0].startTime, store[0].endTime)
-                    isOnline: store[0].isOnline
+                        storeId: store.storeId,
+                        countryId: store.countryId,
+                        areaId: store.areaId,
+                        cityId: store.cityId,
+                        location: store.location,
+                        address_en: store.address_en,
+                        address_ar: store.address_ar,
+                        name_en: store.name_en,
+                        name_ar: store.name_ar,
+                        isOnline: store.isOnline
+                    }
                 }
                 return res
             }
@@ -145,7 +144,7 @@ export class LocationController {
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
                                     s['isSelected'] = false
-                                    s['isOnline'] = checkStoreOnline(s.startTime, s.endTime)
+                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime)
                                 })
                             }
                         })

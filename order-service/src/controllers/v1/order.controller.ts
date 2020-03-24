@@ -134,12 +134,11 @@ export class OrderController {
                 }
 
                 let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
-                if (!getStore.hasOwnProperty("id"))
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_STORE)
-                else {
-                    if (!getStore.isOnline)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
-                }
+                if (getStore && getStore.id&& getStore.id != "") {
+                    // if (!getStore.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
                 let promo: IPromotionGrpcRequest.IValidatePromotionRes
                 if (payload.couponCode && payload.items && payload.items.length > 0) {

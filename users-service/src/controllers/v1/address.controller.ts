@@ -73,33 +73,36 @@ export class AddressController {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let type = ""
-            let store: IStoreGrpcRequest.IStore[]
+            let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
-                if (store && store.length) {
-                    if (!store[0].isOnline)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
+                if (store && store.id&& store.id != "") {
+                    // if (!store.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-                    payload['lat'] = store[0].location.latitude
-                    payload['lng'] = store[0].location.longitude
-                    payload['bldgName'] = store[0].location.description
-                    payload['description'] = store[0].location.description
-                    payload['flatNum'] = store[0].location.description
+                    payload['lat'] = store.location.latitude
+                    payload['lng'] = store.location.longitude
+                    payload['bldgName'] = store.location.description
+                    payload['description'] = store.location.description
+                    payload['flatNum'] = store.location.description
                     payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
-                } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+                }
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else if (payload.lat && payload.lng) {
-                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.length) {
-                    if (!store[0].isOnline)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.STORE_NOT_FOUND)
+                let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.id&& store.id != "") {
+                    // if (!validateStore.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    store = validateStore
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-                } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+                }
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else
-                return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
-            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store[0])
+            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store)
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                 userData['asAddress'] = [addressData]
                 userData['headers'] = headers
@@ -139,30 +142,35 @@ export class AddressController {
             console.log("syncOldAddress", userId, payload)
             let userData = await ENTITY.UserE.getUser({ userId: userId })
             let type = ""
-            let store: IStoreGrpcRequest.IStore[]
+            let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
-                if (store && store.length) {
+                if (store && store.id&& store.id != "") {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['addressId'] = payload.addressId
-                    payload['lat'] = store[0].location.latitude
-                    payload['lng'] = store[0].location.longitude
+                    payload['lat'] = store.location.latitude
+                    payload['lng'] = store.location.longitude
                     payload['bldgName'] = ""
                     payload['description'] = ""
                     payload['flatNum'] = ""
                     payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
                 } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
-            } else if (payload.lat && payload.lng) {
-                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.length) {
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-                } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
-            } else
-                return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
-            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store[0])
+            } else if (payload.lat && payload.lng) {
+                let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.id&& store.id != "") {
+                    // if (!validateStore.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    store = validateStore
+                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                }
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+
+            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store)
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                 userData['asAddress'] = [addressData]
                 userData['headers'] = headers
@@ -200,11 +208,13 @@ export class AddressController {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             if (payload.lat && payload.lng) {
-                let store: IStoreGrpcRequest.IStore[] = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.length) {
-
-                } else
-                    return Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE
+                let store: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.id&& store.id != "") {
+                    // if (!validateStore.isOnline)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                }
+                else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             }
             let updatedAdd = await ENTITY.AddressE.updateAddress(headers, payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
 

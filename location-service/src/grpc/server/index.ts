@@ -34,8 +34,8 @@ server.addService(locationProto.LocationService.service, {
     validateCoordinate: async (call: IStoreGrpcRequest.IValidateCoordinate, callback) => {
         try {
             consolelog(process.cwd(), "grpc validateCoordinate", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await storeController.validateCoords(call.request)
-            res.map(item => item.geoFence = {})
+            let res: IStoreRequest.IStore = await storeController.validateCoords(call.request)
+            res.geoFence = {}
             callback(null, { store: res })
         } catch (error) {
             consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
