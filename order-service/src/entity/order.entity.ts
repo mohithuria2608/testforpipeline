@@ -1688,7 +1688,11 @@ export class OrderClass extends BaseEntity {
 
             let match = {
                 userId: auth.id,
-                sdmOrderRef: { $ne: 0 }
+                sdmOrderRef: { $ne: 0 },
+                $and: [
+                    { status: { $ne: "PENDING" } },
+                    { "payment.status": { $exists: true } }
+                ]
             }
             if (payload.isActive == 1) {
                 match['$or'] = [
