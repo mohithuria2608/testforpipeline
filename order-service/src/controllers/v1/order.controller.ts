@@ -134,7 +134,9 @@ export class OrderController {
                 }
 
                 let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
-                if (getStore && getStore.id&& getStore.id != "") {
+                if (getStore && getStore.id && getStore.id != "") {
+                    // if (!getStore.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     // if (!getStore.isOnline)
                     //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 } else

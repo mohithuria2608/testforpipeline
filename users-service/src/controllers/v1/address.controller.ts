@@ -77,6 +77,8 @@ export class AddressController {
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.id && store.id != "") {
+                    // if (!store.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     // if (!store.isOnline)
                     //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
@@ -91,7 +93,9 @@ export class AddressController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else if (payload.lat && payload.lng) {
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "") {
+                if (validateStore && validateStore.id && validateStore.id != "") {
+                    // if (!validateStore.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     // if (!validateStore.isOnline)
                     //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     store = validateStore
@@ -159,7 +163,9 @@ export class AddressController {
 
             } else if (payload.lat && payload.lng) {
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "") {
+                if (validateStore && validateStore.id && validateStore.id != "") {
+                    // if (!validateStore.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     // if (!validateStore.isOnline)
                     //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     store = validateStore
@@ -208,8 +214,10 @@ export class AddressController {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             if (payload.lat && payload.lng) {
-                let store: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "") {
+                let validateStore: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (validateStore && validateStore.id && validateStore.id != "") {
+                    // if (!validateStore.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     // if (!validateStore.isOnline)
                     //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }
