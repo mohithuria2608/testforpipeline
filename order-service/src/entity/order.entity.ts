@@ -1687,20 +1687,20 @@ export class OrderClass extends BaseEntity {
             let pipeline = [];
 
             let match = {
-                userId: auth.id,
-                sdmOrderRef: { $ne: 0 },
-                $and: [
-                    { status: { $ne: "PENDING" } },
-                    { "payment.status": { $exists: true } }
-                ]
+                userId: auth.id
             }
+            let or = []
+
             if (payload.isActive == 1) {
-                match['$or'] = [
+                or.push(
                     {
+                        sdmOrderRef: { '$ne': 0 },
                         status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
-                        trackUntil: { $gte: new Date().getTime() }
+                        trackUntil: { $gte: new Date().getTime() },
+
                     },
                     {
+                        sdmOrderRef: { '$ne': 0 },
                         status: {
                             $in: [
                                 Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
@@ -1712,9 +1712,25 @@ export class OrderClass extends BaseEntity {
                         },
                         isActive: 1
                     }
-                ]
+                )
+            } else {
+                or.push(
+                    {
+                        sdmOrderRef: { '$eq': 0 },
+                        status: { $eq: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO }
+                    },
+                    {
+                        "payment.paymentMethodId": Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD,
+                        sdmOrderRef: { '$ne': 0 },
+                    },
+                    {
+                        sdmOrderRef: { '$ne': 0 },
+                        "payment.paymentMethodId": Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
+                        "payment.status": { $exists: true }
+                    })
             }
-
+            if (or && or.length > 0)
+                match['$or'] = or
             pipeline.push({
                 $match: match
             })
