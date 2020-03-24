@@ -77,10 +77,10 @@ export class AddressController {
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
                 if (store && store.id && store.id != "") {
-                    // if (!store.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    // if (!store.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store.location.latitude
                     payload['lng'] = store.location.longitude
@@ -94,10 +94,10 @@ export class AddressController {
             } else if (payload.lat && payload.lng) {
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
                 if (validateStore && validateStore.id && validateStore.id != "") {
-                    // if (!validateStore.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    // if (!validateStore.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    if (!validateStore.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!validateStore.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     store = validateStore
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 }
@@ -164,10 +164,10 @@ export class AddressController {
             } else if (payload.lat && payload.lng) {
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
                 if (validateStore && validateStore.id && validateStore.id != "") {
-                    // if (!validateStore.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    // if (!validateStore.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    if (!validateStore.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!validateStore.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     store = validateStore
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 }
@@ -216,10 +216,10 @@ export class AddressController {
             if (payload.lat && payload.lng) {
                 let validateStore: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
                 if (validateStore && validateStore.id && validateStore.id != "") {
-                    // if (!validateStore.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    // if (!validateStore.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    if (!validateStore.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!validateStore.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)

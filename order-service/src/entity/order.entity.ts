@@ -811,18 +811,22 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number) {
+    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number, paymentRetry: boolean) {
         try {
             let noonpayRedirectionUrl = ""
+            let dataToUpdateOrder = {
+                payment: {
+                    paymentMethodId: paymentMethodId,
+                    amount: totalAmount,
+                    name: ""
+                }
+            }
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
-                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                        payment: {
-                            paymentMethodId: paymentMethodId,
-                            amount: totalAmount,
-                            name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
-                        }
-                    })
+                    dataToUpdateOrder['payment.name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
+                    if (paymentRetry)
+                        dataToUpdateOrder['transLogs'] = []
+                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
                         payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
@@ -832,6 +836,7 @@ export class OrderClass extends BaseEntity {
                     break;
                 }
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
+                    dataToUpdateOrder['payment.name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
                     let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                         orderId: order.cmsOrderRef.toString(),
                         amount: totalAmount,
@@ -840,32 +845,33 @@ export class OrderClass extends BaseEntity {
                         channel: "Mobile",
                         locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
                     })
-                    noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
-                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                        $addToSet: {
-                            transLogs: initiatePaymentObj
-                        },
-                        payment: {
-                            paymentMethodId: paymentMethodId,
-                            amount: totalAmount,
-                            name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
-                        }
-                    })
-                    CMS.TransactionCMSE.createTransaction({
-                        order_id: order.cmsOrderRef,
-                        message: initiatePaymentObj.paymentStatus,
-                        type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
-                        payment_data: {
-                            id: initiatePaymentObj.noonpayOrderId.toString(),
-                            data: JSON.stringify(initiatePaymentObj)
-                        }
-                    })
-                    CMS.OrderCMSE.updateOrder({
-                        order_id: order.cmsOrderRef,
-                        payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                        order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
-                        sdm_order_id: order.sdmOrderRef
-                    })
+                    if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
+                        noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
+                        if (paymentRetry)
+                            dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
+                        else
+                            dataToUpdateOrder['$addToSet'] = {
+                                transLogs: initiatePaymentObj
+                            }
+                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
+                        CMS.TransactionCMSE.createTransaction({
+                            order_id: order.cmsOrderRef,
+                            message: initiatePaymentObj.paymentStatus,
+                            type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
+                            payment_data: {
+                                id: initiatePaymentObj.noonpayOrderId.toString(),
+                                data: JSON.stringify(initiatePaymentObj)
+                            }
+                        })
+                        CMS.OrderCMSE.updateOrder({
+                            order_id: order.cmsOrderRef,
+                            payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                            sdm_order_id: order.sdmOrderRef
+                        })
+                    } else {
+                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, true)
+                    }
                     break;
                 }
                 default: {
@@ -1596,7 +1602,6 @@ export class OrderClass extends BaseEntity {
                                     }
                                 } else {
                                     consolelog(process.cwd(), `FAILURE HANDLER 5`, "", true)
-
                                 }
                                 try {
                                     reverseStatus = await paymentService.getPaymentStatus({
