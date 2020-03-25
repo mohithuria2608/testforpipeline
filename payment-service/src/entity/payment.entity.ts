@@ -199,13 +199,16 @@ export class PaymentClass extends BaseEntity {
      * @param noonpayConfig 
      */
     private getNoonPayAPIKey(noonpayConfig: any): string {
+        console.log("payment environment", noonpayConfig.environment)
         if (noonpayConfig.environment == "Test") {
             // Format: Key_Environment Base64Encoded(BusinessIdentifier.ApplicationIdentifier:AppKey (case-insensitive))
             let key = `${PaymentClass.API_KEY_PREFIX}${noonpayConfig.environment} ${(new Buffer(`${noonpayConfig.businessIdentifier}.${noonpayConfig.appIdentifier}:${noonpayConfig.appAccessKey}`)).toString('base64')}`;
+            console.log("payment environment key", noonpayConfig.environment, key)
             return key;
         } else {
             // Format: Key_Environment Base64Encoded(BusinessIdentifier.ApplicationIdentifier:AppKey (case-insensitive))
             let key = `${PaymentClass.API_KEY_PREFIX}${noonpayConfig.environment} ${noonpayConfig.apiKey}`;
+            console.log("payment environment key", noonpayConfig.environment, key)
             return key;
         }
 
