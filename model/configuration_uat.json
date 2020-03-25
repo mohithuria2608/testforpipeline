@@ -425,17 +425,17 @@
                     {
                         "id": 1,
                         "name": "Card",
-                        "orderCategory": "kfc_3ds"
+                        "orderCategory": "kfc_3dsf"
                     }
                 ],
                 "paymentRetryInterval": 10000,
                 "maxTry": 2,
                 "noonpayOrderExpirationTime": 600000,
-                "businessIdentifier": "americana_test_cognizant",
-                "appIdentifier": "kfc_uae_test",
-                "appAccessKey": "65c5cc823a3f4c079de1c2928d927ebd",
-                "apiKey": "",
-                "environment": "Test",
+                "businessIdentifier": "",
+                "appIdentifier": "",
+                "appAccessKey": "",
+                "apiKey": "YW1lcmljYW5hLmtmY191YWVfYXBwOjZmMDVmMjY5YjNkZDRkZWJhOTYyNTI0NzIxOWJmNWQz",
+                "environment": "Live",
                 "noonpayBaseUrl": "https://api.noonpayments.com/payment/v1",
                 "noonpayInitiatePaymentEndPoint": "/order",
                 "noonpayGetOrderEndPoint": "/order",
