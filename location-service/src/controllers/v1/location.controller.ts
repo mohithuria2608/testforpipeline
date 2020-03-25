@@ -54,10 +54,6 @@ export class LocationController {
                                                 if (s && s.active == 1) {
                                                     delete s.geoFence
                                                     if (s.areaId == a.areaId) {
-                                                        // c['isSelected'] = false
-                                                        // a['isSelected'] = false
-                                                        // s['isSelected'] = false
-                                                        // s['isOnline'] = checkOnlineStore(s.startTime, s.endTime)
                                                         storeCollection.push(s)
                                                     }
                                                 }
@@ -144,7 +140,7 @@ export class LocationController {
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
                                     s['isSelected'] = false
-                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime)
+                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextDay)
                                 })
                             }
                         })

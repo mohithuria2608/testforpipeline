@@ -399,7 +399,7 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let checkOnlineStore = function (start, end) {
+export let checkOnlineStore = function (start, end, nextDay?) {
     // console.log("curTime",
     //     new Date(),
     //     new Date().getUTCHours(),
@@ -428,6 +428,8 @@ export let checkOnlineStore = function (start, end) {
     // console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
     // console.log(startTime < curTime)
     // console.log(curTime > endTime)
+    if (nextDay != undefined && (nextDay == 1))
+        endTime = endTime + (12 * 60 * 60 * 1000)
     if (startTime < curTime && curTime < endTime)
         return true
     else
