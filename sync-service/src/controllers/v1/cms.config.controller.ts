@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as fs from 'fs';
 import * as Constant from '../../constant'
 import { consolelog, configIdGenerator } from '../../utils'
@@ -16,10 +17,11 @@ export class CmsConfigController {
     * */
     async bootstrapConfiguration() {
         try {
+            let jsonPostfix = config.get("sdm.type")
             await Aerospike.truncate({ set: ENTITY.ConfigE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/configuration.json', 'utf-8');
-            let config = JSON.parse(rawdata);
-            for (const iterator of config) {
+            let rawdata = fs.readFileSync(__dirname + `/../../../model/configuration_${jsonPostfix}.json`, 'utf-8');
+            let configurations = JSON.parse(rawdata);
+            for (const iterator of configurations) {
                 ENTITY.ConfigE.postConfiguration(iterator)
             }
             return {}
