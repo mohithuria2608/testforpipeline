@@ -1032,6 +1032,7 @@ export const PAYMENT_CONFIG = {
             businessIdentifier: 'americana_test_cognizant',
             appIdentifier: 'kfc_uae_test',
             appAccessKey: '65c5cc823a3f4c079de1c2928d927ebd',
+            apiKey: "",
             environment: 'Test', // Test or Live
             noonpayBaseUrl: 'https://api.noonpayments.com/payment/v1',
             noonpayInitiatePaymentEndPoint: '/order',
@@ -2511,6 +2512,7 @@ interface IPayment {
         businessIdentifier: string,
         appIdentifier: string,
         appAccessKey: string,
+        apiKey: string
         environment: string,
         noonpayBaseUrl: string,
         noonpayInitiatePaymentEndPoint: string,
@@ -2549,12 +2551,17 @@ export const paymentConfigSync = function (store_code: string, config: IPayment,
             PAYMENT_CONFIG[store_code].noonpayConfig.businessIdentifier = config.noonpayConfig.businessIdentifier
         if (config.noonpayConfig.appIdentifier)
             PAYMENT_CONFIG[store_code].noonpayConfig.appIdentifier = config.noonpayConfig.appIdentifier
+        if (config.noonpayConfig.appAccessKey)
+            PAYMENT_CONFIG[store_code].noonpayConfig.appAccessKey = config.noonpayConfig.appAccessKey
+        if (config.noonpayConfig.apiKey)
+            PAYMENT_CONFIG[store_code].noonpayConfig.apiKey = config.noonpayConfig.apiKey
         if (config.noonpayConfig.paymentMethods)
             PAYMENT_CONFIG[store_code].noonpayConfig.paymentMethods = config.noonpayConfig.paymentMethods
         if (config.noonpayConfig.code)
             PAYMENT_CONFIG[store_code].noonpayConfig.code = config.noonpayConfig.code
         if (config.noonpayConfig.decimal)
             PAYMENT_CONFIG[store_code].noonpayConfig.decimal = config.noonpayConfig.decimal
+
         if (config.noonpayConfig.status)
             PAYMENT_CONFIG[store_code].noonpayConfig.status = config.noonpayConfig.status
         if (config.noonpayConfig.environment)

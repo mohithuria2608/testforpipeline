@@ -434,6 +434,7 @@
                 "businessIdentifier": "americana_test_cognizant",
                 "appIdentifier": "kfc_uae_test",
                 "appAccessKey": "65c5cc823a3f4c079de1c2928d927ebd",
+                "apiKey": "",
                 "environment": "Test",
                 "noonpayBaseUrl": "https://api.noonpayments.com/payment/v1",
                 "noonpayInitiatePaymentEndPoint": "/order",
