@@ -11,58 +11,58 @@ import { cloneObject } from '../utils/helper';
 /**
  * Noonpay Payment Config from CMS
  */
-const PAYMENT_CONFIG = Object.freeze({
-    // cms store code
-    main_website_store: {
-        /** 
-         * NOTE: 1. Currently this info is coming inside noon_pay_config from CMS
-         * 2. Keys are coming '_' separated
-         */
-        channel: 'Mobile', // TODO: To be provided by Order service
-        decimal: 2, // To be added in CMS Store config - here not required
-        /** xxxx */
-        noonpayConfig: {
-            brandCode: 'KFC',
-            countryCode: 'UAE',
-            currencyCode: 'AED',
-            paymentMethods: [
-                {
-                    id: 1,
-                    name: 'Card',
-                    orderCategory: 'kfc_3ds'
-                },
-                {
-                    id: 2,
-                    name: 'Visa Checkout',
-                    orderCategory: 'kfc_visacheckout'
-                }
-            ],
-            paymentRetryInterval: 10 * 1000, // in milliseconds
-            maxTry: 2,
-            noonpayOrderExpirationTime: 10 * 60 * 1000, // in milliseconds (10min)
-            businessIdentifier: 'americana_test_cognizant',
-            appIdentifier: 'kfc_uae_test',
-            appAccessKey: '65c5cc823a3f4c079de1c2928d927ebd',
-            environment: 'Test', // Test or Live
-            noonpayBaseUrl: 'https://api.noonpayments.com/payment/v1',
-            noonpayInitiatePaymentEndPoint: '/order',
-            noonpayGetOrderEndPoint: '/order',
-            noonpayGetOrderByReferenceEndPoint: '/order/GetByReference',
-            noonpayCapturePaymentEndPoint: '/order',
-            noonpayReversePaymentEndPoint: '/order',
-            noonpayRefundPaymentEndPoint: '/order',
-            code: "noonpay",
-            status: 1
-        },
-        codInfo: {
-            status: 1,
-            title: 'Cash On Delivery',
-            min_order_total: null,
-            max_order_total: null,
-            code: "cashondelivery"
-        }
-    }
-});
+// const PAYMENT_CONFIG = Object.freeze({
+//     // cms store code
+//     main_website_store: {
+//         /** 
+//          * NOTE: 1. Currently this info is coming inside noon_pay_config from CMS
+//          * 2. Keys are coming '_' separated
+//          */
+//         channel: 'Mobile', // TODO: To be provided by Order service
+//         decimal: 2, // To be added in CMS Store config - here not required
+//         /** xxxx */
+//         noonpayConfig: {
+//             brand_ode: 'KFC',
+//             countryCode: 'UAE',
+//             currencyCode: 'AED',
+//             paymentMethods: [
+//                 {
+//                     id: 1,
+//                     name: 'Card',
+//                     orderCategory: 'kfc_3ds'
+//                 },
+//                 {
+//                     id: 2,
+//                     name: 'Visa Checkout',
+//                     orderCategory: 'kfc_visacheckout'
+//                 }
+//             ],
+//             paymentRetryInterval: 10 * 1000, // in milliseconds
+//             maxTry: 2,
+//             noonpayOrderExpirationTime: 10 * 60 * 1000, // in milliseconds (10min)
+//             businessIdentifier: 'americana_test_cognizant',
+//             appIdentifier: 'kfc_uae_test',
+//             appAccessKey: '65c5cc823a3f4c079de1c2928d927ebd',
+//             environment: 'Test', // Test or Live
+//             noonpayBaseUrl: 'https://api.noonpayments.com/payment/v1',
+//             noonpayInitiatePaymentEndPoint: '/order',
+//             noonpayGetOrderEndPoint: '/order',
+//             noonpayGetOrderByReferenceEndPoint: '/order/GetByReference',
+//             noonpayCapturePaymentEndPoint: '/order',
+//             noonpayReversePaymentEndPoint: '/order',
+//             noonpayRefundPaymentEndPoint: '/order',
+//             code: "noonpay",
+//             status: 1
+//         },
+//         codInfo: {
+//             status: 1,
+//             name: 'Cash On Delivery',
+//             min_order_total: null,
+//             max_order_total: null,
+//             code: "cashondelivery"
+//         }
+//     }
+// });
 
 /**
  * Version: 1.0.0
@@ -232,15 +232,6 @@ export class PaymentClass extends BaseEntity {
         storeCode: Joi.string().trim().required().description('CMS store code')
     });
 
-    // public sindex: IAerospike.CreateIndex[] = [
-    //     {
-    //         set: this.set,
-    //         bin: 'userId',
-    //         index: 'idx_' + this.set + '_' + 'userId',
-    //         type: "STRING"
-    //     }
-    // ]
-
     constructor() {
         super('payment')
     }
@@ -250,7 +241,7 @@ export class PaymentClass extends BaseEntity {
      */
     private async getConfig(storeCode: string) {
         // TODO: Get from Aerospike
-        return PAYMENT_CONFIG[storeCode];
+        return Constant.PAYMENT_CONFIG[storeCode];
     }
     /**
      * @description Returns applicable noonpay payment configuration corresponding to a cms store code`
@@ -258,7 +249,7 @@ export class PaymentClass extends BaseEntity {
      */
     private async getNoonpayConfig(storeCode: string) {
         // TODO: Get from Aerospike
-        return PAYMENT_CONFIG[storeCode].noonpayConfig;
+        return Constant.PAYMENT_CONFIG[storeCode].noonpayConfig;
     }
     /**
      * @description Generates and returns API key for specified configuration
@@ -316,7 +307,7 @@ export class PaymentClass extends BaseEntity {
                 // COD available
                 availablePaymentMethods.offline.push({
                     id: 0,
-                    name: config.codInfo.title,
+                    name: config.codInfo.name,
                     min_order_total: config.codInfo.min_order_total,
                     max_order_total: config.codInfo.max_order_total,
                     code: config.codInfo.code

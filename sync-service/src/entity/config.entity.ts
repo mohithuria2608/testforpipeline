@@ -31,6 +31,7 @@ export class ConfigEntity extends BaseEntity {
      * */
     async postConfiguration(data) {
         try {
+            data['createdAt'] = new Date().getTime()
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
@@ -51,7 +52,7 @@ export class ConfigEntity extends BaseEntity {
     * */
     async getConfig(payload: IConfigRequest.IFetchConfig) {
         try {
-            if (payload.type && payload.type != "") {
+            if (payload.type && payload.type != "" && (payload.store_code == "" || payload.store_code == undefined)) {
                 let queryArg: IAerospike.Query = {
                     equal: {
                         bin: "type",
@@ -64,7 +65,7 @@ export class ConfigEntity extends BaseEntity {
                 if (configData && configData.length > 0) {
                     return configData
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
+                    return []
             }
             if (payload.store_code && payload.store_code != "") {
                 let queryArg: IAerospike.Query = {
@@ -77,9 +78,12 @@ export class ConfigEntity extends BaseEntity {
                 }
                 let configData = await Aerospike.query(queryArg)
                 if (configData && configData.length > 0) {
-                    return configData
+                    if (payload.type) {
+                        return configData.filter(elem => { return elem.type == payload.type })
+                    } else
+                        return configData
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
+                    return []
             }
             return {}
         } catch (error) {

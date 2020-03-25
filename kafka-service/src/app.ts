@@ -4,7 +4,9 @@ require('events').EventEmitter.defaultMaxListeners = 15;
 global.configSync = {
   general: 0,
   kafka: 0,
-  orderStatus: 0
+  orderStatus: 0,
+  payment: 0,
+  shipment: 0
 }
 import * as config from "config"
 import * as Koa from 'koa'

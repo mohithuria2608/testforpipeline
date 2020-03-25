@@ -1,36 +1,437 @@
 [
     {
+        "id": "general",
+        "type": "general",
+        "general": {
+            "cms_page_data": [
+                {
+                    "title": "404 Not Found",
+                    "identifier": "no-route"
+                },
+                {
+                    "title": "Home page",
+                    "identifier": "home"
+                },
+                {
+                    "title": "Enable Cookies",
+                    "identifier": "enable-cookies"
+                },
+                {
+                    "title": "Privacy and Cookie Policy",
+                    "identifier": "privacy-policy-cookie-restriction-mode"
+                }
+            ],
+            "ttl_for_menu": null,
+            "ttl_for_cart": "86400",
+            "initial_user_ttl": "604800",
+            "initial_guest_ttl": "86400",
+            "bypass_otp": "1212",
+            "otp_expire": "600000",
+            "access_token_expire_time": "8640000",
+            "refresh_token_expire_time": "8640000",
+            "cms_auth_exp": "bna to lo",
+            "reg_ex_for_validation": "^[1-9]\\d{8}$|^[1-9]\\d{8}$",
+            "country_codes": "+971",
+            "resent_otp_attempts": null,
+            "upgrade": null,
+            "tnclink": null,
+            "maximum_order_items": null,
+            "app_reset_time_stamp": null,
+            "cdn_base_url": null,
+            "maximum_cart_price": null,
+            "support": "666666666",
+            "appstore_url": null,
+            "play_store_url": null,
+            "customer_care_email": "kfc_uae@gmail.com",
+            "user_change_ttl": "900",
+            "max_pending_state": "480000",
+            "minimum_cart_price": "23",
+            "payment_api_timeout": "3000",
+            "payment_api_key_prefix": "Key_",
+            "display_color": "true",
+            "deeplink_fallback": "https://uae.kfc.me//",
+            "auth_mech": "Bearer",
+            "addr_show_time": "3"
+        }
+    },
+    {
+        "id": "kafka",
+        "type": "kafka",
+        "kafka": {
+            "sdm": {
+                "user_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "address_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "menu_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "promotion_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "hidden_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "order_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                }
+            },
+            "cms": {
+                "user_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "address_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "menu_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "promotion_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "hidden_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "order_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                }
+            },
+            "as": {
+                "user_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "address_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "menu_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "promotion_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "hidden_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "configuration_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                },
+                "app_config": {
+                    "max_try": {
+                        "create": "5",
+                        "update": "5",
+                        "get": "5",
+                        "sync": "5",
+                        "reset": "5"
+                    }
+                }
+            }
+        }
+    },
+    {
+        "id": "order_status",
+        "type": "order_status",
+        "orderStatus": {
+            "cart_config": {
+                "as": "CART",
+                "mongo": null,
+                "cms": null,
+                "sdm": null,
+                "freq": {
+                    "get": null,
+                    "geet_once": null,
+                    "get_max": null,
+                    "next_ping": null
+                }
+            },
+            "pending_config": {
+                "as": "PENDING",
+                "mongo": "PENDING",
+                "cms": "pending",
+                "sdm": "0,1,96",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "confirmed_config": {
+                "as": "CONFIRMED",
+                "mongo": "CONFIRMED",
+                "cms": "processing",
+                "sdm": "2",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "prepared_config": {
+                "as": "BEING_PREPARED",
+                "mongo": "BEING_PREPARED",
+                "cms": "being_prepared",
+                "sdm": "2",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "ready_config": {
+                "as": "READY",
+                "mongo": "READY",
+                "cms": "ready",
+                "sdm": "8",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "ontheway_config": {
+                "as": "ON_THE_WAY",
+                "mongo": "ON_THE_WAY",
+                "cms": "shipped",
+                "sdm": "16,32",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "delivered_config": {
+                "as": "DELIVERED",
+                "mongo": "DELIVERED",
+                "cms": "complete",
+                "sdm": "64,128,2048",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "closed_config": {
+                "as": null,
+                "mongo": null,
+                "cms": "closed",
+                "sdm": null,
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "cancelled_config": {
+                "as": "CANCELLED",
+                "mongo": "CANCELLED",
+                "cms": "canceled",
+                "sdm": "512,256,1024,4096,8192",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            },
+            "failure_config": {
+                "as": "FAILURE",
+                "mongo": "FAILURE",
+                "cms": "failed",
+                "sdm": "-2",
+                "freq": {
+                    "get": "5000",
+                    "geet_once": "0",
+                    "get_max": "65000",
+                    "next_ping": "15"
+                }
+            }
+        }
+    },
+    {
         "id": "shipment_main_website_store",
+        "type": "shipment",
         "store_code": "main_website_store",
         "store_id": "1",
-        "free_shipping": {
-            "status": "1",
-            "title": "Free Shipping",
-            "min_order_total": "1",
-            "price": "0",
-            "code": "freeshipping"
-        },
-        "flat_rate": {
-            "status": "1",
-            "title": "Flat Rate",
-            "price": "5",
-            "code": "freeshipping"
+        "shipment": {
+            "free_shipping": {
+                "status": "1",
+                "title": "Free Shipping",
+                "min_order_total": "1",
+                "price": "0",
+                "code": "freeshipping"
+            },
+            "flat_rate": {
+                "status": "1",
+                "title": "Flat Rate",
+                "price": "5",
+                "code": "freeshipping"
+            }
         }
     },
     {
         "id": "payment_main_website_store",
+        "type": "payment",
         "store_code": "main_website_store",
         "store_id": "1",
-        "noon_pay_config": {
-            "brand_code": "ksa",
-            "country_code": "us",
-            "code": "noonpay",
-            "status": "1"
-        },
-        "cod_info": {
-            "status": "1",
-            "name": "Cash On Delivery",
-            "code": "cashondelivery"
+        "payment": {
+            "channel": "Mobile",
+            "decimal": 2,
+            "noonpayConfig": {
+                "brandCode": "KFC",
+                "countryCode": "UAE",
+                "currencyCode": "AED",
+                "paymentMethods": [
+                    {
+                        "id": 1,
+                        "name": "Card",
+                        "orderCategory": "kfc_3ds"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Visa Checkout",
+                        "orderCategory": "kfc_visacheckout"
+                    }
+                ],
+                "paymentRetryInterval": 10000,
+                "maxTry": 2,
+                "noonpayOrderExpirationTime": 600000,
+                "businessIdentifier": "americana_test_cognizant",
+                "appIdentifier": "kfc_uae_test",
+                "appAccessKey": "65c5cc823a3f4c079de1c2928d927ebd",
+                "environment": "Test",
+                "noonpayBaseUrl": "https: //api.noonpayments.com/payment/v1",
+                "noonpayInitiatePaymentEndPoint": "/order",
+                "noonpayGetOrderEndPoint": "/order",
+                "noonpayGetOrderByReferenceEndPoint": "/order/GetByReference",
+                "noonpayCapturePaymentEndPoint": "/order",
+                "noonpayReversePaymentEndPoint": "/order",
+                "noonpayRefundPaymentEndPoint": "/order",
+                "code": "noonpay",
+                "status": 1
+            },
+            "codInfo": {
+                "status": 1,
+                "name": "Cash On Delivery",
+                "min_order_total": null,
+                "max_order_total": null,
+                "code": "cashondelivery"
+            }
         }
     }
 ]

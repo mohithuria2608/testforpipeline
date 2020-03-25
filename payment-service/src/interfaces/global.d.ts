@@ -5,10 +5,12 @@ declare namespace NodeJS {
             as?: boolean,
             sdm?: boolean,
         },
-        configSync: {
+       configSync: {
             general?: number,
             kafka?: number,
             orderStatus?: number,
+            payment?: number,
+            shipment?: number
         }
     }
 }

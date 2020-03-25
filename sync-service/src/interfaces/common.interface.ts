@@ -1,23 +1,33 @@
 declare namespace ICommonRequest {
 
     interface IHeaders {
+        language: string,
+        brand: string,
         country: string,
         appversion: string,
+        devicemodel: string,
         devicetype: string,
+        osversion: string,
         deviceid: string,
+        timezone: string,
     }
 
     interface AuthorizationObj {
         deviceid: string,
         devicetype: string,
         tokenType: string,
-        id?: string,
-        isGuest: number,
+        id: string,
+        isGuest: number
         sessionTime: number
     }
 
     interface IPagination {
         page?: number,
+    }
+
+    interface ICordinatesOpt {
+        lat?: number,
+        lng?: number
     }
 
     interface IError {
@@ -32,6 +42,16 @@ declare namespace ICommonRequest {
         useNoonPayMessage?: boolean;
         data?: any;
     }
+
+    interface IReqPromiseOptions {
+        method: string,
+        url: string,
+        body?: boolean
+        form?: boolean,
+        qs?: boolean,
+        formData?: boolean
+    }
+
     interface IActivityLogger {
         type: string,
         info: any,
@@ -41,6 +61,7 @@ declare namespace ICommonRequest {
         },
         createdAt: number
     }
+
     interface IPingService {
         set: string,
         service: string[],
@@ -48,4 +69,17 @@ declare namespace ICommonRequest {
         type?: string,
         data?: IConfigRequest.IConfig
     }
+
+    interface IInitConfiguration {
+        store_code?: string,
+        type?: string,
+        bootstrap: boolean
+    }
+    interface ISDM {
+        licenseCode: string,
+        conceptID?: number,
+        language: string,
+    }
 }
+
+

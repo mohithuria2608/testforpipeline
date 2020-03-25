@@ -33,7 +33,7 @@ export class CartController {
             let invalidMenu = false
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "" && store.menuId != payload.curMenuId) {
+                if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
                     invalidMenu = true
                     storeOnline = store.isOnline
                 } else

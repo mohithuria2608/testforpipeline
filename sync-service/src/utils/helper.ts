@@ -395,3 +395,7 @@ export let chunk = function (array, size) {
     }
     return chunked_arr;
 }
+
+export let configIdGenerator = function (type: string, store_code: string) {
+    return type + "_" + store_code
+}

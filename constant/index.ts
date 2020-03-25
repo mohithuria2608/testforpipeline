@@ -447,9 +447,9 @@ export const DATABASE = {
             GENERAL: "general",
             PAYMENT: "payment",
             SHIPMENT: "shipment",
-            COUNTRY_SPECIFIC: "country-specific",
+            COUNTRY_SPECIFIC: "country_specific",
             KAFKA: "kafka",
-            ORDER_STATUS: "order-status"
+            ORDER_STATUS: "order_status"
         },
 
         TOKEN: {
@@ -1011,6 +1011,58 @@ export const DATABASE = {
     }
 };
 
+export const PAYMENT_CONFIG = {
+    main_website_store: {
+        /** 
+         * NOTE: 1. Currently this info is coming inside noon_pay_config from CMS
+         * 2. Keys are coming '_' separated
+         */
+        channel: 'Mobile', // TODO: To be provided by Order service
+        decimal: 2, // To be added in CMS Store config - here not required
+        /** xxxx */
+        noonpayConfig: {
+            brandCode: 'KFC',
+            countryCode: 'UAE',
+            currencyCode: 'AED',
+            paymentMethods: [
+                {
+                    id: 1,
+                    name: 'Card',
+                    orderCategory: 'kfc_3ds'
+                },
+                {
+                    id: 2,
+                    name: 'Visa Checkout',
+                    orderCategory: 'kfc_visacheckout'
+                }
+            ],
+            paymentRetryInterval: 10 * 1000, // in milliseconds
+            maxTry: 2,
+            noonpayOrderExpirationTime: 10 * 60 * 1000, // in milliseconds (10min)
+            businessIdentifier: 'americana_test_cognizant',
+            appIdentifier: 'kfc_uae_test',
+            appAccessKey: '65c5cc823a3f4c079de1c2928d927ebd',
+            environment: 'Test', // Test or Live
+            noonpayBaseUrl: 'https://api.noonpayments.com/payment/v1',
+            noonpayInitiatePaymentEndPoint: '/order',
+            noonpayGetOrderEndPoint: '/order',
+            noonpayGetOrderByReferenceEndPoint: '/order/GetByReference',
+            noonpayCapturePaymentEndPoint: '/order',
+            noonpayReversePaymentEndPoint: '/order',
+            noonpayRefundPaymentEndPoint: '/order',
+            code: "noonpay",
+            status: 1
+        },
+        codInfo: {
+            status: 1,
+            title: 'Cash On Delivery',
+            min_order_total: null,
+            max_order_total: null,
+            code: "cashondelivery"
+        }
+    }
+}
+
 export const NOTIFICATION_CODE = {
     SMS: {
         USER_OTP_VERIFICATION: 'USER_OTP_VERIFICATION',
@@ -1243,14 +1295,6 @@ export const STATUS_MSG = {
                 "type": "ORDER_NOT_FOUND",
                 "message_Ar": "الطلب غير موجود، يرجى إدخال رقم هاتف صحيح وإعادة الطلب",
                 "message_En": "Order not found, please enter the correct phone number and order ID"
-            },
-            "CONFIG_NOT_FOUND": {
-                "statusCode": 409,
-                "httpCode": 409,
-                "message": "Config not found",
-                "type": "CONFIG_NOT_FOUND",
-                "message_Ar": "التكوين غير موجود",
-                "message_En": "Config not found"
             },
             "USER_NOT_FOUND": {
                 "statusCode": 409,
@@ -1885,7 +1929,6 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
 
 
     global.configSync.general = date;
-    console.log("--------------------MIN_CART_VALUE--------------------", SERVER)
     return {}
 }
 
@@ -2461,5 +2504,62 @@ export const orderStatusConfigSync = function (config: IOrderStatus, date: numbe
         }
     }
     global.configSync.orderStatus = date;
+    return {}
+}
+
+interface IPayment {
+    channel: string,
+    decimal: number,
+    noon_pay_config: {
+        brand_code: string,
+        country_code: string,
+        payment_methods: [{
+            id: string,
+            name: string,
+            order_category: string,
+        }],
+        code: string,
+        status: string,
+    },
+    cod_info: {
+        status: string,
+        title: string,
+        code: string,
+    }
+}
+
+export const paymentConfigSync = function (store_code: string, config: IPayment, date: number) {
+    // if (config.channel && config.decimal != undefined)
+    //     PAYMENT_CONFIG[store_code]['channel'] = config.channel
+    // if (config.decimal && config.decimal != undefined)
+    //     PAYMENT_CONFIG[store_code]['decimal'] = config.decimal
+    // if (config.noon_pay_config && config.noon_pay_config != undefined)
+    //     PAYMENT_CONFIG[store_code]['noon_pay_config'] = config.noon_pay_config
+    // if (config.cod_info)
+    //     PAYMENT_CONFIG[store_code]['cod_info'] = config.cod_info
+
+    global.configSync.payment = date;
+    return {}
+}
+
+interface IShipment {
+    free_shipping: {
+        status: string,
+        title: string,
+        min_order_total: null,
+        price: number,
+        code: string
+    },
+    flat_rate: {
+        status: string,
+        title: string,
+        price: number,
+        code: string
+    }
+}
+
+export const shipmentConfigSync = function (store_code: string, config: IShipment, date: number) {
+
+    global.configSync.shipment = date;
     return {}
 }

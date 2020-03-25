@@ -69,6 +69,12 @@ declare namespace ICommonRequest {
         type?: string,
         data?: ISyncGrpcRequest.IConfig
     }
+    
+    interface IInitConfiguration {
+        store_code?: string,
+        type?: string,
+        bootstrap: boolean
+    }
     interface ISDM {
         licenseCode: string,
         conceptID?: number,

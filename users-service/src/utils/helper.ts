@@ -447,3 +447,7 @@ function isJsonString(str) {
     }
     return true;
 }
+
+export let configIdGenerator = function (type: string, store_code: string) {
+    return type + "_" + store_code
+}

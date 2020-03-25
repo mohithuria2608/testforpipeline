@@ -1,21 +1,17 @@
 declare namespace ISyncGrpcRequest {
 
-    interface IFetchConfig {
-        store_code?: string,
-        type?: string
-    }
-
     interface IConfig {
         type: string,
         id: string,
 
         store_code?: string,
+        store_id?: string,
 
         general?: IGeneral
         kafka?: IKafka
         orderStatus?: IOrderStatus
         payment?: IPayment
-        shipping?: IShipping
+        shipment?: IShipment
         countrySpecific?: ICountrySpecific,
 
         createdAt: number
@@ -49,7 +45,7 @@ declare namespace ISyncGrpcRequest {
         addr_show_time: number,
     }
     interface IKafka {
-        sdm: {
+        sdm?: {
             user_config: {
                 max_try: IMaxRetry
             },
@@ -69,7 +65,7 @@ declare namespace ISyncGrpcRequest {
                 max_try: IMaxRetry
             }
         },
-        cms: {
+        cms?: {
             user_config: {
                 max_try: IMaxRetry
             },
@@ -89,7 +85,7 @@ declare namespace ISyncGrpcRequest {
                 max_try: IMaxRetry
             }
         },
-        as: {
+        as?: {
             user_config: {
                 max_try: IMaxRetry
             },
@@ -123,16 +119,16 @@ declare namespace ISyncGrpcRequest {
     }
 
     interface IOrderStatus {
-        cart_config: IStatus,
-        pending_config: IStatus,
-        confirmed_config: IStatus,
-        prepared_config: IStatus,
-        ready_config: IStatus,
-        ontheway_config: IStatus,
-        delivered_config: IStatus,
-        closed_config: IStatus,
-        cancelled_config: IStatus,
-        failure_config: IStatus
+        cart_config?: IStatus,
+        pending_config?: IStatus,
+        confirmed_config?: IStatus,
+        prepared_config?: IStatus,
+        ready_config?: IStatus,
+        ontheway_config?: IStatus,
+        delivered_config?: IStatus,
+        closed_config?: IStatus,
+        cancelled_config?: IStatus,
+        failure_config?: IStatus
     }
     interface IStatus {
         as: string,
@@ -148,26 +144,27 @@ declare namespace ISyncGrpcRequest {
     }
 
     interface IPayment {
-        store_id: string,
-        noon_pay_config: {
-            brand_code: string,
-            country_code: string,
-            payment_methods: [{
-                id: string,
-                name: string,
-                order_category: string,
-            }],
-            code: string,
-            status: string,
-        },
-        cod_info: {
-            status: string,
-            title: string,
-            code: string,
-        }
+    channel: string,
+    decimal: number,
+    noon_pay_config: {
+        brand_code: string,
+        country_code: string,
+        payment_methods: [{
+            id: string,
+            name: string,
+            order_category: string,
+        }],
+        code: string,
+        status: string,
+    },
+    cod_info: {
+        status: string,
+        title: string,
+        code: string,
     }
+}
 
-    interface IShipping {
+    interface IShipment {
         free_shipping: {
             status: string,
             title: string,
@@ -200,6 +197,11 @@ declare namespace ISyncGrpcRequest {
             channel: string,
             template_id: number,
         }]
+    }
+
+    interface IFetchConfig {
+        type?: string,
+        store_code?: string
     }
 
     interface IFetchAppversion {
