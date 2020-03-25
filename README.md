@@ -97,6 +97,7 @@ Hands-on Microservices with TypeScript 3
 * git add .
 * git commit -m "update merge"
 * git push http://40.127.244.213:10004/americana/backend.git ${current branch name of current origin}:${target branch name of target origin}
+* git push http://40.127.244.213:10004/americana/backend.git uat:testing
 
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json
