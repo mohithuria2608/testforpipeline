@@ -1,7 +1,7 @@
 <tr>
     <td
         style="background : #eaf4fe; padding: 15px 30px; font-weight: 600; border: solid #d0e1f3; border-width: 1px 1px 0 1px">
-        Details</td>
+        Item Details</td>
 </tr>
 <tr>
     <td>
@@ -10,7 +10,7 @@
             <% if(showAddress) { %>
             <tr>
                 <td style="color: #213f5d; font-weight: 600; ">
-                    <%= (order.orderType === "DELIVERY") ? "Delivery Address" : "Pickup Address" %>
+                    <%= (order.orderType === "DELIVERY") ? "Delivery Address" : "Pick up your order from restaurant at" %>
                 </td>
             </tr>
             <tr>
@@ -21,13 +21,20 @@
             </tr>
             <% } %>
             <tr>
-                <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px;">
-                    Items</td>
-            </tr>
-            <tr>
                 <td>
                     <table cellpadding="0" cellspacing="0" border="0" width="100%"
                         style="color: #213f5d; padding-bottom: 15px">
+                        <tr>
+                            <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px;">
+                                Item Name
+                            </td>
+                            <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px;">
+                                Quantity
+                            </td>
+                            <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px; text-align: right;">
+                                Price
+                            </td>
+                        </tr>
                         <% var itemsHash = {};
                         for(var i=0; i < order.items.length; i++) { 
                             if(itemsHash[order.items[i].id]) {
@@ -67,18 +74,6 @@
                     </table>
                 </td>
             </tr>
-            <% if(showAddress) { %>
-            <tr>
-                <td style="background: #d0e1f3; height: 1px;"></td>
-            </tr>
-            <tr>
-                <td style="color: #213f5d; font-weight: 600; padding-top: 20px">
-                    Store Address </td>
-            </tr>
-            <tr>
-                <td class="gap1" style="padding: 5px 0 30px;"><%= order.store.address_en %></td>
-            </tr>
-            <% } %>
         </table>
     </td>
 </tr>

@@ -125,7 +125,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><img src="images/logo.png" width="111px" alt="Logo" class="logo" style="margin: 0 auto;">
+                        <td><img src="<%= meta.baseImageUrl %>images/logo.png" width="111px" alt="Logo" class="logo"
+                                style="margin: 0 auto;">
                         </td>
                     </tr>
                     <tr>
@@ -134,7 +135,7 @@
                             Order Failure
                         </td>
                     </tr>
-                    <%- include('../common/hello_user', {user: user}); %>
+                    <%- include('../common/En/hello_user', {user: user}); %>
 
                 </table>
             </td>
@@ -152,9 +153,9 @@
                                 <tr>
                                     <td class="para1" style="padding-bottom: 30px; ">
                                         Oops! We are unable to process your order at the moment. Please try after some
-                                        time. Any payments if deducted will get refunded within 4-7 business days.
+                                        time.
                                     </td>
                                 </tr>
-                                <%- include('../common/order_meta', {meta:meta, order: order}); %>
-                                <%- include('../common/order_detail', {meta:meta, order:order, showAddress:false}); %>
-                                <%- include('../common/footer', {meta:meta}); %>
+                                <%- include('../common/En/order_meta', {meta:meta, order: order}); %>
+                                <%- include('../common/En/order_detail', {meta:meta, order:order, showAddress:false}); %>
+                                <%- include('../common/En/footer', {meta:meta}); %>

@@ -99,7 +99,7 @@
 <body style="padding: 0; margin: 0;">
     <!-- table _1 -->
     <table cellpadding="0" cellspacing="0" border="0"
-        style="margin: 0 auto; min-width:320px; max-width:800px; width:100%; font-family: Arial,sans-serif;  background: #ffffff;">
+        style="margin: 0 auto; min-width:320px; max-width:800px; width:100%; font-family: Arial,sans-serif;  background: #ffffff; direction: rtl;">
         <tr>
             <td>
                 <table class="table-1" cellpadding="0" cellspacing="0" border="0" width="100%"
@@ -125,16 +125,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><img src="<%= meta.baseImageUrl %>images/logo.png" width="111px" alt="Logo" class="logo" style="margin: 0 auto;">
+                        <td><img src="<%= meta.baseImageUrl %>images/logo.png" width="111px" alt="Logo" class="logo"
+                                style="margin: 0 auto;">
                         </td>
                     </tr>
                     <tr>
                         <td class="head1"
                             style="color: #ffffff; font-size: 35px; font-weight: 600; padding: 30px 0 30px;">
-                            Order Confirmed
+                            تم تاكيد الطلب
                         </td>
                     </tr>
-                    <%- include('../common/hello_user', {user: user}); %>
+                    <%- include('../common/En/hello_user', {user: user}); %>
                 </table>
             </td>
         </tr>
@@ -149,12 +150,15 @@
                             <table class="table-2" cellpadding="0" cellspacing="0" border="0" width="100%"
                                 style="background: #ffffff; padding: 0 45px 50px; font-size: 18px; color: #6b8090; letter-spacing: 0.3px; line-height: 1.7;">
                                 <tr>
-                                    <td class="para1" style="padding-bottom: 30px; ">
-                                        Thank you for choosing KFC! Your order has been confirmed and will be ready in
-                                        the next 30 mins.
+                                    <td class="para1" style="padding-bottom: 15px; ">
+                                        شكرًا لاختيارك كنتاكي. تم تأكيد طلبك وسيكون جاهزًا خلال 30 دقيقة.
                                     </td>
                                 </tr>
-                                <%- include('../common/order_meta', {meta:meta, order: order}); %>
-                                <%- include('../common/order_detail', {meta:meta, order:order, showAddress:true}); %>
-
-                                <%- include('../common/footer', {meta:meta}); %>
+                                <tr>
+                                    <td class="para1" style="padding-bottom: 30px; ">
+                                        البيانات المطلوبة:
+                                    </td>
+                                </tr>
+                                <%- include('../common/Ar/order_meta', {meta:meta, order: order}); %>
+                                <%- include('../common/Ar/order_detail', {meta:meta, order:order, showAddress:true}); %>
+                                <%- include('../common/Ar/footer', {meta:meta}); %>

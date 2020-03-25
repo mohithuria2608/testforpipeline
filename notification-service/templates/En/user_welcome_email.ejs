@@ -120,12 +120,7 @@
                             Welcome to KFC
                         </td>
                     </tr>
-                    <tr>
-                        <td class="head2"
-                            style="color: #2b343c; font-size: 24px; font-weight: 600; padding: 40px 45px 15px; background: #ffffff; text-align: left">
-                            Hi, <%= user.name %>,
-                        </td>
-                    </tr>
+                    <%- include('../common/En/hello_user', {user: user}); %>
                 </table>
             </td>
         </tr>
@@ -139,6 +134,11 @@
                             <!-- table _3 -->
                             <table class="table-2" cellpadding="0" cellspacing="0" border="0" width="100%"
                                 style="background: #ffffff; padding: 0 45px 50px; font-size: 18px; color: #6b8090; letter-spacing: 0.3px; line-height: 1.7;">
+                                <tr>
+                                    <td class="para1" style="padding-bottom:10px;">
+                                        Welcome to KFC!
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="para1" style="padding-bottom: 40px;">
                                         KFC, pioneered by Colonel Harland Sanders, has grown to become one of the
@@ -196,4 +196,4 @@
                                         password later.
                                     </td>
                                 </tr>
-                                <%- include('../common/footer', {meta:meta}); %>
+                                <%- include('../common/En/footer', {meta:meta}); %>

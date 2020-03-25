@@ -1,0 +1,79 @@
+<tr>
+    <td
+        style="background : #eaf4fe; padding: 15px 30px; font-weight: 600; border: solid #d0e1f3; border-width: 1px 1px 0 1px">
+        بيانات الصنف</td>
+</tr>
+<tr>
+    <td>
+        <table class="table-4" cellpadding="0" cellspacing="0" border="0" width="100%"
+            style="padding: 25px 30px 0; border: solid #d0e1f3; border-width: 0 1px 1px 1px">
+            <% if(showAddress) { %>
+            <tr>
+                <td style="color: #213f5d; font-weight: 600; ">
+                    <%= (order.orderType === "DELIVERY") ? "بيانات الصنف" : "يمكنك استلام طلبك من المطعم في" %>
+                </td>
+            </tr>
+            <tr>
+                <td class="gap1" style="padding: 5px 0 30px;"><%= order.address.description %></td>
+            </tr>
+            <tr>
+                <td style="background: #d0e1f3; height: 1px;"></td>
+            </tr>
+            <% } %>
+            <tr>
+                <td>
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%"
+                        style="color: #213f5d; padding-bottom: 15px">
+                        <tr>
+                            <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px;">
+                                اسم الصنف
+                            </td>
+                            <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px;">
+                                الكمية
+                            </td>
+                            <td style="color: #213f5d; font-weight: 600; padding: 20px 0 10px;">
+                                السعر
+                            </td>
+                        </tr>
+                        <% var itemsHash = {};
+                        for(var i=0; i < order.items.length; i++) { 
+                            if(itemsHash[order.items[i].id]) {
+                                itemsHash[order.items[i].id].qty++;
+                                itemsHash[order.items[i].id].price = itemsHash[order.items[i].id].price * 2;
+                            } else {
+                                itemsHash[order.items[i].id] = {name:order.items[i].name, qty: 1, price:order.items[i].finalPrice}
+                            }
+                        }
+                        for(var items in itemsHash) { %>
+                        <tr class="height" height="50px">
+                            <td><%=itemsHash[items].name%> </td>
+                            <td><%=itemsHash[items].qty%></td>
+                            <td class="width" style="text-align: right; width: 150px;">
+                                AED <%= itemsHash[items].price %></td>
+                        </tr>
+                        <% } %>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="background: #d0e1f3; height: 1px;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table class="table-6" cellpadding="0" cellspacing="0" border="0" width="100%"
+                        style="color: #213f5d; padding: 25px 0">
+
+                        <% for(var j=0; j < order.amount.length; j++) { %>
+                        <tr class="height" height="50px">
+                            <td style="text-align: right;"><%= order.amount[j].name %> </td>
+                            <td class="width" style="text-align: right; width: 180px;">
+                                AED <%= order.amount[j].amount %></td>
+                        </tr>
+                        <% } %>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

@@ -1,9 +1,10 @@
 
 'use strict';
-import { BaseEntity } from './base.entity'
-import * as Constant from '../constant'
-import { startLocationForCMSSequence } from "../service";
 import { consolelog } from '../utils'
+import * as Constant from '../constant'
+import { BaseEntity } from './base.entity'
+import { startLocationForCMSSequence } from "../service";
+import storeSequence from "../service/locationSync/store";
 
 export class LocationClass extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = []
@@ -20,6 +21,18 @@ export class LocationClass extends BaseEntity {
             await startLocationForCMSSequence();
         } catch (error) {
             consolelog(process.cwd(), "fetchLocationFromSDM", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * fetch stores from SDM
+     */
+    async fetchStoresFromSDM(payload) {
+        try {
+            await storeSequence();
+        } catch (error) {
+            consolelog(process.cwd(), "fetchStoresFromSDM", error, false)
             return Promise.reject(error)
         }
     }

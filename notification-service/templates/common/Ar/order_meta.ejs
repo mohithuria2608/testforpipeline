@@ -1,0 +1,18 @@
+<tr>
+    <td>
+        <table class="table-3" cellpadding="0" cellspacing="0" border="0" width="100%"
+            style="border-top: solid 2px #eaf4fe; border-bottom: solid 2px #eaf4fe; margin-bottom: 40px;">
+            <tr>
+                <td width="251px" style="padding-top: 15px;" class="groupImg">
+                    <img src="<%= meta.baseImageUrl %>images/group.png" style="max-width: 100%" alt="">
+                </td>
+                <td>
+                    <p class="para2" style="color: #213f5d; font-size: 22px; font-weight: 600; margin : 0">
+                        UAE - <%= order.sdmOrderRef %> :رقم الطلب </p>
+                    <p style="color: #0c2136; font-weight: 600; margin : 0">
+                        <%= new Date(order.createdAt).toLocaleString() %></p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

@@ -135,6 +135,14 @@ export const SERVER = {
     DELIVERY_CHARGE_ID: 279
 };
 
+export const SDM_CONFIG = {
+    UAE: {
+        COUNTRY_ID: 1,
+        MENU_ID: 1,
+        SDM_URL: ''
+    }
+}
+
 export const DATABASE = {
     STORE_CODE: {
         MAIN_WEB_STORE: "main_website_store"

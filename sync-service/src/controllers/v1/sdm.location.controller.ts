@@ -24,6 +24,24 @@ export class SdmLocationController {
             return Promise.reject(error)
         }
     }
+
+    /**
+     * @method POST
+     * @param {any} data
+     * */
+    async syncStoreStatusData(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
+        try {
+            await ENTITY.LocationE.fetchStoresFromSDM(payload);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOCATION,
+                cms: { create: true, argv: JSON.stringify({ event: "location_sync" }) },
+                inQ: true
+            });
+        } catch (error) {
+            consolelog(process.cwd(), "syncStoreStatusData", error, false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const sdmLocationController = new SdmLocationController();
