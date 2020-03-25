@@ -721,6 +721,7 @@ export class CartClass extends BaseEntity {
             } else
                 dataToUpdate['items'] = payload.curItems
             dataToUpdate['updatedAt'] = new Date().getTime()
+            console.log("dataToUpdate", JSON.stringify(dataToUpdate))
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,
