@@ -598,6 +598,7 @@ export class CartClass extends BaseEntity {
                 action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
             })
             if (payload.cmsCart.coupon_code && payload.cmsCart.coupon_code != "") {
+                console.log("promo==================>2", payload.promo)
                 dataToUpdate['promo'] = payload.promo
                 if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
                     dataToUpdate['freeItems'] = {

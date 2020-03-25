@@ -101,7 +101,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             if (payload.couponCode && payload.items && payload.items.length > 0) {
-                let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (!promo || (promo && !promo.isValid)) {
                     delete payload['couponCode']
                 }
@@ -119,6 +119,8 @@ export class OrderController {
                 payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
             }
             let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
+            console.log("promo==================>1", promo)
+
             let cart: ICartRequest.ICartData = await ENTITY.CartE.updateCart({
                 headers: headers,
                 orderType: payload.orderType,
