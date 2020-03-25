@@ -69,130 +69,90 @@ export class OrderController {
                 userData = await userService.createUserOnSdm(userData)
             if (!userData.cmsUserRef || userData.cmsUserRef == 0)
                 userData = await userService.createUserOnCms(userData)
-            let order: IOrderRequest.IOrderData
-            let paymentRetry = false
-            let getCurrentCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            let dataToHashToCheckCart: ICartRequest.IDataToHash = {
-                items: payload.items,
-                promo: payload.couponCode ? 1 : 0,
-                updatedAt: payload.cartUpdatedAt,
-            }
-            const hash = hashObj(dataToHashToCheckCart)
-            console.log("cartUnique ================ ", getCurrentCart.cartUnique)
-            console.log("cartUnique ---------------- ", hash)
-            if (hash == getCurrentCart.cartUnique) {
-                order = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: getCurrentCart.cartUnique }, {}, { lean: true })
-                if (order && order._id) {
-                    if (order.address.addressId == payload.addressId) {
-                        paymentRetry = true
-                    }
+
+            let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
+                addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
+
+            if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
+            else {
+                if (!getAddress.cmsAddressRef || getAddress.cmsAddressRef == 0) {
+                    userData['asAddress'] = JSON.stringify([getAddress])
+                    userData['headers'] = headers
+                    await userService.creatAddressOnCms(userData)
+                    getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                 }
-            } else {
-                let midOrder = await ENTITY.OrderE.getOneEntityMdb({ cartUnique: hash }, {}, { lean: true })
-                if (midOrder && midOrder._id) {
-                    return {
-                        orderPlaced: {
-                            noonpayRedirectionUrl: "",
-                            orderInfo: midOrder
-                        }
-                    }
-                } else {
-                    if (getCurrentCart.items && getCurrentCart.items.length == 0) {
-                        let midRes: any = { ...getCurrentCart }
-                        midRes['invalidMenu'] = (getCurrentCart['invalidMenu'] == 1) ? true : false
-                        midRes['storeOnline'] = (getCurrentCart['storeOnline'] == 1) ? true : false
-                        return { cartValidate: getCurrentCart }
-                    }
+                if (!getAddress.sdmAddressRef || getAddress.sdmAddressRef == 0) {
+                    userData['asAddress'] = JSON.stringify([getAddress])
+                    userData['headers'] = headers
+                    await userService.creatAddressOnSdm(userData)
+                    getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
                 }
             }
-            let totalAmount = getCurrentCart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
+            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
+            if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+                if (!store.active)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                if (!store.isOnline)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+            let promo: IPromotionGrpcRequest.IValidatePromotionRes
+            if (payload.couponCode && payload.items && payload.items.length > 0) {
+                let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                if (!promo || (promo && !promo.isValid)) {
+                    delete payload['couponCode']
+                }
+            } else
+                delete payload['couponCode']
+            /**
+             * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
+             * @description step 2 create order on SDM async
+             * @description step 3 create order on MONGO synchronously
+             * @description step 4 inititate payment on Noonpay synchronously
+             */
+            let cmsReq = await ENTITY.CartE.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
+            let cmsOrderReq = {
+                ...cmsReq.req,
+                payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
+            }
+            let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
+            let cart: ICartRequest.ICartData = await ENTITY.CartE.updateCart({
+                headers: headers,
+                orderType: payload.orderType,
+                cartId: payload.cartId,
+                cmsCart: cmsOrder,
+                changeCartUnique: true,
+                curItems: payload.items,
+                selFreeItem: payload.selFreeItem,
+                invalidMenu: false,
+                promo: promo,
+                storeOnline: true
+            })
+            if (cmsOrder && !cmsOrder['order_id']) {
+                return { cartValidate: cart }
+            }
+            let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
             if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
-            if (!paymentRetry) {
-                let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
-                if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
-                    addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-                let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
 
-                if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
-                else {
-                    if (!getAddress.cmsAddressRef || getAddress.cmsAddressRef == 0) {
-                        userData['asAddress'] = JSON.stringify([getAddress])
-                        userData['headers'] = headers
-                        await userService.creatAddressOnCms(userData)
-                        getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
-                    }
-                    if (!getAddress.sdmAddressRef || getAddress.sdmAddressRef == 0) {
-                        userData['asAddress'] = JSON.stringify([getAddress])
-                        userData['headers'] = headers
-                        await userService.creatAddressOnSdm(userData)
-                        getAddress = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
-                    }
-                }
-
-                let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
-                if (getStore && getStore.id && getStore.id != "") {
-                    if (!getStore.active)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    if (!getStore.isOnline)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
-                } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-
-                let promo: IPromotionGrpcRequest.IValidatePromotionRes
-                if (payload.couponCode && payload.items && payload.items.length > 0) {
-                    let promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                    if (!promo || (promo && !promo.isValid)) {
-                        delete payload['couponCode']
-                    }
-                } else
-                    delete payload['couponCode']
-                /**
-                 * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
-                 * @description step 2 create order on SDM async
-                 * @description step 3 create order on MONGO synchronously
-                 * @description step 4 inititate payment on Noonpay synchronously
-                 */
-                let cmsReq = await ENTITY.CartE.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
-
-                let cmsOrderReq = {
-                    ...cmsReq.req,
-                    payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
-                }
-                let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
-                if (cmsOrder && !cmsOrder['order_id']) {
-                    getCurrentCart = await ENTITY.CartE.updateCart({
-                        headers: headers,
-                        orderType: payload.orderType,
-                        cartId: payload.cartId,
-                        cmsCart: cmsOrder,
-                        changeCartUnique: true,
-                        curItems: payload.items,
-                        selFreeItem: payload.selFreeItem,
-                        invalidMenu: false,
-                        storeOnline: true,
-                        promo: promo ? promo : {}
-                    })
-                    return { cartValidate: getCurrentCart }
-                }
-                order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData)
-            }
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), cart, getAddress, store, userData)
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
                 headers,
                 payload.paymentMethodId,
                 order,
-                totalAmount[0].amount,
-                paymentRetry
+                totalAmount[0].amount
             )
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
                     ENTITY.OrderE.syncOrder(order)
                     if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
-                        ENTITY.CartE.resetCart(getCurrentCart.cartId)
+                        ENTITY.CartE.resetCart(cart.cartId)
                 }
                 return {
                     orderPlaced: {

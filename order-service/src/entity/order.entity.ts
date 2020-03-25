@@ -811,7 +811,7 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number, paymentRetry: boolean) {
+    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number) {
         try {
             let noonpayRedirectionUrl = ""
             let dataToUpdateOrder = {
@@ -825,8 +825,7 @@ export class OrderClass extends BaseEntity {
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
                     dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
-                    if (paymentRetry)
-                        dataToUpdateOrder['transLogs'] = []
+                    dataToUpdateOrder['transLogs'] = []
                     order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
@@ -848,12 +847,7 @@ export class OrderClass extends BaseEntity {
                     })
                     if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
                         noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
-                        if (paymentRetry)
-                            dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
-                        else
-                            dataToUpdateOrder['$addToSet'] = {
-                                transLogs: initiatePaymentObj
-                            }
+                        dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
                         CMS.TransactionCMSE.createTransaction({
                             order_id: order.cmsOrderRef,
