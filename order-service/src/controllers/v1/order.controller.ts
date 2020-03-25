@@ -119,8 +119,6 @@ export class OrderController {
                 payment_method: payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
             }
             let cmsOrder = await ENTITY.OrderE.createOrderOnCMS(cmsOrderReq, getAddress.cmsAddressRef)
-            console.log("promo==================>1", promo)
-
             let cart: ICartRequest.ICartData = await ENTITY.CartE.updateCart({
                 headers: headers,
                 orderType: payload.orderType,
