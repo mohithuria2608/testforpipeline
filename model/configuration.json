@@ -22,13 +22,13 @@
                 }
             ],
             "ttl_for_menu": null,
-            "ttl_for_cart": "86400",
-            "initial_user_ttl": "604800",
-            "initial_guest_ttl": "86400",
-            "bypass_otp": "1212",
-            "otp_expire": "600000",
-            "access_token_expire_time": "8640000",
-            "refresh_token_expire_time": "8640000",
+            "ttl_for_cart": 86400,
+            "initial_user_ttl": 604800,
+            "initial_guest_ttl": 86400,
+            "bypass_otp": 1212,
+            "otp_expire": 600000,
+            "access_token_expire_time": 8640000,
+            "refresh_token_expire_time": 8640000,
             "cms_auth_exp": "bna to lo",
             "reg_ex_for_validation": "^[1-9]\\d{8}$|^[1-9]\\d{8}$",
             "country_codes": "+971",
@@ -43,15 +43,15 @@
             "appstore_url": null,
             "play_store_url": null,
             "customer_care_email": "kfc_uae@gmail.com",
-            "user_change_ttl": "900",
-            "max_pending_state": "480000",
-            "minimum_cart_price": "23",
-            "payment_api_timeout": "3000",
+            "user_change_ttl": 900,
+            "max_pending_state": 480000,
+            "minimum_cart_price": 23,
+            "payment_api_timeout": 3000,
             "payment_api_key_prefix": "Key_",
             "display_color": "true",
             "deeplink_fallback": "https://uae.kfc.me//",
             "auth_mech": "Bearer",
-            "addr_show_time": "3"
+            "addr_show_time": 3
         }
     },
     {
@@ -61,177 +61,177 @@
             "sdm": {
                 "user_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "address_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "menu_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "promotion_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "hidden_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "order_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 }
             },
             "cms": {
                 "user_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "address_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "menu_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "promotion_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "hidden_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "order_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 }
             },
             "as": {
                 "user_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "address_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "menu_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "promotion_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "hidden_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "configuration_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 },
                 "app_config": {
                     "max_try": {
-                        "create": "5",
-                        "update": "5",
-                        "get": "5",
-                        "sync": "5",
-                        "reset": "5"
+                        "create": 5,
+                        "update": 5,
+                        "get": 5,
+                        "sync": 5,
+                        "reset": 5
                     }
                 }
             }
@@ -257,72 +257,89 @@
                 "as": "PENDING",
                 "mongo": "PENDING",
                 "cms": "pending",
-                "sdm": "0,1,96",
+                "sdm": [
+                    0,
+                    1,
+                    96
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "confirmed_config": {
                 "as": "CONFIRMED",
                 "mongo": "CONFIRMED",
                 "cms": "processing",
-                "sdm": "2",
+                "sdm": [
+                    2
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "prepared_config": {
                 "as": "BEING_PREPARED",
                 "mongo": "BEING_PREPARED",
                 "cms": "being_prepared",
-                "sdm": "2",
+                "sdm": [
+                    2
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "ready_config": {
                 "as": "READY",
                 "mongo": "READY",
                 "cms": "ready",
-                "sdm": "8",
+                "sdm": [
+                    8
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "ontheway_config": {
                 "as": "ON_THE_WAY",
                 "mongo": "ON_THE_WAY",
                 "cms": "shipped",
-                "sdm": "16,32",
+                "sdm": [
+                    16,
+                    32
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "delivered_config": {
                 "as": "DELIVERED",
                 "mongo": "DELIVERED",
                 "cms": "complete",
-                "sdm": "64,128,2048",
+                "sdm": [
+                    64,
+                    128,
+                    2048
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "closed_config": {
@@ -331,34 +348,42 @@
                 "cms": "closed",
                 "sdm": null,
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "cancelled_config": {
                 "as": "CANCELLED",
                 "mongo": "CANCELLED",
                 "cms": "canceled",
-                "sdm": "512,256,1024,4096,8192",
+                "sdm": [
+                    512,
+                    256,
+                    1024,
+                    4096,
+                    8192
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             },
             "failure_config": {
                 "as": "FAILURE",
                 "mongo": "FAILURE",
                 "cms": "failed",
-                "sdm": "-2",
+                "sdm": [
+                    -2
+                ],
                 "freq": {
-                    "get": "5000",
-                    "geet_once": "0",
-                    "get_max": "65000",
-                    "next_ping": "15"
+                    "get": 5000,
+                    "geet_once": 0,
+                    "get_max": 65000,
+                    "next_ping": 15
                 }
             }
         }
@@ -373,13 +398,13 @@
                 "status": "1",
                 "title": "Free Shipping",
                 "min_order_total": "1",
-                "price": "0",
+                "price": 0,
                 "code": "freeshipping"
             },
             "flat_rate": {
                 "status": "1",
                 "title": "Flat Rate",
-                "price": "5",
+                "price": 5,
                 "code": "freeshipping"
             }
         }

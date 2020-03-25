@@ -1317,8 +1317,10 @@ export class OrderClass extends BaseEntity {
                         order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS,
                         sdm_order_id: order.sdmOrderRef
                     })
-                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
-                        recheck = false
+                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS) {
+                        if (process.env.NODE_ENV == "testing")
+                            recheck = false
+                    }
                 }
             }
             return { recheck, order }
@@ -1362,7 +1364,8 @@ export class OrderClass extends BaseEntity {
                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     if (order.status != Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO) {
                         consolelog(process.cwd(), "DELIVERED 1 :       ", parseInt(sdmOrder.Status), true)
-                        recheck = false
+                        if (parseInt(sdmOrder.Status) == 128)
+                            recheck = false
                         order = await this.updateOneEntityMdb({ _id: order._id }, {
                             isActive: 0,
                             status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
@@ -1391,7 +1394,8 @@ export class OrderClass extends BaseEntity {
             if (order && order._id) {
                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     consolelog(process.cwd(), "CANCELED 1 :       ", parseInt(sdmOrder.Status), true)
-                    recheck = false
+                    if (parseInt(sdmOrder.Status) == 512)
+                        recheck = false
                     if (order.status != Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO) {
                         let dataToUpdateOrder = {
                             isActive: 0,
