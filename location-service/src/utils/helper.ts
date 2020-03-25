@@ -427,13 +427,18 @@ export let checkOnlineStore = function (start, end, nextDay?) {
 
     // console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
     // console.log(startTime < curTime)
-    // console.log(curTime > endTime)
-    if (nextDay != undefined && (nextDay == 1))
-        endTime = endTime + (12 * 60 * 60 * 1000)
-    if (startTime < curTime && curTime < endTime)
-        return true
-    else
-        return false
+    // console.log(curTime < endTime)
+    if (nextDay != undefined && nextDay == 0) {
+        if (startTime < curTime && curTime < endTime)
+            return true
+        else
+            return false
+    } else {
+        if (startTime < curTime)
+            return true
+        else
+            return false
+    }
 }
 
 function isJsonString(str) {
