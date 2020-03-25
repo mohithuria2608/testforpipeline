@@ -20,19 +20,31 @@ export class MiscController {
                 consolelog(process.cwd(), "Pinged by  :::", set, true)
                 switch (set) {
                     case Constant.SET_NAME.CONFIG: {
-                        let configInitArgv: ICommonRequest.IInitConfiguration = {
-                            bootstrap: false
+                        if (argv.store_code) {
+                            let storeCodeConfig: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ store_code: argv.store_code, type: Constant.DATABASE.TYPE.CONFIG.PAYMENT })
+                            if (storeCodeConfig && storeCodeConfig.length > 0) {
+                                if (storeCodeConfig[0].payment) {
+                                    if (storeCodeConfig[0].createdAt != global.configSync.payment)
+                                        Constant.paymentConfigSync(storeCodeConfig[0].store_code, storeCodeConfig[0].payment, storeCodeConfig[0].createdAt)
+                                }
+                            }
+                        } else if (argv.type) {
+                            let typeConfig: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ type: argv.type })
+                            if (typeConfig && typeConfig.length > 0) {
+                                switch (argv.type) {
+                                    case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
+                                        if (typeConfig[0].createdAt != global.configSync.general)
+                                            Constant.generalConfigSync(typeConfig[0].general, typeConfig[0].createdAt)
+                                        break;
+                                    }
+                                }
+                            }
                         }
-                        if (argv.store_code && argv.store_code != "")
-                            configInitArgv.store_code = argv.store_code
-                        if (argv.type && argv.type != "")
-                            configInitArgv.type = argv.type
-                        configuration.init(configInitArgv)
                         break;
                     }
                     case Constant.SET_NAME.APP_VERSION: {
-                        let config = await syncService.fetchAppversion({ isActive: 1 })
-                        consolelog(process.cwd(), "appversion", JSON.stringify(config), true)
+                        let appVersionConfig = await syncService.fetchAppversion({ isActive: 1 })
+                        consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
                         break;
                     }
                 }

@@ -5,7 +5,6 @@ import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService } from '../../grpc/client'
 import { configuration } from '../../configuration';
-import { config } from 'winston';
 
 export class CmsConfigController {
 
@@ -232,48 +231,90 @@ export class CmsConfigController {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
                             if (data.data && data.data.length > 0) {
-                                let store_code = data.data['store_code']
-                                data.data.map(async config => {
-                                    console.log("config", config)
-                                    let dataToSave: IConfigRequest.IConfig = {
-                                        id: configIdGenerator(data.type, config.store_code),
-                                        type: data.type,
-                                        store_code: config.store_code,
-                                        store_id: config.store_id,
-                                        payment: {
-                                            channel: config.channel,
-                                            decimal: config.decimal,
-                                            noon_pay_config: config.noon_pay_config,
-                                            cod_info: config.cod_info
-                                        },
-                                        createdAt: new Date().getTime()
+                                data.data.map(async paymentConf => {
+                                    if (paymentConf.store_code == Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE) {
+                                        console.log("paymentConf", paymentConf)
+                                        let dataToSave: IConfigRequest.IConfig = {
+                                            id: configIdGenerator(data.type, paymentConf.store_code),
+                                            type: data.type,
+                                            store_code: paymentConf.store_code,
+                                            store_id: paymentConf.store_id,
+                                            payment: {
+                                                noonpayConfig: {
+                                                    channel: paymentConf.noon_pay_config.channel ? paymentConf.noon_pay_config.channel : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.channel,
+                                                    decimal: paymentConf.noon_pay_config.decimal ? parseInt(paymentConf.noon_pay_config.decimal) : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.decimal,
+                                                    brandCode: paymentConf.noon_pay_config.brand_code ? paymentConf.noon_pay_config.brand_code : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.brandCode,
+                                                    countryCode: paymentConf.noon_pay_config.country_code ? paymentConf.noon_pay_config.country_code : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.countryCode,
+                                                    currencyCode: paymentConf.noon_pay_config.currency_code ? paymentConf.noon_pay_config.currency_code : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.currencyCode,
+                                                    paymentMethods: [],
+                                                    paymentRetryInterval: paymentConf.noon_pay_config.payment_retry_interval ? parseInt(paymentConf.noon_pay_config.payment_retry_interval) : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.paymentRetryInterval,
+                                                    maxTry: paymentConf.noon_pay_config.max_try ? parseInt(paymentConf.noon_pay_config.max_try) : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.maxTry,
+                                                    noonpayOrderExpirationTime: paymentConf.noon_pay_config.noonpay_order_expiration_time ? parseInt(paymentConf.noon_pay_config.noonpay_order_expiration_time) : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayOrderExpirationTime,
+                                                    businessIdentifier: paymentConf.noon_pay_config.businessIdentifier ? paymentConf.noon_pay_config.businessIdentifier : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.businessIdentifier,
+                                                    appIdentifier: paymentConf.noon_pay_config.app_identifier ? paymentConf.noon_pay_config.app_identifier : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.appIdentifier,
+                                                    appAccessKey: paymentConf.noon_pay_config.app_access_key ? paymentConf.noon_pay_config.app_access_key : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.appAccessKey,
+                                                    environment: paymentConf.noon_pay_config.environment ? paymentConf.noon_pay_config.environment : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.environment,
+                                                    noonpayBaseUrl: paymentConf.noon_pay_config.noonpay_base_url ? paymentConf.noon_pay_config.noonpay_base_url : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayBaseUrl,
+                                                    noonpayInitiatePaymentEndPoint: paymentConf.noon_pay_config.noonpay_initiate_payment_end_point ? paymentConf.noon_pay_config.noonpay_initiate_payment_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayInitiatePaymentEndPoint,
+                                                    noonpayGetOrderEndPoint: paymentConf.noon_pay_config.noonpay_get_order_end_point ? paymentConf.noon_pay_config.noonpay_get_order_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayGetOrderEndPoint,
+                                                    noonpayGetOrderByReferenceEndPoint: paymentConf.noon_pay_config.noonpay_get_order_by_reference_end_point ? paymentConf.noon_pay_config.noonpay_get_order_by_reference_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayGetOrderByReferenceEndPoint,
+                                                    noonpayCapturePaymentEndPoint: paymentConf.noon_pay_config.noonpay_capture_payment_end_point ? paymentConf.noon_pay_config.noonpay_capture_payment_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayCapturePaymentEndPoint,
+                                                    noonpayReversePaymentEndPoint: paymentConf.noon_pay_config.noonpay_reverse_payment_end_point ? paymentConf.noon_pay_config.noonpay_reverse_payment_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayReversePaymentEndPoint,
+                                                    noonpayRefundPaymentEndPoint: paymentConf.noon_pay_config.noonpay_refund_payment_end_point ? paymentConf.noon_pay_config.noonpay_refund_payment_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayRefundPaymentEndPoint,
+                                                    code: paymentConf.noon_pay_config.code ? paymentConf.noon_pay_config.code : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.code,
+                                                    status: paymentConf.noon_pay_config.status ? parseInt(paymentConf.noon_pay_config.status) : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.status,
+                                                },
+                                                codInfo: {
+                                                    status: paymentConf.cod_info.status ? parseInt(paymentConf.cod_info.status) : Constant.PAYMENT_CONFIG[paymentConf.store_code].codInfo.status,
+                                                    name: paymentConf.cod_info.name ? paymentConf.cod_info.name : Constant.PAYMENT_CONFIG[paymentConf.store_code].codInfo.name,
+                                                    code: paymentConf.cod_info.code ? paymentConf.cod_info.code : Constant.PAYMENT_CONFIG[paymentConf.store_code].codInfo.code,
+                                                    min_order_total: paymentConf.cod_info.min_order_total ? parseInt(paymentConf.cod_info.min_order_total) : Constant.PAYMENT_CONFIG[paymentConf.store_code].codInfo.min_order_total,
+                                                    max_order_total: paymentConf.cod_info.max_order_total ? parseInt(paymentConf.cod_info.max_order_total) : Constant.PAYMENT_CONFIG[paymentConf.store_code].codInfo.max_order_total,
+                                                }
+                                            },
+                                            createdAt: new Date().getTime()
+                                        }
+                                        let paymentMethods = []
+                                        if (paymentConf.noon_pay_config.payment_methods && paymentConf.noon_pay_config.payment_methods.length > 0) {
+                                            paymentConf.noon_pay_config.payment_methods.map(obj => {
+                                                paymentMethods.push({
+                                                    id: parseInt(obj.id),
+                                                    name: obj.name,
+                                                    orderCategory: obj.order_category
+                                                })
+                                            })
+                                        } else
+                                            paymentMethods = Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.paymentMethods
+                                        dataToSave['payment']['noonpayConfig']['paymentMethods'] = paymentMethods
+                                        let putArg: IAerospike.Put = {
+                                            bins: dataToSave,
+                                            set: ENTITY.ConfigE.set,
+                                            key: dataToSave['id'],
+                                            createOrReplace: true
+                                        }
+                                        await Aerospike.put(putArg)
+
+                                        await configuration.init({ store_code: paymentConf.store_code, bootstrap: false });
+                                        let pingServices: IKafkaGrpcRequest.IKafkaBody = {
+                                            set: Constant.SET_NAME.PING_SERVICE,
+                                            as: {
+                                                create: true,
+                                                argv: JSON.stringify({
+                                                    set: Constant.SET_NAME.CONFIG,
+                                                    service: [
+                                                        Constant.MICROSERVICE.PAYMENT,
+                                                        Constant.MICROSERVICE.ORDER,
+                                                        Constant.MICROSERVICE.USER
+                                                    ],
+                                                    store_code: paymentConf.store_code
+                                                })
+                                            },
+                                            inQ: true
+                                        }
+                                        kafkaService.kafkaSync(pingServices)
                                     }
-                                    let putArg: IAerospike.Put = {
-                                        bins: dataToSave,
-                                        set: ENTITY.ConfigE.set,
-                                        key: dataToSave['id'],
-                                        createOrReplace: true
-                                    }
-                                    await Aerospike.put(putArg)
                                 })
-                                await configuration.init({ store_code: data.data[0].store_code, bootstrap: false });
-                                let pingServices: IKafkaGrpcRequest.IKafkaBody = {
-                                    set: Constant.SET_NAME.PING_SERVICE,
-                                    as: {
-                                        create: true,
-                                        argv: JSON.stringify({
-                                            set: Constant.SET_NAME.CONFIG,
-                                            service: [
-                                                Constant.MICROSERVICE.PAYMENT,
-                                                Constant.MICROSERVICE.ORDER,
-                                                Constant.MICROSERVICE.USER
-                                            ],
-                                            store_code: store_code
-                                        })
-                                    },
-                                    inQ: true
-                                }
-                                kafkaService.kafkaSync(pingServices)
+
                             } else {
                                 return Promise.reject("Unhandled error while saving payment configs from cms")
                             }
@@ -288,44 +329,46 @@ export class CmsConfigController {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
                             if (data.data && data.data.length > 0) {
-                                let store_code = data.data['store_code']
-                                data.data.map(async config => {
-                                    let dataToSave: IConfigRequest.IConfig = {
-                                        id: configIdGenerator(data.type, config.store_code),
-                                        type: data.type,
-                                        store_code: config.store_code,
-                                        store_id: config.store_id,
-                                        shipment: {
-                                            free_shipping: config.free_shipping,
-                                            flat_rate: config.flat_rate,
-                                        },
-                                        createdAt: new Date().getTime()
+                                data.data.map(async shipmentConf => {
+                                    if (shipmentConf.store_code == Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE) {
+                                        let dataToSave: IConfigRequest.IConfig = {
+                                            id: configIdGenerator(data.type, shipmentConf.store_code),
+                                            type: data.type,
+                                            store_code: shipmentConf.store_code,
+                                            store_id: shipmentConf.store_id,
+                                            shipment: {
+                                                free_shipping: shipmentConf.free_shipping,
+                                                flat_rate: shipmentConf.flat_rate,
+                                            },
+                                            createdAt: new Date().getTime()
+                                        }
+                                        let putArg: IAerospike.Put = {
+                                            bins: dataToSave,
+                                            set: ENTITY.ConfigE.set,
+                                            key: dataToSave['id'],
+                                            createOrReplace: true,
+                                        }
+                                        await Aerospike.put(putArg)
+
+                                        await configuration.init({ store_code: shipmentConf.store_code, bootstrap: false });
+                                        let pingServices: IKafkaGrpcRequest.IKafkaBody = {
+                                            set: Constant.SET_NAME.PING_SERVICE,
+                                            as: {
+                                                create: true,
+                                                argv: JSON.stringify({
+                                                    set: Constant.SET_NAME.CONFIG,
+                                                    service: [
+                                                        Constant.MICROSERVICE.ORDER,
+                                                        Constant.MICROSERVICE.USER
+                                                    ],
+                                                    store_code: shipmentConf.store_code
+                                                })
+                                            },
+                                            inQ: true
+                                        }
+                                        kafkaService.kafkaSync(pingServices)
                                     }
-                                    let putArg: IAerospike.Put = {
-                                        bins: dataToSave,
-                                        set: ENTITY.ConfigE.set,
-                                        key: dataToSave['id'],
-                                        createOrReplace: true,
-                                    }
-                                    await Aerospike.put(putArg)
                                 })
-                                await configuration.init({ store_code: data.data[0].store_code, bootstrap: false });
-                                let pingServices: IKafkaGrpcRequest.IKafkaBody = {
-                                    set: Constant.SET_NAME.PING_SERVICE,
-                                    as: {
-                                        create: true,
-                                        argv: JSON.stringify({
-                                            set: Constant.SET_NAME.CONFIG,
-                                            service: [
-                                                Constant.MICROSERVICE.ORDER,
-                                                Constant.MICROSERVICE.USER
-                                            ],
-                                            store_code: store_code
-                                        })
-                                    },
-                                    inQ: true
-                                }
-                                kafkaService.kafkaSync(pingServices)
                             } else {
                                 return Promise.reject("Unhandled error while saving payment configs from cms")
                             }
