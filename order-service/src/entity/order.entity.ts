@@ -670,7 +670,6 @@ export class OrderClass extends BaseEntity {
             }
             /**
              * @step 1 :create order on sdm 
-             * @step 2 :update mongo order using payload.cartUnique sdmOrderRef
              */
             let data: IOrderSdmRequest.ICreateOrder = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
@@ -687,7 +686,7 @@ export class OrderClass extends BaseEntity {
             }
             let createOrder = await OrderSDME.createOrder(data)
             if (createOrder && typeof createOrder == 'string') {
-                let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
+                let order = await this.updateOneEntityMdb({ cmsOrderRef: payload.cmsOrderRef }, {
                     orderId: createOrder,
                     sdmOrderRef: createOrder,
                     isActive: 1,
@@ -745,7 +744,6 @@ export class OrderClass extends BaseEntity {
             let orderData = {
                 orderType: address.addressType,
                 cartId: cartData.cartId,
-                cartUnique: cartData.cartUnique,
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
                 cmsOrderRef: cmsOrderRef,

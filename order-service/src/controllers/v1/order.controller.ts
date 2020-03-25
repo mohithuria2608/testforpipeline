@@ -124,7 +124,6 @@ export class OrderController {
                 orderType: payload.orderType,
                 cartId: payload.cartId,
                 cmsCart: cmsOrder,
-                changeCartUnique: true,
                 curItems: payload.items,
                 selFreeItem: payload.selFreeItem,
                 invalidMenu: false,

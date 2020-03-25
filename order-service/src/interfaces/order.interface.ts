@@ -4,7 +4,6 @@ declare namespace IOrderRequest {
         _id: string,
         orderType: string,
         cartId: string,
-        cartUnique: string
         cmsCartRef: number,
         sdmOrderRef: number,
         cmsOrderRef: number,

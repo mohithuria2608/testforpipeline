@@ -2,7 +2,6 @@ declare namespace ICartRequest {
 
     interface ICartData {
         cartId?: string,
-        cartUnique?: string,
         cmsCartRef?: number,
         sdmOrderRef?: number,
         cmsOrderRef?: number,
@@ -92,7 +91,6 @@ declare namespace ICartRequest {
         orderType: string,
         cartId: string,
         cmsCart: ICartCMSRequest.ICmsCartRes,
-        changeCartUnique: boolean,
         curItems: any,
         selFreeItem: any,
         invalidMenu: boolean,

@@ -65,7 +65,6 @@ export class CartController {
                 orderType: payload.orderType,
                 cartId: payload.cartId,
                 cmsCart: cmsValidatedCart,
-                changeCartUnique: true,
                 curItems: payload.items,
                 selFreeItem: payload.selFreeItem,
                 invalidMenu: invalidMenu,
