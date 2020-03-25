@@ -415,9 +415,9 @@
         "store_code": "main_website_store",
         "store_id": "1",
         "payment": {
-            "channel": "Mobile",
-            "decimal": 2,
             "noonpayConfig": {
+                "channel": "Mobile",
+                "decimal": 2,
                 "brandCode": "KFC",
                 "countryCode": "UAE",
                 "currencyCode": "AED",
@@ -426,11 +426,6 @@
                         "id": 1,
                         "name": "Card",
                         "orderCategory": "kfc_3ds"
-                    },
-                    {
-                        "id": 2,
-                        "name": "Visa Checkout",
-                        "orderCategory": "kfc_visacheckout"
                     }
                 ],
                 "paymentRetryInterval": 10000,
@@ -440,7 +435,7 @@
                 "appIdentifier": "kfc_uae_test",
                 "appAccessKey": "65c5cc823a3f4c079de1c2928d927ebd",
                 "environment": "Test",
-                "noonpayBaseUrl": "https: //api.noonpayments.com/payment/v1",
+                "noonpayBaseUrl": "https://api.noonpayments.com/payment/v1",
                 "noonpayInitiatePaymentEndPoint": "/order",
                 "noonpayGetOrderEndPoint": "/order",
                 "noonpayGetOrderByReferenceEndPoint": "/order/GetByReference",

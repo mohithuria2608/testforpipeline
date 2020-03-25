@@ -1005,13 +1005,8 @@ export const DATABASE = {
 
 export const PAYMENT_CONFIG = {
     main_website_store: {
-        /** 
-         * NOTE: 1. Currently this info is coming inside noon_pay_config from CMS
-         * 2. Keys are coming '_' separated
-         */
-        channel: 'Mobile', // TODO: To be provided by Order service
-        decimal: 2, // To be added in CMS Store config - here not required
-        /** xxxx */
+        channel: 'Mobile',
+        decimal: 2,
         noonpayConfig: {
             brandCode: 'KFC',
             countryCode: 'UAE',
@@ -1021,11 +1016,6 @@ export const PAYMENT_CONFIG = {
                     id: 1,
                     name: 'Card',
                     orderCategory: 'kfc_3ds'
-                },
-                {
-                    id: 2,
-                    name: 'Visa Checkout',
-                    orderCategory: 'kfc_visacheckout'
                 }
             ],
             paymentRetryInterval: 10 * 1000, // in milliseconds
@@ -2488,36 +2478,101 @@ export const orderStatusConfigSync = function (config: IOrderStatus, date: numbe
 }
 
 interface IPayment {
-    channel: string,
-    decimal: number,
-    noon_pay_config: {
-        brand_code: string,
-        country_code: string,
-        payment_methods: [{
-            id: string,
-            name: string,
-            order_category: string,
-        }],
+    noonpayConfig: {
+        channel: string,
+        decimal: number,
+        brandCode: string,
+        countryCode: string,
+        currencyCode: string,
+        paymentMethods: IPaymentMethods[],
+        paymentRetryInterval: number,
+        maxTry: number,
+        noonpayOrderExpirationTime: number,
+        businessIdentifier: string,
+        appIdentifier: string,
+        appAccessKey: string,
+        environment: string,
+        noonpayBaseUrl: string,
+        noonpayInitiatePaymentEndPoint: string,
+        noonpayGetOrderEndPoint: string,
+        noonpayGetOrderByReferenceEndPoint: string,
+        noonpayCapturePaymentEndPoint: string,
+        noonpayReversePaymentEndPoint: string,
+        noonpayRefundPaymentEndPoint: string,
         code: string,
-        status: string,
+        status: number
     },
-    cod_info: {
-        status: string,
-        title: string,
+    codInfo: {
+        status: number,
+        name: string,
         code: string,
+        min_order_total: number,
+        max_order_total: number,
     }
+}
+interface IPaymentMethods {
+    id?: number,
+    name?: string,
+    orderCategory?: string
 }
 
 export const paymentConfigSync = function (store_code: string, config: IPayment, date: number) {
-    // if (config.channel && config.decimal != undefined)
-    //     PAYMENT_CONFIG[store_code]['channel'] = config.channel
-    // if (config.decimal && config.decimal != undefined)
-    //     PAYMENT_CONFIG[store_code]['decimal'] = config.decimal
-    // if (config.noon_pay_config && config.noon_pay_config != undefined)
-    //     PAYMENT_CONFIG[store_code]['noon_pay_config'] = config.noon_pay_config
-    // if (config.cod_info)
-    //     PAYMENT_CONFIG[store_code]['cod_info'] = config.cod_info
-
+    console.log("old", PAYMENT_CONFIG)
+    if (config.noonpayConfig) {
+        if (config.noonpayConfig.noonpayReversePaymentEndPoint)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayReversePaymentEndPoint = config.noonpayConfig.noonpayReversePaymentEndPoint
+        if (config.noonpayConfig.noonpayOrderExpirationTime)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayOrderExpirationTime = config.noonpayConfig.noonpayOrderExpirationTime
+        if (config.noonpayConfig.countryCode)
+            PAYMENT_CONFIG[store_code].noonpayConfig.countryCode = config.noonpayConfig.countryCode
+        if (config.noonpayConfig.businessIdentifier)
+            PAYMENT_CONFIG[store_code].noonpayConfig.businessIdentifier = config.noonpayConfig.businessIdentifier
+        if (config.noonpayConfig.appIdentifier)
+            PAYMENT_CONFIG[store_code].noonpayConfig.appIdentifier = config.noonpayConfig.appIdentifier
+        if (config.noonpayConfig.paymentMethods)
+            PAYMENT_CONFIG[store_code].noonpayConfig.paymentMethods = config.noonpayConfig.paymentMethods
+        if (config.noonpayConfig.code)
+            PAYMENT_CONFIG[store_code].noonpayConfig.code = config.noonpayConfig.code
+        if (config.noonpayConfig.decimal)
+            PAYMENT_CONFIG[store_code].noonpayConfig.decimal = config.noonpayConfig.decimal
+        if (config.noonpayConfig.status)
+            PAYMENT_CONFIG[store_code].noonpayConfig.status = config.noonpayConfig.status
+        if (config.noonpayConfig.environment)
+            PAYMENT_CONFIG[store_code].noonpayConfig.environment = config.noonpayConfig.environment
+        if (config.noonpayConfig.brandCode)
+            PAYMENT_CONFIG[store_code].noonpayConfig.brandCode = config.noonpayConfig.brandCode
+        if (config.noonpayConfig.noonpayGetOrderEndPoint)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayGetOrderEndPoint = config.noonpayConfig.noonpayGetOrderEndPoint
+        if (config.noonpayConfig.noonpayBaseUrl)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayBaseUrl = config.noonpayConfig.noonpayBaseUrl
+        if (config.noonpayConfig.maxTry)
+            PAYMENT_CONFIG[store_code].noonpayConfig.maxTry = config.noonpayConfig.maxTry
+        if (config.noonpayConfig.noonpayRefundPaymentEndPoint)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayRefundPaymentEndPoint = config.noonpayConfig.noonpayRefundPaymentEndPoint
+        if (config.noonpayConfig.noonpayCapturePaymentEndPoint)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayCapturePaymentEndPoint = config.noonpayConfig.noonpayCapturePaymentEndPoint
+        if (config.noonpayConfig.currencyCode)
+            PAYMENT_CONFIG[store_code].noonpayConfig.currencyCode = config.noonpayConfig.currencyCode
+        if (config.noonpayConfig.channel)
+            PAYMENT_CONFIG[store_code].noonpayConfig.channel = config.noonpayConfig.channel
+        if (config.noonpayConfig.noonpayInitiatePaymentEndPoint)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayInitiatePaymentEndPoint = config.noonpayConfig.noonpayInitiatePaymentEndPoint
+        if (config.noonpayConfig.noonpayGetOrderByReferenceEndPoint)
+            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayGetOrderByReferenceEndPoint = config.noonpayConfig.noonpayGetOrderByReferenceEndPoint
+    }
+    if (config.codInfo) {
+        if (config.codInfo.min_order_total)
+            PAYMENT_CONFIG[store_code].codInfo.min_order_total = config.codInfo.min_order_total
+        if (config.codInfo.name)
+            PAYMENT_CONFIG[store_code].codInfo.name = config.codInfo.name
+        if (config.codInfo.code)
+            PAYMENT_CONFIG[store_code].codInfo.code = config.codInfo.code
+        if (config.codInfo.status)
+            PAYMENT_CONFIG[store_code].codInfo.status = config.codInfo.status
+        if (config.codInfo.max_order_total)
+            PAYMENT_CONFIG[store_code].codInfo.max_order_total = config.codInfo.max_order_total
+    }
+    console.log("new", PAYMENT_CONFIG)
     global.configSync.payment = date;
     return {}
 }
@@ -2526,7 +2581,7 @@ interface IShipment {
     free_shipping: {
         status: string,
         title: string,
-        min_order_total: null,
+        min_order_total: string,
         price: number,
         code: string
     },
