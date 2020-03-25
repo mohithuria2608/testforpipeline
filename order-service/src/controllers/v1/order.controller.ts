@@ -134,10 +134,25 @@ export class OrderController {
                 return { cartValidate: cart }
             }
             let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
+            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE) {
+                CMS.OrderCMSE.updateOrder({
+                    order_id: parseInt(cmsOrder['order_id']),
+                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                    sdm_order_id: 0
+                })
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
-            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
+            }
+            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
+                CMS.OrderCMSE.updateOrder({
+                    order_id: parseInt(cmsOrder['order_id']),
+                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                    sdm_order_id: 0
+                })
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
+            }
+
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), cart, getAddress, store, userData)
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
