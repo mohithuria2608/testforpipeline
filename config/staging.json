@@ -213,7 +213,7 @@
         "password": "AppInvDbUser"
     },
     "cms": {
-        "baseUrl": "https://magentouat.appskeeper.com/rest/V1/",
+        "baseUrl": "https://mobcms.americana-food.com/rest/V1/",
         "categoryId": 3
     },
     "sdm": {
