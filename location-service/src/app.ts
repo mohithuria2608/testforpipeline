@@ -27,8 +27,8 @@ export const start = (async () => {
     const port = config.get("server.location.port")
     const server = app.listen(port)
 
-    let startTime = "2014-04-28T10:00:00.000Z"
-    let endTime = "2014-04-28T04:00:59.000Z"
+    let startTime = "2014-08-03T00:00:00.000Z"
+    let endTime = "2014-08-03T00:59:59.000Z"
     let nextDay = 1
     // console.log("checkOnlineStore(startTime, endTime, nextDay)", checkOnlineStore(startTime, endTime, nextDay))
     await bootstrap(server)

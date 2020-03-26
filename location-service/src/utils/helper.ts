@@ -402,10 +402,10 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 export let checkOnlineStore = function (start, end, nextDay?) {
     // console.log("curTime",
     //     new Date(),
-    //     new Date().getUTCHours(),
-    //     new Date().getUTCMinutes(),
-    //     new Date().getUTCSeconds(),
-    //     new Date().getUTCMilliseconds())
+    //     new Date().getHours(),
+    //     new Date().getMinutes(),
+    //     new Date().getSeconds(),
+    //     new Date().getMilliseconds())
     // console.log("startTime",
     //     start,
     //     new Date(start).getTime(),
@@ -421,7 +421,7 @@ export let checkOnlineStore = function (start, end, nextDay?) {
     //     new Date(end).getUTCMinutes(),
     //     new Date(end).getUTCSeconds(),
     //     new Date(end).getUTCMilliseconds())
-    let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
+    let curTime = (new Date().getHours() * 60 * 60 * 1000) + (new Date().getMinutes() * 60 * 1000) + (new Date().getSeconds() * 1000) + new Date().getMilliseconds()
     let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds()
     let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds()
 
