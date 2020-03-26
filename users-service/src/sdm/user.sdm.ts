@@ -17,6 +17,14 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomerOnSdm(payload: IUserRequest.IUserData) {
         try {
+            // <a:CUST_NOTIFICATION_MOBILE>971541211211</a:CUST_NOTIFICATION_MOBILE>
+            // <a:CUST_OCCUPATION/>
+            // <a:CUST_OCCUPATIONUN/>
+            // <a:CUST_PHONEAREACODE>97</a:CUST_PHONEAREACODE>
+            // <a:CUST_PHONECOUNTRYCODE/>
+            // <a:CUST_PHONEEXTENSTION/>
+            // <a:CUST_PHONELOOKUP>971541211211</a:CUST_PHONELOOKUP>
+            // <a:CUST_PHONENUMBER>1541211211</a:CUST_PHONENUMBER>
             let naemRes = nameConstructor(payload.name.trim())
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
@@ -30,9 +38,9 @@ export class UserSDMEntity extends BaseSDM {
                         CUST_LASTNAME: naemRes.lastName,
                         CUST_NATID: -1,
                         CUST_NOTIFICATION_MOBILE: (payload.cCode + payload.phnNo).replace('+', ''),
-                        CUST_PHONEAREACODE: payload.cCode.replace('+', ''),//52
+                        CUST_PHONEAREACODE: payload.cCode.replace('+', '').slice(0,2),
                         CUST_PHONELOOKUP: (payload.cCode + payload.phnNo).replace('+', ''),
-                        CUST_PHONENUMBER: payload.phnNo,
+                        CUST_PHONENUMBER: (payload.cCode + payload.phnNo).slice(3),
                         CUST_PHONETYPE: 2,
                         PASSWORD: deCryptData(payload.password),
                         USERNAME: payload.email,
