@@ -603,27 +603,57 @@ export const start = (async () => {
 
     await bootstrap(server)
     let order = {
-      "licenseCode": Constant.SERVER.SDM.LICENSE_CODE,
+      "licenseCode": "PizzaHutApp",
+      "language": "en",
       "conceptID": 3,
       "order": {
-        "AddressID": "10514480",//"10512559",//,//
-        "ConceptID": "3",
+        "AddressID": 13359185,
+        "ConceptID": 3,
         "CountryID": 1,
-        "CustomerID": "7695133",//"7694266",//"",// 
-        "DeliveryChargeID": Constant.SERVER.DELIVERY_CHARGE_ID,
+        "CustomerID": 8587479,
+        "DeliveryChargeID": 279,
         "DistrictID": -1,
-        "Entries": Entries,
+        "Entries": {
+          "CEntry": [
+            {
+              "DealID": 0,
+              "ID": 0,
+              "ItemID": 413002,
+              "ModCode": "NONE",
+              "Name": "Super Mega Deal - Original",
+              "QCComponent": 1,
+              "QCInstanceID": 907,
+              "QCLevel": 0,
+              "QCProID": 55
+            },
+            {
+              "DealID": 0,
+              "ID": 0,
+              "ItemID": 510005,
+              "ModCode": "NONE",
+              "Name": "Family Fries",
+              "QCComponent": 2,
+              "QCInstanceID": 907,
+              "QCLevel": 0,
+              "QCProID": 55
+            }
+          ]
+        },
         "OrderID": 0,
-        "OrderMode": "1",
+        "OrderMode": 1,
         "OrderType": 0,
         "ProvinceID": 7,
-        "StoreID": "1240",// "1219"
+        "ServiceCharge": 0,
+        "StoreID": 97,
         "StreetID": 315
       },
-      "autoApprove": "true",
-      "useBackupStoreIfAvailable": "true",
-      "creditCardPaymentbool": "false",
-      "menuTemplateID": "17"
+      "autoApprove": true,
+      "useBackupStoreIfAvailable": true,
+      "orderNotes1": "Test Orders - Appinventiv 674",
+      "orderNotes2": "Test Orders - Appinventiv 5e7cab3b85b358e76e3071fc",
+      "creditCardPaymentbool": false,
+      "isSuspended": false,
+      "menuTemplateID": 17
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
     // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 48714070, language: "En" })

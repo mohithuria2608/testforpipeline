@@ -686,7 +686,7 @@ export class OrderClass extends BaseEntity {
             }
             let createOrder = await OrderSDME.createOrder(data)
             if (createOrder && typeof createOrder == 'string') {
-                let order = await this.updateOneEntityMdb({ cmsOrderRef: payload.cmsOrderRef }, {
+                let order = await this.updateOneEntityMdb({ cmsOrderRef: payload.cmsOrderRef, env: Constant.SERVER.ENV[config.get("env")] }, {
                     orderId: createOrder,
                     sdmOrderRef: createOrder,
                     isActive: 1,
