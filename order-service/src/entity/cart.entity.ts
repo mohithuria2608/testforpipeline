@@ -648,6 +648,11 @@ export class CartClass extends BaseEntity {
                             }
                             dataToUpdate['couponApplied'] = 0
                         }
+                    } else {
+                        dataToUpdate['freeItems'] = {
+                            ar: [],
+                            en: []
+                        }
                     }
                     dataToUpdate['selFreeItem'] = {
                         ar: [],
