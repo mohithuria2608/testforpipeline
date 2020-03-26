@@ -400,34 +400,34 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 }
 
 export let checkOnlineStore = function (start, end, nextDay?) {
-    // console.log("curTime",
-    //     new Date(),
-    //     new Date().getHours(),
-    //     new Date().getMinutes(),
-    //     new Date().getSeconds(),
-    //     new Date().getMilliseconds())
-    // console.log("startTime",
-    //     start,
-    //     new Date(start).getTime(),
-    //     new Date(start).getUTCHours(),
-    //     new Date(start).getUTCMinutes(),
-    //     new Date(start).getUTCSeconds(),
-    //     new Date(start).getUTCMilliseconds()
-    // )
-    // console.log("endTime",
-    //     end,
-    //     new Date(end).getTime(),
-    //     new Date(end).getUTCHours(),
-    //     new Date(end).getUTCMinutes(),
-    //     new Date(end).getUTCSeconds(),
-    //     new Date(end).getUTCMilliseconds())
+    console.log("curTime",
+        new Date(),
+        new Date().getHours(),
+        new Date().getMinutes(),
+        new Date().getSeconds(),
+        new Date().getMilliseconds())
+    console.log("startTime",
+        start,
+        new Date(start).getTime(),
+        new Date(start).getUTCHours(),
+        new Date(start).getUTCMinutes(),
+        new Date(start).getUTCSeconds(),
+        new Date(start).getUTCMilliseconds()
+    )
+    console.log("endTime",
+        end,
+        new Date(end).getTime(),
+        new Date(end).getUTCHours(),
+        new Date(end).getUTCMinutes(),
+        new Date(end).getUTCSeconds(),
+        new Date(end).getUTCMilliseconds())
     let curTime = (new Date().getHours() * 60 * 60 * 1000) + (new Date().getMinutes() * 60 * 1000) + (new Date().getSeconds() * 1000) + new Date().getMilliseconds()
     let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds()
     let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds()
 
-    // console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
-    // console.log(startTime < curTime)
-    // console.log(curTime < endTime)
+    console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
+    console.log(startTime < curTime)
+    console.log(curTime < endTime)
     if (nextDay != undefined && nextDay == 0) {
         if (startTime < curTime && curTime < endTime)
             return true
