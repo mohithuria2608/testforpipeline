@@ -20,31 +20,30 @@ export class MiscController {
                 switch (set) {
                     case Constant.SET_NAME.CONFIG: {
                         if (argv.store_code) {
-                            let config: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ store_code: argv.store_code, type: Constant.DATABASE.TYPE.CONFIG.PAYMENT })
-                            if (config && config.length > 0) {
-                                if (config[0].payment) {
-                                    if (config[0].createdAt != global.configSync.payment)
-                                        Constant.paymentConfigSync(config[0].store_code, config[0].payment, config[0].createdAt)
+                            let storeCodeConfig: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ store_code: argv.store_code, type: Constant.DATABASE.TYPE.CONFIG.PAYMENT })
+                            if (storeCodeConfig && storeCodeConfig.length > 0) {
+                                if (storeCodeConfig[0].payment) {
+                                    if (storeCodeConfig[0].createdAt != global.configSync.payment)
+                                        Constant.paymentConfigSync(storeCodeConfig[0].store_code, storeCodeConfig[0].payment, storeCodeConfig[0].createdAt)
                                 }
                             }
                         } else if (argv.type) {
-                            let config: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ type: argv.type })
-                            if (config && config.length > 0) {
+                            let typeConfig: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ type: argv.type })
+                            if (typeConfig && typeConfig.length > 0) {
                                 switch (argv.type) {
                                     case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
-                                        if (config[0].createdAt != global.configSync.general)
-                                            Constant.generalConfigSync(config[0].general, config[0].createdAt)
+                                        if (typeConfig[0].createdAt != global.configSync.general)
+                                            Constant.generalConfigSync(typeConfig[0].general, typeConfig[0].createdAt)
                                         break;
                                     }
                                 }
                             }
                         }
-                        consolelog(process.cwd(), "config", JSON.stringify(config), true)
                         break;
                     }
                     case Constant.SET_NAME.APP_VERSION: {
-                        let config = await syncService.fetchAppversion({ isActive: 1 })
-                        consolelog(process.cwd(), "appversion", JSON.stringify(config), true)
+                        let appVersionConfig = await syncService.fetchAppversion({ isActive: 1 })
+                        consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
                         break;
                     }
                 }

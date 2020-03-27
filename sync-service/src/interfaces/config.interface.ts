@@ -144,31 +144,48 @@ declare namespace IConfigRequest {
     }
 
     interface IPayment {
-        channel: string,
-        decimal: number,
-        noon_pay_config: {
-            brand_code: string,
-            country_code: string,
-            payment_methods: [{
-                id: string,
-                name: string,
-                order_category: string,
-            }],
+        noonpayConfig: {
+            channel: string,
+            decimal: number,
+            brandCode: string,
+            countryCode: string,
+            currencyCode: string,
+            paymentMethods: IPaymentMethods[],
+            paymentRetryInterval: number,
+            maxTry: number,
+            noonpayOrderExpirationTime: number,
+            businessIdentifier: string,
+            appIdentifier: string,
+            appAccessKey: string,
+            environment: string,
+            noonpayBaseUrl: string,
+            noonpayInitiatePaymentEndPoint: string,
+            noonpayGetOrderEndPoint: string,
+            noonpayGetOrderByReferenceEndPoint: string,
+            noonpayCapturePaymentEndPoint: string,
+            noonpayReversePaymentEndPoint: string,
+            noonpayRefundPaymentEndPoint: string,
             code: string,
-            status: string,
+            status: number
         },
-        cod_info: {
-            status: string,
-            title: string,
+        codInfo: {
+            status: number,
+            name: string,
             code: string,
+            min_order_total: number,
+            max_order_total: number,
         }
     }
-
+    interface IPaymentMethods {
+        id?: number,
+        name?: string,
+        orderCategory?: string
+    }
     interface IShipment {
         free_shipping: {
             status: string,
             title: string,
-            min_order_total: null,
+            min_order_total: string,
             price: number,
             code: string
         },

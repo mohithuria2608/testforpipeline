@@ -753,7 +753,7 @@ export class OrderClass extends BaseEntity {
                 sdmUserRef: userData.sdmUserRef,
                 country: headers.country,
                 language: headers.language,
-                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
+                status: Constant.DATABASE.STATUS.ORDER.CART.MONGO,
                 sdmOrderStatus: -1,
                 items: items,
                 amount: amount,
@@ -811,18 +811,23 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number) {
+    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number, paymentRetry: boolean) {
         try {
             let noonpayRedirectionUrl = ""
+            let dataToUpdateOrder = {
+                payment: {
+                    paymentMethodId: paymentMethodId,
+                    amount: totalAmount,
+                    name: ""
+                },
+                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+            }
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
-                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                        payment: {
-                            paymentMethodId: paymentMethodId,
-                            amount: totalAmount,
-                            name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
-                        }
-                    })
+                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
+                    if (paymentRetry)
+                        dataToUpdateOrder['transLogs'] = []
+                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
                         payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
@@ -832,6 +837,7 @@ export class OrderClass extends BaseEntity {
                     break;
                 }
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
+                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
                     let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
                         orderId: order.cmsOrderRef.toString(),
                         amount: totalAmount,
@@ -840,32 +846,33 @@ export class OrderClass extends BaseEntity {
                         channel: "Mobile",
                         locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
                     })
-                    noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
-                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                        $addToSet: {
-                            transLogs: initiatePaymentObj
-                        },
-                        payment: {
-                            paymentMethodId: paymentMethodId,
-                            amount: totalAmount,
-                            name: Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
-                        }
-                    })
-                    CMS.TransactionCMSE.createTransaction({
-                        order_id: order.cmsOrderRef,
-                        message: initiatePaymentObj.paymentStatus,
-                        type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
-                        payment_data: {
-                            id: initiatePaymentObj.noonpayOrderId.toString(),
-                            data: JSON.stringify(initiatePaymentObj)
-                        }
-                    })
-                    CMS.OrderCMSE.updateOrder({
-                        order_id: order.cmsOrderRef,
-                        payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                        order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
-                        sdm_order_id: order.sdmOrderRef
-                    })
+                    if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
+                        noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
+                        if (paymentRetry)
+                            dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
+                        else
+                            dataToUpdateOrder['$addToSet'] = {
+                                transLogs: initiatePaymentObj
+                            }
+                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
+                        CMS.TransactionCMSE.createTransaction({
+                            order_id: order.cmsOrderRef,
+                            message: initiatePaymentObj.paymentStatus,
+                            type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
+                            payment_data: {
+                                id: initiatePaymentObj.noonpayOrderId.toString(),
+                                data: JSON.stringify(initiatePaymentObj)
+                            }
+                        })
+                        CMS.OrderCMSE.updateOrder({
+                            order_id: order.cmsOrderRef,
+                            payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                            sdm_order_id: order.sdmOrderRef
+                        })
+                    } else {
+                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, true)
+                    }
                     break;
                 }
                 default: {
@@ -1310,8 +1317,10 @@ export class OrderClass extends BaseEntity {
                         order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS,
                         sdm_order_id: order.sdmOrderRef
                     })
-                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
-                        recheck = false
+                    if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS) {
+                        if (process.env.NODE_ENV == "testing")
+                            recheck = false
+                    }
                 }
             }
             return { recheck, order }
@@ -1355,7 +1364,8 @@ export class OrderClass extends BaseEntity {
                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     if (order.status != Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO) {
                         consolelog(process.cwd(), "DELIVERED 1 :       ", parseInt(sdmOrder.Status), true)
-                        recheck = false
+                        if (parseInt(sdmOrder.Status) == 128)
+                            recheck = false
                         order = await this.updateOneEntityMdb({ _id: order._id }, {
                             isActive: 0,
                             status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
@@ -1384,7 +1394,8 @@ export class OrderClass extends BaseEntity {
             if (order && order._id) {
                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     consolelog(process.cwd(), "CANCELED 1 :       ", parseInt(sdmOrder.Status), true)
-                    recheck = false
+                    if (parseInt(sdmOrder.Status) == 512)
+                        recheck = false
                     if (order.status != Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO) {
                         let dataToUpdateOrder = {
                             isActive: 0,
@@ -1596,7 +1607,6 @@ export class OrderClass extends BaseEntity {
                                     }
                                 } else {
                                     consolelog(process.cwd(), `FAILURE HANDLER 5`, "", true)
-
                                 }
                                 try {
                                     reverseStatus = await paymentService.getPaymentStatus({
@@ -1680,14 +1690,23 @@ export class OrderClass extends BaseEntity {
             let skip = (limit * (parseInt(payload.page.toString()) - 1));
             let pipeline = [];
 
-            let match = { userId: auth.id }
+            let match = {
+                userId: auth.id,
+                "payment.paymentMethodId": { $exists: true },
+                sdmOrderStatus: { $gte: 0 }
+            }
+            let or = []
+
             if (payload.isActive == 1) {
-                match['$or'] = [
+                or.push(
                     {
+                        sdmOrderRef: { '$ne': 0 },
                         status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
-                        trackUntil: { $gte: new Date().getTime() }
+                        trackUntil: { $gte: new Date().getTime() },
+
                     },
                     {
+                        sdmOrderRef: { '$ne': 0 },
                         status: {
                             $in: [
                                 Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
@@ -1699,9 +1718,25 @@ export class OrderClass extends BaseEntity {
                         },
                         isActive: 1
                     }
-                ]
+                )
+            } else {
+                or.push(
+                    {
+                        sdmOrderRef: { '$eq': 0 },
+                        status: { $eq: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO }
+                    },
+                    {
+                        "payment.paymentMethodId": Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD,
+                        sdmOrderRef: { '$ne': 0 },
+                    },
+                    {
+                        sdmOrderRef: { '$ne': 0 },
+                        "payment.paymentMethodId": Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
+                        "payment.status": { $exists: true }
+                    })
             }
-
+            if (or && or.length > 0)
+                match['$or'] = or
             pipeline.push({
                 $match: match
             })

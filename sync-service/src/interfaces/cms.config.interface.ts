@@ -114,29 +114,48 @@ declare namespace ICmsConfigRequest {
         store_code: string,
         store_id: string,
 
-        channel: string,
-        decimal: number,
         noon_pay_config: {
             brand_code: string,
             country_code: string,
-            payment_methods: [{
-                id: string,
-                name: string,
-                order_category: string,
-            }],
+            currency_code: string,
+            channel: string,
+            decimal: string,
+            payment_methods: [
+                {
+                    id: string,
+                    name: string,
+                    order_category: string
+                }
+            ],
+            payment_retry_interval: string,
+            max_try: string,
+            noonpay_order_expiration_time: string,
+            businessIdentifier: string,
+            app_identifier: string,
+            app_access_key: string,
+            environment: string,
+            noonpay_base_url: string,
+            noonpay_initiate_payment_end_point: string,
+            noonpay_get_order_end_point: string,
+            noonpay_get_order_by_reference_end_point: string,
+            noonpay_capture_payment_end_point: string,
+            noonpay_reverse_payment_end_point: string,
+            noonpay_refund_payment_end_point: string,
             code: string,
-            status: string,
+            status: string
         },
         cod_info: {
             status: string,
-            title: string,
+            name: string,
             code: string,
+            min_order_total: string,
+            max_order_total: string
         }
 
         free_shipping: {
             status: string,
             title: string,
-            min_order_total: null,
+            min_order_total: string,
             price: number,
             code: string
         },

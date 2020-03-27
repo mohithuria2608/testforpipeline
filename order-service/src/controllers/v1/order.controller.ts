@@ -135,10 +135,10 @@ export class OrderController {
 
                 let getStore: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
                 if (getStore && getStore.id && getStore.id != "") {
-                    // if (!getStore.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    // if (!getStore.isOnline)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
+                    if (!getStore.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!getStore.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
@@ -180,12 +180,20 @@ export class OrderController {
                 }
                 order = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), getCurrentCart, getAddress, getStore, userData)
             }
-            let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(headers, payload.paymentMethodId, order, totalAmount[0].amount)
+            let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
+                headers,
+                payload.paymentMethodId,
+                order,
+                totalAmount[0].amount,
+                paymentRetry
+            )
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
-                ENTITY.OrderE.syncOrder(order)
-                if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
-                    ENTITY.CartE.resetCart(getCurrentCart.cartId)
+                if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
+                    ENTITY.OrderE.syncOrder(order)
+                    if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
+                        ENTITY.CartE.resetCart(getCurrentCart.cartId)
+                }
                 return {
                     orderPlaced: {
                         noonpayRedirectionUrl: initiatePayment.noonpayRedirectionUrl,
