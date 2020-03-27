@@ -1113,18 +1113,18 @@ export const NOTIFICATION_MSG = {
     },
     EMAIL: {
         En: {
-            USER_WELCOME_EMAIL: 'Welcome to KFC',
-            ORDER_DELIVERY_CONFIRM: 'Order Confirmed - Delivery',
-            ORDER_PICKUP_CONFIRM: 'Order Confirmed - Pickup',
-            ORDER_CANCEL: 'Order Cancelled',
-            ORDER_FAIL: 'Order Failed',
+            USER_WELCOME_EMAIL: 'Welcome to KFC | KFC UAE',
+            ORDER_DELIVERY_CONFIRM: 'Order Confirmed - Delivery | KFC UAE',
+            ORDER_PICKUP_CONFIRM: 'Order Confirmed - Pickup | KFC UAE',
+            ORDER_CANCEL: 'Order Cancelled | KFC UAE',
+            ORDER_FAIL: 'Order Failed | KFC UAE',
         },
         Ar: {
-            USER_WELCOME_EMAIL: 'Welcome to KFC',
-            ORDER_DELIVERY_CONFIRM: 'Order Confirmed - Delivery',
-            ORDER_PICKUP_CONFIRM: 'Order Confirmed - Pickup',
-            ORDER_CANCEL: 'Order Cancelled',
-            ORDER_FAIL: 'Order Failed',
+            USER_WELCOME_EMAIL: 'Welcome to KFC | KFC UAE',
+            ORDER_DELIVERY_CONFIRM: 'Order Confirmed - Delivery | KFC UAE',
+            ORDER_PICKUP_CONFIRM: 'Order Confirmed - Pickup | KFC UAE',
+            ORDER_CANCEL: 'Order Cancelled | KFC UAE',
+            ORDER_FAIL: 'Order Failed | KFC UAE',
         }
     }
 }

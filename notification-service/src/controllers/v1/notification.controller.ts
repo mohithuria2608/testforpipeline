@@ -21,7 +21,7 @@ export class NotificationController {
                     resolve();
                 }
                 if (payload.toSendEmail) {
-                    payloadData.email.meta = Constant.EMAIL_META;
+                    payloadData.email.meta = { ...Constant.EMAIL_META, ...payloadData.email.meta };
                     ejs.renderFile(`${__dirname}/../../../templates/${payload.language}/${payload.emailCode.toLowerCase()}.ejs`, payloadData.email, {}, function (err, emailer) {
                         if (err) reject(err);
                         else {

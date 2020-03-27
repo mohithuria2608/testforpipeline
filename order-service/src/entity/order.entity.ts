@@ -1282,7 +1282,7 @@ export class OrderClass extends BaseEntity {
                         msgDestination: `${userData.cCode}${userData.phnNo}`,
                         emailDestination: userData.email,
                         language: order.language,
-                        payload: JSON.stringify({ msg: order, email: { order } })
+                        payload: JSON.stringify({ msg: order, email: { order, user: userData } })
                     });
                     order = await this.updateOneEntityMdb({ _id: order._id }, { orderConfirmationNotified: true }, { new: true })
                 }
@@ -1507,7 +1507,7 @@ export class OrderClass extends BaseEntity {
                                 msgDestination: `${userData.cCode}${userData.phnNo}`,
                                 emailDestination: userData.email,
                                 language: order.language,
-                                payload: JSON.stringify({ msg: order, email: { order } })
+                                payload: JSON.stringify({ msg: order, email: { order, user: userData } })
                             });
                         }
                     }
@@ -1658,7 +1658,7 @@ export class OrderClass extends BaseEntity {
                             emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
                             emailDestination: userData.email,
                             language: order.language,
-                            payload: JSON.stringify({ msg: order, email: { order } })
+                            payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
                         });
                     }
                 }

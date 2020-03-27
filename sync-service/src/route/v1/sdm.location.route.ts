@@ -37,7 +37,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ISdmMenuRequest.ISdmMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    sdmLocationController.syncLocationData(headers, payload, auth);
+                    sdmLocationController.syncStoreStatusData(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, {})
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

@@ -31,10 +31,15 @@ export class SdmLocationController {
      * */
     async syncStoreStatusData(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            await ENTITY.LocationE.fetchStoresFromSDM(payload);
+            let storesStatusDataList = await ENTITY.LocationE.fetchStoresStatusFromSDM(payload);
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOCATION,
-                cms: { create: true, argv: JSON.stringify({ event: "location_sync" }) },
+                cms: { create: true, argv: JSON.stringify({ event: "store_status_sync", data: storesStatusDataList }) },
+                inQ: true
+            });
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOCATION,
+                as: { create: true, argv: JSON.stringify({ event: "store_status_sync", data: storesStatusDataList }) },
                 inQ: true
             });
         } catch (error) {

@@ -13,7 +13,7 @@ export default async function () {
     await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_STORE });
     let invalidStores = ['1240', '1067'];
     for (let store of storesList) {
-        if (store.STR_ISACTIVE === "true" && !invalidStores.includes(store.STR_ID)) {
+        if (!invalidStores.includes(store.STR_ID)) { // removed active store check
             let storeData = {
                 storeId: 1,
                 language: 1,
@@ -21,9 +21,9 @@ export default async function () {
                 menuId: 17,
                 webMenuId: Constant.SDM_CONFIG.UAE.MENU_ID,
                 location: {
-                    description: store.Locations.CC_STORE_MAP_LOCATION.MAPL_DESCRIPTION,
-                    latitude: parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE),
-                    longitude: parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LONGITUDE),
+                    description: store.Locations ? store.Locations.CC_STORE_MAP_LOCATION.MAPL_DESCRIPTION : 'No Location',
+                    latitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE) : 0,
+                    longitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LONGITUDE) : 0,
                 },
                 nameEn: store.STR_NAME || "",
                 nameAr: store.STR_NAMEUN || "",
@@ -31,6 +31,7 @@ export default async function () {
                 phone2: store.STR_PHONE2 || "",
                 addressEn: store.STR_ADDRESS || "",
                 addressAr: store.STR_ADDRESSUN || "",
+                active: store.STR_ACTIVE === "true" ? 1 : 0,
                 services: getServices(store.STR_SERVICES, store.Fences),
                 ...getStoreTimings(store.STR_WH_STARTTIME, store.STR_WH_ENDTIME, parseInt(store.STR_WH_NEXT_DAY)),
                 email: "",

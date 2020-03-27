@@ -287,7 +287,6 @@ export class KafkaController {
                         delete messages.sdm;
                         delete messages.as;
                         delete messages.mdb;
-                        console.log("HERERERE ---> ");
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
