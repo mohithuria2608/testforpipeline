@@ -9,12 +9,16 @@ export class EmailClass {
     }
 
     sendEmail(payload: IEmailRequest.ISingleEmail) {
-        // sendGrid.send({
-        //     to: payload.destination,
-        //     from: config.get("email.sender"),
-        //     subject: payload.subject,
-        //     html: payload.message
-        // });
+        try {
+            sendGrid.send({
+                to: payload.destination,
+                from: config.get("email.sender"),
+                subject: payload.subject,
+                html: payload.message
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 
