@@ -162,7 +162,6 @@ export class CartClass extends BaseEntity {
 
     public cartSchema = Joi.object().keys({
         cartId: Joi.string().required().description("pk"),
-        cartUnique: Joi.string().required(),
         cmsCartRef: Joi.number().required(),
         userId: Joi.string().required().description("sk"),
         orderId: Joi.string().required().description("sk, UAE-1"),
@@ -231,51 +230,30 @@ export class CartClass extends BaseEntity {
     /**
     * @method INTERNAL
     * @param {string} cartId : cart id
-    * @param {string} cmsCartRef : cms cart id
     * */
     async getCart(payload: ICartRequest.IGetCart): Promise<ICartRequest.ICartData> {
         try {
             let cartFound = true
-            if (payload.cartId) {
-                let getArg: IAerospike.Get = {
-                    set: this.set,
-                    key: payload.cartId
-                }
-                let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
-                if (cart && cart.cartId) {
-                    return cart
-                } else
-                    cartFound = false
+            let getArg: IAerospike.Get = {
+                set: this.set,
+                key: payload.cartId
             }
-            else if (payload.cmsCartRef) {
-                let queryArg = {
-                    equal: {
-                        bin: "cmsCartRef",
-                        value: payload.cmsCartRef
-                    },
-                    set: this.set,
-                    background: false,
-                }
-                let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
-                if (cart && cart.length > 0) {
-                    return cart[0]
-                } else
-                    cartFound = false
-            }
+            let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
+            if (cart && cart.cartId) {
+                return cart
+            } else
+                cartFound = false
             if (!cartFound) {
                 let user = await userService.fetchUser({ cartId: payload.cartId })
                 if (user && user.id) {
-                    if (user.cartId == payload.cartId) {
-                        await this.createDefaultCart({
-                            userId: user.id
-                        })
-                        let getArg: IAerospike.Get = {
-                            set: this.set,
-                            key: payload.cartId
-                        }
-                        return await Aerospike.get(getArg)
-                    } else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+                    await this.createDefaultCart({
+                        userId: user.id
+                    })
+                    let getArg: IAerospike.Get = {
+                        set: this.set,
+                        key: payload.cartId
+                    }
+                    return await Aerospike.get(getArg)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }
@@ -291,7 +269,6 @@ export class CartClass extends BaseEntity {
         try {
             let dataToSave: ICartRequest.ICartData = {
                 cartId: payload.userId,
-                cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
@@ -328,7 +305,6 @@ export class CartClass extends BaseEntity {
     async resetCart(userId: string) {
         try {
             let cartUpdate: ICartRequest.ICartData = {
-                cartUnique: this.ObjectId().toString(),
                 cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
@@ -600,7 +576,7 @@ export class CartClass extends BaseEntity {
                 sequence: 1,
                 action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
             })
-            if (payload.cmsCart.coupon_code && payload.cmsCart.coupon_code != "") {
+            if (payload.cmsCart.coupon_code && payload.cmsCart.coupon_code != "" && payload.promo && payload.promo.couponCode) {
                 dataToUpdate['promo'] = payload.promo
                 if (payload.selFreeItem && payload.selFreeItem.en && payload.selFreeItem.en.length > 0) {
                     dataToUpdate['freeItems'] = {
@@ -650,6 +626,11 @@ export class CartClass extends BaseEntity {
                                 en: []
                             }
                             dataToUpdate['couponApplied'] = 0
+                        }
+                    } else {
+                        dataToUpdate['freeItems'] = {
+                            ar: [],
+                            en: []
                         }
                     }
                     dataToUpdate['selFreeItem'] = {
@@ -723,18 +704,7 @@ export class CartClass extends BaseEntity {
                 })
             } else
                 dataToUpdate['items'] = payload.curItems
-
-            let updatedAt = new Date().getTime()
-            dataToUpdate['updatedAt'] = updatedAt
-            if (payload.changeCartUnique) {
-                let dataToHash: ICartRequest.IDataToHash = {
-                    items: dataToUpdate['items'],
-                    promo: dataToUpdate['couponApplied'],
-                    updatedAt: updatedAt,
-                }
-                dataToUpdate['cartUnique'] = hashObj(dataToHash)
-            }
-
+            dataToUpdate['updatedAt'] = new Date().getTime()
             let putArg: IAerospike.Put = {
                 bins: dataToUpdate,
                 set: this.set,

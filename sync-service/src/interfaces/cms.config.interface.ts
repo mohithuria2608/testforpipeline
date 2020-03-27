@@ -133,6 +133,7 @@ declare namespace ICmsConfigRequest {
             businessIdentifier: string,
             app_identifier: string,
             app_access_key: string,
+            api_key: string,
             environment: string,
             noonpay_base_url: string,
             noonpay_initiate_payment_end_point: string,

@@ -99,8 +99,10 @@ export class PaymentServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    noonpayOrderId: Joi.number().required(),
-                    storeCode: Joi.string().required()
+                    noonpayOrderId: Joi.number().integer().required().description('Noonpay order id, returned in INITIATE'),
+                    amount: Joi.number().required().description('Amount to refund(Order amount)'),
+                    captureTransactionId: Joi.string().trim().required().description('The transaction id of Capture transaction'),
+                    storeCode: Joi.string().trim().required().description('CMS store code')
                 });
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

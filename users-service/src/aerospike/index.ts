@@ -253,6 +253,8 @@ class AerospikeClass {
                     resolve()
                 } else reject('Client not initialized');
             } catch (error) {
+                if (error.code == Constant.STATUS_MSG.AEROSPIKE_ERROR.TYPE.DATA_NOT_FOUND)
+                    resolve({})
                 reject(error)
             }
         })

@@ -31,6 +31,7 @@ declare namespace IStoreRequest {
         address_ar?: string,
         startTime?: string,
         endTime?: string,
+        nextDay?: number,
         isOnline?: boolean
     }
 

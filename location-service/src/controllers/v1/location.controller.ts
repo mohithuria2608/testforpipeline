@@ -52,12 +52,16 @@ export class LocationController {
                                         if (store && store.length > 0) {
                                             for (const s of store) {
                                                 if (s && s.active == 1) {
-                                                    delete s.geoFence
                                                     if (s.areaId == a.areaId) {
-                                                        // c['isSelected'] = false
-                                                        // a['isSelected'] = false
-                                                        // s['isSelected'] = false
-                                                        // s['isOnline'] = checkOnlineStore(s.startTime, s.endTime)
+                                                        delete s.phone2
+                                                        delete s.provinceId
+                                                        delete s.countryId
+                                                        delete s.mapId
+                                                        delete s.areaId
+                                                        delete s.streetId
+                                                        delete s.districtId
+                                                        delete s.geoFence
+
                                                         storeCollection.push(s)
                                                     }
                                                 }
@@ -66,6 +70,12 @@ export class LocationController {
                                         if (storeCollection && storeCollection.length > 0) {
                                             storeCollection.sort(compare)
                                             a['store'] = storeCollection
+                                            delete a.cityId
+                                            delete a.areaId
+                                            delete a.districtId
+                                            delete a.provinceId
+                                            delete a.countryId
+                                            delete a.streetId
                                             areaCollection.push(a)
                                         }
                                     }
@@ -144,7 +154,7 @@ export class LocationController {
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
                                     s['isSelected'] = false
-                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime)
+                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextDay)
                                 })
                             }
                         })

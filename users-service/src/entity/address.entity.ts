@@ -263,7 +263,7 @@ export class AddressEntity extends BaseEntity {
                 address: {
                     ADDR_AREAID: userData.asAddress[0].areaId,// 1786,//  16
                     ADDR_BLDGNAME: userData.asAddress[0].bldgName,
-                    ADDR_BLDGNUM: userData.asAddress[0].flatNum,
+                    // ADDR_BLDGNUM: userData.asAddress[0].flatNum,//comment test
                     ADDR_CITYID: userData.asAddress[0].cityId,// 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
@@ -271,7 +271,7 @@ export class AddressEntity extends BaseEntity {
                     ADDR_DESC: userData.asAddress[0].description,
                     ADDR_DISTRICTID: 1021,// 1008
                     ADDR_FLATNUM: userData.asAddress[0].flatNum,
-                    ADDR_FLOOR: userData.asAddress[0].flatNum,
+                    // ADDR_FLOOR: userData.asAddress[0].flatNum,//comment test
                     ADDR_MAPCODE: {
                         X: userData.asAddress[0].lat,
                         Y: userData.asAddress[0].lng
@@ -297,7 +297,7 @@ export class AddressEntity extends BaseEntity {
                     },
                     WADDR_AREAID: 1786,// 16
                     WADDR_BUILD_NAME: userData.asAddress[0].bldgName,
-                    WADDR_BUILD_NUM: userData.asAddress[0].flatNum,
+                    // WADDR_BUILD_NUM: userData.asAddress[0].flatNum,//comment test
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
                     WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,

@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as fs from 'fs';
 import * as Constant from '../../constant'
 import { consolelog, configIdGenerator } from '../../utils'
@@ -16,10 +17,11 @@ export class CmsConfigController {
     * */
     async bootstrapConfiguration() {
         try {
+            let jsonPostfix = config.get("sdm.type")
             await Aerospike.truncate({ set: ENTITY.ConfigE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/configuration.json', 'utf-8');
-            let config = JSON.parse(rawdata);
-            for (const iterator of config) {
+            let rawdata = fs.readFileSync(__dirname + `/../../../model/configuration_${jsonPostfix}.json`, 'utf-8');
+            let configurations = JSON.parse(rawdata);
+            for (const iterator of configurations) {
                 ENTITY.ConfigE.postConfiguration(iterator)
             }
             return {}
@@ -253,6 +255,7 @@ export class CmsConfigController {
                                                     businessIdentifier: paymentConf.noon_pay_config.businessIdentifier ? paymentConf.noon_pay_config.businessIdentifier : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.businessIdentifier,
                                                     appIdentifier: paymentConf.noon_pay_config.app_identifier ? paymentConf.noon_pay_config.app_identifier : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.appIdentifier,
                                                     appAccessKey: paymentConf.noon_pay_config.app_access_key ? paymentConf.noon_pay_config.app_access_key : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.appAccessKey,
+                                                    apiKey: paymentConf.noon_pay_config.api_key ? paymentConf.noon_pay_config.api_key : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.apiKey,
                                                     environment: paymentConf.noon_pay_config.environment ? paymentConf.noon_pay_config.environment : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.environment,
                                                     noonpayBaseUrl: paymentConf.noon_pay_config.noonpay_base_url ? paymentConf.noon_pay_config.noonpay_base_url : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayBaseUrl,
                                                     noonpayInitiatePaymentEndPoint: paymentConf.noon_pay_config.noonpay_initiate_payment_end_point ? paymentConf.noon_pay_config.noonpay_initiate_payment_end_point : Constant.PAYMENT_CONFIG[paymentConf.store_code].noonpayConfig.noonpayInitiatePaymentEndPoint,

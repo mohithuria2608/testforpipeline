@@ -619,75 +619,74 @@ export class OrderClass extends BaseEntity {
     * @method GRPC
     * @description : Create order on SDM
     * */
-    async createSdmOrder(payload: IOrderRequest.IOrderData) {
+    async createSdmOrder(order: IOrderRequest.IOrderData) {
         try {
             let Comps
-            if (payload.promo &&
-                payload.promo.couponId &&
-                payload.promo.couponCode &&
-                payload.promo.posId &&
-                !payload.isFreeItem
+            if (order.promo &&
+                order.promo.couponId &&
+                order.promo.couponCode &&
+                order.promo.posId &&
+                !order.isFreeItem
             ) {
-                let discountAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
+                let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
                 Comps = {
                     KeyValueOfdecimalCCompkckD9yn_P: {
-                        Key: payload.promo.posId,
+                        Key: order.promo.posId,
                         Value: {
                             Amount: discountAmount[0].amount,
-                            CompID: payload.promo.posId,
+                            CompID: order.promo.posId,
                             EnterAmount: discountAmount[0].amount,
-                            Name: payload.promo.couponCode
+                            Name: order.promo.couponCode
                         }
                     }
                 }
             }
-            let serviceAmount = payload.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
+            let serviceAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
             let serviceCharge = undefined;
             if (serviceAmount && serviceAmount.length > 0)
                 serviceCharge = (serviceAmount[0].amount != undefined) ? serviceAmount[0].amount : 0
             else
                 serviceCharge = 0
-            let order = {
-                AddressID: payload.address.sdmAddressRef,
+            let sdmOrderObj = {
+                AddressID: order.address.sdmAddressRef,
                 Comps: Comps,
                 // AreaID: "",//payload.address.areaId
                 // CityID: "",//payload.address.areaId
                 ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
                 CountryID: 1,//payload.store.countryId
-                CustomerID: payload.sdmUserRef,
+                CustomerID: order.sdmUserRef,
                 // DateOfTrans: "",
-                DeliveryChargeID: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.SERVER.DELIVERY_CHARGE_ID : undefined,
+                DeliveryChargeID: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.SERVER.DELIVERY_CHARGE_ID : undefined,
                 DistrictID: -1,
                 // DueTime: "",
-                Entries: this.createCEntries(payload.items),
+                Entries: this.createCEntries(order.items),
                 OrderID: 0,
-                OrderMode: (payload['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM : Constant.DATABASE.TYPE.ORDER.PICKUP.SDM,
+                OrderMode: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM : Constant.DATABASE.TYPE.ORDER.PICKUP.SDM,
                 OrderType: 0,
                 ProvinceID: 7,
                 ServiceCharge: serviceCharge,
-                StoreID: payload.address.storeId,
+                StoreID: order.address.storeId,
                 StreetID: 315
             }
             /**
              * @step 1 :create order on sdm 
-             * @step 2 :update mongo order using payload.cartUnique sdmOrderRef
              */
             let data: IOrderSdmRequest.ICreateOrder = {
                 licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
                 language: "en",
                 conceptID: Constant.SERVER.SDM.CONCEPT_ID,
-                order: order,
+                order: sdmOrderObj,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + payload.cmsOrderRef : payload.cmsOrderRef,
-                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + payload._id : payload._id,
-                creditCardPaymentbool: (payload['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
-                isSuspended: (payload['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
+                orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order.cmsOrderRef : order.cmsOrderRef,
+                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order._id : order._id,
+                creditCardPaymentbool: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
+                isSuspended: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
                 menuTemplateID: 17,
             }
             let createOrder = await OrderSDME.createOrder(data)
             if (createOrder && typeof createOrder == 'string') {
-                let order = await this.updateOneEntityMdb({ cartUnique: payload.cartUnique }, {
+                order = await this.updateOneEntityMdb({ _id: order._id }, {
                     orderId: createOrder,
                     sdmOrderRef: createOrder,
                     isActive: 1,
@@ -713,7 +712,7 @@ export class OrderClass extends BaseEntity {
                 }
                 return {}
             } else {
-                this.orderFailureHandler(payload, 1, createOrder.ResultText, false)
+                this.orderFailureHandler(order, 1, createOrder.ResultText, false)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
             }
         } catch (error) {
@@ -745,7 +744,6 @@ export class OrderClass extends BaseEntity {
             let orderData = {
                 orderType: address.addressType,
                 cartId: cartData.cartId,
-                cartUnique: cartData.cartUnique,
                 cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
                 cmsOrderRef: cmsOrderRef,
@@ -811,7 +809,7 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number, paymentRetry: boolean) {
+    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number) {
         try {
             let noonpayRedirectionUrl = ""
             let dataToUpdateOrder = {
@@ -825,8 +823,7 @@ export class OrderClass extends BaseEntity {
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
                     dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
-                    if (paymentRetry)
-                        dataToUpdateOrder['transLogs'] = []
+                    dataToUpdateOrder['transLogs'] = []
                     order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
@@ -848,12 +845,7 @@ export class OrderClass extends BaseEntity {
                     })
                     if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
                         noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
-                        if (paymentRetry)
-                            dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
-                        else
-                            dataToUpdateOrder['$addToSet'] = {
-                                transLogs: initiatePaymentObj
-                            }
+                        dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
                         CMS.TransactionCMSE.createTransaction({
                             order_id: order.cmsOrderRef,

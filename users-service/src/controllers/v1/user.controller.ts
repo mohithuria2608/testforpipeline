@@ -111,7 +111,6 @@ export class UserController {
                 let userId = ENTITY.UserE.ObjectId().toString()
                 let tempUser: IUserRequest.IUserData = {
                     id: userId,
-                    cartId: userId,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     phnVerified: 0,
                     brand: headers.brand,
@@ -173,8 +172,6 @@ export class UserController {
                     userUpdate['socialKey'] = userchange[0].socialKey
                 if (userchange[0].medium)
                     userUpdate['medium'] = userchange[0].medium
-                if (userchange[0].cartId)
-                    userUpdate['cartId'] = userchange[0].cartId
                 if (userchange[0].isGuest != undefined)
                     userUpdate['isGuest'] = userchange[0].isGuest
                 if (userchange[0].profileStep != undefined)
@@ -365,7 +362,6 @@ export class UserController {
                 let userId = ENTITY.UserE.ObjectId().toString()
                 let createUser: IUserRequest.IUserData = {
                     id: userId,
-                    cartId: userId,
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     phnVerified: 0,
                     brand: headers.brand,
@@ -490,7 +486,6 @@ export class UserController {
                         medium: userData.medium,
                         socialKey: userData.socialKey,
                         otp: otp,
-                        cartId: userData.id,
                         otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
@@ -502,7 +497,7 @@ export class UserController {
                     if (asUserByPhone && asUserByPhone.length > 0) {
                         userchangePayload['id'] = asUserByPhone[0].id
                         console.log('STEP : 1               MS : P')
-                        if (asUserByPhone[0].email == payload.email) {
+                        if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
                             console.log('STEP : 2               MS : P/E  , same user')
                             userchangePayload['deleteUserId'] = auth.id
                         } else {

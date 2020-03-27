@@ -4,7 +4,6 @@ import * as Constant from '../constant';
 export interface Iorder extends Document {
     orderType: string,
     cartId: string,
-    cartUnique: string
     cmsCartRef: number,
     sdmOrderRef: number,
     cmsOrderRef: number,
@@ -79,7 +78,6 @@ interface IStore {
 
 const orderSchema = new Schema({
     cartId: { type: String, required: true },
-    cartUnique: { type: String },
     orderType: {
         type: String, required: true, enum: [
             Constant.DATABASE.TYPE.ORDER.PICKUP.AS,
@@ -88,7 +86,7 @@ const orderSchema = new Schema({
     },
     cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
-    cmsOrderRef: { type: Number, required: true },
+    cmsOrderRef: { type: Number, required: true, index: true },
     userId: { type: String, required: true, index: true },
     sdmUserRef: { type: Number, required: true },
     country: {

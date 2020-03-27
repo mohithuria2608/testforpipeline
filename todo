@@ -13,3 +13,54 @@
 
 ----> LIVE stores without geofence => 70
 ----> LIVE stores with invalid geofence => 613(576), 493(469), 81(963)
+
+
+
+
+uat 
+{
+        "id": "payment_main_website_store",
+        "type": "payment",
+        "store_code": "main_website_store",
+        "store_id": "1",
+        "payment": {
+            "noonpayConfig": {
+                "channel": "Mobile",
+                "decimal": 2,
+                "brandCode": "KFC",
+                "countryCode": "UAE",
+                "currencyCode": "AED",
+                "paymentMethods": [
+                    {
+                        "id": 1,
+                        "name": "Card",
+                        "orderCategory": "kfc_3ds"
+                    }
+                ],
+                "paymentRetryInterval": 10000,
+                "maxTry": 2,
+                "noonpayOrderExpirationTime": 600000,
+                "businessIdentifier": "americana_test_cognizant",
+                "appIdentifier": "kfc_uae_test",
+                "appAccessKey": "65c5cc823a3f4c079de1c2928d927ebd",
+                "apiKey": "",
+                "environment": "Test",
+                "noonpayBaseUrl": "https://api.noonpayments.com/payment/v1",
+                "noonpayInitiatePaymentEndPoint": "/order",
+                "noonpayGetOrderEndPoint": "/order",
+                "noonpayGetOrderByReferenceEndPoint": "/order/GetByReference",
+                "noonpayCapturePaymentEndPoint": "/order",
+                "noonpayReversePaymentEndPoint": "/order",
+                "noonpayRefundPaymentEndPoint": "/order",
+                "code": "noonpay",
+                "status": 1
+            },
+            "codInfo": {
+                "status": 1,
+                "name": "Cash On Delivery",
+                "min_order_total": null,
+                "max_order_total": null,
+                "code": "cashondelivery"
+            }
+        }
+    }

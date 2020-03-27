@@ -399,7 +399,8 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let checkOnlineStore = function (start, end) {
+export let checkOnlineStore = function (start, end, nextDay?) {
+    let dbOffest = (4 * 60 * 60 * 1000)
     // console.log("curTime",
     //     new Date(),
     //     new Date().getUTCHours(),
@@ -422,16 +423,23 @@ export let checkOnlineStore = function (start, end) {
     //     new Date(end).getUTCSeconds(),
     //     new Date(end).getUTCMilliseconds())
     let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
-    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds()
-    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds()
+    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds() - dbOffest
+    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds() - dbOffest
 
     // console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
-    // console.log(startTime < curTime)
-    // console.log(curTime > endTime)
-    if (startTime < curTime && curTime < endTime)
-        return true
-    else
-        return false
+    console.log(startTime < curTime)
+    console.log(curTime < endTime)
+    if (nextDay != undefined && nextDay == 0) {
+        if (startTime < curTime && curTime < endTime)
+            return true
+        else
+            return false
+    } else {
+        if (startTime < curTime)
+            return true
+        else
+            return false
+    }
 }
 
 function isJsonString(str) {

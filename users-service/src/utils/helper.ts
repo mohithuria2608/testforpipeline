@@ -313,6 +313,7 @@ export let generateOtp = function () {
 
 export let formatUserData = function (userObj: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, isGuest: number) {
     try {
+        userObj['cartId'] = userObj.id
         userObj['isGuest'] = (isGuest != undefined) ? isGuest : 0
         userObj['country'] = headers.country
         userObj['language'] = headers.language

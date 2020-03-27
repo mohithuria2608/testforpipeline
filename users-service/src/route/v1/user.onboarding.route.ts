@@ -53,7 +53,7 @@ export default (router: Router) => {
                     ctx.set({
                         'accessToken': res.accessToken,
                         'refreshToken': res.refreshToken,
-                        cartId: res.response['cartId'],
+                        cartId: res.response['id'],
                         phnNo: res.response['phnNo'],
                         cCode: res.response['cCode'],
                     })

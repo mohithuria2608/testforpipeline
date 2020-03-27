@@ -42,7 +42,7 @@ export class OrderService {
         })
     }
 
-    async getCart(payload: IOrderGrpcRequest.IGetOrder): Promise<IOrderGrpcRequest.IGetOrderRes> {
+    async getCart(payload: IOrderGrpcRequest.IGetCart): Promise<IOrderGrpcRequest.IGetCartRes> {
         return new Promise(async (resolve, reject) => {
             try {
                 await orderServiceValidator.getCartValidator(payload)

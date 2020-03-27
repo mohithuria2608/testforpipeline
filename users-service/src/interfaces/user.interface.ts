@@ -19,7 +19,6 @@ declare namespace IUserRequest {
         medium?: string,
         profileStep?: number,
         password?: string,
-        cartId?: string,
         createdAt?: number,
         headers?: ICommonRequest.IHeaders
     }
@@ -65,7 +64,6 @@ declare namespace IUserRequest {
         userId?: string,
         cCode?: string,
         phnNo?: string,
-        cartId?: string
     }
 
 }

@@ -26,12 +26,6 @@ export class UserEntity extends BaseEntity {
         },
         {
             set: this.set,
-            bin: 'cartId',
-            index: 'idx_' + this.set + '_' + 'cartId',
-            type: "STRING"
-        },
-        {
-            set: this.set,
             bin: 'email',
             index: 'idx_' + this.set + '_' + 'email',
             type: "STRING"
@@ -67,7 +61,6 @@ export class UserEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
         password: Joi.string(),
-        cartId: Joi.string().required(),
         createdAt: Joi.number().required()
     });
 
@@ -103,21 +96,6 @@ export class UserEntity extends BaseEntity {
                 } else {
                     return {}
                 }
-            } else if (payload.cartId) {
-                let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "cartId",
-                        value: payload.cartId
-                    },
-                    set: this.set,
-                    background: false,
-                }
-                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                if (checkUser && checkUser.length > 0) {
-                    return checkUser[0]
-                } else {
-                    return {}
-                }
             }
             else {
                 return {}
@@ -141,7 +119,6 @@ export class UserEntity extends BaseEntity {
                 checkUser = {}
                 checkUser['id'] = payload.id
                 checkUser['password'] = cryptData("Password1")
-                checkUser['cartId'] = payload.id
                 this.createDefaultCart(payload.id)
             }
             if (payload.username)
@@ -176,8 +153,6 @@ export class UserEntity extends BaseEntity {
                 checkUser['medium'] = payload.medium
             if (payload.profileStep != undefined)
                 checkUser['profileStep'] = payload.profileStep
-            if (payload.cartId)
-                checkUser['cartId'] = payload.cartId
             if (payload.createdAt)
                 checkUser['createdAt'] = payload.createdAt
 
@@ -194,12 +169,7 @@ export class UserEntity extends BaseEntity {
                 key: payload.id,
                 createOrReplace: true
             }
-            // if (isCreate)
-            //     putArg['create'] = true
-            // else
-            //     putArg['update'] = true
             await Aerospike.put(putArg)
-            // let user = await this.getUser({ userId: payload.id })
             return checkUser
         } catch (error) {
             consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)

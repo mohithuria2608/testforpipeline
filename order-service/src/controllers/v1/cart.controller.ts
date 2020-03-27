@@ -34,10 +34,12 @@ export class CartController {
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                     invalidMenu = true
                     storeOnline = store.isOnline
                 } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             } else {
                 const defaultMenu = await menuService.fetchMenu({
                     menuId: 1,
@@ -65,7 +67,6 @@ export class CartController {
                 orderType: payload.orderType,
                 cartId: payload.cartId,
                 cmsCart: cmsValidatedCart,
-                changeCartUnique: true,
                 curItems: payload.items,
                 selFreeItem: payload.selFreeItem,
                 invalidMenu: invalidMenu,

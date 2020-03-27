@@ -73,11 +73,15 @@ export class BaseEntity {
         }
     }
 
-    async getCart(userId: string) {
+    /**
+     * @description : Load Test 
+     * @param userId 
+     */
+    async getCartForLoadTest(userId: string) {
         try {
             return await orderService.getCart({ cartId: userId })
         } catch (error) {
-            consolelog(process.cwd(), "getCart", JSON.stringify(error), false)
+            consolelog(process.cwd(), "getCartForLoadTest", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

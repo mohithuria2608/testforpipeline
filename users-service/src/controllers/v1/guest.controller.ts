@@ -22,7 +22,6 @@ export class GuestController {
                 profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                 brand: headers.brand,
                 country: headers.country,
-                cartId: userId,
                 phnVerified: 0,
             }
             let userData = await ENTITY.UserE.buildUser(tempUser)
@@ -82,7 +81,6 @@ export class GuestController {
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
                 otp: otp,
-                cartId: userData.id,
                 otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
                 otpVerified: 0,
                 isGuest: payload.isGuest,
@@ -99,7 +97,6 @@ export class GuestController {
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     brand: headers.brand,
                     country: headers.country,
-                    cartId: userId,
                     phnVerified: 0,
                 }
                 userData = await ENTITY.UserE.buildUser(tempUser)
@@ -126,7 +123,7 @@ export class GuestController {
             if (asUserByPhone && asUserByPhone.length > 0) {
                 userchangePayload['id'] = asUserByPhone[0].id
                 console.log('STEP : 1               MS : P')
-                if (asUserByPhone[0].email == payload.email) {
+                if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
                     console.log('STEP : 2               MS : P/E  , same user')
                     userchangePayload['deleteUserId'] = auth.id
                 } else {

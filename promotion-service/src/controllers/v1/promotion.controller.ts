@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -14,7 +15,7 @@ export class PromotionController {
     */
     async syncPromoFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            
+
             let data = JSON.parse(payload.as.argv);
             await ENTITY.PromotionE.removeAllPromotions();
             if (payload.as.create || payload.as.update || payload.as.get) {
@@ -35,9 +36,10 @@ export class PromotionController {
      * */
     async postPromotion() {
         try {
+            let jsonPostfix = config.get("sdm.type")
             await Aerospike.truncate({ set: ENTITY.PromotionE.set, before_nanos: 0 })
 
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/promotion.json', 'utf-8');
+            let rawdata = fs.readFileSync(__dirname + `/../../../model/promotion_${jsonPostfix}.json`, 'utf-8');
             let promo = JSON.parse(rawdata);
 
             for (const iterator of promo) {

@@ -157,6 +157,7 @@ declare namespace IConfigRequest {
             businessIdentifier: string,
             appIdentifier: string,
             appAccessKey: string,
+            apiKey: string,
             environment: string,
             noonpayBaseUrl: string,
             noonpayInitiatePaymentEndPoint: string,
