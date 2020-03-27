@@ -1381,7 +1381,7 @@ export const STATUS_MSG = {
                 "type": "SERVICE_UNAVAILABLE",
                 "message": "Sorry, we don't deliver at this location",
                 "message_Ar": "عذرًا، لا نقوم بالتوصيل في هذه المنطقة",
-                "message_En": "Sorry, we do not deliver at this location"
+                "message_En": "Sorry, we don't deliver at this location"
             },
         },
         "E422": {
