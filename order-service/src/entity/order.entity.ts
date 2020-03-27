@@ -868,7 +868,7 @@ export class OrderClass extends BaseEntity {
                     break;
                 }
                 default: {
-                    consolelog(process.cwd(), `Unhandled Payment method order id : ${order._id}`, "", true)
+                    order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, true)
                     break;
                 }
             }
@@ -1394,110 +1394,128 @@ export class OrderClass extends BaseEntity {
                             status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
                             updatedAt: new Date().getTime()
                         }
-                        switch (order.payment.paymentMethodId) {
-                            case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
-                                consolelog(process.cwd(), "CANCELED 2 :       ", parseInt(sdmOrder.Status), true)
-                                CMS.OrderCMSE.updateOrder({
-                                    order_id: order.cmsOrderRef,
-                                    payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
-                                    sdm_order_id: order.sdmOrderRef
-                                })
-                                break;
-                            }
-                            case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
-                                consolelog(process.cwd(), "CANCELED 3 :       ", parseInt(sdmOrder.Status), true)
-                                let transLogs = [];
-                                let reverseStatus;
-                                if (order.payment && order.payment.status) {
-                                    if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
-                                        consolelog(process.cwd(), "CANCELED 4 :       ", parseInt(sdmOrder.Status), true)
-                                        try {
-                                            await paymentService.reversePayment({
-                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
-                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
-                                            })
-                                            dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
-                                        } catch (revError) {
-                                            if (revError.data) {
-                                                if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
-                                                    transLogs.push(revError.data)
-                                                } else if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
-                                                    transLogs.push(revError.data)
-                                                } else {
-                                                    consolelog(process.cwd(), "unhandled payment error reverse", "", false)
-                                                }
-                                            }
-                                        }
-                                    } else if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.AS) {
-                                        consolelog(process.cwd(), "CANCELED 5 :       ", parseInt(sdmOrder.Status), true)
-                                        try {
-                                            await paymentService.refundPayment({
-                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
-                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                                amount: parseInt(order.transLogs[2].transactions[0].amount),
-                                                captureTransactionId: order.transLogs[2].transactions[0].id
-                                            })
-                                            dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS
-                                        } catch (refundError) {
-                                            if (refundError.data) {
-                                                if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
-                                                    transLogs.push(refundError.data)
-                                                } else if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
-                                                    transLogs.push(refundError.data)
-                                                } else {
-                                                    consolelog(process.cwd(), "unhandled payment error refund", "", false)
-                                                }
-                                            }
-                                        }
-                                    }
-                                    try {
-                                        reverseStatus = await paymentService.getPaymentStatus({
-                                            noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
-                                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                            paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
-                                        })
-                                        transLogs.push(reverseStatus)
-                                    } catch (statusError) {
-                                        if (statusError.data) {
-                                            if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
-                                                transLogs.push(statusError.data)
-                                            } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
-                                                transLogs.push(statusError.data)
-                                            } else {
-                                                consolelog(process.cwd(), "unhandled payment error reverse or refund status", "", false)
-                                            }
-                                        }
-                                    }
-                                    if (transLogs && transLogs.length > 0)
-                                        dataToUpdateOrder['$addToSet'] = {
-                                            transLogs: { $each: transLogs.reverse() }
-                                        }
-                                }
-                                if (reverseStatus && order && order._id) {
-                                    consolelog(process.cwd(), "CANCELED 6 :       ", parseInt(sdmOrder.Status), true)
+                        if (order.payment) {
+                            switch (order.payment.paymentMethodId) {
+                                case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
+                                    consolelog(process.cwd(), "CANCELED 2 :       ", parseInt(sdmOrder.Status), true)
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
-                                        payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
+                                        order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
+                                        sdm_order_id: order.sdmOrderRef
+                                    })
+                                    break;
+                                }
+                                case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
+                                    consolelog(process.cwd(), "CANCELED 3 :       ", parseInt(sdmOrder.Status), true)
+                                    let transLogs = [];
+                                    let reverseStatus;
+                                    if (order.payment && order.payment.status) {
+                                        if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
+                                            consolelog(process.cwd(), "CANCELED 4 :       ", parseInt(sdmOrder.Status), true)
+                                            try {
+                                                await paymentService.reversePayment({
+                                                    noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
+                                                })
+                                                dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
+                                            } catch (revError) {
+                                                if (revError.data) {
+                                                    if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                        transLogs.push(revError.data)
+                                                    } else if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                        transLogs.push(revError.data)
+                                                    } else {
+                                                        consolelog(process.cwd(), "unhandled payment error reverse", "", false)
+                                                    }
+                                                }
+                                            }
+                                        } else if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.AS) {
+                                            consolelog(process.cwd(), "CANCELED 5 :       ", parseInt(sdmOrder.Status), true)
+                                            try {
+                                                await paymentService.refundPayment({
+                                                    noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                    amount: parseInt(order.transLogs[2].transactions[0].amount),
+                                                    captureTransactionId: order.transLogs[2].transactions[0].id
+                                                })
+                                                dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS
+                                            } catch (refundError) {
+                                                if (refundError.data) {
+                                                    if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                        transLogs.push(refundError.data)
+                                                    } else if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                        transLogs.push(refundError.data)
+                                                    } else {
+                                                        consolelog(process.cwd(), "unhandled payment error refund", "", false)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        try {
+                                            reverseStatus = await paymentService.getPaymentStatus({
+                                                noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
+                                                storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                                                paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                            })
+                                            transLogs.push(reverseStatus)
+                                        } catch (statusError) {
+                                            if (statusError.data) {
+                                                if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                                                    transLogs.push(statusError.data)
+                                                } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                                                    transLogs.push(statusError.data)
+                                                } else {
+                                                    consolelog(process.cwd(), "unhandled payment error reverse or refund status", "", false)
+                                                }
+                                            }
+                                        }
+                                        if (transLogs && transLogs.length > 0)
+                                            dataToUpdateOrder['$addToSet'] = {
+                                                transLogs: { $each: transLogs.reverse() }
+                                            }
+                                    }
+                                    if (reverseStatus && order && order._id) {
+                                        consolelog(process.cwd(), "CANCELED 6 :       ", parseInt(sdmOrder.Status), true)
+                                        CMS.OrderCMSE.updateOrder({
+                                            order_id: order.cmsOrderRef,
+                                            payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                            sdm_order_id: order.sdmOrderRef
+                                        })
+                                        CMS.TransactionCMSE.createTransaction({
+                                            order_id: order.cmsOrderRef,
+                                            message: reverseStatus.transactions[0].type,
+                                            type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                            payment_data: {
+                                                id: reverseStatus.transactions[0].id.toString(),
+                                                data: JSON.stringify(reverseStatus)
+                                            }
+                                        })
+                                    }
+                                    break;
+                                }
+                                default: {
+                                    consolelog(process.cwd(), "CANCELED 7 :       ", parseInt(sdmOrder.Status), true)
+                                    dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
+                                    CMS.OrderCMSE.updateOrder({
+                                        order_id: order.cmsOrderRef,
+                                        payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
                                         order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
                                         sdm_order_id: order.sdmOrderRef
                                     })
-                                    CMS.TransactionCMSE.createTransaction({
-                                        order_id: order.cmsOrderRef,
-                                        message: reverseStatus.transactions[0].type,
-                                        type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
-                                        payment_data: {
-                                            id: reverseStatus.transactions[0].id.toString(),
-                                            data: JSON.stringify(reverseStatus)
-                                        }
-                                    })
+                                    break;
                                 }
-                                break;
                             }
-                            default: {
-                                consolelog(process.cwd(), `Unhandled Payment method order id : ${order._id}`, "", true)
-                                break;
-                            }
+
+                        } else {
+                            dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
+                            CMS.OrderCMSE.updateOrder({
+                                order_id: order.cmsOrderRef,
+                                payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
+                                order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                sdm_order_id: order.sdmOrderRef
+                            })
                         }
                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                         if (order && order._id) {
@@ -1644,25 +1662,40 @@ export class OrderClass extends BaseEntity {
                             break;
                         }
                         default: {
-                            consolelog(process.cwd(), `Unhandled Payment method order id : ${order._id}`, "", true)
+                            consolelog(process.cwd(), `FAILURE HANDLER 7`, "", true)
+                            dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
+                            CMS.OrderCMSE.updateOrder({
+                                order_id: order.cmsOrderRef,
+                                payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
+                                order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                sdm_order_id: order.sdmOrderRef
+                            })
                             break;
                         }
                     }
-                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                    if (order && order._id) {
-                        // send notification(sms + email) on order failure
-                        let userData = await userService.fetchUser({ userId: order.userId });
-                        notificationService.sendNotification({
-                            toSendMsg: true,
-                            msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
-                            msgDestination: `${userData.cCode}${userData.phnNo}`,
-                            toSendEmail: true,
-                            emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
-                            emailDestination: userData.email,
-                            language: order.language,
-                            payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
-                        });
-                    }
+                } else {
+                    dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
+                    CMS.OrderCMSE.updateOrder({
+                        order_id: order.cmsOrderRef,
+                        payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
+                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                        sdm_order_id: order.sdmOrderRef
+                    })
+                }
+                order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                if (order && order._id) {
+                    // send notification(sms + email) on order failure
+                    let userData = await userService.fetchUser({ userId: order.userId });
+                    notificationService.sendNotification({
+                        toSendMsg: true,
+                        msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
+                        msgDestination: `${userData.cCode}${userData.phnNo}`,
+                        toSendEmail: true,
+                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                        emailDestination: userData.email,
+                        language: order.language,
+                        payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
+                    });
                 }
             }
             return order

@@ -173,9 +173,9 @@ export class OrderController {
                         orderInfo: order
                     }
                 }
-            } else
+            } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
-
+            }
         } catch (error) {
             consolelog(process.cwd(), "postOrder", error, false)
             return Promise.reject(error)
