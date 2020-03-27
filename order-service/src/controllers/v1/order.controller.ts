@@ -160,6 +160,7 @@ export class OrderController {
                 order,
                 totalAmount[0].amount
             )
+            console.log("initiatePayment", JSON.stringify(initiatePayment))
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
