@@ -1372,6 +1372,16 @@ export const STATUS_MSG = {
                 "message_En": "The store is currently offline, please feel free to explore menu."
             },
         },
+        "E412": {
+            "SERVICE_UNAVAILABLE": {
+                "statusCode": 412,
+                "httpCode": 412,
+                "type": "SERVICE_UNAVAILABLE",
+                "message": "Sorry, we don't, deliver at this location",
+                "message_Ar": "عذرًا، لا نقوم بالتوصيل في هذه المنطقة",
+                "message_En": "Sorry, we do not, deliver at this location"
+            },
+        },
         "E422": {
             "INVALID_COUNTRY_CODE": {
                 "statusCode": 422,

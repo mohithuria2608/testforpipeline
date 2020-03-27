@@ -94,11 +94,11 @@ export class OrderController {
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
             if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
                 if (!store.active)
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                 if (!store.isOnline)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             if (payload.couponCode && payload.items && payload.items.length > 0) {
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
@@ -152,7 +152,6 @@ export class OrderController {
                 })
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
             }
-
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, parseInt(cmsOrder['order_id']), cart, getAddress, store, userData)
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
