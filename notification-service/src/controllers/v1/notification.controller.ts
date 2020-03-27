@@ -1,6 +1,6 @@
 import { smsLib, emailLib } from '../../lib'
 import * as Constant from "../../constant";
-import ejs from "ejs";
+import * as ejs from "ejs";
 
 export class NotificationController {
 
