@@ -28,7 +28,7 @@ export class NotificationController {
                             emailLib.sendEmail({
                                 message: emailer,
                                 destination: payload.emailDestination,
-                                subject: Constant.NOTIFICATION_MSG.EMAIL[payload.language][payload.msgCode]
+                                subject: Constant.NOTIFICATION_MSG.EMAIL[payload.language][payload.emailCode]
                             });
                             resolve();
                         }
