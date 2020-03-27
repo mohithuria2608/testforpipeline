@@ -1105,17 +1105,19 @@ export const NOTIFICATION_MSG = {
     EMAIL: {
         En: {
             USER_WELCOME_EMAIL: 'Welcome to KFC | KFC UAE',
-            ORDER_DELIVERY_CONFIRM: 'Order Confirmed - Delivery | KFC UAE',
-            ORDER_PICKUP_CONFIRM: 'Order Confirmed - Pickup | KFC UAE',
-            ORDER_CANCEL: 'Order Cancelled | KFC UAE',
-            ORDER_FAIL: 'Order Failed | KFC UAE',
+            ORDER_DELIVERY_CONFIRM_EMAIL: 'Order Confirmed - Delivery | KFC UAE',
+            ORDER_PICKUP_CONFIRM_EMAIL: 'Order Confirmed - Pickup | KFC UAE',
+            ORDER_CANCEL_EMAIL: 'Order Cancelled | KFC UAE',
+            ORDER_FAIL_EMAIL: 'Order Failed | KFC UAE',
+            PAYMENT_FAIL_EMAIL: 'Payment Failed | KFC UAE'
         },
         Ar: {
             USER_WELCOME_EMAIL: 'Welcome to KFC | KFC UAE',
-            ORDER_DELIVERY_CONFIRM: 'Order Confirmed - Delivery | KFC UAE',
-            ORDER_PICKUP_CONFIRM: 'Order Confirmed - Pickup | KFC UAE',
-            ORDER_CANCEL: 'Order Cancelled | KFC UAE',
-            ORDER_FAIL: 'Order Failed | KFC UAE',
+            ORDER_DELIVERY_CONFIRM_EMAIL: 'Order Confirmed - Delivery | KFC UAE',
+            ORDER_PICKUP_CONFIRM_EMAIL: 'Order Confirmed - Pickup | KFC UAE',
+            ORDER_CANCEL_EMAIL: 'Order Cancelled | KFC UAE',
+            ORDER_FAIL_EMAIL: 'Order Failed | KFC UAE',
+            PAYMENT_FAIL_EMAIL: 'Payment Failed | KFC UAE'
         }
     }
 }
