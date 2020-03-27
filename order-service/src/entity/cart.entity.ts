@@ -230,51 +230,30 @@ export class CartClass extends BaseEntity {
     /**
     * @method INTERNAL
     * @param {string} cartId : cart id
-    * @param {string} cmsCartRef : cms cart id
     * */
     async getCart(payload: ICartRequest.IGetCart): Promise<ICartRequest.ICartData> {
         try {
             let cartFound = true
-            if (payload.cartId) {
-                let getArg: IAerospike.Get = {
-                    set: this.set,
-                    key: payload.cartId
-                }
-                let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
-                if (cart && cart.cartId) {
-                    return cart
-                } else
-                    cartFound = false
+            let getArg: IAerospike.Get = {
+                set: this.set,
+                key: payload.cartId
             }
-            else if (payload.cmsCartRef) {
-                let queryArg = {
-                    equal: {
-                        bin: "cmsCartRef",
-                        value: payload.cmsCartRef
-                    },
-                    set: this.set,
-                    background: false,
-                }
-                let cart: ICartRequest.ICartData[] = await Aerospike.query(queryArg)
-                if (cart && cart.length > 0) {
-                    return cart[0]
-                } else
-                    cartFound = false
-            }
+            let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
+            if (cart && cart.cartId) {
+                return cart
+            } else
+                cartFound = false
             if (!cartFound) {
                 let user = await userService.fetchUser({ cartId: payload.cartId })
                 if (user && user.id) {
-                    if (user.cartId == payload.cartId) {
-                        await this.createDefaultCart({
-                            userId: user.id
-                        })
-                        let getArg: IAerospike.Get = {
-                            set: this.set,
-                            key: payload.cartId
-                        }
-                        return await Aerospike.get(getArg)
-                    } else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+                    await this.createDefaultCart({
+                        userId: user.id
+                    })
+                    let getArg: IAerospike.Get = {
+                        set: this.set,
+                        key: payload.cartId
+                    }
+                    return await Aerospike.get(getArg)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             }

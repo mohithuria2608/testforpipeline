@@ -81,8 +81,7 @@ declare namespace ICartRequest {
     }
 
     interface IGetCart extends ICommonRequest.ICordinatesOpt {
-        cartId?: string,
-        cmsCartRef?: number
+        cartId: string,
         cartUpdatedAt?: number
     }
 
