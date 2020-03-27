@@ -18,7 +18,6 @@ declare namespace ICartCMSRequest {
         type_id: string,
         super_attribute?: any,
         bundle_option?: any,
-        selection_configurable_option?: any,
         bundle_super_attribute?: any,
         option?: any
         final_price?: boolean
