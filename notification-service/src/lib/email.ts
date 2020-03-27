@@ -8,16 +8,16 @@ export class EmailClass {
         sendGrid.setApiKey(config.get("email.sgKey"))
     }
 
-    sendEmail(payload: IEmailRequest.ISingleEmail) {
+    async sendEmail(payload: IEmailRequest.ISingleEmail) {
         try {
-            sendGrid.send({
+            await sendGrid.send({
                 to: payload.destination,
                 from: config.get("email.sender"),
                 subject: payload.subject,
                 html: payload.message
             });
         } catch (err) {
-            console.log(err);
+            console.log("ERROR -> ", JSON.stringify(err));
         }
     }
 }

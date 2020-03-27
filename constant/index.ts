@@ -1121,7 +1121,7 @@ export const NOTIFICATION_MSG = {
 }
 
 export const EMAIL_META = {
-    baseImageUrl: 'http://40.123.205.1/pub/media/catalog/product/emailer',
+    baseImageUrl: 'http://40.123.205.1/pub/media/catalog/product/emailer/',
     ctaLink: '',
     contactEmail: 'hello@kfc.uae'
 }
