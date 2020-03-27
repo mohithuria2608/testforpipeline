@@ -1315,9 +1315,9 @@ export const STATUS_MSG = {
                 "statusCode": 409,
                 "httpCode": 409,
                 "type": "SERVICE_UNAVAILABLE",
-                "message": "Sorry, we don't, deliver at this location",
+                "message": "Sorry, we don't deliver at this location",
                 "message_Ar": "عذرًا، لا نقوم بالتوصيل في هذه المنطقة",
-                "message_En": "Sorry, we do not, deliver at this location"
+                "message_En": "Sorry, we do not deliver at this location"
             },
             "ADDRESS_NOT_FOUND": {
                 "statusCode": 409,
@@ -1377,9 +1377,9 @@ export const STATUS_MSG = {
                 "statusCode": 412,
                 "httpCode": 412,
                 "type": "SERVICE_UNAVAILABLE",
-                "message": "Sorry, we don't, deliver at this location",
+                "message": "Sorry, we don't deliver at this location",
                 "message_Ar": "عذرًا، لا نقوم بالتوصيل في هذه المنطقة",
-                "message_En": "Sorry, we do not, deliver at this location"
+                "message_En": "Sorry, we do not deliver at this location"
             },
         },
         "E422": {

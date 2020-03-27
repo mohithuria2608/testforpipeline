@@ -38,7 +38,7 @@ export default (router: Router) => {
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res: any = await addressController.registerAddress(headers, payload, auth);
                     if (process.env.NODE_ENV == "staging") {
-                        let cart = await ENTITY.LoadE.getCart(auth.id)
+                        let cart = await ENTITY.LoadE.getCartForLoadTest(auth.id)
                         ENTITY.LoadE.createOneEntityMdb({
                             cartId: auth.id,
                             deviceId: headers.deviceid,

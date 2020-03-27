@@ -16,40 +16,6 @@ export class LocationController {
      * */
     async bootstrapPickup() {
         try {
-            let a = {
-
-                "active": 1,
-                "isSelected": false,
-                "isOnline": true,
-
-
-
-
-
-
-
-                "phone1": "0521669724",
-                "name_ar": "كنتاكي - سينترال مول",
-                "cityId": 17,
-                "endTime": "2018-04-30T02:00:59.000Z",
-                "nextDay": 1,
-                "startTime": "2018-04-30T10:00:00.000Z",
-                "address_en": "Inside Central Mall 2st St. SectorSE-25 Khalifa City \"A\" Abu Dhabi - United Arab Emirates",
-                "location": {
-                    "latitude": 24.4118958062436,
-                    "longitude": 54.5904501871025,
-                    "description": "17th St - Abu Dhabi - United Arab Emirates"
-                },
-                "menuId": 1,
-                "id": "0adbdb40-6ce6-11ea-a0b4-95f374dfd3fa",
-                "storeId": 1024,
-                "name_en": "Central Mall - KFC",
-                "address_ar": "داخل سنترال مول - شارع 2 - مدينة خليفة أ _ أبو ظبي - الإمارات العربية المتحدة",
-
-
-            }
-
-
             await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
 
             const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()

@@ -23,7 +23,7 @@ export class OrderServiceValidator {
         })
     }
 
-    async getCartValidator(data: IOrderGrpcRequest.IGetOrder) {
+    async getCartValidator(data: IOrderGrpcRequest.IGetCart) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

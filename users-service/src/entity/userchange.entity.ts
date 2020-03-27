@@ -51,7 +51,6 @@ export class UserchangeEntity extends BaseEntity {
             Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
         ).required(),
         password: Joi.string(),
-        cartId: Joi.string().required(),
         createdAt: Joi.number().required(),
         /**
          * @description extra validator keys
@@ -172,8 +171,6 @@ export class UserchangeEntity extends BaseEntity {
                 dataToUpdateUserchange['socialKey'] = payload.socialKey
             if (payload.medium)
                 dataToUpdateUserchange['medium'] = payload.medium
-            if (payload.cartId)
-                dataToUpdateUserchange['cartId'] = payload.cartId
             if (payload.deleteUserId)
                 dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
             if (payload.emailVerified != undefined)
