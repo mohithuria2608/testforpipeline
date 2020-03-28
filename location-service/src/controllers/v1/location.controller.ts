@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog, checkOnlineStore } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -194,7 +195,7 @@ export class LocationController {
 
     /**
      * @method GRPC
-     * syncs location data from CMS
+     * upload pickup on blob
      */
     async syncLocationFromCMS(payload): Promise<any> {
         try {
@@ -213,7 +214,11 @@ export class LocationController {
 
     async uploadPickupOnBlob(payload: IStoreGrpcRequest.IUploadPickupOnBlob) {
         try {
-            this.bootstrapPickup(true)
+            await countryController.bootstrapCountry(payload.sdm)
+            await cityController.bootstrapCity(payload.sdm)
+            await areaController.bootstrapArea(payload.sdm)
+            await storeController.bootstrapStore(payload.sdm)
+            this.bootstrapPickup()
             return {}
         } catch (error) {
             consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)
