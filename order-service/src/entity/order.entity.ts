@@ -1695,7 +1695,7 @@ export class OrderClass extends BaseEntity {
                                     message: getReversalStatusType,
                                     type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
                                     payment_data: {
-                                        id: (reverseStatus.transactions && reverseStatus.transactions.length > 0) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
+                                        id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
                                         data: JSON.stringify(reverseStatus)
                                     }
                                 })
