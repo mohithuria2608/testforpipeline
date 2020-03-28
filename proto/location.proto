@@ -2,7 +2,7 @@ syntax = "proto3";
 
 service LocationService {
     rpc FetchStore (IFetchStoreReq) returns (IFetchStoreRes) {}
-    rpc FetchPickup (IFetchPickupReq) returns (IFetchPickupRes) {}
+    rpc UploadPickup (IUploadPickupReq) returns (IUploadPickupRes) {}
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
     rpc SyncLocationFromCMS (ISyncLocationFromCMSReq) returns (ISyncLocationFromCMSRes) {}
     rpc PostLocationDataToCMS (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
@@ -15,9 +15,9 @@ message IFetchStoreReq {
     required int32 storeId = 1;
 }
 
-message IFetchPickupReq { }
+message IUploadPickupReq { }
 
-message IFetchPickupRes {
+message IUploadPickupRes {
     required string pickup = 1;
 }
 

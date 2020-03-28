@@ -26,9 +26,11 @@ declare namespace IStoreGrpcRequest {
     interface ISyncStoreStatusToASReq {
         request: any
     }
-    interface IFetchPickupReq {
-        request: IFetchPickup
+    interface IUploadPickupOnBlobReq {
+        request: IUploadPickupOnBlob
     }
 
-    interface IFetchPickup { }
+    interface IUploadPickupOnBlob {
+        sdm: string
+    }
 }

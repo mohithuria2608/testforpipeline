@@ -92,11 +92,10 @@ export class LocationController {
                 }
             }
             res.sort(compare)
-            if (!grpc) {
+            if (!grpc)
                 await ENTITY.PickupE.bootstrapPickup(res)
+            if (grpc)
                 await uploadService.uploadToBlob({ name: "pickup.json", json: JSON.stringify(res) })
-            }
-
             return {}
         } catch (error) {
             consolelog(process.cwd(), "bootstrapPickup", JSON.stringify(error), false)
@@ -212,10 +211,10 @@ export class LocationController {
         }
     }
 
-    async fetchPickup(payload: IStoreGrpcRequest.IFetchPickup) {
+    async uploadPickupOnBlob(payload: IStoreGrpcRequest.IUploadPickupOnBlob) {
         try {
-            let pickupData = await this.bootstrapPickup(true)
-            return pickupData
+            this.bootstrapPickup(true)
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)
             return Promise.reject(error)

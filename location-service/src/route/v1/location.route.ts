@@ -56,4 +56,23 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .post('/pickup/upload',
+            validate({
+                body: {
+                    sdm: Joi.string().valid("live", "uat").required(),
+                }
+            }),
+            async (ctx) => {
+                try {
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let payload: IStoreGrpcRequest.IUploadPickupOnBlob = ctx.request.body;
+                    let res = await locationController.uploadPickupOnBlob(payload);
+                    let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
+                    ctx.status = sendResponse.statusCode;
+                    ctx.body = sendResponse
+                }
+                catch (error) {
+                    throw error
+                }
+            })
 }
