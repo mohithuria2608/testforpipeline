@@ -31,6 +31,17 @@ server.addService(locationProto.LocationService.service, {
         }
     },
 
+    fetchPickup: async (call: IStoreGrpcRequest.IFetchPickupReq, callback) => {
+        try {
+            consolelog(process.cwd(), "grpc fetchPickup", JSON.stringify(call.request), true)
+            let res: any = await locationController.fetchPickup(call.request)
+            callback(null, { pickup: JSON.stringify(res) })
+        } catch (error) {
+            consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+
     validateCoordinate: async (call: IStoreGrpcRequest.IValidateCoordinate, callback) => {
         try {
             consolelog(process.cwd(), "grpc validateCoordinate", JSON.stringify(call.request), true)

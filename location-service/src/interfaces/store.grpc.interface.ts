@@ -18,4 +18,10 @@ declare namespace IStoreGrpcRequest {
     interface IPostLocationDataToCMSReq {
         request: any
     }
+
+    interface IFetchPickupReq {
+        request: IFetchPickup
+    }
+
+    interface IFetchPickup { }
 }
