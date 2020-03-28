@@ -74,6 +74,7 @@ export default (router: Router) => {
                             accessToken: ctx.header.authorization,
                             name: "Load test powered by ankit",
                             email: payload.phnNo + "@gmail.com",
+                            cartId: res.response['id'],
                             type: "CREATE_PROFILE"
                         })
                     }
