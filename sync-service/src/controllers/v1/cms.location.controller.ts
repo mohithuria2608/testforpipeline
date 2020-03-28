@@ -19,7 +19,7 @@ export class CmsLocationController {
                 set: ENTITY.LocationE.set,
                 as: {
                     create: true,
-                    argv: JSON.stringify(payload.data)
+                    argv: JSON.stringify({ event: "location_sync", data: payload.data })
                 },
                 inQ: false // bypass queue, because data is too large. change to true
             }

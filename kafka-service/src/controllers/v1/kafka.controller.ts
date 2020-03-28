@@ -307,8 +307,13 @@ export class KafkaController {
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
-                        else
-                            await locationService.syncLocationFromCMS(messages)
+                        else {
+                            let messageArgv = JSON.parse(messages.as.argv);
+                            switch (messageArgv.event) {
+                                case "location_sync": await locationService.syncLocationFromCMS(messages); break;
+                                case "store_status_sync": await locationService.syncStoreStatusToAS(messages); break;
+                            }
+                        }
                     }
                     break;
                 }

@@ -194,7 +194,7 @@ export class LocationController {
      */
     async syncLocationFromCMS(payload): Promise<any> {
         try {
-            let syncData = JSON.parse(payload.as.argv);
+            let syncData = JSON.parse(payload.as.argv)['data'];
             switch (syncData.type) {
                 case 'city': await cityController.syncToAS(syncData.data);
                 case 'country': await countryController.syncToAS(syncData.data);

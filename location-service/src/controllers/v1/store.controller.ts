@@ -125,6 +125,42 @@ export class StoreController {
             console.log(err);
         }
     }
+
+    /**
+     * @method GRPC
+     * syncs stores from CMS to Aerospike
+     */
+    async postStoreStatusToCMS(payload): Promise<any> {
+        try {
+            let storesList = JSON.parse(payload.as.argv)['data'];
+            await Utils.sendRequestToCMS('SYNC_STORE_STATUS', storesList);
+        } catch (error) {
+            consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * syncs location data from CMS
+     */
+    async syncStoreStatusToAS(payload): Promise<any> {
+        try {
+            let storeStatusList = JSON.parse(payload.as.argv)['data'];
+            let storesList = await ENTITY.StoreE.getAllStores();
+            for (let store of storesList) {
+                for (let i = 0; i < storeStatusList.length; i++) {
+                    if (store.storeId === storeStatusList[i].sdmStoreId) {
+                        store.active = 1;
+                        await ENTITY.StoreE.syncStoreData(store);
+                    }
+                }
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "syncStoreStatusToAS", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
 }
 
 export const storeController = new StoreController();

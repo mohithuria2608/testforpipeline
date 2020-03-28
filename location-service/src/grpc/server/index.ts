@@ -65,6 +65,28 @@ server.addService(locationProto.LocationService.service, {
         }
     },
 
+    PostStoreStatusToCMS: async (call: IStoreGrpcRequest.IPostStoreStatusToCMSReq, callback) => {
+        try {
+            consolelog(process.cwd(), "grpc PostStoreStatusToCMS", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IStore[] = await storeController.postStoreStatusToCMS(call.request);
+            callback(null, { store: true })
+        } catch (error) {
+            consolelog(process.cwd(), "PostStoreStatusToCMS", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+
+    SyncStoreStatusToAS: async (call: IStoreGrpcRequest.ISyncStoreStatusToASReq, callback) => {
+        try {
+            consolelog(process.cwd(), "grpc SyncStoreStatusToAS", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IStore[] = await storeController.syncStoreStatusToAS(call.request);
+            callback(null, { store: true })
+        } catch (error) {
+            consolelog(process.cwd(), "SyncStoreStatusToAS", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
             consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)

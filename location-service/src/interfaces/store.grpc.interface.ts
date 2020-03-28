@@ -18,4 +18,12 @@ declare namespace IStoreGrpcRequest {
     interface IPostLocationDataToCMSReq {
         request: any
     }
+
+    interface IPostStoreStatusToCMSReq {
+        request: any
+    }
+
+    interface ISyncStoreStatusToASReq {
+        request: any
+    }
 }

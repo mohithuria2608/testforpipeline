@@ -118,7 +118,7 @@ export class StoreEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.sdmStoreId,
+                key: data.sdmStoreId, // @TODO - make it storeId for consistency
                 createOrReplace: true,
             }
             return Aerospike.put(putArg)
@@ -130,19 +130,7 @@ export class StoreEntity extends BaseEntity {
 
     async getAllStores() {
         try {
-            let storesList = await Aerospike.scan({ set: this.set });
-            let finalStoresList = [];
-            for (let store of storesList) {
-                if (store.geoFence && store.geoFence.length) {
-                    for (let fence of store.geoFence) {
-                        let storeData = { ...store, ...fence };
-                        storeData.geoFence = this.createGeoFence(storeData.latitude, storeData.longitude);
-                        delete storeData.latitude; delete storeData.longitude;
-                        finalStoresList.push(storeData);
-                    }
-                } else finalStoresList.push(store);
-            }
-            fs.writeFileSync('newStoresList.json', JSON.stringify(finalStoresList));
+            return Aerospike.scan({ set: this.set });
         } catch (err) {
             console.log(err);
         }

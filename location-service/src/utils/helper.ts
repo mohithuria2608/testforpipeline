@@ -370,6 +370,7 @@ export let sendRequestToCMS = function (type, data) {
             case 'SYNC_CITY': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createcity"; break;
             case 'SYNC_AREA': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createarea"; break;
             case 'SYNC_STORE': requestUrl = "http://40.123.207.192/rest/V1/restaurant/create"; break;
+            case 'SYNC_STORE_STATUS': requestUrl = "http://40.123.207.192/rest/V1/restaurant/create"; break;
             // case 'SYNC_COUNTRY': requestUrl = "http://40.123.207.192/rest/V1/restaurant/createcountry"; break;
             default: reject(new Error('Invalid Request Entity Type'));
         }

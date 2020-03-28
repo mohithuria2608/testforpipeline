@@ -14,7 +14,11 @@ class CMSLocationConsumer extends BaseConsumer {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
                 consolelog(process.cwd(), "consumer cms_location", JSON.stringify(message), true)
-                this.postLocationDataToCMS(message);
+                let messageArgv = JSON.parse(message.cms.argv);
+                switch (messageArgv.event) {
+                    case "location_sync": this.postLocationDataToCMS(message); break;
+                    case "store_status_sync": this.postStoreStatusToCMS(message); break;
+                }
                 return null;
             })
     }
@@ -25,6 +29,29 @@ class CMSLocationConsumer extends BaseConsumer {
             return res
         } catch (error) {
             consolelog(process.cwd(), "syncStores", JSON.stringify(error), false);
+            if (message.count > 0) {
+                message.count = message.count - 1
+                kafkaController.kafkaSync(message)
+            }
+            else if (message.count == -1) {
+                /**
+                 * @description : ignore
+                 */
+            }
+            else {
+                message.error = JSON.stringify(error)
+                kafkaController.produceToFailureTopic(message)
+            }
+            return {}
+        }
+    }
+
+    private async postStoreStatusToCMS(message: IKafkaRequest.IKafkaBody) {
+        try {
+            let res = await locationService.postStoreStatusToCMS(message)
+            return res
+        } catch (error) {
+            consolelog(process.cwd(), "postStoreStatusToCMS", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
                 kafkaController.kafkaSync(message)
