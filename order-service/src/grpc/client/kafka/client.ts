@@ -43,6 +43,24 @@ export class KafkaService {
             }
         })
     }
+
+    async health(payload: ICommonRequest.IGrpcHealthCheckReq): Promise<ICommonRequest.IGrpcHealthCheckRes> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.kafkaClient.health(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully health check kafka ", JSON.stringify(res), false)
+                        resolve(res.state)
+                    } else {
+                        consolelog(process.cwd(), "Error in  health check of kafka", JSON.stringify(error), false)
+                        reject(false)
+                    }
+                })
+            } catch (error) {
+                reject(false)
+            }
+        })
+    }
 }
 
 export const kafkaService = new KafkaService();

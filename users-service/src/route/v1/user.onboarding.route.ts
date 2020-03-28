@@ -5,6 +5,7 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { userController } from '../../controllers';
 import * as JOI from './common.joi.validator';
+import * as ENTITY from '../../entity'
 
 export default (router: Router) => {
     router
@@ -24,6 +25,14 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IUserRequest.IAuthSendOtp = ctx.request.body;
                     let res = await userController.loginSendOtp(headers, payload);
+                    if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
+                        ENTITY.LoadE.createOneEntityMdb({
+                            deviceId: headers.deviceid,
+                            cCode: payload.cCode,
+                            phnNo: payload.phnNo,
+                            type: "VERIFY_OTP"
+                        })
+                    }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_SENT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
@@ -57,6 +66,18 @@ export default (router: Router) => {
                         phnNo: res.response['phnNo'],
                         cCode: res.response['cCode'],
                     })
+                    if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
+                        ENTITY.LoadE.createOneEntityMdb({
+                            deviceId: headers.deviceid,
+                            cCode: payload.cCode,
+                            phnNo: payload.phnNo,
+                            accessToken: ctx.header.authorization,
+                            name: "Load test powered by ankit",
+                            email: payload.phnNo + "@gmail.com",
+                            cartId: res.response['id'],
+                            type: "CREATE_PROFILE"
+                        })
+                    }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, headers.language, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

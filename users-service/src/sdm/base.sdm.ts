@@ -39,7 +39,7 @@ export class BaseSDM {
                                 },
                                 response: global.healthcheck
                             },
-                            description: "/healthcheck/sdm",
+                            description: "/user/healthcheck/sdm",
                             options: {
                                 env: Constant.SERVER.ENV[config.get("env")],
                             },

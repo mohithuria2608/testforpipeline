@@ -38,7 +38,7 @@ export class OrderController {
                 let data = JSON.parse(payload.sdm.argv);
                 data.language = Constant.DATABASE.LANGUAGE.EN;
                 if (payload.sdm.create)
-                    await ENTITY.OrderE.createSdmOrder(data)
+                    await ENTITY.OrderE.syncOrder(data, false)
                 if (payload.sdm.get)
                     await ENTITY.OrderE.getSdmOrder(data)
             }
@@ -163,7 +163,7 @@ export class OrderController {
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
-                    ENTITY.OrderE.syncOrder(order)
+                    ENTITY.OrderE.syncOrder(order, true)
                     if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                         ENTITY.CartE.resetCart(cart.cartId)
                 }

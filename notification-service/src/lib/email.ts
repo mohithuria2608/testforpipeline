@@ -10,14 +10,18 @@ export class EmailClass {
 
     async sendEmail(payload: IEmailRequest.ISingleEmail) {
         try {
-            await sendGrid.send({
-                to: payload.destination,
-                from: config.get("email.sender"),
-                subject: payload.subject,
-                html: payload.message
-            });
+            if (process.env.NODE_ENV == "staging")
+                return {}
+            else
+                return await sendGrid.send({
+                    to: payload.destination,
+                    from: config.get("email.sender"),
+                    subject: payload.subject,
+                    html: payload.message
+                });
         } catch (err) {
             console.log("ERROR -> ", JSON.stringify(err));
+            return Promise.reject(err)
         }
     }
 }

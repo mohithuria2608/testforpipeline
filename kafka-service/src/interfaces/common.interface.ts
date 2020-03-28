@@ -69,4 +69,12 @@ declare namespace ICommonRequest {
         type?: string,
         bootstrap: boolean
     }
+
+    interface IGrpcHealthCheck {
+        request: IGrpcHealthCheckReq
+    }
+
+    interface IGrpcHealthCheckReq {
+        get: boolean
+    }
 }

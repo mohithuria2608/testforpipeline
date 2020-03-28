@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import { kafkaController } from '../../controllers'
+import { kafkaController, miscController } from '../../controllers'
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -24,6 +24,15 @@ server.addService(kafkaProto.KafkaService.service, {
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "kafkaSync", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+    health: async (call: ICommonRequest.IGrpcHealthCheck, callback) => {
+        try {
+            // let res: {} = await miscController.healthCheck(call)
+            callback(null, { state: true })
+        } catch (error) {
+            consolelog(process.cwd(), "health", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },
