@@ -8,6 +8,15 @@ export class MiscController {
 
     constructor() { }
 
+    async healthCheck(data: ICommonRequest.IGrpcHealthCheck) {
+        try {
+            return { state: true }
+        } catch (error) {
+            consolelog(process.cwd(), "healthCheck", JSON.stringify(error), false)
+            return { state: false }
+        }
+    }
+
     /**
     * @method INTERNAL
     * @description : PING SERVICES

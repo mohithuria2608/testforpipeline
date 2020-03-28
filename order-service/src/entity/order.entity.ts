@@ -16,19 +16,30 @@ export class OrderClass extends BaseEntity {
     * @method INTERNAL
     * @description Sync order request in KAFKA for creating order on SDM
     */
-    async syncOrder(payload: IOrderRequest.IOrderData) {
+    async syncOrder(payload: IOrderRequest.IOrderData, firstAttempt: boolean, ) {
         try {
-            kafkaService.kafkaSync({
-                set: this.set,
-                sdm: {
-                    create: true,
-                    argv: JSON.stringify(payload)
-                },
-                inQ: true
-            })
+            if (firstAttempt)
+                await this.createSdmOrder(payload)
+            else
+                kafkaService.kafkaSync({
+                    set: this.set,
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(payload)
+                    },
+                    inQ: true
+                })
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncOrder", JSON.stringify(error), false)
+            if (firstAttempt)
+                kafkaService.kafkaSync({
+                    set: this.set,
+                    sdm: {
+                        create: true,
+                        argv: JSON.stringify(payload)
+                    },
+                    inQ: true
+                })
             return Promise.reject(error)
         }
     }
