@@ -71,7 +71,7 @@ export default (router: Router) => {
                             deviceId: headers.deviceid,
                             cCode: payload.cCode,
                             phnNo: payload.phnNo,
-                            accessToken: res.accessToken,
+                            accessToken: ctx.header.authorization,
                             name: "Load test powered by ankit",
                             email: payload.phnNo + "@gmail.com",
                             type: "CREATE_PROFILE"
