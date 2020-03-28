@@ -61,7 +61,6 @@ export class LocationController {
                                                         delete s.streetId
                                                         delete s.districtId
                                                         delete s.geoFence
-
                                                         storeCollection.push(s)
                                                     }
                                                 }

@@ -18,9 +18,9 @@ export class SmsCLass {
     constructor() { }
 
     async sendSMS(payload: ISmsRequest.ISingleSms) {
-        // if (process.env.NODE_ENV == "staging")
-        //     return {}
-        // else
+        if (process.env.NODE_ENV == "staging")
+            return {}
+        else
             return new Promise((resolve, reject) => {
                 payload.message = Helper.utfConverter(payload.message);
                 request.get(
