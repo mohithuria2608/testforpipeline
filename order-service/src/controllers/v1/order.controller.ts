@@ -308,14 +308,15 @@ export class OrderController {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
                 status: {
                     $in: [Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                        //  Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                         Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
-                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime() ||
-                        order.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO) {
+                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()
+                        || order.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                    ) {
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,
                             language: order.language,
