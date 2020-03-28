@@ -15,7 +15,7 @@ export interface ILoad extends Document {
 };
 
 const loadSchema = new Schema({
-    cartId: { type: String, required: true, index: true },
+    cartId: { type: String },
     deviceId: { type: String },
     accessToken: { type: String },
     addressId: { type: String },

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service KafkaService {
     rpc KafkaSync (IKafkaReq) returns (IKafkaRes) {}
+    rpc Health (IHealthReq) returns (IHealthRes) {}
 }
 
 message IKafkaReq {
@@ -54,4 +55,12 @@ message IMdb {
 
 message IKafkaRes {
     required string data = 1;
+}
+
+message IHealthReq {
+    required bool get = 1;
+}
+
+message IHealthRes {
+    required bool state = 1;
 }
