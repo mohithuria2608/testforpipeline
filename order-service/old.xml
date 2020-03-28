@@ -12,10 +12,11 @@
             <language>en</language>
             <conceptID>3</conceptID>
             <order>
-                <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10516085</q247:AddressID>
+                <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10516103</q247:AddressID>
                 <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
                 <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
                 <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7698971</q247:CustomerID>
+                <q247:DeliveryChargeID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">279</q247:DeliveryChargeID>
                 <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
                 <q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
                     <q247:CEntry>
@@ -28,7 +29,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Chicken Pc - Original</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>599</q247:QCInstanceID>
+                                <q247:QCInstanceID>589</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -39,7 +40,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Chicken Pc - Original</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>599</q247:QCInstanceID>
+                                <q247:QCInstanceID>589</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -50,7 +51,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Chicken Pc - Spicy</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>790</q247:QCInstanceID>
+                                <q247:QCInstanceID>387</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -61,7 +62,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Chicken Pc - Spicy</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>790</q247:QCInstanceID>
+                                <q247:QCInstanceID>387</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -72,7 +73,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Crispy Strips Original</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>142</q247:QCInstanceID>
+                                <q247:QCInstanceID>308</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -83,7 +84,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Crispy Strips Original</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>142</q247:QCInstanceID>
+                                <q247:QCInstanceID>308</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -94,7 +95,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Crispy Strips Spicy</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>546</q247:QCInstanceID>
+                                <q247:QCInstanceID>526</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -105,7 +106,7 @@
                                 <q247:ModCode>NONE</q247:ModCode>
                                 <q247:Name>Crispy Strips Spicy</q247:Name>
                                 <q247:QCComponent>1</q247:QCComponent>
-                                <q247:QCInstanceID>546</q247:QCInstanceID>
+                                <q247:QCInstanceID>526</q247:QCInstanceID>
                                 <q247:QCLevel>0</q247:QCLevel>
                                 <q247:QCProID>83</q247:QCProID>
                             </q247:CEntry>
@@ -115,7 +116,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Better together</q247:Name>
                         <q247:QCComponent>1</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -126,7 +127,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Chocolate Chip Cookie</q247:Name>
                         <q247:QCComponent>2</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -137,7 +138,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Chocolate Chip Cookie</q247:Name>
                         <q247:QCComponent>3</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -148,7 +149,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Regular Fries</q247:Name>
                         <q247:QCComponent>4</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -159,7 +160,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Regular Fries</q247:Name>
                         <q247:QCComponent>5</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -170,7 +171,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Coleslaw Salad Small</q247:Name>
                         <q247:QCComponent>6</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -181,7 +182,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Coleslaw Salad Small</q247:Name>
                         <q247:QCComponent>7</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -192,7 +193,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Pepsi Regular</q247:Name>
                         <q247:QCComponent>8</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
@@ -203,39 +204,23 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Pepsi Regular</q247:Name>
                         <q247:QCComponent>9</q247:QCComponent>
-                        <q247:QCInstanceID>128</q247:QCInstanceID>
+                        <q247:QCInstanceID>653</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>83</q247:QCProID>
                     </q247:CEntry>
                 </q247:Entries>
                 <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
-                <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">2</q247:OrderMode>
+                <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:OrderMode>
                 <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
                 <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-                <q247:ServiceCharge xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:ServiceCharge>
-                <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1218</q247:StoreID>
+                <q247:ServiceCharge xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">6.5</q247:ServiceCharge>
+                <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">90</q247:StoreID>
                 <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
             </order>
             <autoApprove>true</autoApprove>
             <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
-            <orderNotes1>826</orderNotes1>
-            <orderNotes2>
-                <_bsontype>ObjectID</_bsontype>
-                <id>
-                    <0>94</0>
-                    <1>127</1>
-                    <2>53</2>
-                    <3>142</3>
-                    <4>203</4>
-                    <5>237</5>
-                    <6>151</6>
-                    <7>146</7>
-                    <8>46</8>
-                    <9>51</9>
-                    <10>1</10>
-                    <11>178</11>
-                </id>
-            </orderNotes2>
+            <orderNotes1>843</orderNotes1>
+            <orderNotes2>5e7f734902ac9fdc8854c3a5</orderNotes2>
             <creditCardPaymentbool>false</creditCardPaymentbool>
             <isSuspended>false</isSuspended>
             <menuTemplateID>17</menuTemplateID>

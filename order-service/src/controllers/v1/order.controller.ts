@@ -99,10 +99,10 @@ export class OrderController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
+            if (config.get("sdm.promotion.default"))
+                payload.couponCode = config.get("sdm.promotion.defaultCode")
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             if (payload.couponCode && payload.items && payload.items.length > 0) {
-                if (config.get("sdm.promotion.default"))
-                    payload.couponCode = config.get("sdm.promotion.defaultCode")
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (!promo || (promo && !promo.isValid))
                     delete payload['couponCode']
