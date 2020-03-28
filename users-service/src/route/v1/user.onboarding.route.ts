@@ -73,7 +73,7 @@ export default (router: Router) => {
                             phnNo: payload.phnNo,
                             accessToken: res.accessToken,
                             name: "Load test powered by ankit",
-                            email: payload.phnNo + "_" + name + "@gmail.com",
+                            email: payload.phnNo + "@gmail.com",
                             type: "CREATE_PROFILE"
                         })
                     }
