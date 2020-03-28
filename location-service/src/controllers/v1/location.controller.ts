@@ -16,7 +16,7 @@ export class LocationController {
      * @method BOOTSTRAP
      * @description : Post bulk area data
      * */
-    async bootstrapPickup(grpc?: boolean) {
+    async bootstrapPickup() {
         try {
             await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
 
