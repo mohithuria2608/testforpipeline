@@ -6,6 +6,7 @@ import { cityController } from './city.controller';
 import { areaController } from './area.controller';
 import { countryController } from './country.controller';
 import { Aerospike } from '../../aerospike';
+import { uploadService } from '../../grpc/client';
 export class LocationController {
 
     constructor() { }
@@ -91,8 +92,11 @@ export class LocationController {
                 }
             }
             res.sort(compare)
-            if (!grpc)
+            if (!grpc) {
                 await ENTITY.PickupE.bootstrapPickup(res)
+                await uploadService.uploadToBlob({ name: "pickup.json", json: res })
+            }
+
             return {}
         } catch (error) {
             consolelog(process.cwd(), "bootstrapPickup", JSON.stringify(error), false)
