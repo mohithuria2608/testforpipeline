@@ -306,9 +306,10 @@ export class OrderController {
     async bootstrapPendingOrders() {
         try {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
+                env: Constant.SERVER.ENV[config.get("env")],
                 status: {
                     $in: [Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                         Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                    Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })

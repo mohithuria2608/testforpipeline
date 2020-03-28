@@ -1461,6 +1461,7 @@ export class OrderClass extends BaseEntity {
                                                 getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                             } catch (revError) {
                                                 recheck = true
+                                                getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                                 if (revError.data) {
                                                     if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
                                                         transLogs.push(revError.data)
@@ -1484,6 +1485,7 @@ export class OrderClass extends BaseEntity {
                                                 getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                             } catch (refundError) {
                                                 recheck = true
+                                                getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                                 if (refundError.data) {
                                                     if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
                                                         transLogs.push(refundError.data)
@@ -1633,6 +1635,7 @@ export class OrderClass extends BaseEntity {
                                         dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
                                         getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                     } catch (revError) {
+                                        getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                         if (revError.data) {
                                             if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
                                                 transLogs.push(revError.data)
@@ -1655,6 +1658,7 @@ export class OrderClass extends BaseEntity {
                                         dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS
                                         getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                     } catch (refundError) {
+                                        getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                         if (refundError.data) {
                                             if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
                                                 transLogs.push(refundError.data)
