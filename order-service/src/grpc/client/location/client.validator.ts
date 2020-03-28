@@ -32,8 +32,8 @@ export class LocationServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    lat: Joi.number().required(),
-                    lng: Joi.number().required()
+                    lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

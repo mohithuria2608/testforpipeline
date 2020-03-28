@@ -188,13 +188,13 @@ export class CartClass extends BaseEntity {
             addressType: Joi.string().valid(
                 Constant.DATABASE.TYPE.ADDRESS.PICKUP,
                 Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
-            lat: Joi.number().required(),
-            lng: Joi.number().required(),
+            lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+            lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
         }),
         store: Joi.object().keys({
             storeId: Joi.number(),
-            lat: Joi.number(),
-            lng: Joi.number(),
+            lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+            lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
             address: Joi.string(),
         }),
         items: Joi.array().items(this.itemSchema),
