@@ -1445,13 +1445,13 @@ export class OrderClass extends BaseEntity {
                                     break;
                                 }
                                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
-                                    consolelog(process.cwd(), "CANCELED 3 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), `CANCELED 3 :       ${recheck}`, parseInt(sdmOrder.Status), true)
                                     let transLogs = [];
                                     let reverseStatus;
                                     let getReversalStatusType = ""
                                     if (order.payment && order.payment.status) {
                                         if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
-                                            consolelog(process.cwd(), "CANCELED 4 :       ", parseInt(sdmOrder.Status), true)
+                                            consolelog(process.cwd(), `CANCELED 4 :       ${recheck}`, parseInt(sdmOrder.Status), true)
                                             try {
                                                 await paymentService.reversePayment({
                                                     noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
@@ -1473,7 +1473,7 @@ export class OrderClass extends BaseEntity {
                                                 }
                                             }
                                         } else if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.AS) {
-                                            consolelog(process.cwd(), "CANCELED 5 :       ", parseInt(sdmOrder.Status), true)
+                                            consolelog(process.cwd(), `CANCELED 5 :       ${recheck}`, parseInt(sdmOrder.Status), true)
                                             try {
                                                 await paymentService.refundPayment({
                                                     noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
@@ -1496,6 +1496,8 @@ export class OrderClass extends BaseEntity {
                                                     }
                                                 }
                                             }
+                                        } else {
+                                            consolelog(process.cwd(), `CANCELED 6:       ${recheck}`, "", true)
                                         }
                                         try {
                                             reverseStatus = await paymentService.getPaymentStatus({
@@ -1516,34 +1518,34 @@ export class OrderClass extends BaseEntity {
                                                 }
                                             }
                                         }
+                                        consolelog(process.cwd(), `CANCELED 6.5:       ${recheck}`, "", true)
                                         if (transLogs && transLogs.length > 0)
                                             dataToUpdateOrder['$addToSet'] = {
                                                 transLogs: { $each: transLogs.reverse() }
                                             }
                                     }
-                                    if (!recheck)
-                                        if (reverseStatus && order && order._id) {
-                                            consolelog(process.cwd(), "CANCELED 6 :       ", parseInt(sdmOrder.Status), true)
-                                            CMS.OrderCMSE.updateOrder({
-                                                order_id: order.cmsOrderRef,
-                                                payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
-                                                order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
-                                                sdm_order_id: order.sdmOrderRef
-                                            })
-                                            CMS.TransactionCMSE.createTransaction({
-                                                order_id: order.cmsOrderRef,
-                                                message: getReversalStatusType,
-                                                type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
-                                                payment_data: {
-                                                    id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
-                                                    data: JSON.stringify(reverseStatus)
-                                                }
-                                            })
-                                        }
+                                    if (reverseStatus && order && order._id) {
+                                        consolelog(process.cwd(), `CANCELED 7 :       ${recheck}`, parseInt(sdmOrder.Status), true)
+                                        CMS.OrderCMSE.updateOrder({
+                                            order_id: order.cmsOrderRef,
+                                            payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
+                                            order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
+                                            sdm_order_id: order.sdmOrderRef
+                                        })
+                                        CMS.TransactionCMSE.createTransaction({
+                                            order_id: order.cmsOrderRef,
+                                            message: getReversalStatusType,
+                                            type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
+                                            payment_data: {
+                                                id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
+                                                data: JSON.stringify(reverseStatus)
+                                            }
+                                        })
+                                    }
                                     break;
                                 }
                                 default: {
-                                    consolelog(process.cwd(), "CANCELED 7 :       ", parseInt(sdmOrder.Status), true)
+                                    consolelog(process.cwd(), "CANCELED 8 :       ", parseInt(sdmOrder.Status), true)
                                     dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
@@ -1554,7 +1556,6 @@ export class OrderClass extends BaseEntity {
                                     break;
                                 }
                             }
-
                         } else {
                             dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.FAILED.AS
                             CMS.OrderCMSE.updateOrder({
@@ -1564,21 +1565,19 @@ export class OrderClass extends BaseEntity {
                                 sdm_order_id: order.sdmOrderRef
                             })
                         }
-                        if (!recheck) {
-                            order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                            if (order && order._id) {
-                                let userData = await userService.fetchUser({ userId: order.userId });
-                                notificationService.sendNotification({
-                                    toSendMsg: true,
-                                    toSendEmail: true,
-                                    msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
-                                    emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
-                                    msgDestination: `${userData.cCode}${userData.phnNo}`,
-                                    emailDestination: userData.email,
-                                    language: order.language,
-                                    payload: JSON.stringify({ msg: order, email: { order, user: userData } })
-                                });
-                            }
+                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                        if (order && order._id) {
+                            let userData = await userService.fetchUser({ userId: order.userId });
+                            notificationService.sendNotification({
+                                toSendMsg: true,
+                                toSendEmail: true,
+                                msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_CANCEL,
+                                emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_CANCEL,
+                                msgDestination: `${userData.cCode}${userData.phnNo}`,
+                                emailDestination: userData.email,
+                                language: order.language,
+                                payload: JSON.stringify({ msg: order, email: { order, user: userData } })
+                            });
                         }
                     }
                 }
