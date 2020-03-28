@@ -1612,6 +1612,7 @@ export class OrderClass extends BaseEntity {
                             consolelog(process.cwd(), `FAILURE HANDLER 2 : ${Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD}`, "", true)
                             let transLogs = [];
                             let reverseStatus;
+                            let getReversalStatusType = ""
                             if (order.payment && order.payment.status) {
                                 if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
                                     consolelog(process.cwd(), `FAILURE HANDLER 3`, "", true)
@@ -1621,6 +1622,7 @@ export class OrderClass extends BaseEntity {
                                             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                                         })
                                         dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
+                                        getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                     } catch (revError) {
                                         if (revError.data) {
                                             if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
@@ -1642,6 +1644,7 @@ export class OrderClass extends BaseEntity {
                                             captureTransactionId: order.transLogs[2].transactions[0].id
                                         })
                                         dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS
+                                        getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                     } catch (refundError) {
                                         if (refundError.data) {
                                             if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
@@ -1660,7 +1663,7 @@ export class OrderClass extends BaseEntity {
                                     reverseStatus = await paymentService.getPaymentStatus({
                                         noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                         storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                        paymentStatus: Constant.DATABASE.STATUS.PAYMENT.CANCELLED,
+                                        paymentStatus: getReversalStatusType,
                                     })
                                     transLogs.push(reverseStatus)
                                 } catch (statusError) {
@@ -1683,16 +1686,16 @@ export class OrderClass extends BaseEntity {
                                 consolelog(process.cwd(), `FAILURE HANDLER 6`, "", true)
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
-                                    payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
+                                    payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
                                     order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef
                                 })
                                 CMS.TransactionCMSE.createTransaction({
                                     order_id: order.cmsOrderRef,
-                                    message: reverseStatus.transactions[0].type,
-                                    type: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS,
+                                    message: getReversalStatusType,
+                                    type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
                                     payment_data: {
-                                        id: reverseStatus.transactions[0].id.toString(),
+                                        id: (reverseStatus.transactions && reverseStatus.transactions.length > 0) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
                                         data: JSON.stringify(reverseStatus)
                                     }
                                 })
