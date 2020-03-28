@@ -690,7 +690,7 @@ export class OrderClass extends BaseEntity {
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
                 orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order.cmsOrderRef : order.cmsOrderRef,
-                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order._id : order._id,
+                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order._id.toString() : order._id.toString(),
                 creditCardPaymentbool: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
                 isSuspended: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
                 menuTemplateID: 17,
