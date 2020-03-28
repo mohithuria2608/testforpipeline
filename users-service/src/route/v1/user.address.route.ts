@@ -44,7 +44,8 @@ export default (router: Router) => {
                             deviceId: headers.deviceid,
                             accessToken: ctx.header.authorization,
                             addressId: res.id,
-                            cartUpdatedAt: cart.updatedAt
+                            cartUpdatedAt: cart.updatedAt,
+                            type: "PLACE_ORDER"
                         })
                     }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
