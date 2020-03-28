@@ -18,8 +18,7 @@ export class LocationController {
      * */
     async bootstrapPickup(grpc?: boolean) {
         try {
-            if (!grpc)
-                await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
+            await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
 
             const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
             const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
@@ -93,10 +92,8 @@ export class LocationController {
                 }
             }
             res.sort(compare)
-            if (!grpc)
-                await ENTITY.PickupE.bootstrapPickup(res)
-            if (grpc)
-                await uploadService.uploadToBlob({ name: "pickup.json", json: JSON.stringify(res) })
+            await ENTITY.PickupE.bootstrapPickup(res)
+            await uploadService.uploadToBlob({ name: "pickup.json", json: JSON.stringify(res) })
             return {}
         } catch (error) {
             consolelog(process.cwd(), "bootstrapPickup", JSON.stringify(error), false)
