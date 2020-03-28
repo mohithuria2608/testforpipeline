@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog, hashObj } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
@@ -53,11 +54,14 @@ export class CartController {
                 }
             }
 
-            if (payload.couponCode && payload.items && payload.items.length > 0) {
-                promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                if (!promo || (promo && !promo.isValid)) {
+            if (!config.get("sdm.promotion.default")) {
+                if (payload.couponCode && payload.items && payload.items.length > 0) {
+                    promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
+                    if (!promo || (promo && !promo.isValid)) {
+                        delete payload['couponCode']
+                    }
+                } else
                     delete payload['couponCode']
-                }
             } else
                 delete payload['couponCode']
             let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)

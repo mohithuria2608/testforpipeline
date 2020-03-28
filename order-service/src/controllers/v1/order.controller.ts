@@ -1,10 +1,9 @@
+import * as config from "config"
 import * as Constant from '../../constant'
-import { consolelog, hashObj, getFrequency } from '../../utils'
-import { userService, locationService, promotionService, paymentService } from '../../grpc/client'
+import { consolelog, getFrequency } from '../../utils'
+import { userService, locationService, promotionService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import * as CMS from '../../cms'
-import { OrderSDME } from '../../sdm';
-
 
 export class OrderController {
 
@@ -64,6 +63,7 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
+            payload.couponCode
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (!userData.sdmUserRef || userData.sdmUserRef == 0)
                 userData = await userService.createUserOnSdm(userData)
@@ -101,10 +101,11 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             if (payload.couponCode && payload.items && payload.items.length > 0) {
+                if (config.get("sdm.promotion.default"))
+                    payload.couponCode = config.get("sdm.promotion.defaultCode")
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
-                if (!promo || (promo && !promo.isValid)) {
+                if (!promo || (promo && !promo.isValid))
                     delete payload['couponCode']
-                }
             } else
                 delete payload['couponCode']
             /**

@@ -659,6 +659,11 @@ export class CartClass extends BaseEntity {
                     en: []
                 }
             }
+            if (config.get("sdm.promotion.default")) {
+                dataToUpdate['promo'] = {}
+                dataToUpdate['couponApplied'] = 0
+            }
+
             if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
                 dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,

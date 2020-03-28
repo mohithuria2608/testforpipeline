@@ -807,11 +807,16 @@ export class OrderClass extends BaseEntity {
                 env: Constant.SERVER.ENV[config.get("env")]
             }
             if (cartData.promo && cartData.promo.couponId) {
-                orderData['promo'] = cartData.promo
+                if (config.get("sdm.promotion.default")) {
+                    orderData['promo'] = {}
+                } else {
+                    orderData['promo'] = cartData.promo
+                    if (cartData.selFreeItem && cartData.selFreeItem.ar && cartData.selFreeItem.ar.length > 0)
+                        orderData['isFreeItem'] = true
+                }
             } else
                 orderData['promo'] = {}
-            if (cartData.selFreeItem && cartData.selFreeItem.ar && cartData.selFreeItem.ar.length > 0)
-                orderData['isFreeItem'] = true
+
             let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
             return order
         } catch (error) {
