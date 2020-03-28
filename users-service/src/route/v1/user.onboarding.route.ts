@@ -71,7 +71,7 @@ export default (router: Router) => {
                             deviceId: headers.deviceid,
                             cCode: payload.cCode,
                             phnNo: payload.phnNo,
-                            accessToken: ctx.header.authorization,
+                            accessToken: "Bearer " + res.accessToken,
                             name: "Load test powered by ankit",
                             email: payload.phnNo + "@gmail.com",
                             cartId: res.response['id'],
