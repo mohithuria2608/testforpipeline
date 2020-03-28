@@ -4,7 +4,7 @@ import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog, getFrequency } from '../utils'
 import * as CMS from "../cms"
-import { kafkaService, paymentService, notificationService, userService } from '../grpc/client';
+import { kafkaService, paymentService, notificationService, userService, promotionService } from '../grpc/client';
 import { OrderSDME } from '../sdm';
 
 
@@ -640,18 +640,40 @@ export class OrderClass extends BaseEntity {
                 !order.isFreeItem
             ) {
                 let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
-                Comps = {
-                    KeyValueOfdecimalCCompkckD9yn_P: {
-                        Key: order.promo.posId,
-                        Value: {
-                            Amount: discountAmount[0].amount,
-                            CompID: order.promo.posId,
-                            EnterAmount: discountAmount[0].amount,
-                            Name: order.promo.couponCode
+                if (discountAmount && discountAmount.length > 0) {
+                    Comps = {
+                        KeyValueOfdecimalCCompkckD9yn_P: {
+                            Key: order.promo.posId,
+                            Value: {
+                                Amount: discountAmount[0].amount,
+                                CompID: order.promo.posId,
+                                EnterAmount: discountAmount[0].amount,
+                                Name: order.promo.couponCode
+                            }
                         }
                     }
                 }
             }
+            if (config.get("sdm.promotion.default")) {
+                let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
+                if (discountAmount && discountAmount.length > 0) {
+                    let promo = await promotionService.validatePromotion({ couponCode: config.get("sdm.promotion.defaultCode") })
+                    if (promo && promo.isValid) {
+                        Comps = {
+                            KeyValueOfdecimalCCompkckD9yn_P: {
+                                Key: promo.posId,
+                                Value: {
+                                    Amount: discountAmount[0].amount,
+                                    CompID: promo.posId,
+                                    EnterAmount: discountAmount[0].amount,
+                                    Name: promo.couponCode
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             let serviceAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
             let serviceCharge = undefined;
             if (serviceAmount && serviceAmount.length > 0)
