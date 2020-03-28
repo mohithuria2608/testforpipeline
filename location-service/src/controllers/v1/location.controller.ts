@@ -94,7 +94,7 @@ export class LocationController {
             res.sort(compare)
             if (!grpc) {
                 await ENTITY.PickupE.bootstrapPickup(res)
-                await uploadService.uploadToBlob({ name: "pickup.json", json: res })
+                await uploadService.uploadToBlob({ name: "pickup.json", json: JSON.stringify(res) })
             }
 
             return {}
