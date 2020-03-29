@@ -6,8 +6,7 @@ service LocationService {
     rpc ValidateCoordinate (IValidateCoordinateReq) returns (IValidateCoordinateRes) {}
     rpc SyncLocationFromCMS (ISyncLocationFromCMSReq) returns (ISyncLocationFromCMSRes) {}
     rpc PostLocationDataToCMS (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
-    rpc PostStoreStatusToCMS (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
-    rpc SyncStoreStatusToAS (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
+    rpc SyncStoreStatus (IKafkaReq) returns (IPostLocationDataToCMSRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
 

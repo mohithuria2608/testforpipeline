@@ -56,7 +56,7 @@ server.addService(locationProto.LocationService.service, {
 
     SyncLocationFromCMS: async (call: IStoreGrpcRequest.ISyncLocationFromCMSReq, callback) => {
         try {
-            consolelog(process.cwd(), "grpc SyncLocationFromCMS", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "grpc SyncLocationFromCMS", "", true)
             let res: IStoreRequest.IStore[] = await locationController.syncLocationFromCMS(call.request);
             callback(null, { store: true })
         } catch (error) {
@@ -67,7 +67,7 @@ server.addService(locationProto.LocationService.service, {
 
     PostLocationDataToCMS: async (call: IStoreGrpcRequest.IPostLocationDataToCMSReq, callback) => {
         try {
-            consolelog(process.cwd(), "grpc PostLocationDataToCMS", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "grpc PostLocationDataToCMS", "", true)
             let res: IStoreRequest.IStore[] = await locationController.postLocationToCMS(call.request);
             callback(null, { store: true })
         } catch (error) {
@@ -76,24 +76,13 @@ server.addService(locationProto.LocationService.service, {
         }
     },
 
-    PostStoreStatusToCMS: async (call: IStoreGrpcRequest.IPostStoreStatusToCMSReq, callback) => {
+    SyncStoreStatus: async (call: IStoreGrpcRequest.ISyncStoreStatusReq, callback) => {
         try {
-            consolelog(process.cwd(), "grpc PostStoreStatusToCMS", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await storeController.postStoreStatusToCMS(call.request);
+            consolelog(process.cwd(), "grpc SyncStoreStatus", JSON.stringify(call.request), true)
+            let res: IStoreRequest.IStore[] = await storeController.syncStoreStatus(call.request);
             callback(null, { store: true })
         } catch (error) {
-            consolelog(process.cwd(), "PostStoreStatusToCMS", JSON.stringify(error), false)
-            callback(grpcSendError(error))
-        }
-    },
-
-    SyncStoreStatusToAS: async (call: IStoreGrpcRequest.ISyncStoreStatusToASReq, callback) => {
-        try {
-            consolelog(process.cwd(), "grpc SyncStoreStatusToAS", JSON.stringify(call.request), true)
-            let res: IStoreRequest.IStore[] = await storeController.syncStoreStatusToAS(call.request);
-            callback(null, { store: true })
-        } catch (error) {
-            consolelog(process.cwd(), "SyncStoreStatusToAS", JSON.stringify(error), false)
+            consolelog(process.cwd(), "SyncStoreStatus", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     },

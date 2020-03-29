@@ -17,7 +17,7 @@ class ASLocationConsumer extends BaseConsumer {
                 let messageArgv = JSON.parse(message.as.argv);
                 switch (messageArgv.event) {
                     case "location_sync": this.syncLocationFromCMS(message); break;
-                    case "store_status_sync": this.syncStoreStatusToAS(message); break;
+                    case "store_status_sync": this.syncStoreStatus(message); break;
                 }
                 this.syncLocationFromCMS(message);
                 return null;
@@ -47,9 +47,9 @@ class ASLocationConsumer extends BaseConsumer {
         }
     }
 
-    private async syncStoreStatusToAS(message: IKafkaRequest.IKafkaBody) {
+    private async syncStoreStatus(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await locationService.syncStoreStatusToAS(message)
+            let res = await locationService.syncStoreStatus(message)
             return res
         } catch (error) {
             consolelog(process.cwd(), "syncStoreStatusToAS", JSON.stringify(error), false);

@@ -118,8 +118,23 @@ export class StoreEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.sdmStoreId, // @TODO - make it storeId for consistency
+                key: data.storeIdAs,
                 createOrReplace: true,
+            }
+            return Aerospike.put(putArg)
+        } catch (error) {
+            console.log("ERROR -> ", error);
+            return {}
+        }
+    }
+
+    async updateStoreData(data) {
+        try {
+            let putArg: IAerospike.Put = {
+                bins: data,
+                set: this.set,
+                key: data.storeId,
+                update: true,
             }
             return Aerospike.put(putArg)
         } catch (error) {

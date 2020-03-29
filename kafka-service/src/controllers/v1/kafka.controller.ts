@@ -311,7 +311,7 @@ export class KafkaController {
                             let messageArgv = JSON.parse(messages.as.argv);
                             switch (messageArgv.event) {
                                 case "location_sync": await locationService.syncLocationFromCMS(messages); break;
-                                case "store_status_sync": await locationService.syncStoreStatusToAS(messages); break;
+                                case "store_status_sync": await locationService.syncStoreStatus(messages); break;
                             }
                         }
                     }

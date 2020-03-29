@@ -111,32 +111,26 @@ export class StoreController {
     /** sync to aerospike */
     async syncToAS(payload) {
         try {
+            console.log("PAYLOAD LENGTH -> ", payload.length);
             for (let store of payload) {
+                store.menuTempId = 17; //@TODO -remove when it will come from CMS
                 if (store.geoFence && store.geoFence.length) {
                     for (let fence of store.geoFence) {
                         let storeData = { ...store, ...fence };
                         storeData.geoFence = ENTITY.StoreE.createGeoFence(storeData.latitude, storeData.longitude);
                         delete storeData.latitude; delete storeData.longitude;
+                        storeData.storeIdAs = storeData.storeId + "_" + storeData.mapId;
                         await ENTITY.StoreE.syncStoreData(storeData);
                     }
+                } else {
+                    store.storeIdAs = store.storeId + "_-1";
+                    store.geoFence = { "type": "Polygon", "coordinates": [] };
+                    await ENTITY.StoreE.syncStoreData(store);
                 }
             }
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    /**
-     * @method GRPC
-     * syncs stores from CMS to Aerospike
-     */
-    async postStoreStatusToCMS(payload): Promise<any> {
-        try {
-            let storesList = JSON.parse(payload.as.argv)['data'];
-            await Utils.sendRequestToCMS('SYNC_STORE_STATUS', storesList);
         } catch (error) {
-            consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)
-            return Promise.reject(error)
+            consolelog(process.cwd(), "syncToAS", JSON.stringify(error), false)
+            return Promise.reject(error);
         }
     }
 
@@ -144,21 +138,33 @@ export class StoreController {
      * @method GRPC
      * syncs location data from CMS
      */
-    async syncStoreStatusToAS(payload): Promise<any> {
+    async syncStoreStatus(payload): Promise<any> {
         try {
             let storeStatusList = JSON.parse(payload.as.argv)['data'];
             let storesList = await ENTITY.StoreE.getAllStores();
+            let storesToSyncWithCMS = [];
+            let storesToSyncWithCMSHash = {};
+
             for (let store of storesList) {
                 for (let i = 0; i < storeStatusList.length; i++) {
-                    if (store.storeId === storeStatusList[i].sdmStoreId) {
-                        store.active = 1;
-                        await ENTITY.StoreE.syncStoreData(store);
+                    if (
+                        store.storeId === storeStatusList[i].sdmStoreId
+                        && store.active !== storeStatusList[i].active
+                    ) {
+                        store.active = storeStatusList[i].active;
+                        await ENTITY.StoreE.updateStoreData(store);
+                        if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
+                            storesToSyncWithCMS.push({ restaurant_id: store.id, id: store.id, sdmStoreId: store.storeId, active: store.active });
+                            storesToSyncWithCMSHash[store.sdmStoreId] = true;
+                        }
                     }
                 }
             }
+            console.log("UPDATING STORES STATUS FOR COUNT ->", storesToSyncWithCMS.length);
+            if (storesToSyncWithCMS.length) await Utils.sendRequestToCMS('SYNC_STORE_STATUS', storesToSyncWithCMS);
         } catch (error) {
-            consolelog(process.cwd(), "syncStoreStatusToAS", JSON.stringify(error), false)
-            return Promise.reject(error)
+            consolelog(process.cwd(), "syncStoreStatus", JSON.stringify(error), false)
+            return Promise.reject(error);
         }
     }
 }

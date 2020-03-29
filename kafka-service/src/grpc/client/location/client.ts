@@ -73,39 +73,16 @@ export class LocationService {
     * @description : this will post location data to CMS
     * @param payload 
     */
-    async syncStoreStatusToAS(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
+    async syncStoreStatus(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.syncValidator(payload)
-                this.locationClient.SyncStoreStatusToAS(payload, (error, res) => {
+                this.locationClient.SyncStoreStatus(payload, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully synced store status on aerospike", JSON.stringify(res), false)
                         resolve(res)
                     } else {
                         consolelog(process.cwd(), "Error in syncing store status on aerospike", JSON.stringify(error), false)
-                        reject(error)
-                    }
-                })
-            } catch (error) {
-                reject(error)
-            }
-        });
-    }
-
-    /**
-    * @description : this will post location data to CMS
-    * @param payload 
-    */
-    async postStoreStatusToCMS(payload: IKafkaRequest.IKafkaBody): Promise<{}> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await locationServiceValidator.syncValidator(payload)
-                this.locationClient.PostStoreStatusToCMS(payload, (error, res) => {
-                    if (!error) {
-                        consolelog(process.cwd(), "successfully synced store status on cms", JSON.stringify(res), false)
-                        resolve(res)
-                    } else {
-                        consolelog(process.cwd(), "Error in syncing store status on cms", JSON.stringify(error), false)
                         reject(error)
                     }
                 })

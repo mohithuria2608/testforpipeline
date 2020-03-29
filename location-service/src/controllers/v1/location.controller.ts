@@ -181,6 +181,7 @@ export class LocationController {
      */
     async postLocationToCMS(payload): Promise<any> {
         try {
+            console.log("SYNCING HERE");
             await Promise.all([
                 // countryController.postOnCMS(),
                 cityController.postOnCMS(),

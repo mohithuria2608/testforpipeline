@@ -14,7 +14,7 @@ export default async function () {
         if (!invalidStores.includes(store.STR_ID)) {
             storeDataList.push({
                 sdmStoreId: parseInt(store.STR_ID),
-                active: store.STR_ACTIVE === "true" ? 1 : 0
+                active: 0
             });
         }
     }

@@ -23,7 +23,7 @@ declare namespace IStoreGrpcRequest {
         request: any
     }
 
-    interface ISyncStoreStatusToASReq {
+    interface ISyncStoreStatusReq {
         request: any
     }
     interface IFetchPickupReq {
