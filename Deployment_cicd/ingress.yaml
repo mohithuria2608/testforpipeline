@@ -8,6 +8,8 @@ metadata:
       appgw.ingress.kubernetes.io/request-timeout: "180"
       appgw.ingress.kubernetes.io/use-private-ip: "true"
       appgw.ingress.kubernetes.io/proxy-body-size: "0"
+      appgw.ingress.kubernetes.io/proxy-read-timeout: "900"
+      appgw.ingress.kubernetes.io/proxy-send-timeout: "900"
       kubernetes.io/ingress.class: azure/application-gateway
     generation: 5
     name: ingress-nodeapp
