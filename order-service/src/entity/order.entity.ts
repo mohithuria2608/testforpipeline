@@ -940,13 +940,13 @@ export class OrderClass extends BaseEntity {
                             let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language })
                             consolelog(process.cwd(), `current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
                             if (sdmOrder.Status && typeof sdmOrder.Status) {
-                                order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: parseInt(sdmOrder.Status)
-                                }, { new: true })
-                                if (oldSdmStatus != parseInt(sdmOrder.Status))
+                                if (oldSdmStatus != parseInt(sdmOrder.Status)) {
+                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                        updatedAt: new Date().getTime(),
+                                        sdmOrderStatus: parseInt(sdmOrder.Status)
+                                    }, { new: true })
                                     statusChanged = true
-
+                                }
                                 if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
                                     let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)
                                     recheck = amountValidation.recheck;
@@ -1460,7 +1460,6 @@ export class OrderClass extends BaseEntity {
                                                 dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS
                                                 getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                             } catch (revError) {
-                                                recheck = true
                                                 getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.CANCELLED
                                                 if (revError.data) {
                                                     if (revError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
@@ -1469,6 +1468,7 @@ export class OrderClass extends BaseEntity {
                                                         transLogs.push(revError.data)
                                                     } else {
                                                         consolelog(process.cwd(), "unhandled payment error reverse", "", false)
+                                                        transLogs.push(revError.data)
                                                     }
                                                 }
                                             }
@@ -1484,7 +1484,6 @@ export class OrderClass extends BaseEntity {
                                                 dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS
                                                 getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                             } catch (refundError) {
-                                                recheck = true
                                                 getReversalStatusType = Constant.DATABASE.STATUS.PAYMENT.REFUNDED
                                                 if (refundError.data) {
                                                     if (refundError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
@@ -1493,6 +1492,7 @@ export class OrderClass extends BaseEntity {
                                                         transLogs.push(refundError.data)
                                                     } else {
                                                         consolelog(process.cwd(), "unhandled payment error refund", "", false)
+                                                        transLogs.push(refundError.data)
                                                     }
                                                 }
                                             }
@@ -1507,7 +1507,6 @@ export class OrderClass extends BaseEntity {
                                             })
                                             transLogs.push(reverseStatus)
                                         } catch (statusError) {
-                                            recheck = true
                                             if (statusError.data) {
                                                 if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
                                                     transLogs.push(statusError.data)
@@ -1515,6 +1514,7 @@ export class OrderClass extends BaseEntity {
                                                     transLogs.push(statusError.data)
                                                 } else {
                                                     consolelog(process.cwd(), "unhandled payment error reverse or refund status", "", false)
+                                                    transLogs.push(statusError.data)
                                                 }
                                             }
                                         }
@@ -1642,6 +1642,7 @@ export class OrderClass extends BaseEntity {
                                                 transLogs.push(revError.data)
                                             } else {
                                                 consolelog(process.cwd(), "unhandled payment error reverse", "", false)
+                                                transLogs.push(revError.data)
                                             }
                                         }
                                     }
@@ -1665,6 +1666,7 @@ export class OrderClass extends BaseEntity {
                                                 transLogs.push(refundError.data)
                                             } else {
                                                 consolelog(process.cwd(), "unhandled payment error refund", "", false)
+                                                transLogs.push(refundError.data)
                                             }
                                         }
                                     }
@@ -1686,6 +1688,7 @@ export class OrderClass extends BaseEntity {
                                             transLogs.push(statusError.data)
                                         } else {
                                             consolelog(process.cwd(), "unhandled payment error reverse or refund status", "", false)
+                                            transLogs.push(statusError.data)
                                         }
                                     }
                                 }
