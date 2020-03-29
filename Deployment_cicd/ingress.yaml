@@ -1,78 +1,76 @@
-apiVersion: v1
-items:
-- apiVersion: extensions/v1beta1
-  kind: Ingress
-  metadata:
-    annotations:
-      appgw.ingress.kubernetes.io/backend-hostname: localhost
-      appgw.ingress.kubernetes.io/backend-path-prefix: /
-      appgw.ingress.kubernetes.io/backend-protocol: http
-      appgw.ingress.kubernetes.io/request-timeout: "180"
-      appgw.ingress.kubernetes.io/use-private-ip: "true"
-      appgw.ingress.kubernetes.io/proxy-body-size: "0"
-      kubernetes.io/ingress.class: azure/application-gateway
-    generation: 5
-    name: ingress-nodeapp
-    namespace: nodeapp
-  spec:
-    rules:
-    - http:
-        paths:
-        - backend:
-            serviceName: auth-service
-            servicePort: 4000
-          path: /auth-service/*
-        - backend:
-            serviceName: user-service
-            servicePort: 4001
-          path: /user-service/*
-        - backend:
-            serviceName: menu-service
-            servicePort: 4002
-          path: /menu-service/*
-        - backend:
-            serviceName: order-service
-            servicePort: 4003
-          path: /order-service/*
-        - backend:
-            serviceName: deeplink-service
-            servicePort: 4005
-          path: /deeplink-service/*
-        - backend:
-            serviceName: kafka-service
-            servicePort: 4006
-          path: /kafka-service/*
-        - backend:
-            serviceName: sync-service
-            servicePort: 4004
-          path: /sync-service/*
-        - backend:
-            serviceName: location-service
-            servicePort: 4007
-          path: /location-service/*
-        - backend:
-            serviceName: notification-service
-            servicePort: 4008
-          path: /notification-service/*
-        - backend:
-            serviceName: payment-service
-            servicePort: 4009
-          path: /payment-service/*
-        - backend:
-            serviceName: promotion-service
-            servicePort: 4010
-          path: /promotion-service/*
-        - backend:
-            serviceName: upload-service
-            servicePort: 4011
-          path: /upload-service/*
-        - backend:
-            serviceName: log-service
-            servicePort: 4012
-          path: /log-service/*
-        - backend:
-            serviceName: home-service
-            servicePort: 4013
-          path: /home-service/*
-    tls:
-    - secretName: mobapi-secret
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+annotations:
+  appgw.ingress.kubernetes.io/backend-hostname: localhost
+  appgw.ingress.kubernetes.io/backend-path-prefix: /
+  appgw.ingress.kubernetes.io/backend-protocol: http
+  appgw.ingress.kubernetes.io/request-timeout: "180"
+  appgw.ingress.kubernetes.io/use-private-ip: "true"
+  appgw.ingress.kubernetes.io/proxy-body-size: "0"
+  kubernetes.io/ingress.class: azure/application-gateway
+generation: 5
+name: ingress-nodeapp
+namespace: nodeapp
+spec:
+rules:
+- http:
+    paths:
+    - backend:
+        serviceName: auth-service
+        servicePort: 4000
+      path: /auth-service/*
+    - backend:
+        serviceName: user-service
+        servicePort: 4001
+      path: /user-service/*
+    - backend:
+        serviceName: menu-service
+        servicePort: 4002
+      path: /menu-service/*
+    - backend:
+        serviceName: order-service
+        servicePort: 4003
+      path: /order-service/*
+    - backend:
+        serviceName: deeplink-service
+        servicePort: 4005
+      path: /deeplink-service/*
+    - backend:
+        serviceName: kafka-service
+        servicePort: 4006
+      path: /kafka-service/*
+    - backend:
+        serviceName: sync-service
+        servicePort: 4004
+      path: /sync-service/*
+    - backend:
+        serviceName: location-service
+        servicePort: 4007
+      path: /location-service/*
+    - backend:
+        serviceName: notification-service
+        servicePort: 4008
+      path: /notification-service/*
+    - backend:
+        serviceName: payment-service
+        servicePort: 4009
+      path: /payment-service/*
+    - backend:
+        serviceName: promotion-service
+        servicePort: 4010
+      path: /promotion-service/*
+    - backend:
+        serviceName: upload-service
+        servicePort: 4011
+      path: /upload-service/*
+    - backend:
+        serviceName: log-service
+        servicePort: 4012
+      path: /log-service/*
+    - backend:
+        serviceName: home-service
+        servicePort: 4013
+      path: /home-service/*
+tls:
+- secretName: mobapi-secret
