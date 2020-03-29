@@ -106,7 +106,7 @@ message IReversePaymentRes { }
 message IRefundPaymentReq {
     required int64 noonpayOrderId = 1;
     required string storeCode = 2;
-    required int64 amount = 3;
+    required double amount = 3;
     required string captureTransactionId = 4;
 }
 
