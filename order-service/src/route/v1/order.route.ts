@@ -16,15 +16,15 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
-                    addressId: Joi.string().required().error(new Error("1")),//Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
-                    orderType: Joi.string().required().valid(Constant.DATABASE.TYPE.ORDER.DELIVERY.AS, Constant.DATABASE.TYPE.ORDER.PICKUP.AS).error(new Error("2")),//Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
-                    paymentMethodId: Joi.number().required().valid(Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD).error(new Error("3")),//Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
-                    cartId: Joi.string().required().error(new Error("4")),//Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
-                    curMenuId: Joi.number().error(new Error("5")),//Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
-                    menuUpdatedAt: Joi.number().error(new Error("6")),//Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
-                    lat: Joi.number().min(-90).max(90).error(new Error("7")),//Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
-                    lng: Joi.number().min(-180).max(180).error(new Error("8")),//Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
-                    couponCode: Joi.string().allow("").error(new Error("9")),//Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
+                    addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.message)),
+                    orderType: Joi.string().required().valid(Constant.DATABASE.TYPE.ORDER.DELIVERY.AS, Constant.DATABASE.TYPE.ORDER.PICKUP.AS).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    paymentMethodId: Joi.number().required().valid(Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    cartId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_CART.message)),
+                    curMenuId: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    menuUpdatedAt: Joi.number().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    couponCode: Joi.string().allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
                 }
             }),
             async (ctx) => {
@@ -32,6 +32,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IOrderRequest.IPostOrder = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
+                    console.log("hereeeeeeeeeeeeeeeeeee")
                     let res = await orderController.postOrder(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
