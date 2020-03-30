@@ -1131,6 +1131,14 @@ export const EMAIL_META = {
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {
+            "EMPTY_CART": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Empty cart !!",
+                "type": "EMPTY_CART",
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Empty cart !!"
+            },
             "INVALID_PHONE_NO": {
                 "statusCode": 400,
                 "httpCode": 400,

@@ -68,6 +68,8 @@ export class OrderController {
             let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            if (cart && (!cart.items || (cart.items && cart.items.length == 0)))
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.EMPTY_CART)
             consolelog(process.cwd(), "step 2", new Date(), false)
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
@@ -298,7 +300,7 @@ export class OrderController {
                 env: Constant.SERVER.ENV[config.get("env")],
                 status: {
                     $in: [Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                    // Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                        // Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
