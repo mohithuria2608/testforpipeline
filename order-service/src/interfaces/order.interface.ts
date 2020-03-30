@@ -82,6 +82,18 @@ declare namespace IOrderRequest {
         paymentMethodId: number
     }
 
+    interface IPostOrderOnCms extends IPostOrderPreHookPayload {
+        cmsOrderReq: IOrderCMSRequest.ICreateOrderCms
+    }
+
+    interface IPostOrderOnSdm extends IPostOrderPreHookPayload {
+    }
+    interface IPostOrderPreHookPayload {
+        headers: ICommonRequest.IHeaders,
+        userData: IUserRequest.IUserData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        order: IOrderRequest.IOrderData
+    }
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         isActive: number
     }

@@ -54,6 +54,7 @@ export class MiscController {
     * */
     async faq(headers: ICommonRequest.IHeaders) {
         try {
+            headers.language = headers.language ? headers.language : Constant.DATABASE.LANGUAGE.EN
             return Constant.DATABASE.FAQ[headers.language]
         } catch (error) {
             consolelog(process.cwd(), "faq", JSON.stringify(error), false)

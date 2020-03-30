@@ -66,21 +66,23 @@ export class WebhookNoonpayController {
                         if (order && order._id) {
                             if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
                                 ENTITY.CartE.resetCart(order.cartId)
-                                CMS.TransactionCMSE.createTransaction({
-                                    order_id: order.cmsOrderRef,
-                                    message: webHookStatus.transactions[0].type,
-                                    type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
-                                    payment_data: {
-                                        id: webHookStatus.transactions[0].id.toString(),
-                                        data: JSON.stringify(webHookStatus)
-                                    }
-                                })
-                                CMS.OrderCMSE.updateOrder({
-                                    order_id: order.cmsOrderRef,
-                                    payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
-                                    sdm_order_id: order.sdmOrderRef
-                                })
+                                if (order.cmsOrderRef)
+                                    CMS.TransactionCMSE.createTransaction({
+                                        order_id: order.cmsOrderRef,
+                                        message: webHookStatus.transactions[0].type,
+                                        type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
+                                        payment_data: {
+                                            id: webHookStatus.transactions[0].id.toString(),
+                                            data: JSON.stringify(webHookStatus)
+                                        }
+                                    })
+                                if (order.cmsOrderRef)
+                                    CMS.OrderCMSE.updateOrder({
+                                        order_id: order.cmsOrderRef,
+                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                                        order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                                        sdm_order_id: order.sdmOrderRef
+                                    })
                                 redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_SUCCESS_FALLBACK
                                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
                                 return redirectUrl
