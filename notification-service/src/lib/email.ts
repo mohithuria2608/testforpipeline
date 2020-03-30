@@ -10,9 +10,9 @@ export class EmailClass {
 
     async sendEmail(payload: IEmailRequest.ISingleEmail) {
         try {
-            if (process.env.NODE_ENV == "staging")
-                return {}
-            else
+            // if (process.env.NODE_ENV == "staging")
+            //     return {}
+            // else
                 return await sendGrid.send({
                     to: payload.destination,
                     from: config.get("email.sender"),

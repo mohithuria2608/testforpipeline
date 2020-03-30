@@ -14,9 +14,9 @@ export class StoreController {
      * @method BOOTSTRAP
      * @description : Post bulk store data
      * */
-    async bootstrapStore() {
+    async bootstrapStore(sdmType?: string) {
         try {
-            let jsonPostfix = config.get("sdm.type")
+            let jsonPostfix = sdmType ? sdmType : config.get("sdm.type")
             consolelog(process.cwd(), "store jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.StoreE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + `/../../../model/store_${jsonPostfix}.json`, 'utf-8');

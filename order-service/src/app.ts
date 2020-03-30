@@ -12,7 +12,7 @@ global.configSync = {
 import * as config from "config"
 import * as Koa from 'koa'
 require('./grpc/server')
-import { bootstrap, consolelog } from './utils'
+import { bootstrap, consolelog, cryptData } from './utils'
 import middleware from './middlewares'
 import route from './route'
 import * as SDM from './sdm';
@@ -30,7 +30,7 @@ export const start = (async () => {
   try {
     const port = config.get("server.order.port")
     const server = app.listen(port)
-
+    
     let stock: any = [
     ]
 
@@ -307,8 +307,6 @@ export const start = (async () => {
                                        */
                                       if (plbpo.productLinks && plbpo.productLinks.length > 0) {
                                         plbpo.productLinks.forEach(dspl => {
-                                          console.log("product name", dspl)
-
                                           let plDefaultSdm = false
                                           if (dspl.subOptions && dspl.subOptions.length > 0) {
                                             dspl.subOptions.forEach(dsplso => {
@@ -320,7 +318,6 @@ export const start = (async () => {
                                             dspl.subOptions.forEach(dsplso => {
                                               if (dsplso.sdmId && dsplso.selected == 1) {
                                                 checkSendNone = true
-                                                console.log("product name", dspl.name)
                                                 if (dsplso.title == "None") {
                                                 }
                                                 else if (dsplso.title == "Regular") {

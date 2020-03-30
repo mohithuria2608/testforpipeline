@@ -31,10 +31,10 @@ server.addService(locationProto.LocationService.service, {
         }
     },
 
-    fetchPickup: async (call: IStoreGrpcRequest.IFetchPickupReq, callback) => {
+    uploadPickup: async (call: IStoreGrpcRequest.IUploadPickupOnBlobReq, callback) => {
         try {
             consolelog(process.cwd(), "grpc fetchPickup", JSON.stringify(call.request), true)
-            let res: any = await locationController.fetchPickup(call.request)
+            let res: any = await locationController.uploadPickupOnBlob(call.request)
             callback(null, { pickup: JSON.stringify(res) })
         } catch (error) {
             consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)

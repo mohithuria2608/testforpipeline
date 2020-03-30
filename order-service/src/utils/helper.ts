@@ -4,6 +4,7 @@ import * as config from 'config'
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
+import * as crypto from 'crypto'
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
 
@@ -286,13 +287,19 @@ export let hashObj = function (data: any) {
     return hash(data)
 }
 
+export let cryptData = function (text: string) {
+    var mykey = crypto.createCipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));
+    var mystr = mykey.update(text, 'utf8', 'hex')
+    mystr += mykey.final('hex');
+    return mystr
+}
 
-
-
-
-
-
-
+export let deCryptData = function (text) {
+    var mykey = crypto.createDecipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));
+    var mystr = mykey.update(text, 'hex', 'utf8')
+    mystr += mykey.final('utf8');
+    return mystr
+}
 
 export let generateOtp = async function () {
     let otp = (Math.floor(1000 + Math.random() * 9000));

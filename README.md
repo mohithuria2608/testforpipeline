@@ -101,7 +101,7 @@ Hands-on Microservices with TypeScript 3
 
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json
-* 207 server : https://bloobstorage.blob.core.windows.net/americana/models/kfc_uae_1_En.json
+* 207 server : https://bloobstorage.blob.core.windows.net/americana/development/kfc_uae_1_En.json
 
 # dev sdm url 
 * https://sdkuatuae.americana.com.sa:1995/?wsdl

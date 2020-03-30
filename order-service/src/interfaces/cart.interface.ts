@@ -71,7 +71,6 @@ declare namespace ICartRequest {
         cartId: string,
         curMenuId: number,
         menuUpdatedAt: number,
-        cartUpdatedAt: number,
         couponCode?: string,
         items: any,
         selFreeItem?: {
@@ -92,9 +91,9 @@ declare namespace ICartRequest {
         cmsCart: ICartCMSRequest.ICmsCartRes,
         curItems: any,
         selFreeItem: any,
-        invalidMenu: boolean,
+        invalidMenu: number,
         promo: IPromotionGrpcRequest.IValidatePromotionRes,
-        storeOnline: boolean
+        storeOnline: number
     }
 
     interface IDataToHash {

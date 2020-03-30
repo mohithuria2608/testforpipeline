@@ -188,13 +188,13 @@ export class CartClass extends BaseEntity {
             addressType: Joi.string().valid(
                 Constant.DATABASE.TYPE.ADDRESS.PICKUP,
                 Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
-            lat: Joi.number().required(),
-            lng: Joi.number().required(),
+            lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+            lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
         }),
         store: Joi.object().keys({
             storeId: Joi.number(),
-            lat: Joi.number(),
-            lng: Joi.number(),
+            lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+            lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
             address: Joi.string(),
         }),
         items: Joi.array().items(this.itemSchema),
@@ -551,23 +551,72 @@ export class CartClass extends BaseEntity {
         }
     }
 
+    async createSudoCartOnCMS(payload: ICartRequest.IValidateCart, promo?: IPromotionGrpcRequest.IValidatePromotionRes) {
+        try {
+            console.log("payload", promo)
+
+            let subtotal = 0
+            let grandtotal = 0
+            let tax = 0
+            let discount = 0
+            if (config.get("sdm.promotion.default") && payload.couponCode)
+                discount = promo ? promo.discountAmount : 6.5
+            if (payload.items && payload.items.length > 0) {
+                payload.items.map(item => {
+                    let price = item.finalPrice * item.qty
+                    grandtotal = grandtotal + price
+                })
+            }
+            tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            subtotal = grandtotal - tax
+            grandtotal = grandtotal - discount
+
+            console.log("grandtotal", grandtotal)
+            console.log("subtotal", subtotal)
+            console.log("tax", tax)
+            console.log("discount", discount)
+
+            let sudoCmsres: ICartCMSRequest.ICmsCartRes = {
+                cms_cart_id: 0,
+                currency_code: "AED",
+                cart_items: [],
+                subtotal: subtotal,
+                grandtotal: grandtotal,
+                tax: [{
+                    tax_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
+                    amount: tax,
+                }],
+                shipping: [{
+                    method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
+                    price: 6.5,
+                    method_code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING
+                }],
+                not_available: [],
+                is_price_changed: false,
+                coupon_code: "",
+                discount_amount: discount,
+                free_items: "",
+                success: true,
+            }
+            return sudoCmsres
+        } catch (error) {
+            consolelog(process.cwd(), "createSudoCartOnCMS", error, false)
+            return Promise.reject(error)
+        }
+    }
+
     async updateCart(payload: ICartRequest.IUpdateCart) {
         try {
-            let prevCart: ICartRequest.ICartData
-            if (payload.curItems == undefined) {
-                prevCart = await this.getCart({ cartId: payload.cartId })
-                payload.curItems = prevCart.items
-            }
             let dataToUpdate: ICartRequest.ICartData = {}
-            console.log("cmsCart", JSON.stringify(payload.cmsCart))
+            dataToUpdate['cartId'] = payload.cartId
             dataToUpdate['orderType'] = payload.orderType
             dataToUpdate['cmsCartRef'] = parseInt(payload.cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['isPriceChanged'] = payload.cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
-            dataToUpdate['invalidMenu'] = payload.invalidMenu ? 1 : 0
-            dataToUpdate['storeOnline'] = payload.storeOnline ? 1 : 0
+            dataToUpdate['invalidMenu'] = payload.invalidMenu
+            dataToUpdate['storeOnline'] = payload.storeOnline
             let amount = []
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,
@@ -659,6 +708,11 @@ export class CartClass extends BaseEntity {
                     en: []
                 }
             }
+            if (config.get("sdm.promotion.default")) {
+                dataToUpdate['promo'] = {}
+                dataToUpdate['couponApplied'] = 0
+            }
+
             if (payload.cmsCart.tax && payload.cmsCart.tax.length > 0) {
                 dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
@@ -712,8 +766,8 @@ export class CartClass extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            let newCart = await this.getCart({ cartId: payload.cartId })
-            return newCart
+            console.log("dataToUpdate cart", dataToUpdate)
+            return dataToUpdate
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)

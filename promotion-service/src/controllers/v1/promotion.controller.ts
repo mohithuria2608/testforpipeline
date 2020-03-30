@@ -60,6 +60,13 @@ export class PromotionController {
     * */
     async getPromotionsList(headers: ICommonRequest.IHeaders, payload: IPromotionRequest.IGetPromotion) {
         try {
+            if (config.get("sdm.promotion.default")) {
+                return {
+                    list: [],
+                    nextPage: -1,
+                    currentPage: parseInt(payload.page.toString())
+                }
+            }
             let promolist = await ENTITY.PromotionE.getPromotion({})
             let returnList = promolist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {

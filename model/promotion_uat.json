@@ -22,7 +22,7 @@
         "couponId": 13,
         "couponCode": "FREEDELIVERY",
         "promotionType": "by_percent",
-        "discountAmount": 0,
+        "discountAmount": 6.5,
         "maxDiscountQty": 0,
         "usesPerCoupon": 0,
         "usesPerCust": 1,

@@ -37,17 +37,17 @@ export default (router: Router) => {
                     let payload: IAddressRequest.IRegisterAddress = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res: any = await addressController.registerAddress(headers, payload, auth);
-                    if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
-                        let cart = await ENTITY.LoadE.getCartForLoadTest(auth.id)
-                        ENTITY.LoadE.createOneEntityMdb({
-                            cartId: auth.id,
-                            deviceId: headers.deviceid,
-                            accessToken: ctx.header.authorization,
-                            addressId: res.id,
-                            cartUpdatedAt: cart.updatedAt,
-                            type: "PLACE_ORDER"
-                        })
-                    }
+                    // if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
+                    //     let cart = await ENTITY.LoadE.getCartForLoadTest(auth.id)
+                    //     ENTITY.LoadE.createOneEntityMdb({
+                    //         cartId: auth.id,
+                    //         deviceId: headers.deviceid,
+                    //         accessToken: ctx.header.authorization,
+                    //         addressId: res.id,
+                    //         cartUpdatedAt: cart.updatedAt,
+                    //         type: "PLACE_ORDER"
+                    //     })
+                    // }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

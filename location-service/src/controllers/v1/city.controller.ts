@@ -14,9 +14,9 @@ export class CityController {
      * @method BOOTSTRAP
      * @description : Post bulk city data
      * */
-    async bootstrapCity() {
+    async bootstrapCity(sdmType?: string) {
         try {
-            let jsonPostfix = config.get("sdm.type")
+            let jsonPostfix = sdmType ? sdmType : config.get("sdm.type")
             consolelog(process.cwd(), "city jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.CityE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + `/../../../model/city_${jsonPostfix}.json`, 'utf-8');
