@@ -46,7 +46,7 @@ export class OrderClass extends BaseEntity {
 
     async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms) {
         try {
-            let preHook = await this.postSdmOrderPreHandler(payload)
+            let preHook = await this.postCmsOrderPreHandler(payload)
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
             let cmsOrder = await CMS.OrderCMSE.createOrder(payload.cmsOrderReq)
 
