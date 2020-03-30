@@ -561,7 +561,7 @@ export class CartClass extends BaseEntity {
             let discount = 0
             let couponCode = ""
             if (config.get("sdm.promotion.default") && payload.couponCode) {
-                discount = promo ? promo.discountAmount : 6.5
+                discount = 6.5 //promo ? promo.discountAmount : 6.5
                 couponCode = promo.couponCode
             }
 
