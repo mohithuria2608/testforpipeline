@@ -559,8 +559,12 @@ export class CartClass extends BaseEntity {
             let grandtotal = 0
             let tax = 0
             let discount = 0
-            if (config.get("sdm.promotion.default") && payload.couponCode)
+            let couponCode = ""
+            if (config.get("sdm.promotion.default") && payload.couponCode) {
                 discount = promo ? promo.discountAmount : 6.5
+                couponCode = promo.couponCode
+            }
+
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
                     let price = item.finalPrice * item.qty
@@ -593,7 +597,7 @@ export class CartClass extends BaseEntity {
                 }],
                 not_available: [],
                 is_price_changed: false,
-                coupon_code: "",
+                coupon_code: couponCode,
                 discount_amount: discount,
                 free_items: "",
                 success: true,
