@@ -893,7 +893,7 @@ export class OrderClass extends BaseEntity {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
                     dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
                     let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                        orderId: order.cmsOrderRef.toString(),
+                        orderId: order._id.toString(),
                         amount: totalAmount,
                         storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
                         paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,

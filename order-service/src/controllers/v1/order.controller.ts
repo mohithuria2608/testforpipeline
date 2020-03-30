@@ -90,10 +90,10 @@ export class OrderController {
             } else
                 delete payload['couponCode']
             /**
-             * @description step 1 create order on CMS synchronously => async for cod and sync for noonpay
-             * @description step 2 create order on SDM async
-             * @description step 3 create order on MONGO synchronously
-             * @description step 4 inititate payment on Noonpay synchronously
+             * @description step 1 create order on MONGO synchronously
+             * @description step 2 async for cod and sync for noonpay
+             * @description step 3 create order on CMS async => 
+             * @description step 4 create order on SDM async
              */
             let cart: ICartRequest.ICartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
