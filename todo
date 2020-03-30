@@ -22,3 +22,15 @@
 ----> DNS resolution takes 2 to 2.5 seconds
 ----> kafka failure ==> ping to order that health is false
 ----> add to cart and order request optimization 
+
+
+
+
+precoditin :
+1. users are using single device 99%
+2. menu is updated to users
+3. menu is updated only in non peek hours
+
+changes :
+1. no validate cart on  post order
+2. async 
