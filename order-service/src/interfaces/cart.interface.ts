@@ -91,9 +91,9 @@ declare namespace ICartRequest {
         cmsCart: ICartCMSRequest.ICmsCartRes,
         curItems: any,
         selFreeItem: any,
-        invalidMenu: boolean,
+        invalidMenu: number,
         promo: IPromotionGrpcRequest.IValidatePromotionRes,
-        storeOnline: boolean
+        storeOnline: number
     }
 
     interface IDataToHash {

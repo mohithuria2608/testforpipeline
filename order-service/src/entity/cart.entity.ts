@@ -615,8 +615,8 @@ export class CartClass extends BaseEntity {
             dataToUpdate['isPriceChanged'] = payload.cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
-            dataToUpdate['invalidMenu'] = payload.invalidMenu ? 1 : 0
-            dataToUpdate['storeOnline'] = payload.storeOnline ? 1 : 0
+            dataToUpdate['invalidMenu'] = payload.invalidMenu
+            dataToUpdate['storeOnline'] = payload.storeOnline
             let amount = []
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,

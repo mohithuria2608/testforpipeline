@@ -22,7 +22,7 @@ export class CartController {
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
             payload.orderType = payload.orderType ? payload.orderType : Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
-            let storeOnline = true
+            let storeOnline = 1
 
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
@@ -31,14 +31,14 @@ export class CartController {
             if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
-            let invalidMenu = false
+            let invalidMenu = 0
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
-                    invalidMenu = true
-                    storeOnline = store.isOnline
+                    invalidMenu = 1
+                    storeOnline = store.isOnline ? 1 : 0
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             } else {
@@ -47,7 +47,7 @@ export class CartController {
                     language: headers.language,
                 })
                 if (defaultMenu.menuId && defaultMenu.menuId != payload.curMenuId)
-                    invalidMenu = true
+                    invalidMenu = 1
             }
             if (config.get("sdm.promotion.default"))
                 payload.couponCode = config.get("sdm.promotion.defaultCode")
