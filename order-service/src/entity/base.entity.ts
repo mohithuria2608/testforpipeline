@@ -2,7 +2,7 @@ import * as Constant from '../constant'
 import * as mongoose from "mongoose";
 import * as Services from '../mongo/dao';
 import { consolelog } from '../utils'
-import { locationService } from '../grpc/client'
+import { locationService, userService } from '../grpc/client'
 
 export class BaseEntity {
     public ObjectId = mongoose.Types.ObjectId;
@@ -80,6 +80,58 @@ export class BaseEntity {
             return validatedStore
         } catch (error) {
             consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async postCmsOrderPreHandler(payload: IOrderRequest.IPostOrderPreHookPayload) {
+        try {
+            let headers: ICommonRequest.IHeaders = payload.headers
+            let userData: IUserRequest.IUserData = payload.userData
+            let address: IUserGrpcRequest.IFetchAddressRes = payload.address
+            let order: IOrderRequest.IOrderData = payload.order
+
+            if (!userData.cmsUserRef || userData.cmsUserRef == 0)
+                userData = await userService.createUserOnCms(userData)
+
+            let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+            if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
+                addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            if (!address.cmsAddressRef || address.cmsAddressRef == 0) {
+                userData['asAddress'] = JSON.stringify([address])
+                userData['headers'] = headers
+                await userService.creatAddressOnCms(userData)
+                address = await userService.fetchAddress({ userId: userData.id, addressId: address.id, bin: addressBin })
+            }
+            return { userData, address }
+        } catch (error) {
+            consolelog(process.cwd(), "postCmsOrderPreHandler", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async postSdmOrderPreHandler(payload: IOrderRequest.IPostOrderPreHookPayload) {
+        try {
+            let headers: ICommonRequest.IHeaders = payload.headers
+            let userData: IUserRequest.IUserData = payload.userData
+            let address: IUserGrpcRequest.IFetchAddressRes = payload.address
+            let order: IOrderRequest.IOrderData = payload.order
+
+            if (!userData.sdmUserRef || userData.sdmUserRef == 0)
+                userData = await userService.createUserOnSdm(userData)
+
+            let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+            if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
+                addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            if (!address.sdmAddressRef || address.sdmAddressRef == 0) {
+                userData['asAddress'] = JSON.stringify([address])
+                userData['headers'] = headers
+                await userService.creatAddressOnSdm(userData)
+                address = await userService.fetchAddress({ userId: userData.id, addressId: address.id, bin: addressBin })
+            }
+            return { userData, address }
+        } catch (error) {
+            consolelog(process.cwd(), "postSdmOrderPreHandler", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
