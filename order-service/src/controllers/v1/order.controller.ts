@@ -62,7 +62,6 @@ export class OrderController {
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            console.log("111111111111111111111111111111")
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             consolelog(process.cwd(), "step 1", new Date(), false)
 

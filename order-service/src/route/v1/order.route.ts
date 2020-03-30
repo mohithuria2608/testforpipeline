@@ -32,7 +32,6 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IOrderRequest.IPostOrder = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    console.log("hereeeeeeeeeeeeeeeeeee")
                     let res = await orderController.postOrder(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
