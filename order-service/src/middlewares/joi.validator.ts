@@ -40,18 +40,17 @@ export const validate = function (validationObj) {
     // Return a Koa middleware function
     return async (ctx, next) => {
         try {
-            console.log("Body parameters", JSON.stringify(ctx.request.body))
-            console.log("Query parameters", JSON.stringify(ctx.query))
-            console.log("Path parameters", JSON.stringify(ctx.params))
-            console.log("Headers parameters", JSON.stringify(ctx.headers))
 
             // Validate each request data object in the Koa context object
             await validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true })
+            console.log("Headers parameters", JSON.stringify(ctx.headers))
             await validateObject(ctx.params, 'URL Parameters', validationObj.params, { abortEarly: true })
+            console.log("Path parameters", JSON.stringify(ctx.params))
             await validateObject(ctx.query, 'URL Query', validationObj.query, { abortEarly: true })
-
+            console.log("Query parameters", JSON.stringify(ctx.query))
             if (ctx.request.body) {
                 await validateObject(ctx.request.body, 'Request Body', validationObj.body, { abortEarly: true })
+                console.log("Body parameters", JSON.stringify(ctx.request.body))
             }
 
             return next()
