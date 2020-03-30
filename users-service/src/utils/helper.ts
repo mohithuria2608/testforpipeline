@@ -6,8 +6,6 @@ import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
 const displayColors = Constant.SERVER.DISPLAY_COLOR
-const key = crypto.randomBytes(32);
-const iv = crypto.randomBytes(16);
 
 
 

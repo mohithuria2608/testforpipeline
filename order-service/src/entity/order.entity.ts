@@ -342,8 +342,6 @@ export class OrderClass extends BaseEntity {
                                                                                  */
                                                                                 if (plbpo.productLinks && plbpo.productLinks.length > 0) {
                                                                                     plbpo.productLinks.forEach(dspl => {
-                                                                                        console.log("product name", dspl)
-
                                                                                         let plDefaultSdm = false
                                                                                         if (dspl.subOptions && dspl.subOptions.length > 0) {
                                                                                             dspl.subOptions.forEach(dsplso => {
@@ -355,7 +353,6 @@ export class OrderClass extends BaseEntity {
                                                                                             dspl.subOptions.forEach(dsplso => {
                                                                                                 if (dsplso.sdmId && dsplso.selected == 1) {
                                                                                                     checkSendNone = true
-                                                                                                    console.log("product name", dspl.name)
                                                                                                     if (dsplso.title == "None") {
                                                                                                     }
                                                                                                     else if (dsplso.title == "Regular") {
@@ -804,7 +801,7 @@ export class OrderClass extends BaseEntity {
                 language: headers.language,
                 status: Constant.DATABASE.STATUS.ORDER.CART.MONGO,
                 sdmOrderStatus: -1,
-                items: items,
+                items:[],// items,
                 amount: amount,
                 vat: cartData.vat,
                 address: {

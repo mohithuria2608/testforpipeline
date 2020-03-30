@@ -59,19 +59,23 @@ export class OrderController {
      * @param {string} lat
      * @param {string} lng
      * @param {string} couponCode
-     * @param {string} items
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
-            payload.couponCode
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
+            consolelog(process.cwd(), "step 1", new Date(), false)
+
+            let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            if (!cart)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            consolelog(process.cwd(), "step 2", new Date(), false)
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
                 addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
             let getAddress: IUserGrpcRequest.IFetchAddressRes = await userService.fetchAddress({ userId: auth.id, addressId: payload.addressId, bin: addressBin })
-
             if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
+            consolelog(process.cwd(), "step 3", new Date(), false)
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
             if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
                 if (!store.active)
@@ -80,42 +84,36 @@ export class OrderController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
+            consolelog(process.cwd(), "step 4", new Date(), false)
             if (config.get("sdm.promotion.default"))
                 payload.couponCode = config.get("sdm.promotion.defaultCode")
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
-            if (payload.couponCode && payload.items && payload.items.length > 0) {
+            if (payload.couponCode) {
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (!promo || (promo && !promo.isValid))
                     delete payload['couponCode']
             } else
                 delete payload['couponCode']
-            /**
-             * @description step 1 create order on MONGO synchronously
-             * @description step 2 async for cod and sync for noonpay
-             * @description step 3 create order on CMS async => 
-             * @description step 4 create order on SDM async
-             */
-            let cart: ICartRequest.ICartData = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            consolelog(process.cwd(), "step 5", new Date(), false)
             let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE) {
+            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
-            }
-            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
+            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
-            }
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, cart, getAddress, store, userData)
-
+            consolelog(process.cwd(), "step 6", new Date(), false)
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
                 headers,
                 payload.paymentMethodId,
                 order,
                 totalAmount[0].amount
             )
+            consolelog(process.cwd(), "step 7", new Date(), false)
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
-                    this.syncOnLegacy(payload, headers, userData, getAddress, order)
+                    this.syncOnLegacy(payload, headers, userData, getAddress, cart, order)
                     if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                         ENTITY.CartE.resetCart(cart.cartId)
                 }
@@ -126,6 +124,7 @@ export class OrderController {
                     }
                 }
             } else {
+                //@todo order failure
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
         } catch (error) {
@@ -139,11 +138,12 @@ export class OrderController {
         headers: ICommonRequest.IHeaders,
         userData: IUserRequest.IUserData,
         address: IUserGrpcRequest.IFetchAddressRes,
+        cart: ICartRequest.ICartData,
         mongoOrder: IOrderRequest.IOrderData) {
         try {
             let cmsReq = await ENTITY.CartE.createCartReqForCms(
-                orderPayload.items,
-                orderPayload.selFreeItem,
+                cart.items,
+                cart.selFreeItem,
                 orderPayload.orderType,
                 orderPayload.couponCode,
                 userData)
@@ -298,14 +298,14 @@ export class OrderController {
                 env: Constant.SERVER.ENV[config.get("env")],
                 status: {
                     $in: [Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                    Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                    // Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
                     if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()
-                        || order.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                        // || order.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                     ) {
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,

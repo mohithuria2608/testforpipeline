@@ -71,7 +71,6 @@ declare namespace ICartRequest {
         cartId: string,
         curMenuId: number,
         menuUpdatedAt: number,
-        cartUpdatedAt: number,
         couponCode?: string,
         items: any,
         selFreeItem?: {

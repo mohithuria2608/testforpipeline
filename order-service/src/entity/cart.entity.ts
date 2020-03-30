@@ -551,15 +551,64 @@ export class CartClass extends BaseEntity {
         }
     }
 
+    async createSudoCartOnCMS(payload: ICartRequest.IValidateCart, promo?: IPromotionGrpcRequest.IValidatePromotionRes) {
+        try {
+            console.log("payload", promo)
+
+            let subtotal = 0
+            let grandtotal = 0
+            let tax = 0
+            let discount = 0
+            if (config.get("sdm.promotion.default") && payload.couponCode)
+                discount = promo ? promo.discountAmount : 6.5
+            if (payload.items && payload.items.length > 0) {
+                payload.items.map(item => {
+                    let price = item.finalPrice * item.qty
+                    grandtotal = grandtotal + price
+                })
+            }
+            tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            subtotal = grandtotal - tax
+            grandtotal = grandtotal - discount
+
+            console.log("grandtotal", grandtotal)
+            console.log("subtotal", subtotal)
+            console.log("tax", tax)
+            console.log("discount", discount)
+
+            let sudoCmsres: ICartCMSRequest.ICmsCartRes = {
+                cms_cart_id: 0,
+                currency_code: "AED",
+                cart_items: [],
+                subtotal: subtotal,
+                grandtotal: grandtotal,
+                tax: [{
+                    tax_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
+                    amount: tax,
+                }],
+                shipping: [{
+                    method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
+                    price: 6.5,
+                    method_code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING
+                }],
+                not_available: [],
+                is_price_changed: false,
+                coupon_code: "",
+                discount_amount: discount,
+                free_items: "",
+                success: true,
+            }
+            return sudoCmsres
+        } catch (error) {
+            consolelog(process.cwd(), "createSudoCartOnCMS", error, false)
+            return Promise.reject(error)
+        }
+    }
+
     async updateCart(payload: ICartRequest.IUpdateCart) {
         try {
-            let prevCart: ICartRequest.ICartData
-            if (payload.curItems == undefined) {
-                prevCart = await this.getCart({ cartId: payload.cartId })
-                payload.curItems = prevCart.items
-            }
             let dataToUpdate: ICartRequest.ICartData = {}
-            console.log("cmsCart", JSON.stringify(payload.cmsCart))
+            dataToUpdate['cartId'] = payload.cartId
             dataToUpdate['orderType'] = payload.orderType
             dataToUpdate['cmsCartRef'] = parseInt(payload.cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
@@ -717,8 +766,8 @@ export class CartClass extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            let newCart = await this.getCart({ cartId: payload.cartId })
-            return newCart
+            console.log("dataToUpdate cart", dataToUpdate)
+            return dataToUpdate
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
             return Promise.reject(error)

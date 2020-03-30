@@ -231,9 +231,11 @@
             "licenseCode": "PizzaHutApp"
         },
         "promotion": {
-            "default": false,
-            "defaultCode": "",
-            "orderMode": []
+            "default": true,
+            "defaultCode": "FREEDELIVERY",
+            "orderMode": [
+                1
+            ]
         }
     }
 }
