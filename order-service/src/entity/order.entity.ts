@@ -801,7 +801,7 @@ export class OrderClass extends BaseEntity {
                 language: headers.language,
                 status: Constant.DATABASE.STATUS.ORDER.CART.MONGO,
                 sdmOrderStatus: -1,
-                items:[],// items,
+                items: items,
                 amount: amount,
                 vat: cartData.vat,
                 address: {
