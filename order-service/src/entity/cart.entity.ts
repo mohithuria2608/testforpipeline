@@ -566,7 +566,8 @@ export class CartClass extends BaseEntity {
             }
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    let price = item.sellingPrice * item.qty
+                    console.log(`${item.name} ======== ${item.qty} ======== ${item.sellingPrice}`)
+                    let price = item.sellingPrice // * item.qty
                     grandtotal = grandtotal + price
                 })
             }
