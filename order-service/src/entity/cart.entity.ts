@@ -237,15 +237,17 @@ export class CartClass extends BaseEntity {
                 set: this.set,
                 key: payload.cartId
             }
-            if (payload.bins)
+            if (payload.bins) {
                 getArg['bins'] = payload.bins
+                getArg['bins'].push('cartId')
+            }
             let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
             if (cart && cart.cartId) {
                 return cart
             } else
                 cartFound = false
             if (!cartFound) {
-                let user = await userService.fetchUser({ cartId: payload.cartId })
+                let user = await userService.fetchUser({ userId: payload.cartId })
                 if (user && user.id) {
                     await this.createDefaultCart({
                         userId: user.id
