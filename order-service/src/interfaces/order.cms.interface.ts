@@ -10,5 +10,6 @@ declare namespace IOrderCMSRequest {
         order_status: string,
         payment_status: string,
         sdm_order_id: number,
+        mongo_order_id: string
     }
 }

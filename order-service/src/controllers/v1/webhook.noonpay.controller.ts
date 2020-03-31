@@ -81,7 +81,8 @@ export class WebhookNoonpayController {
                                         order_id: order.cmsOrderRef,
                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
                                         order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
-                                        sdm_order_id: order.sdmOrderRef
+                                        sdm_order_id: order.sdmOrderRef,
+                                        mongo_order_id: order._id.toString()
                                     })
                                 redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_SUCCESS_FALLBACK
                                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)

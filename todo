@@ -60,32 +60,3 @@ Path parameters {"0":"/v1/guest/checkout"}
   <-- POST /v1/guest/login
 Body parameters {}
 Query parameters {}
-
-
-
-
-
-{
-  "licenseCode": "PizzaHutApp",
-  "language": "en",
-  "customer": {
-    "CUST_CLASSID": -1,
-    "CUST_EMAIL": "gshshshsjjaka@gmail.com",
-    "CUST_FIRSTNAME": "ndjdjdjdj",
-    "CUST_LASTNAME": ".",
-    "CUST_NATID": -1,
-    "CUST_NOTIFICATION_MOBILE": "965784521",
-    "CUST_PHONEAREACODE": "96",
-    "CUST_PHONECOUNTRYCODE": "971",
-    "CUST_PHONELOOKUP": "965784521",
-    "CUST_PHONENUMBER": "5784521",
-    "CUST_PHONETYPE": 2,
-    "PASSWORD": "mRFgoV97z",
-    "USERNAME": "gshshshsjjaka@gmail.com",
-    "WCUST_FIRSTNAME": "ndjdjdjdj",
-    "WCUST_IS_GUEST": false,
-    "WCUST_LASTNAME": ".",
-    "WCUST_STATUS": 4
-  },
-  "conceptID": 3
-}
