@@ -14,7 +14,6 @@ declare namespace IOrderRequest {
         sdmOrderStatus: number,
         transLogs: any,
         isActive: number,
-        changePaymentMode: number,
         paymentMethodAddedOnSdm: number,
         createdAt: number,
         updatedAt: number,

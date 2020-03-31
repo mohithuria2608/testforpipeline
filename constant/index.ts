@@ -1887,7 +1887,8 @@ export const STATUS_MSG = {
         EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
         MAX_PENDING_TIME_REACHED: "Maximum pending time reached",
         PAYMENT_FAILURE: "Payment failure",
-        PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm"
+        PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm",
+        SDM_ORDER_PRE_CONDITION_FAILURE: "Failure in order pre condition"
     }
 };
 

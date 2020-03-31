@@ -156,30 +156,35 @@ export class OrderController {
         cart: ICartRequest.ICartData,
         mongoOrder: IOrderRequest.IOrderData) {
         try {
-            let cmsReq = await ENTITY.CartE.createCartReqForCms(
-                cart.items,
-                cart.selFreeItem,
-                orderPayload.orderType,
-                orderPayload.couponCode,
-                userData)
-            let cmsOrderReq = {
-                ...cmsReq.req,
-                payment_method: orderPayload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
+            if (mongoOrder.cmsOrderRef == 0) {
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(
+                    cart.items,
+                    cart.selFreeItem,
+                    orderPayload.orderType,
+                    orderPayload.couponCode,
+                    userData)
+                let cmsOrderReq = {
+                    ...cmsReq.req,
+                    payment_method: orderPayload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay",
+                    mongo_order_id: mongoOrder._id.toString()
+                }
+                ENTITY.OrderE.createOrderOnCMS({
+                    headers: headers,
+                    cmsOrderReq: cmsOrderReq,
+                    userData: userData,
+                    address: address,
+                    order: mongoOrder
+                })
             }
-            ENTITY.OrderE.createOrderOnCMS({
-                headers: headers,
-                cmsOrderReq: cmsOrderReq,
-                userData: userData,
-                address: address,
-                order: mongoOrder
-            })
 
-            ENTITY.OrderE.createSdmOrder({
-                headers: headers,
-                userData: userData,
-                address: address,
-                order: mongoOrder
-            })
+            if (mongoOrder.sdmOrderRef == 0) {
+                ENTITY.OrderE.createSdmOrder({
+                    headers: headers,
+                    userData: userData,
+                    address: address,
+                    order: mongoOrder
+                })
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOnLegacy", error, false)
