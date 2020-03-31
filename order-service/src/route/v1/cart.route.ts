@@ -39,7 +39,6 @@ export default (router: Router) => {
                     let payload: ICartRequest.IValidateCart = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res = await cartController.validateCart(headers, payload, auth);
-                    ctx.set({ 'cartUpdatedAt': res.updatedAt })
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
