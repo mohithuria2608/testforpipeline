@@ -237,6 +237,8 @@ export class CartClass extends BaseEntity {
                 set: this.set,
                 key: payload.cartId
             }
+            if (payload.bins)
+                getArg['bins'] = payload.bins
             let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
             if (cart && cart.cartId) {
                 return cart
@@ -252,6 +254,8 @@ export class CartClass extends BaseEntity {
                         set: this.set,
                         key: payload.cartId
                     }
+                    if (payload.bins)
+                        getArg['bins'] = payload.bins
                     return await Aerospike.get(getArg)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)

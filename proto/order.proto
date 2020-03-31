@@ -15,6 +15,7 @@ message ICreateDefaultCartRes { }
 
 message IGetCartReq {
     required string cartId = 1;
+    repeated string bins = 2;
 }
 
 message IGetCartRes {

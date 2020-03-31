@@ -1,7 +1,8 @@
 declare namespace IOrderGrpcRequest {
 
     interface IGetOrder {
-        cartId: string
+        cartId: string,
+        bins?: string[]
     }
 
     interface IGetOrderRes {
@@ -26,7 +27,7 @@ declare namespace IOrderGrpcRequest {
         sequence?: number,
         action?: string
     }
-    
+
     interface IAddress {
         addressId: string,
         sdmAddressRef: number,
