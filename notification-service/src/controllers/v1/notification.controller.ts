@@ -19,7 +19,6 @@ export class NotificationController {
                         message: Constant.NOTIFICATION_MSG.SMS[payload.language][payload.msgCode](payloadData.msg),
                         destination: payload.msgDestination
                     });
-                    resolve();
                 }
                 if (payload.toSendEmail) {
                     payloadData.email.meta = { ...Constant.EMAIL_META, ...payloadData.email.meta };
