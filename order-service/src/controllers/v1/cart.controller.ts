@@ -32,8 +32,8 @@ export class CartController {
             let invalidMenu = 0
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "" ) {
-                    if(store.menuId != payload.curMenuId)
+                if (store && store.id && store.id != "") {
+                    if (store.menuId != payload.curMenuId)
                         invalidMenu = 1
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
@@ -46,10 +46,10 @@ export class CartController {
             })
             if (menu.menuId && (menu.menuId != payload.curMenuId
                 // || menu.updatedAt != payload.menuUpdatedAt
-            )){
+            )) {
                 invalidMenu = 1
             }
-                
+
 
             let hitCms = false
             if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
