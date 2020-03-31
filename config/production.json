@@ -1,5 +1,5 @@
 {
-    "env": "testing",
+    "env": "production",
     "server": {
         "auth": {
             "url": "http://americanaqa.appskeeper.com/auth-service/",
