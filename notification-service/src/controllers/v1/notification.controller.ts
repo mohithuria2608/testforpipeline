@@ -22,7 +22,7 @@ export class NotificationController {
                 }
                 if (payload.toSendEmail) {
                     payloadData.email.meta = { ...Constant.EMAIL_META, ...payloadData.email.meta };
-                    payloadData.moment = moment;
+                    payloadData.email.moment = moment;
                     ejs.renderFile(`${__dirname}/../../../templates/${payload.language}/${payload.emailCode.toLowerCase()}.ejs`, payloadData.email, {}, function (err, emailer) {
                         if (err) reject(err);
                         else {
