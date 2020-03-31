@@ -571,9 +571,10 @@ export class CartClass extends BaseEntity {
                     grandtotal = grandtotal + price
                 })
             }
+            grandtotal = grandtotal + shippingAmt
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             subtotal = grandtotal - tax
-            grandtotal = grandtotal + shippingAmt - discount
+            grandtotal = grandtotal - discount
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
