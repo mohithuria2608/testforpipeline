@@ -33,7 +33,8 @@ export class StoreEntity extends BaseEntity {
     }
 
     public storeSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
+        storeIdAs: Joi.string().trim().required().description("pk"),
+        id: Joi.string().trim().required().description("cms id"),
         storeId: Joi.number().required().description("sk NUMERIC"),
         countryId: Joi.number().required(),
         provinceId: Joi.number().required(),
@@ -74,7 +75,7 @@ export class StoreEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.id,
+                key: data.storeIdAs,
                 create: true,
             }
             await Aerospike.put(putArg)
@@ -94,7 +95,7 @@ export class StoreEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: store,
                 set: this.set,
-                key: store._id,
+                key: store.storeIdAs,
                 createOrReplace: true,
             }
             await Aerospike.put(putArg);
