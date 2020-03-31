@@ -239,5 +239,6 @@
                 1
             ]
         }
-    }
+    },
+    "loadTest": false
 }

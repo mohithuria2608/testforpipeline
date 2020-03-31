@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Router from 'koa-router'
 import * as Joi from '@hapi/joi';
 import { getMiddleware, validate } from '../../middlewares'
@@ -20,7 +21,14 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IGuestRequest.IGuestLogin = ctx.request.body;
                     let res = await guestController.guestLogin(headers, payload);
-                    ctx.set({ 'accessToken': res.accessToken, 'refreshToken': res.refreshToken, cartId: res.response['id'] })
+                    let resHeaders = {
+                        'accessToken': res.accessToken,
+                        'refreshToken': res.refreshToken
+                    }
+                    if (config.get("loadTest")) {
+                        resHeaders['cartId'] = res.response['id']
+                    }
+                    ctx.set(resHeaders)
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.LOGIN, headers.language, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
