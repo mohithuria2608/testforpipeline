@@ -1,5 +1,5 @@
 import * as Constant from '../../constant'
-import { consolelog, formatUserData, generateOtp } from '../../utils'
+import { consolelog, formatUserData, generateOtp, deCryptData } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService, notificationService } from '../../grpc/client';
@@ -202,17 +202,17 @@ export class UserController {
                     deleteUserId = userchange[0].deleteUserId
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
-                console.log("userData", userData)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                     await this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
+                    userData.password = deCryptData(userData.password);
                     notificationService.sendNotification({
                         toSendEmail: true,
                         emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
                         emailDestination: userData.email,
                         language: headers.language,
-                        payload: JSON.stringify({ email: { user: userData } })
+                        payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
                     });
                 }
 

@@ -182,7 +182,7 @@
                                         and get it delivered at your doorstep.
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="display: none;">
                                     <td>
                                         <a href="<%= meta.ctaLink %>"
                                             style="display: inline-block; background: #e4002b; color: #ffffff; border-radius: 2px; padding: 15px 30px; text-decoration: none; font-weight: 600;">
@@ -190,8 +190,30 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="para3" style="padding-top: 30px;">You can also login with the above
-                                        credentials onto our different platforms like msite and website.
+                                    <td class="para3" style="padding-top: 30px;">
+                                        You can also login with the above credentials onto our different platforms like
+                                        mobile-sites and websites of both Pizza Hut and KFC.
+                                        <% if (isNewUser) { %>
+                                        While doing that you can use the password mentioned below and can anytime change
+                                        the password later.
                                     </td>
                                 </tr>
-                                <%- include('../common/En/footer', {meta:meta}); %>
+                                <tr>
+                                    <td>
+                                        <table class="table-3" cellpadding="0" cellspacing="0" border="0" width="100%"
+                                            style="background: #f6fafd; padding: 5px 30px 0;">
+                                            <tr class="height" height="50px">
+                                                <td class="width" width="180px"
+                                                    style="color: #2b343c; font-weight: 600;">
+                                                    Password:
+                                                </td>
+                                                <td style="text-align: right; "><%= user.password %></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <% } else { %>
+                        </td>
+                    </tr>
+                    <% } %>
+                    <%- include('../common/En/footer', {meta:meta}); %>
