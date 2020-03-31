@@ -8,36 +8,40 @@ declare namespace IStoreGrpcRequest {
     }
 
     interface IStore {
-        id: string,
-        storeId: number,
-        countryId: number,
-        provinceId: number,
-        areaId: number,
-        streetId: number,
-        districtId: number,
-        cityId: number,
-        mapId: number,
-        menuId: number,
-        name_en: string,
-        name_ar: string,
-        phone1: string,
-        phone2: string,
-        services: {
+        id?: string,
+        storeId?: number,
+        cityId?: number,
+        countryId?: number,
+        provinceId?: number,
+        areaId?: number,
+        streetId?: number,
+        districtId?: number,
+        mapId?: number,
+        menuId?: number,
+        name_en?: string,
+        name_ar?: string,
+        phone1?: string,
+        phone2?: string,
+        services?: {
             din: number,
             del: number,
             tak: number,
         },
-        active: number,
-        geoFence: any,
-        location: {
+        active?: number,
+        geoFence?: any,
+        location?: {
             description: string,
             latitude: number,
             longitude: number
         },
-        address_en: string,
-        address_ar: string,
-        startTime: string,
-        endTime: string,
-        isOnline: boolean
+        address_en?: string,
+        address_ar?: string,
+        startTime?: string,
+        endTime?: string,
+        nextDay?: number,
+        isOnline?: boolean,
+        sdmStoreId?: number,
+        webMenuId?: number,
+        menuTempId?: number,
     }
 }
