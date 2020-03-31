@@ -551,13 +551,12 @@ export class CartClass extends BaseEntity {
     async createSudoCartOnCMS(payload: ICartRequest.IValidateCart, promo?: IPromotionGrpcRequest.IValidatePromotionRes) {
         try {
             console.log("payload", promo)
-
             let subtotal = 0
             let grandtotal = 0
             let tax = 0
             let discount = 0
             let couponCode = ""
-            if (config.get("sdm.promotion.default") && payload.couponCode) {
+            if (config.get("sdm.promotion.default") && payload.couponCode && payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) {
                 discount = 6.5 //promo ? promo.discountAmount : 6.5
                 couponCode = promo.couponCode
             }
@@ -587,11 +586,11 @@ export class CartClass extends BaseEntity {
                     tax_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     amount: tax,
                 }],
-                shipping: [{
+                shipping: payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS ? [{
                     method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
                     price: 6.5,
                     method_code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING
-                }],
+                }] : [],
                 not_available: [],
                 is_price_changed: false,
                 coupon_code: couponCode,

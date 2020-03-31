@@ -30,7 +30,6 @@ export default (router: Router) => {
                      * @description : ignore
                      */
                     addressId: Joi.any(),
-                    // orderType: Joi.any(),
                     paymentMethodId: Joi.number().valid(Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD),
                 }
             }),
