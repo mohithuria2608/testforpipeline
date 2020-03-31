@@ -212,7 +212,7 @@
         "username": "",
         "password": "",
         "config": {
-            "timeout": 30000,
+            "timeout": 20000,
             "maxConnsPerNode": 20000
         }
     },
