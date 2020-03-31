@@ -680,12 +680,13 @@ export class UserController {
                         inQ: true
                     });
                     // send welcome email
+                    userData.password = deCryptData(userData.password);
                     notificationService.sendNotification({
                         toSendEmail: true,
                         emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
                         emailDestination: userData.email,
                         language: headers.language,
-                        payload: JSON.stringify({ email: { user: userData } })
+                        payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
                     });
                     return formatUserData(userData, headers, auth.isGuest)
                 }
