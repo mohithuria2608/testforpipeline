@@ -20,7 +20,7 @@ export class EmailClass {
 
     async sendEmail(payload: IEmailRequest.ISingleEmail) {
         try {
-            if (process.env.NODE_ENV == "staging")
+            if (config.get("loadTest"))
                 return {}
             else {
                 let emailResponse = await this.transporter.sendMail({
@@ -43,7 +43,7 @@ export class EmailClass {
     // sendGrid.setApiKey(config.get("email.sgKey"))
     // async sendEmail(payload: IEmailRequest.ISingleEmail) {
     //     try {
-    //         if (process.env.NODE_ENV == "staging")
+    //         if (config.get("loadTest"))
     //             return {}
     //         else
     //             return await sendGrid.send({
