@@ -79,7 +79,7 @@ export class StoreEntity extends BaseEntity {
                 if (data.location.longitude && data.location.longitude != "")
                     data.location.longitude = parseFloat(data.location.longitude)
                 else
-                    data.location.latitude = 0
+                    data.location.longitude = 0
             }
             data['geoFence'] = new GeoJSON(data['geoFence'])
             let putArg: IAerospike.Put = {
