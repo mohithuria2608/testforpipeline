@@ -200,7 +200,13 @@
     },
     "email": {
         "sgKey": "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",
-        "sender": "support@americana.com"
+        "sender": "KFC <support@americana-food.com>",
+        "smtp": {
+            "host": "eu-smtp-outbound-1.mimecast.com",
+            "port": 587,
+            "auth_user": "mobappuat@americana-food.com",
+            "auth_pass": "Sxd#2231"
+        }
     },
     "kafka": {
         "url": "localhost:9092"
@@ -225,7 +231,7 @@
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1996/?wsdl",
         "type": "uat",
         "cred": {
             "licenseCode": "PizzaHutApp"

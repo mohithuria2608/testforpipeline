@@ -1104,20 +1104,20 @@ export const NOTIFICATION_MSG = {
     },
     EMAIL: {
         En: {
-            USER_WELCOME_EMAIL: 'Welcome to KFC | KFC UAE',
-            ORDER_DELIVERY_CONFIRM_EMAIL: 'Order Confirmed - Delivery | KFC UAE',
-            ORDER_PICKUP_CONFIRM_EMAIL: 'Order Confirmed - Pickup | KFC UAE',
-            ORDER_CANCEL_EMAIL: 'Order Cancelled | KFC UAE',
-            ORDER_FAIL_EMAIL: 'Order Failed | KFC UAE',
-            PAYMENT_FAIL_EMAIL: 'Payment Failed | KFC UAE'
+            USER_WELCOME_EMAIL: 'Welcome to KFC! | KFC UAE',
+            ORDER_DELIVERY_CONFIRM_EMAIL: 'Your order has been confirmed!- Delivery | KFC UAE',
+            ORDER_PICKUP_CONFIRM_EMAIL: 'Your order has been confirmed! - Pickup | KFC UAE',
+            ORDER_CANCEL_EMAIL: 'Your order has been cancelled | KFC UAE',
+            ORDER_FAIL_EMAIL: 'Your order failed! | KFC UAE',
+            PAYMENT_FAIL_EMAIL: 'Payment failed for your order| KFC UAE'
         },
         Ar: {
-            USER_WELCOME_EMAIL: 'Welcome to KFC | KFC UAE',
-            ORDER_DELIVERY_CONFIRM_EMAIL: 'Order Confirmed - Delivery | KFC UAE',
-            ORDER_PICKUP_CONFIRM_EMAIL: 'Order Confirmed - Pickup | KFC UAE',
-            ORDER_CANCEL_EMAIL: 'Order Cancelled | KFC UAE',
-            ORDER_FAIL_EMAIL: 'Order Failed | KFC UAE',
-            PAYMENT_FAIL_EMAIL: 'Payment Failed | KFC UAE'
+            USER_WELCOME_EMAIL: 'Welcome to KFC! | KFC UAE',
+            ORDER_DELIVERY_CONFIRM_EMAIL: 'Your order has been confirmed! - Delivery | KFC UAE',
+            ORDER_PICKUP_CONFIRM_EMAIL: 'Your order has been confirmed! - Pickup | KFC UAE',
+            ORDER_CANCEL_EMAIL: 'Your order has been cancelled | KFC UAE',
+            ORDER_FAIL_EMAIL: 'Your order failed! | KFC UAE',
+            PAYMENT_FAIL_EMAIL: 'Payment failed for your order| KFC UAE'
         }
     }
 }
@@ -1125,7 +1125,8 @@ export const NOTIFICATION_MSG = {
 export const EMAIL_META = {
     baseImageUrl: 'http://40.123.205.1/pub/media/catalog/product/emailer/',
     ctaLink: '',
-    contactEmail: 'hello@kfc.uae'
+    contactEmail: 'support@americana-food.com',
+    contactNumber: '600522252'
 }
 
 export const STATUS_MSG = {
