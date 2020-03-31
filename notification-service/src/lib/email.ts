@@ -22,13 +22,16 @@ export class EmailClass {
         try {
             if (process.env.NODE_ENV == "staging")
                 return {}
-            else
-                return await this.transporter.sendMail({
+            else {
+                let emailResponse = await this.transporter.sendMail({
                     to: payload.destination,
                     from: config.get("email.sender"),
                     subject: payload.subject,
                     html: payload.message
                 });
+                consolelog(process.cwd(), 'sendEmail', JSON.stringify(emailResponse), true);
+                return {}
+            }
         } catch (err) {
             console.log("ERROR -> ", err);
             return Promise.reject(err)
