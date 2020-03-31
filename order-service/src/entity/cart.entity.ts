@@ -555,6 +555,7 @@ export class CartClass extends BaseEntity {
             let tax = 0
             let discount = 0
             let shippingAmt = 0
+            let shippingTax = 0
             let couponCode = ""
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) {
                 shippingAmt = 6.5
@@ -563,7 +564,6 @@ export class CartClass extends BaseEntity {
                     couponCode = promo.couponCode
                 }
             }
-
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
                     let price = item.sellingPrice * item.qty
@@ -573,7 +573,8 @@ export class CartClass extends BaseEntity {
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             subtotal = grandtotal - tax
             grandtotal = grandtotal + shippingAmt - discount
-            shippingAmt = shippingAmt - Math.round(((shippingAmt - (Math.round(((shippingAmt / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            shippingTax = Math.round(((shippingAmt - (Math.round(((shippingAmt / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            shippingAmt = shippingAmt - shippingTax
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
@@ -589,7 +590,7 @@ export class CartClass extends BaseEntity {
                 grandtotal: grandtotal,
                 tax: [{
                     tax_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
-                    amount: tax,
+                    amount: tax + shippingTax,
                 }],
                 shipping: payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS ? [{
                     method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
