@@ -151,16 +151,9 @@
                                 style="background: #ffffff; padding: 0 45px 50px; font-size: 18px; color: #6b8090; letter-spacing: 0.3px; line-height: 1.7;">
                                 <tr>
                                     <td class="para1" style="padding-bottom: 20px; ">
-                                        Oops! Your order has been cancelled. Any payments if deducted will get refunded
-                                        within 4-7 business days.
+                                        We’re really sorry, but we cannot fulfill your order at this moment. Any payments if deducted will get refunded within 4-7 business days.
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="para1" style="padding-bottom: 20px; ">
-                                        Please reach out to your bank if your money is deducted and doesn’t reach your
-                                        bank account in the above mentioned time period.
-                                    </td>
-                                </tr>
-                                <%- include('../common/En/order_meta', {meta:meta, order: order}); %>
+                                <%- include('../common/En/order_meta', {meta:meta, order: order, moment:moment}); %>
                                 <%- include('../common/En/order_detail', {meta:meta, order:order, showAddress:false}); %>
                                 <%- include('../common/En/footer', {meta:meta}); %>

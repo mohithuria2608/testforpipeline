@@ -66,7 +66,16 @@
 
                         <% for(var j=0; j < order.amount.length; j++) { %>
                         <tr class="height" height="50px">
-                            <td style="text-align: right;"><%= order.amount[j].name %> </td>
+                            <td style="text-align: right;">
+                                <% switch(order.amount[j].type) {
+                                    case "SUB_TOTAL": %>Sub Total<% break;
+                                    case "DISCOUNT": %>Discount<% break;
+                                    case "TAX": %>vat @ 5%<% break;
+                                    case "SHIPPING": %>Shipping<% break;
+                                    case "TOTAL": %><span style="font-weight:600">Grand Total</span><% break;
+                                }
+                                %>
+                            </td>
                             <td class="width" style="text-align: right; width: 180px;">
                                 AED <%= order.amount[j].amount %></td>
                         </tr>

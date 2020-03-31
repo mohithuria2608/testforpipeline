@@ -10,7 +10,7 @@
                     <p class="para2" style="color: #213f5d; font-size: 22px; font-weight: 600; margin : 0">
                         ORDER NO. UAE - <%= order.sdmOrderRef %> </p>
                     <p style="color: #0c2136; font-weight: 600; margin : 0">
-                        <%= new Date(order.createdAt).toLocaleString() %></p>
+                        <%= moment(order.createdAt).utcOffset(240).format('D MMM, YYYY [|] h:mm:ss A') %></p>
                 </td>
             </tr>
         </table>

@@ -161,6 +161,6 @@
                                         البنك الخاص بك.
                                     </td>
                                 </tr>
-                                <%- include('../common/Ar/order_meta', {meta:meta, order: order}); %>
+                                <%- include('../common/Ar/order_meta', {meta:meta, order: order, moment:moment}); %>
                                 <%- include('../common/Ar/order_detail', {meta:meta, order:order, showAddress:false}); %>
                                 <%- include('../common/Ar/footer', {meta:meta}); %>

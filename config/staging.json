@@ -194,6 +194,16 @@
         "endPoint": "bulksms/bulksms",
         "source": "KFC"
     },
+    "email": {
+        "sgKey": "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",
+        "sender": "KFC <support@americana-food.com>",
+        "smtp": {
+            "host": "eu-smtp-outbound-1.mimecast.com",
+            "port": 587,
+            "auth_user": "mobappuat@americana-food.com",
+            "auth_pass": "Sxd#2231"
+        }
+    },
     "kafka": {
         "url": "10.2.4.4:9092,10.2.4.5:9092,10.2.4.6:9092"
     },

@@ -119,7 +119,7 @@ export class StoreController {
                         let storeData = { ...store, ...fence };
                         storeData.geoFence = ENTITY.StoreE.createGeoFence(storeData.latitude, storeData.longitude);
                         delete storeData.latitude; delete storeData.longitude;
-                        storeData.storeIdAs = storeData.storeId + "_" + storeData.mapId;
+                        storeData.storeIdAs = storeData.storeId + "_" + storeData.areaId;
                         await ENTITY.StoreE.syncStoreData(storeData);
                     }
                 } else {

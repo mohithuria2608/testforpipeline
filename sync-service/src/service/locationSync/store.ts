@@ -13,101 +13,101 @@ export default async function () {
     await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_STORE });
     let invalidStores = ['1240', '1067'];
     for (let store of storesList) {
-        if (!invalidStores.includes(store.STR_ID)) { // removed active store check
-            let storeData = {
-                storeId: 1,
-                language: 1,
-                sdmStoreId: parseInt(store.STR_ID),
-                menuId: Constant.SDM_CONFIG.UAE.MENU_ID,
-                menuTempId: 17,
-                webMenuId: Constant.SDM_CONFIG.UAE.MENU_ID,
-                location: {
-                    description: store.Locations ? store.Locations.CC_STORE_MAP_LOCATION.MAPL_DESCRIPTION : 'No Location',
-                    latitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE) : 0,
-                    longitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LONGITUDE) : 0,
-                },
-                nameEn: store.STR_NAME || "",
-                nameAr: store.STR_NAMEUN || "",
-                phone1: store.STR_PHONE1 || "",
-                phone2: store.STR_PHONE2 || "",
-                addressEn: store.STR_ADDRESS || "",
-                addressAr: store.STR_ADDRESSUN || "",
-                active: store.STR_ISACTIVE === "true" ? 1 : 0,
-                services: getServices(store.STR_SERVICES, store.Fences),
-                ...getStoreTimings(store.STR_WH_STARTTIME, store.STR_WH_ENDTIME, parseInt(store.STR_WH_NEXT_DAY)),
-                email: "",
-                postcode: -1,
-                homeDelStatus: 1,
-                pickupStatus: 1,
-                takeawayStatus: 1,
-                monStatus: "1",
-                monOpen: "",
-                monClose: "",
-                tuesStatus: "",
-                tuesOpen: "",
-                tuesClose: "",
-                wednesStatus: "",
-                wednesOpen: "",
-                wednesClose: "",
-                thursStatus: "",
-                thursOpen: "",
-                thursClose: "",
-                friStatus: "",
-                friOpen: "",
-                friClose: "",
-                saturStatus: "",
-                saturOpen: "",
-                saturClose: "",
-                sunStatus: "",
-                sunOpen: "",
-                sunClose: "",
-                locationName: "",
-                locationCode: "",
-                gst: "",
-                vat: "",
-                isGlobal: "1",
-                workingHours: "",
-                geoFenceAll: [],
-                geoFence: {
-                    type: 'Polygon',
-                    coordinates: []
-                }
+        // if (!invalidStores.includes(store.STR_ID)) { // removed active store check
+        let storeData = {
+            storeId: 1,
+            language: 1,
+            sdmStoreId: parseInt(store.STR_ID),
+            menuId: Constant.SDM_CONFIG.UAE.MENU_ID,
+            menuTempId: 17,
+            webMenuId: Constant.SDM_CONFIG.UAE.MENU_ID,
+            location: {
+                description: store.Locations ? store.Locations.CC_STORE_MAP_LOCATION.MAPL_DESCRIPTION : 'No Location',
+                latitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE) : 0,
+                longitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LONGITUDE) : 0,
+            },
+            nameEn: store.STR_NAME || "",
+            nameAr: store.STR_NAMEUN || "",
+            phone1: store.STR_PHONE1 || "",
+            phone2: store.STR_PHONE2 || "",
+            addressEn: store.STR_ADDRESS || "",
+            addressAr: store.STR_ADDRESSUN || "",
+            active: store.STR_ISACTIVE === "true" ? 1 : 0,
+            services: getServices(store.STR_SERVICES, store.Fences),
+            ...getStoreTimings(store.STR_WH_STARTTIME, store.STR_WH_ENDTIME, parseInt(store.STR_WH_NEXT_DAY)),
+            email: "",
+            postcode: -1,
+            homeDelStatus: 1,
+            pickupStatus: 1,
+            takeawayStatus: 1,
+            monStatus: "1",
+            monOpen: "",
+            monClose: "",
+            tuesStatus: "",
+            tuesOpen: "",
+            tuesClose: "",
+            wednesStatus: "",
+            wednesOpen: "",
+            wednesClose: "",
+            thursStatus: "",
+            thursOpen: "",
+            thursClose: "",
+            friStatus: "",
+            friOpen: "",
+            friClose: "",
+            saturStatus: "",
+            saturOpen: "",
+            saturClose: "",
+            sunStatus: "",
+            sunOpen: "",
+            sunClose: "",
+            locationName: "",
+            locationCode: "",
+            gst: "",
+            vat: "",
+            isGlobal: "1",
+            workingHours: "",
+            geoFenceAll: [],
+            geoFence: {
+                type: 'Polygon',
+                coordinates: []
             }
+        }
 
-            if (store.Fences) {
-                let geoFenceAllHash: any = {};
-                for (let i = 0; i < store.Fences.CC_STORE_MAP_FENCE.length; i++) {
-                    if (geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID]) {
-                        geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].latitude += ',' + geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].latitude;
-                        geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].longitude += ',' + geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].longitude;
-                    } else {
-                        let areaDetail = await getAreaDetail(parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID));
-                        geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID] = {
-                            areaId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID),
-                            ...areaDetail, // cityId, districtId, streetId
-                            description: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_DESCRIPTION || "",
-                            mapId: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_ID,
-                            latitude: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_LATITUDE,
-                            longitude: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_LONGITUDE
-                        }
+        if (store.Fences) {
+            let geoFenceAllHash: any = {};
+            for (let i = 0; i < store.Fences.CC_STORE_MAP_FENCE.length; i++) {
+                if (geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID]) {
+                    geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].latitude += ',' + geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].latitude;
+                    geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].longitude += ',' + geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID].longitude;
+                } else {
+                    let areaDetail = await getAreaDetail(parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID));
+                    geoFenceAllHash[store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID] = {
+                        areaId: parseInt(store.Fences.CC_STORE_MAP_FENCE[i].MAPF_AREAID),
+                        ...areaDetail, // cityId, districtId, streetId
+                        description: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_DESCRIPTION || "",
+                        mapId: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_ID,
+                        latitude: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_LATITUDE,
+                        longitude: store.Fences.CC_STORE_MAP_FENCE[i].MAPF_LONGITUDE
                     }
                 }
-
-                // push the final generated data into geoFence
-                for (let geoFenceData in geoFenceAllHash) {
-                    storeData.geoFenceAll.push(geoFenceAllHash[geoFenceData]);
-                    storeData.geoFence.coordinates.push(createGeoFence(geoFenceAllHash[geoFenceData].latitude, geoFenceAllHash[geoFenceData].longitude));
-                }
             }
 
-            // insert data into aerospike
-            await Aerospike.put({
-                bins: storeData,
-                set: Constant.SET_NAME.SYNC_STORE,
-                key: storeData.sdmStoreId,
-                create: true
-            });
+            // push the final generated data into geoFence
+            for (let geoFenceData in geoFenceAllHash) {
+                storeData.geoFenceAll.push(geoFenceAllHash[geoFenceData]);
+                storeData.geoFence.coordinates.push(createGeoFence(geoFenceAllHash[geoFenceData].latitude, geoFenceAllHash[geoFenceData].longitude));
+            }
         }
+
+        // insert data into aerospike
+        await Aerospike.put({
+            bins: storeData,
+            set: Constant.SET_NAME.SYNC_STORE,
+            key: storeData.sdmStoreId,
+            create: true
+        });
+        // }
     }
 }
 

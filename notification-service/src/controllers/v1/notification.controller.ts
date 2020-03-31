@@ -1,6 +1,7 @@
 import { smsLib, emailLib } from '../../lib'
 import * as Constant from "../../constant";
 import * as ejs from "ejs";
+import * as moment from "moment";
 
 export class NotificationController {
 
@@ -22,6 +23,7 @@ export class NotificationController {
                 }
                 if (payload.toSendEmail) {
                     payloadData.email.meta = { ...Constant.EMAIL_META, ...payloadData.email.meta };
+                    payloadData.moment = moment;
                     ejs.renderFile(`${__dirname}/../../../templates/${payload.language}/${payload.emailCode.toLowerCase()}.ejs`, payloadData.email, {}, function (err, emailer) {
                         if (err) reject(err);
                         else {

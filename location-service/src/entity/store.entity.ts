@@ -133,7 +133,7 @@ export class StoreEntity extends BaseEntity {
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,
-                key: data.storeId,
+                key: data.storeIdAs,
                 update: true,
             }
             return Aerospike.put(putArg)
