@@ -32,7 +32,10 @@ declare namespace IStoreRequest {
         startTime?: string,
         endTime?: string,
         nextDay?: number,
-        isOnline?: boolean
+        isOnline?: boolean,
+        sdmStoreId?: number,
+        webMenuId?: number,
+        menuTempId?: number,
     }
 
     interface IFetchStore {
