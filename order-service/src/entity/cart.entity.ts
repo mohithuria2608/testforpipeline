@@ -550,7 +550,6 @@ export class CartClass extends BaseEntity {
 
     async createSudoCartOnCMS(payload: ICartRequest.IValidateCart, promo?: IPromotionGrpcRequest.IValidatePromotionRes) {
         try {
-            console.log("payload", promo)
             let subtotal = 0
             let grandtotal = 0
             let tax = 0
