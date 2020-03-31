@@ -126,6 +126,7 @@ export const SERVER = {
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
     AUTH_MECH: "Bearer",
     ADDR_SHOW_TIME: 3,//hr
+    SPLASH_EXPR_TIME: 1589523974000,
     CUSTOMER_CARE: "666666666",
     SUPPORT_EMAIL: "kfc_uae@ag.com",
     DEFAULT_CCODE: "+971",
