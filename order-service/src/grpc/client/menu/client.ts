@@ -28,7 +28,7 @@ export class MenuService {
             await menuServiceValidator.fetchMenu(payload)
             this.menuClient.fetchMenu({ menuId: payload.menuId, language: payload.language }, (error, res) => {
                 if (!error) {
-                    consolelog(process.cwd(), "successfully fetched Menu", "", false)
+                    consolelog(process.cwd(), "successfully fetched Menu", res.menu, false)
                     if (res.menu)
                         resolve(JSON.parse(res.menu))
                     else

@@ -33,21 +33,23 @@ export class MenuClass extends BaseEntity {
 
     /**
     * @method GRPC
-    * @param {string} id : user id
+    * @param {string} menuId : menu id
     * */
-   async getMenu(payload: IMenuRequest.IFetchMenu) {
-    try {
-        let getArg: IAerospike.Get = {
-            key: payload.menuId,
-            set: this.set
+    async getMenu(payload: IMenuRequest.IFetchMenu) {
+        try {
+            let getArg: IAerospike.Get = {
+                key: payload.menuId,
+                set: this.set,
+                bins: ["menuId", "updatedAt"]
+            }
+            let menu = await Aerospike.get(getArg)
+            console.log("menu-------------->", JSON.stringify(menu))
+            return menu
+        } catch (error) {
+            consolelog(process.cwd(), "getMenu en", JSON.stringify(error), false)
+            return Promise.reject(error)
         }
-        let menu = await Aerospike.get(getArg)
-        return menu
-    } catch (error) {
-        consolelog(process.cwd(), "getMenu en", JSON.stringify(error), false)
-        return Promise.reject(error)
     }
-}
 }
 
 export const MenuEnE = new MenuClass()
