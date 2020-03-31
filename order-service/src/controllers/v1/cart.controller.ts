@@ -25,9 +25,9 @@ export class CartController {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (!cart)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            // let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            // if (!cart)
+            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
             let invalidMenu = 0
             if (payload.lat && payload.lng) {
@@ -52,8 +52,8 @@ export class CartController {
 
 
             let hitCms = false
-            if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
-                hitCms = true
+            // if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
+            //     hitCms = true
             if (config.get("sdm.promotion.default")) {
                 hitCms = false
                 payload.couponCode = config.get("sdm.promotion.defaultCode")
@@ -69,7 +69,7 @@ export class CartController {
 
             let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
             console.log("cmsCart", JSON.stringify(cmsCart))
-            cart = await ENTITY.CartE.updateCart({
+            let cart = await ENTITY.CartE.updateCart({
                 headers: headers,
                 orderType: payload.orderType,
                 cartId: payload.cartId,
