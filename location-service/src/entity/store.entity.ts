@@ -71,7 +71,6 @@ export class StoreEntity extends BaseEntity {
     async bootstrapStore(data) {
         try {
             let GeoJSON = aerospike.GeoJSON;
-
             if (data.location) {
                 if (data.location.latitude && data.location.latitude != "")
                     data.location.latitude = parseFloat(data.location.latitude)
@@ -103,6 +102,16 @@ export class StoreEntity extends BaseEntity {
     async postStores(data) {
         let langWiseStore = this.storeForLang(data);
         for (let store of langWiseStore) {
+            if (store.location) {
+                if (store.location.latitude && store.location.latitude != "")
+                    store.location.latitude = parseFloat(store.location.latitude)
+                else
+                    store.location.latitude = 0
+                if (store.location.longitude && store.location.longitude != "")
+                    store.location.longitude = parseFloat(store.location.longitude)
+                else
+                    store.location.longitude = 0
+            }
             let putArg: IAerospike.Put = {
                 bins: store,
                 set: this.set,
