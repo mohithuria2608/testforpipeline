@@ -594,7 +594,7 @@ export class CartClass extends BaseEntity {
                 }],
                 shipping: payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS ? [{
                     method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
-                    price: 6.5,
+                    price: shippingAmt,
                     method_code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING
                 }] : [],
                 not_available: [],
