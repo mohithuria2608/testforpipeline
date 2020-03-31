@@ -560,7 +560,7 @@ export class CartClass extends BaseEntity {
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) {
                 shippingAmt = 6.5
                 if (config.get("sdm.promotion.default") && payload.couponCode) {
-                    discount = 6.5 //promo ? promo.discountAmount : 6.5
+                    discount = promo ? promo.discountAmount : 6.5
                     couponCode = promo.couponCode
                 }
             }
