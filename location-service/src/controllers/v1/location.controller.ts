@@ -1,3 +1,4 @@
+import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog, checkOnlineStore } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -15,10 +16,9 @@ export class LocationController {
      * @method BOOTSTRAP
      * @description : Post bulk area data
      * */
-    async bootstrapPickup(grpc?: boolean) {
+    async bootstrapPickup() {
         try {
-            if (!grpc)
-                await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
+            await Aerospike.truncate({ set: ENTITY.PickupE.set, before_nanos: 0 })
 
             const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
             const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
@@ -92,11 +92,8 @@ export class LocationController {
                 }
             }
             res.sort(compare)
-            if (!grpc) {
-                await ENTITY.PickupE.bootstrapPickup(res)
-                await uploadService.uploadToBlob({ name: "pickup.json", json: JSON.stringify(res) })
-            }
-
+            await ENTITY.PickupE.bootstrapPickup(res)
+            await uploadService.uploadToBlob({ name: "pickup.json", json: JSON.stringify(res) })
             return {}
         } catch (error) {
             consolelog(process.cwd(), "bootstrapPickup", JSON.stringify(error), false)
@@ -196,7 +193,7 @@ export class LocationController {
 
     /**
      * @method GRPC
-     * syncs location data from CMS
+     * upload pickup on blob
      */
     async syncLocationFromCMS(payload): Promise<any> {
         try {
@@ -213,10 +210,14 @@ export class LocationController {
         }
     }
 
-    async fetchPickup(payload: IStoreGrpcRequest.IFetchPickup) {
+    async uploadPickupOnBlob(payload: IStoreGrpcRequest.IUploadPickupOnBlob) {
         try {
-            let pickupData = await this.bootstrapPickup(true)
-            return pickupData
+            await countryController.bootstrapCountry(payload.sdm)
+            await cityController.bootstrapCity(payload.sdm)
+            await areaController.bootstrapArea(payload.sdm)
+            await storeController.bootstrapStore(payload.sdm)
+            this.bootstrapPickup()
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -26,12 +26,12 @@ declare namespace ICartCMSRequest {
     interface ICmsCartRes {
         cms_cart_id: number,
         currency_code: string,
-        cart_items: ICMSCartItems[],
+        cart_items?: ICMSCartItems[],
         subtotal: number,
         grandtotal: number,
         tax: ITax[]
         shipping: IShipping[]
-        not_available: number[],
+        not_available?: number[],
         is_price_changed: boolean,
         coupon_code: string,
         discount_amount: number,

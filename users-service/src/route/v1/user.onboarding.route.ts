@@ -25,14 +25,14 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: IUserRequest.IAuthSendOtp = ctx.request.body;
                     let res = await userController.loginSendOtp(headers, payload);
-                    if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
-                        ENTITY.LoadE.createOneEntityMdb({
-                            deviceId: headers.deviceid,
-                            cCode: payload.cCode,
-                            phnNo: payload.phnNo,
-                            type: "VERIFY_OTP"
-                        })
-                    }
+                    // if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
+                    //     ENTITY.LoadE.createOneEntityMdb({
+                    //         deviceId: headers.deviceid,
+                    //         cCode: payload.cCode,
+                    //         phnNo: payload.phnNo,
+                    //         type: "VERIFY_OTP"
+                    //     })
+                    // }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_SENT, headers.language, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
@@ -66,18 +66,18 @@ export default (router: Router) => {
                         phnNo: res.response['phnNo'],
                         cCode: res.response['cCode'],
                     })
-                    if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
-                        ENTITY.LoadE.createOneEntityMdb({
-                            deviceId: headers.deviceid,
-                            cCode: payload.cCode,
-                            phnNo: payload.phnNo,
-                            accessToken: "Bearer " + res.accessToken,
-                            name: "Load test powered by ankit",
-                            email: payload.phnNo + "@gmail.com",
-                            cartId: res.response['id'],
-                            type: "CREATE_PROFILE"
-                        })
-                    }
+                    // if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
+                    //     ENTITY.LoadE.createOneEntityMdb({
+                    //         deviceId: headers.deviceid,
+                    //         cCode: payload.cCode,
+                    //         phnNo: payload.phnNo,
+                    //         accessToken: "Bearer " + res.accessToken,
+                    //         name: "Load test powered by ankit",
+                    //         email: payload.phnNo + "@gmail.com",
+                    //         cartId: res.response['id'],
+                    //         type: "CREATE_PROFILE"
+                    //     })
+                    // }
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.OTP_VERIFIED, headers.language, res.response)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

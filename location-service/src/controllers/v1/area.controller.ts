@@ -14,9 +14,9 @@ export class AreaController {
      * @method BOOTSTRAP
      * @description : Post bulk area data
      * */
-    async bootstrapArea() {
+    async bootstrapArea(sdmType?: string) {
         try {
-            let jsonPostfix = config.get("sdm.type")
+            let jsonPostfix = sdmType ? sdmType : config.get("sdm.type")
             consolelog(process.cwd(), "area jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.AreaE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + `/../../../model/area_${jsonPostfix}.json`, 'utf-8');

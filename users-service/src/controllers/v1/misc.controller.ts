@@ -22,6 +22,7 @@ export class MiscController {
                 paymentSuccessUrl: redirectUrl + "payment/success",
                 paymentFailureUrl: redirectUrl + "payment/failure",
                 addressShownTime: Constant.SERVER.ADDR_SHOW_TIME,
+                splashExpireTime: 1617113821,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
@@ -54,6 +55,7 @@ export class MiscController {
     * */
     async faq(headers: ICommonRequest.IHeaders) {
         try {
+            headers.language = headers.language ? headers.language : Constant.DATABASE.LANGUAGE.EN
             return Constant.DATABASE.FAQ[headers.language]
         } catch (error) {
             consolelog(process.cwd(), "faq", JSON.stringify(error), false)

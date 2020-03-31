@@ -14,9 +14,9 @@ export class CountryController {
      * @method BOOTSTRAP
      * @description : Post bulk country data
      * */
-    async bootstrapCountry() {
+    async bootstrapCountry(sdmType?: string) {
         try {
-            let jsonPostfix = config.get("sdm.type")
+            let jsonPostfix = sdmType ? sdmType : config.get("sdm.type")
             consolelog(process.cwd(), "country jsonPostfix", jsonPostfix, true)
             await Aerospike.truncate({ set: ENTITY.CountryE.set, before_nanos: 0 })
             let rawdata = fs.readFileSync(__dirname + `/../../../model/country_${jsonPostfix}.json`, 'utf-8');

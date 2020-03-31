@@ -76,12 +76,28 @@ declare namespace IOrderRequest {
         name_ar: string
     }
 
-    interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination, ICartRequest.IValidateCart {
+    interface IPostOrder extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         addressId: string,
         orderType: string,
-        paymentMethodId: number
+        paymentMethodId: number,
+        cartId: string,
+        curMenuId: number,
+        menuUpdatedAt: number,
+        couponCode?: string
     }
 
+    interface IPostOrderOnCms extends IPostOrderPreHookPayload {
+        cmsOrderReq: IOrderCMSRequest.ICreateOrderCms
+    }
+
+    interface IPostOrderOnSdm extends IPostOrderPreHookPayload {
+    }
+    interface IPostOrderPreHookPayload {
+        headers: ICommonRequest.IHeaders,
+        userData: IUserRequest.IUserData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        order: IOrderRequest.IOrderData
+    }
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         isActive: number
     }

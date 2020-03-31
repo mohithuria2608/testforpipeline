@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog, hashObj } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
@@ -21,23 +22,23 @@ export class CartController {
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
             payload.orderType = payload.orderType ? payload.orderType : Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
-            let storeOnline = true
-            let promo: IPromotionGrpcRequest.IValidatePromotionRes
+            let storeOnline = 1
+
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let validatedCart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
-            if (!validatedCart)
+            let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
-            let invalidMenu = false
+            let invalidMenu = 0
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
                 if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
-                    invalidMenu = true
-                    storeOnline = store.isOnline
+                    invalidMenu = 1
+                    storeOnline = store.isOnline ? 1 : 0
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             } else {
@@ -45,14 +46,12 @@ export class CartController {
                     menuId: 1,
                     language: headers.language,
                 })
-                if (
-                    (defaultMenu.menuId && defaultMenu.menuId != payload.curMenuId)
-                    // || (defaultMenu.updatedAt > payload.menuUpdatedAt)
-                ) {
-                    invalidMenu = true
-                }
+                if (defaultMenu.menuId && defaultMenu.menuId != payload.curMenuId)
+                    invalidMenu = 1
             }
-
+            if (config.get("sdm.promotion.default"))
+                payload.couponCode = config.get("sdm.promotion.defaultCode")
+            let promo: IPromotionGrpcRequest.IValidatePromotionRes
             if (payload.couponCode && payload.items && payload.items.length > 0) {
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
                 if (!promo || (promo && !promo.isValid)) {
@@ -60,22 +59,21 @@ export class CartController {
                 }
             } else
                 delete payload['couponCode']
-            let cmsValidatedCart = await ENTITY.CartE.createCartOnCMS(payload, userData)
-            console.log("cmsValidatedCart", JSON.stringify(cmsValidatedCart))
-            validatedCart = await ENTITY.CartE.updateCart({
+
+            let cmsSudoValidatedCart = await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
+            console.log("cmsSudoValidatedCart", JSON.stringify(cmsSudoValidatedCart))
+            cart = await ENTITY.CartE.updateCart({
                 headers: headers,
                 orderType: payload.orderType,
                 cartId: payload.cartId,
-                cmsCart: cmsValidatedCart,
+                cmsCart: cmsSudoValidatedCart,
                 curItems: payload.items,
                 selFreeItem: payload.selFreeItem,
                 invalidMenu: invalidMenu,
                 promo: promo,
                 storeOnline: storeOnline
             })
-            let res: any = { ...validatedCart }
-            res['invalidMenu'] = invalidMenu
-            res['storeOnline'] = storeOnline
+            let res: any = { ...cart }
             return res
         } catch (error) {
             consolelog(process.cwd(), "postCart", JSON.stringify(error), false)

@@ -231,6 +231,11 @@
         "type": "live",
         "cred": {
             "licenseCode": "PizzaHutApp"
+        },
+        "promotion": {
+            "default": false,
+            "defaultCode": "",
+            "orderMode": []
         }
     }
 }

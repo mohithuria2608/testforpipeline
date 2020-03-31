@@ -84,9 +84,9 @@ export class AddressController {
                     type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store.location.latitude
                     payload['lng'] = store.location.longitude
-                    payload['bldgName'] = store.location.description
-                    payload['description'] = store.location.description
-                    payload['flatNum'] = store.location.description
+                    payload['bldgName'] = (headers.language == Constant.DATABASE.LANGUAGE.EN) ? store.name_en : store.name_ar
+                    payload['description'] = (headers.language == Constant.DATABASE.LANGUAGE.EN) ? store.address_en : store.address_ar
+                    payload['flatNum'] = '0'
                     payload['tag'] = Constant.DATABASE.TYPE.TAG.OTHER
                 }
                 else
