@@ -43,6 +43,7 @@ export const validate = function (validationObj) {
             console.log("Body parameters", JSON.stringify(ctx.request.body))
             console.log("Query parameters", JSON.stringify(ctx.query))
             console.log("Path parameters", JSON.stringify(ctx.params))
+            console.log("Headers parameters", JSON.stringify(ctx.headers))
 
             // Validate each request data object in the Koa context object
             await validateObject(ctx.headers, 'Headers', validationObj.headers, { allowUnknown: true })

@@ -63,7 +63,8 @@ export class LocationController {
                                                         delete s.streetId
                                                         delete s.districtId
                                                         delete s.geoFence
-                                                        storeCollection.push(s)
+                                                        if (!storeCollection.some(ss => ss.storeId === s.storeId))
+                                                            storeCollection.push(s)
                                                     }
                                                 }
                                             }

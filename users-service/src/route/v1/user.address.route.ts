@@ -18,7 +18,7 @@ export default (router: Router) => {
                 headers: COMMON_HEADERS,
                 body: {
                     storeId: Joi.number(),
-                    lat: Joi.number().min(0).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
+                    lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     bldgName: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     description: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
@@ -37,6 +37,9 @@ export default (router: Router) => {
                     let payload: IAddressRequest.IRegisterAddress = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
                     let res: any = await addressController.registerAddress(headers, payload, auth);
+                    ctx.set({
+                        'addressId': res.id,
+                    })
                     // if (process.env.NODE_ENV == "staging" || process.env.NODE_ENV == "testing") {
                     //     let cart = await ENTITY.LoadE.getCartForLoadTest(auth.id)
                     //     ENTITY.LoadE.createOneEntityMdb({
@@ -65,7 +68,7 @@ export default (router: Router) => {
                 headers: COMMON_HEADERS,
                 body: {
                     addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.type)),
-                    lat: Joi.number().min(0).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
+                    lat: Joi.number().min(-90).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     lng: Joi.number().min(-180).max(180).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     bldgName: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     description: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),

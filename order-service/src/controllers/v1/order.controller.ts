@@ -1,9 +1,8 @@
 import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog, getFrequency } from '../../utils'
-import { userService, locationService, promotionService } from '../../grpc/client'
+import { userService, locationService, promotionService, menuService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
-import * as CMS from '../../cms'
 
 export class OrderController {
 
@@ -68,6 +67,8 @@ export class OrderController {
             let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
             if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
+            if (cart && (!cart.items || (cart.items && cart.items.length == 0)))
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.EMPTY_CART)
             consolelog(process.cwd(), "step 2", new Date(), false)
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
@@ -78,6 +79,20 @@ export class OrderController {
             consolelog(process.cwd(), "step 3", new Date(), false)
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
             if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+                const menu = await menuService.fetchMenu({
+                    menuId: 1,
+                    language: headers.language,
+                })
+                if (menu.menuId && (menu.menuId != payload.curMenuId
+                    //|| menu.updatedAt != payload.menuUpdatedAt
+                )) {
+                    return {
+                        validateCart: {
+                            ...cart,
+                            invalidMenu: 1
+                        }
+                    }
+                }
                 if (!store.active)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                 if (!store.isOnline)
@@ -141,30 +156,35 @@ export class OrderController {
         cart: ICartRequest.ICartData,
         mongoOrder: IOrderRequest.IOrderData) {
         try {
-            let cmsReq = await ENTITY.CartE.createCartReqForCms(
-                cart.items,
-                cart.selFreeItem,
-                orderPayload.orderType,
-                orderPayload.couponCode,
-                userData)
-            let cmsOrderReq = {
-                ...cmsReq.req,
-                payment_method: orderPayload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay"
+            if (mongoOrder.cmsOrderRef == 0) {
+                let cmsReq = await ENTITY.CartE.createCartReqForCms(
+                    cart.items,
+                    cart.selFreeItem,
+                    orderPayload.orderType,
+                    orderPayload.couponCode,
+                    userData)
+                let cmsOrderReq = {
+                    ...cmsReq.req,
+                    payment_method: orderPayload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay",
+                    mongo_order_id: mongoOrder._id.toString()
+                }
+                ENTITY.OrderE.createOrderOnCMS({
+                    headers: headers,
+                    cmsOrderReq: cmsOrderReq,
+                    userData: userData,
+                    address: address,
+                    order: mongoOrder
+                })
             }
-            ENTITY.OrderE.createOrderOnCMS({
-                headers: headers,
-                cmsOrderReq: cmsOrderReq,
-                userData: userData,
-                address: address,
-                order: mongoOrder
-            })
 
-            ENTITY.OrderE.createSdmOrder({
-                headers: headers,
-                userData: userData,
-                address: address,
-                order: mongoOrder
-            })
+            if (mongoOrder.sdmOrderRef == 0) {
+                ENTITY.OrderE.createSdmOrder({
+                    headers: headers,
+                    userData: userData,
+                    address: address,
+                    order: mongoOrder
+                })
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOnLegacy", error, false)
@@ -298,7 +318,7 @@ export class OrderController {
                 env: Constant.SERVER.ENV[config.get("env")],
                 status: {
                     $in: [Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                    // Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                        // Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })

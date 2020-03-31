@@ -126,6 +126,7 @@ export const SERVER = {
     DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
     AUTH_MECH: "Bearer",
     ADDR_SHOW_TIME: 3,//hr
+    SPLASH_EXPR_TIME: 1589523974000,
     CUSTOMER_CARE: "666666666",
     SUPPORT_EMAIL: "kfc_uae@ag.com",
     DEFAULT_CCODE: "+971",
@@ -1132,6 +1133,14 @@ export const EMAIL_META = {
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {
+            "EMPTY_CART": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Empty cart !!",
+                "type": "EMPTY_CART",
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Empty cart !!"
+            },
             "INVALID_PHONE_NO": {
                 "statusCode": 400,
                 "httpCode": 400,
@@ -1879,7 +1888,8 @@ export const STATUS_MSG = {
         EXCEED_ORDER_AMOUNT: "EXCEED_ORDER_AMOUNT",
         MAX_PENDING_TIME_REACHED: "Maximum pending time reached",
         PAYMENT_FAILURE: "Payment failure",
-        PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm"
+        PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm",
+        SDM_ORDER_PRE_CONDITION_FAILURE: "Failure in order pre condition"
     }
 };
 

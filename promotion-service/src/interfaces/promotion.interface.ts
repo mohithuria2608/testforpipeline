@@ -5,7 +5,7 @@ declare namespace IPromotionRequest {
         couponCode: string,
         couponCodeL?: string,
         promotionType: string,
-        discountAmount: string,
+        discountAmount: number,
         maximumQtyDiscountIsAppliedTo: string,
         usesPerCoupon: string,
         usesPerCustomer: string,

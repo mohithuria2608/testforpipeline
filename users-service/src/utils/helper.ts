@@ -431,11 +431,27 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 }
 
 
-export let nameConstructor = function (name) {
+export let nameConstructor = function (name: string) {
     let splitName = name.split(" ")
     let firstName = splitName.length == 1 ? splitName[0] : splitName.slice(0, splitName.length - 1).join(" ")
     let lastName = splitName.length > 1 ? splitName[splitName.length - 1] : "."
     return { firstName, lastName }
+}
+
+export let phnNoConstructor = function (phnNo: string, cCode: string) {
+    // <d4p1:CUST_NOTIFICATION_MOBILE>501234567</d4p1:CUST_NOTIFICATION_MOBILE>
+    // <d4p1:CUST_PHONEAREACODE>50</d4p1:CUST_PHONEAREACODE> [First two digits of the mobile number]
+    // <d4p1:CUST_PHONECOUNTRYCODE>971</d4p1:CUST_PHONECOUNTRYCODE>
+    // <d4p1:CUST_PHONELOOKUP>501234567</d4p1:CUST_PHONELOOKUP>[Full mobile number]
+    // <d4p1:CUST_PHONENUMBER>1234567</d4p1:CUST_PHONENUMBER>[last 7 digits of the mobile number]
+
+    return {
+        CUST_NOTIFICATION_MOBILE: phnNo,
+        CUST_PHONEAREACODE: phnNo.slice(0, 2),
+        CUST_PHONECOUNTRYCODE: cCode.replace('+', ''),
+        CUST_PHONELOOKUP: phnNo,
+        CUST_PHONENUMBER: phnNo.slice(2),
+    }
 }
 
 function isJsonString(str) {

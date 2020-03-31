@@ -22,8 +22,6 @@ export class CartController {
     async validateCart(headers: ICommonRequest.IHeaders, payload: ICartRequest.IValidateCart, auth: ICommonRequest.AuthorizationObj) {
         try {
             payload.orderType = payload.orderType ? payload.orderType : Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
-            let storeOnline = 1
-
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
@@ -38,19 +36,25 @@ export class CartController {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                     invalidMenu = 1
-                    storeOnline = store.isOnline ? 1 : 0
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
-            } else {
-                const defaultMenu = await menuService.fetchMenu({
-                    menuId: 1,
-                    language: headers.language,
-                })
-                if (defaultMenu.menuId && defaultMenu.menuId != payload.curMenuId)
-                    invalidMenu = 1
             }
-            if (config.get("sdm.promotion.default"))
+            const menu = await menuService.fetchMenu({
+                menuId: 1,
+                language: headers.language,
+            })
+            if (menu.menuId && (menu.menuId != payload.curMenuId
+                // || menu.updatedAt != payload.menuUpdatedAt
+            ))
+                invalidMenu = 1
+
+            let hitCms = false
+            if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
+                hitCms = true
+            if (config.get("sdm.promotion.default")) {
+                hitCms = false
                 payload.couponCode = config.get("sdm.promotion.defaultCode")
+            }
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
             if (payload.couponCode && payload.items && payload.items.length > 0) {
                 promo = await promotionService.validatePromotion({ couponCode: payload.couponCode })
@@ -60,18 +64,17 @@ export class CartController {
             } else
                 delete payload['couponCode']
 
-            let cmsSudoValidatedCart = await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
-            console.log("cmsSudoValidatedCart", JSON.stringify(cmsSudoValidatedCart))
+            let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
+            console.log("cmsCart", JSON.stringify(cmsCart))
             cart = await ENTITY.CartE.updateCart({
                 headers: headers,
                 orderType: payload.orderType,
                 cartId: payload.cartId,
-                cmsCart: cmsSudoValidatedCart,
+                cmsCart: cmsCart,
                 curItems: payload.items,
                 selFreeItem: payload.selFreeItem,
                 invalidMenu: invalidMenu,
                 promo: promo,
-                storeOnline: storeOnline
             })
             let res: any = { ...cart }
             return res

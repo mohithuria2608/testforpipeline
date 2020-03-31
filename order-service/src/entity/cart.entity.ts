@@ -223,8 +223,7 @@ export class CartClass extends BaseEntity {
             en: Joi.array().items(this.itemSchema)
         }),
         invalidMenu: Joi.number().valid(0, 1).required(),
-        promo: Joi.any(),
-        storeOnline: Joi.number().valid(0, 1).required(),
+        promo: Joi.any()
     })
 
     /**
@@ -283,8 +282,7 @@ export class CartClass extends BaseEntity {
                 vat: {},
                 freeItems: { en: [], ar: [] },
                 promo: {},
-                invalidMenu: 0,
-                storeOnline: 1
+                invalidMenu: 0
             }
             console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
@@ -321,8 +319,7 @@ export class CartClass extends BaseEntity {
                     en: [], ar: [],
                 },
                 promo: {},
-                invalidMenu: 0,
-                storeOnline: 1
+                invalidMenu: 0
             }
             let putArg: IAerospike.Put = {
                 bins: cartUpdate,
@@ -553,28 +550,37 @@ export class CartClass extends BaseEntity {
 
     async createSudoCartOnCMS(payload: ICartRequest.IValidateCart, promo?: IPromotionGrpcRequest.IValidatePromotionRes) {
         try {
-            console.log("payload", promo)
-
             let subtotal = 0
             let grandtotal = 0
             let tax = 0
             let discount = 0
-            if (config.get("sdm.promotion.default") && payload.couponCode)
-                discount = promo ? promo.discountAmount : 6.5
+            let shippingAmt = 0
+            let couponCode = ""
+            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) {
+                shippingAmt = 6.5
+                if (config.get("sdm.promotion.default") && payload.couponCode) {
+                    discount = promo ? promo.discountAmount : 6.5
+                    couponCode = promo.couponCode
+                }
+            }
+
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
                     let price = item.finalPrice * item.qty
                     grandtotal = grandtotal + price
                 })
             }
+            grandtotal = grandtotal + shippingAmt
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             subtotal = grandtotal - tax
             grandtotal = grandtotal - discount
+            discount = discount - Math.round(((discount - (Math.round(((discount / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
             console.log("tax", tax)
             console.log("discount", discount)
+            console.log("shippingAmt", shippingAmt)
 
             let sudoCmsres: ICartCMSRequest.ICmsCartRes = {
                 cms_cart_id: 0,
@@ -586,14 +592,14 @@ export class CartClass extends BaseEntity {
                     tax_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     amount: tax,
                 }],
-                shipping: [{
+                shipping: payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS ? [{
                     method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
                     price: 6.5,
                     method_code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING
-                }],
+                }] : [],
                 not_available: [],
                 is_price_changed: false,
-                coupon_code: "",
+                coupon_code: couponCode,
                 discount_amount: discount,
                 free_items: "",
                 success: true,
@@ -616,7 +622,6 @@ export class CartClass extends BaseEntity {
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
             dataToUpdate['invalidMenu'] = payload.invalidMenu
-            dataToUpdate['storeOnline'] = payload.storeOnline
             let amount = []
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,

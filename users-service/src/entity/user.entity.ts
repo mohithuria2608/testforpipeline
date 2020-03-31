@@ -3,7 +3,7 @@ import * as config from "config"
 import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
-import { consolelog, cryptData } from '../utils'
+import { consolelog, cryptData, generateRandomString } from '../utils'
 import * as CMS from "../cms";
 import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
@@ -118,7 +118,7 @@ export class UserEntity extends BaseEntity {
             } else {
                 checkUser = {}
                 checkUser['id'] = payload.id
-                checkUser['password'] = cryptData("Password1")
+                checkUser['password'] = cryptData(generateRandomString(9))
                 this.createDefaultCart(payload.id)
             }
             if (payload.username)

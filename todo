@@ -16,39 +16,82 @@
 
 
 
-30 March Tasks
+31 March Tasks
 ----> DNS resolution takes 2 to 2.5 seconds
 ----> kafka failure ==> ping to order that health is false
+----> load test 
+----> scheduler task best method
+----> bug 1613, 1594, 1598, 1506
+----> store sync validate
+
+
+
+----> single product in cart validation to cms
+
+DONE : 
+----> when promotion is added hit cart api for cart validation
+----> menu update time is greater than cart last update time then give error invalidMenu
+----> bug 1594, 1613, 1506, 1598
 
 
 
 
 
-
-
-
-
-
-error","message":"app--------------successfully produced data on kafka for syncing--------------{\"data\":\"success\"}","timestamp":"2020-03-29T12:15:20.145Z"}
+error","message":"app--------------successfully produced data on kafka for syncing--------------{"data":"success"}","timestamp":"2020-03-29T12:15:20.145Z"}
   <-- POST /v1/guest/checkout
 {"level":"info","message":"app--------------authorization--------------Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VpZCI6ImZlOGQ3ZWVlYWM5MTZiNzIiLCJkZXZpY2V0eXBlIjoiQU5EUk9JRCIsInRva2VuVHlwZSI6IlVTRVJfQVVUSCIsImlkIjoiNWU4MDkwZjdmYTZlNDYwMDFhMTkyYmFkIiwiaXNHdWVzdCI6MSwic2Vzc2lvblRpbWUiOjE1ODU0ODQwMzAsImV4cCI6MTU5NDEyNDAyOSwiaWF0IjoxNTg1NDg0MDI5fQ.HhEve4P4sAHlPseJK3uC1PL1Dpm-Z3ZeWQhHGonKOyQ","timestamp":"2020-03-29T12:15:20.915Z"}
-{"level":"error","message":"app--------------successfully verified token--------------{\"tokenType\":\"USER_AUTH\",\"deviceid\":\"fe8d7eeeac916b72\",\"devicetype\":\"ANDROID\",\"id\":\"5e8090f7fa6e46001a192bad\",\"isGuest\":1,\"sessionTime\":1585484030}","timestamp":"2020-03-29T12:15:20.918Z"}
+{"level":"error","message":"app--------------successfully verified token--------------{"tokenType":"USER_AUTH","deviceid":"fe8d7eeeac916b72","devicetype":"ANDROID","id":"5e8090f7fa6e46001a192bad","isGuest":1,"sessionTime":1585484030}","timestamp":"2020-03-29T12:15:20.918Z"}
 Body parameters {"addressId":"5e8090b423bcc6001b35d686","addressType":"PICKUP","cCode":"+971","email":"ahha@jjs.com","isGuest":0,"name":"jzjz","phnNo":"646400404"}
 Query parameters {}
 Path parameters {"0":"/v1/guest/checkout"}
-{"level":"error","message":"app--------------In error handler--------------{\"statusCode\":409,\"httpCode\":409,\"type\":\"ADDRESS_NOT_FOUND\",\"message\":\"This address does not exist\",\"message_Ar\":\"هذا العنوان غير موجود\",\"message_En\":\"This address does not exist\"}","timestamp":"2020-03-29T12:15:20.923Z"}
+{"level":"error","message":"app--------------In error handler--------------{"statusCode":409,"httpCode":409,"type":"ADDRESS_NOT_FOUND","message":"This address does not exist","message_Ar":"هذا العنوان غير موجود","message_En":"This address does not exist"}","timestamp":"2020-03-29T12:15:20.923Z"}
 {"level":"error","message":"app--------------In error handler type of --------------object","timestamp":"2020-03-29T12:15:20.924Z"}
 {"level":"error","message":"app--------------In error handler direct --------------[object Object]","timestamp":"2020-03-29T12:15:20.924Z"}
-{"level":"error","message":"app--------------In error handler parsed --------------{\"statusCode\":409,\"httpCode\":409,\"type\":\"ADDRESS_NOT_FOUND\",\"message\":\"This address does not exist\",\"message_Ar\":\"هذا العنوان غير موجود\",\"message_En\":\"This address does not exist\"}","timestamp":"2020-03-29T12:15:20.924Z"}
+{"level":"error","message":"app--------------In error handler parsed --------------{"statusCode":409,"httpCode":409,"type":"ADDRESS_NOT_FOUND","message":"This address does not exist","message_Ar":"هذا العنوان غير موجود","message_En":"This address does not exist"}","timestamp":"2020-03-29T12:15:20.924Z"}
 {"level":"error","message":"app-------------------step 4--------------------","timestamp":"2020-03-29T12:15:20.924Z"}
-{"level":"error","message":"app--------------In error sendError(error)--------------{\"statusCode\":409,\"httpCode\":409,\"payload\":{\"statusCode\":409,\"httpCode\":409,\"message\":\"This address does not exist\",\"type\":\"ADDRESS_NOT_FOUND\"},\"headers\":{}}","timestamp":"2020-03-29T12:15:20.924Z"}
+{"level":"error","message":"app--------------In error sendError(error)--------------{"statusCode":409,"httpCode":409,"payload":{"statusCode":409,"httpCode":409,"message":"This address does not exist","type":"ADDRESS_NOT_FOUND"},"headers":{}}","timestamp":"2020-03-29T12:15:20.924Z"}
 {"level":"error","message":"app--------------In error handler type of --------------object","timestamp":"2020-03-29T12:15:20.924Z"}
 {"level":"error","message":"app--------------In error handler direct --------------[object Object]","timestamp":"2020-03-29T12:15:20.924Z"}
-{"level":"error","message":"app--------------In error handler parsed --------------{\"statusCode\":409,\"httpCode\":409,\"type\":\"ADDRESS_NOT_FOUND\",\"message\":\"This address does not exist\",\"message_Ar\":\"هذا العنوان غير موجود\",\"message_En\":\"This address does not exist\"}","timestamp":"2020-03-29T12:15:20.924Z"}
+{"level":"error","message":"app--------------In error handler parsed --------------{"statusCode":409,"httpCode":409,"type":"ADDRESS_NOT_FOUND","message":"This address does not exist","message_Ar":"هذا العنوان غير موجود","message_En":"This address does not exist"}","timestamp":"2020-03-29T12:15:20.924Z"}
 {"level":"error","message":"app-------------------step 4--------------------","timestamp":"2020-03-29T12:15:20.924Z"}
-{"level":"info","message":"app--------------activity log--------------{\"type\":\"REQUEST\",\"info\":{\"request\":{\"query\":{},\"path\":\"/v1/guest/checkout\",\"method\":\"POST\",\"pathParams\":{\"0\":\"/v1/guest/checkout\"},\"body\":{\"addressId\":\"5e8090b423bcc6001b35d686\",\"addressType\":\"PICKUP\",\"cCode\":\"+971\",\"email\":\"ahha@jjs.com\",\"isGuest\":0,\"name\":\"jzjz\",\"phnNo\":\"646400404\"}},\"response\":{\"statusCode\":409,\"message\":\"This address does not exist\"},\"ip\":\"::ffff:10.2.2.8\",\"executionTime\":7,\"user\":{\"tokenType\":\"USER_AUTH\",\"deviceid\":\"fe8d7eeeac916b72\",\"devicetype\":\"ANDROID\",\"id\":\"5e8090f7fa6e46001a192bad\",\"isGuest\":1,\"sessionTime\":1585484030}},\"description\":\"\",\"options\":{\"env\":3},\"createdAt\":1585484120925}","timestamp":"2020-03-29T12:15:20.925Z"}
+{"level":"info","message":"app--------------activity log--------------{"type":"REQUEST","info":{"request":{"query":{},"path":"/v1/guest/checkout","method":"POST","pathParams":{"0":"/v1/guest/checkout"},"body":{"addressId":"5e8090b423bcc6001b35d686","addressType":"PICKUP","cCode":"+971","email":"ahha@jjs.com","isGuest":0,"name":"jzjz","phnNo":"646400404"}},"response":{"statusCode":409,"message":"This address does not exist"},"ip":"::ffff:10.2.2.8","executionTime":7,"user":{"tokenType":"USER_AUTH","deviceid":"fe8d7eeeac916b72","devicetype":"ANDROID","id":"5e8090f7fa6e46001a192bad","isGuest":1,"sessionTime":1585484030}},"description":"","options":{"env":3},"createdAt":1585484120925}","timestamp":"2020-03-29T12:15:20.925Z"}
   --> POST /v1/guest/checkout 409 13ms 100b
-{"level":"error","message":"app--------------successfully produced data on kafka for syncing--------------{\"data\":\"success\"}","timestamp":"2020-03-29T12:15:20.928Z"}
+{"level":"error","message":"app--------------successfully produced data on kafka for syncing--------------{"data":"success"}","timestamp":"2020-03-29T12:15:20.928Z"}
   <-- POST /v1/guest/login
 Body parameters {}
 Query parameters {}
+
+
+
+
+
+eters {"host":"localhost:4003","connection":"close","content-length":"9121","retrycount":"1","authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXZpY2VpZCI6ImY5NmQxY2M1OTYwMGYxMWMiLCJkZXZpY2V0eXBlIjoiQU5EUk9JRCIsInRva2VuVHlwZSI6IlVTRVJfQVVUSCIsImlkIjoiNWU4MTdkNGJmMDg2ZjI0NzYzNTU0ZWRhIiwiaXNHdWVzdCI6MCwic2Vzc2lvblRpbWUiOjE1ODU2NDg0MzQsImV4cCI6MTU5NDI4ODQzMywiaWF0IjoxNTg1NjQ4NDMzfQ._G-O3tpDkR2GAb3JA9zMeXp2Q5iITkHbGSBD-GOI27k","language":"En","appversion":"0.0.16","devicemodel":"Samsung SM-A507FN","devicetype":"ANDROID","osversion":"29","country":"UAE","deviceid":"f96d1cc59600f11c","brand":"KFC","content-type":"application/json; charset=UTF-8","accept-encoding":"gzip","user-agent":"okhttp/3.12.0"}
+10|order  | {"level":"error","message":"order-service--------------successfully fetched user by id--------------{\"id\":\"5e817d4bf086f24763554eda\",\"sdmUserRef\":7695529,\"cmsUserRef\":194,\"isGuest\":false,\"name\":\"Kfc\",\"cCode\":\"+971\",\"phnNo\":\"555550000\",\"phnVerified\":true,\"email\":\"kfc55555@yahoo.com\",\"profileStep\":1,\"socialKey\":\"\",\"medium\":\"\",\"createdAt\":0,\"cartId\":\"\",\"sdmCorpRef\":9374108,\"fullPhnNo\":\"+971555550000\",\"password\":\"d7353e7de05447eb5faa20b321b19e4e\"}","timestamp":"2020-03-31T09:58:56.104Z"}
+10|order  | {"level":"error","message":"order-service--------------successfully fetched Menu--------------","timestamp":"2020-03-31T09:58:56.166Z"}
+10|order  | {"level":"error","message":"order-service--------------successfully validated promotion on as--------------{\"couponId\":13,\"couponCode\":\"FREEDELIVERY\",\"promotionType\":\"cart_fixed\",\"discountAmount\":6,\"maxDiscountQty\":1,\"usesPerCoupon\":1000000,\"usesPerCust\":10000,\"timesUsed\":104,\"dateFrom\":\"2020-02-06T00:00:00.000Z\",\"dateTo\":\"2021-02-28T00:00:00.000Z\",\"ruleName\":\"Free Delivery\",\"shortDesc\":\"Your Minimum order value must be 100AED in order to avail a free Delivery offer.\",\"activeFlag\":1,\"posId\":6830,\"maxDiscountAmt\":0,\"isVisible\":0,\"termsAndConds\":\"\",\"isValid\":true}","timestamp":"2020-03-31T09:58:56.189Z"}
+10|order  | payload { couponId: 13,
+10|order  |   couponCode: 'FREEDELIVERY',
+10|order  |   promotionType: 'cart_fixed',
+10|order  |   discountAmount: 6,
+10|order  |   maxDiscountQty: 1,
+10|order  |   usesPerCoupon: 1000000,
+10|order  |   usesPerCust: 10000,
+10|order  |   timesUsed: 104,
+10|order  |   dateFrom: '2020-02-06T00:00:00.000Z',
+10|order  |   dateTo: '2021-02-28T00:00:00.000Z',
+10|order  |   ruleName: 'Free Delivery',
+10|order  |   shortDesc:
+10|order  |    'Your Minimum order value must be 100AED in order to avail a free Delivery offer.',
+10|order  |   activeFlag: 1,
+10|order  |   posId: 6830,
+10|order  |   maxDiscountAmt: 0,
+10|order  |   isVisible: 0,
+10|order  |   termsAndConds: '',
+10|order  |   isValid: true }
+10|order  | grandtotal 117.5
+10|order  | subtotal 117.62
+10|order  | tax 5.88
+10|order  | discount 5.71
+10|order  | shippingAmt 6.5
+10|order  | cmsCart {"cms_cart_id":0,"currency_code":"AED","cart_items":[],"subtotal":117.62,"grandtotal":117.5,"tax":[{"tax_name":"TAX","amount":5.88}],"shipping":[{"method_name":"SHIPPING","price":6.5,"method_code":"SHIPPING"}],"not_available":[],"is_price_changed":false,"coupon_code":"FREEDELIVERY","discount_amount":5.71,"free_items":"","success":true}
+10|order  | dataToUpdate cart { cartId: '5e817d4bf086f247635

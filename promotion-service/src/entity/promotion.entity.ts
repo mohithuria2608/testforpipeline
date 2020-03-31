@@ -78,6 +78,7 @@ export class PromotionClass extends BaseEntity {
     async savePromotion(data: IPromotionRequest.IPromoData, options: { create?: boolean, update?: boolean, replace?: boolean, createOrReplace?: boolean }) {
         try {
             data['couponCodeL'] = data['couponCode'].toLowerCase();
+            data['discountAmount'] = parseFloat(data['discountAmount'].toString())
             return this.post(data, options);
         } catch (error) {
             consolelog(process.cwd(), "save Promotion", JSON.stringify(error), false)

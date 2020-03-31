@@ -11,22 +11,10 @@
          <licenseCode>PizzaHutApp</licenseCode>
          <language>ar</language>
          <customer>
-            <q67:CUST_CLASSID xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q67:CUST_CLASSID>
-            <q67:CUST_EMAIL xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">test_xml_phnno@gmail.com</q67:CUST_EMAIL>
-            <q67:CUST_FIRSTNAME xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">test</q67:CUST_FIRSTNAME>
-            <q67:CUST_LASTNAME xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">xml</q67:CUST_LASTNAME>
-            <q67:CUST_NATID xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q67:CUST_NATID>
-            <q67:CUST_NOTIFICATION_MOBILE xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">971435268943</q67:CUST_NOTIFICATION_MOBILE>
-            <q67:CUST_PHONEAREACODE xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">97</q67:CUST_PHONEAREACODE>
-            <q67:CUST_PHONELOOKUP xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">971435268943</q67:CUST_PHONELOOKUP>
-            <q67:CUST_PHONENUMBER xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">1435268943</q67:CUST_PHONENUMBER>
-            <q67:CUST_PHONETYPE xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">2</q67:CUST_PHONETYPE>
-            <q67:PASSWORD xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">Password1</q67:PASSWORD>
-            <q67:USERNAME xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">test_xml_phnno@gmail.com</q67:USERNAME>
-            <q67:WCUST_FIRSTNAME xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">test</q67:WCUST_FIRSTNAME>
-            <q67:WCUST_IS_GUEST xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">false</q67:WCUST_IS_GUEST>
-            <q67:WCUST_LASTNAME xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">xml</q67:WCUST_LASTNAME>
-            <q67:WCUST_STATUS xmlns:q67="http://schemas.datacontract.org/2004/07/SDM_SDK">4</q67:WCUST_STATUS>
+            <q67:CUST_NOTIFICATION_MOBILE xmlns:q67="">971435268943</q67:CUST_NOTIFICATION_MOBILE>
+            <q67:CUST_PHONEAREACODE xmlns:q67="">97</q67:CUST_PHONEAREACODE>
+            <q67:CUST_PHONELOOKUP xmlns:q67="">971435268943</q67:CUST_PHONELOOKUP>
+            <q67:CUST_PHONENUMBER xmlns:q67="">1435268943</q67:CUST_PHONENUMBER>
          </customer>
          <conceptID>3</conceptID>
       </RegisterCustomer>
