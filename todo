@@ -31,7 +31,7 @@
 DONE : 
 ----> when promotion is added hit cart api for cart validation
 ----> menu update time is greater than cart last update time then give error invalidMenu
-----> bug 1594, 1613, 
+----> bug 1594, 1613, 1506, 1598
 
 
 
