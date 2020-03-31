@@ -65,7 +65,7 @@ message IValidatePromotionRes {
     optional int32 couponId = 1;
     optional string couponCode = 2;
     optional string promotionType = 3;
-    optional int32 discountAmount = 4;
+    optional double discountAmount = 4;
     optional int32 maxDiscountQty = 5;
     optional int32 usesPerCoupon = 6;
     optional int32 usesPerCust = 7;
