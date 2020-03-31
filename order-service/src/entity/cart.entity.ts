@@ -566,7 +566,7 @@ export class CartClass extends BaseEntity {
 
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    let price = item.finalPrice * item.qty
+                    let price = item.sellingPrice * item.qty
                     grandtotal = grandtotal + price
                 })
             }
@@ -574,7 +574,7 @@ export class CartClass extends BaseEntity {
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             subtotal = grandtotal - tax
             grandtotal = grandtotal - discount
-            discount = discount - Math.round(((discount - (Math.round(((discount / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
+            shippingAmt = shippingAmt - Math.round(((shippingAmt - (Math.round(((shippingAmt / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
