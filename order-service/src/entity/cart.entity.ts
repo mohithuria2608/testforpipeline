@@ -555,10 +555,14 @@ export class CartClass extends BaseEntity {
             let grandtotal = 0
             let tax = 0
             let discount = 0
+            let shippingAmt = 0
             let couponCode = ""
-            if (config.get("sdm.promotion.default") && payload.couponCode && payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) {
-                discount = 6.5 //promo ? promo.discountAmount : 6.5
-                couponCode = promo.couponCode
+            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) {
+                shippingAmt = 6.5
+                if (config.get("sdm.promotion.default") && payload.couponCode) {
+                    discount = 6.5 //promo ? promo.discountAmount : 6.5
+                    couponCode = promo.couponCode
+                }
             }
 
             if (payload.items && payload.items.length > 0) {
@@ -569,12 +573,13 @@ export class CartClass extends BaseEntity {
             }
             tax = Math.round(((grandtotal - (Math.round(((grandtotal / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             subtotal = grandtotal - tax
-            grandtotal = grandtotal - discount
+            grandtotal = grandtotal + shippingAmt - discount
 
             console.log("grandtotal", grandtotal)
             console.log("subtotal", subtotal)
             console.log("tax", tax)
             console.log("discount", discount)
+            console.log("shippingAmt", shippingAmt)
 
             let sudoCmsres: ICartCMSRequest.ICmsCartRes = {
                 cms_cart_id: 0,
