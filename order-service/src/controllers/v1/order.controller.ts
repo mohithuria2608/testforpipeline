@@ -1,9 +1,8 @@
 import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog, getFrequency } from '../../utils'
-import { userService, locationService, promotionService } from '../../grpc/client'
+import { userService, locationService, promotionService, menuService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
-import * as CMS from '../../cms'
 
 export class OrderController {
 
@@ -80,6 +79,20 @@ export class OrderController {
             consolelog(process.cwd(), "step 3", new Date(), false)
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
             if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+                const menu = await menuService.fetchMenu({
+                    menuId: 1,
+                    language: headers.language,
+                })
+                if (menu.menuId && (menu.menuId != payload.curMenuId
+                    //|| menu.updatedAt != payload.menuUpdatedAt
+                )) {
+                    return {
+                        validateCart: {
+                            ...cart,
+                            invalidMenu: 1
+                        }
+                    }
+                }
                 if (!store.active)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                 if (!store.isOnline)

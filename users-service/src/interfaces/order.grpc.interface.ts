@@ -28,7 +28,6 @@ declare namespace IOrderGrpcRequest {
         vat?: IAmount,
         store?: IStore,
         invalidMenu?: number,
-        storeOnline?: number
         freeItems?: {
             ar?: any
             en?: any

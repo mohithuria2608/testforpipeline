@@ -19,7 +19,7 @@ declare namespace ICartRequest {
         store?: IStore,
         invalidMenu?: number,
         promo?: IPromotionGrpcRequest.IValidatePromotionRes,
-        storeOnline?: number
+        couponApplied?: number,
         freeItems?: {
             ar?: any
             en?: any
@@ -92,8 +92,7 @@ declare namespace ICartRequest {
         curItems: any,
         selFreeItem: any,
         invalidMenu: number,
-        promo: IPromotionGrpcRequest.IValidatePromotionRes,
-        storeOnline: number
+        promo: IPromotionGrpcRequest.IValidatePromotionRes
     }
 
     interface IDataToHash {

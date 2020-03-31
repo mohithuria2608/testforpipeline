@@ -223,8 +223,7 @@ export class CartClass extends BaseEntity {
             en: Joi.array().items(this.itemSchema)
         }),
         invalidMenu: Joi.number().valid(0, 1).required(),
-        promo: Joi.any(),
-        storeOnline: Joi.number().valid(0, 1).required(),
+        promo: Joi.any()
     })
 
     /**
@@ -283,8 +282,7 @@ export class CartClass extends BaseEntity {
                 vat: {},
                 freeItems: { en: [], ar: [] },
                 promo: {},
-                invalidMenu: 0,
-                storeOnline: 1
+                invalidMenu: 0
             }
             console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
@@ -321,8 +319,7 @@ export class CartClass extends BaseEntity {
                     en: [], ar: [],
                 },
                 promo: {},
-                invalidMenu: 0,
-                storeOnline: 1
+                invalidMenu: 0
             }
             let putArg: IAerospike.Put = {
                 bins: cartUpdate,
@@ -620,7 +617,6 @@ export class CartClass extends BaseEntity {
             dataToUpdate['notAvailable'] = []
             dataToUpdate['items'] = []
             dataToUpdate['invalidMenu'] = payload.invalidMenu
-            dataToUpdate['storeOnline'] = payload.storeOnline
             let amount = []
             amount.push({
                 type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SUB_TOTAL,

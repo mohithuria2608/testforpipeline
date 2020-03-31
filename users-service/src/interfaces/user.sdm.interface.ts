@@ -12,10 +12,11 @@ declare namespace IUserSDMRequest {
             CUST_FIRSTNAME: string,// "nusrattest",
             CUST_LASTNAME: string,// "user",
             CUST_NATID: number,
-            CUST_NOTIFICATION_MOBILE: string,// 525454090,
-            CUST_PHONEAREACODE: string,//52
-            CUST_PHONELOOKUP: string,// 525454090,
-            CUST_PHONENUMBER: string,// 5454090,
+            CUST_NOTIFICATION_MOBILE: string,
+            CUST_PHONEAREACODE: string,
+            CUST_PHONECOUNTRYCODE: string,
+            CUST_PHONELOOKUP: string,
+            CUST_PHONENUMBER: string,
             CUST_PHONETYPE: number,
             PASSWORD: string,
             USERNAME: string,
@@ -40,10 +41,11 @@ declare namespace IUserSDMRequest {
             CUST_ID: number,
             CUST_LASTNAME: string,// "user",
             CUST_NATID: number,
-            CUST_NOTIFICATION_MOBILE: string,// 525454090,
-            CUST_PHONEAREACODE: string,//52
-            CUST_PHONELOOKUP: string,// 525454090,
-            CUST_PHONENUMBER: string,// 5454090,
+            CUST_NOTIFICATION_MOBILE: string,
+            CUST_PHONEAREACODE: string,
+            CUST_PHONECOUNTRYCODE: string,
+            CUST_PHONELOOKUP: string,
+            CUST_PHONENUMBER: string,
             CUST_PHONETYPE: number,
             PASSWORD: string,
             USERNAME: string,
@@ -60,7 +62,7 @@ declare namespace IUserSDMRequest {
     }
 
     interface IUpdateCustomerToken {
-        
+
     }
 
 }

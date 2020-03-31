@@ -16,14 +16,22 @@
 
 
 
-30 March Tasks
+31 March Tasks
 ----> DNS resolution takes 2 to 2.5 seconds
 ----> kafka failure ==> ping to order that health is false
+----> load test 
+----> scheduler task best method
+----> bug 1613, 1594, 1598, 1506
+----> store sync validate
 
 
 
+----> single product in cart validation to cms
 
-
+DONE : 
+----> when promotion is added hit cart api for cart validation
+----> menu update time is greater than cart last update time then give error invalidMenu
+----> bug 1594, 1613, 
 
 
 
