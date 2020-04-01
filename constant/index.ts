@@ -1094,7 +1094,8 @@ export const NOTIFICATION_MSG = {
             ORDER_FAIL: (data) => `Your order failed due to unavoidable reasons. Please try after some time.`,
         },
         Ar: {
-            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. a3OzI18qBY5O`,
+            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. 
+3OzI18qBY5O`,
             ORDER_DELIVERY_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
                 return `شكرًا لاختيارك دجاج كنتاكي. سنقوم بإيصال طلبك إلى منزلك ساخن وطازج. من المتوقع أن يصلك الطلب خلال 20 >قيقة. رقم الطلب: ${data.sdmOrderRef} المبلغ ${data.amount[0].amount} درهم.`
