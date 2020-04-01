@@ -2,59 +2,59 @@
     "env": "staging",
     "server": {
         "auth": {
-            "url": "http://americanauat.appskeeper.com/auth-service/",
+            "url": "https://mobapi.americana-food.com/auth-service/",
             "port": 4000
         },
         "user": {
-            "url": "http://americanauat.appskeeper.com/user-service/",
+            "url": "https://mobapi.americana-food.com/user-service/",
             "port": 4001
         },
         "menu": {
-            "url": "http://americanauat.appskeeper.com/menu-service/",
+            "url": "https://mobapi.americana-food.com/menu-service/",
             "port": 4002
         },
         "order": {
-            "url": "http://americanauat.appskeeper.com/order-service/",
+            "url": "https://mobapi.americana-food.com/order-service/",
             "port": 4003
         },
         "sync": {
-            "url": "http://americanauat.appskeeper.com/sync-service/",
+            "url": "https://mobapi.americana-food.com/sync-service/",
             "port": 4004
         },
         "deeplink": {
-            "url": "http://americanauat.appskeeper.com/deeplink-service/",
+            "url": "https://mobapi.americana-food.com/deeplink-service/",
             "port": 4005
         },
         "kafka": {
-            "url": "http://americanauat.appskeeper.com/kafka-service/",
+            "url": "https://mobapi.americana-food.com/kafka-service/",
             "port": 4006
         },
         "location": {
-            "url": "http://americanauat.appskeeper.com/location-service/",
+            "url": "https://mobapi.americana-food.com/location-service/",
             "port": 4007
         },
         "notification": {
-            "url": "http://americanauat.appskeeper.com/notification-service/",
+            "url": "https://mobapi.americana-food.com/notification-service/",
             "port": 4008
         },
         "payment": {
-            "url": "http://americanauat.appskeeper.com/payment-service/",
+            "url": "https://mobapi.americana-food.com/payment-service/",
             "port": 4009
         },
         "promotion": {
-            "url": "http://americana.appskeeper.com/promotion-service/",
+            "url": "https://mobapi.americana-food.com/promotion-service/",
             "port": 4010
         },
         "upload": {
-            "url": "http://americana.appskeeper.com/upload-service/",
+            "url": "https://mobapi.americana-food.com/upload-service/",
             "port": 4011
         },
         "log": {
-            "url": "http://americanauat.appskeeper.com/log-service/",
+            "url": "https://mobapi.americana-food.com/log-service/",
             "port": 4012
         },
         "home": {
-            "url": "http://americanauat.appskeeper.com/home-service/",
+            "url": "https://mobapi.americana-food.com/home-service/",
             "port": 4013
         }
     },
@@ -178,8 +178,8 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.123.205.1/pub/media/catalog/product/",
-        "home": "http://40.123.205.1/pub/media/homepage/",
+        "product": "https://mobcms.americana-food.com/pub/media/catalog/product/",
+        "home": "https://mobcms.americana-food.com/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/staging/"
     },
     "cryptoSecret": "d6F3Efeq",
