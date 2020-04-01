@@ -87,43 +87,43 @@ export class UserCMSEntity extends BaseCMS {
         }
     }
 
-    async getCustomerFromCms(payload: IUserCMSRequest.IGetUser): Promise<any> {
-        try {
-            let formObj = {
-                "websiteId": "1",
-            }
-            if (payload.cmsUserRef)
-                formObj['customerId'] = payload.cmsUserRef
-            else
-                formObj['customerId'] = ""
-            if (payload.email && payload.email != "")
-                formObj['email'] = payload.email
-            else
-                formObj['email'] = ""
-            if (payload.fullPhnNo)
-                formObj['phone'] = payload.fullPhnNo
-            else
-                formObj['phone'] = ""
-            const headers = {};
-            const form = formObj;
-            const options = {
-                method: Constant.DATABASE.CMS.END_POINTS.GET_USER.METHOD,
-                url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.GET_USER.URL,
-                body: true
-            }
-            let cmsRes = await this.request(options, headers, form)
-            if (cmsRes && cmsRes.length > 0) {
-                if (cmsRes[0]['success'])
-                    return cmsRes[0]
-                else
-                    return {}
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
-        } catch (error) {
-            consolelog(process.cwd(), 'getCustomerFromCms', JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
+    // async getCustomerFromCms(payload: IUserCMSRequest.IGetUser): Promise<any> {
+    //     try {
+    //         let formObj = {
+    //             "websiteId": "1",
+    //         }
+    //         if (payload.cmsUserRef)
+    //             formObj['customerId'] = payload.cmsUserRef
+    //         else
+    //             formObj['customerId'] = ""
+    //         if (payload.email && payload.email != "")
+    //             formObj['email'] = payload.email
+    //         else
+    //             formObj['email'] = ""
+    //         if (payload.fullPhnNo)
+    //             formObj['phone'] = payload.fullPhnNo
+    //         else
+    //             formObj['phone'] = ""
+    //         const headers = {};
+    //         const form = formObj;
+    //         const options = {
+    //             method: Constant.DATABASE.CMS.END_POINTS.GET_USER.METHOD,
+    //             url: config.get("cms.baseUrl") + Constant.DATABASE.CMS.END_POINTS.GET_USER.URL,
+    //             body: true
+    //         }
+    //         let cmsRes = await this.request(options, headers, form)
+    //         if (cmsRes && cmsRes.length > 0) {
+    //             if (cmsRes[0]['success'])
+    //                 return cmsRes[0]
+    //             else
+    //                 return {}
+    //         } else
+    //             return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+    //     } catch (error) {
+    //         consolelog(process.cwd(), 'getCustomerFromCms', JSON.stringify(error), false)
+    //         return Promise.reject(error)
+    //     }
+    // }
 }
 
 export const UserCMSE = new UserCMSEntity()
