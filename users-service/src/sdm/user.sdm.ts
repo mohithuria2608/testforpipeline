@@ -50,8 +50,13 @@ export class UserSDMEntity extends BaseSDM {
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
                 return res.RegisterCustomerResult
             }
-            else
-                return Promise.reject(res)
+            else {
+                if (res.SDKResult && res.SDKResult.ResultText == "Customer is already exist") {
+                    return await this.getCustomerByEmail({ email: payload.email })
+                } else {
+                    return Promise.reject(res)
+                }
+            }
         } catch (error) {
             consolelog(process.cwd(), 'createCustomerOnSdm', error, false)
             return (error)
