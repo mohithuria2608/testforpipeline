@@ -56,7 +56,7 @@ export class HiddenController {
     * @param {string} type  enum[menu, hidden]
     * @param {string} data  actuall array of menu or hidden
     * */
-    async syncFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
+    async syncToAS(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
             let data = JSON.parse(payload.as.argv);
             if (data) {

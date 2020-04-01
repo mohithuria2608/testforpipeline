@@ -207,7 +207,10 @@ export class LocationController {
                 case 'city': await cityController.syncToAS(syncData.data);
                 case 'country': await countryController.syncToAS(syncData.data);
                 case 'area': await areaController.syncToAS(syncData.data);
-                case 'store': await storeController.syncToAS(syncData.data);
+                case 'store': {
+                    await storeController.syncToAS(syncData.data);
+                    await this.bootstrapPickup();
+                }
             }
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)

@@ -111,9 +111,17 @@ export class StoreController {
     /** sync to aerospike */
     async syncToAS(payload) {
         try {
-            console.log("PAYLOAD LENGTH -> ", payload.length);
+            console.log("Number of stores synced -> ", payload.length);
             for (let store of payload) {
                 store.menuTempId = 17; //@TODO -remove when it will come from CMS
+
+                if (store.location) {
+                    if (store.location.latitude && store.location.latitude != "") store.location.latitude = parseFloat(store.location.latitude);
+                    else store.location.latitude = 0;
+                    if (store.location.longitude && store.location.longitude != "") store.location.longitude = parseFloat(store.location.longitude);
+                    else store.location.longitude = 0;
+                }
+
                 if (store.geoFence && store.geoFence.length) {
                     for (let fence of store.geoFence) {
                         let storeData = { ...store, ...fence };

@@ -20,7 +20,7 @@ export class CmsMenuController {
                         create: true,
                         argv: JSON.stringify(payload.data)
                     },
-                    inQ: true
+                    inQ: false
                 }
                 if (payload.action == "update") {
                     menuChange['as']['update'] = true
