@@ -580,7 +580,7 @@ export const DATABASE = {
                     },
                     {
                         name: "DISCOUNT",
-                        value: "خدمة التوصيل"
+                        value: " خدمة التوصيل"
                     },
                     {
                         name: "TAX",
