@@ -207,20 +207,28 @@
         }
     },
     "mongo": {
-        "url": "mongodb://admin:ebaN4cnM7hnu35Km@10.1.4.7:27017,10.1.4.5:27017,10.1.4.6:27017/admin?replicaSet=rs0&readPreference=secondaryPreferred&w=majority&wtimeoutMS=5000"",
+        "url": "mongodb://admin:ebaN4cnM7hnu35Km@10.1.4.7:27017,10.1.4.5:27017,10.1.4.6:27017/admin?replicaSet=rs0&readPreference=secondaryPreferred&w=majority&wtimeoutMS=5000",
         "hosts": "10.1.4.5,10.1.4.6,10.1.4.7",
         "username": "admin",
-        "password": "ebaN4cnM7hnu35Km""
+        "password": "ebaN4cnM7hnu35Km"
     },
     "cms": {
         "baseUrl": "http://kfccms.americanarest.com/rest/V1/",
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkliveuae.americana.com.sa:1998/?wsdl",
-        "type": "live",
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
+        "type": "uat",
         "cred": {
             "licenseCode": "PizzaHutApp"
+        },
+        "promotion": {
+            "default": true,
+            "defaultCode": "FREEDELIVERY",
+            "orderMode": [
+                1
+            ]
         }
-    }
+    },
+    "loadTest": false
 }

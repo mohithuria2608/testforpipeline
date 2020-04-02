@@ -221,6 +221,14 @@
         "type": "uat",
         "cred": {
             "licenseCode": "PizzaHutApp"
+        },
+        "promotion": {
+            "default": true,
+            "defaultCode": "FREEDELIVERY",
+            "orderMode": [
+                1
+            ]
         }
-    }
+    },
+    "loadTest": false
 }
