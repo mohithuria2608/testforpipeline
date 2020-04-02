@@ -182,8 +182,8 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.123.205.1/pub/media/catalog/product/",
-        "home": "http://40.123.205.1/pub/media/homepage/",
+        "product": "http://40.123.205.1/media/catalog/product/",
+        "home": "http://40.123.205.1/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
@@ -200,13 +200,7 @@
     },
     "email": {
         "sgKey": "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",
-        "sender": "KFC <support@americana-food.com>",
-        "smtp": {
-            "host": "eu-smtp-outbound-1.mimecast.com",
-            "port": 587,
-            "auth_user": "mobappuat@americana-food.com",
-            "auth_pass": "Sxd#2231"
-        }
+        "sender": "support@americana.com"
     },
     "kafka": {
         "url": "localhost:9092"
@@ -216,8 +210,8 @@
         "username": "",
         "password": "",
         "config": {
-            "timeout": 30000,
-            "maxConnsPerNode": 20000
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
         }
     },
     "mongo": {
@@ -231,18 +225,10 @@
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkuatuae.americana.com.sa:1996/?wsdl",
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
         "type": "uat",
         "cred": {
             "licenseCode": "PizzaHutApp"
-        },
-        "promotion": {
-            "default": true,
-            "defaultCode": "FREEDELIVERY",
-            "orderMode": [
-                1
-            ]
         }
-    },
-    "loadTest": false
+    }
 }

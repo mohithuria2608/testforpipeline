@@ -1,60 +1,60 @@
 {
-    "env": "production",
+    "env": "testing",
     "server": {
         "auth": {
-            "url": "https://prod-api.americanarest.com/auth-service/",
+            "url": "http://americanaqa.appskeeper.com/auth-service/",
             "port": 4000
         },
         "user": {
-            "url": "https://prod-api.americanarest.com/user-service/",
+            "url": "http://americanaqa.appskeeper.com/user-service/",
             "port": 4001
         },
         "menu": {
-            "url": "https://prod-api.americanarest.com/menu-service/",
+            "url": "http://americanaqa.appskeeper.com/menu-service/",
             "port": 4002
         },
         "order": {
-            "url": "https://prod-api.americanarest.com/order-service/",
+            "url": "http://americanaqa.appskeeper.com/order-service/",
             "port": 4003
         },
         "sync": {
-            "url": "https://prod-api.americanarest.com/sync-service/",
+            "url": "http://americanaqa.appskeeper.com/sync-service/",
             "port": 4004
         },
         "deeplink": {
-            "url": "https://prod-api.americanarest.com/deeplink-service/",
+            "url": "http://americanaqa.appskeeper.com/deeplink-service/",
             "port": 4005
         },
         "kafka": {
-            "url": "https://prod-api.americanarest.com/kafka-service/",
+            "url": "http://americanaqa.appskeeper.com/kafka-service/",
             "port": 4006
         },
         "location": {
-            "url": "https://prod-api.americanarest.com/location-service/",
+            "url": "http://americanaqa.appskeeper.com/location-service/",
             "port": 4007
         },
         "notification": {
-            "url": "https://prod-api.americanarest.com/notification-service/",
+            "url": "http://americanaqa.appskeeper.com/notification-service/",
             "port": 4008
         },
         "payment": {
-            "url": "https://prod-api.americanarest.com/payment-service/",
+            "url": "http://americanaqa.appskeeper.com/payment-service/",
             "port": 4009
         },
         "promotion": {
-            "url": "https://prod-api.americanarest.com/promotion-service/",
+            "url": "http://americanaqa.appskeeper.com/promotion-service/",
             "port": 4010
         },
         "upload": {
-            "url": "https://prod-api.americanarest.com/upload-service/",
+            "url": "http://americanaqa.appskeeper.com/upload-service/",
             "port": 4011
         },
         "log": {
-            "url": "https://prod-api.americanarest.com/log-service/",
+            "url": "http://americanaqa.appskeeper.com/log-service/",
             "port": 4012
         },
         "home": {
-            "url": "https://prod-api.americanarest.com/home-service/",
+            "url": "http://americanaqa.appskeeper.com/home-service/",
             "port": 4013
         }
     },
@@ -178,9 +178,9 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://magentopro.appskeeper.com/pub/media/catalog/product/",
-        "home": "http://magentopro.appskeeper.com/pub/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/production/"
+        "product": "http://40.123.205.1/pub/media/catalog/product/",
+        "home": "http://40.123.205.1/pub/media/homepage/",
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
     "cryptoAlgo": "aes-256-cbc",
@@ -194,16 +194,6 @@
         "endPoint": "bulksms/bulksms",
         "source": "KFC"
     },
-    "email": {
-        "sgKey": "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",
-        "sender": "KFC <support@americana-food.com>",
-        "smtp": {
-            "host": "eu-smtp-outbound-1.mimecast.com",
-            "port": 587,
-            "auth_user": "mobappuat@americana-food.com",
-            "auth_pass": "Sxd#2231"
-        }
-    },
     "kafka": {
         "url": "20.46.146.2:9092"
     },
@@ -212,8 +202,8 @@
         "username": "aerospikeusr",
         "password": "GM2nGDQkN5yMdPZs",
         "config": {
-            "timeout": 30000,
-            "maxConnsPerNode": 20000
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
         }
     },
     "mongo": {
@@ -223,7 +213,7 @@
         "password": "96fMUpk2PGzbu8Hn"
     },
     "cms": {
-        "baseUrl": "http://magentopro.appskeeper.com/rest/V1/",
+        "baseUrl": "http://40.123.205.1/rest/V1/",
         "categoryId": 3
     },
     "sdm": {
@@ -231,14 +221,6 @@
         "type": "live",
         "cred": {
             "licenseCode": "PizzaHutApp"
-        },
-        "promotion": {
-            "default": true,
-            "defaultCode": "FREEDELIVERY",
-            "orderMode": [
-                1
-            ]
         }
-    },
-    "loadTest": false
+    }
 }
