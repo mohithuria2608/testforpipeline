@@ -85,9 +85,7 @@ export class OrderController {
                     menuId: payload.curMenuId,
                     language: headers.language,
                 })
-                if (menu.menuId && (menu.menuId != payload.curMenuId
-                    //|| menu.updatedAt != payload.menuUpdatedAt
-                )) {
+                if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
                     return {
                         validateCart: {
                             ...cart,

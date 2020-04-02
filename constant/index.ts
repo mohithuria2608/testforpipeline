@@ -1047,14 +1047,26 @@ export const PAYMENT_CONFIG = {
             noonpayReversePaymentEndPoint: '/order',
             noonpayRefundPaymentEndPoint: '/order',
             code: "noonpay",
-            status: 1
+            status: 1,
+            SDM: {
+                PAY_STATUS: 1,
+                PAY_STORE_TENDERID: 253,
+                PAY_SUB_TYPE: 1,
+                PAY_TYPE: 2,
+            }
         },
         codInfo: {
             status: 1,
             title: 'Cash On Delivery',
             min_order_total: null,
             max_order_total: null,
-            code: "cashondelivery"
+            code: "cashondelivery",
+            SDM: {
+                PAY_STATUS: 1,
+                PAY_STORE_TENDERID: 252,
+                PAY_SUB_TYPE: 2,
+                PAY_TYPE: 2,
+            }
         }
     }
 }
