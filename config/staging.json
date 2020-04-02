@@ -2,59 +2,59 @@
     "env": "staging",
     "server": {
         "auth": {
-            "url": "http://americanauat.appskeeper.com/auth-service/",
+            "url": "https://prod-api.americanarest.com/auth-service/",
             "port": 4000
         },
         "user": {
-            "url": "http://americanauat.appskeeper.com/user-service/",
+            "url": "https://prod-api.americanarest.com/user-service/",
             "port": 4001
         },
         "menu": {
-            "url": "http://americanauat.appskeeper.com/menu-service/",
+            "url": "https://prod-api.americanarest.com/menu-service/",
             "port": 4002
         },
         "order": {
-            "url": "http://americanauat.appskeeper.com/order-service/",
+            "url": "https://prod-api.americanarest.com/order-service/",
             "port": 4003
         },
         "sync": {
-            "url": "http://americanauat.appskeeper.com/sync-service/",
+            "url": "https://prod-api.americanarest.com/sync-service/",
             "port": 4004
         },
         "deeplink": {
-            "url": "http://americanauat.appskeeper.com/deeplink-service/",
+            "url": "https://prod-api.americanarest.com/deeplink-service/",
             "port": 4005
         },
         "kafka": {
-            "url": "http://americanauat.appskeeper.com/kafka-service/",
+            "url": "https://prod-api.americanarest.comm/kafka-service/",
             "port": 4006
         },
         "location": {
-            "url": "http://americanauat.appskeeper.com/location-service/",
+            "url": "https://prod-api.americanarest.com/location-service/",
             "port": 4007
         },
         "notification": {
-            "url": "http://americanauat.appskeeper.com/notification-service/",
+            "url": "https://prod-api.americanarest.com/notification-service/",
             "port": 4008
         },
         "payment": {
-            "url": "http://americanauat.appskeeper.com/payment-service/",
+            "url": "https://prod-api.americanarest.com/payment-service/",
             "port": 4009
         },
         "promotion": {
-            "url": "http://americana.appskeeper.com/promotion-service/",
+            "url": "https://prod-api.americanarest.com/promotion-service/",
             "port": 4010
         },
         "upload": {
-            "url": "http://americana.appskeeper.com/upload-service/",
+            "url": "https://prod-api.americanarest.com/upload-service/",
             "port": 4011
         },
         "log": {
-            "url": "http://americanauat.appskeeper.com/log-service/",
+            "url": "https://prod-api.americanarest.com/log-service/",
             "port": 4012
         },
         "home": {
-            "url": "http://americanauat.appskeeper.com/home-service/",
+            "url": "https://prod-api.americanarest.com/home-service/",
             "port": 4013
         }
     },
@@ -208,12 +208,12 @@
     },
     "mongo": {
         "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",
-        "hosts": "10.2.0.5",
+        "hosts": "10.1.4.5",
         "username": "americana_dbusr_uat",
         "password": "AppInvDbUser"
     },
     "cms": {
-        "baseUrl": "http://magentopro.appskeeper.com/rest/V1/",
+        "baseUrl": "http://kfccms.americanarest.com/rest/V1/",
         "categoryId": 3
     },
     "sdm": {
