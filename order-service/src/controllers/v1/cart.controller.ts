@@ -33,14 +33,10 @@ export class CartController {
                 menuId: payload.curMenuId,
                 language: headers.language,
             })
-            if (menu.menuId && menu.updatedAt != payload.menuUpdatedAt) {
-                return {
-                    validateCart: {
-                        ...cart,
-                        invalidMenu: 1
-                    }
-                }
-            }
+            let invalidMenu = 0
+            if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt))
+                invalidMenu = 1
+
             let hitCms = false
             if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
                 hitCms = true
@@ -66,7 +62,7 @@ export class CartController {
                 cmsCart: cmsCart,
                 curItems: payload.items,
                 selFreeItem: payload.selFreeItem,
-                invalidMenu: 0,
+                invalidMenu: invalidMenu,
                 promo: promo,
             })
             let res: any = { ...cart }
