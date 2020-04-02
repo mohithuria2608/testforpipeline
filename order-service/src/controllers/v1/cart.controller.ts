@@ -33,7 +33,7 @@ export class CartController {
                 menuId: 2,// payload.curMenuId,
                 language: headers.language,
             })
-            if (menu.menuId && menu.updatedAt != payload.menuUpdatedAt) {
+            if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
                 cart.items = payload.items
                 return {
                     validateCart: {
