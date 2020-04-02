@@ -487,7 +487,6 @@ export class UserController {
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log("createProfile step 6=====================>")
-                                userchangePayload['chngEmailCms'] = 1
                                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                     console.log("createProfile step 7=====================>")
