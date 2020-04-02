@@ -194,6 +194,16 @@
         "endPoint": "bulksms/bulksms",
         "source": "KFC"
     },
+    "email": {
+        "sgKey": "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",
+        "sender": "KFC <support@americana-food.com>",
+        "smtp": {
+            "host": "eu-smtp-outbound-1.mimecast.com",
+            "port": 587,
+            "auth_user": "mobappuat@americana-food.com",
+            "auth_pass": "Sxd#2231"
+        }
+    },
     "kafka": {
         "url": "20.46.146.2:9092"
     },
@@ -202,8 +212,8 @@
         "username": "",
         "password": "",
         "config": {
-            "timeout": 10000,
-            "maxConnsPerNode": 10000
+            "timeout": 30000,
+            "maxConnsPerNode": 20000
         }
     },
     "mongo": {
@@ -223,11 +233,9 @@
             "licenseCode": "PizzaHutApp"
         },
         "promotion": {
-            "default": true,
-            "defaultCode": "FREEDELIVERY",
-            "orderMode": [
-                1
-            ]
+            "default": false,
+            "defaultCode": "",
+            "orderMode": []
         }
     },
     "loadTest": false
