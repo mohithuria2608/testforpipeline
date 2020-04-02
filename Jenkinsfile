@@ -20,7 +20,7 @@ pipeline {
     agent any
 
     stages{/*
-    	stage('Email'){
+    	stage('EmailProd'){
                 steps{
                     emailext body: "<body><p><font size='+2'><b>Build Status: </b>Started <br> <b>Build Job: </b> ${env.JOB_NAME} <br><b> Build Number: </b> ${env.BUILD_NUMBER} </font> <br><br> <font size='+1'>More info at:  ${env.BUILD_URL}</font></p></body>", subject: "Americana UAT : Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com'
             
