@@ -584,7 +584,7 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: "%5" + "ضريبة القيمة المضافة"
+                        value: "%5 " + "ضريبة القيمة المضافة"
                     },
                     {
                         name: "SHIPPING",
