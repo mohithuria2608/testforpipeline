@@ -30,11 +30,10 @@ export class CartController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
             const menu = await menuService.fetchMenu({
-                menuId: 2,// payload.curMenuId,
+                menuId:  payload.curMenuId,
                 language: headers.language,
             })
             if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
-                cart.items = payload.items
                 return {
                     validateCart: {
                         ...cart,
