@@ -132,7 +132,7 @@ export const SERVER = {
     ADDR_SHOW_TIME: 3,//hr
     SPLASH_EXPR_TIME: 1589523974000,
     CUSTOMER_CARE: "600522252",
-    SUPPORT_EMAIL: "kfc_uae@ag.com",
+    SUPPORT_EMAIL: "support@americana-food.com",
     DEFAULT_CCODE: "+971",
     CHUNK_SIZE_USER_MIGRATION: 50000,
     PAYMENT_SUCCESS_FALLBACK: "payment/success",
@@ -584,7 +584,7 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: "%5 " + "ضريبة القيمة المضافة"
+                        value:"ضريبة القيمة المضافة 5%"
                     },
                     {
                         name: "SHIPPING",
