@@ -1,5 +1,6 @@
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
+import { kafkaService } from '../../grpc/client';
 import * as ENTITY from '../../entity'
 
 export class SdmMenuController {
@@ -10,12 +11,17 @@ export class SdmMenuController {
      * @method POST
      * @param {any} data
      * */
-    async partialProcessMenuFromSDM(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
+    async fetchMenuFromSDM(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
         try {
-            ENTITY.MenuE.fetchMenuFromSDM(payload)
+            ENTITY.MenuE.fetchMenuFromSDM(payload);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.MENU_EN,
+                cms: { create: true, argv: JSON.stringify({ event: "menu_sync" }) },
+                inQ: false
+            });
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "postMenu", JSON.stringify(error), false)
+            consolelog(process.cwd(), "fetchMenuFromSDM", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

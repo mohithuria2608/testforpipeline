@@ -100,12 +100,16 @@ export class WebhookNoonpayController {
                     else
                         validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
                 }
-                await ENTITY.OrderE.orderFailureHandler(order, 1, validationRemarks)
+                if (order.status != Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO)
+                    await ENTITY.OrderE.orderFailureHandler(order, 1, validationRemarks)
                 redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_FAILURE_FALLBACK
                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
                 return redirectUrl
-            } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+            } else {
+                redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_FAILURE_FALLBACK
+                consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
+                return redirectUrl
+            }
         } catch (error) {
             consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
             ENTITY.OrderE.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)

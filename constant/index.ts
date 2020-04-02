@@ -41,6 +41,11 @@ export enum SET_NAME {
     SYNC_AREA = "sync_area",
     SYNC_WEB_AREA = "sync_web_area",
     SYNC_COUNTRY = "sync_country",
+    SYNC_MENU_VGROUP = "sync_menu_vgroup",
+    SYNC_MENU_VSELECTOR = "sync_menu_vselector",
+    SYNC_MENU_WEBCOMBO = "sync_menu_webcombo",
+    SYNC_MENU = "sync_menu",
+    SYNC_MENU_PRODUCT = "sync_menu_product",
     LOGGER = "logger",
     APP_VERSION = "appversion",
     FAILQ = "failq",
@@ -127,7 +132,7 @@ export const SERVER = {
     ADDR_SHOW_TIME: 3,//hr
     SPLASH_EXPR_TIME: 1589523974000,
     CUSTOMER_CARE: "600522252",
-    SUPPORT_EMAIL: "kfc_uae@ag.com",
+    SUPPORT_EMAIL: "support@americana-food.com",
     DEFAULT_CCODE: "+971",
     CHUNK_SIZE_USER_MIGRATION: 50000,
     PAYMENT_SUCCESS_FALLBACK: "payment/success",
@@ -575,11 +580,11 @@ export const DATABASE = {
                     },
                     {
                         name: "DISCOUNT",
-                        value: "خدمة التوصيل"
+                        value: " خدمة التوصيل"
                     },
                     {
                         name: "TAX",
-                        value: "%ضريبة القيمة المضافة5"
+                        value: String.raw`%5 ضريبة القيمة المضافة`
                     },
                     {
                         name: "SHIPPING",
@@ -1042,14 +1047,26 @@ export const PAYMENT_CONFIG = {
             noonpayReversePaymentEndPoint: '/order',
             noonpayRefundPaymentEndPoint: '/order',
             code: "noonpay",
-            status: 1
+            status: 1,
+            SDM: {
+                PAY_STATUS: 1,
+                PAY_STORE_TENDERID: 253,
+                PAY_SUB_TYPE: 1,
+                PAY_TYPE: 2,
+            }
         },
         codInfo: {
             status: 1,
             title: 'Cash On Delivery',
             min_order_total: null,
             max_order_total: null,
-            code: "cashondelivery"
+            code: "cashondelivery",
+            SDM: {
+                PAY_STATUS: 1,
+                PAY_STORE_TENDERID: 252,
+                PAY_SUB_TYPE: 2,
+                PAY_TYPE: 2,
+            }
         }
     }
 }
@@ -1075,7 +1092,7 @@ export const NOTIFICATION_CODE = {
 export const NOTIFICATION_MSG = {
     SMS: {
         En: {
-            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. rMXm+gJ4X0P`,
+            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. 3OzI18qBY5O`,
             ORDER_DELIVERY_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
                 return `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount[0].amount} AED.`
@@ -1088,7 +1105,8 @@ export const NOTIFICATION_MSG = {
             ORDER_FAIL: (data) => `Your order failed due to unavoidable reasons. Please try after some time.`,
         },
         Ar: {
-            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. rMXm+gJ4X0P`,
+            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. 
+3OzI18qBY5O`,
             ORDER_DELIVERY_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
                 return `شكرًا لاختيارك دجاج كنتاكي. سنقوم بإيصال طلبك إلى منزلك ساخن وطازج. من المتوقع أن يصلك الطلب خلال 20 >قيقة. رقم الطلب: ${data.sdmOrderRef} المبلغ ${data.amount[0].amount} درهم.`

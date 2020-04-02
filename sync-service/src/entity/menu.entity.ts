@@ -3,6 +3,7 @@ import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { authService, kafkaService } from '../grpc/client'
 import { consolelog } from '../utils'
+import { startMenuSyncSequence } from "../service";
 
 
 export class MenuEntity extends BaseEntity {
@@ -15,7 +16,7 @@ export class MenuEntity extends BaseEntity {
      */
     async fetchMenuFromSDM(payload) {
         try {
-
+            await startMenuSyncSequence(payload.menuId)
         } catch (error) {
             consolelog(process.cwd(), "fetchMenuFromSDM", JSON.stringify(error), false)
             return Promise.reject(error)

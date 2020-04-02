@@ -29,6 +29,7 @@ export interface Iorder extends Document {
     validationRemarks: string,
     amountValidationPassed: boolean,
     orderConfirmationNotified: boolean,
+    transferFromOrderId: number
     payment: {
         paymentMethodId: number,
         amount: number,
@@ -222,6 +223,7 @@ const orderSchema = new Schema({
     isFreeItem: { type: Boolean },
     amountValidationPassed: { type: Boolean, default: false, required: true },
     orderConfirmationNotified: { type: Boolean, default: false, required: true },
+    transferFromOrderId: { type: Number, default: 0, required: true },
     env: { type: Number, required: true },
 });
 

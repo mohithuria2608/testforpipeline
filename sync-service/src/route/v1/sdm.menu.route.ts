@@ -14,9 +14,10 @@ export default (router: Router) => {
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
-                headers: JOI_CMS_HEADERS,
                 body: {
-                    data: Joi.any().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
+                    data: Joi.object().keys({
+                        menuId: Joi.number().required()
+                    }).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
             async (ctx) => {
@@ -24,7 +25,7 @@ export default (router: Router) => {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ISdmMenuRequest.ISdmMenu = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await sdmMenuController.partialProcessMenuFromSDM(headers, payload, auth);
+                    let res = await sdmMenuController.fetchMenuFromSDM(headers, payload, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
