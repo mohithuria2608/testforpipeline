@@ -122,12 +122,12 @@ export class GuestController {
             let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             if (asUserByPhone && asUserByPhone.length > 0) {
                 userchangePayload['id'] = asUserByPhone[0].id
-                console.log('STEP : 1               MS : P')
+                console.log("guestCheckout step 1=====================>")
                 if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
-                    console.log('STEP : 2               MS : P/E  , same user')
+                    console.log("guestCheckout step 2=====================>")
                     userchangePayload['deleteUserId'] = auth.id
                 } else {
-                    console.log('STEP : 3               MS : P')
+                    console.log("guestCheckout step 3=====================>")
                     let queryArg: IAerospike.Query = {
                         equal: {
                             bin: "email",
@@ -138,27 +138,27 @@ export class GuestController {
                     }
                     let asUserByEmail = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0) {
-                        console.log('STEP : 4               MS : P/E  , different user')
+                        console.log("guestCheckout step 4=====================>")
                         return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                     } else {
-                        console.log('STEP : 7               MS : P, CMS :, ')
+                        console.log("guestCheckout step 5=====================>")
                         userchangePayload['chngEmailCms'] = 1
                         let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                            console.log('STEP : 8               MS : P, CMS :, SDM : E    different user')
+                            console.log("guestCheckout step 6=====================>")
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
-                            console.log('STEP : 9               MS : P, CMS :, SDM :    update email')
+                            console.log("guestCheckout step 7=====================>")
                             userchangePayload['deleteUserId'] = auth.id
                             userchangePayload['chngEmailSdm'] = 1
                             userchangePayload['chngEmailCms'] = 1
                         }
                     }
                 }
-                console.log("userchangePayload by phone : ", userchangePayload)
+                console.log("guestCheckout step 8=====================>")
                 await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload, headers.language)
             } else {
-                console.log('STEP : 10               MS : ')
+                console.log("guestCheckout step 9=====================>")
                 let queryArg: IAerospike.Query = {
                     equal: {
                         bin: "email",
@@ -171,10 +171,10 @@ export class GuestController {
                 if (asUserByEmail && asUserByEmail.length > 0) {
                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                 } else {
-                    console.log('STEP : 23               MS :  , CMS :  , SDM : ')
+                    console.log("guestCheckout step 10=====================>")
                     let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                        console.log('STEP : 23               MS :  , CMS :  , SDM : E')
+                        console.log("guestCheckout step 11=====================>")
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
                         userchangePayload['chngPhnSdm'] = 1
@@ -182,14 +182,14 @@ export class GuestController {
                         userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
                         userchangePayload['cmsUserRef'] = 0
                     } else {
-                        console.log('STEP : 23               MS :  , CMS :  , SDM : ')
+                        console.log("guestCheckout step 12=====================>")
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
                         userchangePayload['sdmUserRef'] = 0
                         userchangePayload['sdmCorpRef'] = 0
                         userchangePayload['cmsUserRef'] = 0
                     }
-                    console.log("userchangePayload by new user : ", userchangePayload)
+                    console.log("guestCheckout step 13=====================>")
                     await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload, headers.language)
                 }
             }
