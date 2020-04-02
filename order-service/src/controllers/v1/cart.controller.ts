@@ -34,6 +34,7 @@ export class CartController {
                 language: headers.language,
             })
             let invalidMenu = 0
+            console.log(`${menu.updatedAt}    ${payload.menuUpdatedAt}     ${(menu.menuId && menu.updatedAt != payload.menuUpdatedAt)}       ${!menu.menuId}`)
             if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt))
                 invalidMenu = 1
 
