@@ -29,6 +29,19 @@ export class CartController {
             if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
+            const menu = await menuService.fetchMenu({
+                menuId: 2,// payload.curMenuId,
+                language: headers.language,
+            })
+            if (menu.menuId && menu.updatedAt != payload.menuUpdatedAt) {
+                cart.items = payload.items
+                return {
+                    validateCart: {
+                        ...cart,
+                        invalidMenu: 1
+                    }
+                }
+            }
             let hitCms = false
             if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
                 hitCms = true
