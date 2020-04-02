@@ -45,7 +45,7 @@ export class CartController {
             } else
                 delete payload['couponCode']
 
-            let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
+            let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload, userData) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
             console.log("cmsCart", JSON.stringify(cmsCart))
             cart = await ENTITY.CartE.updateCart({
                 headers: headers,

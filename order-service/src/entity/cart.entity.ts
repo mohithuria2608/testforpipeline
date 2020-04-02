@@ -525,7 +525,7 @@ export class CartClass extends BaseEntity {
         }
     }
 
-    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData?: IUserRequest.IUserData) {
+    async createCartOnCMS(payload: ICartRequest.IValidateCart, userData: IUserRequest.IUserData) {
         try {
             if (payload.items && payload.items.length > 0) {
                 let req = await this.createCartReqForCms(payload.items, payload.selFreeItem, payload.orderType, payload.couponCode, userData)
@@ -599,7 +599,7 @@ export class CartClass extends BaseEntity {
                 grandtotal: grandtotal,
                 tax: [{
                     tax_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
-                    amount: tax ,
+                    amount: tax,
                 }],
                 shipping: payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS ? [{
                     method_name: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
