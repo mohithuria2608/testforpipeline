@@ -207,7 +207,7 @@
         }
     },
     "mongo": {
-        "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",
+        "url": "mongodb://admin:ebaN4cnM7hnu35Km@10.1.4.5:27017/admin",
         "hosts": "10.1.4.5",
         "username": "americana_dbusr_uat",
         "password": "AppInvDbUser"
