@@ -41,6 +41,11 @@ export enum SET_NAME {
     SYNC_AREA = "sync_area",
     SYNC_WEB_AREA = "sync_web_area",
     SYNC_COUNTRY = "sync_country",
+    SYNC_MENU_VGROUP = "sync_menu_vgroup",
+    SYNC_MENU_VSELECTOR = "sync_menu_vselector",
+    SYNC_MENU_WEBCOMBO = "sync_menu_webcombo",
+    SYNC_MENU = "sync_menu",
+    SYNC_MENU_PRODUCT = "sync_menu_product",
     LOGGER = "logger",
     APP_VERSION = "appversion",
     FAILQ = "failq",
@@ -1075,7 +1080,7 @@ export const NOTIFICATION_CODE = {
 export const NOTIFICATION_MSG = {
     SMS: {
         En: {
-            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. rMXm+gJ4X0P`,
+            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. 3OzI18qBY5O`,
             ORDER_DELIVERY_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
                 return `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount[0].amount} AED.`
@@ -1088,7 +1093,8 @@ export const NOTIFICATION_MSG = {
             ORDER_FAIL: (data) => `Your order failed due to unavoidable reasons. Please try after some time.`,
         },
         Ar: {
-            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. rMXm+gJ4X0P`,
+            USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} هوOTP . لتسجيل الدخول إلى حساب KFC الخاص بك. انها صالحة لمدة 10 دقائق القادمة. يرجى عدم مشاركة مع أي شخص. 
+3OzI18qBY5O`,
             ORDER_DELIVERY_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
                 return `شكرًا لاختيارك دجاج كنتاكي. سنقوم بإيصال طلبك إلى منزلك ساخن وطازج. من المتوقع أن يصلك الطلب خلال 20 >قيقة. رقم الطلب: ${data.sdmOrderRef} المبلغ ${data.amount[0].amount} درهم.`

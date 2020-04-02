@@ -41,16 +41,16 @@ server.addService(menuProto.MenuService.service, {
     },
     sync: async (call: IKafkaGrpcRequest.IKafkaReq, callback) => {
         try {
-            consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
+            // consolelog(process.cwd(), "sync", JSON.stringify(call.request), true)
             let data = call.request
             let res: any
             switch (data.set) {
                 case Constant.SET_NAME.MENU_EN: case Constant.SET_NAME.MENU_AR: {
-                    res = await menuController.syncFromKafka(data)
+                    res = await menuController.syncToAS(data)
                     break;
                 }
                 case Constant.SET_NAME.HIDDEN_AR: case Constant.SET_NAME.HIDDEN_EN: {
-                    res = await hiddenController.syncFromKafka(data)
+                    res = await hiddenController.syncToAS(data)
                     break;
                 }
                 case Constant.SET_NAME.PING_SERVICE: {
