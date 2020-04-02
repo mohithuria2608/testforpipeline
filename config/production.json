@@ -1,5 +1,5 @@
 {
-    "env": "staging",
+    "env": "production",
     "server": {
         "auth": {
             "url": "https://prod-api.americanarest.com/auth-service/",
