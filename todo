@@ -24,6 +24,10 @@
 ----> remove cms api for get user
 
 
+Saved address is displayed 2twice >>if th user moved to Profile >> My Address >> add address >> it displayed 2 times
+
+
+
 
 error","message":"app--------------successfully produced data on kafka for syncing--------------{"data":"success"}","timestamp":"2020-03-29T12:15:20.145Z"}
   <-- POST /v1/guest/checkout
