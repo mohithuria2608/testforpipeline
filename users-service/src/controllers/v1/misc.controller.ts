@@ -23,6 +23,7 @@ export class MiscController {
                 paymentFailureUrl: redirectUrl + "payment/failure",
                 addressShownTime: Constant.SERVER.ADDR_SHOW_TIME,
                 splashExpireTime: Constant.SERVER.SPLASH_EXPR_TIME,
+                imgEtagThreshold: Constant.SERVER.IMG_ETAG_THRESHOLD,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,

@@ -3,7 +3,7 @@ import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { kafkaController } from '../../controllers'
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.FAIL_Q
+const topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.FAIL_Q
 
 class FailConsumer extends BaseConsumer {
 

@@ -137,7 +137,8 @@ export const SERVER = {
     CHUNK_SIZE_USER_MIGRATION: 50000,
     PAYMENT_SUCCESS_FALLBACK: "payment/success",
     PAYMENT_FAILURE_FALLBACK: "payment/failure",
-    DELIVERY_CHARGE_ID: 279
+    DELIVERY_CHARGE_ID: 279,
+    IMG_ETAG_THRESHOLD: (2 * 60 * 60 * 1000)
 };
 
 export const SDM_CONFIG = {
