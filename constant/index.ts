@@ -574,7 +574,7 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: "VAT @5%"
+                        value: "Inclusive of VAT 5% i.e."
                     },
                     {
                         name: "SHIPPING",
