@@ -104,6 +104,11 @@ export class MiscController {
                         consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
                         break;
                     }
+                    case Constant.SET_NAME.FAQ: {
+                        let appVersionConfig = await syncService.fetchFaq({ language: argv.language, country: argv.country })
+                        consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
+                        break;
+                    }
                 }
             }
             return {}

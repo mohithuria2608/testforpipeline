@@ -48,6 +48,7 @@ export enum SET_NAME {
     SYNC_MENU_PRODUCT = "sync_menu_product",
     LOGGER = "logger",
     APP_VERSION = "appversion",
+    FAQ = "faq",
     FAILQ = "failq",
     PING_SERVICE = "ping-service"
 };
@@ -79,6 +80,7 @@ export enum KAFKA_TOPIC {
 
     AS_CONFIG = 'as_config',
     AS_APP_VERSION = 'as_app_version',
+    AS_FAQ = 'as_faq',
 
     M_LOGGER = 'm_logger',
 
@@ -398,6 +400,15 @@ export const DATABASE = {
                 }
             },
             APP_VERSION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            FAQ: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,

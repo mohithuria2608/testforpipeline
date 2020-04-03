@@ -7,3 +7,4 @@ export * from './v1/cms.config.controller';
 export * from './v1/cms.location.controller';
 export * from './v1/cms.home.controller';
 export * from './v1/cms.app.version.controller';
+export * from './v1/cms.faq.controller'

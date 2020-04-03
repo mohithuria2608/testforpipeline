@@ -356,6 +356,10 @@ export let generateSessionId = function (userId: string, deviceid: string) {
     return userId + "_" + deviceid;
 };
 
+export let generateFaqId = function (language: string, country: string) {
+    return country + "_" + language;
+};
+
 export let validatorErr = function (error) {
     return {
         name: "ValidationError",

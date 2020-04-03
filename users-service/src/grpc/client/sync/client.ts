@@ -66,6 +66,24 @@ export class SyncService {
             }
         })
     }
+    async fetchFaq(payload: ISyncGrpcRequest.IFetchFaq): Promise<ISyncGrpcRequest.IFaq[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await syncServiceValidator.fetchFaqValidator(payload)
+                this.syncClient.fetchFaq(payload, (error, res) => {
+                    if (!error) {
+                        consolelog(process.cwd(), "successfully fetched faq", JSON.stringify(res), false)
+                        resolve(JSON.parse(res.faq))
+                    } else {
+                        consolelog(process.cwd(), "Error in fetched faq", JSON.stringify(error), false)
+                        reject(error)
+                    }
+                })
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
 }
 
 export const syncService = new SyncService();

@@ -291,7 +291,7 @@ export class OrderController {
                 })
                 let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
                 if (order && order._id) {
-                    if (payload.cCode && payload.phnNo && (userData.id != order.userId))
+                    if (userData.id != order.userId)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                     order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]
                     order['nextPing'] = getFrequency({

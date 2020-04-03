@@ -237,6 +237,12 @@ declare namespace ISyncGrpcRequest {
         isActive: number,
         createdAt: number,
         updatedAt: number
-
     }
+
+    interface IFetchFaq {
+        country: string,
+        language: string
+    }
+
+    interface IFaq { }
 }
