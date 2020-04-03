@@ -1,3 +1,4 @@
+import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
@@ -7,7 +8,7 @@ import { kafkaController } from '../../controllers'
 class ASLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION, process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION);
+        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION);
     }
 
     handleMessage() {

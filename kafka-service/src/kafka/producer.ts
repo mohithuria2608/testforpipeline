@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as kafka from 'kafka-node';
 import { KafkaClientClass } from './client';
 import { consolelog } from "../utils"
@@ -18,28 +19,28 @@ class KafkaProducer {
 
         this.producer.on('ready', () => {
             this.producer.createTopics([
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HOME,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_ADDRESS,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE,
-                process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_MENU,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_MENU,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_MENU,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HOME,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_USER,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_USER,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_USER,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_ADDRESS,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_STORE,
+               config.get("env") + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,
             ], (error, data) => {
                 if (error) {
                     consolelog(process.cwd(), 'Err in creating topics', error, false);

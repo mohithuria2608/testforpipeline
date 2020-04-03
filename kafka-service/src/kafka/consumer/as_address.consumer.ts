@@ -1,10 +1,11 @@
+import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { userService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS
+const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS
 class AsAddressConsumer extends BaseConsumer {
 
     constructor() {

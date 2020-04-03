@@ -1,8 +1,9 @@
+import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { logService } from "../../grpc/client"
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER
+const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.M_LOGGER
 
 class MLoggerConsumer extends BaseConsumer {
 

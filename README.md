@@ -84,7 +84,7 @@ Hands-on Microservices with TypeScript 3
         * ssh localadmin@amfuatnejnkvm02
         * kubectl get pods -n nodeapp
         * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
-
+        * kubectl exec -it auth-service-5686bf859d-r8flt -n nodeapp bash
 * aerospike
     * kubectl exec -it aerospike-0 bash -n aerospikedb
 
@@ -105,6 +105,11 @@ Hands-on Microservices with TypeScript 3
 * mongoDB
     * 52.142.115.201:10005
     * mongo url : mongodb://admin:ebaN4cnM7hnu35Km@52.142.115.201:10005/?authSource=admin
+
+* Graphana 
+    * URL : http://52.142.115.201:10004/?orgId=1    
+    * username = admin
+    * password = WebApp@2020
     
 * https://prod-api.americanarest.com/
 * public ip : https://51.104.147.206/

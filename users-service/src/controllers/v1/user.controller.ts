@@ -320,8 +320,8 @@ export class UserController {
                         }
                         let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                         if (asUserByEmail && asUserByEmail.length > 0) {
-                            console.log("socialAuthValidate step 4=====================>")
-                            if (asUserByEmail[0].fullPhnNo == "") {
+                            console.log("socialAuthValidate step 4=====================>", asUserByEmail)
+                            if (!asUserByEmail[0].fullPhnNo || asUserByEmail[0].fullPhnNo == "") {
                                 delete userchange['fullPhnNo']
                                 delete userchange['cCode']
                                 delete userchange['phnNo']

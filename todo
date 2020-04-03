@@ -21,8 +21,8 @@
 ----> kafka failure ==> ping to order that health is false
 ----> scheduler task best method
 ----> single product in cart validation to cms
-----> remove cms api for get user
-
+----> faq
+----> more configs
 
 Saved address is displayed 2twice >>if th user moved to Profile >> My Address >> add address >> it displayed 2 times
 
