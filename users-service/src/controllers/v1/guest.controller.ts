@@ -62,6 +62,7 @@ export class GuestController {
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+            let phnVerified = 0
             if (payload.addressId && payload.addressType) {
                 let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
                     userId: auth.id,
@@ -151,6 +152,7 @@ export class GuestController {
                             userchangePayload['deleteUserId'] = auth.id
                             userchangePayload['chngEmailSdm'] = 1
                             userchangePayload['chngEmailCms'] = 1
+                            phnVerified = 1
                         }
                     }
                 }
@@ -197,7 +199,7 @@ export class GuestController {
             userData['fullPhnNo'] = payload.cCode + payload.phnNo
             userData['phnNo'] = payload.phnNo
             userData['cCode'] = payload.cCode
-            userData['phnVerified'] = 0
+            userData['phnVerified'] = phnVerified
             userData['profileStep'] = 0
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
