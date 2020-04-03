@@ -35,7 +35,7 @@ export class MiscController {
                         supportEmail: Constant.SERVER.SUPPORT_EMAIL,
                         cashondelivery: 0,
                         minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
-                        homeOverlay: Constant.COUNTRY_SPECIFIC[headers.language]
+                        homeOverlay: Constant.COUNTRY_SPECIFIC.HOME_OVERLAY[headers.language]
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
