@@ -13,7 +13,6 @@ export default (opts?): Middleware => {
                 if (headers.appversion != appversion[0].appversion) {
                     switch (appversion[0].type) {
                         case Constant.DATABASE.TYPE.APP_VERSION.SKIP: {
-                            // ctx.request.header['skipable'] = true
                             ctx.set('X-skip', 1);
                             break;
                         }

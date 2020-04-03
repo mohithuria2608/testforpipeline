@@ -2,11 +2,11 @@ import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import { menuService } from "../../grpc/client"
+import { syncService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
 
-class AsHiddenConsumer extends BaseConsumer {
+const topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_FAQ
+class AsFaqConsumer extends BaseConsumer {
 
     constructor() {
         super(topic, topic);
@@ -15,22 +15,22 @@ class AsHiddenConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_hidden", JSON.stringify(message), true)
-                this.syncHidden(message);
+                consolelog(process.cwd(), "consumer as_faq", JSON.stringify(message), true)
+                this.syncFaq(message);
                 return null;
             })
     }
 
-    private async syncHidden(message: IKafkaRequest.IKafkaBody) {
+    private async syncFaq(message: IKafkaRequest.IKafkaBody) {
         try {
             if (message.count > 0) {
-                let res = await menuService.sync(message)
+                let res = await syncService.sync(message)
                 return res
             }
             else
                 return {}
         } catch (error) {
-            consolelog(process.cwd(), "sync", JSON.stringify(error), false);
+            consolelog(process.cwd(), "syncFaq", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
                 if (message.count == 0) {
@@ -49,4 +49,4 @@ class AsHiddenConsumer extends BaseConsumer {
 }
 
 
-export const as_hiddenConsumerE = new AsHiddenConsumer();
+export const as_faqConsumerE = new AsFaqConsumer();

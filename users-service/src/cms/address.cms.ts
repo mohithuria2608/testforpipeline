@@ -95,7 +95,7 @@ export class AddressCMSEntity extends BaseCMS {
                 "addressType": payload.asAddress[0].addressType,
                 "telephone": payload.fullPhnNo,
                 "bldgName": payload.asAddress[0].bldgName,
-                "flatNum": payload.asAddress[0].bldgName,
+                "flatNum": payload.asAddress[0].flatNum,
                 "addTag": payload.asAddress[0].tag,
                 "sdmAddressRef": payload.asAddress[0].sdmAddressRef.toString(),
                 "sdmStoreRef": payload.asAddress[0].storeId.toString(),

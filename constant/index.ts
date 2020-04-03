@@ -48,6 +48,7 @@ export enum SET_NAME {
     SYNC_MENU_PRODUCT = "sync_menu_product",
     LOGGER = "logger",
     APP_VERSION = "appversion",
+    FAQ = "faq",
     FAILQ = "failq",
     PING_SERVICE = "ping-service"
 };
@@ -79,6 +80,7 @@ export enum KAFKA_TOPIC {
 
     AS_CONFIG = 'as_config',
     AS_APP_VERSION = 'as_app_version',
+    AS_FAQ = 'as_faq',
 
     M_LOGGER = 'm_logger',
 
@@ -132,12 +134,13 @@ export const SERVER = {
     ADDR_SHOW_TIME: 3,//hr
     SPLASH_EXPR_TIME: 1589523974000,
     CUSTOMER_CARE: "600522252",
-    SUPPORT_EMAIL: "kfc_uae@ag.com",
+    SUPPORT_EMAIL: "support@americana-food.com",
     DEFAULT_CCODE: "+971",
     CHUNK_SIZE_USER_MIGRATION: 50000,
     PAYMENT_SUCCESS_FALLBACK: "payment/success",
     PAYMENT_FAILURE_FALLBACK: "payment/failure",
-    DELIVERY_CHARGE_ID: 279
+    DELIVERY_CHARGE_ID: 279,
+    IMG_ETAG_THRESHOLD: (2 * 60 * 60 * 1000)
 };
 
 export const SDM_CONFIG = {
@@ -404,6 +407,15 @@ export const DATABASE = {
                     SYNC: 5,
                     RESET: 5
                 }
+            },
+            FAQ: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
             }
         }
     },
@@ -580,11 +592,11 @@ export const DATABASE = {
                     },
                     {
                         name: "DISCOUNT",
-                        value: "خدمة التوصيل"
+                        value: " خدمة التوصيل"
                     },
                     {
                         name: "TAX",
-                        value: "%ضريبة القيمة المضافة5"
+                        value: String.raw`%5 ضريبة القيمة المضافة`
                     },
                     {
                         name: "SHIPPING",
@@ -1047,14 +1059,26 @@ export const PAYMENT_CONFIG = {
             noonpayReversePaymentEndPoint: '/order',
             noonpayRefundPaymentEndPoint: '/order',
             code: "noonpay",
-            status: 1
+            status: 1,
+            SDM: {
+                PAY_STATUS: 1,
+                PAY_STORE_TENDERID: 253,
+                PAY_SUB_TYPE: 1,
+                PAY_TYPE: 2,
+            }
         },
         codInfo: {
             status: 1,
             title: 'Cash On Delivery',
             min_order_total: null,
             max_order_total: null,
-            code: "cashondelivery"
+            code: "cashondelivery",
+            SDM: {
+                PAY_STATUS: 1,
+                PAY_STORE_TENDERID: 252,
+                PAY_SUB_TYPE: 2,
+                PAY_TYPE: 2,
+            }
         }
     }
 }
@@ -1898,7 +1922,32 @@ export const STATUS_MSG = {
     }
 };
 
-
+export const COUNTRY_SPECIFIC = {
+    HOME_OVERLAY: {
+        En: {
+            "mediaUrl": "ic_red@3x.png",
+            "gif": "",
+            "mediaType": "image",
+            "extension": "png",
+            "action": {
+                "id": 21,
+                "type": "category",
+                "delimeters": "delimeters"
+            }
+        },
+        Ar: {
+            "mediaUrl": "ic_red@3x.png",
+            "gif": "",
+            "mediaType": "image",
+            "extension": "png",
+            "action": {
+                "id": 21,
+                "type": "category",
+                "delimeters": "delimeters"
+            }
+        }
+    }
+}
 interface IGeneral {
     cms_page_data: [{
         title: string,

@@ -69,6 +69,7 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
             if (cart && (!cart.items || (cart.items && cart.items.length == 0)))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.EMPTY_CART)
+
             consolelog(process.cwd(), "step 2", new Date(), false)
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (payload.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
@@ -77,15 +78,14 @@ export class OrderController {
             if (!getAddress.hasOwnProperty("id") || getAddress.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
             consolelog(process.cwd(), "step 3", new Date(), false)
+
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
             if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
                 const menu = await menuService.fetchMenu({
-                    menuId: 1,
+                    menuId: payload.curMenuId,
                     language: headers.language,
                 })
-                if (menu.menuId && (menu.menuId != payload.curMenuId
-                    //|| menu.updatedAt != payload.menuUpdatedAt
-                )) {
+                if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
                     return {
                         validateCart: {
                             ...cart,
@@ -100,6 +100,7 @@ export class OrderController {
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             consolelog(process.cwd(), "step 4", new Date(), false)
+
             if (config.get("sdm.promotion.default"))
                 payload.couponCode = config.get("sdm.promotion.defaultCode")
             let promo: IPromotionGrpcRequest.IValidatePromotionRes
@@ -110,6 +111,7 @@ export class OrderController {
             } else
                 delete payload['couponCode']
             consolelog(process.cwd(), "step 5", new Date(), false)
+
             let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
             if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
@@ -118,6 +120,7 @@ export class OrderController {
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, cart, getAddress, store, userData)
             consolelog(process.cwd(), "step 6", new Date(), false)
+
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
                 headers,
                 payload.paymentMethodId,
@@ -125,6 +128,7 @@ export class OrderController {
                 totalAmount[0].amount
             )
             consolelog(process.cwd(), "step 7", new Date(), false)
+
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
@@ -250,8 +254,8 @@ export class OrderController {
 
     /**
      * @method GET
-     * @param {string=} cCode
-     * @param {string=} phnNo
+     * @param {string} cCode
+     * @param {string} phnNo
      * @param {number} orderId
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
@@ -267,12 +271,12 @@ export class OrderController {
                 sdmOrder = parseInt(sdmOrderRef[0])
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-            let userData: IUserRequest.IUserData
-            if (payload.cCode && payload.phnNo) {
-                userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
-                if (userData.id == undefined || userData.id == null || userData.id == "")
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-            }
+            if (isNaN(sdmOrder))
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
+            let userData: IUserRequest.IUserData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+            if (userData.id == undefined || userData.id == null || userData.id == "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+
             let getSdmOrderRef = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { status: 1 })
             if (getSdmOrderRef && getSdmOrderRef._id) {
                 await ENTITY.OrderE.getSdmOrder({
@@ -287,7 +291,7 @@ export class OrderController {
                 })
                 let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
                 if (order && order._id) {
-                    if (payload.cCode && payload.phnNo && (userData.id != order.userId))
+                    if (userData.id != order.userId)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                     order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]
                     order['nextPing'] = getFrequency({

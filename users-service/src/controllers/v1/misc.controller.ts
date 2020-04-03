@@ -23,6 +23,7 @@ export class MiscController {
                 paymentFailureUrl: redirectUrl + "payment/failure",
                 addressShownTime: Constant.SERVER.ADDR_SHOW_TIME,
                 splashExpireTime: Constant.SERVER.SPLASH_EXPR_TIME,
+                imgEtagThreshold: Constant.SERVER.IMG_ETAG_THRESHOLD,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
@@ -34,6 +35,7 @@ export class MiscController {
                         supportEmail: Constant.SERVER.SUPPORT_EMAIL,
                         cashondelivery: 0,
                         minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
+                        homeOverlay: Constant.COUNTRY_SPECIFIC.HOME_OVERLAY[headers.language]
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
@@ -99,6 +101,11 @@ export class MiscController {
                     }
                     case Constant.SET_NAME.APP_VERSION: {
                         let appVersionConfig = await syncService.fetchAppversion({ isActive: 1 })
+                        consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
+                        break;
+                    }
+                    case Constant.SET_NAME.FAQ: {
+                        let appVersionConfig = await syncService.fetchFaq({ language: argv.language, country: argv.country })
                         consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
                         break;
                     }

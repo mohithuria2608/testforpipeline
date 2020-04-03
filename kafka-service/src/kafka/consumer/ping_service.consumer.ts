@@ -1,9 +1,10 @@
+import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { userService, orderService, paymentService, promotionService, menuService, homeService, locationService, deeplinkService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE
+const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.PING_SERVICE
 
 class PingServiceConsumer extends BaseConsumer {
 

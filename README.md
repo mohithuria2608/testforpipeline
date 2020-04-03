@@ -84,7 +84,7 @@ Hands-on Microservices with TypeScript 3
         * ssh localadmin@amfuatnejnkvm02
         * kubectl get pods -n nodeapp
         * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
-
+        * kubectl exec -it auth-service-5686bf859d-r8flt -n nodeapp bash
 * aerospike
     * kubectl exec -it aerospike-0 bash -n aerospikedb
 
@@ -93,9 +93,31 @@ Hands-on Microservices with TypeScript 3
     * mongo url : mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db
 
 # PROD 
+* ssh
+    * ssh Localadmin@13.74.178.42
+    * Mob@pp@@2020
+    * login to jenkins server :
+        * ssh Localadmin@10.1.1.6
+        * Mob@pp@@2020
+        * kubectl get pods -n nodeapp
+        * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
+
+* mongoDB
+    * 52.142.115.201:10005
+    * mongo url : mongodb://admin:ebaN4cnM7hnu35Km@52.142.115.201:10005/?authSource=admin
+
+* Graphana 
+    * URL : http://52.142.115.201:10004/?orgId=1    
+    * username = admin
+    * password = WebApp@2020
+    
 * https://prod-api.americanarest.com/
 * public ip : https://51.104.147.206/
 * aerospike new : 40.127.244.213:10008
+* GIT :
+    * git pull http://52.142.115.201:10002/americana-foods/amf_backend.git -b prod_final
+    * username: root
+    ​* password: WebApp@2020
 
 # Code commit on UAT
 * URL : http://40.127.244.213:10004/americana/backend

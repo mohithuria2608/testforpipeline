@@ -26,7 +26,7 @@
             "port": 4005
         },
         "kafka": {
-            "url": "https://prod-api.americanarest.com/kafka-service/",
+            "url": "https://prod-api.americanarest.comm/kafka-service/",
             "port": 4006
         },
         "location": {
@@ -63,60 +63,60 @@
             "keepalive_timeout_ms": 1500
         },
         "auth": {
-            "server": "localhost:50051",
-            "client": "127.0.0.1:50051"
+            "server": "0.0.0.0:50051",
+            "client": "10.2.0.8:50051"
         },
         "user": {
-            "server": "localhost:50052",
-            "client": "127.0.0.1:50052"
+            "server": "0.0.0.0:50052",
+            "client": "10.2.0.11:50052"
         },
         "menu": {
-            "server": "localhost:50053",
-            "client": "127.0.0.1:50053"
+            "server": "0.0.0.0:50053",
+            "client": "10.2.0.12:50053"
         },
         "order": {
-            "server": "localhost:50054",
-            "client": "127.0.0.1:50054"
+            "server": "0.0.0.0:50054",
+            "client": "10.2.0.13:50054"
         },
         "sync": {
-            "server": "localhost:50055",
-            "client": "127.0.0.1:50055"
+            "server": "0.0.0.0:50055",
+            "client": "10.2.0.16:50055"
         },
         "deeplink": {
-            "server": "localhost:50056",
-            "client": "127.0.0.1:50056"
+            "server": "0.0.0.0:50056",
+            "client": "10.2.0.14:50056"
         },
         "kafka": {
-            "server": "localhost:50057",
-            "client": "127.0.0.1:50057"
+            "server": "0.0.0.0:50057",
+            "client": "10.2.0.15:50057"
         },
         "location": {
-            "server": "localhost:50058",
-            "client": "127.0.0.1:50058"
+            "server": "0.0.0.0:50058",
+            "client": "10.2.0.17:50058"
         },
         "notification": {
-            "server": "localhost:50059",
-            "client": "127.0.0.1:50059"
+            "server": "0.0.0.0:50059",
+            "client": "10.2.0.18:50059"
         },
         "payment": {
-            "server": "localhost:50060",
-            "client": "127.0.0.1:50060"
+            "server": "0.0.0.0:50060",
+            "client": "10.2.0.19:50060"
         },
         "promotion": {
-            "server": "localhost:50061",
-            "client": "127.0.0.1:50061"
+            "server": "0.0.0.0:50061",
+            "client": "10.2.0.20:50061"
         },
         "upload": {
-            "server": "localhost:50062",
-            "client": "127.0.0.1:50062"
+            "server": "0.0.0.0:50062",
+            "client": "10.2.0.21:50062"
         },
         "log": {
-            "server": "localhost:50063",
-            "client": "127.0.0.1:50063"
+            "server": "0.0.0.0:50063",
+            "client": "10.2.0.22:50063"
         },
         "home": {
-            "server": "localhost:50064",
-            "client": "127.0.0.1:50064"
+            "server": "0.0.0.0:50064",
+            "client": "10.2.0.23:50064"
         }
     },
     "directory": {
@@ -178,9 +178,9 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://magentopro.appskeeper.com/pub/media/catalog/product/",
-        "home": "http://magentopro.appskeeper.com/pub/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/production/"
+        "product": "http://40.123.205.1/pub/media/catalog/product/",
+        "home": "http://40.123.205.1/pub/media/homepage/",
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/models/"
     },
     "cryptoSecret": "d6F3Efeq",
     "cryptoAlgo": "aes-256-cbc",
@@ -205,30 +205,30 @@
         }
     },
     "kafka": {
-        "url": "20.46.146.2:9092"
+        "url": "10.4.1.5:9092,10.4.1.6:9092"
     },
     "aerospike": {
-        "hosts": "40.123.212.40:3000",
-        "username": "aerospikeusr",
-        "password": "GM2nGDQkN5yMdPZs",
+        "hosts": "aerospike.aerospike.svc.cluster.local:3000",
+        "username": "",
+        "password": "",
         "config": {
-            "timeout": 30000,
-            "maxConnsPerNode": 20000
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
         }
     },
     "mongo": {
-        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",
-        "hosts": "54.176.239.44:2798",
-        "username": "americana_dbusr",
-        "password": "96fMUpk2PGzbu8Hn"
+        "url": "mongodb://admin:ebaN4cnM7hnu35Km@10.1.4.5:27017/admin",
+        "hosts": "10.1.4.5",
+        "username": "americana_dbusr_uat",
+        "password": "AppInvDbUser"
     },
     "cms": {
-        "baseUrl": "http://magentopro.appskeeper.com/rest/V1/",
+        "baseUrl": "http://kfccms.americanarest.com/rest/V1/",
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkliveuae.americana.com.sa:1998/?wsdl",
-        "type": "live",
+        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
+        "type": "uat",
         "cred": {
             "licenseCode": "PizzaHutApp"
         },
@@ -240,5 +240,5 @@
             ]
         }
     },
-    "loadTest": false
+    "loadTest": true
 }

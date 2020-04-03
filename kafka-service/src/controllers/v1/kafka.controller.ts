@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { kafkaProducerE } from '../../kafka'
@@ -39,7 +40,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_USER
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_USER
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -65,7 +66,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_USER
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_USER
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -92,7 +93,7 @@ export class KafkaController {
                         else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_USER
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_USER
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -122,7 +123,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_ADDRESS
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_ADDRESS
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -147,7 +148,7 @@ export class KafkaController {
                             break;
                         }
                         console.log("payload['count']", payload.sdm.create, messages['count'])
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -171,7 +172,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_ADDRESS
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -201,7 +202,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_MENU
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_MENU
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -225,7 +226,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_MENU
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_MENU
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -249,7 +250,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_MENU
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_MENU
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -269,7 +270,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HOME
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HOME
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -289,7 +290,7 @@ export class KafkaController {
                         delete messages.mdb;
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -303,7 +304,7 @@ export class KafkaController {
                         delete messages.mdb;
                         if (!payload.hasOwnProperty('count'))
                             payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -338,7 +339,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -368,7 +369,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -394,7 +395,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -428,7 +429,7 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -461,7 +462,40 @@ export class KafkaController {
                         } else if (payload.count < 0) {
                             break;
                         }
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION
+                        messages['q'] = topic
+                        if (payload.inQ)
+                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        else
+                            await syncService.sync(messages)
+                    }
+                    break;
+                }
+                case Constant.SET_NAME.FAQ: {
+                    let messages = null;
+                    let topic = null
+                    let partition = 0
+                    if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm
+                        delete messages.cms
+                        delete messages.mdb
+                        if (payload.count == 0) {
+                            if (payload.as.create) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.FAQ.MAX_RETRY.CREATE
+                            }
+                            else if (payload.as.reset) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.FAQ.MAX_RETRY.RESET
+                            }
+                            else if (payload.as.update) {
+                                messages['count'] = Constant.DATABASE.KAFKA.AS.FAQ.MAX_RETRY.UPDATE
+                            }
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
+                        }
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_FAQ
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -480,7 +514,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         messages['count'] = 1
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.M_LOGGER
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.M_LOGGER
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -499,7 +533,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         messages['count'] = 1
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_STORE;
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_STORE;
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -516,7 +550,7 @@ export class KafkaController {
                         delete messages.sdm
                         delete messages.cms
                         messages['count'] = 1
-                        topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.PING_SERVICE;
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.PING_SERVICE;
                         messages['q'] = topic
                         if (payload.inQ)
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
@@ -561,7 +595,7 @@ export class KafkaController {
             consolelog(process.cwd(), "produce data in failed KAFKA q", payload, true)
             kafkaProducerE.sendMessage({
                 messages: JSON.stringify(payload),
-                topic: process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
+                topic: config.get("env") + "_" + Constant.KAFKA_TOPIC.FAIL_Q,
                 partition: 0,
             });
             return {}

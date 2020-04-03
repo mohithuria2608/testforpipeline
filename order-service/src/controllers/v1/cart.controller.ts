@@ -29,31 +29,18 @@ export class CartController {
             if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
-            let invalidMenu = 0
-            if (payload.lat && payload.lng) {
-                let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "") {
-                    if (store.menuId != payload.curMenuId)
-                        invalidMenu = 1
-                    if (!store.active)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
-                } else
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
-            }
             const menu = await menuService.fetchMenu({
-                menuId: 1,
+                menuId: payload.curMenuId,
                 language: headers.language,
             })
-            if (menu.menuId && (menu.menuId != payload.curMenuId
-                // || menu.updatedAt != payload.menuUpdatedAt
-            )) {
+            let invalidMenu = 0
+            console.log(`${menu.updatedAt}    ${payload.menuUpdatedAt}     ${(menu.menuId && menu.updatedAt != payload.menuUpdatedAt)}       ${!menu.menuId}`)
+            if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt))
                 invalidMenu = 1
-            }
-
 
             let hitCms = false
-            // if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
-            //     hitCms = true
+            if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
+                hitCms = true
             if (config.get("sdm.promotion.default")) {
                 hitCms = false
                 payload.couponCode = config.get("sdm.promotion.defaultCode")
@@ -67,7 +54,7 @@ export class CartController {
             } else
                 delete payload['couponCode']
 
-            let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
+            let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload, userData) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
             console.log("cmsCart", JSON.stringify(cmsCart))
             cart = await ENTITY.CartE.updateCart({
                 headers: headers,
