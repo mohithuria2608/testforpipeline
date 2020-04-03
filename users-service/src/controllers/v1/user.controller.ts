@@ -492,7 +492,7 @@ export class UserController {
                                 background: false,
                             }
                             let asUserByEmail = await Aerospike.query(queryArg)
-                            if (asUserByEmail && asUserByEmail.length > 0) {
+                            if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                                 console.log("createProfile step 5=====================>")
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
@@ -522,7 +522,7 @@ export class UserController {
                             background: false,
                         }
                         let asUserByEmail = await Aerospike.query(queryArg)
-                        if (asUserByEmail && asUserByEmail.length > 0) {
+                        if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
                             console.log("createProfile step 11=====================>")
@@ -572,7 +572,7 @@ export class UserController {
                     let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0) {
                         console.log("createProfile step 14=====================>")
-                        if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo)
+                        if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         userUpdate['phnVerified'] = 1
                         userUpdate['cmsUserRef'] = asUserByEmail[0].cmsUserRef
