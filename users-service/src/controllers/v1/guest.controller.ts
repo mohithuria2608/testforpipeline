@@ -204,6 +204,8 @@ export class GuestController {
             userData['cCode'] = payload.cCode
             userData['phnVerified'] = phnVerified
             userData['profileStep'] = 0
+            console.log("guestCheckout step 14=====================>", userchangePayload)
+
             if (userchangePayload['chngEmailSdm'] || userchangePayload['chngEmailCms']) {
                 userData = await this.forceUpdateUserOnGuestCheckout(headers, userchangePayload)
             }
