@@ -585,7 +585,8 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: String.raw`%5 ضريبة القيمة المضافة`
+                        value: String.raw`\\u200F إلىضريبة القيمة المضافة %5`
+                        // value: String.raw`%5 ضريبة القيمة المضافة`
                     },
                     {
                         name: "SHIPPING",
