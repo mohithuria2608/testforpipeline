@@ -152,6 +152,9 @@ export class GuestController {
                             userchangePayload['deleteUserId'] = auth.id
                             userchangePayload['chngEmailSdm'] = 1
                             userchangePayload['chngEmailCms'] = 1
+                            delete userchangePayload.otp
+                            delete userchangePayload.otpExpAt
+                            delete userchangePayload.otpVerified
                             phnVerified = 1
                         }
                     }
@@ -201,9 +204,63 @@ export class GuestController {
             userData['cCode'] = payload.cCode
             userData['phnVerified'] = phnVerified
             userData['profileStep'] = 0
+            if (userchangePayload['chngEmailSdm'] || userchangePayload['chngEmailCms']) {
+                userData = await this.forceUpdateUserOnGuestCheckout(headers, userchangePayload)
+            }
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async forceUpdateUserOnGuestCheckout(headers: ICommonRequest.IHeaders, userchangePayload: IUserchangeRequest.IUserchange) {
+        try {
+            let userUpdate = {
+                id: userchangePayload.id,
+                phnVerified: 1,
+            }
+            if (userchangePayload.fullPhnNo)
+                userUpdate['fullPhnNo'] = userchangePayload.fullPhnNo
+            if (userchangePayload.username)
+                userUpdate['username'] = userchangePayload.username
+            if (userchangePayload.cCode)
+                userUpdate['cCode'] = userchangePayload.cCode
+            if (userchangePayload.phnNo)
+                userUpdate['phnNo'] = userchangePayload.phnNo
+            if (userchangePayload.name)
+                userUpdate['name'] = userchangePayload.name
+            if (userchangePayload.email)
+                userUpdate['email'] = userchangePayload.email
+            if (userchangePayload.socialKey)
+                userUpdate['socialKey'] = userchangePayload.socialKey
+            if (userchangePayload.medium)
+                userUpdate['medium'] = userchangePayload.medium
+            if (userchangePayload.profileStep != undefined)
+                userUpdate['profileStep'] = userchangePayload.profileStep
+            if (userchangePayload.brand)
+                userUpdate['brand'] = userchangePayload.brand
+            if (userchangePayload.country)
+                userUpdate['country'] = userchangePayload.country
+            if (userchangePayload.sdmUserRef != undefined)
+                userUpdate['sdmUserRef'] = parseInt(userchangePayload.sdmUserRef.toString())
+            if (userchangePayload.sdmCorpRef != undefined)
+                userUpdate['sdmCorpRef'] = parseInt(userchangePayload.sdmCorpRef.toString())
+            if (userchangePayload.cmsUserRef != undefined)
+                userUpdate['cmsUserRef'] = parseInt(userchangePayload.cmsUserRef.toString())
+
+            let user: IUserRequest.IUserData = await ENTITY.UserE.buildUser(userUpdate)
+
+            if (userchangePayload.cmsUserRef && userchangePayload.cmsUserRef != 0 && (userchangePayload.chngEmailCms || userchangePayload.chngPhnCms))
+                CMS.UserCMSE.updateCustomerOnCms(userchangePayload)
+
+            if (userchangePayload.sdmUserRef && userchangePayload.sdmUserRef != 0 && (userchangePayload.chngEmailSdm || userchangePayload.chngPhnSdm)) {
+                userchangePayload['headers'] = headers
+                SDM.UserSDME.updateCustomerOnSdm(userchangePayload)
+            }
+            return user
+        } catch (error) {
+            consolelog(process.cwd(), "forceUpdateUserOnGuestCheckout", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
