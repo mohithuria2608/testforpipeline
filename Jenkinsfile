@@ -7,7 +7,7 @@ pipeline {
         Menu_image="amfprodnecontregist.azurecr.io/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
         Order_image="amfprodnecontregist.azurecr.io/order"+ ":Order-service_${env.BUILD_NUMBER}"
         Deeplink_image="amfprodnecontregist.azurecr.io/deeplink"+ ":Deeplink-service_${env.BUILD_NUMBER}"
-        Kafka_image="amfprodnecontregist.azurecr.ioo/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}"
+        Kafka_image="amfprodnecontregist.azurecr.io/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}"
         Sync_image="amfprodnecontregist.azurecr.io/sync"+ ":Sync-service_${env.BUILD_NUMBER}"
         Location_image="amfprodnecontregist.azurecr.io/location"+ ":Location-service_${env.BUILD_NUMBER}"
         Upload_image="amfprodnecontregist.azurecr.io/upload"+ ":Upload-service_${env.BUILD_NUMBER}"
