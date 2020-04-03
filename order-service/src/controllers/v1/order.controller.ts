@@ -272,7 +272,7 @@ export class OrderController {
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
             console.log("..............aaaaa", typeof sdmOrder, sdmOrder)
-            if (typeof sdmOrder != 'number')
+            if (isNaN(sdmOrder))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
             let userData: IUserRequest.IUserData
             if (payload.cCode && payload.phnNo) {
