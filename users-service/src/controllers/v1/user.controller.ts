@@ -321,28 +321,38 @@ export class UserController {
                         let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                         if (asUserByEmail && asUserByEmail.length > 0) {
                             console.log("socialAuthValidate step 4=====================>")
-                            if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo)
-                                return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
-                            userUpdate['phnVerified'] = 1
-                            userUpdate['cmsUserRef'] = asUserByEmail[0].cmsUserRef
-                            userUpdate['sdmUserRef'] = asUserByEmail[0].sdmUserRef
-                            userUpdate['sdmCorpRef'] = asUserByEmail[0].sdmCorpRef
-                            userUpdate['name'] = asUserByEmail[0].name
-                            userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                            userUpdate['fullPhnNo'] = asUserByEmail[0].fullPhnNo
-                            userUpdate['cCode'] = asUserByEmail[0].cCode
-                            userUpdate['phnNo'] = asUserByEmail[0].phnNo
-                            userUpdate['email'] = payload.email
-                            delete userchange['fullPhnNo']
-                            delete userchange['cCode']
-                            delete userchange['phnNo']
-                            delete userchange['otp']
-                            delete userchange['otpExpAt']
-                            delete userchange['otpVerified']
-                            delete userchange['email']
-                            /**
-                             * @todo if this email user has address copy those addresses to current user
-                             */
+                            if (asUserByEmail[0].fullPhnNo == "") {
+                                delete userchange['fullPhnNo']
+                                delete userchange['cCode']
+                                delete userchange['phnNo']
+                                delete userchange['otp']
+                                delete userchange['otpExpAt']
+                                delete userchange['otpVerified']
+                                delete userchange['email']
+                            } else {
+                                if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo)
+                                    return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
+                                userUpdate['phnVerified'] = 1
+                                userUpdate['cmsUserRef'] = asUserByEmail[0].cmsUserRef
+                                userUpdate['sdmUserRef'] = asUserByEmail[0].sdmUserRef
+                                userUpdate['sdmCorpRef'] = asUserByEmail[0].sdmCorpRef
+                                userUpdate['name'] = asUserByEmail[0].name
+                                userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                                userUpdate['fullPhnNo'] = asUserByEmail[0].fullPhnNo
+                                userUpdate['cCode'] = asUserByEmail[0].cCode
+                                userUpdate['phnNo'] = asUserByEmail[0].phnNo
+                                userUpdate['email'] = payload.email
+                                delete userchange['fullPhnNo']
+                                delete userchange['cCode']
+                                delete userchange['phnNo']
+                                delete userchange['otp']
+                                delete userchange['otpExpAt']
+                                delete userchange['otpVerified']
+                                delete userchange['email']
+                                /**
+                                 * @todo if this email user has address copy those addresses to current user
+                                 */
+                            }
                         }
                     }
                     await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
