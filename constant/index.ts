@@ -1910,7 +1910,32 @@ export const STATUS_MSG = {
     }
 };
 
-
+export const COUNTRY_SPECIFIC = {
+    HOME_OVERLAY: {
+        En: {
+            "mediaUrl": "ic_red@3x.png",
+            "gif": "",
+            "mediaType": "image",
+            "extension": "png",
+            "action": {
+                "id": 21,
+                "type": "category",
+                "delimeters": "delimeters"
+            }
+        },
+        Ar: {
+            "mediaUrl": "ic_red@3x.png",
+            "gif": "",
+            "mediaType": "image",
+            "extension": "png",
+            "action": {
+                "id": 21,
+                "type": "category",
+                "delimeters": "delimeters"
+            }
+        }
+    }
+}
 interface IGeneral {
     cms_page_data: [{
         title: string,

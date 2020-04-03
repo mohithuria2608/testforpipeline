@@ -200,6 +200,10 @@ export class UserchangeEntity extends BaseEntity {
                     dataToUpdateUserchange['chngEmailCms'] = payload.chngEmailCms
                 if (payload.chngEmailSdm != undefined)
                     dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
+                if (payload.brand)
+                    dataToUpdateUserchange['brand'] = payload.brand
+                if (payload.country)
+                    dataToUpdateUserchange['country'] = payload.country
                 if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
                     notificationService.sendNotification({
                         toSendMsg: true,
