@@ -86,7 +86,7 @@ export class StoreEntity extends BaseEntity {
                 bins: data,
                 set: this.set,
                 key: data.storeIdAs,
-                create: true,
+                createOrReplace: true,
             }
             await Aerospike.put(putArg)
             return {}
