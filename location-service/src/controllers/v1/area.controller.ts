@@ -39,6 +39,7 @@ export class AreaController {
 
     /** sync to aerospike */
     async syncToAS(payload) {
+        await Aerospike.truncate({ set: ENTITY.AreaE.set, before_nanos: 0 });
         for (let area of payload) {
             area.id = `1_${area.cityId}_${area.sdmAreaId}`;
             await ENTITY.AreaE.saveData(area);
