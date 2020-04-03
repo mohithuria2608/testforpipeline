@@ -28,7 +28,7 @@ message IFetchAppversionRes {
 
 message IFetchFaqReq {
     required string language = 1;
-    required string country = 1;
+    required string country = 2;
 }
 
 message IFetchFaqRes {
