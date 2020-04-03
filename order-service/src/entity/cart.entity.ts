@@ -731,7 +731,7 @@ export class CartClass extends BaseEntity {
                 dataToUpdate['vat'] = {
                     type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
                     code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TAX,
-                    amount: payload.cmsCart.tax[0].amount,
+                    amount: parseFloat(payload.cmsCart.tax[0].amount.toString()),
                     sequence: 0,
                     action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD
                 }
