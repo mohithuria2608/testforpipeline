@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog,validatorErr } from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class OrderServiceValidator {
@@ -12,7 +12,8 @@ export class OrderServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    cartId: Joi.string().required()
+                    cartId: Joi.string().required(),
+                    bins: Joi.array()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

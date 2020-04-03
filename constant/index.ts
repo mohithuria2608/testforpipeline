@@ -49,8 +49,7 @@ export enum SET_NAME {
     LOGGER = "logger",
     APP_VERSION = "appversion",
     FAILQ = "failq",
-    PING_SERVICE = "ping-service",
-    LOAD = "load"
+    PING_SERVICE = "ping-service"
 };
 
 export enum KAFKA_TOPIC {
@@ -563,7 +562,7 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: "VAT"
+                        value: "VAT @5%"
                     },
                     {
                         name: "SHIPPING",
@@ -585,7 +584,7 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: "ضريبة القيمة المضافة"
+                        value: "%ضريبة القيمة المضافة5"
                     },
                     {
                         name: "SHIPPING",

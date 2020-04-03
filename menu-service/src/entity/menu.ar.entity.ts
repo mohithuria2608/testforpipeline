@@ -31,13 +31,14 @@ export class MenuClass extends BaseEntity {
 
     /**
     * @method GRPC
-    * @param {string} id : user id
+    * @param {string} menuId : menu id
     * */
     async getMenu(payload: IMenuRequest.IFetchMenu) {
         try {
             let getArg: IAerospike.Get = {
                 key: payload.menuId,
-                set: this.set
+                set: this.set,
+                bins: ["menuId", "updatedAt"]
             }
             let menu = await Aerospike.get(getArg)
             return menu

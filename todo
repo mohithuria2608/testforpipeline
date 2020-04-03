@@ -19,21 +19,9 @@
 31 March Tasks
 ----> DNS resolution takes 2 to 2.5 seconds
 ----> kafka failure ==> ping to order that health is false
-----> load test 
 ----> scheduler task best method
-----> bug 1613, 1594, 1598, 1506
-----> store sync validate
-
-
-
 ----> single product in cart validation to cms
-
-DONE : 
-----> when promotion is added hit cart api for cart validation
-----> menu update time is greater than cart last update time then give error invalidMenu
-----> bug 1594, 1613, 1506, 1598
-
-
+----> remove cms api for get user
 
 
 
@@ -95,3 +83,8 @@ eters {"host":"localhost:4003","connection":"close","content-length":"9121","ret
 10|order  | shippingAmt 6.5
 10|order  | cmsCart {"cms_cart_id":0,"currency_code":"AED","cart_items":[],"subtotal":117.62,"grandtotal":117.5,"tax":[{"tax_name":"TAX","amount":5.88}],"shipping":[{"method_name":"SHIPPING","price":6.5,"method_code":"SHIPPING"}],"not_available":[],"is_price_changed":false,"coupon_code":"FREEDELIVERY","discount_amount":5.71,"free_items":"","success":true}
 10|order  | dataToUpdate cart { cartId: '5e817d4bf086f247635
+
+
+
+
+{SDKResult:{ExternalCode:0,ResultCode:Data_insertion_Error,ResultText:Customer is already exist}}

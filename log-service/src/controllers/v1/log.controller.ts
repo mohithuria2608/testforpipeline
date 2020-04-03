@@ -1,3 +1,4 @@
+import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -16,11 +17,15 @@ export class LogController {
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.SMS: {
-                    ENTITY.LoggerE.createOneEntity(data)
+                    if (!config.get("loadTest")) {
+                        ENTITY.LoggerE.createOneEntity(data)
+                    }
                     break;
                 }
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.FAIL_Q: {
-                    ENTITY.FailQE.createOneEntity(data)
+                    if (!config.get("loadTest")) {
+                        ENTITY.FailQE.createOneEntity(data)
+                    }
                     break;
                 }
             }

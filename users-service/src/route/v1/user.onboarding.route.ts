@@ -99,7 +99,7 @@ export default (router: Router) => {
                             'accessToken': res.accessToken,
                             'refreshToken': res.refreshToken
                         }
-                        ctx.set({ resHeaders })
+                        ctx.set(resHeaders)
                         let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.SOCIAL_LOGIN, headers.language, res.response)
                         ctx.status = sendResponse.statusCode;
                         ctx.body = sendResponse

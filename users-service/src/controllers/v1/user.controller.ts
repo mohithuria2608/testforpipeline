@@ -94,20 +94,20 @@ export class UserController {
                     sdmCorpRef: 0,
                     cmsUserRef: 0,
                 }
-                let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
-                if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
-                    userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
-                    if (cmsUserByPhoneNo.SdmUserRef && (cmsUserByPhoneNo.SdmUserRef != null || cmsUserByPhoneNo.SdmUserRef != "null") && (cmsUserByPhoneNo.SdmUserRef != "0"))
-                        userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
-                    if (cmsUserByPhoneNo.SdmCorpRef && (cmsUserByPhoneNo.SdmCorpRef != null || cmsUserByPhoneNo.SdmCorpRef != "null") && (cmsUserByPhoneNo.SdmCorpRef != "0"))
-                        userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
-                    userchangePayload['email'] = cmsUserByPhoneNo.email
-                    userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
-                    userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                    if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
-                        userchangePayload.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
-                    }
-                }
+                // let cmsUserByPhoneNo: IUserCMSRequest.ICmsUser = await CMS.UserCMSE.getCustomerFromCms({ fullPhnNo: fullPhnNo })
+                // if (cmsUserByPhoneNo && cmsUserByPhoneNo.customerId) {
+                //     userchangePayload['cmsUserRef'] = parseInt(cmsUserByPhoneNo.customerId)
+                //     if (cmsUserByPhoneNo.SdmUserRef && (cmsUserByPhoneNo.SdmUserRef != null || cmsUserByPhoneNo.SdmUserRef != "null") && (cmsUserByPhoneNo.SdmUserRef != "0"))
+                //         userchangePayload['sdmUserRef'] = parseInt(cmsUserByPhoneNo.SdmUserRef)
+                //     if (cmsUserByPhoneNo.SdmCorpRef && (cmsUserByPhoneNo.SdmCorpRef != null || cmsUserByPhoneNo.SdmCorpRef != "null") && (cmsUserByPhoneNo.SdmCorpRef != "0"))
+                //         userchangePayload['sdmCorpRef'] = parseInt(cmsUserByPhoneNo.SdmCorpRef)
+                //     userchangePayload['email'] = cmsUserByPhoneNo.email
+                //     userchangePayload['name'] = cmsUserByPhoneNo.firstName + " " + cmsUserByPhoneNo.lastName
+                //     userchangePayload['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                //     if (cmsUserByPhoneNo.address && cmsUserByPhoneNo.address.length > 0) {
+                //         userchangePayload.cmsAddress = cmsUserByPhoneNo.address.slice(0, 6)
+                //     }
+                // }
                 let userId = ENTITY.UserE.ObjectId().toString()
                 let tempUser: IUserRequest.IUserData = {
                     id: userId,

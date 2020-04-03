@@ -18,7 +18,7 @@ export class SmsCLass {
     constructor() { }
 
     async sendSMS(payload: ISmsRequest.ISingleSms) {
-        if (process.env.NODE_ENV == "staging")
+        if (config.get("loadTest"))
             return {}
         else
             return new Promise((resolve, reject) => {

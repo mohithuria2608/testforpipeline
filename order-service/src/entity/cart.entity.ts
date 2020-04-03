@@ -237,13 +237,17 @@ export class CartClass extends BaseEntity {
                 set: this.set,
                 key: payload.cartId
             }
+            if (payload.bins) {
+                getArg['bins'] = payload.bins
+                getArg['bins'].push('cartId')
+            }
             let cart: ICartRequest.ICartData = await Aerospike.get(getArg)
             if (cart && cart.cartId) {
                 return cart
             } else
                 cartFound = false
             if (!cartFound) {
-                let user = await userService.fetchUser({ cartId: payload.cartId })
+                let user = await userService.fetchUser({ userId: payload.cartId })
                 if (user && user.id) {
                     await this.createDefaultCart({
                         userId: user.id
@@ -252,6 +256,8 @@ export class CartClass extends BaseEntity {
                         set: this.set,
                         key: payload.cartId
                     }
+                    if (payload.bins)
+                        getArg['bins'] = payload.bins
                     return await Aerospike.get(getArg)
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
@@ -566,7 +572,8 @@ export class CartClass extends BaseEntity {
             }
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    let price = item.sellingPrice * item.qty
+                    console.log(`${item.name} ======== ${item.qty} ======== ${item.sellingPrice}`)
+                    let price = item.sellingPrice // * item.qty
                     grandtotal = grandtotal + price
                 })
             }

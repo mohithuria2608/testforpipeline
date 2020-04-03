@@ -25,17 +25,18 @@ export class CartController {
             let userData: IUserRequest.IUserData = await userService.fetchUser({ userId: auth.id })
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)
-            let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId })
+            let cart = await ENTITY.CartE.getCart({ cartId: payload.cartId, bins: ["couponApplied"] })
             if (!cart)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CART_NOT_FOUND)
 
             let invalidMenu = 0
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.OrderE.validateCoordinate(payload.lat, payload.lng)
-                if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+                if (store && store.id && store.id != "") {
+                    if (store.menuId != payload.curMenuId)
+                        invalidMenu = 1
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
-                    invalidMenu = 1
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
             }
@@ -45,12 +46,14 @@ export class CartController {
             })
             if (menu.menuId && (menu.menuId != payload.curMenuId
                 // || menu.updatedAt != payload.menuUpdatedAt
-            ))
+            )) {
                 invalidMenu = 1
+            }
+
 
             let hitCms = false
-            if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
-                hitCms = true
+            // if (payload.couponCode || (cart.couponApplied && (payload.couponCode == "" || !payload.couponCode)))
+            //     hitCms = true
             if (config.get("sdm.promotion.default")) {
                 hitCms = false
                 payload.couponCode = config.get("sdm.promotion.defaultCode")

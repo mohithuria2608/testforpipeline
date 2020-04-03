@@ -14,7 +14,7 @@ export class PaymentController {
      */
     public async getPaymentMethods(headers: ICommonRequest.IHeaders, payload: IPaymentGrpcRequest.IGetPaymentMethods, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let cart = await orderService.getCart({ cartId: payload.cartId })
+            let cart = await orderService.getCart({ cartId: payload.cartId, bins: ['cartId', 'amount'] })
             if (cart && cart.cartId && cart.amount && cart.amount.length > 0) {
                 let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                 let storeCode = Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE

@@ -8,6 +8,7 @@
     "dev": "NODE_ENV=development gulp",
     "qa": "NODE_ENV=testing node dist/app.js",
     "stg": "NODE_ENV=staging node dist/app.js",
+    "prod": "NODE_ENV=production node dist/app.js",
     "test-mocha": "node_modules/.bin/ts-mocha ./test/*.ts",
     "test-jest": "node_modules/.bin/jest",
     "test-jasmine": "ts-node node_modules/jasmine/bin/jasmine ./test/*.ts",

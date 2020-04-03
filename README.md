@@ -92,6 +92,11 @@ Hands-on Microservices with TypeScript 3
     * 40.127.244.213:10006
     * mongo url : mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db
 
+# PROD 
+* https://prod-api.americanarest.com/
+* public ip : https://51.104.147.206/
+* aerospike new : 40.127.244.213:10008
+
 # Code commit on UAT
 * URL : http://40.127.244.213:10004/americana/backend
 * git add .
