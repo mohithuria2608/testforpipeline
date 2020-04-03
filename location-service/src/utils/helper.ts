@@ -380,7 +380,7 @@ export let sendRequestToCMS = function (type, data) {
             url: requestUrl,
             body: JSON.stringify(data)
         }, function (err, d, b) {
-            console.log("b --> ", b);
+            console.log("Type -> ", type, " -> Response Body", b);
             if (err) reject(err);
             else resolve(b);
         });

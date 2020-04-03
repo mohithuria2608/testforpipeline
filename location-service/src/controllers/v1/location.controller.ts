@@ -204,14 +204,13 @@ export class LocationController {
         try {
             let syncData = JSON.parse(payload.as.argv)['data'];
             switch (syncData.type) {
-                case 'city': await cityController.syncToAS(syncData.data);
-                case 'country': await countryController.syncToAS(syncData.data);
-                case 'area': await areaController.syncToAS(syncData.data);
-                case 'store': {
-                    await storeController.syncToAS(syncData.data);
-                    await this.bootstrapPickup();
-                }
+                case 'city': { await cityController.syncToAS(syncData.data); break; }
+                case 'country': { await countryController.syncToAS(syncData.data); break; }
+                case 'area': { await areaController.syncToAS(syncData.data); break; }
+                case 'store': { await storeController.syncToAS(syncData.data); break; }
+                default: return {};
             }
+            await this.bootstrapPickup();
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
             return Promise.reject(error)
