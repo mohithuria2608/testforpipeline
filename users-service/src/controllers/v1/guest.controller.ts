@@ -149,7 +149,6 @@ export class GuestController {
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
                             console.log("guestCheckout step 7=====================>")
-                            userchangePayload['deleteUserId'] = auth.id
                             userchangePayload['chngEmailSdm'] = 1
                             userchangePayload['chngEmailCms'] = 1
                             delete userchangePayload.otp
@@ -207,7 +206,7 @@ export class GuestController {
             console.log("guestCheckout step 14=====================>", userchangePayload)
 
             if (userchangePayload['chngEmailSdm'] || userchangePayload['chngEmailCms']) {
-                userData = await this.forceUpdateUserOnGuestCheckout(headers, userchangePayload)
+                userData = await this.forceUpdateUserOnGuestCheckout(headers, userData, userchangePayload)
             }
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
@@ -216,7 +215,7 @@ export class GuestController {
         }
     }
 
-    async forceUpdateUserOnGuestCheckout(headers: ICommonRequest.IHeaders, userchangePayload: IUserchangeRequest.IUserchange) {
+    async forceUpdateUserOnGuestCheckout(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, userchangePayload: IUserchangeRequest.IUserchange) {
         try {
             let userUpdate = {
                 id: userchangePayload.id,
@@ -234,33 +233,23 @@ export class GuestController {
                 userUpdate['name'] = userchangePayload.name
             if (userchangePayload.email)
                 userUpdate['email'] = userchangePayload.email
-            if (userchangePayload.socialKey)
-                userUpdate['socialKey'] = userchangePayload.socialKey
-            if (userchangePayload.medium)
-                userUpdate['medium'] = userchangePayload.medium
             if (userchangePayload.profileStep != undefined)
                 userUpdate['profileStep'] = userchangePayload.profileStep
             if (userchangePayload.brand)
                 userUpdate['brand'] = userchangePayload.brand
             if (userchangePayload.country)
                 userUpdate['country'] = userchangePayload.country
-            if (userchangePayload.sdmUserRef != undefined)
-                userUpdate['sdmUserRef'] = parseInt(userchangePayload.sdmUserRef.toString())
-            if (userchangePayload.sdmCorpRef != undefined)
-                userUpdate['sdmCorpRef'] = parseInt(userchangePayload.sdmCorpRef.toString())
-            if (userchangePayload.cmsUserRef != undefined)
-                userUpdate['cmsUserRef'] = parseInt(userchangePayload.cmsUserRef.toString())
 
-            let user: IUserRequest.IUserData = await ENTITY.UserE.buildUser(userUpdate)
+            userData = await ENTITY.UserE.buildUser(userUpdate)
 
-            if (userchangePayload.cmsUserRef && userchangePayload.cmsUserRef != 0 && (userchangePayload.chngEmailCms || userchangePayload.chngPhnCms))
-                CMS.UserCMSE.updateCustomerOnCms(userchangePayload)
+            if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchangePayload.chngEmailCms || userchangePayload.chngPhnCms))
+                CMS.UserCMSE.updateCustomerOnCms(userData)
 
-            if (userchangePayload.sdmUserRef && userchangePayload.sdmUserRef != 0 && (userchangePayload.chngEmailSdm || userchangePayload.chngPhnSdm)) {
-                userchangePayload['headers'] = headers
-                SDM.UserSDME.updateCustomerOnSdm(userchangePayload)
+            if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchangePayload.chngEmailSdm || userchangePayload.chngPhnSdm)) {
+                userData['headers'] = headers
+                SDM.UserSDME.updateCustomerOnSdm(userData)
             }
-            return user
+            return userData
         } catch (error) {
             consolelog(process.cwd(), "forceUpdateUserOnGuestCheckout", JSON.stringify(error), false)
             return Promise.reject(error)
