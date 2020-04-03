@@ -254,8 +254,8 @@ export class OrderController {
 
     /**
      * @method GET
-     * @param {string=} cCode
-     * @param {string=} phnNo
+     * @param {string} cCode
+     * @param {string} phnNo
      * @param {number} orderId
      * */
     async trackOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.ITrackOrder, auth: ICommonRequest.AuthorizationObj) {
@@ -271,15 +271,12 @@ export class OrderController {
                 sdmOrder = parseInt(sdmOrderRef[0])
             else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-            console.log("..............aaaaa", typeof sdmOrder, sdmOrder)
             if (isNaN(sdmOrder))
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E422.INVALID_ORDER)
-            let userData: IUserRequest.IUserData
-            if (payload.cCode && payload.phnNo) {
-                userData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
-                if (userData.id == undefined || userData.id == null || userData.id == "")
-                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-            }
+            let userData: IUserRequest.IUserData = await userService.fetchUser({ cCode: payload.cCode, phnNo: payload.phnNo })
+            if (userData.id == undefined || userData.id == null || userData.id == "")
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+
             let getSdmOrderRef = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { status: 1 })
             if (getSdmOrderRef && getSdmOrderRef._id) {
                 await ENTITY.OrderE.getSdmOrder({
