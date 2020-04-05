@@ -49,7 +49,7 @@ export default async function () {
                 let webAreaData = {
                     countryId: 'AE',
                     sdmCountryId: 1,
-                    active: parseInt(webArea.AREA_ACTIVE),
+                    active: webArea.AREA_ACTIVE === "1" ? 1 : 2,
                     sdmAreaId: parseInt(webArea.AREA_ID),
                     cityId: parseInt(webArea.AREA_CITYID),
                     areaName: webArea.AREA_NAME || "",

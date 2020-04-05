@@ -10,7 +10,6 @@ export default async function () {
         listData: any = await SoapManager.requestData('GetWebCitiesList', params),
         list = await listData.GetWebCitiesListResult.CC_WEB_CITY;
 
-
     await Aerospike.truncate({ set: Constant.SET_NAME.SYNC_CITY });
 
     for (let city of list) {
@@ -19,7 +18,7 @@ export default async function () {
             let cityData = {
                 sdmCityId: parseInt(city.CTY_ID),
                 countryId: 'AE',
-                active: parseInt(city.CTY_ACTIVE),
+                active: city.CTY_ACTIVE === "1" ? 1 : 2,
                 sdmCountryId: parseInt(city.CTY_CNTID),
                 cityName: city.CTY_NAME,
                 cityNameAr: city.CTY_NAMEUN,
