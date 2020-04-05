@@ -40,41 +40,39 @@ export default async function () {
             list = listData.GetWebAreasListResult.CC_WEB_AREA;
 
         for (let webArea of list) {
-            // only save city with valid cityId
-            if (webArea.AREA_ACTIVE === "1") {
-                let storeAreaData = await Aerospike.get({
-                    set: Constant.SET_NAME.SYNC_WEB_AREA,
-                    key: parseInt(webArea.AREA_ID)
-                });
-                if (storeAreaData.sdmAreaId) {
-                    let webAreaData = {
-                        countryId: 'AE',
-                        sdmCountryId: 1,
-                        sdmAreaId: parseInt(webArea.AREA_ID),
-                        cityId: parseInt(webArea.AREA_CITYID),
-                        areaName: webArea.AREA_NAME || "",
-                        areaNameAr: webArea.AREA_NAMEUN || "",
-                        districtId: -1,
-                        streetId: -1,
-                        provinceId: 7,
-                        sdmStoreId: storeAreaData.sdmStoreId,
-                        areaPinCode: 1,
-                        delRefCode: 1,
-                        validAreaType: 1
-                    };
 
-                    // save and insert data into database
-                    await Aerospike.put({
-                        bins: webAreaData,
-                        set: Constant.SET_NAME.SYNC_AREA,
-                        key: webAreaData.sdmAreaId,
-                        createOrReplace: true
-                    });
-                }
+            let storeAreaData = await Aerospike.get({
+                set: Constant.SET_NAME.SYNC_WEB_AREA,
+                key: parseInt(webArea.AREA_ID)
+            });
+            if (storeAreaData.sdmAreaId) {
+                let webAreaData = {
+                    countryId: 'AE',
+                    sdmCountryId: 1,
+                    active: webArea.AREA_ACTIVE === "1" ? 1 : 2,
+                    sdmAreaId: parseInt(webArea.AREA_ID),
+                    cityId: parseInt(webArea.AREA_CITYID),
+                    areaName: webArea.AREA_NAME || "",
+                    areaNameAr: webArea.AREA_NAMEUN || "",
+                    districtId: -1,
+                    streetId: -1,
+                    provinceId: 7,
+                    sdmStoreId: storeAreaData.sdmStoreId,
+                    areaPinCode: 1,
+                    delRefCode: 1,
+                    validAreaType: 1
+                };
+
+                // save and insert data into database
+                await Aerospike.put({
+                    bins: webAreaData,
+                    set: Constant.SET_NAME.SYNC_AREA,
+                    key: webAreaData.sdmAreaId,
+                    createOrReplace: true
+                });
             }
         }
     }
-
 
     console.log("\t# Area Sequence Complete");
 }
