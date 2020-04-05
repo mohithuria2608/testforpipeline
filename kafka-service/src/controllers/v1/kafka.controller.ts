@@ -471,39 +471,6 @@ export class KafkaController {
                     }
                     break;
                 }
-                case Constant.SET_NAME.FAQ: {
-                    let messages = null;
-                    let topic = null
-                    let partition = 0
-                    if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.reset || payload.as.sync)) {
-                        messages = { ...payload }
-                        delete messages.sdm
-                        delete messages.cms
-                        delete messages.mdb
-                        if (payload.count == 0) {
-                            if (payload.as.create) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.FAQ.MAX_RETRY.CREATE
-                            }
-                            else if (payload.as.reset) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.FAQ.MAX_RETRY.RESET
-                            }
-                            else if (payload.as.update) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.FAQ.MAX_RETRY.UPDATE
-                            }
-                            else
-                                messages['count'] = 1
-                        } else if (payload.count < 0) {
-                            break;
-                        }
-                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_FAQ
-                        messages['q'] = topic
-                        if (payload.inQ)
-                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
-                        else
-                            await syncService.sync(messages)
-                    }
-                    break;
-                }
                 case Constant.SET_NAME.LOGGER: {
                     let messages = null;
                     let topic = null
