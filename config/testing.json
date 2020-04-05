@@ -238,5 +238,5 @@
             "orderMode": []
         }
     },
-    "loadTest": false
+    "loadTest": true
 }

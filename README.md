@@ -96,7 +96,7 @@ Hands-on Microservices with TypeScript 3
 # PROD 
 * ssh
     * ssh Localadmin@13.74.178.42
-    * Mob@pp@@2020
+    * FoodMob@1996
     * login to jenkins server :
         * ssh Localadmin@10.1.1.6
         * Mob@pp@@2020

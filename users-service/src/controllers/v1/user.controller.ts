@@ -189,7 +189,7 @@ export class UserController {
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                    await this.validateUserOnSdm(userData, false, headers)
+                    this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
                     userData.password = deCryptData(userData.password);
@@ -407,7 +407,7 @@ export class UserController {
             console.log("socialAuthValidate step 9=====================>")
 
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
-                await this.validateUserOnSdm(userData, false, headers)
+                 this.validateUserOnSdm(userData, false, headers)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
                 userId: userData.id,
