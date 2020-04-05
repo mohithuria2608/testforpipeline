@@ -29,7 +29,11 @@ export class FaqEntity extends BaseEntity {
         country: Joi.string().valid(
             Constant.DATABASE.COUNTRY.UAE
         ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUNTRY.type)),
-        faq: Joi.any()
+        questionair: Joi.array().items(
+            Joi.object().keys({
+                ques: Joi.string(),
+                ans: Joi.string()
+            }))
     })
 
     /**

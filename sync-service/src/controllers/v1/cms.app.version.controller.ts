@@ -84,7 +84,7 @@ export class CmsAppversionController {
      * @param {any} payload
      * @description creates a appversion from CMS to aerospike
      */
-    async postAppversion(headers: ICommonRequest.IHeaders, payload: ICmsAppversionRequest.ICmsAppversion) {
+    async postAppversion( payload: ICmsAppversionRequest.ICmsAppversion) {
         try {
             let appversionChange: IKafkaGrpcRequest.IKafkaBody = {
                 set: ENTITY.AppversionE.set,
@@ -94,7 +94,6 @@ export class CmsAppversionController {
                 },
                 inQ: true
             }
-            // this.syncAppversionFromKafka(appversionChange)
             kafkaService.kafkaSync(appversionChange)
             return {}
         } catch (error) {

@@ -2,7 +2,7 @@ import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { syncService } from '../../grpc/client';
-import { configuration } from '../../configuration';
+import { configuration } from '../../sync/configuration';
 
 export class MiscController {
 
@@ -101,11 +101,6 @@ export class MiscController {
                     }
                     case Constant.SET_NAME.APP_VERSION: {
                         let appVersionConfig = await syncService.fetchAppversion({ isActive: 1 })
-                        consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
-                        break;
-                    }
-                    case Constant.SET_NAME.FAQ: {
-                        let appVersionConfig = await syncService.fetchFaq({ language: argv.language, country: argv.country })
                         consolelog(process.cwd(), "appversion", JSON.stringify(appVersionConfig), true)
                         break;
                     }

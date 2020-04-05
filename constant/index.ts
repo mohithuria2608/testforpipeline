@@ -80,7 +80,6 @@ export enum KAFKA_TOPIC {
 
     AS_CONFIG = 'as_config',
     AS_APP_VERSION = 'as_app_version',
-    AS_FAQ = 'as_faq',
 
     M_LOGGER = 'm_logger',
 

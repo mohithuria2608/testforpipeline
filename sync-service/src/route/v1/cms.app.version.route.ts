@@ -9,7 +9,6 @@ export default (router: Router) => {
     router
         .post('/',
             validate({
-                // headers: JOI_CMS_HEADERS,
                 body: {
                     action: Joi.string().required().valid(Constant.DATABASE.TYPE.SYNC_ACTION.RESET).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     data: Joi.any().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
@@ -17,9 +16,8 @@ export default (router: Router) => {
             }),
             async (ctx) => {
                 try {
-                    let headers: ICommonRequest.IHeaders = ctx.request.header;
                     let payload: ICmsAppversionRequest.ICmsAppversion = ctx.request.body;
-                    let res = await cmsAppversionController.postAppversion(headers, payload);
+                    let res = await cmsAppversionController.postAppversion(payload);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse
