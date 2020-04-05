@@ -14,14 +14,14 @@ export default async function () {
 
     for (let city of list) {
         // only save city with valid cityId
-        if (city.CTY_CNTID === "1") {
+        if (city.CTY_ID !== "-1" && city.CTY_CNTID === "1") {
             let cityData = {
                 sdmCityId: parseInt(city.CTY_ID),
                 countryId: 'AE',
-                active: city.CTY_ACTIVE === "1" ? 1 : 2,
+                active: (city.CTY_ACTIVE === "1") ? 1 : 2,
                 sdmCountryId: parseInt(city.CTY_CNTID),
-                cityName: city.CTY_NAME,
-                cityNameAr: city.CTY_NAMEUN,
+                cityName: city.CTY_NAME || "",
+                cityNameAr: city.CTY_NAMEUN || "",
                 provinceId: parseInt(city.CTY_PROVINCEID)
             };
 
