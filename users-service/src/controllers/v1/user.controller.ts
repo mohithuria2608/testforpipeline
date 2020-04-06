@@ -30,18 +30,18 @@ export class UserController {
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
                 let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create)
-                    await ENTITY.UserE.createUserOnCms(data)
+                    await ENTITY.UserE.createUserOnCms(data.userData, data.headers)
                 if (payload.cms.update)
-                    await ENTITY.UserE.updateUserOnCms(data)
+                    await ENTITY.UserE.updateUserOnCms(data.userData, data.headers)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
-                    await ENTITY.UserE.createUserOnSdm(data)
+                    await ENTITY.UserE.createUserOnSdm(data.userData, data.headers)
                 if (payload.sdm.update)
-                    await ENTITY.UserE.updateUserOnSdm(data)
+                    await ENTITY.UserE.updateUserOnSdm(data.userData, data.headers)
                 if (payload.sdm.sync)
-                    await this.validateUserOnSdm(data, true, undefined)
+                    await this.validateUserOnSdm(data.userData, true, data.headers)
             }
             return {}
         } catch (error) {
@@ -189,7 +189,6 @@ export class UserController {
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                    userData['headers'] = headers
                     this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
@@ -206,10 +205,8 @@ export class UserController {
                 if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
                     CMS.UserCMSE.updateCustomerOnCms(userData)
 
-                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm)) {
-                    userData['headers'] = headers
-                    SDM.UserSDME.updateCustomerOnSdm(userData)
-                }
+                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm))
+                    SDM.UserSDME.updateCustomerOnSdm(userData, headers)
 
                 if (asAddress && asAddress.length > 0) {
                 }
@@ -408,7 +405,6 @@ export class UserController {
             console.log("socialAuthValidate step 9=====================>")
 
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                userData['headers'] = headers
                 this.validateUserOnSdm(userData, false, headers)
             }
 
@@ -501,7 +497,7 @@ export class UserController {
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log("createProfile step 6=====================>")
-                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.country })
+                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                     console.log("createProfile step 7=====================>")
                                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
@@ -530,7 +526,7 @@ export class UserController {
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
                             console.log("createProfile step 11=====================>")
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.country })
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                 console.log("createProfile step 12=====================>")
                                 userchangePayload['id'] = auth.id
@@ -593,12 +589,14 @@ export class UserController {
                          */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
-                    userData['headers'] = headers
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
                             sync: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     });
@@ -624,8 +622,6 @@ export class UserController {
 
     async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
         try {
-            if (headers)
-                userData.headers = headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             let updateOnSdm = false
             let updateOnCms = false
@@ -636,7 +632,7 @@ export class UserController {
                 createOnCms = true
             }
             if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
-                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: userData.headers.language, country: userData.headers.country })
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email }, headers)
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true
                     updateAs['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
@@ -648,33 +644,37 @@ export class UserController {
                     createOnSdm = true
             }
             if (createOnSdm) {
-                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
                             create: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
                 } else {
-                    userData = await ENTITY.UserE.createUserOnSdm(userData)
+                    userData = await ENTITY.UserE.createUserOnSdm(userData, headers)
                 }
             }
             if (createOnCms) {
-                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         cms: {
                             create: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
                 } else {
-                    userData = await ENTITY.UserE.createUserOnCms(userData)
+                    userData = await ENTITY.UserE.createUserOnCms(userData, headers)
                 }
             }
             if (updateAs && Object.keys(updateAs).length > 0) {
@@ -683,29 +683,33 @@ export class UserController {
             }
 
             if (updateOnSdm) {
-                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
                             update: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
                 } else {
-                    await SDM.UserSDME.updateCustomerOnSdm(userData)
+                    await SDM.UserSDME.updateCustomerOnSdm(userData, headers)
                 }
             }
 
             if (updateOnCms) {
-                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })

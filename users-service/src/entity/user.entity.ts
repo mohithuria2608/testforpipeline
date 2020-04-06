@@ -229,10 +229,10 @@ export class UserEntity extends BaseEntity {
      * @description Create user on SDM
      * @param payload 
      */
-    async createUserOnSdm(payload: IUserRequest.IUserData) {
+    async createUserOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(payload), false)
-            let res = await SDM.UserSDME.createCustomerOnSdm(payload)
+            let res = await SDM.UserSDME.createCustomerOnSdm(payload, headers)
 
             let putArg: IAerospike.Put = {
                 bins: {
@@ -246,7 +246,7 @@ export class UserEntity extends BaseEntity {
             await Aerospike.put(putArg)
             let user = await this.getUser({ userId: payload.id })
             if (user.socialKey) {
-                SDM.UserSDME.updateCustomerTokenOnSdm(user)
+                SDM.UserSDME.updateCustomerTokenOnSdm(user, headers)
             }
             console.log("user after getting sdm id", user)
             if (user.cmsUserRef != 0) {
@@ -254,7 +254,10 @@ export class UserEntity extends BaseEntity {
                     set: this.set,
                     cms: {
                         update: true,
-                        argv: JSON.stringify(user)
+                        argv: JSON.stringify({
+                            userData: user,
+                            headers: headers
+                        })
                     },
                     inQ: true
                 })
@@ -270,9 +273,9 @@ export class UserEntity extends BaseEntity {
      * @description Update user on SDM
      * @param payload 
      */
-    async updateUserOnSdm(payload: IUserRequest.IUserData) {
+    async updateUserOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let res = await SDM.UserSDME.updateCustomerOnSdm(payload)
+            let res = await SDM.UserSDME.updateCustomerOnSdm(payload, headers)
             return res
         } catch (error) {
             consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
@@ -284,7 +287,7 @@ export class UserEntity extends BaseEntity {
      * @description Create user on CMS
      * @param payload 
      */
-    async createUserOnCms(payload: IUserRequest.IUserData) {
+    async createUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             let res = await CMS.UserCMSE.createCustomerOnCms(payload)
             if (res && res.customerId) {
@@ -304,7 +307,10 @@ export class UserEntity extends BaseEntity {
                         set: this.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify(user)
+                            argv: JSON.stringify({
+                                userData: user,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
@@ -322,7 +328,7 @@ export class UserEntity extends BaseEntity {
      * @description Update user on CMS
      * @param payload 
      */
-    async updateUserOnCms(payload: IUserRequest.IUserData) {
+    async updateUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             if (payload.cmsUserRef) {
                 let res = await CMS.UserCMSE.updateCustomerOnCms(payload)

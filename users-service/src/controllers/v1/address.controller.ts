@@ -12,6 +12,7 @@ export class AddressController {
      */
     async syncAddress(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
+
             if (payload.as && (payload.as.create || payload.as.update || payload.as.get || payload.as.sync)) {
                 let data = JSON.parse(payload.as.argv)
                 if (payload.as.create) {
@@ -19,35 +20,38 @@ export class AddressController {
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
                 let data = JSON.parse(payload.cms.argv)
-                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
-                userData.asAddress = data.asAddress
+                let userData: IUserRequest.IUserData = JSON.parse(data.userData)
+                let headers = JSON.parse(data.headers)
+                let asAddress = JSON.parse(data.asAddress)
+                userData = await ENTITY.UserE.getUser({ userId: data.id })
                 if (payload.cms.create) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
-                        await ENTITY.AddressE.addAddressOnCms(userData)
+                        await ENTITY.AddressE.addAddressOnCms(userData, headers, asAddress)
                     else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
                 if (payload.cms.update) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
-                        await ENTITY.AddressE.updateAddressOnCms(userData)
+                        await ENTITY.AddressE.updateAddressOnCms(userData, headers, asAddress)
                     else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
-                let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: data.id })
-                userData['asAddress'] = data.asAddress
-                userData['headers'] = data.headers
+                let userData: IUserRequest.IUserData = JSON.parse(data.userData)
+                let headers = JSON.parse(data.headers)
+                let asAddress = JSON.parse(data.asAddress)
+                userData = await ENTITY.UserE.getUser({ userId: data.id })
                 if (payload.sdm.create) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
-                        await ENTITY.AddressE.addAddressOnSdm(userData)
+                        await ENTITY.AddressE.addAddressOnSdm(userData, headers, asAddress)
                     else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
                 if (payload.sdm.update) {
-                    if (userData.sdmUserRef && userData.sdmUserRef != 0)
-                        await ENTITY.AddressE.updateAddressOnSdm(userData)
+                    if (userData.sdmUserRef && userData.sdmUserRef != 0) {
+                    }
                     else
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
@@ -108,17 +112,23 @@ export class AddressController {
 
             let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store)
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                userData['asAddress'] = [addressData]
-                userData['headers'] = headers
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
                     cms: {
                         create: true,
-                        argv: JSON.stringify(userData)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers,
+                            asAddress: [addressData]
+                        })
                     },
                     sdm: {
                         create: true,
-                        argv: JSON.stringify(userData)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers,
+                            asAddress: [addressData]
+                        })
                     },
                     inQ: true
                 })
@@ -178,17 +188,23 @@ export class AddressController {
 
             let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store)
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                userData['asAddress'] = [addressData]
-                userData['headers'] = headers
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
                     cms: {
                         create: true,
-                        argv: JSON.stringify(userData)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers,
+                            asAddress: [addressData]
+                        })
                     },
                     sdm: {
                         create: true,
-                        argv: JSON.stringify(userData)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers,
+                            asAddress: [addressData]
+                        })
                     },
                     inQ: true
                 })
@@ -227,13 +243,15 @@ export class AddressController {
             let updatedAdd = await ENTITY.AddressE.updateAddress(headers, payload, Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY, userData, false)
 
             if (updatedAdd.cmsAddressRef && updatedAdd.cmsAddressRef != 0) {
-                userData['asAddress'] = [updatedAdd]
-                userData['headers'] = headers
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
                     cms: {
                         update: true,
-                        argv: JSON.stringify(userData)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers,
+                            asAddress: [updatedAdd]
+                        })
                     },
                     inQ: true
                 })

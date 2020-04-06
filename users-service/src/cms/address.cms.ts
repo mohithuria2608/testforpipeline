@@ -10,14 +10,14 @@ export class AddressCMSEntity extends BaseCMS {
         super()
     }
 
-    async createAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
+    async createAddresssOnCms(payload: IUserRequest.IUserData, asAddress: IAddressRequest.IAddress[], ): Promise<any> {
         try {
             let naemRes = nameConstructor(payload.name.trim())
             let address = []
-            if (payload.asAddress && typeof payload.asAddress == 'string')
-                payload.asAddress = JSON.parse(payload.asAddress)
-            if (payload.asAddress && payload.asAddress.length > 0) {
-                payload.asAddress.map(obj => {
+            if (asAddress && typeof asAddress == 'string')
+                asAddress = JSON.parse(asAddress)
+            if (asAddress && asAddress.length > 0) {
+                asAddress.map(obj => {
                     address.push({
                         "id": obj.id,
                         "firstName": naemRes.firstName,
