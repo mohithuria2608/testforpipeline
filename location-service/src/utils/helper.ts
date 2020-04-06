@@ -425,8 +425,8 @@ export let checkOnlineStore = function (start, end, nextDay?) {
         new Date(end).getUTCSeconds(),
         new Date(end).getUTCMilliseconds())
     let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
-    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds()
-    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds()
+    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds() - dbOffest
+    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds() - dbOffest
 
     console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
     console.log(startTime < curTime)
