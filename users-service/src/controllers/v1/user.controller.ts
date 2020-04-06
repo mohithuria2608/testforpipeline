@@ -492,6 +492,8 @@ export class UserController {
                                 background: false,
                             }
                             let asUserByEmail = await Aerospike.query(queryArg)
+                            console.log("createProfile step 5=====================>", asUserByEmail)
+
                             if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                                 console.log("createProfile step 5=====================>")
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
