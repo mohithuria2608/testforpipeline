@@ -764,7 +764,7 @@ export class OrderClass extends BaseEntity {
                         payment_status: "",
                         order_status: "",
                         sdm_order_id: order.sdmOrderRef,
-
+                        validation_remarks: ""
                     })
                 if (order && order._id) {
                     this.getSdmOrder({
@@ -904,7 +904,7 @@ export class OrderClass extends BaseEntity {
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
                             order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
                             sdm_order_id: order.sdmOrderRef,
-
+                            validation_remarks: ""
                         })
                     break;
                 }
@@ -938,7 +938,7 @@ export class OrderClass extends BaseEntity {
                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
                                 order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
                                 sdm_order_id: order.sdmOrderRef,
-
+                                validation_remarks: ""
                             })
                     } else {
                         order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
@@ -1266,7 +1266,7 @@ export class OrderClass extends BaseEntity {
                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                             order_status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.CMS,
                                             sdm_order_id: order.sdmOrderRef,
-
+                                            validation_remarks: ""
                                         })
                                 }, 10000)
                                 break;
@@ -1346,7 +1346,7 @@ export class OrderClass extends BaseEntity {
                                                     payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                                     order_status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.CMS,
                                                     sdm_order_id: order.sdmOrderRef,
-
+                                                    validation_remarks: ""
                                                 })
                                         }
                                     }
@@ -1402,7 +1402,7 @@ export class OrderClass extends BaseEntity {
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                             order_status: Constant.CONF.ORDER_STATUS.READY.CMS,
                             sdm_order_id: order.sdmOrderRef,
-
+                            validation_remarks: ""
                         })
                     if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS) {
                         if (process.env.NODE_ENV == "testing")
@@ -1434,7 +1434,7 @@ export class OrderClass extends BaseEntity {
                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                 order_status: Constant.CONF.ORDER_STATUS.ON_THE_WAY.CMS,
                                 sdm_order_id: order.sdmOrderRef,
-
+                                validation_remarks: ""
                             })
                     }
                 }
@@ -1467,7 +1467,7 @@ export class OrderClass extends BaseEntity {
                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
                                 order_status: Constant.CONF.ORDER_STATUS.DELIVERED.CMS,
                                 sdm_order_id: order.sdmOrderRef,
-
+                                validation_remarks: ""
                             })
                     }
                 }
@@ -1503,7 +1503,7 @@ export class OrderClass extends BaseEntity {
                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
                                             order_status: Constant.CONF.ORDER_STATUS.CANCELED.CMS,
                                             sdm_order_id: order.sdmOrderRef,
-
+                                            validation_remarks: ""
                                         })
                                     break;
                                 }
@@ -1595,7 +1595,7 @@ export class OrderClass extends BaseEntity {
                                                 payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
                                                 order_status: Constant.CONF.ORDER_STATUS.CANCELED.CMS,
                                                 sdm_order_id: order.sdmOrderRef,
-
+                                                validation_remarks: ""
                                             })
                                         if (order.cmsOrderRef)
                                             CMS.TransactionCMSE.createTransaction({
@@ -1619,7 +1619,7 @@ export class OrderClass extends BaseEntity {
                                             payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
                                             order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                             sdm_order_id: order.sdmOrderRef,
-
+                                            validation_remarks: ""
                                         })
                                     break;
                                 }
@@ -1632,7 +1632,7 @@ export class OrderClass extends BaseEntity {
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
                                     order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef,
-
+                                    validation_remarks: ""
                                 })
                         }
                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
@@ -1712,7 +1712,7 @@ export class OrderClass extends BaseEntity {
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
                                     order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef,
-
+                                    validation_remarks: validationRemarks
                                 })
                             break;
                         }
@@ -1803,7 +1803,7 @@ export class OrderClass extends BaseEntity {
                                         payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
                                         order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                         sdm_order_id: order.sdmOrderRef,
-
+                                        validation_remarks: validationRemarks
                                     })
                                 if (order.cmsOrderRef)
                                     CMS.TransactionCMSE.createTransaction({
@@ -1827,7 +1827,7 @@ export class OrderClass extends BaseEntity {
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
                                     order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef,
-
+                                    validation_remarks: validationRemarks
                                 })
                             break;
                         }
@@ -1840,7 +1840,7 @@ export class OrderClass extends BaseEntity {
                             payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
                             order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                             sdm_order_id: order.sdmOrderRef,
-
+                            validation_remarks: validationRemarks
                         })
                 }
                 order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
