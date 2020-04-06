@@ -140,7 +140,7 @@ export class GuestController {
                     let asUserByEmail = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                         console.log("guestCheckout step 4=====================>")
-                        return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
+                        return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                     } else {
                         console.log("guestCheckout step 5=====================>")
                         let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
