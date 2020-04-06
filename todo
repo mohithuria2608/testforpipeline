@@ -24,4 +24,8 @@
 ----> faq
 ----> more configs
 
-Saved address is displayed 2twice >>if th user moved to Profile >> My Address >> add address >> it displayed 2 times
+
+changes : 
+1. user addition on cms and sdm async via kafka
+2. headers update in all sync apis
+3. 

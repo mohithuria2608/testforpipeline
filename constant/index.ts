@@ -1453,7 +1453,6 @@ export const CONF = {
         OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
         ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
         REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-        MIN_CART_VALUE: 23,//AED
         MAX_PENDING_STATE_TIME: (8 * 60 * 1000),//millisecond
         PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
         PAYMENT_API_KEY_PREFIX: "Key_",
@@ -1461,17 +1460,14 @@ export const CONF = {
         DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
         AUTH_MECH: "Bearer",
         ADDR_SHOW_TIME: 3,//hr
-        CUSTOMER_CARE: "600522252",
-        SUPPORT_EMAIL: "support@americana-food.com",
+
 
 
         TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
-        MIN_COD_CART_VALUE: 300,//AED
         ANDROID_SCHEME_HOST: "https://",
         ANDROID_PACKAGE_NAME: "com.android.kfc",
         IOS_SCHEME_HOST: "americanaKFCUAE://",
         SPLASH_EXPR_TIME: 1589523974000,
-        DEFAULT_CCODE: "+971",
         CHUNK_SIZE_USER_MIGRATION: 50000,
         PAYMENT_SUCCESS_FALLBACK: "payment/success",
         PAYMENT_FAILURE_FALLBACK: "payment/failure",
@@ -1509,7 +1505,12 @@ export const CONF = {
                 LICENSE_CODE: "PizzaHutApp",// "AmericanaWeb",
                 CONCEPT_ID: 3,
                 MENU_TEMPLATE_ID: 17
-            }
+            },
+            CCODE: "+971",
+            CUSTOMER_CARE: "600522252",
+            SUPPORT_EMAIL: "support@americana-food.com",
+            MIN_CART_VALUE: 23,//AED
+            MIN_COD_CART_VALUE: 300,//AED
         }
     },
     KAFKA: {
@@ -1957,32 +1958,29 @@ export const CONF = {
 }
 
 interface IGeneral {
-    cms_page_data: [{
-        title: string,
-        identifier: string,
-    }],
-    ttl_for_cart: number,
-    initial_user_ttl: number,
-    initial_guest_ttl: number,
-    bypass_otp: number,
-    otp_expire: number,
-    access_token_expire_time: number,
-    refresh_token_expire_time: number,
-    cms_auth_exp: number,
-    reg_ex_for_validation: string,
-    country_codes: string,
-    support: string,
-    customer_care_email: string,
-    user_change_ttl: number,
-    max_pending_state: number,
-    minimum_cart_price: number,
-    payment_api_timeout: number,
-    payment_api_key_prefix: string,
-    display_color: boolean,
-    deeplink_fallback: string,
-    auth_mech: string,
-    addr_show_time: number,
-}
+        cms_page_data: [{
+            title: string,
+            identifier: string,
+        }],
+        ttl_for_cart: number,
+        initial_user_ttl: number,
+        initial_guest_ttl: number,
+        bypass_otp: number,
+        otp_expire: number,
+        access_token_expire_time: number,
+        refresh_token_expire_time: number,
+        cms_auth_exp: number,
+        reg_ex_for_validation: string,
+        country_codes: string,
+        user_change_ttl: number,
+        max_pending_state: number,
+        payment_api_timeout: number,
+        payment_api_key_prefix: string,
+        display_color: boolean,
+        deeplink_fallback: string,
+        auth_mech: string,
+        addr_show_time: number,
+    }
 export const generalConfigSync = function (config: IGeneral, date: number) {
     CONF.GENERAL.DEFAULT_CART_TTL = config.ttl_for_cart;
     CONF.GENERAL.BY_PASS_OTP = config.bypass_otp;
@@ -1990,11 +1988,8 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
     CONF.GENERAL.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
     CONF.GENERAL.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
     CONF.GENERAL.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
-    CONF.GENERAL.CUSTOMER_CARE = config.support;
-    CONF.GENERAL.SUPPORT_EMAIL = config.customer_care_email;
     CONF.GENERAL.USERCHANGE_TTL = config.user_change_ttl;
     CONF.GENERAL.MAX_PENDING_STATE_TIME = config.max_pending_state;
-    CONF.GENERAL.MIN_CART_VALUE = config.minimum_cart_price;
     CONF.GENERAL.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
     CONF.GENERAL.DEEPLINK_FALLBACK = config.deeplink_fallback;
     CONF.GENERAL.ADDR_SHOW_TIME = config.addr_show_time;
@@ -2003,12 +1998,10 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
     // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
 
     // CONF.GENERAL.TRACK_ORDER_UNITIL = ;
-    // CONF.GENERAL.MIN_COD_CART_VALUE = ;
     // CONF.GENERAL.ANDROID_SCHEME_HOST = ;
     // CONF.GENERAL.ANDROID_PACKAGE_NAME = ;
     // CONF.GENERAL.IOS_SCHEME_HOST = ;
     // CONF.GENERAL.SPLASH_EXPR_TIME = ;
-    // CONF.GENERAL.DEFAULT_CCODE = ;
     // CONF.GENERAL.CHUNK_SIZE_USER_MIGRATION = ;
     // CONF.GENERAL.PAYMENT_SUCCESS_FALLBACK = ;
     // CONF.GENERAL.PAYMENT_FAILURE_FALLBACK = ;
