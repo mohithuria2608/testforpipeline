@@ -15,10 +15,9 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async createCustomerOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
+    async createCustomerOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-
-            let naemRes = nameConstructor(payload.name.trim())
+            let naemRes = nameConstructor(userData.name.trim())
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
@@ -26,18 +25,18 @@ export class UserSDMEntity extends BaseSDM {
                     language: headers.language.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
-                        CUST_EMAIL: payload.email,
+                        CUST_EMAIL: userData.email,
                         CUST_FIRSTNAME: naemRes.firstName,
                         CUST_LASTNAME: naemRes.lastName,
                         CUST_NATID: -1,
-                        CUST_NOTIFICATION_MOBILE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_NOTIFICATION_MOBILE,
-                        CUST_PHONEAREACODE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONEAREACODE,
-                        CUST_PHONECOUNTRYCODE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONECOUNTRYCODE,
-                        CUST_PHONELOOKUP: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONELOOKUP,
-                        CUST_PHONENUMBER: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONENUMBER,
+                        CUST_NOTIFICATION_MOBILE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_NOTIFICATION_MOBILE,
+                        CUST_PHONEAREACODE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONEAREACODE,
+                        CUST_PHONECOUNTRYCODE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONECOUNTRYCODE,
+                        CUST_PHONELOOKUP: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONELOOKUP,
+                        CUST_PHONENUMBER: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONENUMBER,
                         CUST_PHONETYPE: 2,
-                        PASSWORD: deCryptData(payload.password),
-                        USERNAME: payload.email,
+                        PASSWORD: deCryptData(userData.password),
+                        USERNAME: userData.email,
                         WCUST_FIRSTNAME: naemRes.firstName,
                         WCUST_IS_GUEST: false,
                         WCUST_LASTNAME: naemRes.lastName,
@@ -52,7 +51,7 @@ export class UserSDMEntity extends BaseSDM {
             }
             else {
                 if (res.SDKResult && res.SDKResult.ResultText == "Customer is already exist") {
-                    return await this.getCustomerByEmail({ email: payload.email }, headers)
+                    return await this.getCustomerByEmail({ email: userData.email }, headers)
                 } else {
                     return Promise.reject(res)
                 }

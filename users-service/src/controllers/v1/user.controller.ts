@@ -623,6 +623,7 @@ export class UserController {
     async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
         try {
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
+            consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
             let updateOnSdm = false
             let updateOnCms = false
             let createOnSdm = false
