@@ -231,6 +231,7 @@ export class UserEntity extends BaseEntity {
      */
     async createUserOnSdm(payload: IUserRequest.IUserData) {
         try {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(payload), false)
             let res = await SDM.UserSDME.createCustomerOnSdm(payload)
 
             let putArg: IAerospike.Put = {
