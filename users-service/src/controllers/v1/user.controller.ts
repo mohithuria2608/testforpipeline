@@ -492,6 +492,8 @@ export class UserController {
                                 background: false,
                             }
                             let asUserByEmail = await Aerospike.query(queryArg)
+                            console.log("createProfile step 5=====================>", asUserByEmail)
+
                             if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                                 console.log("createProfile step 5=====================>")
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
@@ -500,7 +502,7 @@ export class UserController {
                                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                     console.log("createProfile step 7=====================>")
-                                    return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
+                                    return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                                 } else {
                                     console.log("createProfile step 8=====================>")
                                     userchangePayload['deleteUserId'] = auth.id

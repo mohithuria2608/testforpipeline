@@ -10,6 +10,7 @@ declare namespace IOrderCMSRequest {
         order_id: number,
         order_status: string,
         payment_status: string,
-        sdm_order_id: number
+        sdm_order_id: number,
+        validation_remarks: string
     }
 }
