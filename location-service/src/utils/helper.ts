@@ -412,7 +412,7 @@ export let checkOnlineStore = function (start, end, nextday?) {
     console.log(startTime < curTime)
     console.log(curTime < endTime)
 
-    if (startTime < curTime && curTime < endTime)
+    if ((startTime < curTime && curTime < endTime) || (startTime > curTime && curTime < endTime && nextday == 1))
         return true
     else
         return false
