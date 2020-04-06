@@ -52,18 +52,32 @@ declare namespace IUserGrpcRequest {
     }
 
     interface ICraeteUserOnCmsReq {
-        request: IUserRequest.IUserData
+        request: {
+            userData: string,
+            headers: string
+        }
     }
 
     interface ICraeteUserOnSdmReq {
-        request: IUserRequest.IUserData
+        request: {
+            userData: string,
+            headers: string
+        }
     }
 
     interface ICreatAddressOnCmsReq {
-        request: IUserRequest.IUserData
+        request: {
+            userData: string,
+            headers: string,
+            asAddress: string
+        }
     }
 
     interface ICreatAddressOnSdmReq {
-        request: IUserRequest.IUserData
+        request: {
+            userData: string,
+            headers: string,
+            asAddress: string
+        }
     }
 }
