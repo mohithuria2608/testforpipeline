@@ -23,18 +23,14 @@ export class AddressController {
                 let userData: IUserRequest.IUserData = data.userData
                 let headers = data.headers
                 let asAddress = data.asAddress
-                userData = await ENTITY.UserE.getUser({ userId: data.id })
+                userData = await ENTITY.UserE.getUser({ userId: userData.id })
                 if (payload.cms.create) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.addAddressOnCms(userData, headers, asAddress)
-                    else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
                 if (payload.cms.update) {
                     if (userData.cmsUserRef && userData.cmsUserRef != 0)
                         await ENTITY.AddressE.updateAddressOnCms(userData, headers, asAddress)
-                    else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
@@ -42,18 +38,12 @@ export class AddressController {
                 let userData: IUserRequest.IUserData = data.userData
                 let headers = data.headers
                 let asAddress = data.asAddress
-                userData = await ENTITY.UserE.getUser({ userId: data.id })
+                userData = await ENTITY.UserE.getUser({ userId: userData.id })
                 if (payload.sdm.create) {
                     if (userData.sdmUserRef && userData.sdmUserRef != 0)
                         await ENTITY.AddressE.addAddressOnSdm(userData, headers, asAddress)
-                    else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
                 if (payload.sdm.update) {
-                    if (userData.sdmUserRef && userData.sdmUserRef != 0) {
-                    }
-                    else
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
                 }
             }
             return {}
