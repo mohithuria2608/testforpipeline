@@ -30,18 +30,18 @@ export class UserController {
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
                 let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create)
-                    await ENTITY.UserE.createUserOnCms(data)
+                    await ENTITY.UserE.createUserOnCms(data.userData, data.headers)
                 if (payload.cms.update)
-                    await ENTITY.UserE.updateUserOnCms(data)
+                    await ENTITY.UserE.updateUserOnCms(data.userData, data.headers)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
                 if (payload.sdm.create)
-                    await ENTITY.UserE.createUserOnSdm(data)
+                    await ENTITY.UserE.createUserOnSdm(data.userData, data.headers)
                 if (payload.sdm.update)
-                    await ENTITY.UserE.updateUserOnSdm(data)
+                    await ENTITY.UserE.updateUserOnSdm(data.userData, data.headers)
                 if (payload.sdm.sync)
-                    await this.validateUserOnSdm(data, true)
+                    await this.validateUserOnSdm(data.userData, true, data.headers)
             }
             return {}
         } catch (error) {
@@ -73,7 +73,7 @@ export class UserController {
                 let userchangePayload: IUserchangeRequest.IUserchange = {
                     fullPhnNo: fullPhnNo,
                     otp: otp,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0
                 }
@@ -87,7 +87,7 @@ export class UserController {
                     brand: headers.brand,
                     country: headers.country,
                     otp: otp,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0,
                     sdmUserRef: 0,
@@ -189,7 +189,7 @@ export class UserController {
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                    await this.validateUserOnSdm(userData, false, headers)
+                    this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
                     userData.password = deCryptData(userData.password);
@@ -205,10 +205,8 @@ export class UserController {
                 if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
                     CMS.UserCMSE.updateCustomerOnCms(userData)
 
-                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm)) {
-                    userData['headers'] = headers
-                    SDM.UserSDME.updateCustomerOnSdm(userData)
-                }
+                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm))
+                    SDM.UserSDME.updateCustomerOnSdm(userData, headers)
 
                 if (asAddress && asAddress.length > 0) {
                 }
@@ -302,7 +300,7 @@ export class UserController {
                         cCode: userData.cCode,
                         phnNo: userData.phnNo,
                         otp: otp,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         brand: headers.brand,
                         country: headers.country,
@@ -320,29 +318,39 @@ export class UserController {
                         }
                         let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                         if (asUserByEmail && asUserByEmail.length > 0) {
-                            console.log("socialAuthValidate step 4=====================>")
-                            if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo)
-                                return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
-                            userUpdate['phnVerified'] = 1
-                            userUpdate['cmsUserRef'] = asUserByEmail[0].cmsUserRef
-                            userUpdate['sdmUserRef'] = asUserByEmail[0].sdmUserRef
-                            userUpdate['sdmCorpRef'] = asUserByEmail[0].sdmCorpRef
-                            userUpdate['name'] = asUserByEmail[0].name
-                            userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-                            userUpdate['fullPhnNo'] = asUserByEmail[0].fullPhnNo
-                            userUpdate['cCode'] = asUserByEmail[0].cCode
-                            userUpdate['phnNo'] = asUserByEmail[0].phnNo
-                            userUpdate['email'] = payload.email
-                            delete userchange['fullPhnNo']
-                            delete userchange['cCode']
-                            delete userchange['phnNo']
-                            delete userchange['otp']
-                            delete userchange['otpExpAt']
-                            delete userchange['otpVerified']
-                            delete userchange['email']
-                            /**
-                             * @todo if this email user has address copy those addresses to current user
-                             */
+                            console.log("socialAuthValidate step 4=====================>", asUserByEmail)
+                            if (!asUserByEmail[0].fullPhnNo || asUserByEmail[0].fullPhnNo == "") {
+                                delete userchange['fullPhnNo']
+                                delete userchange['cCode']
+                                delete userchange['phnNo']
+                                delete userchange['otp']
+                                delete userchange['otpExpAt']
+                                delete userchange['otpVerified']
+                                delete userchange['email']
+                            } else {
+                                if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo)
+                                    return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
+                                userUpdate['phnVerified'] = 1
+                                userUpdate['cmsUserRef'] = asUserByEmail[0].cmsUserRef
+                                userUpdate['sdmUserRef'] = asUserByEmail[0].sdmUserRef
+                                userUpdate['sdmCorpRef'] = asUserByEmail[0].sdmCorpRef
+                                userUpdate['name'] = asUserByEmail[0].name
+                                userUpdate['profileStep'] = Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
+                                userUpdate['fullPhnNo'] = asUserByEmail[0].fullPhnNo
+                                userUpdate['cCode'] = asUserByEmail[0].cCode
+                                userUpdate['phnNo'] = asUserByEmail[0].phnNo
+                                userUpdate['email'] = payload.email
+                                delete userchange['fullPhnNo']
+                                delete userchange['cCode']
+                                delete userchange['phnNo']
+                                delete userchange['otp']
+                                delete userchange['otpExpAt']
+                                delete userchange['otpVerified']
+                                delete userchange['email']
+                                /**
+                                 * @todo if this email user has address copy those addresses to current user
+                                 */
+                            }
                         }
                     }
                     await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
@@ -396,8 +404,10 @@ export class UserController {
             }
             console.log("socialAuthValidate step 9=====================>")
 
-            if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
-                await this.validateUserOnSdm(userData, false, headers)
+            if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
+                this.validateUserOnSdm(userData, false, headers)
+            }
+
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
                 userId: userData.id,
@@ -457,7 +467,7 @@ export class UserController {
                         medium: userData.medium,
                         socialKey: userData.socialKey,
                         otp: otp,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
                         profileStep: 1,
@@ -482,13 +492,12 @@ export class UserController {
                                 background: false,
                             }
                             let asUserByEmail = await Aerospike.query(queryArg)
-                            if (asUserByEmail && asUserByEmail.length > 0) {
+                            if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                                 console.log("createProfile step 5=====================>")
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log("createProfile step 6=====================>")
-                                userchangePayload['chngEmailCms'] = 1
-                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
+                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                     console.log("createProfile step 7=====================>")
                                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
@@ -513,11 +522,11 @@ export class UserController {
                             background: false,
                         }
                         let asUserByEmail = await Aerospike.query(queryArg)
-                        if (asUserByEmail && asUserByEmail.length > 0) {
+                        if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
                             console.log("createProfile step 11=====================>")
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                 console.log("createProfile step 12=====================>")
                                 userchangePayload['id'] = auth.id
@@ -563,7 +572,7 @@ export class UserController {
                     let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0) {
                         console.log("createProfile step 14=====================>")
-                        if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo)
+                        if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         userUpdate['phnVerified'] = 1
                         userUpdate['cmsUserRef'] = asUserByEmail[0].cmsUserRef
@@ -580,12 +589,14 @@ export class UserController {
                          */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
-                    userData['headers'] = headers
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
                             sync: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     });
@@ -609,11 +620,10 @@ export class UserController {
         }
     }
 
-    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers?: ICommonRequest.IHeaders) {
+    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
         try {
-            if (userData.headers && !headers)
-                headers = userData.headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
+            consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
             let updateOnSdm = false
             let updateOnCms = false
             let createOnSdm = false
@@ -623,7 +633,7 @@ export class UserController {
                 createOnCms = true
             }
             if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
-                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email }, headers)
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true
                     updateAs['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
@@ -640,12 +650,15 @@ export class UserController {
                         set: ENTITY.UserE.set,
                         sdm: {
                             create: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
                 } else {
-                    userData = await ENTITY.UserE.createUserOnSdm(userData)
+                    userData = await ENTITY.UserE.createUserOnSdm(userData, headers)
                 }
             }
             if (createOnCms) {
@@ -654,12 +667,15 @@ export class UserController {
                         set: ENTITY.UserE.set,
                         cms: {
                             create: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
                 } else {
-                    userData = await ENTITY.UserE.createUserOnCms(userData)
+                    userData = await ENTITY.UserE.createUserOnCms(userData, headers)
                 }
             }
             if (updateAs && Object.keys(updateAs).length > 0) {
@@ -673,12 +689,15 @@ export class UserController {
                         set: ENTITY.UserE.set,
                         sdm: {
                             update: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
                 } else {
-                    await SDM.UserSDME.updateCustomerOnSdm(userData)
+                    await SDM.UserSDME.updateCustomerOnSdm(userData, headers)
                 }
             }
 
@@ -688,7 +707,10 @@ export class UserController {
                         set: ENTITY.UserE.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })

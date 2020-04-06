@@ -6,9 +6,9 @@ service UserService {
     rpc FetchSession (IFetchSessionReq) returns (ISession) {}
     rpc FetchUser (IFetchUserReq) returns (IUserData) {}
     rpc FetchAddress (IFetchAddressReq) returns (IFetchAddressRes) {}
-    rpc CreateUserOnCms (IUserData) returns (IUserData) {}
+    rpc CreateUserOnCms (ICreatUserOnCmsReq) returns (IUserData) {}
     rpc CreateAddressOnCms (ICreatAddressOnCmsReq) returns (ICreatAddressOnCmsRes) {}
-    rpc CreateUserOnSdm (IUserData) returns (IUserData) {}
+    rpc CreateUserOnSdm (ICreatUserOnSdmReq) returns (IUserData) {}
     rpc CreateAddressOnSdm (ICreatAddressOnSdmReq) returns (ICreatAddressOnSdmRes) {}
 }
 
@@ -135,6 +135,16 @@ message IFetchAddressRes {
     required int32 cityId = 12;
     required int32 areaId = 13;
     required int32 countryId = 14;
+}
+
+message ICreatUserOnCmsReq {
+    required string userData = 1;
+    required string headers = 2;
+}
+
+message ICreatUserOnSdmReq {
+    required string userData = 1;
+    required string headers = 2;
 }
 
 message ICreatAddressOnCmsReq {

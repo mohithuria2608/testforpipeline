@@ -67,6 +67,9 @@ export class LocationController {
                                                         delete s.webMenuId
                                                         delete s.menuTempId
 
+                                                        s.startTime = new Date(+new Date(s.startTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
+                                                        s.endTime = new Date(+new Date(s.endTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
+
                                                         if (!storeCollection.some(ss => ss.storeId === s.storeId))
                                                             storeCollection.push(s)
                                                     }
@@ -161,7 +164,7 @@ export class LocationController {
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
                                     s['isSelected'] = false
-                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextDay)
+                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextday)
                                 })
                             }
                         })
@@ -204,14 +207,13 @@ export class LocationController {
         try {
             let syncData = JSON.parse(payload.as.argv)['data'];
             switch (syncData.type) {
-                case 'city': await cityController.syncToAS(syncData.data);
-                case 'country': await countryController.syncToAS(syncData.data);
-                case 'area': await areaController.syncToAS(syncData.data);
-                case 'store': {
-                    await storeController.syncToAS(syncData.data);
-                    await this.bootstrapPickup();
-                }
+                case 'city': { await cityController.syncToAS(syncData.data); break; }
+                case 'country': { await countryController.syncToAS(syncData.data); break; }
+                case 'area': { await areaController.syncToAS(syncData.data); break; }
+                case 'store': { await storeController.syncToAS(syncData.data); break; }
+                default: return {};
             }
+            await this.bootstrapPickup();
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
             return Promise.reject(error)

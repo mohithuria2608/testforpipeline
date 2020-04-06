@@ -3,6 +3,7 @@ syntax = "proto3";
 service SyncService {
     rpc FetchConfig (IFetchConfigReq) returns (IFetchConfigRes) {}
     rpc FetchAppversion (IFetchAppversionReq) returns (IFetchAppversionRes) {}
+    rpc FetchFaq (IFetchFaqReq) returns (IFetchFaqRes) {}
     rpc Sync (IKafkaReq) returns (IKafkaRes) {}
 }
 
@@ -23,6 +24,15 @@ message IFetchAppversionReq {
 
 message IFetchAppversionRes {
     required string appversion = 1;
+}
+
+message IFetchFaqReq {
+    required string language = 1;
+    required string country = 2;
+}
+
+message IFetchFaqRes {
+    required string faq = 1;
 }
 
 message IKafkaReq {

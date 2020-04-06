@@ -1,5 +1,26 @@
 declare namespace IUserGrpcRequest {
 
+    interface ICraeteUserOnSdmReq {
+        userData: string,
+        headers: string
+    }
+
+    interface ICraeteUserOnCmsReq {
+        userData: string,
+        headers: string
+    }
+
+    interface ICreatAddressOnCmsReq {
+        userData: string,
+        headers: string,
+        asAddress: string
+    }
+
+    interface ICreatAddressOnSdmReq {
+        userData: string,
+        headers: string,
+        asAddress: string
+    }
     interface IFetchAddress {
         userId: string,
         addressId: string,
@@ -25,5 +46,5 @@ declare namespace IUserGrpcRequest {
         cityId: number,
     }
 
-    
+
 }

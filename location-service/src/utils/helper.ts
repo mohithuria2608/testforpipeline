@@ -5,7 +5,7 @@ import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)
@@ -365,13 +365,13 @@ export let validatorErr = function (error) {
 
 export let sendRequestToCMS = function (type, data) {
     return new Promise((resolve, reject) => {
-        let requestUrl = "";
+        let requestUrl = config.get("cms.baseUrl");
         switch (type) {
-            case 'SYNC_CITY': requestUrl = "http://40.123.205.1/rest/V1/restaurant/createcity"; break;
-            case 'SYNC_AREA': requestUrl = "http://40.123.205.1/rest/V1/restaurant/createarea"; break;
-            case 'SYNC_STORE': requestUrl = "http://40.123.205.1/rest/V1/restaurant/create"; break;
-            case 'SYNC_STORE_STATUS': requestUrl = "http://40.123.205.1/rest/V1/restaurant/updatestatus"; break;
-            // case 'SYNC_COUNTRY': requestUrl = "http://40.123.205.1/rest/V1/restaurant/createcountry"; break;
+            case 'SYNC_CITY': requestUrl = "restaurant/createcity"; break;
+            case 'SYNC_AREA': requestUrl = "restaurant/createarea"; break;
+            case 'SYNC_STORE': requestUrl = "restaurant/create"; break;
+            case 'SYNC_STORE_STATUS': requestUrl = "restaurant/updatestatus"; break;
+            // case 'SYNC_COUNTRY': requestUrl = "restaurant/createcountry"; break;
             default: reject(new Error('Invalid Request Entity Type'));
         }
         console.log("SENDING DATA -> ", type, " -> COUNT: ", data.length);
@@ -380,11 +380,11 @@ export let sendRequestToCMS = function (type, data) {
             url: requestUrl,
             body: JSON.stringify(data)
         }, function (err, d, b) {
-            console.log("b --> ", b);
+            console.log("Type -> ", type, " -> Response Body", b);
             if (err) reject(err);
             else resolve(b);
         });
-    })
+    });
 }
 
 export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: string = Constant.DATABASE.LANGUAGE.EN, returnMsg?: boolean, returnErr?: boolean) {
@@ -401,47 +401,21 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let checkOnlineStore = function (start, end, nextDay?) {
-    let dbOffest = (4 * 60 * 60 * 1000)
-    console.log("curTime",
-        new Date(),
-        new Date().getUTCHours(),
-        new Date().getUTCMinutes(),
-        new Date().getUTCSeconds(),
-        new Date().getUTCMilliseconds())
-    console.log("startTime",
-        start,
-        new Date(start).getTime(),
-        new Date(start).getUTCHours(),
-        new Date(start).getUTCMinutes(),
-        new Date(start).getUTCSeconds(),
-        new Date(start).getUTCMilliseconds()
-    )
-    console.log("endTime",
-        end,
-        new Date(end).getTime(),
-        new Date(end).getUTCHours(),
-        new Date(end).getUTCMinutes(),
-        new Date(end).getUTCSeconds(),
-        new Date(end).getUTCMilliseconds())
-    let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
-    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds() - dbOffest
-    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds() - dbOffest
+export let checkOnlineStore = function (start, end, nextday?) {
+    let curTime = new Date().getTime()
+    let startTime = new Date(new Date(new Date().setUTCHours(new Date(start).getUTCHours())).setUTCMinutes(new Date(start).getUTCMinutes())).setUTCSeconds(new Date(start).getUTCSeconds())
+    let endTime = (nextday == 0) ?
+        new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds()) :
+        new Date(new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds())).setUTCDate(new Date().getUTCDate() + 1)
 
     console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
     console.log(startTime < curTime)
     console.log(curTime < endTime)
-    if (nextDay != undefined && nextDay == 0) {
-        if (startTime < curTime && curTime < endTime)
-            return true
-        else
-            return false
-    } else {
-        if (startTime < curTime)
-            return true
-        else
-            return false
-    }
+
+    if ((startTime < curTime && curTime < endTime) || (startTime > curTime && curTime < endTime && nextday == 1))
+        return true
+    else
+        return false
 }
 
 function isJsonString(str) {

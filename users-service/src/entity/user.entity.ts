@@ -113,64 +113,64 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
-            let checkUser: IUserRequest.IUserData = await this.getUser({ userId: payload.id })
-            if (checkUser && checkUser.id) {
+            let userInfo: IUserRequest.IUserData = await this.getUser({ userId: payload.id })
+            if (userInfo && userInfo.id) {
             } else {
-                checkUser = {}
-                checkUser['id'] = payload.id
-                checkUser['password'] = cryptData(generateRandomString(9))
+                userInfo = {}
+                userInfo['id'] = payload.id
+                userInfo['password'] = cryptData(generateRandomString(9))
                 this.createDefaultCart(payload.id)
             }
             if (payload.username)
-                checkUser['username'] = payload.username
+                userInfo['username'] = payload.username
             if (payload.brand)
-                checkUser['brand'] = payload.brand
+                userInfo['brand'] = payload.brand
             if (payload.country)
-                checkUser['country'] = payload.country
+                userInfo['country'] = payload.country
             if (payload.email && payload.email != "")
-                checkUser['email'] = payload.email
+                userInfo['email'] = payload.email
             if (payload.fullPhnNo)
-                checkUser['fullPhnNo'] = payload.fullPhnNo
+                userInfo['fullPhnNo'] = payload.fullPhnNo
             if (payload.cCode)
-                checkUser['cCode'] = payload.cCode
+                userInfo['cCode'] = payload.cCode
             if (payload.phnNo)
-                checkUser['phnNo'] = payload.phnNo
+                userInfo['phnNo'] = payload.phnNo
             if (payload.sdmUserRef != undefined)
-                checkUser['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
+                userInfo['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
             if (payload.sdmCorpRef != undefined)
-                checkUser['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
+                userInfo['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
             if (payload.cmsUserRef != undefined)
-                checkUser['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
+                userInfo['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
             if (payload.phnVerified != undefined)
-                checkUser['phnVerified'] = payload.phnVerified
+                userInfo['phnVerified'] = payload.phnVerified
             if (payload.emailVerified != undefined)
-                checkUser['emailVerified'] = payload.emailVerified
+                userInfo['emailVerified'] = payload.emailVerified
             if (payload.name && payload.name != "")
-                checkUser['name'] = payload.name.trim()
+                userInfo['name'] = payload.name.trim()
             if (payload.socialKey)
-                checkUser['socialKey'] = payload.socialKey
+                userInfo['socialKey'] = payload.socialKey
             if (payload.socialKey)
-                checkUser['medium'] = payload.medium
+                userInfo['medium'] = payload.medium
             if (payload.profileStep != undefined)
-                checkUser['profileStep'] = payload.profileStep
+                userInfo['profileStep'] = payload.profileStep
             if (payload.createdAt)
-                checkUser['createdAt'] = payload.createdAt
+                userInfo['createdAt'] = payload.createdAt
 
             if (payload.cmsAddress && payload.cmsAddress.length > 0)
-                checkUser['cmsAddress'] = payload.cmsAddress
+                userInfo['cmsAddress'] = payload.cmsAddress
             if (payload.asAddress && payload.asAddress.length > 0)
-                checkUser['asAddress'] = payload.asAddress
+                userInfo['asAddress'] = payload.asAddress
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
-                checkUser['sdmAddress'] = payload.sdmAddress
+                userInfo['sdmAddress'] = payload.sdmAddress
 
             let putArg: IAerospike.Put = {
-                bins: checkUser,
+                bins: userInfo,
                 set: this.set,
                 key: payload.id,
                 createOrReplace: true
             }
             await Aerospike.put(putArg)
-            return checkUser
+            return userInfo
         } catch (error) {
             consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -227,11 +227,13 @@ export class UserEntity extends BaseEntity {
 
     /**
      * @description Create user on SDM
-     * @param payload 
+     * @param userData 
      */
-    async createUserOnSdm(payload: IUserRequest.IUserData) {
+    async createUserOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let res = await SDM.UserSDME.createCustomerOnSdm(payload)
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(userData), false)
+            consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
+            let res = await SDM.UserSDME.createCustomerOnSdm(userData, headers)
 
             let putArg: IAerospike.Put = {
                 bins: {
@@ -239,27 +241,29 @@ export class UserEntity extends BaseEntity {
                     sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
                 },
                 set: this.set,
-                key: payload.id,
+                key: userData.id,
                 update: true,
             }
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: payload.id })
-            if (user.socialKey) {
-                SDM.UserSDME.updateCustomerTokenOnSdm(user)
+            userData = await this.getUser({ userId: userData.id })
+            if (userData.socialKey) {
+                SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
             }
-            console.log("user after getting sdm id", user)
-            if (user.cmsUserRef != 0) {
+            console.log("user after getting sdm id", userData)
+            if (userData.cmsUserRef != 0) {
                 kafkaService.kafkaSync({
                     set: this.set,
                     cms: {
                         update: true,
-                        argv: JSON.stringify(user)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers
+                        })
                     },
                     inQ: true
                 })
             }
-
-            return user
+            return userData
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -270,9 +274,9 @@ export class UserEntity extends BaseEntity {
      * @description Update user on SDM
      * @param payload 
      */
-    async updateUserOnSdm(payload: IUserRequest.IUserData) {
+    async updateUserOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let res = await SDM.UserSDME.updateCustomerOnSdm(payload)
+            let res = await SDM.UserSDME.updateCustomerOnSdm(payload, headers)
             return res
         } catch (error) {
             consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
@@ -284,7 +288,7 @@ export class UserEntity extends BaseEntity {
      * @description Create user on CMS
      * @param payload 
      */
-    async createUserOnCms(payload: IUserRequest.IUserData) {
+    async createUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             let res = await CMS.UserCMSE.createCustomerOnCms(payload)
             if (res && res.customerId) {
@@ -304,7 +308,10 @@ export class UserEntity extends BaseEntity {
                         set: this.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify(user)
+                            argv: JSON.stringify({
+                                userData: user,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
@@ -322,7 +329,7 @@ export class UserEntity extends BaseEntity {
      * @description Update user on CMS
      * @param payload 
      */
-    async updateUserOnCms(payload: IUserRequest.IUserData) {
+    async updateUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             if (payload.cmsUserRef) {
                 let res = await CMS.UserCMSE.updateCustomerOnCms(payload)

@@ -2,7 +2,7 @@ import * as config from 'config'
 import { connect, set, connection as db } from 'mongoose'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export class MongoClass {
     private mongoUrl = config.get('mongo.url')

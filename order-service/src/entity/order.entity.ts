@@ -705,20 +705,20 @@ export class OrderClass extends BaseEntity {
                         // PAY_CREDITCARD_EXPIREDATE: "",
                         // PAY_REF_GATEWAY: "",
                         // PAY_REF_NO: "",
-                        PAY_STATUS: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
-                        PAY_STORE_TENDERID: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
-                        PAY_SUB_TYPE: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
-                        PAY_TYPE: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
+                        PAY_STATUS: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
+                        PAY_STORE_TENDERID: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
+                        PAY_SUB_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
+                        PAY_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
                     }
                 }
             }
             let sdmOrderObj = {
                 AddressID: order.address.sdmAddressRef,
                 Comps: Comps,
-                ConceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                ConceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
                 CountryID: 1,
                 CustomerID: order.sdmUserRef,
-                DeliveryChargeID: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.SERVER.DELIVERY_CHARGE_ID : undefined,
+                DeliveryChargeID: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.CONF.GENERAL.DELIVERY_CHARGE_ID : undefined,
                 DistrictID: -1,
                 Entries: this.createCEntries(order.items),
                 OrderID: 0,
@@ -735,9 +735,9 @@ export class OrderClass extends BaseEntity {
              * @step 1 :create order on sdm 
              */
             let data: IOrderSdmRequest.ICreateOrder = {
-                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+                licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
                 language: "en",
-                conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
                 order: sdmOrderObj,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
@@ -819,7 +819,7 @@ export class OrderClass extends BaseEntity {
                 sdmUserRef: userData.sdmUserRef,
                 country: headers.country,
                 language: headers.language,
-                status: Constant.DATABASE.STATUS.ORDER.CART.MONGO,
+                status: Constant.CONF.ORDER_STATUS.CART.MONGO,
                 sdmOrderStatus: -1,
                 items: items,
                 amount: amount,
@@ -891,7 +891,7 @@ export class OrderClass extends BaseEntity {
                     amount: totalAmount,
                     name: ""
                 },
-                status: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO
+                status: Constant.CONF.ORDER_STATUS.PENDING.MONGO
             }
             switch (paymentMethodId) {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
@@ -902,7 +902,7 @@ export class OrderClass extends BaseEntity {
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                            order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                            order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
                             sdm_order_id: order.sdmOrderRef,
 
                         })
@@ -936,7 +936,7 @@ export class OrderClass extends BaseEntity {
                             CMS.OrderCMSE.updateOrder({
                                 order_id: order.cmsOrderRef,
                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                                order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                                order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
                                 sdm_order_id: order.sdmOrderRef,
 
                             })
@@ -980,7 +980,7 @@ export class OrderClass extends BaseEntity {
                         if (order.sdmOrderRef && order.sdmOrderRef != 0) {
                             if (order.transferFromOrderId)
                                 order.sdmOrderRef = order.transferFromOrderId
-                            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language })
+                            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
                             consolelog(process.cwd(), `current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
                             if (sdmOrder.Status && typeof sdmOrder.Status) {
                                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
@@ -1061,8 +1061,8 @@ export class OrderClass extends BaseEntity {
                                     }
                                 }
 
-                                if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO &&
-                                    (order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
+                                if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
+                                    (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
                                     recheck = false
                                     order = await this.maxPendingReachedHandler(order);
                                 }
@@ -1186,7 +1186,8 @@ export class OrderClass extends BaseEntity {
                                             let paymentObjAdded = await OrderSDME.processCreditCardOnSdm({
                                                 sdmOrderRef: order.sdmOrderRef,
                                                 transaction: order.transLogs[1],
-                                                language: order.language
+                                                language: order.language,
+                                                country: order.country
                                             })
                                             if (paymentObjAdded) {
                                                 consolelog(process.cwd(), "PENDING 5:       ", parseInt(sdmOrder.Status), true)
@@ -1250,20 +1251,20 @@ export class OrderClass extends BaseEntity {
                             case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
                                 consolelog(process.cwd(), "CONFIRMED 2 :       ", parseInt(sdmOrder.Status), true)
                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                    status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                    status: Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
                                     updatedAt: new Date().getTime(),
                                 }, { new: true })
 
                                 setTimeout(async () => {
                                     order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                        status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
                                         updatedAt: new Date().getTime(),
                                     }, { new: true })
                                     if (order.cmsOrderRef)
                                         CMS.OrderCMSE.updateOrder({
                                             order_id: order.cmsOrderRef,
                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                            order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
+                                            order_status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.CMS,
                                             sdm_order_id: order.sdmOrderRef,
 
                                         })
@@ -1275,7 +1276,7 @@ export class OrderClass extends BaseEntity {
                                 if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
                                     consolelog(process.cwd(), "CONFIRMED 4 :       ", parseInt(sdmOrder.Status), true)
                                     order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                        status: Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
+                                        status: Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
                                         updatedAt: new Date().getTime(),
                                     }, { new: true })
                                     let transLogs = [];
@@ -1318,7 +1319,7 @@ export class OrderClass extends BaseEntity {
                                     }
                                     if (captureStatus) {
                                         let dataToUpdateOrder = {
-                                            status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
+                                            status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
                                             "payment.transactionId": captureStatus.transactions[0].id,
                                             "payment.status": captureStatus.transactions[0].type,
                                             updatedAt: new Date().getTime()
@@ -1343,7 +1344,7 @@ export class OrderClass extends BaseEntity {
                                                 CMS.OrderCMSE.updateOrder({
                                                     order_id: order.cmsOrderRef,
                                                     payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                                    order_status: Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.CMS,
+                                                    order_status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.CMS,
                                                     sdm_order_id: order.sdmOrderRef,
 
                                                 })
@@ -1392,14 +1393,14 @@ export class OrderClass extends BaseEntity {
                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
                     consolelog(process.cwd(), "READY 1 :       ", parseInt(sdmOrder.Status), true)
                     order = await this.updateOneEntityMdb({ _id: order._id }, {
-                        status: Constant.DATABASE.STATUS.ORDER.READY.MONGO,
+                        status: Constant.CONF.ORDER_STATUS.READY.MONGO,
                         updatedAt: new Date().getTime(),
                     }, { new: true })
                     if (order.cmsOrderRef)
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                            order_status: Constant.DATABASE.STATUS.ORDER.READY.CMS,
+                            order_status: Constant.CONF.ORDER_STATUS.READY.CMS,
                             sdm_order_id: order.sdmOrderRef,
 
                         })
@@ -1424,14 +1425,14 @@ export class OrderClass extends BaseEntity {
                     consolelog(process.cwd(), "ON_THE_WAY 1 :       ", parseInt(sdmOrder.Status), true)
                     if (parseInt(sdmOrder.Status) == 32) {
                         order = await this.updateOneEntityMdb({ _id: order._id }, {
-                            status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
+                            status: Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO,
                             updatedAt: new Date().getTime(),
                         }, { new: true })
                         if (order.cmsOrderRef)
                             CMS.OrderCMSE.updateOrder({
                                 order_id: order.cmsOrderRef,
                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                order_status: Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.CMS,
+                                order_status: Constant.CONF.ORDER_STATUS.ON_THE_WAY.CMS,
                                 sdm_order_id: order.sdmOrderRef,
 
                             })
@@ -1450,21 +1451,21 @@ export class OrderClass extends BaseEntity {
             consolelog(process.cwd(), ` DELIVERED : current sdm status : ${sdmOrder.Status}, old sdm status : ${oldSdmStatus}`, "", true)
             if (order && order._id) {
                 if (oldSdmStatus != parseInt(sdmOrder.Status)) {
-                    if (order.status != Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO) {
+                    if (order.status != Constant.CONF.ORDER_STATUS.DELIVERED.MONGO) {
                         consolelog(process.cwd(), "DELIVERED 1 :       ", parseInt(sdmOrder.Status), true)
                         if (parseInt(sdmOrder.Status) == 128)
                             recheck = false
                         order = await this.updateOneEntityMdb({ _id: order._id }, {
                             isActive: 0,
-                            status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
+                            status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
                             updatedAt: new Date().getTime(),
-                            trackUntil: new Date().getTime() + Constant.SERVER.TRACK_ORDER_UNITIL,
+                            trackUntil: new Date().getTime() + Constant.CONF.GENERAL.TRACK_ORDER_UNITIL,
                         }, { new: true })
                         if (order.cmsOrderRef)
                             CMS.OrderCMSE.updateOrder({
                                 order_id: order.cmsOrderRef,
                                 payment_status: Constant.DATABASE.STATUS.PAYMENT.CAPTURED,
-                                order_status: Constant.DATABASE.STATUS.ORDER.DELIVERED.CMS,
+                                order_status: Constant.CONF.ORDER_STATUS.DELIVERED.CMS,
                                 sdm_order_id: order.sdmOrderRef,
 
                             })
@@ -1486,10 +1487,10 @@ export class OrderClass extends BaseEntity {
                     consolelog(process.cwd(), "CANCELED 1 :       ", parseInt(sdmOrder.Status), true)
                     if (parseInt(sdmOrder.Status) == 512)
                         recheck = false
-                    if (order.status != Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO) {
+                    if (order.status != Constant.CONF.ORDER_STATUS.CANCELED.MONGO) {
                         let dataToUpdateOrder = {
                             isActive: 0,
-                            status: Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
+                            status: Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
                             updatedAt: new Date().getTime()
                         }
                         if (order.payment) {
@@ -1500,7 +1501,7 @@ export class OrderClass extends BaseEntity {
                                         CMS.OrderCMSE.updateOrder({
                                             order_id: order.cmsOrderRef,
                                             payment_status: Constant.DATABASE.STATUS.PAYMENT.FAILED,
-                                            order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
+                                            order_status: Constant.CONF.ORDER_STATUS.CANCELED.CMS,
                                             sdm_order_id: order.sdmOrderRef,
 
                                         })
@@ -1592,7 +1593,7 @@ export class OrderClass extends BaseEntity {
                                             CMS.OrderCMSE.updateOrder({
                                                 order_id: order.cmsOrderRef,
                                                 payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
-                                                order_status: Constant.DATABASE.STATUS.ORDER.CANCELED.CMS,
+                                                order_status: Constant.CONF.ORDER_STATUS.CANCELED.CMS,
                                                 sdm_order_id: order.sdmOrderRef,
 
                                             })
@@ -1616,7 +1617,7 @@ export class OrderClass extends BaseEntity {
                                         CMS.OrderCMSE.updateOrder({
                                             order_id: order.cmsOrderRef,
                                             payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
-                                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                            order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                             sdm_order_id: order.sdmOrderRef,
 
                                         })
@@ -1629,7 +1630,7 @@ export class OrderClass extends BaseEntity {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef,
 
                                 })
@@ -1692,11 +1693,12 @@ export class OrderClass extends BaseEntity {
                         sdmOrderRef: order.sdmOrderRef,
                         voidReason: voidReason,
                         validationRemarks: validationRemarks,
-                        language: order.language
+                        language: order.language,
+                        country: order.country
                     })
                 let dataToUpdateOrder = {
                     isActive: 0,
-                    status: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO,
+                    status: Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
                     updatedAt: new Date().getTime(),
                     validationRemarks: validationRemarks,
                 }
@@ -1708,7 +1710,7 @@ export class OrderClass extends BaseEntity {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef,
 
                                 })
@@ -1799,7 +1801,7 @@ export class OrderClass extends BaseEntity {
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
                                         payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
-                                        order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                        order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                         sdm_order_id: order.sdmOrderRef,
 
                                     })
@@ -1823,7 +1825,7 @@ export class OrderClass extends BaseEntity {
                                 CMS.OrderCMSE.updateOrder({
                                     order_id: order.cmsOrderRef,
                                     payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
-                                    order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                                    order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                                     sdm_order_id: order.sdmOrderRef,
 
                                 })
@@ -1836,7 +1838,7 @@ export class OrderClass extends BaseEntity {
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
                             payment_status: Constant.DATABASE.STATUS.TRANSACTION.FAILED.CMS,
-                            order_status: Constant.DATABASE.STATUS.ORDER.FAILURE.CMS,
+                            order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
                             sdm_order_id: order.sdmOrderRef,
 
                         })
@@ -1885,7 +1887,7 @@ export class OrderClass extends BaseEntity {
                 or.push(
                     {
                         sdmOrderRef: { '$ne': 0 },
-                        status: Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
+                        status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
                         trackUntil: { $gte: new Date().getTime() },
 
                     },
@@ -1893,11 +1895,11 @@ export class OrderClass extends BaseEntity {
                         sdmOrderRef: { '$ne': 0 },
                         status: {
                             $in: [
-                                Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                                Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
-                                Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-                                Constant.DATABASE.STATUS.ORDER.READY.MONGO,
-                                Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO
+                                Constant.CONF.ORDER_STATUS.PENDING.MONGO,
+                                Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
+                                Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
+                                Constant.CONF.ORDER_STATUS.READY.MONGO,
+                                Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO
                             ]
                         },
                         isActive: 1
@@ -1907,7 +1909,7 @@ export class OrderClass extends BaseEntity {
                 or.push(
                     {
                         sdmOrderRef: { '$eq': 0 },
-                        status: { $eq: Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO }
+                        status: { $eq: Constant.CONF.ORDER_STATUS.FAILURE.MONGO }
                     },
                     {
                         "payment.paymentMethodId": Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD,

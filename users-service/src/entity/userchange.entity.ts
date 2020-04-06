@@ -105,7 +105,7 @@ export class UserchangeEntity extends BaseEntity {
                 }
                 if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (!((Constant.SERVER.BY_PASS_OTP && (payload.otp == Constant.SERVER.BY_PASS_OTP)) || (curUserchnage.otp == payload.otp))) {
+                if (!((Constant.CONF.GENERAL.BY_PASS_OTP && (payload.otp == Constant.CONF.GENERAL.BY_PASS_OTP)) || (curUserchnage.otp == payload.otp))) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
                 }
                 if (curUserchnage.otpExpAt < new Date().getTime())
@@ -123,99 +123,105 @@ export class UserchangeEntity extends BaseEntity {
 
     async buildUserchange(userId: string, payload: IUserchangeRequest.IUserchange, language: string = Constant.DATABASE.LANGUAGE.EN) {
         try {
-            if (payload.fullPhnNo && payload.otp && payload.otpExpAt) {
-                let queryArg: IAerospike.Query = {
-                    equal: {
-                        bin: "fullPhnNo",
-                        value: payload.fullPhnNo
-                    },
-                    set: this.set,
-                    background: false,
-                }
-                let checkUserChange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
-                if (checkUserChange && checkUserChange.length > 0) {
-                    console.log("old checkUserChange===========>", JSON.stringify(checkUserChange))
-                    if (checkUserChange[0].id && checkUserChange[0].otp && checkUserChange[0].otpExpAt) {
-                        await Aerospike.remove({ set: this.set, key: checkUserChange[0].id })
-                        if (checkUserChange[0].otpExpAt > new Date().getTime()) {
-                            payload.otp = checkUserChange[0].otp
-                            payload.otpExpAt = checkUserChange[0].otpExpAt
+            if (payload && Object.keys(payload).length > 0) {
+                if (payload.fullPhnNo && payload.otp && payload.otpExpAt) {
+                    let queryArg: IAerospike.Query = {
+                        equal: {
+                            bin: "fullPhnNo",
+                            value: payload.fullPhnNo
+                        },
+                        set: this.set,
+                        background: false,
+                    }
+                    let checkUserChange: IUserchangeRequest.IUserchange[] = await Aerospike.query(queryArg)
+                    if (checkUserChange && checkUserChange.length > 0) {
+                        console.log("old checkUserChange===========>", JSON.stringify(checkUserChange))
+                        if (checkUserChange[0].id && checkUserChange[0].otp && checkUserChange[0].otpExpAt) {
+                            await Aerospike.remove({ set: this.set, key: checkUserChange[0].id })
+                            if (checkUserChange[0].otpExpAt > new Date().getTime()) {
+                                payload.otp = checkUserChange[0].otp
+                                payload.otpExpAt = checkUserChange[0].otpExpAt
+                            }
                         }
                     }
                 }
+                let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
+                    id: userId
+                }
+                if (payload.username)
+                    dataToUpdateUserchange['username'] = payload.username
+                if (payload.isGuest != undefined)
+                    dataToUpdateUserchange['isGuest'] = payload.isGuest
+                if (payload.fullPhnNo)
+                    dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
+                if (payload.cCode)
+                    dataToUpdateUserchange['cCode'] = payload.cCode
+                if (payload.phnNo)
+                    dataToUpdateUserchange['phnNo'] = payload.phnNo
+                if (payload.otp)
+                    dataToUpdateUserchange['otp'] = payload.otp
+                if (payload.otpExpAt)
+                    dataToUpdateUserchange['otpExpAt'] = payload.otpExpAt
+                if (payload.otpVerified)
+                    dataToUpdateUserchange['otpVerified'] = payload.otpVerified
+                if (payload.name && payload.name != "")
+                    dataToUpdateUserchange['name'] = payload.name.trim()
+                if (payload.email && payload.email != "")
+                    dataToUpdateUserchange['email'] = payload.email
+                if (payload.socialKey)
+                    dataToUpdateUserchange['socialKey'] = payload.socialKey
+                if (payload.medium)
+                    dataToUpdateUserchange['medium'] = payload.medium
+                if (payload.deleteUserId)
+                    dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
+                if (payload.emailVerified != undefined)
+                    dataToUpdateUserchange['emailVerified'] = payload.emailVerified
+                if (payload.profileStep != undefined)
+                    dataToUpdateUserchange['profileStep'] = payload.profileStep
+                if (payload.address)
+                    dataToUpdateUserchange['address'] = payload.address
+                if (payload.cmsUserRef != undefined)
+                    dataToUpdateUserchange['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
+                if (payload.sdmUserRef != undefined)
+                    dataToUpdateUserchange['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
+                if (payload.sdmCorpRef != undefined)
+                    dataToUpdateUserchange['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
+                if (payload.cmsAddress && payload.cmsAddress.length > 0)
+                    dataToUpdateUserchange['cmsAddress'] = payload.cmsAddress
+                if (payload.asAddress && payload.asAddress.length > 0)
+                    dataToUpdateUserchange['asAddress'] = payload.asAddress
+                if (payload.sdmAddress && payload.sdmAddress.length > 0)
+                    dataToUpdateUserchange['sdmAddress'] = payload.sdmAddress
+                if (payload.chngPhnCms != undefined)
+                    dataToUpdateUserchange['chngPhnCms'] = payload.chngPhnCms
+                if (payload.chngPhnSdm != undefined)
+                    dataToUpdateUserchange['chngPhnSdm'] = payload.chngPhnSdm
+                if (payload.chngEmailCms != undefined)
+                    dataToUpdateUserchange['chngEmailCms'] = payload.chngEmailCms
+                if (payload.chngEmailSdm != undefined)
+                    dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
+                if (payload.brand)
+                    dataToUpdateUserchange['brand'] = payload.brand
+                if (payload.country)
+                    dataToUpdateUserchange['country'] = payload.country
+                if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
+                    notificationService.sendNotification({
+                        toSendMsg: true,
+                        msgCode: Constant.NOTIFICATION_CODE.SMS.USER_OTP_VERIFICATION,
+                        msgDestination: encodeURIComponent(payload.fullPhnNo),
+                        language: language,
+                        payload: JSON.stringify({ msg: { otp: payload.otp } })
+                    });
+                }
+                let putArg: IAerospike.Put = {
+                    bins: dataToUpdateUserchange,
+                    set: this.set,
+                    key: dataToUpdateUserchange['id'],
+                    createOrReplace: true
+                }
+                consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
+                await Aerospike.put(putArg)
             }
-            let dataToUpdateUserchange: IUserchangeRequest.IUserchange = {
-                id: userId
-            }
-            if (payload.username)
-                dataToUpdateUserchange['username'] = payload.username
-            if (payload.isGuest != undefined)
-                dataToUpdateUserchange['isGuest'] = payload.isGuest
-            if (payload.fullPhnNo)
-                dataToUpdateUserchange['fullPhnNo'] = payload.fullPhnNo
-            if (payload.cCode)
-                dataToUpdateUserchange['cCode'] = payload.cCode
-            if (payload.phnNo)
-                dataToUpdateUserchange['phnNo'] = payload.phnNo
-            if (payload.otp)
-                dataToUpdateUserchange['otp'] = payload.otp
-            if (payload.otpExpAt)
-                dataToUpdateUserchange['otpExpAt'] = payload.otpExpAt
-            if (payload.otpVerified)
-                dataToUpdateUserchange['otpVerified'] = payload.otpVerified
-            if (payload.name && payload.name != "")
-                dataToUpdateUserchange['name'] = payload.name.trim()
-            if (payload.email && payload.email != "")
-                dataToUpdateUserchange['email'] = payload.email
-            if (payload.socialKey)
-                dataToUpdateUserchange['socialKey'] = payload.socialKey
-            if (payload.medium)
-                dataToUpdateUserchange['medium'] = payload.medium
-            if (payload.deleteUserId)
-                dataToUpdateUserchange['deleteUserId'] = payload.deleteUserId
-            if (payload.emailVerified != undefined)
-                dataToUpdateUserchange['emailVerified'] = payload.emailVerified
-            if (payload.profileStep != undefined)
-                dataToUpdateUserchange['profileStep'] = payload.profileStep
-            if (payload.address)
-                dataToUpdateUserchange['address'] = payload.address
-            if (payload.cmsUserRef != undefined)
-                dataToUpdateUserchange['cmsUserRef'] = parseInt(payload.cmsUserRef.toString())
-            if (payload.sdmUserRef != undefined)
-                dataToUpdateUserchange['sdmUserRef'] = parseInt(payload.sdmUserRef.toString())
-            if (payload.sdmCorpRef != undefined)
-                dataToUpdateUserchange['sdmCorpRef'] = parseInt(payload.sdmCorpRef.toString())
-            if (payload.cmsAddress && payload.cmsAddress.length > 0)
-                dataToUpdateUserchange['cmsAddress'] = payload.cmsAddress
-            if (payload.asAddress && payload.asAddress.length > 0)
-                dataToUpdateUserchange['asAddress'] = payload.asAddress
-            if (payload.sdmAddress && payload.sdmAddress.length > 0)
-                dataToUpdateUserchange['sdmAddress'] = payload.sdmAddress
-            if (payload.chngPhnCms != undefined)
-                dataToUpdateUserchange['chngPhnCms'] = payload.chngPhnCms
-            if (payload.chngPhnSdm != undefined)
-                dataToUpdateUserchange['chngPhnSdm'] = payload.chngPhnSdm
-            if (payload.chngEmailCms != undefined)
-                dataToUpdateUserchange['chngEmailCms'] = payload.chngEmailCms
-            if (payload.chngEmailSdm != undefined)
-                dataToUpdateUserchange['chngEmailSdm'] = payload.chngEmailSdm
-            if (payload.fullPhnNo && payload.fullPhnNo != "" && payload.otp && payload.otp != 0 && payload.otpExpAt && payload.otpVerified == 0) {
-                notificationService.sendNotification({
-                    toSendMsg: true,
-                    msgCode: Constant.NOTIFICATION_CODE.SMS.USER_OTP_VERIFICATION,
-                    msgDestination: encodeURIComponent(payload.fullPhnNo),
-                    language: language,
-                    payload: JSON.stringify({ msg: { otp: payload.otp } })
-                });
-            }
-            let putArg: IAerospike.Put = {
-                bins: dataToUpdateUserchange,
-                set: this.set,
-                key: dataToUpdateUserchange['id'],
-                createOrReplace: true
-            }
-            consolelog(process.cwd(), "putArg", JSON.stringify(putArg), false)
-            await Aerospike.put(putArg)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "createUserchange", JSON.stringify(error), false)

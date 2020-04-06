@@ -22,7 +22,7 @@ export class StoreController {
             let rawdata = fs.readFileSync(__dirname + `/../../../model/store_${jsonPostfix}.json`, 'utf-8');
             let stores = JSON.parse(rawdata);
             for (const store of stores) {
-                await ENTITY.StoreE.bootstrapStore(store)
+                await ENTITY.StoreE.saveStore(store)
             }
             return stores
         } catch (error) {
@@ -47,7 +47,7 @@ export class StoreController {
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
             if (store && store.length > 0 && store[0].active == 1) {
-                store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextDay)
+                store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                 return store[0]
             } else
                 return {}
@@ -74,7 +74,7 @@ export class StoreController {
             }
             let res = await Aerospike.query(geoWithinArg)
             if (res && res.length > 0 && res[0].active == 1) {
-                res[0]['isOnline'] = checkOnlineStore(res[0].startTime, res[0].endTime, res[0].nextDay)
+                res[0]['isOnline'] = checkOnlineStore(res[0].startTime, res[0].endTime, res[0].nextday)
                 return res[0]
             }
             else
@@ -85,22 +85,22 @@ export class StoreController {
         }
     }
 
-    /**
-     * @method GRPC
-     * syncs stores from CMS to Aerospike
-     */
-    async syncStores(payload): Promise<any> {
-        try {
-            let storesList = JSON.parse(payload.as.argv);
-            for (let store of storesList.data) {
-                await ENTITY.StoreE.postStores(store);
-            }
-            return {};
-        } catch (error) {
-            consolelog(process.cwd(), "syncStores", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
+    // /**
+    //  * @method GRPC
+    //  * syncs stores from CMS to Aerospike
+    //  */
+    // async syncStores(payload): Promise<any> {
+    //     try {
+    //         let storesList = JSON.parse(payload.as.argv);
+    //         for (let store of storesList.data) {
+    //             await ENTITY.StoreE.postStores(store);
+    //         }
+    //         return {};
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "syncStores", JSON.stringify(error), false)
+    //         return Promise.reject(error)
+    //     }
+    // }
 
     /** post on CMS */
     async postOnCMS() {
@@ -114,26 +114,18 @@ export class StoreController {
             console.log("Number of stores synced -> ", payload.length);
             for (let store of payload) {
                 store.menuTempId = 17; //@TODO -remove when it will come from CMS
-
-                if (store.location) {
-                    if (store.location.latitude && store.location.latitude != "") store.location.latitude = parseFloat(store.location.latitude);
-                    else store.location.latitude = 0;
-                    if (store.location.longitude && store.location.longitude != "") store.location.longitude = parseFloat(store.location.longitude);
-                    else store.location.longitude = 0;
-                }
-
                 if (store.geoFence && store.geoFence.length) {
                     for (let fence of store.geoFence) {
                         let storeData = { ...store, ...fence };
                         storeData.geoFence = ENTITY.StoreE.createGeoFence(storeData.latitude, storeData.longitude);
                         delete storeData.latitude; delete storeData.longitude;
                         storeData.storeIdAs = storeData.storeId + "_" + storeData.areaId;
-                        await ENTITY.StoreE.syncStoreData(storeData);
+                        await ENTITY.StoreE.saveStore(storeData);
                     }
                 } else {
                     store.storeIdAs = store.storeId + "_-1";
                     store.geoFence = { "type": "Polygon", "coordinates": [] };
-                    await ENTITY.StoreE.syncStoreData(store);
+                    await ENTITY.StoreE.saveStore(store);
                 }
             }
         } catch (error) {
@@ -160,7 +152,7 @@ export class StoreController {
                         && store.active !== storeStatusList[i].active
                     ) {
                         store.active = storeStatusList[i].active;
-                        await ENTITY.StoreE.updateStoreData(store);
+                        await ENTITY.StoreE.saveStore(store);
                         if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
                             storesToSyncWithCMS.push({ restaurant_id: store.id, id: store.id, sdmStoreId: store.storeId, active: store.active });
                             storesToSyncWithCMSHash[store.sdmStoreId] = true;

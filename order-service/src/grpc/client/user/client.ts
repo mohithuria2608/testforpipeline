@@ -38,7 +38,7 @@ export class UserService {
         })
     }
 
-    async   fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
+    async fetchAddress(payload: IUserGrpcRequest.IFetchAddress): Promise<IUserGrpcRequest.IFetchAddressRes> {
         return new Promise(async (resolve, reject) => {
             consolelog(process.cwd(), "fetchAddress", payload, false)
 
@@ -74,7 +74,7 @@ export class UserService {
         })
     }
 
-    async createUserOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+    async createUserOnCms(payload: IUserGrpcRequest.ICraeteUserOnCmsReq): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
                 this.userClient.createUserOnCms(payload, (error, res) => {
@@ -92,7 +92,7 @@ export class UserService {
         })
     }
 
-    async creatAddressOnCms(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+    async creatAddressOnCms(payload: IUserGrpcRequest.ICreatAddressOnCmsReq): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
                 this.userClient.createAddressOnCms(payload, (error, res) => {
@@ -110,7 +110,7 @@ export class UserService {
         })
     }
 
-    async createUserOnSdm(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+    async createUserOnSdm(payload: IUserGrpcRequest.ICraeteUserOnSdmReq): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
                 this.userClient.createUserOnSdm(payload, (error, res) => {
@@ -128,7 +128,7 @@ export class UserService {
         })
     }
 
-    async creatAddressOnSdm(payload: IUserRequest.IUserData): Promise<IUserRequest.IUserData> {
+    async creatAddressOnSdm(payload: IUserGrpcRequest.ICreatAddressOnSdmReq): Promise<IUserRequest.IUserData> {
         return new Promise(async (resolve, reject) => {
             try {
                 this.userClient.createAddressOnSdm(payload, (error, res) => {

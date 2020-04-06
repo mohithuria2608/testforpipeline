@@ -40,16 +40,20 @@ export default async function () {
             list = listData.GetWebAreasListResult.CC_WEB_AREA;
 
         for (let webArea of list) {
-            // only save city with valid cityId
-            if (webArea.AREA_ACTIVE === "1") {
+
+            if (webArea.AREA_ID !== "-1") {
+
                 let storeAreaData = await Aerospike.get({
                     set: Constant.SET_NAME.SYNC_WEB_AREA,
                     key: parseInt(webArea.AREA_ID)
                 });
+
                 if (storeAreaData.sdmAreaId) {
+                    
                     let webAreaData = {
                         countryId: 'AE',
                         sdmCountryId: 1,
+                        active: (webArea.AREA_ACTIVE === "1") ? 1 : 2,
                         sdmAreaId: parseInt(webArea.AREA_ID),
                         cityId: parseInt(webArea.AREA_CITYID),
                         areaName: webArea.AREA_NAME || "",
@@ -74,7 +78,6 @@ export default async function () {
             }
         }
     }
-
 
     console.log("\t# Area Sequence Complete");
 }

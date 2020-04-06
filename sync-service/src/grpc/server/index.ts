@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import { cmsConfigController, cmsAppversionController } from '../../controllers';
+import { cmsConfigController, cmsAppversionController, cmsFaqController } from '../../controllers';
 import * as Constant from '../../constant'
 
 const grpc = require('grpc')
@@ -57,6 +57,16 @@ server.addService(syncProto.SyncService.service, {
             callback(null, { appversion: JSON.stringify(res) })
         } catch (error) {
             consolelog(process.cwd(), "fetchAppversion", JSON.stringify(error), false)
+            callback(grpcSendError(error))
+        }
+    },
+    fetchFaq: async (call: IFaqGrpcRequest.IFetchFaqReq, callback) => {
+        try {
+            consolelog(process.cwd(), "fetchFaq", JSON.stringify(call.request), true)
+            let res = await cmsFaqController.getFaq(call.request)
+            callback(null, { faq: JSON.stringify(res) })
+        } catch (error) {
+            consolelog(process.cwd(), "fetchFaq", JSON.stringify(error), false)
             callback(grpcSendError(error))
         }
     }

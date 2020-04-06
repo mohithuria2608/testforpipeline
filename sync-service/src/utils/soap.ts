@@ -48,8 +48,8 @@ export class SoapManagerClass {
 export const SoapManager = new SoapManagerClass();
 
 export const commonParams = {
-    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
+    licenseCode: Constant.CONF.COUNTRY_SPECIFIC.UAE.SDM.LICENSE_CODE,
     language: 'En',
-    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+    conceptID: Constant.CONF.COUNTRY_SPECIFIC.UAE.SDM.CONCEPT_ID,
     menuTemplateID: 17
 }

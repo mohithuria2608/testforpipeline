@@ -1,9 +1,10 @@
+import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
 import { menuService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic = process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
+const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN
 
 class AsHiddenConsumer extends BaseConsumer {
 

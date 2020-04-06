@@ -245,36 +245,36 @@ export class AddressEntity extends BaseEntity {
    * @method SDM
    * @description Add address on SDM
    * */
-    async addAddressOnSdm(userData: IUserRequest.IUserData) {
+    async addAddressOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
-            if (userData.asAddress && typeof userData.asAddress == 'string')
-                userData.asAddress = JSON.parse(userData.asAddress)
-            if (userData.asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) {
-                userData.asAddress[0].bldgName = ""
-                userData.asAddress[0].description = ""
-                userData.asAddress[0].flatNum = ""
-                userData.asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP
+            if (asAddress && typeof asAddress == 'string')
+                asAddress = JSON.parse(asAddress)
+            if (asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) {
+                asAddress[0].bldgName = ""
+                asAddress[0].description = ""
+                asAddress[0].flatNum = ""
+                asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP
             }
-            consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
+            consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(asAddress), false)
             let addressSdmData = {
-                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                language: (userData.headers && userData.headers.language) ? userData.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
+                language: headers.language.toLowerCase(),
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
-                    ADDR_AREAID: userData.asAddress[0].areaId,// 1786,//  16
-                    ADDR_BLDGNAME: userData.asAddress[0].bldgName,
-                    // ADDR_BLDGNUM: userData.asAddress[0].flatNum,//comment test
-                    ADDR_CITYID: userData.asAddress[0].cityId,// 17,
+                    ADDR_AREAID: asAddress[0].areaId,// 1786,//  16
+                    ADDR_BLDGNAME: asAddress[0].bldgName,
+                    // ADDR_BLDGNUM: asAddress[0].flatNum,//comment test
+                    ADDR_CITYID: asAddress[0].cityId,// 17,
                     ADDR_CLASSID: -1,
                     ADDR_COUNTRYID: 1,
                     ADDR_CUSTID: userData.sdmUserRef,
-                    ADDR_DESC: userData.asAddress[0].description,
+                    ADDR_DESC: asAddress[0].description,
                     ADDR_DISTRICTID: 1021,// 1008
-                    ADDR_FLATNUM: userData.asAddress[0].flatNum,
-                    // ADDR_FLOOR: userData.asAddress[0].flatNum,//comment test
+                    ADDR_FLATNUM: asAddress[0].flatNum,
+                    // ADDR_FLOOR: asAddress[0].flatNum,//comment test
                     ADDR_MAPCODE: {
-                        X: userData.asAddress[0].lat,
-                        Y: userData.asAddress[0].lng
+                        X: asAddress[0].lat,
+                        Y: asAddress[0].lng
                     },
                     ADDR_PHONEAREACODE: userData.phnNo.slice(0, 2),
                     ADDR_PHONECOUNTRYCODE: userData.cCode.replace('+', ''),
@@ -282,7 +282,7 @@ export class AddressEntity extends BaseEntity {
                     ADDR_PHONENUMBER: userData.phnNo.slice(2),
                     ADDR_PHONETYPE: 2,
                     ADDR_PROVINCEID: 7,
-                    ADDR_SKETCH: userData.asAddress[0].description,
+                    ADDR_SKETCH: asAddress[0].description,
                     ADDR_STREETID: 1,
                     Phones: {
                         CC_CUSTOMER_PHONE: {
@@ -296,13 +296,13 @@ export class AddressEntity extends BaseEntity {
                         }
                     },
                     WADDR_AREAID: 1786,// 16
-                    WADDR_BUILD_NAME: userData.asAddress[0].bldgName,
-                    // WADDR_BUILD_NUM: userData.asAddress[0].flatNum,//comment test
+                    WADDR_BUILD_NAME: asAddress[0].bldgName,
+                    // WADDR_BUILD_NUM: asAddress[0].flatNum,//comment test
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
-                    WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    WADDR_conceptID: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
-                    WADDR_DIRECTIONS: userData.asAddress[0].description,
+                    WADDR_DIRECTIONS: asAddress[0].description,
                     WADDR_DISTRICTID: 1021,// 1008
                     WADDR_DISTRICT_TEXT: "Default",
                     WADDR_MNUID: 4,
@@ -314,15 +314,18 @@ export class AddressEntity extends BaseEntity {
             }
 
             let sdmAdd = await SDM.AddressSDME.createAddress(addressSdmData)
-            let bin = userData.asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-            let asAddr = await this.updateAddress(userData.headers, { addressId: userData.asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
+            let bin = asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            let asAddr = await this.updateAddress(headers, { addressId: asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
             if (asAddr.cmsAddressRef) {
-                userData['asAddress'] = [asAddr]
                 kafkaService.kafkaSync({
                     set: this.set,
                     cms: {
                         update: true,
-                        argv: JSON.stringify(userData)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers,
+                            asAddress: [asAddr]
+                        })
                     },
                     inQ: true
                 })
@@ -335,27 +338,13 @@ export class AddressEntity extends BaseEntity {
     }
 
     /**
-    * @method SDM
-    * @description Add address on SDM
-    * */
-    async updateAddressOnSdm(userData: IUserRequest.IUserData) {
-        try {
-            consolelog(process.cwd(), "going to update adddress on sdm", JSON.stringify(userData.asAddress), false)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "updateAddressOnSdm", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
      * @method SDM
      * @description Add address on SDM
      * */
-    async addAddressOnCms(userData: IUserRequest.IUserData) {
+    async addAddressOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
-            consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(userData.asAddress), false)
-            let res = await CMS.AddressCMSE.createAddresssOnCms(userData)
+            consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(asAddress), false)
+            let res = await CMS.AddressCMSE.createAddresssOnCms(userData, asAddress)
             if (res && res.customerId) {
                 if (res.addressIds && res.addressIds.length > 0) {
                     for (const iterator of res.addressIds) {
@@ -365,12 +354,12 @@ export class AddressEntity extends BaseEntity {
                                 cmsAddressRef: parseInt(iterator.addressId),
                             }
                             let bin = ""
-                            userData.asAddress.forEach(obj => {
+                            asAddress.forEach(obj => {
                                 if (obj.id == iterator.id)
                                     bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                             })
                             if (bin != "")
-                                await this.updateAddress(userData.headers, updateAddressOnAs, bin, userData, false)
+                                await this.updateAddress(headers, updateAddressOnAs, bin, userData, false)
                         }
                     }
                 }
@@ -386,7 +375,7 @@ export class AddressEntity extends BaseEntity {
     * @method SDM
     * @description Add address on SDM
     * */
-    async updateAddressOnCms(userData: IUserRequest.IUserData) {
+    async updateAddressOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
             consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData), false)
             let res = await CMS.AddressCMSE.updateAddresssOnCms(userData)
@@ -417,13 +406,15 @@ export class AddressEntity extends BaseEntity {
                         }
                         let asAdd = await this.addAddress(headers, userData, bin, add, store)
                         if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
-                            userData['asAddress'] = [asAdd]
-                            userData['headers'] = headers
                             kafkaService.kafkaSync({
                                 set: this.set,
                                 sdm: {
                                     create: true,
-                                    argv: JSON.stringify(userData)
+                                    argv: JSON.stringify({
+                                        userData: userData,
+                                        headers: headers,
+                                        asAddress: [asAdd]
+                                    })
                                 },
                                 inQ: true
                             })
@@ -465,13 +456,15 @@ export class AddressEntity extends BaseEntity {
             }
             if (asAddress && asAddress.length > 0) {
                 if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                    userData['asAddress'] = asAddress
-                    userData['headers'] = headers
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {
                             create: true,
-                            argv: JSON.stringify(userData)
+                            argv: JSON.stringify({
+                                userData: userData,
+                                headers: headers,
+                                asAddress: asAddress
+                            })
                         },
                         inQ: true
                     })

@@ -4,7 +4,7 @@ import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)
@@ -354,6 +354,10 @@ export let generateRandomString = function (digits: number) {
 
 export let generateSessionId = function (userId: string, deviceid: string) {
     return userId + "_" + deviceid;
+};
+
+export let generateFaqId = function (language: string, country: string) {
+    return country + "_" + language;
 };
 
 export let validatorErr = function (error) {

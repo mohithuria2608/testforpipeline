@@ -20,7 +20,6 @@ declare namespace IUserRequest {
         profileStep?: number,
         password?: string,
         createdAt?: number,
-        headers?: ICommonRequest.IHeaders
     }
 
     interface TempAddressArray {

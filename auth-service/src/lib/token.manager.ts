@@ -13,11 +13,11 @@ export class TokenManager {
 
     async setToken(tokenData: IAuthGrpcRequest.ICreateTokenData) {
         try {
-            let expiretime = Constant.SERVER.ACCESS_TOKEN_EXPIRE_TIME
+            let expiretime = Constant.CONF.GENERAL.ACCESS_TOKEN_EXPIRE_TIME
             switch (tokenData.tokenType) {
                 case Constant.DATABASE.TYPE.TOKEN.GUEST_AUTH: {
                     if (tokenData.id) {
-                        // expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+                        // expiretime = Constant.CONF.GENERAL.REFRESH_TOKEN_EXPIRE_TIME
                         // tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                         break;
                     } else
@@ -25,7 +25,7 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.REFRESH_AUTH: {
                     if (tokenData.id) {
-                        expiretime = Constant.SERVER.REFRESH_TOKEN_EXPIRE_TIME
+                        expiretime = Constant.CONF.GENERAL.REFRESH_TOKEN_EXPIRE_TIME
                         tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                         break;
                     } else
@@ -33,7 +33,7 @@ export class TokenManager {
                 }
                 case Constant.DATABASE.TYPE.TOKEN.USER_AUTH: {
                     if (tokenData.id) {
-                        expiretime = Constant.SERVER.ACCESS_TOKEN_EXPIRE_TIME
+                        expiretime = Constant.CONF.GENERAL.ACCESS_TOKEN_EXPIRE_TIME
                         tokenData["exp"] = Math.floor(Date.now() / 1000) + expiretime
                         break;
                     } else
