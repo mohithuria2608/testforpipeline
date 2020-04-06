@@ -227,11 +227,13 @@ export class UserEntity extends BaseEntity {
 
     /**
      * @description Create user on SDM
-     * @param payload 
+     * @param userData 
      */
-    async createUserOnSdm(payload: IUserRequest.IUserData) {
+    async createUserOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let res = await SDM.UserSDME.createCustomerOnSdm(payload)
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(userData), false)
+            consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
+            let res = await SDM.UserSDME.createCustomerOnSdm(userData, headers)
 
             let putArg: IAerospike.Put = {
                 bins: {
@@ -239,27 +241,29 @@ export class UserEntity extends BaseEntity {
                     sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
                 },
                 set: this.set,
-                key: payload.id,
+                key: userData.id,
                 update: true,
             }
             await Aerospike.put(putArg)
-            let user = await this.getUser({ userId: payload.id })
-            if (user.socialKey) {
-                SDM.UserSDME.updateCustomerTokenOnSdm(user)
+            userData = await this.getUser({ userId: userData.id })
+            if (userData.socialKey) {
+                SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
             }
-            console.log("user after getting sdm id", user)
-            if (user.cmsUserRef != 0) {
+            console.log("user after getting sdm id", userData)
+            if (userData.cmsUserRef != 0) {
                 kafkaService.kafkaSync({
                     set: this.set,
                     cms: {
                         update: true,
-                        argv: JSON.stringify(user)
+                        argv: JSON.stringify({
+                            userData: userData,
+                            headers: headers
+                        })
                     },
                     inQ: true
                 })
             }
-
-            return user
+            return userData
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -270,9 +274,9 @@ export class UserEntity extends BaseEntity {
      * @description Update user on SDM
      * @param payload 
      */
-    async updateUserOnSdm(payload: IUserRequest.IUserData) {
+    async updateUserOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let res = await SDM.UserSDME.updateCustomerOnSdm(payload)
+            let res = await SDM.UserSDME.updateCustomerOnSdm(payload, headers)
             return res
         } catch (error) {
             consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
@@ -284,7 +288,7 @@ export class UserEntity extends BaseEntity {
      * @description Create user on CMS
      * @param payload 
      */
-    async createUserOnCms(payload: IUserRequest.IUserData) {
+    async createUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             let res = await CMS.UserCMSE.createCustomerOnCms(payload)
             if (res && res.customerId) {
@@ -304,7 +308,10 @@ export class UserEntity extends BaseEntity {
                         set: this.set,
                         cms: {
                             update: true,
-                            argv: JSON.stringify(user)
+                            argv: JSON.stringify({
+                                userData: user,
+                                headers: headers
+                            })
                         },
                         inQ: true
                     })
@@ -322,7 +329,7 @@ export class UserEntity extends BaseEntity {
      * @description Update user on CMS
      * @param payload 
      */
-    async updateUserOnCms(payload: IUserRequest.IUserData) {
+    async updateUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             if (payload.cmsUserRef) {
                 let res = await CMS.UserCMSE.updateCustomerOnCms(payload)

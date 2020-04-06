@@ -113,9 +113,9 @@ export class OrderController {
             consolelog(process.cwd(), "step 5", new Date(), false)
 
             let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-            if (totalAmount[0].amount < Constant.CONF.GENERAL.MIN_CART_VALUE)
+            if (totalAmount[0].amount < Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
-            if (totalAmount[0].amount > Constant.CONF.GENERAL.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
+            if (totalAmount[0].amount > Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, cart, getAddress, store, userData)

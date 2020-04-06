@@ -29,8 +29,8 @@ export const start = (async () => {
 
     let startTime =  "2014-08-03T10:00:00Z"
     let endTime = "2014-08-03T00:30:59Z"
-    let nextDay = 1
-    console.log("checkOnlineStore(startTime, endTime, nextDay)", checkOnlineStore(startTime, endTime, nextDay))
+    let nextday = 1
+    console.log("checkOnlineStore(startTime, endTime, nextday)", checkOnlineStore(startTime, endTime, nextday))
     await bootstrap(server)
   } catch (error) {
     console.error(error)

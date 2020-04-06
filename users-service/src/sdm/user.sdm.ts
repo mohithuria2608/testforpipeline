@@ -15,44 +15,45 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async createCustomerOnSdm(payload: IUserRequest.IUserData) {
+    async createCustomerOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-
-            let naemRes = nameConstructor(payload.name.trim())
+            let naemRes = nameConstructor(userData.name.trim())
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
-                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
-                    language: payload.headers.language.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
+                    language: headers.language.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
-                        CUST_EMAIL: payload.email,
+                        CUST_EMAIL: userData.email,
                         CUST_FIRSTNAME: naemRes.firstName,
                         CUST_LASTNAME: naemRes.lastName,
                         CUST_NATID: -1,
-                        CUST_NOTIFICATION_MOBILE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_NOTIFICATION_MOBILE,
-                        CUST_PHONEAREACODE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONEAREACODE,
-                        CUST_PHONECOUNTRYCODE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONECOUNTRYCODE,
-                        CUST_PHONELOOKUP: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONELOOKUP,
-                        CUST_PHONENUMBER: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONENUMBER,
+                        CUST_NOTIFICATION_MOBILE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_NOTIFICATION_MOBILE,
+                        CUST_PHONEAREACODE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONEAREACODE,
+                        CUST_PHONECOUNTRYCODE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONECOUNTRYCODE,
+                        CUST_PHONELOOKUP: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONELOOKUP,
+                        CUST_PHONENUMBER: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONENUMBER,
                         CUST_PHONETYPE: 2,
-                        PASSWORD: deCryptData(payload.password),
-                        USERNAME: payload.email,
+                        PASSWORD: deCryptData(userData.password),
+                        USERNAME: userData.email,
                         WCUST_FIRSTNAME: naemRes.firstName,
                         WCUST_IS_GUEST: false,
                         WCUST_LASTNAME: naemRes.lastName,
                         WCUST_STATUS: 4, //2 means : active but not verified /// 4 means verified
                     },
-                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.CONCEPT_ID,
                 }
             }
+            consolelog(process.cwd(), "data", JSON.stringify(data), false)
+
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
                 return res.RegisterCustomerResult
             }
             else {
                 if (res.SDKResult && res.SDKResult.ResultText == "Customer is already exist") {
-                    return await this.getCustomerByEmail({ email: payload.email, country: payload.headers.country })
+                    return await this.getCustomerByEmail({ email: userData.email }, headers)
                 } else {
                     return Promise.reject(res)
                 }
@@ -66,14 +67,14 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async updateCustomerOnSdm(payload: IUserRequest.IUserData) {
+    async updateCustomerOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             let naemRes = nameConstructor(payload.name.trim())
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
-                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
-                    language: payload.headers.language.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
+                    language: headers.language.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_CORPID: payload.sdmCorpRef,
@@ -112,13 +113,13 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async updateCustomerTokenOnSdm(payload: IUserRequest.IUserData) {
+    async updateCustomerTokenOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
             let data: IUserSDMRequest.IUpdateCustomerTokenReq = {
                 name: "UpdateCustomerToken",
                 req: {
-                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
-                    language: payload.headers.language.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
+                    language: headers.language.toLowerCase(),
                     customerID: payload.sdmUserRef,
                     token: payload.socialKey
                 }
@@ -139,15 +140,15 @@ export class UserSDMEntity extends BaseSDM {
     * @method SDK
     * @param {string} email : customer email
     * */
-    async getCustomerByEmail(payload) {
+    async getCustomerByEmail(payload, headers: ICommonRequest.IHeaders) {
         try {
             const data = {
                 name: "GetCustomerByEmail",
                 req: {
-                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
-                    language: payload.language.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
+                    language: headers.language.toLowerCase(),
                     email: payload.email,
-                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)

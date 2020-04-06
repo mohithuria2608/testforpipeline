@@ -28,13 +28,13 @@ export class MiscController {
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
                         language: Constant.DATABASE.LANGUAGE.AR,
-                        defaultCCode: Constant.CONF.GENERAL.DEFAULT_CCODE,
+                        defaultCCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].CCODE,
                         phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
                         phnLength: 9,
-                        customerCare: Constant.CONF.GENERAL.CUSTOMER_CARE,
-                        supportEmail: Constant.CONF.GENERAL.SUPPORT_EMAIL,
+                        customerCare: Constant.CONF.COUNTRY_SPECIFIC[headers.country].CUSTOMER_CARE,
+                        supportEmail: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SUPPORT_EMAIL,
                         cashondelivery: 0,
-                        minOrderAmount: Constant.CONF.GENERAL.MIN_CART_VALUE,
+                        minOrderAmount: Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE,
                         homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language]
                     }
                 ],
