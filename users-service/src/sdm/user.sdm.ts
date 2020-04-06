@@ -17,8 +17,6 @@ export class UserSDMEntity extends BaseSDM {
     * */
     async createCustomerOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(userData), false)
-            consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
             let naemRes = nameConstructor(userData.name.trim())
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
