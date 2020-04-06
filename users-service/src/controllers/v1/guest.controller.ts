@@ -143,7 +143,7 @@ export class GuestController {
                         return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                     } else {
                         console.log("guestCheckout step 5=====================>")
-                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.language })
+                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.country })
                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                             console.log("guestCheckout step 6=====================>")
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
@@ -175,7 +175,7 @@ export class GuestController {
                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                 } else {
                     console.log("guestCheckout step 10=====================>")
-                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.language })
+                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.country })
                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                         console.log("guestCheckout step 11=====================>")
                         userchangePayload['id'] = auth.id

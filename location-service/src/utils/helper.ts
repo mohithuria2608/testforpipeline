@@ -442,6 +442,11 @@ export let checkOnlineStore = function (start, end, nextDay?) {
         else
             return false
     }
+
+//     curTime 2020-04-06T07:04:18.726Z 7 4 18 726
+// 3|location       | startTime 2019-03-24T10:00:00Z 1553421600000 10 0 0 0
+// 3|location       | endTime 2019-03-24T13:00:59Z 1553432459000 13 0 59 0
+
 }
 
 function isJsonString(str) {
