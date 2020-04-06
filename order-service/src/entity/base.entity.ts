@@ -117,8 +117,10 @@ export class BaseEntity {
             let address: IUserGrpcRequest.IFetchAddressRes = payload.address
             let order: IOrderRequest.IOrderData = payload.order
 
-            if (!userData.sdmUserRef || userData.sdmUserRef == 0)
+            if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
+                userData['headers'] = headers
                 userData = await userService.createUserOnSdm(userData)
+            }
 
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)

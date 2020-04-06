@@ -99,7 +99,7 @@ server.addService(userProto.UserService.service, {
             callback(grpcSendError(error))
         }
     },
-    createUserOnSdm: async (call: IUserGrpcRequest.ICraeteUserOnCmsReq, callback) => {
+    createUserOnSdm: async (call: IUserGrpcRequest.ICraeteUserOnSdmReq, callback) => {
         try {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
             let res: {} = await ENTITY.UserE.createUserOnSdm(call.request)

@@ -112,6 +112,19 @@ message IUserData {
     required int32 sdmCorpRef = 16;
     required string fullPhnNo = 17;
     required string password = 18;
+    optional IHeaders headers = 19;
+}
+
+message IHeaders {
+    required string language = 1;
+    required string brand = 2;
+    required string country = 3;
+    required string appversion = 4;
+    required string devicemodel = 5;
+    required string devicetype = 6;
+    required string osversion = 7;
+    required string deviceid = 8;
+    required string timezone = 9;
 }
 
 message IFetchAddressReq {
