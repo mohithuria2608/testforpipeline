@@ -292,7 +292,7 @@ export class UserController {
                 if (payload.name && payload.name != "")
                     userUpdate['name'] = payload.name.trim()
                 if (userObj[0].phnVerified == 1) {
-                    console.log("socialAuthValidate step 1=====================>")
+                    console.log("socialAuthValidate step 1=====================>", userUpdate)
                     if (userObj[0].name != payload.name)
                         updateName = true
                     userData = await ENTITY.UserE.buildUser(userUpdate)
