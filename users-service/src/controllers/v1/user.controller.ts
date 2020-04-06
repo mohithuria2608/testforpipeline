@@ -477,7 +477,7 @@ export class UserController {
                     }
                     if (asUserByPhone && asUserByPhone.length > 0) {
                         userchangePayload['id'] = asUserByPhone[0].id
-                        console.log("createProfile step 2=====================>")
+                        console.log("createProfile step 2=====================>", asUserByPhone)
                         if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
                             console.log("createProfile step 3=====================>")
                             userchangePayload['deleteUserId'] = auth.id
