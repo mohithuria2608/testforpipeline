@@ -365,13 +365,13 @@ export let validatorErr = function (error) {
 
 export let sendRequestToCMS = function (type, data) {
     return new Promise((resolve, reject) => {
-        let requestUrl = "";
+        let requestUrl = config.get("cms.baseUrl");
         switch (type) {
-            case 'SYNC_CITY': requestUrl = "http://40.123.205.1/rest/V1/restaurant/createcity"; break;
-            case 'SYNC_AREA': requestUrl = "http://40.123.205.1/rest/V1/restaurant/createarea"; break;
-            case 'SYNC_STORE': requestUrl = "http://40.123.205.1/rest/V1/restaurant/create"; break;
-            case 'SYNC_STORE_STATUS': requestUrl = "http://40.123.205.1/rest/V1/restaurant/updatestatus"; break;
-            // case 'SYNC_COUNTRY': requestUrl = "http://40.123.205.1/rest/V1/restaurant/createcountry"; break;
+            case 'SYNC_CITY': requestUrl = "restaurant/createcity"; break;
+            case 'SYNC_AREA': requestUrl = "restaurant/createarea"; break;
+            case 'SYNC_STORE': requestUrl = "restaurant/create"; break;
+            case 'SYNC_STORE_STATUS': requestUrl = "restaurant/updatestatus"; break;
+            // case 'SYNC_COUNTRY': requestUrl = "restaurant/createcountry"; break;
             default: reject(new Error('Invalid Request Entity Type'));
         }
         console.log("SENDING DATA -> ", type, " -> COUNT: ", data.length);
@@ -384,7 +384,7 @@ export let sendRequestToCMS = function (type, data) {
             if (err) reject(err);
             else resolve(b);
         });
-    })
+    });
 }
 
 export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: string = Constant.DATABASE.LANGUAGE.EN, returnMsg?: boolean, returnErr?: boolean) {
@@ -443,9 +443,9 @@ export let checkOnlineStore = function (start, end, nextDay?) {
             return false
     }
 
-//     curTime 2020-04-06T07:04:18.726Z 7 4 18 726
-// 3|location       | startTime 2019-03-24T10:00:00Z 1553421600000 10 0 0 0
-// 3|location       | endTime 2019-03-24T13:00:59Z 1553432459000 13 0 59 0
+    //     curTime 2020-04-06T07:04:18.726Z 7 4 18 726
+    // 3|location       | startTime 2019-03-24T10:00:00Z 1553421600000 10 0 0 0
+    // 3|location       | endTime 2019-03-24T13:00:59Z 1553432459000 13 0 59 0
 
 }
 
