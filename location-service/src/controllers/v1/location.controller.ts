@@ -67,6 +67,9 @@ export class LocationController {
                                                         delete s.webMenuId
                                                         delete s.menuTempId
 
+                                                        s.startTime = new Date(+new Date(s.startTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
+                                                        s.endTime = new Date(+new Date(s.endTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
+
                                                         if (!storeCollection.some(ss => ss.storeId === s.storeId))
                                                             storeCollection.push(s)
                                                     }
