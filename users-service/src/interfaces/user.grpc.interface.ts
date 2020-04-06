@@ -55,6 +55,10 @@ declare namespace IUserGrpcRequest {
         request: IUserRequest.IUserData
     }
 
+    interface ICraeteUserOnSdmReq {
+        request: IUserRequest.IUserData
+    }
+
     interface ICreatAddressOnCmsReq {
         request: IUserRequest.IUserData
     }

@@ -41,7 +41,7 @@ export class UserController {
                 if (payload.sdm.update)
                     await ENTITY.UserE.updateUserOnSdm(data)
                 if (payload.sdm.sync)
-                    await this.validateUserOnSdm(data, true, undefined)
+                    await this.validateUserOnSdm(data, true)
             }
             return {}
         } catch (error) {
@@ -189,7 +189,9 @@ export class UserController {
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                    this.validateUserOnSdm(userData, false, headers)
+
+                    userData['headers'] = headers
+                    this.validateUserOnSdm(userData, false)
 
                     // send welcome email on first time user create
                     userData.password = deCryptData(userData.password);
@@ -406,8 +408,11 @@ export class UserController {
             }
             console.log("socialAuthValidate step 9=====================>")
 
-            if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
-                this.validateUserOnSdm(userData, false, headers)
+            if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
+                userData['headers'] = headers
+                this.validateUserOnSdm(userData, false)
+            }
+
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
                 userId: userData.id,
@@ -618,12 +623,8 @@ export class UserController {
         }
     }
 
-    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
+    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean) {
         try {
-            if (userData.headers && !headers)
-                headers = userData.headers
-            if (!userData.headers && headers)
-                userData.headers = headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             let updateOnSdm = false
             let updateOnCms = false
@@ -634,7 +635,7 @@ export class UserController {
                 createOnCms = true
             }
             if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
-                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language, country: headers.country })
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: userData.headers.language, country: userData.headers.country })
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true
                     updateAs['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)
