@@ -144,7 +144,7 @@ export class UserSDMEntity extends BaseSDM {
             const data = {
                 name: "GetCustomerByEmail",
                 req: {
-                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
                     language: payload.language.toLowerCase(),
                     email: payload.email,
                     conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
