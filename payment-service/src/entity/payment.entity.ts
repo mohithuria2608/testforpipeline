@@ -14,7 +14,7 @@ import { cloneObject } from '../utils/helper';
  */
 export class PaymentClass extends BaseEntity {
 
-    private static readonly API_KEY_PREFIX = Constant.SERVER.PAYMENT_API_KEY_PREFIX;
+    private static readonly API_KEY_PREFIX = Constant.CONF.GENERAL.PAYMENT_API_KEY_PREFIX;
 
     private static readonly CUSTOM_ERRORS = Object.freeze({
         default: {
@@ -184,7 +184,7 @@ export class PaymentClass extends BaseEntity {
      */
     private async getConfig(storeCode: string) {
         // TODO: Get from Aerospike
-        return Constant.PAYMENT_CONFIG[storeCode];
+        return Constant.CONF.PAYMENT[storeCode];
     }
     /**
      * @description Returns applicable noonpay payment configuration corresponding to a cms store code`
@@ -192,7 +192,7 @@ export class PaymentClass extends BaseEntity {
      */
     private async getNoonpayConfig(storeCode: string) {
         // TODO: Get from Aerospike
-        return Constant.PAYMENT_CONFIG[storeCode].noonpayConfig;
+        return Constant.CONF.PAYMENT[storeCode].noonpayConfig;
     }
     /**
      * @description Generates and returns API key for specified configuration
@@ -316,7 +316,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
+                timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
 
             console.log('--Payment INITIATE');
@@ -371,7 +371,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
+                timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
             // EXPECTED: In case of using CMS order id, response might contain contain multiple transaction, pick the recent one
             // ACTUAL: Get Error code 19085
@@ -660,7 +660,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
+                timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
             console.log('--Payment CAPTURE', JSON.stringify(response));
             let result = {
@@ -751,7 +751,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
+                timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
             console.log('--Payment REVERSE', JSON.stringify(response));
             let result = {
@@ -847,7 +847,7 @@ export class PaymentClass extends BaseEntity {
                     Authorization: apiKey
                 },
                 json: true,
-                timeout: Constant.SERVER.PAYMENT_API_TIMEOUT
+                timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
             console.log('--Payment REFUND');
             let result = {

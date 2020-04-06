@@ -44,11 +44,11 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "GetOrderDetails",
                 req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
                     language: payload.language.toLowerCase().trim(),
                     orderID: payload.sdmOrderRef,
-                    menuTemplateID: Constant.SERVER.SDM.MENU_TEMPLATE_ID
+                    menuTemplateID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.MENU_TEMPLATE_ID
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -69,14 +69,14 @@ export class OrderSDMEntity extends BaseSDM {
             let data = {
                 name: "ProcessCreditCardPayment",
                 req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
                     language: payload.language.toLowerCase().trim(),
                     orderID: payload.sdmOrderRef,
-                    paymentType: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
-                    paymentSubType: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
-                    paymentStatus: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
-                    paymentTenderID: Constant.PAYMENT_CONFIG[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
+                    paymentType: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
+                    paymentSubType: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
+                    paymentStatus: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
+                    paymentTenderID: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
                     amount: payload.transaction.amount,
                     refNumber: payload.transaction.transactions[0].id,
                     refGateway: "noonpay",
@@ -105,8 +105,8 @@ export class OrderSDMEntity extends BaseSDM {
                 let data = {
                     name: "CancelOrder",
                     req: {
-                        licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                        conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                        licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
+                        conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
                         language: payload.language.toLowerCase(),
                         orderID: payload.sdmOrderRef,
                         voidReason: payload.voidReason,

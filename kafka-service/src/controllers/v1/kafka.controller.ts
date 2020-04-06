@@ -30,11 +30,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (messages.count == 0) {
                             if (payload.cms.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.CREATE
                             else if (payload.cms.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.GET
                             else if (payload.cms.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -54,13 +54,13 @@ export class KafkaController {
                         delete messages.mdb
                         if (messages.count == 0) {
                             if (payload.sdm.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.CREATE
                             else if (payload.sdm.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.GET
                             else if (payload.sdm.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.UPDATE
                             else if (payload.sdm.sync)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.USER.MAX_RETRY.SYNC
+                                messages['count'] = Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.SYNC
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -80,13 +80,13 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.USER.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.AS.USER.MAX_RETRY.GET
                             else if (payload.as.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.USER.MAX_RETRY.UPDATE
                             else if (payload.as.sync)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC
+                                messages['count'] = Constant.CONF.KAFKA.AS.USER.MAX_RETRY.SYNC
                             else
                                 messages['count'] = 1
                         }
@@ -113,11 +113,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.cms.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE
                             else if (payload.cms.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.GET
                             else if (payload.cms.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -137,11 +137,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             // if (payload.sdm.create)
-                            //     messages['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE
+                            //     messages['count'] = Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE
                             // else if (payload.sdm.get)
-                            //     messages['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.GET
+                            //     messages['count'] = Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.GET
                             // else if (payload.sdm.update)
-                            //     messages['count'] = Constant.DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE
+                            //     messages['count'] = Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE
                             // else
                             messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -162,11 +162,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.GET
                             else if (payload.as.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -192,11 +192,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.cms.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.CREATE
                             else if (payload.cms.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.GET
                             else if (payload.cms.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -216,11 +216,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.sdm.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.CREATE
                             else if (payload.sdm.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.GET
                             else if (payload.sdm.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -240,11 +240,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.GET
                             else if (payload.as.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -269,7 +269,7 @@ export class KafkaController {
                         delete messages.cms
                         delete messages.mdb
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            payload['count'] = payload.as.create ? Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HOME
                         messages['q'] = topic
                         if (payload.inQ)
@@ -289,7 +289,7 @@ export class KafkaController {
                         delete messages.as;
                         delete messages.mdb;
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.cms.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            payload['count'] = payload.cms.create ? Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION
                         messages['q'] = topic
                         if (payload.inQ)
@@ -303,7 +303,7 @@ export class KafkaController {
                         delete messages.cms;
                         delete messages.mdb;
                         if (!payload.hasOwnProperty('count'))
-                            payload['count'] = payload.as.create ? Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE
+                            payload['count'] = payload.as.create ? Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.CREATE : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.UPDATE
                         topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION
                         messages['q'] = topic
                         if (payload.inQ)
@@ -329,11 +329,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.GET
                             else if (payload.as.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -359,11 +359,11 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE
                             else if (payload.as.get)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.GET
+                                messages['count'] = Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.GET
                             else if (payload.as.update)
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -389,7 +389,7 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count = 0) {
                             if (payload.sdm.create)
-                                messages['count'] = Constant.DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
                             else
                                 messages['count'] = 1
                         } else if (payload.count < 0) {
@@ -416,13 +416,13 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.CREATE
                             }
                             else if (payload.as.reset) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.RESET
+                                messages['count'] = Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.RESET
                             }
                             else if (payload.as.update) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE
                             }
                             else
                                 messages['count'] = 1
@@ -449,13 +449,13 @@ export class KafkaController {
                         delete messages.mdb
                         if (payload.count == 0) {
                             if (payload.as.create) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE
                             }
                             else if (payload.as.reset) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET
+                                messages['count'] = Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET
                             }
                             else if (payload.as.update) {
-                                messages['count'] = Constant.DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE
+                                messages['count'] = Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE
                             }
                             else
                                 messages['count'] = 1

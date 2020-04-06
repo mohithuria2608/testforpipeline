@@ -257,8 +257,8 @@ export class AddressEntity extends BaseEntity {
             }
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(userData.asAddress), false)
             let addressSdmData = {
-                licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                language: (userData.headers && userData.headers.language) ? userData.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                licenseCode: Constant.CONF.COUNTRY_SPECIFIC[userData.headers.country].SDM.LICENSE_CODE,
+                language: userData.headers.language.toLowerCase(),
                 customerRegistrationID: userData.sdmCorpRef,
                 address: {
                     ADDR_AREAID: userData.asAddress[0].areaId,// 1786,//  16
@@ -300,7 +300,7 @@ export class AddressEntity extends BaseEntity {
                     // WADDR_BUILD_NUM: userData.asAddress[0].flatNum,//comment test
                     WADDR_BUILD_TYPE: -1,
                     WADDR_CITYID: 17,
-                    WADDR_conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    WADDR_conceptID: Constant.CONF.COUNTRY_SPECIFIC[userData.headers.country].SDM.CONCEPT_ID,
                     WADDR_COUNTRYID: 1,
                     WADDR_DIRECTIONS: userData.asAddress[0].description,
                     WADDR_DISTRICTID: 1021,// 1008

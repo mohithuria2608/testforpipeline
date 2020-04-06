@@ -5,7 +5,7 @@ import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)
@@ -402,7 +402,7 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 }
 
 export let checkOnlineStore = function (start, end, nextDay?) {
-    let dbOffest = (4 * 60 * 60 * 1000)
+    let dbOffest = Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET
     console.log("curTime",
         new Date(),
         new Date().getUTCHours(),

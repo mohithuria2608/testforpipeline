@@ -5,7 +5,7 @@ import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
 const utf8 = require('utf8');
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)

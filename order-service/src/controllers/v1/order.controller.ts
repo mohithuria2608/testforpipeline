@@ -113,9 +113,9 @@ export class OrderController {
             consolelog(process.cwd(), "step 5", new Date(), false)
 
             let totalAmount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-            if (totalAmount[0].amount < Constant.SERVER.MIN_CART_VALUE)
+            if (totalAmount[0].amount < Constant.CONF.GENERAL.MIN_CART_VALUE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MIN_CART_VALUE_VOILATION)
-            if (totalAmount[0].amount > Constant.SERVER.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
+            if (totalAmount[0].amount > Constant.CONF.GENERAL.MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, cart, getAddress, store, userData)
@@ -131,7 +131,7 @@ export class OrderController {
 
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
-                if (order.status == Constant.DATABASE.STATUS.ORDER.PENDING.MONGO) {
+                if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO) {
                     this.syncOnLegacy(payload, headers, userData, getAddress, cart, order)
                     if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                         ENTITY.CartE.resetCart(cart.cartId)
@@ -321,15 +321,15 @@ export class OrderController {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
                 env: Constant.SERVER.ENV[config.get("env")],
                 status: {
-                    $in: [Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-                        // Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                    $in: [Constant.CONF.ORDER_STATUS.PENDING.MONGO,
+                        // Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
-                    if ((order.createdAt + Constant.SERVER.MAX_PENDING_STATE_TIME) > new Date().getTime()
-                        // || order.status == Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO
+                    if ((order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) > new Date().getTime()
+                        // || order.status == Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO
                     ) {
                         ENTITY.OrderE.getSdmOrder({
                             sdmOrderRef: order.sdmOrderRef,

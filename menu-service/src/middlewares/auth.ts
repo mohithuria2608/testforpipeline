@@ -9,7 +9,7 @@ export default (opts?): Middleware => {
         try {
             consolelog(process.cwd(), 'authorization', ctx.header.authorization, true)
 
-            let settings = Constant.SERVER.AUTH_MECH
+            let settings = Constant.CONF.GENERAL.AUTH_MECH
             let authorization = ctx.header.authorization;
             if (!authorization) {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E401.UNAUTHORIZED)

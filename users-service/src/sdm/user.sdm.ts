@@ -22,8 +22,8 @@ export class UserSDMEntity extends BaseSDM {
             let data: IUserSDMRequest.ICreateUserReq = {
                 name: "RegisterCustomer",
                 req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: (payload.headers && payload.headers.language) ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
+                    language: payload.headers.language.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_EMAIL: payload.email,
@@ -43,7 +43,7 @@ export class UserSDMEntity extends BaseSDM {
                         WCUST_LASTNAME: naemRes.lastName,
                         WCUST_STATUS: 4, //2 means : active but not verified /// 4 means verified
                     },
-                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -52,7 +52,7 @@ export class UserSDMEntity extends BaseSDM {
             }
             else {
                 if (res.SDKResult && res.SDKResult.ResultText == "Customer is already exist") {
-                    return await this.getCustomerByEmail({ email: payload.email })
+                    return await this.getCustomerByEmail({ email: payload.email, country: payload.headers.language })
                 } else {
                     return Promise.reject(res)
                 }
@@ -72,8 +72,8 @@ export class UserSDMEntity extends BaseSDM {
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: (payload.headers && payload.headers.language) ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
+                    language: payload.headers.language.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
                         CUST_CORPID: payload.sdmCorpRef,
@@ -117,8 +117,8 @@ export class UserSDMEntity extends BaseSDM {
             let data: IUserSDMRequest.IUpdateCustomerTokenReq = {
                 name: "UpdateCustomerToken",
                 req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: (payload.headers && payload.headers.language) ? payload.headers.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
+                    language: payload.headers.language.toLowerCase(),
                     customerID: payload.sdmUserRef,
                     token: payload.socialKey
                 }
@@ -144,10 +144,10 @@ export class UserSDMEntity extends BaseSDM {
             const data = {
                 name: "GetCustomerByEmail",
                 req: {
-                    licenseCode: Constant.SERVER.SDM.LICENSE_CODE,
-                    language: payload.language ? payload.language.toLowerCase() : Constant.DATABASE.LANGUAGE.EN.toLowerCase(),
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
+                    language: payload.language.toLowerCase(),
                     email: payload.email,
-                    conceptID: Constant.SERVER.SDM.CONCEPT_ID,
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
                 }
             }
             let res = await this.requestData(data.name, data.req)

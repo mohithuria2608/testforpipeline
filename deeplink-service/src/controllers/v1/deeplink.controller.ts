@@ -15,11 +15,11 @@ export class DeeplinkController {
         try {
             let option = {
                 title: 'deeplink',
-                android_package_name: Constant.SERVER.ANDROID_PACKAGE_NAME,
-                url: Constant.SERVER.ANDROID_SCHEME_HOST + Constant.SERVER.ANDROID_PACKAGE_NAME,
-                iosLink: Constant.SERVER.IOS_SCHEME_HOST,
-                ios_store_link: Constant.SERVER.IOS_SCHEME_HOST,
-                fallback: Constant.SERVER.DEEPLINK_FALLBACK
+                android_package_name: Constant.CONF.GENERAL.ANDROID_PACKAGE_NAME,
+                url: Constant.CONF.GENERAL.ANDROID_SCHEME_HOST + Constant.CONF.GENERAL.ANDROID_PACKAGE_NAME,
+                iosLink: Constant.CONF.GENERAL.IOS_SCHEME_HOST,
+                ios_store_link: Constant.CONF.GENERAL.IOS_SCHEME_HOST,
+                fallback: Constant.CONF.GENERAL.DEEPLINK_FALLBACK
             }
             option['title'] = Constant.SERVER.APP_INFO.APP_NAME
             option['description'] = ''

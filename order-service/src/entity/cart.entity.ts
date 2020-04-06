@@ -168,7 +168,7 @@ export class CartClass extends BaseEntity {
         sdmOrderRef: Joi.number().required().description("sk"),
         cmsOrderRef: Joi.number().required().description("sk"),
         status: Joi.string().valid(
-            Constant.DATABASE.STATUS.ORDER.CART.AS,
+            Constant.CONF.ORDER_STATUS.CART.AS,
         ).required(),
         orderType: Joi.string().valid(Constant.DATABASE.TYPE.ORDER.PICKUP.AS, Constant.DATABASE.TYPE.ORDER.DELIVERY.AS),
         updatedAt: Joi.number().required(),
@@ -279,7 +279,7 @@ export class CartClass extends BaseEntity {
                 cmsOrderRef: 0,
                 userId: payload.userId,
                 orderId: this.ObjectId().toString(),
-                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
+                status: Constant.CONF.ORDER_STATUS.CART.AS,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],
@@ -295,7 +295,7 @@ export class CartClass extends BaseEntity {
                 bins: dataToSave,
                 set: this.set,
                 key: payload.userId,
-                // ttl: Constant.SERVER.DEFAULT_CART_TTL,
+                // ttl: Constant.CONF.GENERAL.DEFAULT_CART_TTL,
                 createOrReplace: true,
             }
             await Aerospike.put(putArg)
@@ -314,7 +314,7 @@ export class CartClass extends BaseEntity {
                 cmsOrderRef: 0,
                 userId: userId,
                 cartId: userId,
-                status: Constant.DATABASE.STATUS.ORDER.CART.AS,
+                status: Constant.CONF.ORDER_STATUS.CART.AS,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 items: [],

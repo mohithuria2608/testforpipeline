@@ -41,7 +41,7 @@ export class UserController {
                 if (payload.sdm.update)
                     await ENTITY.UserE.updateUserOnSdm(data)
                 if (payload.sdm.sync)
-                    await this.validateUserOnSdm(data, true)
+                    await this.validateUserOnSdm(data, true, undefined)
             }
             return {}
         } catch (error) {
@@ -73,7 +73,7 @@ export class UserController {
                 let userchangePayload: IUserchangeRequest.IUserchange = {
                     fullPhnNo: fullPhnNo,
                     otp: otp,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0
                 }
@@ -87,7 +87,7 @@ export class UserController {
                     brand: headers.brand,
                     country: headers.country,
                     otp: otp,
-                    otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                    otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                     otpVerified: 0,
                     isGuest: 0,
                     sdmUserRef: 0,
@@ -302,7 +302,7 @@ export class UserController {
                         cCode: userData.cCode,
                         phnNo: userData.phnNo,
                         otp: otp,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         brand: headers.brand,
                         country: headers.country,
@@ -407,7 +407,7 @@ export class UserController {
             console.log("socialAuthValidate step 9=====================>")
 
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0))
-                 this.validateUserOnSdm(userData, false, headers)
+                this.validateUserOnSdm(userData, false, headers)
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
                 userId: userData.id,
@@ -467,7 +467,7 @@ export class UserController {
                         medium: userData.medium,
                         socialKey: userData.socialKey,
                         otp: otp,
-                        otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                        otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                         otpVerified: 0,
                         isGuest: 0,
                         profileStep: 1,
@@ -497,7 +497,7 @@ export class UserController {
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log("createProfile step 6=====================>")
-                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
+                                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.language })
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                     console.log("createProfile step 7=====================>")
                                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
@@ -526,7 +526,7 @@ export class UserController {
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
                             console.log("createProfile step 11=====================>")
-                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
+                            let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.language })
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                 console.log("createProfile step 12=====================>")
                                 userchangePayload['id'] = auth.id
@@ -618,10 +618,12 @@ export class UserController {
         }
     }
 
-    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers?: ICommonRequest.IHeaders) {
+    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
         try {
             if (userData.headers && !headers)
                 headers = userData.headers
+            if (!userData.headers && headers)
+                userData.headers = headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             let updateOnSdm = false
             let updateOnCms = false
@@ -632,7 +634,7 @@ export class UserController {
                 createOnCms = true
             }
             if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
-                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
+                let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language, country: headers.language })
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true
                     updateAs['sdmUserRef'] = parseInt(sdmUserByEmail.CUST_ID)

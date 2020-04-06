@@ -82,7 +82,7 @@ export class GuestController {
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
                 otp: otp,
-                otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                 otpVerified: 0,
                 isGuest: payload.isGuest,
                 brand: headers.brand,
@@ -143,7 +143,7 @@ export class GuestController {
                         return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                     } else {
                         console.log("guestCheckout step 5=====================>")
-                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
+                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.language })
                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                             console.log("guestCheckout step 6=====================>")
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
@@ -175,7 +175,7 @@ export class GuestController {
                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                 } else {
                     console.log("guestCheckout step 10=====================>")
-                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
+                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language, country: headers.language })
                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                         console.log("guestCheckout step 11=====================>")
                         userchangePayload['id'] = auth.id
