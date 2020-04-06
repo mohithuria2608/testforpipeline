@@ -258,7 +258,6 @@ export class UserEntity extends BaseEntity {
                     inQ: true
                 })
             }
-
             return user
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)

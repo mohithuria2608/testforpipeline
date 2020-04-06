@@ -646,6 +646,7 @@ export class UserController {
                     createOnSdm = true
             }
             if (createOnSdm) {
+                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
@@ -660,6 +661,7 @@ export class UserController {
                 }
             }
             if (createOnCms) {
+                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
@@ -679,6 +681,7 @@ export class UserController {
             }
 
             if (updateOnSdm) {
+                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
@@ -694,6 +697,7 @@ export class UserController {
             }
 
             if (updateOnCms) {
+                userData['headers'] = userData.headers
                 if (async) {
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
