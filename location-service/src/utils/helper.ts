@@ -402,39 +402,15 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 }
 
 export let checkOnlineStore = function (start, end, nextday?) {
-    let dbOffest = Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET
-    console.log("curTime",
-        new Date(),
-        new Date().getUTCHours(),
-        new Date().getUTCMinutes(),
-        new Date().getUTCSeconds(),
-        new Date().getUTCMilliseconds())
-    console.log("startTime",
-        start,
-        new Date(start).getTime(),
-        new Date(start).getUTCHours(),
-        new Date(start).getUTCMinutes(),
-        new Date(start).getUTCSeconds(),
-        new Date(start).getUTCMilliseconds()
-    )
-    console.log("endTime",
-        end,
-        new Date(end).getTime(),
-        new Date(end).getUTCHours(),
-        new Date(end).getUTCMinutes(),
-        new Date(end).getUTCSeconds(),
-        new Date(end).getUTCMilliseconds())
-    let curTime = (new Date().getUTCHours() * 60 * 60 * 1000) + (new Date().getUTCMinutes() * 60 * 1000) + (new Date().getUTCSeconds() * 1000) + new Date().getUTCMilliseconds()
-    let startTime = (new Date(start).getUTCHours() * 60 * 60 * 1000) + (new Date(start).getUTCMinutes() * 60 * 1000) + (new Date(start).getUTCSeconds() * 1000) + new Date(start).getUTCMilliseconds() - dbOffest
-    let endTime = (new Date(end).getUTCHours() * 60 * 60 * 1000) + (new Date(end).getUTCMinutes() * 60 * 1000) + (new Date(end).getUTCSeconds() * 1000) + new Date(end).getUTCMilliseconds() - dbOffest
+    let curTime = new Date().getTime()
+    let startTime = new Date(new Date(new Date().setUTCHours(new Date(start).getUTCHours())).setUTCMinutes(new Date(start).getUTCMinutes())).setUTCSeconds(new Date(start).getUTCSeconds())
+    let endTime = (nextday == 0) ?
+        new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds()) :
+        new Date(new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds())).setUTCDate(new Date().getUTCDate() + 1)
 
     console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
     console.log(startTime < curTime)
     console.log(curTime < endTime)
-    if (nextday) {
-        endTime = endTime + (24 * 60 * 60 * 1000)
-        curTime = curTime + (24 * 60 * 60 * 1000)
-    }
 
     if (startTime < curTime && curTime < endTime)
         return true
