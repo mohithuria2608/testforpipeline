@@ -272,6 +272,7 @@ export class UserController {
         try {
             const otp = generateOtp()
             let userData: IUserRequest.IUserData = {}
+            let updateName = false
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -292,6 +293,8 @@ export class UserController {
                     userUpdate['name'] = payload.name.trim()
                 if (userObj[0].phnVerified == 1) {
                     console.log("socialAuthValidate step 1=====================>")
+                    if (userObj[0].name != payload.name)
+                        updateName = true
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
                     console.log("socialAuthValidate step 2=====================>")
@@ -407,6 +410,10 @@ export class UserController {
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                 this.validateUserOnSdm(userData, false, headers)
             }
+            if (updateName) {
+                CMS.UserCMSE.updateCustomerOnCms(userData)
+                SDM.UserSDME.updateCustomerOnSdm(userData, headers)
+            }
 
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
@@ -495,7 +502,7 @@ export class UserController {
                             console.log("createProfile step 5=====================>", asUserByEmail)
 
                             if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                                console.log("createProfile step 5=====================>")
+                                console.log("createProfile step 5.1=====================>")
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log("createProfile step 6=====================>")
