@@ -146,7 +146,7 @@ export class GuestController {
                         let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                             console.log("guestCheckout step 6=====================>")
-                            return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
+                            return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                         } else {
                             console.log("guestCheckout step 7=====================>")
                             userchangePayload['chngEmailSdm'] = 1
