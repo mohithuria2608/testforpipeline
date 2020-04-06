@@ -401,7 +401,7 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let checkOnlineStore = function (start, end, nextDay?) {
+export let checkOnlineStore = function (start, end, nextday?) {
     let dbOffest = Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET
     console.log("curTime",
         new Date(),
@@ -431,7 +431,7 @@ export let checkOnlineStore = function (start, end, nextDay?) {
     console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
     console.log(startTime < curTime)
     console.log(curTime < endTime)
-    if (nextDay) {
+    if (nextday) {
         endTime = endTime + (24 * 60 * 60 * 1000)
         curTime = curTime + (24 * 60 * 60 * 1000)
     }

@@ -164,7 +164,7 @@ export class LocationController {
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
                                     s['isSelected'] = false
-                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextDay)
+                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextday)
                                 })
                             }
                         })
