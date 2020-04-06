@@ -130,8 +130,8 @@ function getServices(serviceString: string, fencesData: any) {
 function getStoreTimings(st, et, nextDay) {
     st += 'Z'; et += 'Z';
     return {
-        startTime: st, //+new Date(st) - +new Date(st).setUTCHours(0, 0, 0),
-        endTime: et, //+new Date(et) - +new Date(et).setUTCHours(0, 0, 0),
+        startTime: new Date(+new Date(st) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString(),
+        endTime: new Date(+new Date(et) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString(),
         nextDay: nextDay
     }
 }
