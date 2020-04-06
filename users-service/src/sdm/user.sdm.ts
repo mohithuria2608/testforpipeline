@@ -45,6 +45,8 @@ export class UserSDMEntity extends BaseSDM {
                     conceptID: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.CONCEPT_ID,
                 }
             }
+            consolelog(process.cwd(), "data", JSON.stringify(data), false)
+
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
                 return res.RegisterCustomerResult
