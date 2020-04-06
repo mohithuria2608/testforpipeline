@@ -41,7 +41,7 @@ export class UserController {
                 if (payload.sdm.update)
                     await ENTITY.UserE.updateUserOnSdm(data)
                 if (payload.sdm.sync)
-                    await this.validateUserOnSdm(data, true)
+                    await this.validateUserOnSdm(data, true, undefined)
             }
             return {}
         } catch (error) {
@@ -190,7 +190,7 @@ export class UserController {
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                     userData['headers'] = headers
-                    this.validateUserOnSdm(userData, false)
+                    this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
                     userData.password = deCryptData(userData.password);
@@ -409,7 +409,7 @@ export class UserController {
 
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                 userData['headers'] = headers
-                this.validateUserOnSdm(userData, false)
+                this.validateUserOnSdm(userData, false, headers)
             }
 
             let sessionUpdate: ISessionRequest.ISession = {
@@ -622,8 +622,10 @@ export class UserController {
         }
     }
 
-    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean) {
+    async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
         try {
+            if (headers)
+                userData.headers = headers
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             let updateOnSdm = false
             let updateOnCms = false
