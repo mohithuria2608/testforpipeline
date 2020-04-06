@@ -92,15 +92,13 @@ export class BaseEntity {
             let order: IOrderRequest.IOrderData = payload.order
 
             if (!userData.cmsUserRef || userData.cmsUserRef == 0)
-                userData = await userService.createUserOnCms(userData)
+                userData = await userService.createUserOnCms({ userData: JSON.stringify(userData), headers: JSON.stringify(headers) })
 
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
                 addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
             if (!address.cmsAddressRef || address.cmsAddressRef == 0) {
-                userData['asAddress'] = JSON.stringify([address])
-                userData['headers'] = headers
-                await userService.creatAddressOnCms(userData)
+                await userService.creatAddressOnCms({ userData: JSON.stringify(userData), headers: JSON.stringify(headers), asAddress: JSON.stringify([address]) })
                 address = await userService.fetchAddress({ userId: userData.id, addressId: address.id, bin: addressBin })
             }
             return { userData, address }
@@ -117,16 +115,15 @@ export class BaseEntity {
             let address: IUserGrpcRequest.IFetchAddressRes = payload.address
             let order: IOrderRequest.IOrderData = payload.order
 
-            if (!userData.sdmUserRef || userData.sdmUserRef == 0)
-                userData = await userService.createUserOnSdm(userData)
+            if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
+                userData = await userService.createUserOnSdm({ userData: JSON.stringify(userData), headers: JSON.stringify(headers) })
+            }
 
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
             if (order.orderType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS)
                 addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
             if (!address.sdmAddressRef || address.sdmAddressRef == 0) {
-                userData['asAddress'] = JSON.stringify([address])
-                userData['headers'] = headers
-                await userService.creatAddressOnSdm(userData)
+                await userService.creatAddressOnSdm({ userData: JSON.stringify(userData), headers: JSON.stringify(headers), asAddress: JSON.stringify([address]) })
                 address = await userService.fetchAddress({ userId: userData.id, addressId: address.id, bin: addressBin })
             }
             return { userData, address }

@@ -32,11 +32,8 @@ declare namespace ISyncGrpcRequest {
         cms_auth_exp: number,
         reg_ex_for_validation: string,
         country_codes: string,
-        support: string,
-        customer_care_email: string,
         user_change_ttl: number,
         max_pending_state: number,
-        minimum_cart_price: number,
         payment_api_timeout: number,
         payment_api_key_prefix: string,
         display_color: boolean,
@@ -237,6 +234,12 @@ declare namespace ISyncGrpcRequest {
         isActive: number,
         createdAt: number,
         updatedAt: number
-
     }
+
+    interface IFetchFaq {
+        country: string,
+        language: string
+    }
+
+    interface IFaq { }
 }

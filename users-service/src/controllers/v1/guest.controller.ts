@@ -62,6 +62,7 @@ export class GuestController {
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
+            let phnVerified = 0
             if (payload.addressId && payload.addressType) {
                 let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
                     userId: auth.id,
@@ -81,7 +82,7 @@ export class GuestController {
                 cCode: payload.cCode,
                 phnNo: payload.phnNo,
                 otp: otp,
-                otpExpAt: new Date().getTime() + Constant.SERVER.OTP_EXPIRE_TIME,
+                otpExpAt: new Date().getTime() + Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                 otpVerified: 0,
                 isGuest: payload.isGuest,
                 brand: headers.brand,
@@ -137,20 +138,23 @@ export class GuestController {
                         background: false,
                     }
                     let asUserByEmail = await Aerospike.query(queryArg)
-                    if (asUserByEmail && asUserByEmail.length > 0) {
+                    if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                         console.log("guestCheckout step 4=====================>")
                         return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                     } else {
                         console.log("guestCheckout step 5=====================>")
-                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email, language: headers.language })
+                        let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                             console.log("guestCheckout step 6=====================>")
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
                             console.log("guestCheckout step 7=====================>")
-                            userchangePayload['deleteUserId'] = auth.id
                             userchangePayload['chngEmailSdm'] = 1
                             userchangePayload['chngEmailCms'] = 1
+                            delete userchangePayload.otp
+                            delete userchangePayload.otpExpAt
+                            delete userchangePayload.otpVerified
+                            phnVerified = 1
                         }
                     }
                 }
@@ -167,11 +171,11 @@ export class GuestController {
                     background: false,
                 }
                 let asUserByEmail = await Aerospike.query(queryArg)
-                if (asUserByEmail && asUserByEmail.length > 0) {
+                if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                 } else {
                     console.log("guestCheckout step 10=====================>")
-                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email, language: headers.language })
+                    let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                         console.log("guestCheckout step 11=====================>")
                         userchangePayload['id'] = auth.id
@@ -197,11 +201,56 @@ export class GuestController {
             userData['fullPhnNo'] = payload.cCode + payload.phnNo
             userData['phnNo'] = payload.phnNo
             userData['cCode'] = payload.cCode
-            userData['phnVerified'] = 0
+            userData['phnVerified'] = phnVerified
             userData['profileStep'] = 0
+            console.log("guestCheckout step 14=====================>", userchangePayload)
+
+            if (userchangePayload['chngEmailSdm'] || userchangePayload['chngEmailCms']) {
+                userData = await this.forceUpdateUserOnGuestCheckout(headers, userData, userchangePayload)
+            }
             return formatUserData(userData, headers, payload.isGuest)
         } catch (error) {
             consolelog(process.cwd(), "guestCheckout", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async forceUpdateUserOnGuestCheckout(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, userchangePayload: IUserchangeRequest.IUserchange) {
+        try {
+            let userUpdate = {
+                id: userchangePayload.id,
+                phnVerified: 1,
+            }
+            if (userchangePayload.fullPhnNo)
+                userUpdate['fullPhnNo'] = userchangePayload.fullPhnNo
+            if (userchangePayload.username)
+                userUpdate['username'] = userchangePayload.username
+            if (userchangePayload.cCode)
+                userUpdate['cCode'] = userchangePayload.cCode
+            if (userchangePayload.phnNo)
+                userUpdate['phnNo'] = userchangePayload.phnNo
+            if (userchangePayload.name)
+                userUpdate['name'] = userchangePayload.name
+            if (userchangePayload.email)
+                userUpdate['email'] = userchangePayload.email
+            if (userchangePayload.profileStep != undefined)
+                userUpdate['profileStep'] = userchangePayload.profileStep
+            if (userchangePayload.brand)
+                userUpdate['brand'] = userchangePayload.brand
+            if (userchangePayload.country)
+                userUpdate['country'] = userchangePayload.country
+
+            userData = await ENTITY.UserE.buildUser(userUpdate)
+
+            if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchangePayload.chngEmailCms || userchangePayload.chngPhnCms))
+                CMS.UserCMSE.updateCustomerOnCms(userData)
+
+            if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchangePayload.chngEmailSdm || userchangePayload.chngPhnSdm)) {
+                SDM.UserSDME.updateCustomerOnSdm(userData, headers)
+            }
+            return userData
+        } catch (error) {
+            consolelog(process.cwd(), "forceUpdateUserOnGuestCheckout", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

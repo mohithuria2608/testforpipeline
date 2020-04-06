@@ -2,7 +2,7 @@ import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { syncService } from '../../grpc/client';
-import { configuration } from '../../configuration';
+import { configuration } from '../../sync/configuration';
 
 export class MiscController {
 
@@ -21,25 +21,27 @@ export class MiscController {
                 locationVicinity: 100,
                 paymentSuccessUrl: redirectUrl + "payment/success",
                 paymentFailureUrl: redirectUrl + "payment/failure",
-                addressShownTime: Constant.SERVER.ADDR_SHOW_TIME,
-                splashExpireTime: Constant.SERVER.SPLASH_EXPR_TIME,
+                addressShownTime: Constant.CONF.GENERAL.ADDR_SHOW_TIME,
+                splashExpireTime: Constant.CONF.GENERAL.SPLASH_EXPR_TIME,
+                imgEtagThreshold: Constant.CONF.GENERAL.IMG_ETAG_THRESHOLD,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,
                         language: Constant.DATABASE.LANGUAGE.AR,
-                        defaultCCode: Constant.SERVER.DEFAULT_CCODE,
+                        defaultCCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].CCODE,
                         phnRegex: String.raw`^[1-9]\d{8}$|^[1-9]\d{8}$`,
                         phnLength: 9,
-                        customerCare: Constant.SERVER.CUSTOMER_CARE,
-                        supportEmail: Constant.SERVER.SUPPORT_EMAIL,
+                        customerCare: Constant.CONF.COUNTRY_SPECIFIC[headers.country].CUSTOMER_CARE,
+                        supportEmail: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SUPPORT_EMAIL,
                         cashondelivery: 0,
-                        minOrderAmount: Constant.SERVER.MIN_CART_VALUE,
+                        minOrderAmount: Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE,
+                        homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language]
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
                 constants: {
                     cartAmount: Constant.DATABASE.TYPE.CART_AMOUNT.FRONTEND_TEXT[headers.language],
-                    orderStatus: Constant.DATABASE.STATUS.ORDER.FRONTEND_TEXT[headers.language],
+                    orderStatus: Constant.CONF.ORDER_STATUS.FRONTEND_TEXT[headers.language],
                     paymentMethod: Constant.DATABASE.TYPE.PAYMENT_METHOD.FRONTEND_TEXT[headers.language]
                 }
             }

@@ -5,7 +5,7 @@ import * as Constant from '../constant'
 import * as crypto from 'crypto'
 import * as randomstring from 'randomstring';
 import { logger } from '../lib'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 
 

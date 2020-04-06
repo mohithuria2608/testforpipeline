@@ -7,16 +7,13 @@ export default async function () {
         listData: any = await SoapManager.requestData('GetStoresList', params),
         storesList = await listData.GetStoresListResult.CC_STORE;
 
-    let invalidStores = ['1240', '1067'];
     let storeDataList = [];
 
     for (let store of storesList) {
-        if (!invalidStores.includes(store.STR_ID)) {
-            storeDataList.push({
-                sdmStoreId: parseInt(store.STR_ID),
-                active: 0
-            });
-        }
+        storeDataList.push({
+            sdmStoreId: parseInt(store.STR_ID),
+            active: 0
+        });
     }
 
     return storeDataList;

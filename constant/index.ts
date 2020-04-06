@@ -48,6 +48,7 @@ export enum SET_NAME {
     SYNC_MENU_PRODUCT = "sync_menu_product",
     LOGGER = "logger",
     APP_VERSION = "appversion",
+    FAQ = "faq",
     FAILQ = "failq",
     PING_SERVICE = "ping-service"
 };
@@ -106,38 +107,7 @@ export const SERVER = {
         INSTA_LINK: "",
         APP_ADDRESS: ""
     },
-    SDM: {
-        LICENSE_CODE: "PizzaHutApp",// "AmericanaWeb",
-        CONCEPT_ID: 3,
-        MENU_TEMPLATE_ID: 17
-    },
-    DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
-    USERCHANGE_TTL: 15 * 60,//seconds
-    BY_PASS_OTP: 1212,
-    OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
-    ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-    TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
-    MIN_COD_CART_VALUE: 300,//AED
-    MIN_CART_VALUE: 23,//AED
-    MAX_PENDING_STATE_TIME: (8 * 60 * 1000),//millisecond
-    PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
-    PAYMENT_API_KEY_PREFIX: "Key_",
-    DISPLAY_COLOR: true,
-    ANDROID_SCHEME_HOST: "https://",
-    ANDROID_PACKAGE_NAME: "com.android.kfc",
-    IOS_SCHEME_HOST: "americanaKFCUAE://",
-    DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
-    AUTH_MECH: "Bearer",
-    ADDR_SHOW_TIME: 3,//hr
-    SPLASH_EXPR_TIME: 1589523974000,
-    CUSTOMER_CARE: "600522252",
-    SUPPORT_EMAIL: "support@americana-food.com",
-    DEFAULT_CCODE: "+971",
-    CHUNK_SIZE_USER_MIGRATION: 50000,
-    PAYMENT_SUCCESS_FALLBACK: "payment/success",
-    PAYMENT_FAILURE_FALLBACK: "payment/failure",
-    DELIVERY_CHARGE_ID: 279
+
 };
 
 export const SDM_CONFIG = {
@@ -227,183 +197,6 @@ export const DATABASE = {
             CREATE_TRANSACTION: {
                 METHOD: "POST",
                 URL: "custom-order/add-transaction"
-            }
-        }
-    },
-
-    KAFKA: {
-        SDM: {
-            USER: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            ADDRESS: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            MENU: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            PROMOTION: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            HIDDEN: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            ORDER: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                },
-                INTERVAL: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            }
-        },
-        CMS: {
-            USER: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            ADDRESS: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            MENU: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            PROMOTION: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            HIDDEN: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            }
-        },
-        AS: {
-            USER: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            ADDRESS: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            MENU: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            PROMOTION: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            HIDDEN: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            CONFIG: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
-            },
-            APP_VERSION: {
-                MAX_RETRY: {
-                    CREATE: 5,
-                    UPDATE: 5,
-                    GET: 5,
-                    SYNC: 5,
-                    RESET: 5
-                }
             }
         }
     },
@@ -562,7 +355,7 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: "VAT @5%"
+                        value: "Inclusive of VAT 5% i.e."
                     },
                     {
                         name: "SHIPPING",
@@ -584,7 +377,8 @@ export const DATABASE = {
                     },
                     {
                         name: "TAX",
-                        value: String.raw`%5 ضريبة القيمة المضافة`
+                        value: String.raw`يشتمل على ضريبة القيمة المضافة 5% بمعنى آخر`
+                        // value: String.raw`%5 ضريبة القيمة المضافة`
                     },
                     {
                         name: "SHIPPING",
@@ -617,210 +411,6 @@ export const DATABASE = {
     },
 
     STATUS: {
-        ORDER: {
-            FRONTEND_TEXT: {
-                En: [
-                    {
-                        name: "PENDING",
-                        value: "Pending"
-                    },
-                    {
-                        name: "CONFIRMED",
-                        value: "Confirmed"
-                    },
-                    {
-                        name: "BEING_PREPARED",
-                        value: "Being prepared"
-                    },
-                    {
-                        name: "READY",
-                        value: "Ready"
-                    },
-                    {
-                        name: "ON_THE_WAY",
-                        value: "On the way"
-                    },
-                    {
-                        name: "DELIVERED",
-                        value: "Delivered"
-                    },
-                    {
-                        name: "CLOSED",
-                        value: "Closed"
-                    },
-                    {
-                        name: "CANCELED",
-                        value: "Canceled"
-                    },
-                    {
-                        name: "FAILURE",
-                        value: "Failure"
-                    }
-                ],
-                Ar: [
-                    {
-                        name: "PENDING",
-                        value: "قيد الانتظار"
-                    },
-                    {
-                        name: "CONFIRMED",
-                        value: "تم التأكيد"
-                    },
-                    {
-                        name: "BEING_PREPARED",
-                        value: "جاري التجهيز"
-                    },
-                    {
-                        name: "READY",
-                        value: "جاهز"
-                    },
-                    {
-                        name: "ON_THE_WAY",
-                        value: "في الطريق"
-                    },
-                    {
-                        name: "DELIVERED",
-                        value: "تم توصيله"
-                    },
-                    {
-                        name: "CLOSED",
-                        value: "مغلق"
-                    },
-                    {
-                        name: "CANCELED",
-                        value: "تم إلغاؤه"
-                    },
-                    {
-                        name: "FAILURE",
-                        value: "فشل"
-                    }
-                ]
-            },
-            CART: {
-                AS: "CART",
-                MONGO: "CART",
-                CMS: "",
-                SDM: [],
-                FREQ: {
-                    GET: 0,
-                    GET_ONCE: 0,
-                    GET_MAX: 0,
-                    NEXT_PING: 0,
-                }
-            },
-            PENDING: {
-                AS: "",
-                MONGO: "PENDING",
-                CMS: "pending",
-                SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            CONFIRMED: {
-                AS: "",
-                MONGO: "CONFIRMED",
-                CMS: "processing",
-                SDM: [2], //@description : in kitchen
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            BEING_PREPARED: {
-                AS: "",
-                MONGO: "BEING_PREPARED",
-                CMS: "being_prepared",
-                SDM: [2], //@description : in kitchen
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            READY: {
-                AS: "",
-                MONGO: "READY",
-                CMS: "ready",
-                SDM: [8], //@description : ready
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            ON_THE_WAY: {
-                AS: "",
-                MONGO: "ON_THE_WAY",
-                CMS: "shipped",
-                SDM: [16, 32], //@description : assigned/shipped
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            DELIVERED: {
-                AS: "",
-                MONGO: "DELIVERED",
-                CMS: "complete",
-                SDM: [64, 128, 2048], //@description : [64 : delivered] , [128 : closed], [2048 : force closed(like pending orders will finally it reaches this state)]
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            CLOSED: {
-                AS: "",
-                MONGO: "DELIVERED",
-                CMS: "closed",
-                SDM: [], //@description :
-                FREQ: {
-                    GET: 0,
-                    GET_ONCE: 0,
-                    GET_MAX: 0,
-                    NEXT_PING: 0,
-                }
-            },
-            CANCELED: {
-                AS: "",
-                MONGO: "CANCELED",
-                CMS: "canceled",
-                SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-            // 4096 : request for cancel ===> then it goes to 512 ===> final cancelled
-            // 8192 : force cancelled (requested by the customer) ====> 512
-            // 1024 : some issue in the pos
-            FAILURE: {
-                AS: "",
-                MONGO: "FAILURE",
-                CMS: "failed",
-                SDM: [-2], //@description : for development purpose, not sdm actual value
-                FREQ: {
-                    GET: 5000,
-                    GET_ONCE: 0,
-                    GET_MAX: 65000,
-                    NEXT_PING: 30,
-                }
-            },
-        },
-
         PAYMENT: {
             INITIATED: 'INITIATED',
             AUTHORIZED: 'AUTHORIZED',
@@ -1015,49 +605,6 @@ export const DATABASE = {
         }]
     }
 };
-
-export const PAYMENT_CONFIG = {
-    main_website_store: {
-        channel: 'Mobile',
-        decimal: 2,
-        noonpayConfig: {
-            brandCode: 'KFC',
-            countryCode: 'UAE',
-            currencyCode: 'AED',
-            paymentMethods: [
-                {
-                    id: 1,
-                    name: 'Card',
-                    orderCategory: 'kfc_3ds'
-                }
-            ],
-            paymentRetryInterval: 10 * 1000, // in milliseconds
-            maxTry: 2,
-            noonpayOrderExpirationTime: 10 * 60 * 1000, // in milliseconds (10min)
-            businessIdentifier: 'americana_test_cognizant',
-            appIdentifier: 'kfc_uae_test',
-            appAccessKey: '65c5cc823a3f4c079de1c2928d927ebd',
-            apiKey: "",
-            environment: 'Test', // Test or Live
-            noonpayBaseUrl: 'https://api.noonpayments.com/payment/v1',
-            noonpayInitiatePaymentEndPoint: '/order',
-            noonpayGetOrderEndPoint: '/order',
-            noonpayGetOrderByReferenceEndPoint: '/order/GetByReference',
-            noonpayCapturePaymentEndPoint: '/order',
-            noonpayReversePaymentEndPoint: '/order',
-            noonpayRefundPaymentEndPoint: '/order',
-            code: "noonpay",
-            status: 1
-        },
-        codInfo: {
-            status: 1,
-            title: 'Cash On Delivery',
-            min_order_total: null,
-            max_order_total: null,
-            code: "cashondelivery"
-        }
-    }
-}
 
 export const NOTIFICATION_CODE = {
     SMS: {
@@ -1898,54 +1445,568 @@ export const STATUS_MSG = {
     }
 };
 
+export const CONF = {
+    GENERAL: {
+        DEFAULT_CART_TTL: 24 * 60 * 60,//seconds
+        USERCHANGE_TTL: 15 * 60,//seconds
+        BY_PASS_OTP: 1212,
+        OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
+        ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+        REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
+        MAX_PENDING_STATE_TIME: (8 * 60 * 1000),//millisecond
+        PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
+        PAYMENT_API_KEY_PREFIX: "Key_",
+        DISPLAY_COLOR: true,
+        DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
+        AUTH_MECH: "Bearer",
+        ADDR_SHOW_TIME: 3,//hr
+
+
+
+        TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
+        ANDROID_SCHEME_HOST: "https://",
+        ANDROID_PACKAGE_NAME: "com.android.kfc",
+        IOS_SCHEME_HOST: "americanaKFCUAE://",
+        SPLASH_EXPR_TIME: 1589523974000,
+        CHUNK_SIZE_USER_MIGRATION: 50000,
+        PAYMENT_SUCCESS_FALLBACK: "payment/success",
+        PAYMENT_FAILURE_FALLBACK: "payment/failure",
+        DELIVERY_CHARGE_ID: 279,
+        IMG_ETAG_THRESHOLD: (2 * 60 * 60 * 1000),
+        SDM_STORE_TIME_OFFSET: (4 * 60 * 60 * 1000)
+    },
+    COUNTRY_SPECIFIC: {
+        UAE: {
+            HOME_OVERLAY: {
+                En: {
+                    "mediaUrl": "ic_red@3x.png",
+                    "gif": "",
+                    "mediaType": "image",
+                    "extension": "png",
+                    "action": {
+                        "id": 21,
+                        "type": "category",
+                        "delimeters": "delimeters"
+                    }
+                },
+                Ar: {
+                    "mediaUrl": "ic_red@3x.png",
+                    "gif": "",
+                    "mediaType": "image",
+                    "extension": "png",
+                    "action": {
+                        "id": 21,
+                        "type": "category",
+                        "delimeters": "delimeters"
+                    }
+                }
+            },
+            SDM: {
+                LICENSE_CODE: "PizzaHutApp",// "AmericanaWeb",
+                CONCEPT_ID: 3,
+                MENU_TEMPLATE_ID: 17
+            },
+            CCODE: "+971",
+            CUSTOMER_CARE: "600522252",
+            SUPPORT_EMAIL: "support@americana-food.com",
+            MIN_CART_VALUE: 23,//AED
+            MIN_COD_CART_VALUE: 300,//AED
+        }
+    },
+    KAFKA: {
+        SDM: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            HIDDEN: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ORDER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                },
+                INTERVAL: {
+                    GET: 5000,
+                    GET_ONCE: 0,
+                    GET_MAX: 65000,
+                    NEXT_PING: 30,
+                }
+            }
+        },
+        CMS: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            HIDDEN: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            }
+        },
+        AS: {
+            USER: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ADDRESS: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            MENU: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            PROMOTION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            HIDDEN: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            CONFIG: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            APP_VERSION: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            FAQ: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            }
+        }
+    },
+    ORDER_STATUS: {
+        FRONTEND_TEXT: {
+            En: [
+                {
+                    name: "PENDING",
+                    value: "Pending"
+                },
+                {
+                    name: "CONFIRMED",
+                    value: "Confirmed"
+                },
+                {
+                    name: "BEING_PREPARED",
+                    value: "Being prepared"
+                },
+                {
+                    name: "READY",
+                    value: "Ready"
+                },
+                {
+                    name: "ON_THE_WAY",
+                    value: "On the way"
+                },
+                {
+                    name: "DELIVERED",
+                    value: "Delivered"
+                },
+                {
+                    name: "CLOSED",
+                    value: "Closed"
+                },
+                {
+                    name: "CANCELED",
+                    value: "Canceled"
+                },
+                {
+                    name: "FAILURE",
+                    value: "Failure"
+                }
+            ],
+            Ar: [
+                {
+                    name: "PENDING",
+                    value: "قيد الانتظار"
+                },
+                {
+                    name: "CONFIRMED",
+                    value: "تم التأكيد"
+                },
+                {
+                    name: "BEING_PREPARED",
+                    value: "جاري التجهيز"
+                },
+                {
+                    name: "READY",
+                    value: "جاهز"
+                },
+                {
+                    name: "ON_THE_WAY",
+                    value: "في الطريق"
+                },
+                {
+                    name: "DELIVERED",
+                    value: "تم توصيله"
+                },
+                {
+                    name: "CLOSED",
+                    value: "مغلق"
+                },
+                {
+                    name: "CANCELED",
+                    value: "تم إلغاؤه"
+                },
+                {
+                    name: "FAILURE",
+                    value: "فشل"
+                }
+            ]
+        },
+        CART: {
+            AS: "CART",
+            MONGO: "CART",
+            CMS: "",
+            SDM: [],
+            FREQ: {
+                GET: 0,
+                GET_ONCE: 0,
+                GET_MAX: 0,
+                NEXT_PING: 0,
+            }
+        },
+        PENDING: {
+            AS: "",
+            MONGO: "PENDING",
+            CMS: "pending",
+            SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        CONFIRMED: {
+            AS: "",
+            MONGO: "CONFIRMED",
+            CMS: "processing",
+            SDM: [2], //@description : in kitchen
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        BEING_PREPARED: {
+            AS: "",
+            MONGO: "BEING_PREPARED",
+            CMS: "being_prepared",
+            SDM: [2], //@description : in kitchen
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        READY: {
+            AS: "",
+            MONGO: "READY",
+            CMS: "ready",
+            SDM: [8], //@description : ready
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        ON_THE_WAY: {
+            AS: "",
+            MONGO: "ON_THE_WAY",
+            CMS: "shipped",
+            SDM: [16, 32], //@description : assigned/shipped
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        DELIVERED: {
+            AS: "",
+            MONGO: "DELIVERED",
+            CMS: "complete",
+            SDM: [64, 128, 2048], //@description : [64 : delivered] , [128 : closed], [2048 : force closed(like pending orders will finally it reaches this state)]
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        CLOSED: {
+            AS: "",
+            MONGO: "DELIVERED",
+            CMS: "closed",
+            SDM: [], //@description :
+            FREQ: {
+                GET: 0,
+                GET_ONCE: 0,
+                GET_MAX: 0,
+                NEXT_PING: 0,
+            }
+        },
+        CANCELED: {
+            AS: "",
+            MONGO: "CANCELED",
+            CMS: "canceled",
+            SDM: [512, 256, 1024, 4096, 8192], //@description : cancelled
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+        // 4096 : request for cancel ===> then it goes to 512 ===> final cancelled
+        // 8192 : force cancelled (requested by the customer) ====> 512
+        // 1024 : some issue in the pos
+        FAILURE: {
+            AS: "",
+            MONGO: "FAILURE",
+            CMS: "failed",
+            SDM: [-2], //@description : for development purpose, not sdm actual value
+            FREQ: {
+                GET: 5000,
+                GET_ONCE: 0,
+                GET_MAX: 65000,
+                NEXT_PING: 30,
+            }
+        },
+    },
+    PAYMENT: {
+        main_website_store: {
+            channel: 'Mobile',
+            decimal: 2,
+            noonpayConfig: {
+                brandCode: 'KFC',
+                countryCode: 'UAE',
+                currencyCode: 'AED',
+                paymentMethods: [
+                    {
+                        id: 1,
+                        name: 'Card',
+                        orderCategory: 'kfc_3ds'
+                    }
+                ],
+                paymentRetryInterval: 10 * 1000, // in milliseconds
+                maxTry: 2,
+                noonpayOrderExpirationTime: 10 * 60 * 1000, // in milliseconds (10min)
+                businessIdentifier: 'americana_test_cognizant',
+                appIdentifier: 'kfc_uae_test',
+                appAccessKey: '65c5cc823a3f4c079de1c2928d927ebd',
+                apiKey: "",
+                environment: 'Test', // Test or Live
+                noonpayBaseUrl: 'https://api.noonpayments.com/payment/v1',
+                noonpayInitiatePaymentEndPoint: '/order',
+                noonpayGetOrderEndPoint: '/order',
+                noonpayGetOrderByReferenceEndPoint: '/order/GetByReference',
+                noonpayCapturePaymentEndPoint: '/order',
+                noonpayReversePaymentEndPoint: '/order',
+                noonpayRefundPaymentEndPoint: '/order',
+                code: "noonpay",
+                status: 1,
+                SDM: {
+                    PAY_STATUS: 1,
+                    PAY_STORE_TENDERID: 253,
+                    PAY_SUB_TYPE: 1,
+                    PAY_TYPE: 2,
+                }
+            },
+            codInfo: {
+                status: 1,
+                title: 'Cash On Delivery',
+                min_order_total: null,
+                max_order_total: null,
+                code: "cashondelivery",
+                SDM: {
+                    PAY_STATUS: 1,
+                    PAY_STORE_TENDERID: 252,
+                    PAY_SUB_TYPE: 2,
+                    PAY_TYPE: 2,
+                }
+            }
+        }
+    }
+}
 
 interface IGeneral {
-    cms_page_data: [{
-        title: string,
-        identifier: string,
-    }],
-    ttl_for_cart: number,
-    initial_user_ttl: number,
-    initial_guest_ttl: number,
-    bypass_otp: number,
-    otp_expire: number,
-    access_token_expire_time: number,
-    refresh_token_expire_time: number,
-    cms_auth_exp: number,
-    reg_ex_for_validation: string,
-    country_codes: string,
-    support: string,
-    customer_care_email: string,
-    user_change_ttl: number,
-    max_pending_state: number,
-    minimum_cart_price: number,
-    payment_api_timeout: number,
-    payment_api_key_prefix: string,
-    display_color: boolean,
-    deeplink_fallback: string,
-    auth_mech: string,
-    addr_show_time: number,
-}
+        cms_page_data: [{
+            title: string,
+            identifier: string,
+        }],
+        ttl_for_cart: number,
+        initial_user_ttl: number,
+        initial_guest_ttl: number,
+        bypass_otp: number,
+        otp_expire: number,
+        access_token_expire_time: number,
+        refresh_token_expire_time: number,
+        cms_auth_exp: number,
+        reg_ex_for_validation: string,
+        country_codes: string,
+        user_change_ttl: number,
+        max_pending_state: number,
+        payment_api_timeout: number,
+        payment_api_key_prefix: string,
+        display_color: boolean,
+        deeplink_fallback: string,
+        auth_mech: string,
+        addr_show_time: number,
+    }
 export const generalConfigSync = function (config: IGeneral, date: number) {
-    SERVER.DEFAULT_CART_TTL = config.ttl_for_cart;
-    SERVER.BY_PASS_OTP = config.bypass_otp;
-    SERVER.OTP_EXPIRE_TIME = config.otp_expire;
-    SERVER.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
-    SERVER.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
-    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
-    SERVER.CUSTOMER_CARE = config.support;
-    SERVER.SUPPORT_EMAIL = config.customer_care_email;
-    SERVER.USERCHANGE_TTL = config.user_change_ttl;
-    SERVER.MAX_PENDING_STATE_TIME = config.max_pending_state;
-    SERVER.MIN_CART_VALUE = config.minimum_cart_price;
-    SERVER.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
-    SERVER.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
-    SERVER.DEEPLINK_FALLBACK = config.deeplink_fallback;
-    SERVER.ADDR_SHOW_TIME = config.addr_show_time;
-    SERVER.AUTH_MECH = config.auth_mech;
-    SERVER.DISPLAY_COLOR = config.display_color;
+    CONF.GENERAL.DEFAULT_CART_TTL = config.ttl_for_cart;
+    CONF.GENERAL.BY_PASS_OTP = config.bypass_otp;
+    CONF.GENERAL.OTP_EXPIRE_TIME = config.otp_expire;
+    CONF.GENERAL.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
+    CONF.GENERAL.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;
+    CONF.GENERAL.PAYMENT_API_KEY_PREFIX = config.payment_api_key_prefix;
+    CONF.GENERAL.USERCHANGE_TTL = config.user_change_ttl;
+    CONF.GENERAL.MAX_PENDING_STATE_TIME = config.max_pending_state;
+    CONF.GENERAL.PAYMENT_API_TIMEOUT = config.payment_api_timeout;
+    CONF.GENERAL.DEEPLINK_FALLBACK = config.deeplink_fallback;
+    CONF.GENERAL.ADDR_SHOW_TIME = config.addr_show_time;
+    CONF.GENERAL.AUTH_MECH = config.auth_mech;
+    CONF.GENERAL.DISPLAY_COLOR = config.display_color;
     // reg_ex_for_validation: config.reg_ex_for_validation ? config.reg_ex_for_validation : String.raw`^[1-9]\\d{8}$|^[1-9]\\d{8}$`
 
+    // CONF.GENERAL.TRACK_ORDER_UNITIL = ;
+    // CONF.GENERAL.ANDROID_SCHEME_HOST = ;
+    // CONF.GENERAL.ANDROID_PACKAGE_NAME = ;
+    // CONF.GENERAL.IOS_SCHEME_HOST = ;
+    // CONF.GENERAL.SPLASH_EXPR_TIME = ;
+    // CONF.GENERAL.CHUNK_SIZE_USER_MIGRATION = ;
+    // CONF.GENERAL.PAYMENT_SUCCESS_FALLBACK = ;
+    // CONF.GENERAL.PAYMENT_FAILURE_FALLBACK = ;
+    // CONF.GENERAL.DELIVERY_CHARGE_ID = ;
+    // CONF.GENERAL.IMG_ETAG_THRESHOLD = ;
 
     global.configSync.general = date;
     return {}
@@ -2030,99 +2091,99 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
         if (config.as.user_config) {
             if (config.as.user_config.max_try) {
                 if (config.as.user_config.max_try.create)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.CREATE = config.as.user_config.max_try.create
+                    CONF.KAFKA.AS.USER.MAX_RETRY.CREATE = config.as.user_config.max_try.create
                 if (config.as.user_config.max_try.update)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.UPDATE = config.as.user_config.max_try.update
+                    CONF.KAFKA.AS.USER.MAX_RETRY.UPDATE = config.as.user_config.max_try.update
                 if (config.as.user_config.max_try.get)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.GET = config.as.user_config.max_try.get
+                    CONF.KAFKA.AS.USER.MAX_RETRY.GET = config.as.user_config.max_try.get
                 if (config.as.user_config.max_try.sync)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.SYNC = config.as.user_config.max_try.sync
+                    CONF.KAFKA.AS.USER.MAX_RETRY.SYNC = config.as.user_config.max_try.sync
                 if (config.as.user_config.max_try.reset)
-                    DATABASE.KAFKA.AS.USER.MAX_RETRY.RESET = config.as.user_config.max_try.reset
+                    CONF.KAFKA.AS.USER.MAX_RETRY.RESET = config.as.user_config.max_try.reset
             }
         }
         if (config.as.address_config) {
             if (config.as.address_config.max_try) {
                 if (config.as.address_config.max_try.create)
-                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE = config.as.address_config.max_try.create
+                    CONF.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE = config.as.address_config.max_try.create
                 if (config.as.address_config.max_try.update)
-                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE = config.as.address_config.max_try.update
+                    CONF.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE = config.as.address_config.max_try.update
                 if (config.as.address_config.max_try.get)
-                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.GET = config.as.address_config.max_try.get
+                    CONF.KAFKA.AS.ADDRESS.MAX_RETRY.GET = config.as.address_config.max_try.get
                 if (config.as.address_config.max_try.sync)
-                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.SYNC = config.as.address_config.max_try.sync
+                    CONF.KAFKA.AS.ADDRESS.MAX_RETRY.SYNC = config.as.address_config.max_try.sync
                 if (config.as.address_config.max_try.reset)
-                    DATABASE.KAFKA.AS.ADDRESS.MAX_RETRY.RESET = config.as.address_config.max_try.reset
+                    CONF.KAFKA.AS.ADDRESS.MAX_RETRY.RESET = config.as.address_config.max_try.reset
             }
         }
         if (config.as.menu_config) {
             if (config.as.menu_config.max_try) {
                 if (config.as.menu_config.max_try.create)
-                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.CREATE = config.as.menu_config.max_try.create
+                    CONF.KAFKA.AS.MENU.MAX_RETRY.CREATE = config.as.menu_config.max_try.create
                 if (config.as.menu_config.max_try.update)
-                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.UPDATE = config.as.menu_config.max_try.update
+                    CONF.KAFKA.AS.MENU.MAX_RETRY.UPDATE = config.as.menu_config.max_try.update
                 if (config.as.menu_config.max_try.get)
-                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.GET = config.as.menu_config.max_try.get
+                    CONF.KAFKA.AS.MENU.MAX_RETRY.GET = config.as.menu_config.max_try.get
                 if (config.as.menu_config.max_try.sync)
-                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.SYNC = config.as.menu_config.max_try.sync
+                    CONF.KAFKA.AS.MENU.MAX_RETRY.SYNC = config.as.menu_config.max_try.sync
                 if (config.as.menu_config.max_try.reset)
-                    DATABASE.KAFKA.AS.MENU.MAX_RETRY.RESET = config.as.menu_config.max_try.reset
+                    CONF.KAFKA.AS.MENU.MAX_RETRY.RESET = config.as.menu_config.max_try.reset
             }
         }
         if (config.as.promotion_config) {
             if (config.as.promotion_config.max_try) {
                 if (config.as.promotion_config.max_try.create)
-                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE = config.as.promotion_config.max_try.create
+                    CONF.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE = config.as.promotion_config.max_try.create
                 if (config.as.promotion_config.max_try.update)
-                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE = config.as.promotion_config.max_try.update
+                    CONF.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE = config.as.promotion_config.max_try.update
                 if (config.as.promotion_config.max_try.get)
-                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.GET = config.as.promotion_config.max_try.get
+                    CONF.KAFKA.AS.PROMOTION.MAX_RETRY.GET = config.as.promotion_config.max_try.get
                 if (config.as.promotion_config.max_try.sync)
-                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.SYNC = config.as.promotion_config.max_try.sync
+                    CONF.KAFKA.AS.PROMOTION.MAX_RETRY.SYNC = config.as.promotion_config.max_try.sync
                 if (config.as.promotion_config.max_try.reset)
-                    DATABASE.KAFKA.AS.PROMOTION.MAX_RETRY.RESET = config.as.promotion_config.max_try.reset
+                    CONF.KAFKA.AS.PROMOTION.MAX_RETRY.RESET = config.as.promotion_config.max_try.reset
             }
         }
         if (config.as.hidden_config) {
             if (config.as.hidden_config.max_try) {
                 if (config.as.hidden_config.max_try.create)
-                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE = config.as.hidden_config.max_try.create
+                    CONF.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE = config.as.hidden_config.max_try.create
                 if (config.as.hidden_config.max_try.update)
-                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE = config.as.hidden_config.max_try.update
+                    CONF.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE = config.as.hidden_config.max_try.update
                 if (config.as.hidden_config.max_try.get)
-                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.GET = config.as.hidden_config.max_try.get
+                    CONF.KAFKA.AS.HIDDEN.MAX_RETRY.GET = config.as.hidden_config.max_try.get
                 if (config.as.hidden_config.max_try.sync)
-                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.SYNC = config.as.hidden_config.max_try.sync
+                    CONF.KAFKA.AS.HIDDEN.MAX_RETRY.SYNC = config.as.hidden_config.max_try.sync
                 if (config.as.hidden_config.max_try.reset)
-                    DATABASE.KAFKA.AS.HIDDEN.MAX_RETRY.RESET = config.as.hidden_config.max_try.reset
+                    CONF.KAFKA.AS.HIDDEN.MAX_RETRY.RESET = config.as.hidden_config.max_try.reset
             }
         }
         if (config.as.configuration_config) {
             if (config.as.configuration_config.max_try) {
                 if (config.as.configuration_config.max_try.create)
-                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.CREATE = config.as.configuration_config.max_try.create
+                    CONF.KAFKA.AS.CONFIG.MAX_RETRY.CREATE = config.as.configuration_config.max_try.create
                 if (config.as.configuration_config.max_try.update)
-                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE = config.as.configuration_config.max_try.update
+                    CONF.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE = config.as.configuration_config.max_try.update
                 if (config.as.configuration_config.max_try.get)
-                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.GET = config.as.configuration_config.max_try.get
+                    CONF.KAFKA.AS.CONFIG.MAX_RETRY.GET = config.as.configuration_config.max_try.get
                 if (config.as.configuration_config.max_try.sync)
-                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.SYNC = config.as.configuration_config.max_try.sync
+                    CONF.KAFKA.AS.CONFIG.MAX_RETRY.SYNC = config.as.configuration_config.max_try.sync
                 if (config.as.configuration_config.max_try.reset)
-                    DATABASE.KAFKA.AS.CONFIG.MAX_RETRY.RESET = config.as.configuration_config.max_try.reset
+                    CONF.KAFKA.AS.CONFIG.MAX_RETRY.RESET = config.as.configuration_config.max_try.reset
             }
         }
         if (config.as.app_config) {
             if (config.as.app_config.max_try) {
                 if (config.as.app_config.max_try.create)
-                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE = config.as.app_config.max_try.create
+                    CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE = config.as.app_config.max_try.create
                 if (config.as.app_config.max_try.update)
-                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE = config.as.app_config.max_try.update
+                    CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE = config.as.app_config.max_try.update
                 if (config.as.app_config.max_try.get)
-                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.GET = config.as.app_config.max_try.get
+                    CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.GET = config.as.app_config.max_try.get
                 if (config.as.app_config.max_try.sync)
-                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.SYNC = config.as.app_config.max_try.sync
+                    CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.SYNC = config.as.app_config.max_try.sync
                 if (config.as.app_config.max_try.reset)
-                    DATABASE.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET = config.as.app_config.max_try.reset
+                    CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET = config.as.app_config.max_try.reset
             }
         }
     }
@@ -2130,71 +2191,71 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
         if (config.cms.user_config) {
             if (config.cms.user_config.max_try) {
                 if (config.cms.user_config.max_try.create)
-                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.CREATE = config.cms.user_config.max_try.create
+                    CONF.KAFKA.CMS.USER.MAX_RETRY.CREATE = config.cms.user_config.max_try.create
                 if (config.cms.user_config.max_try.update)
-                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.UPDATE = config.cms.user_config.max_try.update
+                    CONF.KAFKA.CMS.USER.MAX_RETRY.UPDATE = config.cms.user_config.max_try.update
                 if (config.cms.user_config.max_try.get)
-                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.GET = config.cms.user_config.max_try.get
+                    CONF.KAFKA.CMS.USER.MAX_RETRY.GET = config.cms.user_config.max_try.get
                 if (config.cms.user_config.max_try.sync)
-                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.SYNC = config.cms.user_config.max_try.sync
+                    CONF.KAFKA.CMS.USER.MAX_RETRY.SYNC = config.cms.user_config.max_try.sync
                 if (config.cms.user_config.max_try.reset)
-                    DATABASE.KAFKA.CMS.USER.MAX_RETRY.RESET = config.cms.user_config.max_try.reset
+                    CONF.KAFKA.CMS.USER.MAX_RETRY.RESET = config.cms.user_config.max_try.reset
             }
         }
         if (config.cms.address_config) {
             if (config.cms.address_config.max_try) {
                 if (config.cms.address_config.max_try.create)
-                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE = config.cms.address_config.max_try.create
+                    CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE = config.cms.address_config.max_try.create
                 if (config.cms.address_config.max_try.update)
-                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE = config.cms.address_config.max_try.update
+                    CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE = config.cms.address_config.max_try.update
                 if (config.cms.address_config.max_try.get)
-                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.GET = config.cms.address_config.max_try.get
+                    CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.GET = config.cms.address_config.max_try.get
                 if (config.cms.address_config.max_try.sync)
-                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.SYNC = config.cms.address_config.max_try.sync
+                    CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.SYNC = config.cms.address_config.max_try.sync
                 if (config.cms.address_config.max_try.reset)
-                    DATABASE.KAFKA.CMS.ADDRESS.MAX_RETRY.RESET = config.cms.address_config.max_try.reset
+                    CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.RESET = config.cms.address_config.max_try.reset
             }
         }
         if (config.cms.menu_config) {
             if (config.cms.menu_config.max_try) {
                 if (config.cms.menu_config.max_try.create)
-                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.CREATE = config.cms.menu_config.max_try.create
+                    CONF.KAFKA.CMS.MENU.MAX_RETRY.CREATE = config.cms.menu_config.max_try.create
                 if (config.cms.menu_config.max_try.update)
-                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.UPDATE = config.cms.menu_config.max_try.update
+                    CONF.KAFKA.CMS.MENU.MAX_RETRY.UPDATE = config.cms.menu_config.max_try.update
                 if (config.cms.menu_config.max_try.get)
-                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.GET = config.cms.menu_config.max_try.get
+                    CONF.KAFKA.CMS.MENU.MAX_RETRY.GET = config.cms.menu_config.max_try.get
                 if (config.cms.menu_config.max_try.sync)
-                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.SYNC = config.cms.menu_config.max_try.sync
+                    CONF.KAFKA.CMS.MENU.MAX_RETRY.SYNC = config.cms.menu_config.max_try.sync
                 if (config.cms.menu_config.max_try.reset)
-                    DATABASE.KAFKA.CMS.MENU.MAX_RETRY.RESET = config.cms.menu_config.max_try.reset
+                    CONF.KAFKA.CMS.MENU.MAX_RETRY.RESET = config.cms.menu_config.max_try.reset
             }
         }
         if (config.cms.promotion_config) {
             if (config.cms.promotion_config.max_try) {
                 if (config.cms.promotion_config.max_try.create)
-                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.CREATE = config.cms.promotion_config.max_try.create
+                    CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.CREATE = config.cms.promotion_config.max_try.create
                 if (config.cms.promotion_config.max_try.update)
-                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.UPDATE = config.cms.promotion_config.max_try.update
+                    CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.UPDATE = config.cms.promotion_config.max_try.update
                 if (config.cms.promotion_config.max_try.get)
-                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.GET = config.cms.promotion_config.max_try.get
+                    CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.GET = config.cms.promotion_config.max_try.get
                 if (config.cms.promotion_config.max_try.sync)
-                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.SYNC = config.cms.promotion_config.max_try.sync
+                    CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.SYNC = config.cms.promotion_config.max_try.sync
                 if (config.cms.promotion_config.max_try.reset)
-                    DATABASE.KAFKA.CMS.PROMOTION.MAX_RETRY.RESET = config.cms.promotion_config.max_try.reset
+                    CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.RESET = config.cms.promotion_config.max_try.reset
             }
         }
         if (config.cms.hidden_config) {
             if (config.cms.hidden_config.max_try) {
                 if (config.cms.hidden_config.max_try.create)
-                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.CREATE = config.cms.hidden_config.max_try.create
+                    CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.CREATE = config.cms.hidden_config.max_try.create
                 if (config.cms.hidden_config.max_try.update)
-                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.UPDATE = config.cms.hidden_config.max_try.update
+                    CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.UPDATE = config.cms.hidden_config.max_try.update
                 if (config.cms.hidden_config.max_try.get)
-                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.GET = config.cms.hidden_config.max_try.get
+                    CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.GET = config.cms.hidden_config.max_try.get
                 if (config.cms.hidden_config.max_try.sync)
-                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.SYNC = config.cms.hidden_config.max_try.sync
+                    CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.SYNC = config.cms.hidden_config.max_try.sync
                 if (config.cms.hidden_config.max_try.reset)
-                    DATABASE.KAFKA.CMS.HIDDEN.MAX_RETRY.RESET = config.cms.hidden_config.max_try.reset
+                    CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.RESET = config.cms.hidden_config.max_try.reset
             }
         }
     }
@@ -2202,85 +2263,85 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
         if (config.sdm.user_config) {
             if (config.sdm.user_config.max_try) {
                 if (config.sdm.user_config.max_try.create)
-                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.CREATE = config.sdm.user_config.max_try.create
+                    CONF.KAFKA.SDM.USER.MAX_RETRY.CREATE = config.sdm.user_config.max_try.create
                 if (config.sdm.user_config.max_try.update)
-                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.UPDATE = config.sdm.user_config.max_try.update
+                    CONF.KAFKA.SDM.USER.MAX_RETRY.UPDATE = config.sdm.user_config.max_try.update
                 if (config.sdm.user_config.max_try.get)
-                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.GET = config.sdm.user_config.max_try.get
+                    CONF.KAFKA.SDM.USER.MAX_RETRY.GET = config.sdm.user_config.max_try.get
                 if (config.sdm.user_config.max_try.sync)
-                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.SYNC = config.sdm.user_config.max_try.sync
+                    CONF.KAFKA.SDM.USER.MAX_RETRY.SYNC = config.sdm.user_config.max_try.sync
                 if (config.sdm.user_config.max_try.reset)
-                    DATABASE.KAFKA.SDM.USER.MAX_RETRY.RESET = config.sdm.user_config.max_try.reset
+                    CONF.KAFKA.SDM.USER.MAX_RETRY.RESET = config.sdm.user_config.max_try.reset
             }
         }
         if (config.sdm.address_config) {
             if (config.sdm.address_config.max_try) {
                 if (config.sdm.address_config.max_try.create)
-                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE = config.sdm.address_config.max_try.create
+                    CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE = config.sdm.address_config.max_try.create
                 if (config.sdm.address_config.max_try.update)
-                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE = config.sdm.address_config.max_try.update
+                    CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE = config.sdm.address_config.max_try.update
                 if (config.sdm.address_config.max_try.get)
-                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.GET = config.sdm.address_config.max_try.get
+                    CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.GET = config.sdm.address_config.max_try.get
                 if (config.sdm.address_config.max_try.sync)
-                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.SYNC = config.sdm.address_config.max_try.sync
+                    CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.SYNC = config.sdm.address_config.max_try.sync
                 if (config.sdm.address_config.max_try.reset)
-                    DATABASE.KAFKA.SDM.ADDRESS.MAX_RETRY.RESET = config.sdm.address_config.max_try.reset
+                    CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.RESET = config.sdm.address_config.max_try.reset
             }
         }
         if (config.sdm.menu_config) {
             if (config.sdm.menu_config.max_try) {
                 if (config.sdm.menu_config.max_try.create)
-                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.CREATE = config.sdm.menu_config.max_try.create
+                    CONF.KAFKA.SDM.MENU.MAX_RETRY.CREATE = config.sdm.menu_config.max_try.create
                 if (config.sdm.menu_config.max_try.update)
-                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.UPDATE = config.sdm.menu_config.max_try.update
+                    CONF.KAFKA.SDM.MENU.MAX_RETRY.UPDATE = config.sdm.menu_config.max_try.update
                 if (config.sdm.menu_config.max_try.get)
-                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.GET = config.sdm.menu_config.max_try.get
+                    CONF.KAFKA.SDM.MENU.MAX_RETRY.GET = config.sdm.menu_config.max_try.get
                 if (config.sdm.menu_config.max_try.sync)
-                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.SYNC = config.sdm.menu_config.max_try.sync
+                    CONF.KAFKA.SDM.MENU.MAX_RETRY.SYNC = config.sdm.menu_config.max_try.sync
                 if (config.sdm.menu_config.max_try.reset)
-                    DATABASE.KAFKA.SDM.MENU.MAX_RETRY.RESET = config.sdm.menu_config.max_try.reset
+                    CONF.KAFKA.SDM.MENU.MAX_RETRY.RESET = config.sdm.menu_config.max_try.reset
             }
         }
         if (config.sdm.promotion_config) {
             if (config.sdm.promotion_config.max_try) {
                 if (config.sdm.promotion_config.max_try.create)
-                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.CREATE = config.sdm.promotion_config.max_try.create
+                    CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.CREATE = config.sdm.promotion_config.max_try.create
                 if (config.sdm.promotion_config.max_try.update)
-                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.UPDATE = config.sdm.promotion_config.max_try.update
+                    CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.UPDATE = config.sdm.promotion_config.max_try.update
                 if (config.sdm.promotion_config.max_try.get)
-                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.GET = config.sdm.promotion_config.max_try.get
+                    CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.GET = config.sdm.promotion_config.max_try.get
                 if (config.sdm.promotion_config.max_try.sync)
-                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.SYNC = config.sdm.promotion_config.max_try.sync
+                    CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.SYNC = config.sdm.promotion_config.max_try.sync
                 if (config.sdm.promotion_config.max_try.reset)
-                    DATABASE.KAFKA.SDM.PROMOTION.MAX_RETRY.RESET = config.sdm.promotion_config.max_try.reset
+                    CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.RESET = config.sdm.promotion_config.max_try.reset
             }
         }
         if (config.sdm.hidden_config) {
             if (config.sdm.hidden_config.max_try) {
                 if (config.sdm.hidden_config.max_try.create)
-                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.CREATE = config.sdm.hidden_config.max_try.create
+                    CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.CREATE = config.sdm.hidden_config.max_try.create
                 if (config.sdm.hidden_config.max_try.update)
-                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.UPDATE = config.sdm.hidden_config.max_try.update
+                    CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.UPDATE = config.sdm.hidden_config.max_try.update
                 if (config.sdm.hidden_config.max_try.get)
-                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.GET = config.sdm.hidden_config.max_try.get
+                    CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.GET = config.sdm.hidden_config.max_try.get
                 if (config.sdm.hidden_config.max_try.sync)
-                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.SYNC = config.sdm.hidden_config.max_try.sync
+                    CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.SYNC = config.sdm.hidden_config.max_try.sync
                 if (config.sdm.hidden_config.max_try.reset)
-                    DATABASE.KAFKA.SDM.HIDDEN.MAX_RETRY.RESET = config.sdm.hidden_config.max_try.reset
+                    CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.RESET = config.sdm.hidden_config.max_try.reset
             }
         }
         if (config.sdm.order_config) {
             if (config.sdm.order_config.max_try) {
                 if (config.sdm.order_config.max_try.create)
-                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.CREATE = config.sdm.order_config.max_try.create
+                    CONF.KAFKA.SDM.ORDER.MAX_RETRY.CREATE = config.sdm.order_config.max_try.create
                 if (config.sdm.order_config.max_try.update)
-                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.UPDATE = config.sdm.order_config.max_try.update
+                    CONF.KAFKA.SDM.ORDER.MAX_RETRY.UPDATE = config.sdm.order_config.max_try.update
                 if (config.sdm.order_config.max_try.get)
-                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.GET = config.sdm.order_config.max_try.get
+                    CONF.KAFKA.SDM.ORDER.MAX_RETRY.GET = config.sdm.order_config.max_try.get
                 if (config.sdm.order_config.max_try.sync)
-                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.SYNC = config.sdm.order_config.max_try.sync
+                    CONF.KAFKA.SDM.ORDER.MAX_RETRY.SYNC = config.sdm.order_config.max_try.sync
                 if (config.sdm.order_config.max_try.reset)
-                    DATABASE.KAFKA.SDM.ORDER.MAX_RETRY.RESET = config.sdm.order_config.max_try.reset
+                    CONF.KAFKA.SDM.ORDER.MAX_RETRY.RESET = config.sdm.order_config.max_try.reset
             }
             // ORDER: {
             //     INTERVAL: {
@@ -2324,202 +2385,202 @@ interface IStatus {
 export const orderStatusConfigSync = function (config: IOrderStatus, date: number) {
     if (config.cart_config) {
         if (config.cart_config.as)
-            DATABASE.STATUS.ORDER.CART.AS = config.cart_config.as
+            CONF.ORDER_STATUS.CART.AS = config.cart_config.as
         if (config.cart_config.mongo)
-            DATABASE.STATUS.ORDER.CART.MONGO = config.cart_config.mongo
+            CONF.ORDER_STATUS.CART.MONGO = config.cart_config.mongo
         if (config.cart_config.cms)
-            DATABASE.STATUS.ORDER.CART.CMS = config.cart_config.cms
+            CONF.ORDER_STATUS.CART.CMS = config.cart_config.cms
         if (config.cart_config.sdm)
-            DATABASE.STATUS.ORDER.CART.SDM = config.cart_config.sdm
+            CONF.ORDER_STATUS.CART.SDM = config.cart_config.sdm
         if (config.cart_config.freq) {
             if (config.cart_config.freq.get)
-                DATABASE.STATUS.ORDER.CART.FREQ.GET = config.cart_config.freq.get
+                CONF.ORDER_STATUS.CART.FREQ.GET = config.cart_config.freq.get
             if (config.cart_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.CART.FREQ.GET_ONCE = config.cart_config.freq.geet_once
+                CONF.ORDER_STATUS.CART.FREQ.GET_ONCE = config.cart_config.freq.geet_once
             if (config.cart_config.freq.get_max)
-                DATABASE.STATUS.ORDER.CART.FREQ.GET_MAX = config.cart_config.freq.get_max
+                CONF.ORDER_STATUS.CART.FREQ.GET_MAX = config.cart_config.freq.get_max
             if (config.cart_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.CART.FREQ.NEXT_PING = config.cart_config.freq.next_ping
+                CONF.ORDER_STATUS.CART.FREQ.NEXT_PING = config.cart_config.freq.next_ping
         }
     }
     if (config.pending_config) {
         if (config.pending_config.as)
-            DATABASE.STATUS.ORDER.PENDING.AS = config.pending_config.as
+            CONF.ORDER_STATUS.PENDING.AS = config.pending_config.as
         if (config.pending_config.mongo)
-            DATABASE.STATUS.ORDER.PENDING.MONGO = config.pending_config.mongo
+            CONF.ORDER_STATUS.PENDING.MONGO = config.pending_config.mongo
         if (config.pending_config.cms)
-            DATABASE.STATUS.ORDER.PENDING.CMS = config.pending_config.cms
+            CONF.ORDER_STATUS.PENDING.CMS = config.pending_config.cms
         if (config.pending_config.sdm)
-            DATABASE.STATUS.ORDER.PENDING.SDM = config.pending_config.sdm
+            CONF.ORDER_STATUS.PENDING.SDM = config.pending_config.sdm
         if (config.pending_config.freq) {
             if (config.pending_config.freq.get)
-                DATABASE.STATUS.ORDER.PENDING.FREQ.GET = config.pending_config.freq.get
+                CONF.ORDER_STATUS.PENDING.FREQ.GET = config.pending_config.freq.get
             if (config.pending_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.PENDING.FREQ.GET_ONCE = config.pending_config.freq.geet_once
+                CONF.ORDER_STATUS.PENDING.FREQ.GET_ONCE = config.pending_config.freq.geet_once
             if (config.pending_config.freq.get_max)
-                DATABASE.STATUS.ORDER.PENDING.FREQ.GET_MAX = config.pending_config.freq.get_max
+                CONF.ORDER_STATUS.PENDING.FREQ.GET_MAX = config.pending_config.freq.get_max
             if (config.pending_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.PENDING.FREQ.NEXT_PING = config.pending_config.freq.next_ping
+                CONF.ORDER_STATUS.PENDING.FREQ.NEXT_PING = config.pending_config.freq.next_ping
         }
     }
     if (config.confirmed_config) {
         if (config.confirmed_config.as)
-            DATABASE.STATUS.ORDER.CONFIRMED.AS = config.confirmed_config.as
+            CONF.ORDER_STATUS.CONFIRMED.AS = config.confirmed_config.as
         if (config.confirmed_config.mongo)
-            DATABASE.STATUS.ORDER.CONFIRMED.MONGO = config.confirmed_config.mongo
+            CONF.ORDER_STATUS.CONFIRMED.MONGO = config.confirmed_config.mongo
         if (config.confirmed_config.cms)
-            DATABASE.STATUS.ORDER.CONFIRMED.CMS = config.confirmed_config.cms
+            CONF.ORDER_STATUS.CONFIRMED.CMS = config.confirmed_config.cms
         if (config.confirmed_config.sdm)
-            DATABASE.STATUS.ORDER.CONFIRMED.SDM = config.confirmed_config.sdm
+            CONF.ORDER_STATUS.CONFIRMED.SDM = config.confirmed_config.sdm
         if (config.confirmed_config.freq) {
             if (config.confirmed_config.freq.get)
-                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.GET = config.confirmed_config.freq.get
+                CONF.ORDER_STATUS.CONFIRMED.FREQ.GET = config.confirmed_config.freq.get
             if (config.confirmed_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.GET_ONCE = config.confirmed_config.freq.geet_once
+                CONF.ORDER_STATUS.CONFIRMED.FREQ.GET_ONCE = config.confirmed_config.freq.geet_once
             if (config.confirmed_config.freq.get_max)
-                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.GET_MAX = config.confirmed_config.freq.get_max
+                CONF.ORDER_STATUS.CONFIRMED.FREQ.GET_MAX = config.confirmed_config.freq.get_max
             if (config.confirmed_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.CONFIRMED.FREQ.NEXT_PING = config.confirmed_config.freq.next_ping
+                CONF.ORDER_STATUS.CONFIRMED.FREQ.NEXT_PING = config.confirmed_config.freq.next_ping
         }
     }
     if (config.prepared_config) {
         if (config.prepared_config.as)
-            DATABASE.STATUS.ORDER.BEING_PREPARED.AS = config.prepared_config.as
+            CONF.ORDER_STATUS.BEING_PREPARED.AS = config.prepared_config.as
         if (config.prepared_config.mongo)
-            DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO = config.prepared_config.mongo
+            CONF.ORDER_STATUS.BEING_PREPARED.MONGO = config.prepared_config.mongo
         if (config.prepared_config.cms)
-            DATABASE.STATUS.ORDER.BEING_PREPARED.CMS = config.prepared_config.cms
+            CONF.ORDER_STATUS.BEING_PREPARED.CMS = config.prepared_config.cms
         if (config.prepared_config.sdm)
-            DATABASE.STATUS.ORDER.BEING_PREPARED.SDM = config.prepared_config.sdm
+            CONF.ORDER_STATUS.BEING_PREPARED.SDM = config.prepared_config.sdm
         if (config.prepared_config.freq) {
             if (config.prepared_config.freq.get)
-                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.GET = config.prepared_config.freq.get
+                CONF.ORDER_STATUS.BEING_PREPARED.FREQ.GET = config.prepared_config.freq.get
             if (config.prepared_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.GET_ONCE = config.prepared_config.freq.geet_once
+                CONF.ORDER_STATUS.BEING_PREPARED.FREQ.GET_ONCE = config.prepared_config.freq.geet_once
             if (config.prepared_config.freq.get_max)
-                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.GET_MAX = config.prepared_config.freq.get_max
+                CONF.ORDER_STATUS.BEING_PREPARED.FREQ.GET_MAX = config.prepared_config.freq.get_max
             if (config.prepared_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.BEING_PREPARED.FREQ.NEXT_PING = config.prepared_config.freq.next_ping
+                CONF.ORDER_STATUS.BEING_PREPARED.FREQ.NEXT_PING = config.prepared_config.freq.next_ping
         }
     }
     if (config.ready_config) {
         if (config.ready_config.as)
-            DATABASE.STATUS.ORDER.READY.AS = config.ready_config.as
+            CONF.ORDER_STATUS.READY.AS = config.ready_config.as
         if (config.ready_config.mongo)
-            DATABASE.STATUS.ORDER.READY.MONGO = config.ready_config.mongo
+            CONF.ORDER_STATUS.READY.MONGO = config.ready_config.mongo
         if (config.ready_config.cms)
-            DATABASE.STATUS.ORDER.READY.CMS = config.ready_config.cms
+            CONF.ORDER_STATUS.READY.CMS = config.ready_config.cms
         if (config.ready_config.sdm)
-            DATABASE.STATUS.ORDER.READY.SDM = config.ready_config.sdm
+            CONF.ORDER_STATUS.READY.SDM = config.ready_config.sdm
         if (config.ready_config.freq) {
             if (config.ready_config.freq.get)
-                DATABASE.STATUS.ORDER.READY.FREQ.GET = config.ready_config.freq.get
+                CONF.ORDER_STATUS.READY.FREQ.GET = config.ready_config.freq.get
             if (config.ready_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.READY.FREQ.GET_ONCE = config.ready_config.freq.geet_once
+                CONF.ORDER_STATUS.READY.FREQ.GET_ONCE = config.ready_config.freq.geet_once
             if (config.ready_config.freq.get_max)
-                DATABASE.STATUS.ORDER.READY.FREQ.GET_MAX = config.ready_config.freq.get_max
+                CONF.ORDER_STATUS.READY.FREQ.GET_MAX = config.ready_config.freq.get_max
             if (config.ready_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.READY.FREQ.NEXT_PING = config.ready_config.freq.next_ping
+                CONF.ORDER_STATUS.READY.FREQ.NEXT_PING = config.ready_config.freq.next_ping
         }
     }
     if (config.ontheway_config) {
         if (config.ontheway_config.as)
-            DATABASE.STATUS.ORDER.ON_THE_WAY.AS = config.ontheway_config.as
+            CONF.ORDER_STATUS.ON_THE_WAY.AS = config.ontheway_config.as
         if (config.ontheway_config.mongo)
-            DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO = config.ontheway_config.mongo
+            CONF.ORDER_STATUS.ON_THE_WAY.MONGO = config.ontheway_config.mongo
         if (config.ontheway_config.cms)
-            DATABASE.STATUS.ORDER.ON_THE_WAY.CMS = config.ontheway_config.cms
+            CONF.ORDER_STATUS.ON_THE_WAY.CMS = config.ontheway_config.cms
         if (config.ontheway_config.sdm)
-            DATABASE.STATUS.ORDER.ON_THE_WAY.SDM = config.ontheway_config.sdm
+            CONF.ORDER_STATUS.ON_THE_WAY.SDM = config.ontheway_config.sdm
         if (config.ontheway_config.freq) {
             if (config.ontheway_config.freq.get)
-                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.GET = config.ontheway_config.freq.get
+                CONF.ORDER_STATUS.ON_THE_WAY.FREQ.GET = config.ontheway_config.freq.get
             if (config.ontheway_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.GET_ONCE = config.ontheway_config.freq.geet_once
+                CONF.ORDER_STATUS.ON_THE_WAY.FREQ.GET_ONCE = config.ontheway_config.freq.geet_once
             if (config.ontheway_config.freq.get_max)
-                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.GET_MAX = config.ontheway_config.freq.get_max
+                CONF.ORDER_STATUS.ON_THE_WAY.FREQ.GET_MAX = config.ontheway_config.freq.get_max
             if (config.ontheway_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.ON_THE_WAY.FREQ.NEXT_PING = config.ontheway_config.freq.next_ping
+                CONF.ORDER_STATUS.ON_THE_WAY.FREQ.NEXT_PING = config.ontheway_config.freq.next_ping
         }
     }
     if (config.delivered_config) {
         if (config.delivered_config.as)
-            DATABASE.STATUS.ORDER.DELIVERED.AS = config.delivered_config.as
+            CONF.ORDER_STATUS.DELIVERED.AS = config.delivered_config.as
         if (config.delivered_config.mongo)
-            DATABASE.STATUS.ORDER.DELIVERED.MONGO = config.delivered_config.mongo
+            CONF.ORDER_STATUS.DELIVERED.MONGO = config.delivered_config.mongo
         if (config.delivered_config.cms)
-            DATABASE.STATUS.ORDER.DELIVERED.CMS = config.delivered_config.cms
+            CONF.ORDER_STATUS.DELIVERED.CMS = config.delivered_config.cms
         if (config.delivered_config.sdm)
-            DATABASE.STATUS.ORDER.DELIVERED.SDM = config.delivered_config.sdm
+            CONF.ORDER_STATUS.DELIVERED.SDM = config.delivered_config.sdm
         if (config.delivered_config.freq) {
             if (config.delivered_config.freq.get)
-                DATABASE.STATUS.ORDER.DELIVERED.FREQ.GET = config.delivered_config.freq.get
+                CONF.ORDER_STATUS.DELIVERED.FREQ.GET = config.delivered_config.freq.get
             if (config.delivered_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.DELIVERED.FREQ.GET_ONCE = config.delivered_config.freq.geet_once
+                CONF.ORDER_STATUS.DELIVERED.FREQ.GET_ONCE = config.delivered_config.freq.geet_once
             if (config.delivered_config.freq.get_max)
-                DATABASE.STATUS.ORDER.DELIVERED.FREQ.GET_MAX = config.delivered_config.freq.get_max
+                CONF.ORDER_STATUS.DELIVERED.FREQ.GET_MAX = config.delivered_config.freq.get_max
             if (config.delivered_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.DELIVERED.FREQ.NEXT_PING = config.delivered_config.freq.next_ping
+                CONF.ORDER_STATUS.DELIVERED.FREQ.NEXT_PING = config.delivered_config.freq.next_ping
         }
     }
     if (config.closed_config) {
         if (config.closed_config.as)
-            DATABASE.STATUS.ORDER.CLOSED.AS = config.closed_config.as
+            CONF.ORDER_STATUS.CLOSED.AS = config.closed_config.as
         if (config.closed_config.mongo)
-            DATABASE.STATUS.ORDER.CLOSED.MONGO = config.closed_config.mongo
+            CONF.ORDER_STATUS.CLOSED.MONGO = config.closed_config.mongo
         if (config.closed_config.cms)
-            DATABASE.STATUS.ORDER.CLOSED.CMS = config.closed_config.cms
+            CONF.ORDER_STATUS.CLOSED.CMS = config.closed_config.cms
         if (config.closed_config.sdm)
-            DATABASE.STATUS.ORDER.CLOSED.SDM = config.closed_config.sdm
+            CONF.ORDER_STATUS.CLOSED.SDM = config.closed_config.sdm
         if (config.closed_config.freq) {
             if (config.closed_config.freq.get)
-                DATABASE.STATUS.ORDER.CLOSED.FREQ.GET = config.closed_config.freq.get
+                CONF.ORDER_STATUS.CLOSED.FREQ.GET = config.closed_config.freq.get
             if (config.closed_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.CLOSED.FREQ.GET_ONCE = config.closed_config.freq.geet_once
+                CONF.ORDER_STATUS.CLOSED.FREQ.GET_ONCE = config.closed_config.freq.geet_once
             if (config.closed_config.freq.get_max)
-                DATABASE.STATUS.ORDER.CLOSED.FREQ.GET_MAX = config.closed_config.freq.get_max
+                CONF.ORDER_STATUS.CLOSED.FREQ.GET_MAX = config.closed_config.freq.get_max
             if (config.closed_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.CLOSED.FREQ.NEXT_PING = config.closed_config.freq.next_ping
+                CONF.ORDER_STATUS.CLOSED.FREQ.NEXT_PING = config.closed_config.freq.next_ping
         }
     }
     if (config.cancelled_config) {
         if (config.cancelled_config.as)
-            DATABASE.STATUS.ORDER.CANCELED.AS = config.cancelled_config.as
+            CONF.ORDER_STATUS.CANCELED.AS = config.cancelled_config.as
         if (config.cancelled_config.mongo)
-            DATABASE.STATUS.ORDER.CANCELED.MONGO = config.cancelled_config.mongo
+            CONF.ORDER_STATUS.CANCELED.MONGO = config.cancelled_config.mongo
         if (config.cancelled_config.cms)
-            DATABASE.STATUS.ORDER.CANCELED.CMS = config.cancelled_config.cms
+            CONF.ORDER_STATUS.CANCELED.CMS = config.cancelled_config.cms
         if (config.cancelled_config.sdm)
-            DATABASE.STATUS.ORDER.CANCELED.SDM = config.cancelled_config.sdm
+            CONF.ORDER_STATUS.CANCELED.SDM = config.cancelled_config.sdm
         if (config.cancelled_config.freq) {
             if (config.cancelled_config.freq.get)
-                DATABASE.STATUS.ORDER.CANCELED.FREQ.GET = config.cancelled_config.freq.get
+                CONF.ORDER_STATUS.CANCELED.FREQ.GET = config.cancelled_config.freq.get
             if (config.cancelled_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.CANCELED.FREQ.GET_ONCE = config.cancelled_config.freq.geet_once
+                CONF.ORDER_STATUS.CANCELED.FREQ.GET_ONCE = config.cancelled_config.freq.geet_once
             if (config.cancelled_config.freq.get_max)
-                DATABASE.STATUS.ORDER.CANCELED.FREQ.GET_MAX = config.cancelled_config.freq.get_max
+                CONF.ORDER_STATUS.CANCELED.FREQ.GET_MAX = config.cancelled_config.freq.get_max
             if (config.cancelled_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.CANCELED.FREQ.NEXT_PING = config.cancelled_config.freq.next_ping
+                CONF.ORDER_STATUS.CANCELED.FREQ.NEXT_PING = config.cancelled_config.freq.next_ping
         }
     }
     if (config.failure_config) {
         if (config.failure_config.as)
-            DATABASE.STATUS.ORDER.FAILURE.AS = config.failure_config.as
+            CONF.ORDER_STATUS.FAILURE.AS = config.failure_config.as
         if (config.failure_config.mongo)
-            DATABASE.STATUS.ORDER.FAILURE.MONGO = config.failure_config.mongo
+            CONF.ORDER_STATUS.FAILURE.MONGO = config.failure_config.mongo
         if (config.failure_config.cms)
-            DATABASE.STATUS.ORDER.FAILURE.CMS = config.failure_config.cms
+            CONF.ORDER_STATUS.FAILURE.CMS = config.failure_config.cms
         if (config.failure_config.sdm)
-            DATABASE.STATUS.ORDER.FAILURE.SDM = config.failure_config.sdm
+            CONF.ORDER_STATUS.FAILURE.SDM = config.failure_config.sdm
         if (config.failure_config.freq) {
             if (config.failure_config.freq.get)
-                DATABASE.STATUS.ORDER.FAILURE.FREQ.GET = config.failure_config.freq.get
+                CONF.ORDER_STATUS.FAILURE.FREQ.GET = config.failure_config.freq.get
             if (config.failure_config.freq.geet_once)
-                DATABASE.STATUS.ORDER.FAILURE.FREQ.GET_ONCE = config.failure_config.freq.geet_once
+                CONF.ORDER_STATUS.FAILURE.FREQ.GET_ONCE = config.failure_config.freq.geet_once
             if (config.failure_config.freq.get_max)
-                DATABASE.STATUS.ORDER.FAILURE.FREQ.GET_MAX = config.failure_config.freq.get_max
+                CONF.ORDER_STATUS.FAILURE.FREQ.GET_MAX = config.failure_config.freq.get_max
             if (config.failure_config.freq.next_ping)
-                DATABASE.STATUS.ORDER.FAILURE.FREQ.NEXT_PING = config.failure_config.freq.next_ping
+                CONF.ORDER_STATUS.FAILURE.FREQ.NEXT_PING = config.failure_config.freq.next_ping
         }
     }
     global.configSync.orderStatus = date;
@@ -2567,67 +2628,67 @@ interface IPaymentMethods {
 }
 
 export const paymentConfigSync = function (store_code: string, config: IPayment, date: number) {
-    console.log("old", PAYMENT_CONFIG)
+    console.log("old", CONF.PAYMENT)
     if (config.noonpayConfig) {
         if (config.noonpayConfig.noonpayReversePaymentEndPoint)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayReversePaymentEndPoint = config.noonpayConfig.noonpayReversePaymentEndPoint
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayReversePaymentEndPoint = config.noonpayConfig.noonpayReversePaymentEndPoint
         if (config.noonpayConfig.noonpayOrderExpirationTime)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayOrderExpirationTime = config.noonpayConfig.noonpayOrderExpirationTime
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayOrderExpirationTime = config.noonpayConfig.noonpayOrderExpirationTime
         if (config.noonpayConfig.countryCode)
-            PAYMENT_CONFIG[store_code].noonpayConfig.countryCode = config.noonpayConfig.countryCode
+            CONF.PAYMENT[store_code].noonpayConfig.countryCode = config.noonpayConfig.countryCode
         if (config.noonpayConfig.businessIdentifier)
-            PAYMENT_CONFIG[store_code].noonpayConfig.businessIdentifier = config.noonpayConfig.businessIdentifier
+            CONF.PAYMENT[store_code].noonpayConfig.businessIdentifier = config.noonpayConfig.businessIdentifier
         if (config.noonpayConfig.appIdentifier)
-            PAYMENT_CONFIG[store_code].noonpayConfig.appIdentifier = config.noonpayConfig.appIdentifier
+            CONF.PAYMENT[store_code].noonpayConfig.appIdentifier = config.noonpayConfig.appIdentifier
         if (config.noonpayConfig.appAccessKey)
-            PAYMENT_CONFIG[store_code].noonpayConfig.appAccessKey = config.noonpayConfig.appAccessKey
+            CONF.PAYMENT[store_code].noonpayConfig.appAccessKey = config.noonpayConfig.appAccessKey
         if (config.noonpayConfig.apiKey)
-            PAYMENT_CONFIG[store_code].noonpayConfig.apiKey = config.noonpayConfig.apiKey
+            CONF.PAYMENT[store_code].noonpayConfig.apiKey = config.noonpayConfig.apiKey
         if (config.noonpayConfig.paymentMethods)
-            PAYMENT_CONFIG[store_code].noonpayConfig.paymentMethods = config.noonpayConfig.paymentMethods
+            CONF.PAYMENT[store_code].noonpayConfig.paymentMethods = config.noonpayConfig.paymentMethods
         if (config.noonpayConfig.code)
-            PAYMENT_CONFIG[store_code].noonpayConfig.code = config.noonpayConfig.code
+            CONF.PAYMENT[store_code].noonpayConfig.code = config.noonpayConfig.code
         if (config.noonpayConfig.decimal)
-            PAYMENT_CONFIG[store_code].noonpayConfig.decimal = config.noonpayConfig.decimal
+            CONF.PAYMENT[store_code].noonpayConfig.decimal = config.noonpayConfig.decimal
 
         if (config.noonpayConfig.status)
-            PAYMENT_CONFIG[store_code].noonpayConfig.status = config.noonpayConfig.status
+            CONF.PAYMENT[store_code].noonpayConfig.status = config.noonpayConfig.status
         if (config.noonpayConfig.environment)
-            PAYMENT_CONFIG[store_code].noonpayConfig.environment = config.noonpayConfig.environment
+            CONF.PAYMENT[store_code].noonpayConfig.environment = config.noonpayConfig.environment
         if (config.noonpayConfig.brandCode)
-            PAYMENT_CONFIG[store_code].noonpayConfig.brandCode = config.noonpayConfig.brandCode
+            CONF.PAYMENT[store_code].noonpayConfig.brandCode = config.noonpayConfig.brandCode
         if (config.noonpayConfig.noonpayGetOrderEndPoint)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayGetOrderEndPoint = config.noonpayConfig.noonpayGetOrderEndPoint
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayGetOrderEndPoint = config.noonpayConfig.noonpayGetOrderEndPoint
         if (config.noonpayConfig.noonpayBaseUrl)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayBaseUrl = config.noonpayConfig.noonpayBaseUrl
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayBaseUrl = config.noonpayConfig.noonpayBaseUrl
         if (config.noonpayConfig.maxTry)
-            PAYMENT_CONFIG[store_code].noonpayConfig.maxTry = config.noonpayConfig.maxTry
+            CONF.PAYMENT[store_code].noonpayConfig.maxTry = config.noonpayConfig.maxTry
         if (config.noonpayConfig.noonpayRefundPaymentEndPoint)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayRefundPaymentEndPoint = config.noonpayConfig.noonpayRefundPaymentEndPoint
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayRefundPaymentEndPoint = config.noonpayConfig.noonpayRefundPaymentEndPoint
         if (config.noonpayConfig.noonpayCapturePaymentEndPoint)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayCapturePaymentEndPoint = config.noonpayConfig.noonpayCapturePaymentEndPoint
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayCapturePaymentEndPoint = config.noonpayConfig.noonpayCapturePaymentEndPoint
         if (config.noonpayConfig.currencyCode)
-            PAYMENT_CONFIG[store_code].noonpayConfig.currencyCode = config.noonpayConfig.currencyCode
+            CONF.PAYMENT[store_code].noonpayConfig.currencyCode = config.noonpayConfig.currencyCode
         if (config.noonpayConfig.channel)
-            PAYMENT_CONFIG[store_code].noonpayConfig.channel = config.noonpayConfig.channel
+            CONF.PAYMENT[store_code].noonpayConfig.channel = config.noonpayConfig.channel
         if (config.noonpayConfig.noonpayInitiatePaymentEndPoint)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayInitiatePaymentEndPoint = config.noonpayConfig.noonpayInitiatePaymentEndPoint
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayInitiatePaymentEndPoint = config.noonpayConfig.noonpayInitiatePaymentEndPoint
         if (config.noonpayConfig.noonpayGetOrderByReferenceEndPoint)
-            PAYMENT_CONFIG[store_code].noonpayConfig.noonpayGetOrderByReferenceEndPoint = config.noonpayConfig.noonpayGetOrderByReferenceEndPoint
+            CONF.PAYMENT[store_code].noonpayConfig.noonpayGetOrderByReferenceEndPoint = config.noonpayConfig.noonpayGetOrderByReferenceEndPoint
     }
     if (config.codInfo) {
         if (config.codInfo.min_order_total)
-            PAYMENT_CONFIG[store_code].codInfo.min_order_total = config.codInfo.min_order_total
+            CONF.PAYMENT[store_code].codInfo.min_order_total = config.codInfo.min_order_total
         if (config.codInfo.name)
-            PAYMENT_CONFIG[store_code].codInfo.name = config.codInfo.name
+            CONF.PAYMENT[store_code].codInfo.name = config.codInfo.name
         if (config.codInfo.code)
-            PAYMENT_CONFIG[store_code].codInfo.code = config.codInfo.code
+            CONF.PAYMENT[store_code].codInfo.code = config.codInfo.code
         if (config.codInfo.status)
-            PAYMENT_CONFIG[store_code].codInfo.status = config.codInfo.status
+            CONF.PAYMENT[store_code].codInfo.status = config.codInfo.status
         if (config.codInfo.max_order_total)
-            PAYMENT_CONFIG[store_code].codInfo.max_order_total = config.codInfo.max_order_total
+            CONF.PAYMENT[store_code].codInfo.max_order_total = config.codInfo.max_order_total
     }
-    console.log("new", PAYMENT_CONFIG)
+    console.log("new", CONF.PAYMENT)
     global.configSync.payment = date;
     return {}
 }

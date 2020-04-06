@@ -68,7 +68,7 @@ export class StoreEntity extends BaseEntity {
         })
     });
 
-    async bootstrapStore(data) {
+    async saveStore(data) {
         try {
             let GeoJSON = aerospike.GeoJSON;
             if (data.location) {
@@ -86,7 +86,7 @@ export class StoreEntity extends BaseEntity {
                 bins: data,
                 set: this.set,
                 key: data.storeIdAs,
-                create: true,
+                createOrReplace: true,
             }
             await Aerospike.put(putArg)
             return {}
@@ -99,70 +99,70 @@ export class StoreEntity extends BaseEntity {
     }
 
     /** posts the stores in aerospike database */
-    async postStores(data) {
-        let langWiseStore = this.storeForLang(data);
-        for (let store of langWiseStore) {
-            if (store.location) {
-                if (store.location.latitude && store.location.latitude != "")
-                    store.location.latitude = parseFloat(store.location.latitude)
-                else
-                    store.location.latitude = 0
-                if (store.location.longitude && store.location.longitude != "")
-                    store.location.longitude = parseFloat(store.location.longitude)
-                else
-                    store.location.longitude = 0
-            }
-            let putArg: IAerospike.Put = {
-                bins: store,
-                set: this.set,
-                key: store.storeIdAs,
-                createOrReplace: true,
-            }
-            await Aerospike.put(putArg);
-        }
-        return {};
-    }
+    // async postStoress(data) {
+    //     let langWiseStore = this.storeForLang(data);
+    //     for (let store of langWiseStore) {
+    //         if (store.location) {
+    //             if (store.location.latitude && store.location.latitude != "")
+    //                 store.location.latitude = parseFloat(store.location.latitude)
+    //             else
+    //                 store.location.latitude = 0
+    //             if (store.location.longitude && store.location.longitude != "")
+    //                 store.location.longitude = parseFloat(store.location.longitude)
+    //             else
+    //                 store.location.longitude = 0
+    //         }
+    //         let putArg: IAerospike.Put = {
+    //             bins: store,
+    //             set: this.set,
+    //             key: store.storeIdAs,
+    //             createOrReplace: true,
+    //         }
+    //         await Aerospike.put(putArg);
+    //     }
+    //     return {};
+    // }
 
-    /* generates stores data for language */
-    storeForLang(data) {
-        let storeDataEn: any = { _id: generateRandomString(16), lang: Constant.DATABASE.LANGUAGE.EN, name: data.name_en, address: data.address_en };
-        let storeDataAr: any = { _id: generateRandomString(16), lang: Constant.DATABASE.LANGUAGE.AR, name: data.name_ar, address: data.address_ar };
-        delete data.name_en; delete data.name_ar;
-        delete data.address_en; delete data.address_ar;
-        storeDataEn = Object.assign(storeDataEn, data);
-        storeDataAr = Object.assign(storeDataAr, data);
-        return [storeDataEn, storeDataAr];
-    }
+    // /* generates stores data for language */
+    // storeForLang(data) {
+    //     let storeDataEn: any = { _id: generateRandomString(16), lang: Constant.DATABASE.LANGUAGE.EN, name: data.name_en, address: data.address_en };
+    //     let storeDataAr: any = { _id: generateRandomString(16), lang: Constant.DATABASE.LANGUAGE.AR, name: data.name_ar, address: data.address_ar };
+    //     delete data.name_en; delete data.name_ar;
+    //     delete data.address_en; delete data.address_ar;
+    //     storeDataEn = Object.assign(storeDataEn, data);
+    //     storeDataAr = Object.assign(storeDataAr, data);
+    //     return [storeDataEn, storeDataAr];
+    // }
 
-    async syncStoreData(data) {
-        try {
-            let putArg: IAerospike.Put = {
-                bins: data,
-                set: this.set,
-                key: data.storeIdAs,
-                createOrReplace: true,
-            }
-            return Aerospike.put(putArg)
-        } catch (error) {
-            console.log("ERROR -> ", error);
-            return {}
-        }
-    }
+    // async syncStoreData(data) {
+    //     try {
+    //         let putArg: IAerospike.Put = {
+    //             bins: data,
+    //             set: this.set,
+    //             key: data.storeIdAs,
+    //             createOrReplace: true,
+    //         }
+    //         return Aerospike.put(putArg)
+    //     } catch (error) {
+    //         console.log("ERROR -> ", error);
+    //         return {}
+    //     }
+    // }
 
-    async updateStoreData(data) {
-        try {
-            let putArg: IAerospike.Put = {
-                bins: data,
-                set: this.set,
-                key: data.storeIdAs,
-                update: true,
-            }
-            return Aerospike.put(putArg)
-        } catch (error) {
-            console.log("ERROR -> ", error);
-            return {}
-        }
-    }
+    // async updateStoreData2(data) {
+    //     try {
+    //         let putArg: IAerospike.Put = {
+    //             bins: data,
+    //             set: this.set,
+    //             key: data.storeIdAs,
+    //             update: true,
+    //         }
+    //         return Aerospike.put(putArg)
+    //     } catch (error) {
+    //         console.log("ERROR -> ", error);
+    //         return {}
+    //     }
+    // }
 
     async getAllStores() {
         try {

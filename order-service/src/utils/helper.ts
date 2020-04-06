@@ -6,7 +6,7 @@ import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
 import * as crypto from 'crypto'
 import { logger } from '../lib'
-const displayColors = Constant.SERVER.DISPLAY_COLOR
+const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)
@@ -393,17 +393,17 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 
 export let getFrequency = function (argv: IOrderRequest.IGetSdmOrderFreq) {
     if (argv.statusChanged) {
-        let nextPingMs = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ[argv.type]
-        let nextPingFe = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.NEXT_PING
+        let nextPingMs = Constant.CONF.ORDER_STATUS[argv.status].FREQ[argv.type]
+        let nextPingFe = Constant.CONF.ORDER_STATUS[argv.status].FREQ.NEXT_PING
         return { nextPingMs: nextPingMs, nextPingFe: nextPingFe }
     } else {
-        if (argv.prevTimeInterval >= Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX) {
-            let nextPingMs = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX
-            let nextPingFe = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.NEXT_PING
+        if (argv.prevTimeInterval >= Constant.CONF.ORDER_STATUS[argv.status].FREQ.GET_MAX) {
+            let nextPingMs = Constant.CONF.ORDER_STATUS[argv.status].FREQ.GET_MAX
+            let nextPingFe = Constant.CONF.ORDER_STATUS[argv.status].FREQ.NEXT_PING
             return { nextPingMs: nextPingMs, nextPingFe: nextPingFe }
         } else {
-            let nextPingMs = (Constant.DATABASE.STATUS.ORDER[argv.status].FREQ[argv.type] + argv.prevTimeInterval) > Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX ? Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.GET_MAX : (Constant.DATABASE.STATUS.ORDER[argv.status].FREQ[argv.type] + argv.prevTimeInterval)
-            let nextPingFe = Constant.DATABASE.STATUS.ORDER[argv.status].FREQ.NEXT_PING
+            let nextPingMs = (Constant.CONF.ORDER_STATUS[argv.status].FREQ[argv.type] + argv.prevTimeInterval) > Constant.CONF.ORDER_STATUS[argv.status].FREQ.GET_MAX ? Constant.CONF.ORDER_STATUS[argv.status].FREQ.GET_MAX : (Constant.CONF.ORDER_STATUS[argv.status].FREQ[argv.type] + argv.prevTimeInterval)
+            let nextPingFe = Constant.CONF.ORDER_STATUS[argv.status].FREQ.NEXT_PING
             return { nextPingMs: nextPingMs, nextPingFe: nextPingFe }
         }
     }

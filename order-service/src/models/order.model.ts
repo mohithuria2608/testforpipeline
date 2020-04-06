@@ -102,17 +102,17 @@ const orderSchema = new Schema({
     },
     status: {
         type: String, enum: [
-            Constant.DATABASE.STATUS.ORDER.CART.MONGO,
-            Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
-            Constant.DATABASE.STATUS.ORDER.CONFIRMED.MONGO,
-            Constant.DATABASE.STATUS.ORDER.BEING_PREPARED.MONGO,
-            Constant.DATABASE.STATUS.ORDER.READY.MONGO,
-            Constant.DATABASE.STATUS.ORDER.ON_THE_WAY.MONGO,
-            Constant.DATABASE.STATUS.ORDER.DELIVERED.MONGO,
-            Constant.DATABASE.STATUS.ORDER.CANCELED.MONGO,
-            Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO
+            Constant.CONF.ORDER_STATUS.CART.MONGO,
+            Constant.CONF.ORDER_STATUS.PENDING.MONGO,
+            Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
+            Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
+            Constant.CONF.ORDER_STATUS.READY.MONGO,
+            Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO,
+            Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+            Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+            Constant.CONF.ORDER_STATUS.FAILURE.MONGO
         ], required: true,
-        default: Constant.DATABASE.STATUS.ORDER.PENDING.MONGO,
+        default: Constant.CONF.ORDER_STATUS.PENDING.MONGO,
     },
     sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
     items: { type: Schema.Types.Mixed, required: true },

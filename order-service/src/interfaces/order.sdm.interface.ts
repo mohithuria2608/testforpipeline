@@ -6,12 +6,14 @@ declare namespace IOrderSdmRequest {
     interface IOrderDetail {
         sdmOrderRef: number,
         language: string,
+        country: string
     }
 
     interface IProcessCreditCardOnSdm {
         sdmOrderRef: number,
         transaction: any,
-        language: string
+        language: string,
+        country: string
     }
 
     interface ICancelOrder {
@@ -19,6 +21,7 @@ declare namespace IOrderSdmRequest {
         voidReason: number,
         validationRemarks: string,
         autoApprove?: string,
-        language: string
+        language: string,
+        country: string
     }
 }

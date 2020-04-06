@@ -96,7 +96,7 @@ message IStore {
     optional int32 storeId = 21;
     optional int32 cityId = 22;
     optional bool isOnline = 23;
-    optional int32 nextDay = 24;
+    optional int32 nextday = 24;
 }
 
 message IService {

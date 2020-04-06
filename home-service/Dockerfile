@@ -13,4 +13,4 @@ RUN npm install
 EXPOSE 4013
 EXPOSE 50064
 RUN tsc
-CMD npm run prod
+CMD npm run stg

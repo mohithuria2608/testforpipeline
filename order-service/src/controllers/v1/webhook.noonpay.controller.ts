@@ -53,7 +53,7 @@ export class WebhookNoonpayController {
                 }
                 consolelog(process.cwd(), "isFailed", isFailed, true)
                 consolelog(process.cwd(), "order.status", order.status, true)
-                if (order.status != Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO) {
+                if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO) {
                     if (!isFailed && webHookStatus && webHookStatus.resultCode == 0 && webHookStatus.transactions && webHookStatus.transactions.length > 0) {
                         let dataToUpdateOrder = {
                             $addToSet: {
@@ -80,10 +80,10 @@ export class WebhookNoonpayController {
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
                                         payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
-                                        order_status: Constant.DATABASE.STATUS.ORDER.PENDING.CMS,
+                                        order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
                                         sdm_order_id: order.sdmOrderRef,
                                     })
-                                redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_SUCCESS_FALLBACK
+                                redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_SUCCESS_FALLBACK
                                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
                                 return redirectUrl
                             } else
@@ -100,20 +100,20 @@ export class WebhookNoonpayController {
                     else
                         validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
                 }
-                if (order.status != Constant.DATABASE.STATUS.ORDER.FAILURE.MONGO)
+                if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO)
                     await ENTITY.OrderE.orderFailureHandler(order, 1, validationRemarks)
-                redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_FAILURE_FALLBACK
+                redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
                 return redirectUrl
             } else {
-                redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_FAILURE_FALLBACK
+                redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
                 return redirectUrl
             }
         } catch (error) {
             consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
             ENTITY.OrderE.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
-            redirectUrl = redirectUrl + Constant.SERVER.PAYMENT_FAILURE_FALLBACK
+            redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
             return redirectUrl
         }
     }

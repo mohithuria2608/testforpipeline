@@ -23,4 +23,4 @@ RUN apt-get install libssl1.1
 EXPOSE 4010
 EXPOSE 50061
 RUN tsc
-CMD npm run prod
+CMD npm run stg
