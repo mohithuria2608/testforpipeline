@@ -35,22 +35,24 @@ export class OrderClass extends BaseEntity {
         } catch (error) {
             if (payload.firstTry) {
                 payload.firstTry = false
-                kafkaService.kafkaSync({
-                    set: this.set,
-                    cms: {
-                        create: true,
-                        argv: JSON.stringify({
-                            orderPayload: orderPayload,
-                            headers: payload.headers,
-                            userData: payload.userData,
-                            address: payload.address,
-                            cart: cart,
-                            order: payload.order,
-                            firstTry: payload.firstTry
-                        })
-                    },
-                    inQ: true
-                })
+                setTimeout(() => {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        cms: {
+                            create: true,
+                            argv: JSON.stringify({
+                                orderPayload: orderPayload,
+                                headers: payload.headers,
+                                userData: payload.userData,
+                                address: payload.address,
+                                cart: cart,
+                                order: payload.order,
+                                firstTry: payload.firstTry
+                            })
+                        },
+                        inQ: true
+                    })
+                }, 1000)
             } else {
                 consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
                 return Promise.reject(error)
@@ -782,14 +784,16 @@ export class OrderClass extends BaseEntity {
         } catch (error) {
             if (payload.firstTry) {
                 payload.firstTry = false
-                kafkaService.kafkaSync({
-                    set: this.set,
-                    sdm: {
-                        create: true,
-                        argv: JSON.stringify(payload)
-                    },
-                    inQ: true
-                })
+                setTimeout(() => {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        sdm: {
+                            create: true,
+                            argv: JSON.stringify(payload)
+                        },
+                        inQ: true
+                    })
+                }, 1000)
             } else {
                 let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE
                 if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
