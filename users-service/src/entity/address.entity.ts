@@ -378,7 +378,7 @@ export class AddressEntity extends BaseEntity {
     async updateAddressOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
             consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData), false)
-            let res = await CMS.AddressCMSE.updateAddresssOnCms(userData)
+            let res = await CMS.AddressCMSE.updateAddresssOnCms(userData, headers, asAddress)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "updateAddressOnCms", JSON.stringify(error), false)

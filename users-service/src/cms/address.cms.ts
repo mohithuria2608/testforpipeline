@@ -73,35 +73,35 @@ export class AddressCMSEntity extends BaseCMS {
         }
     }
 
-    async updateAddresssOnCms(payload: IUserRequest.IUserData): Promise<any> {
+    async updateAddresssOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]): Promise<any> {
         try {
-            let naemRes = nameConstructor(payload.name.trim())
+            let naemRes = nameConstructor(userData.name.trim())
             let formObj: IAddressCMSRequest.IUpdateAddress = {
-                "customerId": payload.cmsUserRef.toString(),
-                "addressId": payload.asAddress[0].cmsAddressRef.toString(),
+                "customerId": userData.cmsUserRef.toString(),
+                "addressId": asAddress[0].cmsAddressRef.toString(),
                 "websiteId": "1",
                 "firstName": naemRes.firstName,
                 "lastName": naemRes.lastName,
-                "password": deCryptData(payload.password),
+                "password": deCryptData(userData.password),
                 "countryId": "AE", // donot change
                 "zip": "00000",
-                "city": payload.asAddress[0].description,
-                "state": payload.asAddress[0].description,
-                "street": payload.asAddress[0].description,
-                "latitude": payload.asAddress[0].lat.toString(),
-                "longitude": payload.asAddress[0].lng.toString(),
-                "description": payload.asAddress[0].description,
+                "city": asAddress[0].description,
+                "state": asAddress[0].description,
+                "street": asAddress[0].description,
+                "latitude": asAddress[0].lat.toString(),
+                "longitude": asAddress[0].lng.toString(),
+                "description": asAddress[0].description,
                 "addressIs": '1',
-                "addressType": payload.asAddress[0].addressType,
-                "telephone": payload.fullPhnNo,
-                "bldgName": payload.asAddress[0].bldgName,
-                "flatNum": payload.asAddress[0].flatNum,
-                "addTag": payload.asAddress[0].tag,
-                "sdmAddressRef": payload.asAddress[0].sdmAddressRef.toString(),
-                "sdmStoreRef": payload.asAddress[0].storeId.toString(),
-                "sdmCountryRef": payload.asAddress[0].countryId.toString(),
-                "sdmAreaRef": payload.asAddress[0].areaId.toString(),
-                "sdmCityRef": payload.asAddress[0].cityId.toString()
+                "addressType": asAddress[0].addressType,
+                "telephone": userData.fullPhnNo,
+                "bldgName": asAddress[0].bldgName,
+                "flatNum": asAddress[0].flatNum,
+                "addTag": asAddress[0].tag,
+                "sdmAddressRef": asAddress[0].sdmAddressRef.toString(),
+                "sdmStoreRef": asAddress[0].storeId.toString(),
+                "sdmCountryRef": asAddress[0].countryId.toString(),
+                "sdmAreaRef": asAddress[0].areaId.toString(),
+                "sdmCityRef": asAddress[0].cityId.toString()
             }
             const headers = {};
             const form = formObj;
