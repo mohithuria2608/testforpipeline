@@ -780,11 +780,23 @@ export class OrderClass extends BaseEntity {
                 }
                 return {}
             } else {
-                this.orderFailureHandler(order, -1, createOrder.ResultText)
+                let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_FAIL
+                if (createOrder.ResultText) {
+                    if (typeof createOrder.ResultText == 'object')
+                        validationRemarks = JSON.stringify(createOrder.SDKResult.ResultText)
+                    else
+                        validationRemarks = createOrder.SDKResult.ResultText
+                }
+                this.orderFailureHandler(order, -1, validationRemarks)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
             }
         } catch (error) {
-            this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE)
+            let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE
+            if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
+                validationRemarks = error.SDKResult.ResultText
+            else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
+                validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
+            this.orderFailureHandler(order, 1, validationRemarks)
             consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
             return Promise.reject(error)
         }
