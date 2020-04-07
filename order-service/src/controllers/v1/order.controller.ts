@@ -42,14 +42,12 @@ export class OrderController {
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
                 let data = JSON.parse(payload.sdm.argv);
                 if (payload.sdm.create) {
-                    let orderPayload = data.orderPayload
                     let headers = data.headers
                     let userData = data.userData
                     let address = data.address
-                    let cart = data.cart
-                    let mongoOrder = data.mongoOrder
+                    let order = data.order
                     let firstTry = data.firstTry
-                    await this.syncOnSdm(orderPayload, headers, userData, address, cart, mongoOrder, firstTry)
+                    await this.syncOnSdm(headers, userData, address, order, firstTry)
                 }
                 if (payload.sdm.get)
                     await ENTITY.OrderE.getSdmOrder(data)
@@ -222,11 +220,9 @@ export class OrderController {
     }
 
     async syncOnSdm(
-        orderPayload: IOrderRequest.IPostOrder,
         headers: ICommonRequest.IHeaders,
         userData: IUserRequest.IUserData,
         address: IUserGrpcRequest.IFetchAddressRes,
-        cart: ICartRequest.ICartData,
         mongoOrder: IOrderRequest.IOrderData,
         firstTry: boolean) {
         try {
