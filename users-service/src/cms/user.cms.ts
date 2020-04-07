@@ -34,7 +34,7 @@ export class UserCMSEntity extends BaseCMS {
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
-                if (cmsRes[0]['success'])
+                if (cmsRes[0]['success'] && cmsRes[0]['success'] != 'false')
                     return cmsRes[0]
                 else
                     return Promise.reject(cmsRes[0]['error_message'])
@@ -75,7 +75,7 @@ export class UserCMSEntity extends BaseCMS {
             }
             let cmsRes = await this.request(options, headers, form)
             if (cmsRes && cmsRes.length > 0) {
-                if (cmsRes[0]['success'])
+                if (cmsRes[0]['success'] && cmsRes[0]['success'] != 'false')
                     return cmsRes[0]
                 else
                     return Promise.reject(cmsRes[0]['error_message'])
