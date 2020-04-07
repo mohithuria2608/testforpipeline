@@ -92,6 +92,11 @@ Hands-on Microservices with TypeScript 3
 * mongoDB
     * 40.127.244.213:10006
     * mongo url : mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db
+* GIT 
+    * URL : http://40.127.244.213:10004/americana/backend
+    * git add .
+    * git commit -m "update merge"
+    * git push http://40.127.244.213:10004/americana/backend.git uat:testing
 
 # PROD 
 * ssh
@@ -127,13 +132,6 @@ Hands-on Microservices with TypeScript 3
     * git pull http://52.142.115.201:10002/americana-foods/amf_backend.git -b prod_final
     * username: root
     ​* password: WebApp@2020
-
-# Code commit on UAT
-* URL : http://40.127.244.213:10004/americana/backend
-* git add .
-* git commit -m "update merge"
-* git push http://40.127.244.213:10004/americana/backend.git ${current branch name of current origin}:${target branch name of target origin}
-* git push http://40.127.244.213:10004/americana/backend.git uat:testing
 
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json
