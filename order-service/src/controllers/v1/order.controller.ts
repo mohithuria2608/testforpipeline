@@ -174,7 +174,7 @@ export class OrderController {
         firstTry: boolean) {
         try {
             this.syncOnCms(orderPayload, headers, userData, address, cart, mongoOrder, firstTry)
-            this.syncOnSdm(orderPayload, headers, userData, address, cart, mongoOrder, firstTry)
+            this.syncOnSdm(headers, userData, address, mongoOrder, firstTry)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOnLegacy", error, false)
