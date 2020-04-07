@@ -213,6 +213,7 @@ export class OrderController {
                     firstTry: firstTry
                 }, orderPayload, cart)
             }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOnCms", error, false)
             return Promise.reject(error)
@@ -235,6 +236,7 @@ export class OrderController {
                     firstTry: firstTry
                 })
             }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOnLegacy", error, false)
             return Promise.reject(error)
