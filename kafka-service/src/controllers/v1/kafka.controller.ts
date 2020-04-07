@@ -401,7 +401,26 @@ export class KafkaController {
                             kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
                         else
                             await orderService.sync(messages)
-
+                    }
+                    if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.reset || payload.cms.sync)) {
+                        messages = { ...payload }
+                        delete messages.as
+                        delete messages.sdm
+                        delete messages.mdb
+                        if (payload.count = 0) {
+                            if (payload.cms.create)
+                                messages['count'] = Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.CREATE
+                            else
+                                messages['count'] = 1
+                        } else if (payload.count < 0) {
+                            break;
+                        }
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_ORDER
+                        messages['q'] = topic
+                        if (payload.inQ)
+                            kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                        else
+                            await orderService.sync(messages)
                     }
                     break;
                 }
