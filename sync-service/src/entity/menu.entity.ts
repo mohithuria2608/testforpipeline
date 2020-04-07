@@ -14,7 +14,7 @@ export class MenuEntity extends BaseEntity {
     /**
      * make it dynamic for menu id and sub menu Id
      */
-    async fetchMenuFromSDM(payload) {
+    async fetchMenuFromSDM(payload: ISdmMenuRequest.ISdmMenu) {
         try {
             await startMenuSyncSequence(payload.menuId)
         } catch (error) {

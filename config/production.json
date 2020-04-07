@@ -192,7 +192,8 @@
         "userName": "Adigital",
         "password": "vSqKeZdc",
         "endPoint": "bulksms/bulksms",
-        "source": "KFC"
+        "source": "KFC",
+        "android_key": "E3ejHP2eeKu"
     },
     "email": {
         "sgKey": "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",

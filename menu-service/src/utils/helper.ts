@@ -3,7 +3,8 @@ import * as config from 'config'
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
-import { logger } from '../lib'
+import { logger } from '../lib';
+import * as request from "request";
 const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
@@ -361,6 +362,26 @@ export let validatorErr = function (error) {
         name: "ValidationError",
         message: error
     }
+}
+
+export let sendRequestToCMS = function (type, data) {
+    return new Promise((resolve, reject) => {
+        let requestUrl = config.get("cms.baseUrl");
+        switch (type) {
+            case 'SYNC_MENU': requestUrl = "menu/create"; break;
+            default: reject(new Error('Invalid Request Entity Type'));
+        }
+        console.log("SENDING DATA -> ", type, " -> COUNT: ", data.length);
+        request.post({
+            headers: { 'content-type': 'application/json' },
+            url: requestUrl,
+            body: JSON.stringify(data)
+        }, function (err, d, b) {
+            console.log("Type -> ", type, " -> Response Body", b);
+            if (err) reject(err);
+            else resolve(b);
+        });
+    });
 }
 
 export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: string = Constant.DATABASE.LANGUAGE.EN, returnMsg?: boolean, returnErr?: boolean) {

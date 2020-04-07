@@ -18,7 +18,7 @@ export class CmsMenuController {
                     set: ENTITY.MenuE.set,
                     as: {
                         create: true,
-                        argv: JSON.stringify(payload.data)
+                        argv: JSON.stringify({ event: "cms_menu_sync", data: payload.data })
                     },
                     inQ: false
                 }

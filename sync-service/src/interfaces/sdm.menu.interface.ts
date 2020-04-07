@@ -1,3 +1,5 @@
 declare namespace ISdmMenuRequest {
-    interface ISdmMenu { }
+    interface ISdmMenu {
+        menuId: number
+    }
 }
