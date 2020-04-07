@@ -13,7 +13,7 @@ export class OrderClass extends BaseEntity {
         super(Constant.SET_NAME.ORDER)
     }
 
-    async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms) {
+    async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms, orderPayload: IOrderRequest.IPostOrder, cart: ICartRequest.ICartData) {
         try {
             let preHook = await this.postCmsOrderPreHandler(payload)
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
@@ -39,7 +39,15 @@ export class OrderClass extends BaseEntity {
                     set: this.set,
                     cms: {
                         create: true,
-                        argv: JSON.stringify(payload)
+                        argv: JSON.stringify({
+                            orderPayload: orderPayload,
+                            headers: payload.headers,
+                            userData: payload.userData,
+                            address: payload.address,
+                            cart: cart,
+                            order: payload.order,
+                            firstTry: payload.firstTry
+                        })
                     },
                     inQ: true
                 })

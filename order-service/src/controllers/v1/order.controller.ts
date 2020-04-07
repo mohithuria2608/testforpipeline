@@ -34,9 +34,9 @@ export class OrderController {
                     let userData = data.userData
                     let address = data.address
                     let cart = data.cart
-                    let mongoOrder = data.mongoOrder
+                    let order = data.order
                     let firstTry = data.firstTry
-                    await this.syncOnCms(orderPayload, headers, userData, address, cart, mongoOrder, firstTry)
+                    await this.syncOnCms(orderPayload, headers, userData, address, cart, order, firstTry)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
@@ -211,7 +211,7 @@ export class OrderController {
                     address: address,
                     order: mongoOrder,
                     firstTry: firstTry
-                })
+                }, orderPayload, cart)
             }
         } catch (error) {
             consolelog(process.cwd(), "syncOnCms", error, false)
