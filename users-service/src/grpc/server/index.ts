@@ -84,7 +84,7 @@ server.addService(userProto.UserService.service, {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
             let userData: IUserRequest.IUserData = JSON.parse(call.request.userData)
             let headers: ICommonRequest.IHeaders = JSON.parse(call.request.headers)
-            let res: {} = await ENTITY.UserE.createUserOnCms(userData, headers)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.createUserOnCms(userData, headers)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
@@ -109,7 +109,7 @@ server.addService(userProto.UserService.service, {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
             let userData: IUserRequest.IUserData = JSON.parse(call.request.userData)
             let headers: ICommonRequest.IHeaders = JSON.parse(call.request.headers)
-            let res: {} = await ENTITY.UserE.createUserOnSdm(userData, headers)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.createUserOnSdm(userData, headers)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)

@@ -250,7 +250,8 @@ export class UserEntity extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            userData = await this.getUser({ userId: userData.id })
+            userData['sdmUserRef'] = parseInt(res.CUST_ID.toString())
+            userData['sdmCorpRef'] = parseInt(res.CUST_CORPID.toString())
             if (userData.socialKey) {
                 SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
             }
@@ -310,24 +311,24 @@ export class UserEntity extends BaseEntity {
                     update: true,
                 }
                 await Aerospike.put(putArg)
-                let user = await this.getUser({ userId: userData.id })
-                console.log("user after getting cms id", user)
-                if (user.sdmUserRef && user.sdmCorpRef) {
+                userData['cmsUserRef'] = parseInt(res.customerId.toString())
+                console.log("user after getting cms id", userData)
+                if (userData.sdmUserRef && userData.sdmCorpRef) {
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {
                             update: true,
                             argv: JSON.stringify({
-                                userData: user,
+                                userData: userData,
                                 headers: headers
                             })
                         },
                         inQ: true
                     })
                 }
-                return user
+                return userData
             }
-            return {}
+            return userData
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
