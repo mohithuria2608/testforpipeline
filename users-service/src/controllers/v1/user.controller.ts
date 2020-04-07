@@ -580,7 +580,7 @@ export class UserController {
                     }
                     let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0) {
-                        console.log("createProfile step 14=====================>")
+                        console.log("createProfile step 14=====================>", asUserByEmail)
                         if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         userUpdate['phnVerified'] = 1
@@ -598,8 +598,11 @@ export class UserController {
                          */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
-                    if (asUserByEmail && asUserByEmail.length > 1)
-                        ENTITY.UserE.removeTempUser(asUserByEmail.map(obj => { return obj.id }), userData.id)
+                    if (asUserByEmail && asUserByEmail.length > 0) {
+                        let temDeleteUserIds = []
+                        asUserByEmail.map(obj => { return temDeleteUserIds.push(obj.id) })
+                        ENTITY.UserE.removeTempUser(temDeleteUserIds, userData.id)
+                    }
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
