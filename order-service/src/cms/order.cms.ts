@@ -23,10 +23,10 @@ export class OrderCMSEntity extends BaseCMS {
                 if (cmsRes[0].success)
                     return cmsRes[0]
                 else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
             else
-            return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         } catch (error) {
             consolelog(process.cwd(), 'createOrder', JSON.stringify(error), false)
             return Promise.reject(error)

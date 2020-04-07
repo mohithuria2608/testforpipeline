@@ -163,6 +163,7 @@ export class UserEntity extends BaseEntity {
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
                 userInfo['sdmAddress'] = payload.sdmAddress
 
+            console.log("updateUser=====================>", userInfo)
             let putArg: IAerospike.Put = {
                 bins: userInfo,
                 set: this.set,

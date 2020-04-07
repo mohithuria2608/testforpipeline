@@ -272,6 +272,7 @@ export class UserController {
         try {
             const otp = generateOtp()
             let userData: IUserRequest.IUserData = {}
+            let updateName = false
             let queryArg: IAerospike.Query = {
                 udf: {
                     module: 'user',
@@ -291,7 +292,9 @@ export class UserController {
                 if (payload.name && payload.name != "")
                     userUpdate['name'] = payload.name.trim()
                 if (userObj[0].phnVerified == 1) {
-                    console.log("socialAuthValidate step 1=====================>")
+                    console.log("socialAuthValidate step 1=====================>", userUpdate)
+                    if (userObj[0].name != payload.name)
+                        updateName = true
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
                     console.log("socialAuthValidate step 2=====================>")
@@ -407,6 +410,10 @@ export class UserController {
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                 this.validateUserOnSdm(userData, false, headers)
             }
+            if (updateName) {
+                CMS.UserCMSE.updateCustomerOnCms(userData)
+                SDM.UserSDME.updateCustomerOnSdm(userData, headers)
+            }
 
             let sessionUpdate: ISessionRequest.ISession = {
                 isGuest: 0,
@@ -477,7 +484,7 @@ export class UserController {
                     }
                     if (asUserByPhone && asUserByPhone.length > 0) {
                         userchangePayload['id'] = asUserByPhone[0].id
-                        console.log("createProfile step 2=====================>")
+                        console.log("createProfile step 2=====================>", asUserByPhone)
                         if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
                             console.log("createProfile step 3=====================>")
                             userchangePayload['deleteUserId'] = auth.id
@@ -492,15 +499,17 @@ export class UserController {
                                 background: false,
                             }
                             let asUserByEmail = await Aerospike.query(queryArg)
+                            console.log("createProfile step 5=====================>", asUserByEmail)
+
                             if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                                console.log("createProfile step 5=====================>")
+                                console.log("createProfile step 5.1=====================>")
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
                                 console.log("createProfile step 6=====================>")
                                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                                     console.log("createProfile step 7=====================>")
-                                    return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
+                                    return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                                 } else {
                                     console.log("createProfile step 8=====================>")
                                     userchangePayload['deleteUserId'] = auth.id

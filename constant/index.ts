@@ -652,7 +652,6 @@ export const NOTIFICATION_MSG = {
             ORDER_CANCEL: (data) => `تم إلغاء الطلب رقم ${data.sdmOrderRef}. إي أموال تم سحبها سيتم إرجاعها خلال 4 إلى 7 أيام عمل.`,
             ORDER_FAIL: (data) => `عذرًا لم نتمكن من إكمال الطلب. يرجى المحاولة مجددًا بعد قليل`
         }
-
     },
     EMAIL: {
         En: {
@@ -1099,6 +1098,16 @@ export const STATUS_MSG = {
                 "message_En": "Validation Error :"
             }
         },
+        "E455": {
+            "SDM_INVALID_CORP_ID": {
+                "statusCode": 455,
+                "httpCode": 455,
+                "message": "Invalid corpId of the customer",
+                "type": "SDM_INVALID_CORP_ID",
+                "message_En": "Invalid corpId of the customer",
+                "message_Ar": "Invalid corpId of the customer",
+            },
+        },
         "E500": {
             "DB_ERROR": {
                 "statusCode": 500,
@@ -1440,7 +1449,8 @@ export const STATUS_MSG = {
         MAX_PENDING_TIME_REACHED: "Maximum pending time reached",
         PAYMENT_FAILURE: "Payment failure",
         PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm",
-        SDM_ORDER_PRE_CONDITION_FAILURE: "Failure in order pre condition"
+        SDM_ORDER_PRE_CONDITION_FAILURE: "Failure in order pre condition wrt SDM",
+        SDM_ORDER_FAIL: "Error in creating order on SDM"
     }
 };
 
@@ -1507,7 +1517,7 @@ export const CONF = {
             },
             CCODE: "+971",
             CUSTOMER_CARE: "600522252",
-            SUPPORT_EMAIL: "support@americana-food.com",
+            SUPPORT_EMAIL: "digiteam@americana-food.com",
             MIN_CART_VALUE: 23,//AED
             MIN_COD_CART_VALUE: 300,//AED
         }
@@ -1957,29 +1967,29 @@ export const CONF = {
 }
 
 interface IGeneral {
-        cms_page_data: [{
-            title: string,
-            identifier: string,
-        }],
-        ttl_for_cart: number,
-        initial_user_ttl: number,
-        initial_guest_ttl: number,
-        bypass_otp: number,
-        otp_expire: number,
-        access_token_expire_time: number,
-        refresh_token_expire_time: number,
-        cms_auth_exp: number,
-        reg_ex_for_validation: string,
-        country_codes: string,
-        user_change_ttl: number,
-        max_pending_state: number,
-        payment_api_timeout: number,
-        payment_api_key_prefix: string,
-        display_color: boolean,
-        deeplink_fallback: string,
-        auth_mech: string,
-        addr_show_time: number,
-    }
+    cms_page_data: [{
+        title: string,
+        identifier: string,
+    }],
+    ttl_for_cart: number,
+    initial_user_ttl: number,
+    initial_guest_ttl: number,
+    bypass_otp: number,
+    otp_expire: number,
+    access_token_expire_time: number,
+    refresh_token_expire_time: number,
+    cms_auth_exp: number,
+    reg_ex_for_validation: string,
+    country_codes: string,
+    user_change_ttl: number,
+    max_pending_state: number,
+    payment_api_timeout: number,
+    payment_api_key_prefix: string,
+    display_color: boolean,
+    deeplink_fallback: string,
+    auth_mech: string,
+    addr_show_time: number,
+}
 export const generalConfigSync = function (config: IGeneral, date: number) {
     CONF.GENERAL.DEFAULT_CART_TTL = config.ttl_for_cart;
     CONF.GENERAL.BY_PASS_OTP = config.bypass_otp;

@@ -117,6 +117,9 @@ export class BaseEntity {
 
             if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
                 userData = await userService.createUserOnSdm({ userData: JSON.stringify(userData), headers: JSON.stringify(headers) })
+            } else {
+                if (userData.sdmCorpRef == 0 || userData.sdmCorpRef == null)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID)
             }
 
             let addressBin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
