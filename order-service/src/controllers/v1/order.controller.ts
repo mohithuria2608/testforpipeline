@@ -27,7 +27,7 @@ export class OrderController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
-                let data = JSON.parse(payload.as.argv)
+                let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create) {
                     let orderPayload = data.orderPayload
                     let headers = data.headers
