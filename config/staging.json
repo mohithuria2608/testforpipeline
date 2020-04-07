@@ -240,5 +240,5 @@
             ]
         }
     },
-    "loadTest": false
+    "loadTest": true
 }
