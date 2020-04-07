@@ -127,7 +127,7 @@ export class GuestController {
                 if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
                     console.log("guestCheckout step 2=====================>")
                     userchangePayload['deleteUserId'] = auth.id
-                    phnVerified = 1
+                    phnVerified = asUserByPhone[0].phnVerified
                 } else {
                     console.log("guestCheckout step 3=====================>")
                     let queryArg: IAerospike.Query = {
@@ -155,7 +155,7 @@ export class GuestController {
                             delete userchangePayload.otp
                             delete userchangePayload.otpExpAt
                             delete userchangePayload.otpVerified
-                            phnVerified = 1
+                            phnVerified = asUserByPhone[0].phnVerified
                         }
                     }
                 }
