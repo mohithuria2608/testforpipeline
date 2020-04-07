@@ -57,27 +57,6 @@ class AerospikeClass {
                     this.client = await aerospike.connect(aerospikeConfig);
                     if (this.client) {
                         global.healthcheck.as = true
-                        kafkaService.kafkaSync({
-                            set: Constant.SET_NAME.LOGGER,
-                            mdb: {
-                                create: true,
-                                argv: JSON.stringify({
-                                    type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
-                                    info: {
-                                        request: {
-                                            body: {}
-                                        },
-                                        response: global.healthcheck
-                                    },
-                                    description: "/healthcheck/as",
-                                    options: {
-                                        env: Constant.SERVER.ENV[config.get("env")],
-                                    },
-                                    createdAt: new Date().getTime(),
-                                })
-                            },
-                            inQ: true
-                        })
                         consolelog(process.cwd(), "Aerospike Client Connected", "", true)
                         this.udfRegister({ module: process.cwd() + '/lua/user.lua' })
                         if (ENTITY.UserE.sindex && ENTITY.UserE.sindex.length > 0)

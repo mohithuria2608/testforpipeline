@@ -178,6 +178,17 @@ export class UserEntity extends BaseEntity {
         }
     }
 
+    async removeTempUser(userIds: string[], doNotDeleteId: string) {
+        try {
+            userIds.map(userId => {
+                if (userId != doNotDeleteId)
+                    Aerospike.remove({ set: this.set, key: userId })
+            })
+        } catch (error) {
+            consolelog(process.cwd(), "removeTempUser", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
     /**
      * @description Get access and refresh token from auth service 
      * @param {string} deviceid 

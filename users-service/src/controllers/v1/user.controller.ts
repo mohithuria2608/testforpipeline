@@ -598,6 +598,8 @@ export class UserController {
                          */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
+                    if (asUserByEmail && asUserByEmail.length > 1)
+                        ENTITY.UserE.removeTempUser(asUserByEmail.map(obj => { return obj.id }), userData.id)
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {
