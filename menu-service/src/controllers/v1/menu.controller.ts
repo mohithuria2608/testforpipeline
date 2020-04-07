@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
+import { consolelog, sendRequestToCMS } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { uploadService } from '../../grpc/client';
@@ -71,13 +71,32 @@ export class MenuController {
     }
 
     /**
-    * @method GRPC
-    * @param {string} type  enum[menu, upsell]
-    * @param {string} data  actuall array of menu or upsell
-    * */
-    async syncToAS(payload: IKafkaGrpcRequest.IKafkaBody) {
+     * @method GRPC
+     * @param {string} type  enum[menu, upsell]
+     * @param {string} data  actuall array of menu or upsell
+     */
+    async sync(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let data = JSON.parse(payload.as.argv)[0];
+            let data = JSON.parse(payload.as.argv);
+            switch (data.event) {
+                case "cms_menu_sync": await this.syncToAS(data.data); break;
+                case "sdm_menu_sync": await this.syncToCMS(data.data); break;
+            }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "sync", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @method GRPC
+     * @param {string} type  enum[menu, upsell]
+     * @param {string} data  actuall array of menu or upsell
+     */
+    async syncToAS(payload) {
+        try {
+            let data = payload[0];
             switch (data.language) {
                 case Constant.DATABASE.LANGUAGE.EN: await ENTITY.MenuEnE.postMenu(data); break;
                 case Constant.DATABASE.LANGUAGE.AR: await ENTITY.MenuArE.postMenu(data); break;
@@ -86,10 +105,28 @@ export class MenuController {
             uploadService.uploadToBlob({ name: `kfc_uae_1_${data.language}.json`, json: JSON.stringify(data) })
             return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncFromKafka", JSON.stringify(error), false)
+            consolelog(process.cwd(), "syncToAS", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
+
+    /**
+     * @method GRPC
+     * @param {string} type  enum[menu, upsell]
+     * @param {string} data  actuall array of menu or upsell
+     * @todo-country country management
+     */
+    async syncToCMS(payload) {
+        try {
+            let syncMenuData = Aerospike.get({ set: Constant.SET_NAME.SYNC_MENU, key: payload.menuId });
+            await sendRequestToCMS('SYNC_MENU', syncMenuData);
+        } catch (error) {
+            consolelog(process.cwd(), "syncToCMS", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+
 }
 
 export const menuController = new MenuController();

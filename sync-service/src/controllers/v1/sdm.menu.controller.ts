@@ -16,7 +16,7 @@ export class SdmMenuController {
             ENTITY.MenuE.fetchMenuFromSDM(payload);
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.MENU_EN,
-                cms: { create: true, argv: JSON.stringify({ event: "menu_sync" }) },
+                cms: { create: true, argv: JSON.stringify({ event: "sdm_menu_sync", data: payload }) },
                 inQ: false
             });
             return {}

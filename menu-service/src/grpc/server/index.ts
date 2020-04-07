@@ -46,7 +46,7 @@ server.addService(menuProto.MenuService.service, {
             let res: any
             switch (data.set) {
                 case Constant.SET_NAME.MENU_EN: case Constant.SET_NAME.MENU_AR: {
-                    res = await menuController.syncToAS(data)
+                    res = await menuController.sync(data)
                     break;
                 }
                 case Constant.SET_NAME.HIDDEN_AR: case Constant.SET_NAME.HIDDEN_EN: {

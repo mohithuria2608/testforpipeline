@@ -5,6 +5,7 @@ import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 import { notificationService } from '../grpc/client';
+import * as config from 'config';
 
 export class UserchangeEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [
@@ -210,7 +211,7 @@ export class UserchangeEntity extends BaseEntity {
                         msgCode: Constant.NOTIFICATION_CODE.SMS.USER_OTP_VERIFICATION,
                         msgDestination: encodeURIComponent(payload.fullPhnNo),
                         language: language,
-                        payload: JSON.stringify({ msg: { otp: payload.otp } })
+                        payload: JSON.stringify({ msg: { otp: payload.otp, key: config.get("sms.android_key") } })
                     });
                 }
                 let putArg: IAerospike.Put = {
