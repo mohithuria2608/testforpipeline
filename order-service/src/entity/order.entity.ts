@@ -257,6 +257,13 @@ export class OrderClass extends BaseEntity {
                     }
                 }
             }
+            let Notes = undefined
+            // Notes = {
+            //     CNote: [{
+            //         NT_FREE_TEXT: "Test Orders - Appinventiv",
+            //         NT_ID: order._id
+            //     }]
+            // }
             let sdmOrderObj = {
                 AddressID: order.address.sdmAddressRef,
                 Comps: Comps,
@@ -266,6 +273,7 @@ export class OrderClass extends BaseEntity {
                 DeliveryChargeID: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.CONF.GENERAL.DELIVERY_CHARGE_ID : undefined,
                 DistrictID: -1,
                 Entries: this.createCEntries(order.items),
+                Notes: Notes,
                 OrderID: 0,
                 OrderMode: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM : Constant.DATABASE.TYPE.ORDER.PICKUP.SDM,
                 OrderType: 0,
