@@ -747,6 +747,11 @@ export class OrderClass extends BaseEntity {
                     isActive: 1,
                     updatedAt: new Date().getTime()
                 }, { new: true })
+                if (order && order._id)
+                    this.getSdmOrderScheduler({
+                        sdmOrderRef: order.sdmOrderRef,
+                        language: order.language
+                    })
                 if (order.cmsOrderRef != 0)
                     order = await this.updateOneEntityMdb({ _id: payload.order._id }, { isActive: 1 }, { new: true })
                 if (order.cmsOrderRef)
@@ -865,7 +870,8 @@ export class OrderClass extends BaseEntity {
                 paymentMethodAddedOnSdm: 0,
                 amountValidationPassed: false,
                 orderConfirmationNotified: false,
-                transferFromOrderId: 0,
+                newOrderId: 0,
+                transferDone: false,
                 env: Constant.SERVER.ENV[config.get("env")]
             }
             if (cartData.promo && cartData.promo.couponId) {
@@ -977,8 +983,8 @@ export class OrderClass extends BaseEntity {
                 }
                 if (recheck) {
                     if (order.sdmOrderRef && order.sdmOrderRef != 0) {
-                        if (order.transferFromOrderId)
-                            order.sdmOrderRef = order.transferFromOrderId
+                        if (order.transferDone)
+                            order.sdmOrderRef = order.newOrderId
                         let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
                         consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
                         if (sdmOrder.Status && typeof sdmOrder.Status) {
@@ -1041,7 +1047,10 @@ export class OrderClass extends BaseEntity {
                                     case 1024:
                                     case 4096:
                                     case 8192: {
-                                        if (sdmOrder && (sdmOrder.TransferFromOrderID == "" || sdmOrder.TransferFromOrderID == "0") && (sdmOrder.TransferFromStoreID == "" || sdmOrder.TransferFromStoreID == "0")) {
+                                        if (sdmOrder &&
+                                            (order.transferDone ||
+                                                (sdmOrder.TransferFromOrderID == "" || sdmOrder.TransferFromOrderID == "0") && (sdmOrder.TransferFromStoreID == "" || sdmOrder.TransferFromStoreID == "0")
+                                            )) {
                                             let cancelledHandler = await this.sdmCancelledHandler(recheck, oldSdmStatus, order, sdmOrder)
                                             recheck = cancelledHandler.recheck;
                                             order = cancelledHandler.order;
@@ -1639,7 +1648,7 @@ export class OrderClass extends BaseEntity {
 
     async transferOrderHandler(order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: parseInt(sdmOrder.TransferFromStoreID), language: order.language })
+            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: parseInt(sdmOrder.StoreID), language: order.language })
             if (store && store.id) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                     store: {
@@ -1653,7 +1662,8 @@ export class OrderClass extends BaseEntity {
                         name_en: store.name_en,
                         name_ar: store.name_ar
                     },
-                    transferFromOrderId: sdmOrder.TransferFromOrderID
+                    newOrderId: sdmOrder.OrderID,
+                    transferDone: true
                 }, { new: true })
 
                 return { recheck: true, order: order }

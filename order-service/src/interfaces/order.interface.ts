@@ -29,7 +29,8 @@ declare namespace IOrderRequest {
         validationRemarks: string,
         amountValidationPassed: boolean,
         orderConfirmationNotified: boolean,
-        transferFromOrderId: number
+        newOrderId: number,
+        transferDone: boolean
         payment: {
             paymentMethodId: number,
             amount: number,

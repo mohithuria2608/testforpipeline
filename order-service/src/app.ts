@@ -1530,7 +1530,7 @@ export const start = (async () => {
       "menuTemplateID": 17
     }
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
-    let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 49190348, language: "En", country: "UAE" })
+    // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 49192451, language: "En", country: "UAE" })
     // await SDM.OrderSDME.cancelOrder({
     //   language: "en",
     //   sdmOrderRef: 48698051,
