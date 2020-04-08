@@ -1516,7 +1516,7 @@ export const start = (async () => {
         "Notes": {
           CNote: [{
             NT_FREE_TEXT: "Test Orders - Appinventiv",
-            NT_ID: new Date()
+            NT_ID: new Date().getTime()
           }]
         },
         "OrderID": 0,
@@ -1535,7 +1535,7 @@ export const start = (async () => {
       "isSuspended": false,
       "menuTemplateID": 17
     }
-    // let orderPlaced = await SDM.OrderSDME.createOrder(order)
+    let orderPlaced = await SDM.OrderSDME.createOrder(order)
     // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 49192451, language: "En", country: "UAE" })
     // await SDM.OrderSDME.cancelOrder({
     //   language: "en",
