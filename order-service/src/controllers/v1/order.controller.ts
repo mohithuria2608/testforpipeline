@@ -354,10 +354,10 @@ export class OrderController {
                 env: Constant.SERVER.ENV[config.get("env")],
                 status: {
                     $nin: [
-                        // Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
-                        // Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
-                        // Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
-                        // Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+                        Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                        Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
+                        Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+                        Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
                     ]
                 }
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1 }, { lean: true })
