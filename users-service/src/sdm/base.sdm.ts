@@ -58,7 +58,7 @@ export class BaseSDM {
                                         body: rawRequest,
                                         baseSOAPUrl: self.baseSOAPUrl
                                     },
-                                    response: error ? error : result
+                                    response: error ? error : rawResponse
                                 },
                                 description: name,
                                 options: {
