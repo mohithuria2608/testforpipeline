@@ -258,12 +258,12 @@ export class OrderClass extends BaseEntity {
                 }
             }
             let Notes = undefined
-            // Notes = {
-            //     CNote: [{
-            //         NT_FREE_TEXT: "Test Orders - Appinventiv",
-            //         NT_ID: order._id
-            //     }]
-            // }
+            Notes = {
+                CNote: [{
+                    NT_FREE_TEXT: "Test Orders - Appinventiv",
+                    NT_ID: order._id
+                }]
+            }
             let sdmOrderObj = {
                 AddressID: order.address.sdmAddressRef,
                 Comps: Comps,
