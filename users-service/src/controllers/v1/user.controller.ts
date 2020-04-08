@@ -600,7 +600,11 @@ export class UserController {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     if (asUserByEmail && asUserByEmail.length > 0) {
                         let temDeleteUserIds = []
-                        asUserByEmail.map(obj => { return temDeleteUserIds.push(obj.id) })
+                        asUserByEmail.map(obj => {
+                            if (obj.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.INIT)
+                                temDeleteUserIds.push(obj.id)
+                            return
+                        })
                         ENTITY.UserE.removeTempUser(temDeleteUserIds, userData.id)
                     }
                     kafkaService.kafkaSync({
