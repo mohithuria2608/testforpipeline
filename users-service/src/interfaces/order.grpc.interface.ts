@@ -26,7 +26,7 @@ declare namespace IOrderGrpcRequest {
         address?: IAddress,
         amount?: IAmount[],
         vat?: IAmount,
-        store?: IStore,
+        store?: IStoreInOrder,
         invalidMenu?: number,
         freeItems?: {
             ar?: any
@@ -61,9 +61,11 @@ declare namespace IOrderGrpcRequest {
         lng?: number,
     }
 
-    interface IStore {
+    interface IStoreInOrder {
         storeId: number,
+        countryId: number,
         areaId: number,
+        cityId: number,
         location: {
             description: string,
             latitude: number
@@ -72,6 +74,6 @@ declare namespace IOrderGrpcRequest {
         address_en: string,
         address_ar: string,
         name_en: string,
-        name_ar: string,
+        name_ar: string
     }
 }

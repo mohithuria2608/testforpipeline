@@ -45,7 +45,8 @@ export class BaseSDM {
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
                 consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
-                BaseSDM.client[name](params, function (error, result) {
+                BaseSDM.client[name](params, function (error, result, rawResponse, soapHeader, rawRequest) {
+                    console.log("rawRequest::::::::::::::::>>>>", rawRequest)
                     kafkaService.kafkaSync({
                         set: Constant.SET_NAME.LOGGER,
                         mdb: {

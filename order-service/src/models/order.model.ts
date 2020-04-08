@@ -20,7 +20,7 @@ export interface Iorder extends Document {
     items: any,
     itemsHash: string
     address: IAddress,
-    store: IStore,
+    store: IStoreInOrder,
     amount: IAmount[],
     language: string,
     promo: IPromotionGrpcRequest.IValidatePromotionRes,
@@ -65,12 +65,16 @@ interface IAmount {
     action?: string
 }
 
-interface IStore {
+interface IStoreInOrder {
     storeId: number,
     countryId: number,
     areaId: number,
     cityId: number,
-    location: any,
+    location: {
+        description: string,
+        latitude: number
+        longitude: number
+    },
     address_en: string,
     address_ar: string,
     name_en: string,
@@ -166,8 +170,8 @@ const orderSchema = new Schema({
         },
         addressType: {
             type: String, enaum: [
-                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                Constant.DATABASE.TYPE.ADDRESS.DELIVERY]
+                Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+                Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE]
         },
         bldgName: { type: String },
         description: { type: String },

@@ -35,7 +35,29 @@ export class MiscController {
                         supportEmail: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SUPPORT_EMAIL,
                         cashondelivery: 0,
                         minOrderAmount: Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE,
-                        // homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language]
+                        // homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language],
+                        addressType: [
+                            {
+                                type: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE,
+                                enable: true,
+                                subType: [{
+                                    type: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY,
+                                    enable: true
+                                }]
+                            },
+                            {
+                                type: Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+                                enable: true,
+                                subType: [{
+                                    type: Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.CARHOP,
+                                    enable: true
+                                },
+                                {
+                                    type: Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE,
+                                    enable: true
+                                }]
+                            }
+                        ]
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],

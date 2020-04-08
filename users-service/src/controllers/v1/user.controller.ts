@@ -234,15 +234,17 @@ export class UserController {
                 session.sessionTime
             )
             if (userchange[0].address && userchange[0].address.id) {
-                let bin = userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP ? Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP : Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                let bin = userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP : Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (deleteUserId && deleteUserId != "") {
                     let userDataToSend = await ENTITY.UserE.getUser({ userId: deleteUserId })
                     await ENTITY.AddressE.updateAddress(headers, { addressId: userchange[0].address.id }, bin, userDataToSend, true)
                 } else
                     await ENTITY.AddressE.updateAddress(headers, { addressId: userchange[0].address.id }, bin, userData, true)
                 await addressController.syncOldAddress(headers, userData.id, {
+                    addressType: userchange[0].address.addressType,
+                    addressSubType: userchange[0].address.addressSubType,
                     addressId: userchange[0].address.id,
-                    storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.storeId : undefined,
+                    storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE) ? userchange[0].address.storeId : undefined,
                     lat: userchange[0].address.lat,
                     lng: userchange[0].address.lng,
                     bldgName: userchange[0].address.bldgName,

@@ -186,8 +186,8 @@ export class CartClass extends BaseEntity {
                 Constant.DATABASE.TYPE.TAG.HOTEL,
                 Constant.DATABASE.TYPE.TAG.OTHER),
             addressType: Joi.string().valid(
-                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
+                Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+                Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE),
             lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
             lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
         }),

@@ -20,7 +20,7 @@ declare namespace IOrderRequest {
         items: any,
         itemsHash: string
         address: IAddress,
-        store: IStore,
+        store: IStoreInOrder,
         amount: IAmount[],
         language: string,
         promo: IPromotionGrpcRequest.IValidatePromotionRes,
@@ -65,12 +65,16 @@ declare namespace IOrderRequest {
         action?: string
     }
 
-    interface IStore {
+    interface IStoreInOrder {
         storeId: number,
         countryId: number,
         areaId: number,
         cityId: number,
-        location: any,
+        location: {
+            description: string,
+            latitude: number
+            longitude: number
+        },
         address_en: string,
         address_ar: string,
         name_en: string,

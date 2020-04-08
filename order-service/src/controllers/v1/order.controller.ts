@@ -90,7 +90,7 @@ export class OrderController {
             consolelog(process.cwd(), "step 3", new Date(), false)
 
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
-            if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+            if (store && store.id && store.menuId == payload.curMenuId) {
                 const menu = await menuService.fetchMenu({
                     menuId: payload.curMenuId,
                     language: headers.language,

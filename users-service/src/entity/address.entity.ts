@@ -29,8 +29,8 @@ export class AddressEntity extends BaseEntity {
             Constant.DATABASE.TYPE.TAG.HOTEL,
             Constant.DATABASE.TYPE.TAG.OTHER),
         addressType: Joi.string().valid(
-            Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-            Constant.DATABASE.TYPE.ADDRESS.DELIVERY),
+            Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+            Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE),
         createdAt: Joi.number().required(),
         updatedAt: Joi.number().required(),
         /**
@@ -95,19 +95,20 @@ export class AddressEntity extends BaseEntity {
      * @description Add address on aerospike
      * @method INTERNAL
      * */
-    async addAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, bin: string, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
+    async addAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
             console.log("addressData", JSON.stringify(addressData))
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
-            let address = {
+            let address: IAddressRequest.IAddress = {
                 id: id,
+                addressType: addressData.addressType,
+                addressSubType: addressData.addressSubType,
                 lat: addressData.lat,
                 lng: addressData.lng,
                 bldgName: addressData.bldgName,
                 description: addressData.description,
                 flatNum: addressData.flatNum,
                 tag: addressData.tag,
-                addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY,
                 createdAt: new Date().getTime(),
                 updatedAt: new Date().getTime(),
                 sdmAddressRef: addressData.sdmAddressRef ? addressData.sdmAddressRef : 0,
@@ -118,15 +119,15 @@ export class AddressEntity extends BaseEntity {
                 cityId: store.cityId,// 17,// 
             };
 
-            if (bin == Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY) {
+            if (addressData.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE) {
                 consolelog(process.cwd(), "deliveryAddress", JSON.stringify(address), false)
-                let checkForMax6Add = await this.getAddress({ userId: userData.id, bin: bin })
+                let checkForMax6Add = await this.getAddress({ userId: userData.id, bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY })
                 if (checkForMax6Add && checkForMax6Add.length == 6) {
                     let listRemoveByIndexArg: IAerospike.ListOperation = {
                         order: true,
                         set: this.set,
                         key: userData.id,
-                        bin: bin,
+                        bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY,
                         remByIndex: true,
                         index: 0
                     }
@@ -140,13 +141,12 @@ export class AddressEntity extends BaseEntity {
                     bins: address,
                     set: this.set,
                     key: userData.id,
-                    bin: bin,
+                    bin: Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY,
                     append: true
                 }
                 await Aerospike.listOperations(listAppendArg)
             } else {
                 address['description'] = store.location.description.substr(0, 10)
-                address['addressType'] = Constant.DATABASE.TYPE.ADDRESS.PICKUP
                 let dataToUpdate = {
                     pickup: [address]
                 }
@@ -249,11 +249,11 @@ export class AddressEntity extends BaseEntity {
         try {
             if (asAddress && typeof asAddress == 'string')
                 asAddress = JSON.parse(asAddress)
-            if (asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) {
+            if (asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE) {
                 asAddress[0].bldgName = ""
                 asAddress[0].description = ""
                 asAddress[0].flatNum = ""
-                asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP
+                asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
             }
             consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(asAddress), false)
             let addressSdmData = {
@@ -314,7 +314,7 @@ export class AddressEntity extends BaseEntity {
             }
 
             let sdmAdd = await SDM.AddressSDME.createAddress(addressSdmData)
-            let bin = asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            let bin = asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
             let asAddr = await this.updateAddress(headers, { addressId: asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
             if (asAddr.cmsAddressRef) {
                 kafkaService.kafkaSync({
@@ -356,7 +356,7 @@ export class AddressEntity extends BaseEntity {
                             let bin = ""
                             asAddress.forEach(obj => {
                                 if (obj.id == iterator.id)
-                                    bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                                    bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                             })
                             if (bin != "")
                                 await this.updateAddress(headers, updateAddressOnAs, bin, userData, false)
@@ -390,21 +390,21 @@ export class AddressEntity extends BaseEntity {
         try {
             for (const obj of cmsAddress) {
                 if (obj.addressId && obj.sdmAddressRef) {
-                    let bin = obj['addressType']
                     let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
-                    if (store && store.id && store.id != "") {
-                        let add = {
+                    if (store && store.id) {
+                        let add: IAddressRequest.IRegisterAddress = {
+                            addressType: obj.addressType,
+                            addressSubType: obj.addressSubType,
                             lat: parseFloat(obj.latitude),
                             lng: parseFloat(obj.longitude),
                             bldgName: obj.bldgName,
                             description: obj.description,
                             flatNum: obj.flatNum,
                             tag: obj.addTag,
-                            addressType: bin,
                             sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
                             cmsAddressRef: parseInt(obj.addressId),
                         }
-                        let asAdd = await this.addAddress(headers, userData, bin, add, store)
+                        let asAdd = await this.addAddress(headers, userData, add, store)
                         if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
                             kafkaService.kafkaSync({
                                 set: this.set,
@@ -434,12 +434,13 @@ export class AddressEntity extends BaseEntity {
             let asAddress = [];
             for (const sdmAddObj of sdmAddress) {
                 if (sdmAddObj.WADDR_STATUS && sdmAddObj.WADDR_STATUS == '1') {
-                    let bin = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                     if (sdmAddObj.ADDR_MAPCODE.X && sdmAddObj.ADDR_MAPCODE.Y) {
                         let store: IStoreGrpcRequest.IStore
                         store = await this.validateCoordinate(parseFloat(sdmAddObj.ADDR_MAPCODE.X), parseFloat(sdmAddObj.ADDR_MAPCODE.Y))
-                        if (store && store.id && store.id != "") {
+                        if (store && store.id) {
                             let addressPayload: IAddressRequest.IRegisterAddress = {
+                                addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE,
+                                addressSubType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY,
                                 lat: parseFloat(sdmAddObj.ADDR_MAPCODE.X),
                                 lng: parseFloat(sdmAddObj.ADDR_MAPCODE.Y),
                                 bldgName: sdmAddObj.ADDR_BLDGNAME,
@@ -448,7 +449,7 @@ export class AddressEntity extends BaseEntity {
                                 tag: Constant.DATABASE.TYPE.TAG.OTHER,
                                 sdmAddressRef: parseInt(sdmAddObj.ADDR_ID)
                             }
-                            let addressData = await this.addAddress(headers, userData, bin, addressPayload, store)
+                            let addressData = await this.addAddress(headers, userData, addressPayload, store)
                             asAddress.push(addressData)
                         }
                     }

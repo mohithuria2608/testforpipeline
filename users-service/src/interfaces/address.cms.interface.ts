@@ -16,6 +16,7 @@ declare namespace IAddressCMSRequest {
         description: string,
         addressIs: string,
         addressType: string,
+        addressSubType: string,
         telephone: string,
         bldgName: string,
         flatNum: string,
