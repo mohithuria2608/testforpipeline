@@ -89,7 +89,7 @@ export class AddressController {
                 payload.addressType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE
                 payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (validateStore && validateStore.id && store.areaId) {
+                if (validateStore && validateStore.id && validateStore.areaId) {
                     if (!validateStore.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!validateStore.isOnline)
