@@ -1059,7 +1059,7 @@ export class OrderClass extends BaseEntity {
                                         case 1024:
                                         case 4096:
                                         case 8192: {
-                                            if (sdmOrder && sdmOrder.TransferFromOrderID == "" && sdmOrder.TransferFromStoreID == "") {
+                                            if (sdmOrder && (sdmOrder.TransferFromOrderID == "" || sdmOrder.TransferFromOrderID == "0") && (sdmOrder.TransferFromStoreID == "" || sdmOrder.TransferFromStoreID == "0")) {
                                                 let cancelledHandler = await this.sdmCancelledHandler(recheck, oldSdmStatus, order, sdmOrder)
                                                 recheck = cancelledHandler.recheck;
                                                 order = cancelledHandler.order;
