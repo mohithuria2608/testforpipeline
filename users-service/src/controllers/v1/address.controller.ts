@@ -71,7 +71,7 @@ export class AddressController {
                 payload.addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
                 payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
-                if (store && store.id) {
+                if (store && store.id && store.areaId) {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
@@ -89,7 +89,7 @@ export class AddressController {
                 payload.addressType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE
                 payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (validateStore && validateStore.id) {
+                if (validateStore && validateStore.id && store.areaId) {
                     if (!validateStore.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!validateStore.isOnline)

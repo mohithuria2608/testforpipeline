@@ -188,6 +188,7 @@ export class OrderClass extends BaseEntity {
     * */
     async createSdmOrder(payload: IOrderRequest.IPostOrderOnSdm) {
         let order: IOrderRequest.IOrderData = payload.order
+        let validationRemarks = ""
         try {
             let preHook = await this.postSdmOrderPreHandler(payload)
             order.address.sdmAddressRef = preHook.address.sdmAddressRef
@@ -326,17 +327,10 @@ export class OrderClass extends BaseEntity {
                     })
                 return {}
             } else {
-                let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_FAIL
-                if (createOrder.ResultText) {
-                    if (typeof createOrder.ResultText == 'object')
-                        validationRemarks = JSON.stringify(createOrder.SDKResult.ResultText)
-                    else
-                        validationRemarks = createOrder.SDKResult.ResultText
-                }
-                this.orderFailureHandler(order, -1, validationRemarks)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
+                return Promise.reject(createOrder)
             }
         } catch (error) {
+            consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
             if (payload.firstTry) {
                 payload.firstTry = false
                 setTimeout(() => {
@@ -350,14 +344,13 @@ export class OrderClass extends BaseEntity {
                     })
                 }, 1000)
             } else {
-                let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE
+                validationRemarks = (validationRemarks == "") ? Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE : validationRemarks
                 if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
                     validationRemarks = error.SDKResult.ResultText
                 else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
                     validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
                 this.orderFailureHandler(order, 1, validationRemarks)
-                consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
-                return Promise.reject(error)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
             }
         }
     }
