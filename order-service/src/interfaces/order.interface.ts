@@ -116,12 +116,14 @@ declare namespace IOrderRequest {
         orderId: string,
     }
 
-    interface IGetSdmOrder {
-        sdmOrderRef: number,
-        language: string
+    interface IGetSdmOrder extends IGetSdmOrderScheduler {
         timeInterval: number
     }
 
+    interface IGetSdmOrderScheduler {
+        sdmOrderRef: number,
+        language: string
+    }
     interface IGetSdmOrderFreq {
         status: string,
         type: string,
