@@ -986,7 +986,7 @@ export class OrderClass extends BaseEntity {
                         if (order.transferDone)
                             order.sdmOrderRef = order.newOrderId
                         let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
-                        if (!order.transferDone && (sdmOrder.TransferFromOrderID != "" || sdmOrder.TransferFromOrderID != "0") && (sdmOrder.TransferFromStoreID != "" || sdmOrder.TransferFromStoreID != "0")) {
+                        if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
                             let transferOrder = await this.transferOrderHandler(order, sdmOrder)
                             recheck = transferOrder.recheck;
                             order = transferOrder.order;
