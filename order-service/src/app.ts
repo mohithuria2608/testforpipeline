@@ -1513,6 +1513,12 @@ export const start = (async () => {
         "DeliveryChargeID": 279,
         "DistrictID": -1,
         "Entries": Entries,
+        "Notes": {
+          CNote: [{
+            NT_FREE_TEXT: "Test Orders - Appinventiv",
+            NT_ID: new Date()
+          }]
+        },
         "OrderID": 0,
         "OrderMode": 1,
         "OrderType": 0,

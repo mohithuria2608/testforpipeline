@@ -261,7 +261,7 @@ export class OrderClass extends BaseEntity {
             Notes = {
                 CNote: [{
                     NT_FREE_TEXT: "Test Orders - Appinventiv",
-                    NT_ID: order._id
+                    NT_ID: order._id.toString()
                 }]
             }
             let sdmOrderObj = {
