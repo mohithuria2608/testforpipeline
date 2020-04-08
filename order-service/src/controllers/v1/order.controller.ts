@@ -352,14 +352,22 @@ export class OrderController {
         try {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
                 env: Constant.SERVER.ENV[config.get("env")],
-                status: {
-                    $nin: [
-                        Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
-                        Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
-                        Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
-                        Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
-                    ]
-                }
+                $or: [
+                    {
+                        status: {
+                            $nin: [
+                                Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                                Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
+                                Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+                            ]
+                        }
+                    },
+                    {
+                        status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+                        trackUntil: { $gte: new Date().getTime() }
+                    }
+                ]
+
             }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1 }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
