@@ -17,9 +17,7 @@
 
 
 31 March Tasks
-----> DNS resolution takes 2 to 2.5 seconds
 ----> kafka failure ==> ping to order that health is false
-----> scheduler task best method
 ----> single product in cart validation to cms
 ----> faq
 ----> more configs
@@ -29,6 +27,8 @@
 ----> otp maxed out time
 ----> sms and emails are sent only once
 ----> single notification fire event only
+----> service.del and service.tak check on location service on validateCoords
+
 
 changes : 
 1. user addition on cms and sdm async via kafka

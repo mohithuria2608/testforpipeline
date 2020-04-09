@@ -197,21 +197,61 @@ declare namespace IConfigRequest {
 
     interface ICountrySpecific {
         country_code: string,
-        country_name: string
-        concept_id: number,
+        country_name: string,
+        concept_id: string,
         sdm_url: string,
         base_currency: string,
         licence: string,
-        brand_kfc: string,
+        channel_data: [
+            {
+                template_id: string,
+                template_status: string,
+                channel_name: string,
+                menu_data: [
+                    {
+                        menu_id: string,
+                        menu_state: string,
+                        menu_cluster: string,
+                        frequency_cron: string,
+                        time_cron: string
+                    }
+                ]
+            }
+        ],
+        home_overlay: {
+            En: {
+                mediaUrl: string,
+                gif: string,
+                mediaType: string,
+                extension: string,
+                action: {
+                    id: string,
+                    type: string,
+                    delimeters: string
+                }
+            },
+            Ar: {
+                mediaUrl: string,
+                gif: string,
+                mediaType: string,
+                extension: string,
+                action: {
+                    id: string,
+                    type: string,
+                    delimeters: string
+                }
+            }
+        },
+        sdm: {
+            licence_code: string,
+            concept_id: string,
+            menu_template_id: string
+        },
         ccode: string,
-        language_en: string,
-        language_ar: string,
-        menus: [{
-            menu_id: number,
-            menu_name: string,
-            channel: string,
-            template_id: number,
-        }]
+        customer_care: string,
+        support_email: string,
+        min_cart_value: string,
+        min_cod_cart_value: string
     }
 
     interface IFetchConfig {
