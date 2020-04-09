@@ -28,7 +28,6 @@ declare namespace IOrderRequest {
         trackUntil: number,
         validationRemarks: string,
         amountValidationPassed: boolean,
-        orderConfirmationNotified: boolean,
         newOrderId: number,
         transferDone: boolean
         payment: {
@@ -36,6 +35,11 @@ declare namespace IOrderRequest {
             amount: number,
             name: string,
             status: string
+        },
+        notification: {
+            confirmed: boolean,
+            cancel: boolean,
+            failure: boolean
         },
         env: number
     }

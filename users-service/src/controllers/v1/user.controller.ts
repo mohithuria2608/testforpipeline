@@ -70,6 +70,8 @@ export class UserController {
             }
             let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             if (checkUser && checkUser.length > 0) {
+                if (!await ENTITY.OtpcooldownE.checkOtpcooldown(checkUser[0].id))
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_RETRY_MAXED_OUT)
                 let userchangePayload: IUserchangeRequest.IUserchange = {
                     fullPhnNo: fullPhnNo,
                     otp: otp,

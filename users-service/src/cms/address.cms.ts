@@ -33,9 +33,10 @@ export class AddressCMSEntity extends BaseCMS {
                         "description": obj.description,
                         "address_is": 1,
                         "addressType": obj.addressType,
+                        "addressSubType": obj.addressSubType,
                         "telephone": payload.fullPhnNo,
                         "bldgName": obj.bldgName,
-                        "flatNum": obj.bldgName,
+                        "flatNum": obj.flatNum,
                         "addTag": obj.tag,
                         "sdmAddressRef": obj.sdmAddressRef,
                         "sdmStoreRef": obj.storeId,
@@ -83,7 +84,7 @@ export class AddressCMSEntity extends BaseCMS {
                 "firstName": naemRes.firstName,
                 "lastName": naemRes.lastName,
                 "password": deCryptData(userData.password),
-                "countryId": "AE", // donot change
+                "countryId": "AE",// Constant.DATABASE.COUNTRY.UAE, // donot change
                 "zip": "00000",
                 "city": asAddress[0].description,
                 "state": asAddress[0].description,

@@ -3,13 +3,10 @@ declare namespace ICmsConfigRequest {
     interface ICmsConfig {
         type: string,
         action: string,
-        data: ICmsConfigData[],
+        data: any,
     }
 
-    interface ICmsConfigData {
-        type: string,
-        id: number,
-
+    interface ICmsConfigGeneral {
         cms_page_data: [{
             title: string,
             identifier: string,
@@ -35,7 +32,70 @@ declare namespace ICmsConfigRequest {
         deeplink_fallback: string,
         auth_mech: string,
         addr_show_time: string,
+    }
 
+    interface ICmsConfigPayment {
+        store_code: string,
+        store_id: string,
+        noon_pay_config: {
+            brand_code: string,
+            country_code: string,
+            currency_code: string,
+            channel: string,
+            decimal: string,
+            payment_methods: [
+                {
+                    id: string,
+                    name: string,
+                    order_category: string
+                }
+            ],
+            payment_retry_interval: string,
+            max_try: string,
+            noonpay_order_expiration_time: string,
+            businessIdentifier: string,
+            app_identifier: string,
+            app_access_key: string,
+            api_key: string,
+            environment: string,
+            noonpay_base_url: string,
+            noonpay_initiate_payment_end_point: string,
+            noonpay_get_order_end_point: string,
+            noonpay_get_order_by_reference_end_point: string,
+            noonpay_capture_payment_end_point: string,
+            noonpay_reverse_payment_end_point: string,
+            noonpay_refund_payment_end_point: string,
+            code: string,
+            status: string
+        },
+        cod_info: {
+            status: string,
+            name: string,
+            code: string,
+            min_order_total: string,
+            max_order_total: string
+        }
+    }
+
+    interface ICmsConfigShipment {
+        store_code: string,
+        store_id: string,
+        free_shipping: {
+            status: string,
+            title: string,
+            min_order_total: string,
+            price: number,
+            code: string
+        },
+        flat_rate: {
+            status: string,
+            title: string,
+            price: number,
+            code: string
+        }
+    }
+
+    interface ICmsConfigKafka {
         sdm: {
             user_config: {
                 max_try: IMaxRetry
@@ -99,7 +159,68 @@ declare namespace ICmsConfigRequest {
                 max_try: IMaxRetry
             }
         }
+    }
 
+    interface ICmsConfigCountrySpecifc {
+        country_code: string,
+        country_name: string,
+        concept_id: string,
+        sdm_url: string,
+        base_currency: string,
+        licence: string,
+        channel_data: [
+            {
+                template_id: string,
+                template_status: string,
+                channel_name: string,
+                menu_data: [
+                    {
+                        menu_id: string,
+                        menu_state: string,
+                        menu_cluster: string,
+                        frequency_cron: string,
+                        time_cron: string
+                    }
+                ]
+            }
+        ],
+        home_overlay: {
+            En: {
+                mediaUrl: string,
+                gif: string,
+                mediaType: string,
+                extension: string,
+                action: {
+                    id: string,
+                    type: string,
+                    delimeters: string
+                }
+            },
+            Ar: {
+                mediaUrl: string,
+                gif: string,
+                mediaType: string,
+                extension: string,
+                action: {
+                    id: string,
+                    type: string,
+                    delimeters: string
+                }
+            }
+        },
+        sdm: {
+            licence_code: string,
+            concept_id: string,
+            menu_template_id: string
+        },
+        ccode: string,
+        customer_care: string,
+        support_email: string,
+        min_cart_value: string,
+        min_cod_cart_value: string
+    }
+
+    interface ICmsConfigOrderStatus {
         cart_config: IStatus,
         pending_config: IStatus,
         confirmed_config: IStatus,
@@ -110,80 +231,8 @@ declare namespace ICmsConfigRequest {
         closed_config: IStatus,
         cancelled_config: IStatus,
         failure_config: IStatus
-
-        store_code: string,
-        store_id: string,
-
-        noon_pay_config: {
-            brand_code: string,
-            country_code: string,
-            currency_code: string,
-            channel: string,
-            decimal: string,
-            payment_methods: [
-                {
-                    id: string,
-                    name: string,
-                    order_category: string
-                }
-            ],
-            payment_retry_interval: string,
-            max_try: string,
-            noonpay_order_expiration_time: string,
-            businessIdentifier: string,
-            app_identifier: string,
-            app_access_key: string,
-            api_key: string,
-            environment: string,
-            noonpay_base_url: string,
-            noonpay_initiate_payment_end_point: string,
-            noonpay_get_order_end_point: string,
-            noonpay_get_order_by_reference_end_point: string,
-            noonpay_capture_payment_end_point: string,
-            noonpay_reverse_payment_end_point: string,
-            noonpay_refund_payment_end_point: string,
-            code: string,
-            status: string
-        },
-        cod_info: {
-            status: string,
-            name: string,
-            code: string,
-            min_order_total: string,
-            max_order_total: string
-        }
-
-        free_shipping: {
-            status: string,
-            title: string,
-            min_order_total: string,
-            price: number,
-            code: string
-        },
-        flat_rate: {
-            status: string,
-            title: string,
-            price: number,
-            code: string
-        }
-
-        country_code: string,
-        country_name: string
-        concept_id: number,
-        sdm_url: string,
-        base_currency: string,
-        licence: string,
-        brand_kfc: string,
-        ccode: string,
-        language_en: string,
-        language_ar: string,
-        menus: [{
-            menu_id: number,
-            menu_name: string,
-            channel: string,
-            template_id: number,
-        }]
     }
+
     interface IMaxRetry {
         create: string,
         update: string,
