@@ -70,7 +70,7 @@ export class AddressController {
             if (payload.storeId) {
                 payload.addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
                 payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE
-                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
+                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language, Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY)
                 if (store && store.id && store.areaId) {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
@@ -88,7 +88,7 @@ export class AddressController {
             } else if (payload.lat && payload.lng) {
                 payload.addressType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE
                 payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY
-                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (store && store.id && store.areaId) {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
@@ -140,7 +140,7 @@ export class AddressController {
             let userData = await ENTITY.UserE.getUser({ userId: userId })
             let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
-                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
+                store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language, Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY)
                 if (store && store.id) {
                     payload['addressId'] = payload.addressId
                     payload['lat'] = store.location.latitude
@@ -153,7 +153,7 @@ export class AddressController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
             } else if (payload.lat && payload.lng) {
-                let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (validateStore && validateStore.id) {
                     if (!validateStore.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
@@ -210,7 +210,7 @@ export class AddressController {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             if (payload.lat && payload.lng) {
-                let validateStore: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                let validateStore: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (validateStore && validateStore.id) {
                     if (!validateStore.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)

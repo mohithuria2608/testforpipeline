@@ -44,9 +44,12 @@ declare namespace IStoreRequest {
     interface IFetchStore {
         storeId: number,
         language: string,
+        serviceType: string
     }
 
-    interface IValidateCoordinates extends ICommonRequest.ICordinatesOpt { }
+    interface IValidateCoordinates extends ICommonRequest.ICordinatesOpt {
+        serviceType: string
+    }
 
     interface IGetNearestStore extends ICommonRequest.ICordinatesOpt { }
 

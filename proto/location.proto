@@ -66,6 +66,7 @@ message IKafkaReq {
 message IValidateCoordinateReq {
     required double lat = 1;
     required double lng = 2;
+    required string serviceType = 3;
 }
 
 message IValidateCoordinateRes {

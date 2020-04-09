@@ -3,9 +3,11 @@ declare namespace IStoreGrpcRequest {
     interface IFetchStore {
         storeId: number,
         language: string,
+        serviceType: string
     }
 
     interface IValidateCoordinateData extends ICommonRequest.ICordinatesOpt {
+        serviceType: string
     }
 
     interface IStore {

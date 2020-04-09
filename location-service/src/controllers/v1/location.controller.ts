@@ -116,7 +116,11 @@ export class LocationController {
      * */
     async validateLocation(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IValidateLocation) {
         try {
-            let store = await storeController.validateCoords(payload)
+            let validateCoordsPayload = {
+                serviceType: Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY,
+                ...payload
+            }
+            let store = await storeController.validateCoords(validateCoordsPayload)
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
             if (store && store.id) {
                 let res = {

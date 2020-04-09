@@ -9,6 +9,7 @@ declare namespace IStoreGrpcRequest {
     }
 
     interface IValidateCoordinateData extends ICommonRequest.ICordinatesOpt {
+        serviceType: string
     }
 
     interface ISyncLocationFromCMSReq {

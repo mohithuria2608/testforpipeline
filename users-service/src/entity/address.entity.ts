@@ -390,34 +390,36 @@ export class AddressEntity extends BaseEntity {
         try {
             for (const obj of cmsAddress) {
                 if (obj.addressId && obj.sdmAddressRef) {
-                    let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude))
-                    if (store && store.id) {
-                        let add: IAddressRequest.IRegisterAddress = {
-                            addressType: obj.addressType,
-                            addressSubType: obj.addressSubType,
-                            lat: parseFloat(obj.latitude),
-                            lng: parseFloat(obj.longitude),
-                            bldgName: obj.bldgName,
-                            description: obj.description,
-                            flatNum: obj.flatNum,
-                            tag: obj.addTag,
-                            sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
-                            cmsAddressRef: parseInt(obj.addressId),
-                        }
-                        let asAdd = await this.addAddress(headers, userData, add, store)
-                        if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
-                            kafkaService.kafkaSync({
-                                set: this.set,
-                                sdm: {
-                                    create: true,
-                                    argv: JSON.stringify({
-                                        userData: userData,
-                                        headers: headers,
-                                        asAddress: [asAdd]
-                                    })
-                                },
-                                inQ: true
-                            })
+                    if (obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE) {
+                        let store = await this.validateCoordinate(parseFloat(obj.latitude), parseFloat(obj.longitude), Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
+                        if (store && store.id) {
+                            let add: IAddressRequest.IRegisterAddress = {
+                                addressType: obj.addressType,
+                                addressSubType: obj.addressSubType,
+                                lat: parseFloat(obj.latitude),
+                                lng: parseFloat(obj.longitude),
+                                bldgName: obj.bldgName,
+                                description: obj.description,
+                                flatNum: obj.flatNum,
+                                tag: obj.addTag,
+                                sdmAddressRef: obj.sdmAddressRef ? parseInt(obj.sdmAddressRef) : 0,
+                                cmsAddressRef: parseInt(obj.addressId),
+                            }
+                            let asAdd = await this.addAddress(headers, userData, add, store)
+                            if (obj.sdmAddressRef && obj.sdmAddressRef == "0" && userData.sdmCorpRef != 0) {
+                                kafkaService.kafkaSync({
+                                    set: this.set,
+                                    sdm: {
+                                        create: true,
+                                        argv: JSON.stringify({
+                                            userData: userData,
+                                            headers: headers,
+                                            asAddress: [asAdd]
+                                        })
+                                    },
+                                    inQ: true
+                                })
+                            }
                         }
                     }
                 }
@@ -436,7 +438,7 @@ export class AddressEntity extends BaseEntity {
                 if (sdmAddObj.WADDR_STATUS && sdmAddObj.WADDR_STATUS == '1') {
                     if (sdmAddObj.ADDR_MAPCODE.X && sdmAddObj.ADDR_MAPCODE.Y) {
                         let store: IStoreGrpcRequest.IStore
-                        store = await this.validateCoordinate(parseFloat(sdmAddObj.ADDR_MAPCODE.X), parseFloat(sdmAddObj.ADDR_MAPCODE.Y))
+                        store = await this.validateCoordinate(parseFloat(sdmAddObj.ADDR_MAPCODE.X), parseFloat(sdmAddObj.ADDR_MAPCODE.Y), Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                         if (store && store.id) {
                             let addressPayload: IAddressRequest.IRegisterAddress = {
                                 addressType: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE,

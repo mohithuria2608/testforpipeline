@@ -1654,7 +1654,12 @@ export class OrderClass extends BaseEntity {
 
     async transferOrderHandler(order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: parseInt(sdmOrder.StoreID), language: order.language })
+            let serviceType = ""
+            if (order.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS)
+                serviceType = Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY
+            else
+                serviceType = Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY
+            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: parseInt(sdmOrder.StoreID), language: order.language, serviceType: serviceType })
             if (store && store.id) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                     store: {

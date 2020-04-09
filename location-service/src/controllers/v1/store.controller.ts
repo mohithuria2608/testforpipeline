@@ -47,8 +47,11 @@ export class StoreController {
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
             if (store && store.length > 0 && store[0].active == 1) {
-                store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
-                return store[0]
+                if (store[0]['services'][payload.serviceType] == 1) {
+                    store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
+                    return store[0]
+                } else
+                    return
             } else
                 return
         } catch (error) {
@@ -61,6 +64,7 @@ export class StoreController {
      * @method GRPC
      * @param {number=} lat : latitude
      * @param {number=} lng : longitude
+     * @param {number=} serviceType : din/del/tak
      * */
     async validateCoords(payload: IStoreRequest.IValidateCoordinates): Promise<IStoreRequest.IStore> {
         try {
@@ -72,10 +76,13 @@ export class StoreController {
                     lng: parseFloat(payload.lng.toString()),
                 }
             }
-            let res = await Aerospike.query(geoWithinArg)
-            if (res && res.length > 0 && res[0].active == 1) {
-                res[0]['isOnline'] = checkOnlineStore(res[0].startTime, res[0].endTime, res[0].nextday)
-                return res[0]
+            let store = await Aerospike.query(geoWithinArg)
+            if (store && store.length > 0 && store[0].active == 1) {
+                if (store[0]['services'][payload.serviceType] == 1) {
+                    store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
+                    return store[0]
+                } else
+                    return
             }
             else
                 return

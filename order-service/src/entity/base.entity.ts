@@ -72,17 +72,7 @@ export class BaseEntity {
             return Promise.reject(error)
         }
     }
-
-    async validateCoordinate(lat: number, lng: number): Promise<IStoreGrpcRequest.IStore> {
-        try {
-            let validatedStore = await locationService.validateCoordinate({ lat, lng })
-            return validatedStore
-        } catch (error) {
-            consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
+    
     async postCmsOrderPreHandler(payload: IOrderRequest.IPostOrderPreHookPayload) {
         try {
             let headers: ICommonRequest.IHeaders = payload.headers

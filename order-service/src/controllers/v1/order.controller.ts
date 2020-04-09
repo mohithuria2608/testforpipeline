@@ -89,7 +89,12 @@ export class OrderController {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_ADDRESS)
             consolelog(process.cwd(), "step 3", new Date(), false)
 
-            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
+            let serviceType = ""
+            if (payload.orderType == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS)
+                serviceType = Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY
+            else
+                serviceType = Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY
+            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language, serviceType: serviceType })
             if (store && store.id && store.menuId == payload.curMenuId) {
                 const menu = await menuService.fetchMenu({
                     menuId: payload.curMenuId,

@@ -27,7 +27,7 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.fetchStoreValidator(payload)
-                this.locationClient.fetchStore({ storeId: payload.storeId, language: payload.language }, (error, res) => {
+                this.locationClient.fetchStore({ storeId: payload.storeId, language: payload.language, serviceType: payload.serviceType }, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully fetched store", JSON.stringify(res), false)
                         resolve(res.store)
@@ -46,7 +46,7 @@ export class LocationService {
         return new Promise(async (resolve, reject) => {
             try {
                 await locationServiceValidator.validateCoordinateValidator(payload)
-                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()) }, (error, res) => {
+                this.locationClient.validateCoordinate({ lat: parseFloat(payload.lat.toString()), lng: parseFloat(payload.lng.toString()), serviceType: payload.serviceType }, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully verified coordinates", JSON.stringify(res), false)
                         resolve(res.store)

@@ -331,6 +331,12 @@ export const DATABASE = {
             }
         },
 
+        STORE_SERVICE: {
+            DELIVERY: "del",
+            TAKEAWAY: "tak",
+            DINEIN: "din"
+        },
+
         DEEPLINK_REDIRECTION: {
             HOME: "HOME",
             CATEGORY: "CATEGORY",
@@ -697,7 +703,7 @@ export const EMAIL_META = {
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {
-            "OTP_RETRY_MAXED_OUT":{
+            "OTP_RETRY_MAXED_OUT": {
                 "statusCode": 400,
                 "httpCode": 400,
                 "message": "Otp retries has maxed out !!",

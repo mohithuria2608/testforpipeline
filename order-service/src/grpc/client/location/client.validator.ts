@@ -17,6 +17,7 @@ export class LocationServiceValidator {
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
                     ).default(Constant.DATABASE.LANGUAGE.EN).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
+                    serviceType: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -32,8 +33,9 @@ export class LocationServiceValidator {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({
-                    lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
-                    lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lat: Joi.number().min(-90).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().min(-180).max(180).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    serviceType: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
