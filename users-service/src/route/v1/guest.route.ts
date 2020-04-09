@@ -52,8 +52,8 @@ export default (router: Router) => {
                     isGuest: Joi.number().valid(0, 1).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
                     addressId: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.type)).required(),
                     addressType: Joi.string().valid(
-                        Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                        Constant.DATABASE.TYPE.ADDRESS.DELIVERY).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)).required(),
+                        Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+                        Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)).required(),
                 }
             }),
             async (ctx) => {

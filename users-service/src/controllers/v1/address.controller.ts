@@ -66,16 +66,16 @@ export class AddressController {
     async registerAddress(headers: ICommonRequest.IHeaders, payload: IAddressRequest.IRegisterAddress, auth: ICommonRequest.AuthorizationObj) {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
-            let type = ""
             let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
+                payload.addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
+                payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
-                if (store && store.id && store.id != "") {
+                if (store && store.id && store.areaId) {
                     if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
                     payload['lat'] = store.location.latitude
                     payload['lng'] = store.location.longitude
                     payload['bldgName'] = (headers.language == Constant.DATABASE.LANGUAGE.EN) ? store.name_en : store.name_ar
@@ -86,21 +86,21 @@ export class AddressController {
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else if (payload.lat && payload.lng) {
-                let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (validateStore && validateStore.id && validateStore.id != "") {
-                    if (!validateStore.active)
+                payload.addressType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE
+                payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY
+                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
+                if (store && store.id && store.areaId) {
+                    if (!store.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    if (!validateStore.isOnline)
+                    if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
-                    store = validateStore
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 }
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
-            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store)
+            let addressData = await ENTITY.AddressE.addAddress(headers, userData, payload, store)
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
@@ -133,24 +133,15 @@ export class AddressController {
     /**
     * @method INTERNAL
     * @description Sync old address
-    * @param {string} storeId
-    * @param {number} lat
-    * @param {number} lng
-    * @param {string} bldgName
-    * @param {string} description
-    * @param {string} flatNum
-    * @param {string} tag
     * */
     async syncOldAddress(headers: ICommonRequest.IHeaders, userId: string, payload: IAddressRequest.ISyncOldAddress) {
         try {
             console.log("syncOldAddress", userId, payload)
             let userData = await ENTITY.UserE.getUser({ userId: userId })
-            let type = ""
             let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language)
-                if (store && store.id && store.id != "") {
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                if (store && store.id) {
                     payload['addressId'] = payload.addressId
                     payload['lat'] = store.location.latitude
                     payload['lng'] = store.location.longitude
@@ -163,20 +154,19 @@ export class AddressController {
 
             } else if (payload.lat && payload.lng) {
                 let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (validateStore && validateStore.id && validateStore.id != "") {
+                if (validateStore && validateStore.id) {
                     if (!validateStore.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!validateStore.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     store = validateStore
-                    type = Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 }
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
-            let addressData = await ENTITY.AddressE.addAddress(headers, userData, type, payload, store)
+            let addressData = await ENTITY.AddressE.addAddress(headers, userData, payload, store)
             if (userData && userData.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                 kafkaService.kafkaSync({
                     set: ENTITY.AddressE.set,
@@ -221,7 +211,7 @@ export class AddressController {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             if (payload.lat && payload.lng) {
                 let validateStore: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng)
-                if (validateStore && validateStore.id && validateStore.id != "") {
+                if (validateStore && validateStore.id) {
                     if (!validateStore.active)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!validateStore.isOnline)

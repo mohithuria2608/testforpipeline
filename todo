@@ -24,6 +24,8 @@
 ----> faq
 ----> more configs
 
+----> kafka schedulers and lapse time
+----> 
 
 changes : 
 1. user addition on cms and sdm async via kafka

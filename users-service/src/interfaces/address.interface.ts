@@ -14,6 +14,7 @@ declare namespace IAddressRequest {
         flatNum?: string,
         tag?: string,
         addressType: string,
+        addressSubType: string,
         createdAt: number,
         updatedAt: number,
         sdmAddressRef: number,
@@ -25,6 +26,8 @@ declare namespace IAddressRequest {
     }
 
     interface IRegisterAddress {
+        addressType: string,
+        addressSubType: string,
         addressId?: string,
         storeId?: number,
         lat?: number,
@@ -33,7 +36,7 @@ declare namespace IAddressRequest {
         description?: string,
         flatNum?: string,
         tag?: string,
-
+        dlvryInst?: string,
         sdmAddressRef?: number,
         cmsAddressRef?: number,
     }
@@ -51,15 +54,7 @@ declare namespace IAddressRequest {
         cmsAddressRef?: number,
     }
 
-    interface ISyncOldAddress {
-        addressId: string,
-        storeId?: number,
-        lat?: number,
-        lng?: number,
-        bldgName?: string,
-        description?: string,
-        flatNum?: string,
-        tag?: string
+    interface ISyncOldAddress extends IRegisterAddress {
     }
     interface IFetchAddress {
         userId: string,

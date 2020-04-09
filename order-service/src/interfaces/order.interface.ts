@@ -20,7 +20,7 @@ declare namespace IOrderRequest {
         items: any,
         itemsHash: string
         address: IAddress,
-        store: IStore,
+        store: IStoreInOrder,
         amount: IAmount[],
         language: string,
         promo: IPromotionGrpcRequest.IValidatePromotionRes,
@@ -29,7 +29,8 @@ declare namespace IOrderRequest {
         validationRemarks: string,
         amountValidationPassed: boolean,
         orderConfirmationNotified: boolean,
-        transferFromOrderId: number
+        newOrderId: number,
+        transferDone: boolean
         payment: {
             paymentMethodId: number,
             amount: number,
@@ -64,12 +65,16 @@ declare namespace IOrderRequest {
         action?: string
     }
 
-    interface IStore {
+    interface IStoreInOrder {
         storeId: number,
         countryId: number,
         areaId: number,
         cityId: number,
-        location: any,
+        location: {
+            description: string,
+            latitude: number
+            longitude: number
+        },
         address_en: string,
         address_ar: string,
         name_en: string,
@@ -116,12 +121,14 @@ declare namespace IOrderRequest {
         orderId: string,
     }
 
-    interface IGetSdmOrder {
-        sdmOrderRef: number,
-        language: string
+    interface IGetSdmOrder extends IGetSdmOrderScheduler {
         timeInterval: number
     }
 
+    interface IGetSdmOrderScheduler {
+        sdmOrderRef: number,
+        language: string
+    }
     interface IGetSdmOrderFreq {
         status: string,
         type: string,

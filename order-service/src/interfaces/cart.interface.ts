@@ -16,7 +16,7 @@ declare namespace ICartRequest {
         address?: IAddress,
         amount?: IAmount[],
         vat?: IAmount,
-        store?: IStore,
+        store?: IStoreInOrder,
         invalidMenu?: number,
         promo?: IPromotionGrpcRequest.IValidatePromotionRes,
         couponApplied?: number,
@@ -53,9 +53,11 @@ declare namespace ICartRequest {
         lng?: number,
     }
 
-    interface IStore {
+    interface IStoreInOrder {
         storeId: number,
+        countryId: number,
         areaId: number,
+        cityId: number,
         location: {
             description: string,
             latitude: number
@@ -64,7 +66,7 @@ declare namespace ICartRequest {
         address_en: string,
         address_ar: string,
         name_en: string,
-        name_ar: string,
+        name_ar: string
     }
     interface IValidateCart extends ICommonRequest.ICordinatesOpt {
         orderType: string

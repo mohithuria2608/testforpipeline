@@ -35,7 +35,6 @@ export class BaseEntity {
             consolelog(process.cwd(), 'Base entity getOneEntityMdb', JSON.stringify(error), false)
             return Promise.reject(error)
         }
-
     }
 
     async getMultipleMdb(criteria: Object, projection: Object, option?) {

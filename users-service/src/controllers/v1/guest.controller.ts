@@ -66,7 +66,7 @@ export class GuestController {
             if (payload.addressId && payload.addressType) {
                 let oldAdd: IAddressRequest.IAddress = await ENTITY.AddressE.getAddress({
                     userId: auth.id,
-                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
+                    bin: (payload.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE) ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP,
                     addressId: payload.addressId
                 })
                 if (oldAdd && oldAdd.id)
@@ -103,7 +103,7 @@ export class GuestController {
                 userData = await ENTITY.UserE.buildUser(tempUser)
                 auth.id = userData.id
                 if (address && address.id) {
-                    if (address.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY)
+                    if (address.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE)
                         delete address.storeId
                     address['addressId'] = address.id
                     delete address.sdmAddressRef
