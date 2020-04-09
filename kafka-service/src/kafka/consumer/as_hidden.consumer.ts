@@ -23,7 +23,7 @@ class AsHiddenConsumer extends BaseConsumer {
 
     private async syncHidden(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count > 0) {
+            if (message.count >=0) {
                 let res = await menuService.sync(message)
                 return res
             }

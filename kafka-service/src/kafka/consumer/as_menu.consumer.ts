@@ -23,7 +23,7 @@ class AsMenuConsumer extends BaseConsumer {
 
     private async syncMenu(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count > 0) {
+            if (message.count >=0) {
                 let res = await menuService.sync(message)
                 return res
             }

@@ -23,7 +23,7 @@ class SdmAddressConsumer extends BaseConsumer {
 
     private async syncAddress(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count > 0) {
+            if (message.count >=0) {
                 let res = await userService.sync(message)
                 return res
             }

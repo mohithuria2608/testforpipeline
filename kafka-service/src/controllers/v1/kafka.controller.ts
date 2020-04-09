@@ -28,7 +28,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.mdb
-                        if (messages.count == 0) {
+                        if (payload.count == 0) {
                             if (payload.cms.create)
                                 messages['count'] = Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.CREATE
                             else if (payload.cms.get)
@@ -52,7 +52,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        if (messages.count == 0) {
+                        if (payload.count == 0) {
                             if (payload.sdm.create)
                                 messages['count'] = Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.CREATE
                             else if (payload.sdm.get)
@@ -387,7 +387,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.cms
                         delete messages.mdb
-                        if (payload.count = 0) {
+                        if (payload.count == 0) {
                             if (payload.sdm.create)
                                 messages['count'] = Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.CREATE
                             else
@@ -407,7 +407,7 @@ export class KafkaController {
                         delete messages.as
                         delete messages.sdm
                         delete messages.mdb
-                        if (payload.count = 0) {
+                        if (payload.count == 0) {
                             if (payload.cms.create)
                                 messages['count'] = Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.CREATE
                             else

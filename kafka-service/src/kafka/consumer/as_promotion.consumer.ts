@@ -24,7 +24,7 @@ class AsPromotionConsumer extends BaseConsumer {
     /** consumes the message and creates promotion on the promotion service */
     private async syncPromotion(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count > 0) {
+            if (message.count >=0) {
                 let res = await promotionService.sync(message)
                 return res
             }

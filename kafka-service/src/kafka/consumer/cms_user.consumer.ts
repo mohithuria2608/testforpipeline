@@ -23,7 +23,7 @@ class CmsUserConsumer extends BaseConsumer {
 
     private async syncUser(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count > 0) {
+            if (message.count >=0) {
                 let res = await userService.sync(message)
                 return res
             }

@@ -23,7 +23,7 @@ class AsAppversionConsumer extends BaseConsumer {
 
     private async syncAppversion(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count > 0) {
+            if (message.count >=0) {
                 let res = await syncService.sync(message)
                 return res
             }
