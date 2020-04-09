@@ -22,6 +22,7 @@
 ----> faq
 ----> more configs
 
+<<<<<<< HEAD
 ----> kafka schedulers and lapse time
 ----> blob storage url to production
 ----> otp maxed out time
@@ -30,6 +31,8 @@
 ----> service.del and service.tak check on location service on validateCoords
 ----> 1. Saving the address >> Flat number is not getting saved *MAJOR
 ----> 2. Create 2 users at the application end >> with arabic names >> MAJOR > when i checked that customer details  Sdm User Ref, Sdm Corp Ref is 0 for both the customer
+=======
+>>>>>>> a5470b87df57b326cacf1902b425f2987e4d7426
 
 changes : 
 1. user addition on cms and sdm async via kafka

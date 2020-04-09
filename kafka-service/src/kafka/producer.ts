@@ -26,7 +26,6 @@ class KafkaProducer {
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HOME,
-
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_USER,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_USER,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_USER,

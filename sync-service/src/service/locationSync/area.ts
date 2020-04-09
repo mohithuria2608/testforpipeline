@@ -50,7 +50,6 @@ export default async function () {
                 });
 
                 if (storeAreaData.sdmAreaId) {
-
                     let webAreaData = {
                         countryId: 'AE',
                         sdmCountryId: 1,

@@ -36,7 +36,7 @@ export function initConsumers() {
 
     as_configConsumerE.handleMessage();
     as_appversionConsumerE.handleMessage();
-
+    
     as_userConsumerE.handleMessage();
     sdm_userConsumerE.handleMessage();
     cms_userConsumerE.handleMessage();
