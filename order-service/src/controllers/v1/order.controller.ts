@@ -27,16 +27,28 @@ export class OrderController {
                 }
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get)) {
-                let data = JSON.parse(payload.as.argv)
+                let data = JSON.parse(payload.cms.argv)
                 if (payload.cms.create) {
-
+                    let orderPayload = data.orderPayload
+                    let headers = data.headers
+                    let userData = data.userData
+                    let address = data.address
+                    let cart = data.cart
+                    let order = data.order
+                    let firstTry = data.firstTry
+                    await this.syncOnCms(orderPayload, headers, userData, address, cart, order, firstTry)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
                 let data = JSON.parse(payload.sdm.argv);
-                data.language = Constant.DATABASE.LANGUAGE.EN;
-                if (payload.sdm.create)
-                    await ENTITY.OrderE.createSdmOrder(data)
+                if (payload.sdm.create) {
+                    let headers = data.headers
+                    let userData = data.userData
+                    let address = data.address
+                    let order = data.order
+                    let firstTry = data.firstTry
+                    await this.syncOnSdm(headers, userData, address, order, firstTry)
+                }
                 if (payload.sdm.get)
                     await ENTITY.OrderE.getSdmOrder(data)
             }
@@ -132,7 +144,7 @@ export class OrderController {
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO) {
-                    this.syncOnLegacy(payload, headers, userData, getAddress, cart, order)
+                    this.syncOnLegacy(payload, headers, userData, getAddress, cart, order, true)
                     if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                         ENTITY.CartE.resetCart(cart.cartId)
                 }
@@ -158,7 +170,27 @@ export class OrderController {
         userData: IUserRequest.IUserData,
         address: IUserGrpcRequest.IFetchAddressRes,
         cart: ICartRequest.ICartData,
-        mongoOrder: IOrderRequest.IOrderData) {
+        mongoOrder: IOrderRequest.IOrderData,
+        firstTry: boolean) {
+        try {
+            this.syncOnCms(orderPayload, headers, userData, address, cart, mongoOrder, firstTry)
+            this.syncOnSdm(headers, userData, address, mongoOrder, firstTry)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncOnLegacy", error, false)
+            return Promise.reject(error)
+        }
+    }
+
+    async syncOnCms(
+        orderPayload: IOrderRequest.IPostOrder,
+        headers: ICommonRequest.IHeaders,
+        userData: IUserRequest.IUserData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        cart: ICartRequest.ICartData,
+        mongoOrder: IOrderRequest.IOrderData,
+        firstTry: boolean
+    ) {
         try {
             if (mongoOrder.cmsOrderRef == 0) {
                 let cmsReq = await ENTITY.CartE.createCartReqForCms(
@@ -172,21 +204,36 @@ export class OrderController {
                     payment_method: orderPayload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay",
                     mongo_order_id: mongoOrder._id.toString()
                 }
-                ENTITY.OrderE.createOrderOnCMS({
+                await ENTITY.OrderE.createOrderOnCMS({
                     headers: headers,
                     cmsOrderReq: cmsOrderReq,
                     userData: userData,
                     address: address,
-                    order: mongoOrder
-                })
+                    order: mongoOrder,
+                    firstTry: firstTry
+                }, orderPayload, cart)
             }
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "syncOnCms", error, false)
+            return Promise.reject(error)
+        }
+    }
 
+    async syncOnSdm(
+        headers: ICommonRequest.IHeaders,
+        userData: IUserRequest.IUserData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        mongoOrder: IOrderRequest.IOrderData,
+        firstTry: boolean) {
+        try {
             if (mongoOrder.sdmOrderRef == 0) {
-                ENTITY.OrderE.createSdmOrder({
+                await ENTITY.OrderE.createSdmOrder({
                     headers: headers,
                     userData: userData,
                     address: address,
-                    order: mongoOrder
+                    order: mongoOrder,
+                    firstTry: firstTry
                 })
             }
             return {}

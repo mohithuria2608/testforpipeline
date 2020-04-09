@@ -35,6 +35,7 @@ class KafkaProducer {
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ADDRESS,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_PROMOTION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ORDER,
+                config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_ORDER,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.M_LOGGER,

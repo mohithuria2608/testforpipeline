@@ -29,7 +29,7 @@ declare namespace IOrderRequest {
         validationRemarks: string,
         amountValidationPassed: boolean,
         orderConfirmationNotified: boolean,
-        transferFromOrderId : number
+        transferFromOrderId: number
         payment: {
             paymentMethodId: number,
             amount: number,
@@ -96,7 +96,8 @@ declare namespace IOrderRequest {
         headers: ICommonRequest.IHeaders,
         userData: IUserRequest.IUserData,
         address: IUserGrpcRequest.IFetchAddressRes,
-        order: IOrderRequest.IOrderData
+        order: IOrderRequest.IOrderData,
+        firstTry: boolean
     }
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         isActive: number

@@ -41,6 +41,7 @@ export class BaseSDM {
      * @param name - name of the function to hit
      */
     async requestData(name: string, params: object): Promise<any> {
+        let self = this
         if (BaseSDM.client) {
             return new Promise((resolve, reject) => {
                 consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
@@ -54,7 +55,7 @@ export class BaseSDM {
                                 info: {
                                     request: {
                                         body: params,
-                                        baseSOAPUrl: this.baseSOAPUrl
+                                        baseSOAPUrl: self.baseSOAPUrl
                                     },
                                     response: error ? error : result
                                 },

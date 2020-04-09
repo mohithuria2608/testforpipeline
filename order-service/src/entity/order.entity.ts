@@ -12,39 +12,8 @@ export class OrderClass extends BaseEntity {
     constructor() {
         super(Constant.SET_NAME.ORDER)
     }
-    /**
-    * @method INTERNAL
-    * @description Sync order request in KAFKA for creating order on SDM
-    */
-    async syncOrder(payload: IOrderRequest.IPostOrderPreHookPayload, firstAttempt: boolean) {
-        try {
-            if (firstAttempt)
-                await this.createSdmOrder(payload)
-            else
-                kafkaService.kafkaSync({
-                    set: this.set,
-                    sdm: {
-                        create: true,
-                        argv: JSON.stringify(payload)
-                    },
-                    inQ: true
-                })
-            return {}
-        } catch (error) {
-            if (firstAttempt)
-                kafkaService.kafkaSync({
-                    set: this.set,
-                    sdm: {
-                        create: true,
-                        argv: JSON.stringify(payload)
-                    },
-                    inQ: true
-                })
-            return Promise.reject(error)
-        }
-    }
 
-    async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms) {
+    async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms, orderPayload: IOrderRequest.IPostOrder, cart: ICartRequest.ICartData) {
         try {
             let preHook = await this.postCmsOrderPreHandler(payload)
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
@@ -64,8 +33,30 @@ export class OrderClass extends BaseEntity {
             }
             return cmsOrder
         } catch (error) {
-            consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
-            return Promise.reject(error)
+            if (payload.firstTry) {
+                payload.firstTry = false
+                setTimeout(() => {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        cms: {
+                            create: true,
+                            argv: JSON.stringify({
+                                orderPayload: orderPayload,
+                                headers: payload.headers,
+                                userData: payload.userData,
+                                address: payload.address,
+                                cart: cart,
+                                order: payload.order,
+                                firstTry: payload.firstTry
+                            })
+                        },
+                        inQ: true
+                    })
+                }, 1000)
+            } else {
+                consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
+                return Promise.reject(error)
+            }
         }
     }
 
@@ -791,14 +782,28 @@ export class OrderClass extends BaseEntity {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
             }
         } catch (error) {
-            let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE
-            if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
-                validationRemarks = error.SDKResult.ResultText
-            else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
-                validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
-            this.orderFailureHandler(order, 1, validationRemarks)
-            consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
-            return Promise.reject(error)
+            if (payload.firstTry) {
+                payload.firstTry = false
+                setTimeout(() => {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        sdm: {
+                            create: true,
+                            argv: JSON.stringify(payload)
+                        },
+                        inQ: true
+                    })
+                }, 1000)
+            } else {
+                let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE
+                if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
+                    validationRemarks = error.SDKResult.ResultText
+                else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
+                    validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
+                this.orderFailureHandler(order, 1, validationRemarks)
+                consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
+                return Promise.reject(error)
+            }
         }
     }
 

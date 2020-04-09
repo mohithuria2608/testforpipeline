@@ -22,6 +22,7 @@ import { as_addressConsumerE } from './as_address.consumer';
 import { as_promotionConsumerE } from './as_promotion.consumer';
 
 import { sdm_orderConsumerE } from './sdm_order.consumer';
+import { cms_orderConsumerE } from './cms_order.consumer';
 
 import { m_loggerE } from './m_logger.consumer';
 import { cms_locationConsumerE } from './cms_location.consumer';
@@ -35,7 +36,7 @@ export function initConsumers() {
 
     as_configConsumerE.handleMessage();
     as_appversionConsumerE.handleMessage();
-    
+
     as_userConsumerE.handleMessage();
     sdm_userConsumerE.handleMessage();
     cms_userConsumerE.handleMessage();
@@ -58,6 +59,7 @@ export function initConsumers() {
     as_promotionConsumerE.handleMessage();
 
     sdm_orderConsumerE.handleMessage();
+    cms_orderConsumerE.handleMessage();
 
     m_loggerE.handleMessage();
 

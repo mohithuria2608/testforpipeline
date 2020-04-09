@@ -77,6 +77,7 @@ export enum KAFKA_TOPIC {
     AS_PROMOTION = 'as_promotion',
 
     SDM_ORDER = 'sdm_order',
+    CMS_ORDER = 'cms_order',
 
     AS_CONFIG = 'as_config',
     AS_APP_VERSION = 'as_app_version',
@@ -1623,6 +1624,15 @@ export const CONF = {
                 }
             },
             HIDDEN: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
+            ORDER: {
                 MAX_RETRY: {
                     CREATE: 5,
                     UPDATE: 5,

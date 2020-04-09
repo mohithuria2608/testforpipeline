@@ -234,6 +234,10 @@ export class UserEntity extends BaseEntity {
         try {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(userData), false)
             consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
+            /**
+             * @todo : remove getUser query
+             */
+            userData = await this.getUser({ userId: userData.id })
             let res = await SDM.UserSDME.createCustomerOnSdm(userData, headers)
 
             let putArg: IAerospike.Put = {
@@ -246,7 +250,8 @@ export class UserEntity extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            userData = await this.getUser({ userId: userData.id })
+            userData['sdmUserRef'] = parseInt(res.CUST_ID.toString())
+            userData['sdmCorpRef'] = parseInt(res.CUST_CORPID.toString())
             if (userData.socialKey) {
                 SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
             }
@@ -287,39 +292,43 @@ export class UserEntity extends BaseEntity {
 
     /**
      * @description Create user on CMS
-     * @param payload 
+     * @param userData 
      */
-    async createUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
+    async createUserOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let res = await CMS.UserCMSE.createCustomerOnCms(payload)
+            /**
+             * @todo : remove getUser query
+             */
+            userData = await this.getUser({ userId: userData.id })
+            let res = await CMS.UserCMSE.createCustomerOnCms(userData)
             if (res && res.customerId) {
                 let putArg: IAerospike.Put = {
                     bins: {
                         cmsUserRef: parseInt(res.customerId.toString()),
                     },
                     set: this.set,
-                    key: payload.id,
+                    key: userData.id,
                     update: true,
                 }
                 await Aerospike.put(putArg)
-                let user = await this.getUser({ userId: payload.id })
-                console.log("user after getting cms id", user)
-                if (user.sdmUserRef && user.sdmCorpRef) {
+                userData['cmsUserRef'] = parseInt(res.customerId.toString())
+                console.log("user after getting cms id", userData)
+                if (userData.sdmUserRef && userData.sdmCorpRef) {
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {
                             update: true,
                             argv: JSON.stringify({
-                                userData: user,
+                                userData: userData,
                                 headers: headers
                             })
                         },
                         inQ: true
                     })
                 }
-                return user
+                return userData
             }
-            return {}
+            return userData
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
