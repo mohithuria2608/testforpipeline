@@ -53,7 +53,7 @@ export class LocationController {
                                         let storeCollection = []
                                         if (store && store.length > 0) {
                                             for (const s of store) {
-                                                if (s && s.active == 1) {
+                                                if (s && s.active == 1 && s.services.tak == 1) {
                                                     if (s.areaId == a.areaId) {
                                                         delete s.phone2
                                                         delete s.provinceId

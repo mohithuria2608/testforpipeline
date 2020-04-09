@@ -100,14 +100,15 @@ export default async function () {
             }
         }
 
-        // insert data into aerospike
-        await Aerospike.put({
-            bins: storeData,
-            set: Constant.SET_NAME.SYNC_STORE,
-            key: storeData.sdmStoreId,
-            create: true
-        });
-        // }
+        // insert data into aerospike only if store provides delivery and takeawauy - no dinein
+        if (storeData.services.del || storeData.services.tak) {
+            await Aerospike.put({
+                bins: storeData,
+                set: Constant.SET_NAME.SYNC_STORE,
+                key: storeData.sdmStoreId,
+                create: true
+            });
+        }
     }
 }
 
