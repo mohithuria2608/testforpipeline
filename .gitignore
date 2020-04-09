@@ -39,7 +39,7 @@ log
 *-service/lua
 
 #constant directories in each service
-*-service/src/constant
+#*-service/src/constant
 
 #Docker files 
 *-service/Dockerfile
