@@ -34,7 +34,7 @@ export default async function () {
             addressAr: store.STR_ADDRESSUN || "",
             active: store.STR_ISACTIVE === "true" ? 1 : 0,
             services: getServices(store.STR_SERVICES, store.Fences),
-            ...getStoreTimings(store.STR_WH_STARTTIME, store.STR_WH_ENDTIME, parseInt(store.STR_WH_NEXT_DAY)),
+            ...getStoreTimings(store.STR_WH_STARTTIME, store.STR_WH_ENDTIME, store.STR_WH_NEXT_DAY),
             email: "",
             postcode: -1,
             homeDelStatus: 1,
@@ -132,7 +132,7 @@ function getStoreTimings(st, et, nextday) {
     return {
         startTime: new Date(+new Date(st) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString(),
         endTime: new Date(+new Date(et) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString(),
-        nextday: nextday
+        nextDay: parseInt(nextday) ? 1 : 0
     }
 }
 

@@ -2,6 +2,7 @@
 
 import { Aerospike } from "../../aerospike";
 import * as Constant from "../../constant";
+// import * as fs from "fs";
 import { SoapManager, commonParams } from "../../utils";
 
 export default async function () {
@@ -49,7 +50,7 @@ export default async function () {
                 });
 
                 if (storeAreaData.sdmAreaId) {
-                    
+
                     let webAreaData = {
                         countryId: 'AE',
                         sdmCountryId: 1,
@@ -78,6 +79,9 @@ export default async function () {
             }
         }
     }
+
+    // let data = await Aerospike.scan({ set: Constant.SET_NAME.SYNC_AREA });
+    // fs.writeFileSync(`${Constant.SET_NAME.SYNC_AREA}.json`, JSON.stringify(data));
 
     console.log("\t# Area Sequence Complete");
 }

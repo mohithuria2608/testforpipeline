@@ -3,6 +3,7 @@
 import { Aerospike } from "../../aerospike";
 import * as Constant from "../../constant";
 import { SoapManager, commonParams } from "../../utils";
+// import * as fs from "fs";
 
 export default async function () {
 
@@ -30,5 +31,9 @@ export default async function () {
             });
         }
     }
+
+    // let data = await Aerospike.scan({ set: Constant.SET_NAME.SYNC_COUNTRY });
+    // fs.writeFileSync(`${Constant.SET_NAME.SYNC_COUNTRY}.json`, JSON.stringify(data));
+
     console.log("\t# Country Sequence Complete");
 }

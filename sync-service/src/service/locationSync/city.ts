@@ -2,6 +2,7 @@
 
 import { Aerospike } from "../../aerospike";
 import * as Constant from "../../constant";
+// import * as fs from "fs";
 import { SoapManager, generateRandomString, commonParams } from "../../utils";
 
 export default async function () {
@@ -34,5 +35,9 @@ export default async function () {
             });
         }
     }
+
+    // let data = await Aerospike.scan({ set: Constant.SET_NAME.SYNC_CITY });
+    // fs.writeFileSync(`${Constant.SET_NAME.SYNC_CITY}.json`, JSON.stringify(data));
+
     console.log("\t# City Sequence Complete");
 }
