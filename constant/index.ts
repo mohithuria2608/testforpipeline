@@ -18,6 +18,7 @@ export enum MICROSERVICE {
 export enum SET_NAME {
     USER = "user",
     SESSION = "session",
+    OTPCOOLDOWN = "otpcooldown",
     USERCHANGE = "userchange",
     ADDRESS = "address",
     LOCATION = "location",
@@ -696,6 +697,14 @@ export const EMAIL_META = {
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {
+            "OTP_RETRY_MAXED_OUT":{
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Otp retries has maxed out !!",
+                "type": "OTP_RETRY_MAXED_OUT",
+                "message_Ar": "يرجى إدخال رقم جوال صالح",
+                "message_En": "Otp retries has maxed out !!"
+            },
             "EMPTY_CART": {
                 "statusCode": 400,
                 "httpCode": 400,
@@ -1498,9 +1507,6 @@ export const CONF = {
         DEEPLINK_FALLBACK: 'https://uae.kfc.me//',
         AUTH_MECH: "Bearer",
         ADDR_SHOW_TIME: 3,//hr
-
-
-
         TRACK_ORDER_UNITIL: (2 * 60 * 60 * 1000),
         ANDROID_SCHEME_HOST: "https://",
         ANDROID_PACKAGE_NAME: "com.android.kfc",
@@ -1511,7 +1517,10 @@ export const CONF = {
         PAYMENT_FAILURE_FALLBACK: "payment/failure",
         DELIVERY_CHARGE_ID: 279,
         IMG_ETAG_THRESHOLD: (2 * 60 * 60 * 1000),
-        SDM_STORE_TIME_OFFSET: (4 * 60 * 60 * 1000)
+        SDM_STORE_TIME_OFFSET: (4 * 60 * 60 * 1000),
+
+        MAX_OTP_RETRY: 5,
+        OTP_COOLDOWN: 1 * 60,//seconds
     },
     COUNTRY_SPECIFIC: {
         UAE: {
