@@ -2,9 +2,9 @@ import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog } from "../../utils"
-import { userService, menuService } from "../../grpc/client"
+import { menuService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_MENU
+const topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_MENU
 
 class SdmMenuConsumer extends BaseConsumer {
 
@@ -33,13 +33,13 @@ class SdmMenuConsumer extends BaseConsumer {
             consolelog(process.cwd(), "syncMenu", JSON.stringify(error), false);
             if (message.count > 0) {
                 message.count = message.count - 1
-                if (message.count == 0){
+                if (message.count == 0) {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
                 }
                 else
                     kafkaController.kafkaSync(message)
-            } else{
+            } else {
                 message.error = JSON.stringify(error)
                 kafkaController.produceToFailureTopic(message)
             }

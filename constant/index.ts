@@ -55,6 +55,7 @@ export enum SET_NAME {
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
+    RETRY = "retry",
 
     SDM_MENU = "sdm_menu",
     CMS_MENU = "cms_menu",
