@@ -6,12 +6,13 @@ declare namespace IKafkaGrpcRequest {
         set: string,
         as?: IChangeAerospike
         cms?: IChangeCMS
-        sdm?: IChangeSDM
+        sdm?: IChangeSDM,
         mdb?: IChangeMongo
         count?: number,
-        q?: string
-        error?: string
+        q?: string,
+        error?: string,
         inQ: boolean,
+        mainTopic?: string
     }
     interface IChangeAerospike {
         create?: boolean,

@@ -1,10 +1,10 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { orderService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_ORDER
+const topic = topicNameCreator(config.get("env") ,Constant.KAFKA_TOPIC.SDM_ORDER)
 
 class SdmOrderStatusConsumer extends BaseConsumer {
 
@@ -21,24 +21,27 @@ class SdmOrderStatusConsumer extends BaseConsumer {
             })
     }
 
-    private async sdmOrder(message: IKafkaRequest.IKafkaBody) {
+    async sdmOrder(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count >= 0)
+            if (message.count > 0) {
                 await orderService.sync(message)
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "sdmOrder", JSON.stringify(error), false);
-            if (message.count > 0) {
-                message.count = message.count - 1
-                if (message.count == 0){
+            switch (message.count) {
+                case 1:
+                case 2:
+                case 3: {
+                    message.count = message.count + 1
+                    kafkaController.kafkaSync(message)
+                    break;
+                }
+                default: {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
+                    break;
                 }
-                else
-                    kafkaController.kafkaSync(message)
-            } else{
-                message.error = JSON.stringify(error)
-                kafkaController.produceToFailureTopic(message)
             }
             return {}
         }

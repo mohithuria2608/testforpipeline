@@ -389,3 +389,7 @@ function isJsonString(str) {
 export let configIdGenerator = function (type: string, store_code: string) {
     return type + "_" + store_code
 }
+
+export let topicNameCreator = function (envName: string, defaultTopicName: string) {
+    return envName + "_" + defaultTopicName
+}

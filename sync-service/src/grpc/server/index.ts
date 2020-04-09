@@ -26,6 +26,7 @@ server.addService(syncProto.SyncService.service, {
             let res: any
             switch (data.set) {
                 case Constant.SET_NAME.CONFIG: {
+                    // callback(grpcSendError("error"))
                     res = await cmsConfigController.syncConfigFromKafka(data)
                     break;
                 }

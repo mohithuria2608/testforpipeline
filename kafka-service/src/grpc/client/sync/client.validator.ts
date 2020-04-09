@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog ,validatorErr} from "../../../utils"
+import { consolelog, validatorErr } from "../../../utils"
 import * as Constant from '../../../constant'
 
 export class SyncServiceValidator {
@@ -48,7 +48,8 @@ export class SyncServiceValidator {
                     count: Joi.number(),
                     q: Joi.string(),
                     error: Joi.string().allow(""),
-                    inQ: Joi.boolean().required()
+                    inQ: Joi.boolean().required(),
+                    mainTopic: Joi.string()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -60,7 +61,7 @@ export class SyncServiceValidator {
         })
     }
 
-   async fetchConfigValidator(data: ISyncGrpcRequest.IFetchConfig) {
+    async fetchConfigValidator(data: ISyncGrpcRequest.IFetchConfig) {
         return new Promise((resolve, reject) => {
             try {
                 let dataToValidate = Joi.object().keys({

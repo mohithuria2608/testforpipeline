@@ -85,7 +85,8 @@ export class UserServiceValidator {
                     count: Joi.number(),
                     q: Joi.string(),
                     error: Joi.string().allow(""),
-                    inQ: Joi.boolean().required()
+                    inQ: Joi.boolean().required(),
+                    mainTopic: Joi.string()
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
