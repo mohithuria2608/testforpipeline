@@ -28,7 +28,6 @@ export interface Iorder extends Document {
     trackUntil: number,
     validationRemarks: string,
     amountValidationPassed: boolean,
-    orderConfirmationNotified: boolean,
     newOrderId: number,
     transferDone: boolean
     payment: {
@@ -36,6 +35,11 @@ export interface Iorder extends Document {
         amount: number,
         name: string,
         status: string
+    },
+    notification: {
+        confirmed: boolean,
+        cancel: boolean,
+        failure: boolean
     },
     env: number
 };
@@ -227,9 +231,13 @@ const orderSchema = new Schema({
     promo: { type: Schema.Types.Mixed },
     isFreeItem: { type: Boolean },
     amountValidationPassed: { type: Boolean, default: false, required: true },
-    orderConfirmationNotified: { type: Boolean, default: false, required: true },
     newOrderId: { type: Number, default: 0, required: true },
     transferDone: { type: Boolean },
+    notification: {
+        confirmed: { type: Boolean, default: false, required: true },
+        cancel: { type: Boolean, default: false, required: true },
+        failure: { type: Boolean, default: false, required: true },
+    },
     env: { type: Number, required: true },
 });
 

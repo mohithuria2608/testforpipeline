@@ -82,9 +82,13 @@ export class OrderClass extends BaseEntity {
                 isActive: 1,
                 paymentMethodAddedOnSdm: 0,
                 amountValidationPassed: false,
-                orderConfirmationNotified: false,
                 newOrderId: 0,
                 transferDone: false,
+                notification: {
+                    confirmed: false,
+                    cancel: false,
+                    failure: false,
+                },
                 env: Constant.SERVER.ENV[config.get("env")]
             }
             if (cartData.promo && cartData.promo.couponId) {
@@ -1348,7 +1352,7 @@ export class OrderClass extends BaseEntity {
                         }
                     }
                 }
-                if (!order.orderConfirmationNotified) {
+                if (order && order._id && order.notification && !order.notification.confirmed) {
                     // send notification(sms + email) on order confirmation
                     let isDelivery = order.orderType === Constant.DATABASE.TYPE.ORDER.DELIVERY.AS;
                     let userData = await userService.fetchUser({ userId: order.userId });
@@ -1364,7 +1368,7 @@ export class OrderClass extends BaseEntity {
                         language: order.language,
                         payload: JSON.stringify({ msg: order, email: { order, user: userData } })
                     });
-                    order = await this.updateOneEntityMdb({ _id: order._id }, { orderConfirmationNotified: true }, { new: true })
+                    order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.confirmed": true }, { new: true })
                 }
             }
             return { recheck, order }
@@ -1624,7 +1628,7 @@ export class OrderClass extends BaseEntity {
                                 })
                         }
                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                        if (order && order._id) {
+                        if (order && order._id && order.notification && !order.notification.cancel) {
                             let userData = await userService.fetchUser({ userId: order.userId });
                             notificationService.sendNotification({
                                 toSendMsg: true,
@@ -1636,6 +1640,7 @@ export class OrderClass extends BaseEntity {
                                 language: order.language,
                                 payload: JSON.stringify({ msg: order, email: { order, user: userData } })
                             });
+                            order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.cancel": true }, { new: true })
                         }
                     }
                 }
@@ -1836,7 +1841,7 @@ export class OrderClass extends BaseEntity {
                         })
                 }
                 order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                if (order && order._id) {
+                if (order && order._id && order.notification && !order.notification.failure) {
                     // send notification(sms + email) on order failure
                     let userData = await userService.fetchUser({ userId: order.userId });
                     notificationService.sendNotification({
@@ -1849,6 +1854,7 @@ export class OrderClass extends BaseEntity {
                         language: order.language,
                         payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
                     });
+                    order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.failure": true }, { new: true })
                 }
             }
             return order

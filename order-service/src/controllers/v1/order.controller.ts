@@ -260,7 +260,7 @@ export class OrderController {
      * */
     async orderDetail(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderDetail, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { transLogs: 0 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { transLogs: 0, notification: 0 })
             if (order && order._id) {
                 return order
             } else {
@@ -322,26 +322,21 @@ export class OrderController {
             if (userData.id == undefined || userData.id == null || userData.id == "")
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
 
-            let getSdmOrderRef = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { status: 1 })
-            if (getSdmOrderRef && getSdmOrderRef._id) {
-                let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
-                if (order && order._id) {
-                    if (userData.id != order.userId)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-                    order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]
-                    order['nextPing'] = getFrequency({
-                        status: order.status,
-                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
-                        prevTimeInterval: 0,
-                        statusChanged: false
-                    }).nextPingFe
-                    order['unit'] = "second"
-                    return order
-                } else
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0, notification: 0 })
+            if (order && order._id) {
+                if (userData.id != order.userId)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
+                order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]
+                order['nextPing'] = getFrequency({
+                    status: order.status,
+                    type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                    prevTimeInterval: 0,
+                    statusChanged: false
+                }).nextPingFe
+                order['unit'] = "second"
+                return order
             } else
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
-
         } catch (error) {
             consolelog(process.cwd(), "trackOrder", JSON.stringify(error), false)
             return Promise.reject(error)
