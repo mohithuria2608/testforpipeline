@@ -572,6 +572,17 @@ export class KafkaController {
         }
     }
 
+    async produceToRetryTopics(topic, retry, messages, partition) {
+        try {
+            topic = topic + "_" + retry
+            
+
+        } catch (error) {
+            consolelog(process.cwd(), "produceToRetryTopics", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
     /**
      * @method KAFKA
      * @description : In case of failure of consumer produce data in failure topic (UNIVERSAL)

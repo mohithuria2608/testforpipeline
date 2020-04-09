@@ -234,15 +234,17 @@ export class UserController {
                 session.sessionTime
             )
             if (userchange[0].address && userchange[0].address.id) {
-                let bin = userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP ? Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP : Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
+                let bin = userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP : Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY
                 if (deleteUserId && deleteUserId != "") {
                     let userDataToSend = await ENTITY.UserE.getUser({ userId: deleteUserId })
                     await ENTITY.AddressE.updateAddress(headers, { addressId: userchange[0].address.id }, bin, userDataToSend, true)
                 } else
                     await ENTITY.AddressE.updateAddress(headers, { addressId: userchange[0].address.id }, bin, userData, true)
                 await addressController.syncOldAddress(headers, userData.id, {
+                    addressType: userchange[0].address.addressType,
+                    addressSubType: userchange[0].address.addressSubType,
                     addressId: userchange[0].address.id,
-                    storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP) ? userchange[0].address.storeId : undefined,
+                    storeId: (userchange[0].address.addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE) ? userchange[0].address.storeId : undefined,
                     lat: userchange[0].address.lat,
                     lng: userchange[0].address.lng,
                     bldgName: userchange[0].address.bldgName,
@@ -580,7 +582,7 @@ export class UserController {
                     }
                     let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0) {
-                        console.log("createProfile step 14=====================>")
+                        console.log("createProfile step 14=====================>", asUserByEmail)
                         if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         userUpdate['phnVerified'] = 1
@@ -598,6 +600,15 @@ export class UserController {
                          */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
+                    if (asUserByEmail && asUserByEmail.length > 0) {
+                        let temDeleteUserIds = []
+                        asUserByEmail.map(obj => {
+                            if (obj.profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.INIT)
+                                temDeleteUserIds.push(obj.id)
+                            return
+                        })
+                        ENTITY.UserE.removeTempUser(temDeleteUserIds, userData.id)
+                    }
                     kafkaService.kafkaSync({
                         set: ENTITY.UserE.set,
                         sdm: {

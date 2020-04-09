@@ -144,4 +144,10 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/scheduler',
+            async (ctx) => {
+                orderController.getSdmOrderScheduler();
+                ctx.status = 200;
+                ctx.body = "success"
+            })
 }

@@ -1,35 +1,12 @@
-import * as config from "config"
 import * as Router from 'koa-router';
 import * as Constant from '../../constant';
 import { sendSuccess } from '../../utils'
-import { kafkaService, syncService } from '../../grpc/client'
 import { createReadStream } from 'fs';
 
 export default (router: Router) => {
     router
         .get('/', async (ctx: Router.IRouterContext) => {
             console.log("healthcheck------------>", global.healthcheck)
-            kafkaService.kafkaSync({
-                set: Constant.SET_NAME.LOGGER,
-                mdb: {
-                    create: true,
-                    argv: JSON.stringify({
-                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.REQUEST,
-                        info: {
-                            request: {
-                                body: {}
-                            },
-                            response: global.healthcheck
-                        },
-                        description: "/healthcheck",
-                        options: {
-                            env: Constant.SERVER.ENV[config.get("env")],
-                        },
-                        createdAt: new Date().getTime(),
-                    })
-                },
-                inQ: true
-            })
             if (global.healthcheck.as &&
                 global.healthcheck.sdm) {
                 ctx.body = "<html>  <head>  </head> <body> user-service@KFC</body> </html>"

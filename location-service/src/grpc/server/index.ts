@@ -23,8 +23,11 @@ server.addService(locationProto.LocationService.service, {
         try {
             consolelog(process.cwd(), "grpc fetchStore", JSON.stringify(call.request), true)
             let res: IStoreRequest.IStore = await storeController.fetchStore(call.request)
-            res.geoFence = {}
-            callback(null, { store: res })
+            if (res) {
+                res.geoFence = {}
+                callback(null, { store: res })
+            } else
+                callback(null, { store: {} })
         } catch (error) {
             consolelog(process.cwd(), "fetchStore", JSON.stringify(error), false)
             callback(grpcSendError(error))
@@ -46,8 +49,11 @@ server.addService(locationProto.LocationService.service, {
         try {
             consolelog(process.cwd(), "grpc validateCoordinate", JSON.stringify(call.request), true)
             let res: IStoreRequest.IStore = await storeController.validateCoords(call.request)
-            res.geoFence = {}
-            callback(null, { store: res })
+            if (res) {
+                res.geoFence = {}
+                callback(null, { store: res })
+            } else
+                callback(null, { store: {} })
         } catch (error) {
             consolelog(process.cwd(), "validateCoordinate", JSON.stringify(error), false)
             callback(grpcSendError(error))

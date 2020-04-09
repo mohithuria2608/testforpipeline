@@ -50,7 +50,7 @@ export class StoreController {
                 store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                 return store[0]
             } else
-                return {}
+                return
         } catch (error) {
             consolelog(process.cwd(), "fetchStore", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -78,29 +78,12 @@ export class StoreController {
                 return res[0]
             }
             else
-                return {}
+                return
         } catch (error) {
             consolelog(process.cwd(), "validateCoords", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
-
-    // /**
-    //  * @method GRPC
-    //  * syncs stores from CMS to Aerospike
-    //  */
-    // async syncStores(payload): Promise<any> {
-    //     try {
-    //         let storesList = JSON.parse(payload.as.argv);
-    //         for (let store of storesList.data) {
-    //             await ENTITY.StoreE.postStores(store);
-    //         }
-    //         return {};
-    //     } catch (error) {
-    //         consolelog(process.cwd(), "syncStores", JSON.stringify(error), false)
-    //         return Promise.reject(error)
-    //     }
-    // }
 
     /** post on CMS */
     async postOnCMS() {
@@ -164,6 +147,53 @@ export class StoreController {
             if (storesToSyncWithCMS.length) await Utils.sendRequestToCMS('SYNC_STORE_STATUS', storesToSyncWithCMS);
         } catch (error) {
             consolelog(process.cwd(), "syncStoreStatus", JSON.stringify(error), false)
+            return Promise.reject(error);
+        }
+    }
+
+    async nearestStore(headers: ICommonRequest.IHeaders, payload: IStoreRequest.IGetNearestStore) {
+        try {
+            let geoWithinArg: IAerospike.Query = {
+                set: ENTITY.StoreE.set,
+                geoWithin: {
+                    bin: 'geoFence',
+                    lat: parseFloat(payload.lat.toString()),
+                    lng: parseFloat(payload.lng.toString()),
+                }
+            }
+            let res: IStoreRequest.IStore[] = await Aerospike.query(geoWithinArg)
+            if (res && res.length > 0) {
+                if (res[0].active == 1) {
+                    let checkStoreOnline = checkOnlineStore(res[0].startTime, res[0].endTime, res[0].nextday)
+                    if (checkStoreOnline) {
+                        return {
+                            cityId: res[0].cityId,
+                            areaId: res[0].areaId,
+                            storeId: res[0].storeId
+                        }
+                    } else {
+                        return {
+                            cityId: res[0].cityId,
+                            areaId: res[0].areaId,
+                            storeId: 0
+                        }
+                    }
+                } else {
+                    return {
+                        cityId: res[0].cityId,
+                        areaId: res[0].areaId,
+                        storeId: 0
+                    }
+                }
+            }
+            else
+                return {
+                    cityId: 0,
+                    areaId: 0,
+                    storeId: 0
+                }
+        } catch (error) {
+            consolelog(process.cwd(), "nearestStore", JSON.stringify(error), false)
             return Promise.reject(error);
         }
     }

@@ -6,7 +6,6 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { addressController } from '../../controllers';
 import { COMMON_HEADERS } from './common.joi.validator';
-import * as ENTITY from '../../entity'
 
 export default (router: Router) => {
     router
@@ -18,18 +17,28 @@ export default (router: Router) => {
             validate({
                 headers: COMMON_HEADERS,
                 body: {
+                    addressType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE,
+                        Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
+                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.message)),
+                    addressSubType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY,
+                        Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.CARHOP,
+                        Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE,
+                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
                     storeId: Joi.number(),
+                    dlvryInst: Joi.string().max(30).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_DELIVERY_INSTRUCTION.type)),
                     lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    bldgName: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    description: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    flatNum: Joi.string().max(12).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
+                    bldgName: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
+                    description: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
+                    flatNum: Joi.string().max(12).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
                     tag: Joi.string().valid(
                         Constant.DATABASE.TYPE.TAG.HOME,
                         Constant.DATABASE.TYPE.TAG.OFFICE,
                         Constant.DATABASE.TYPE.TAG.HOTEL,
                         Constant.DATABASE.TYPE.TAG.OTHER
-                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
+                    ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
                 }
             }),
             async (ctx) => {
@@ -63,10 +72,15 @@ export default (router: Router) => {
                     addressId: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS.type)),
                     lat: Joi.number().min(-90).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     lng: Joi.number().min(-180).max(180).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    bldgName: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    description: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    flatNum: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
-                    tag: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
+                    bldgName: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
+                    description: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
+                    flatNum: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
+                    tag: Joi.string().valid(
+                        Constant.DATABASE.TYPE.TAG.HOME,
+                        Constant.DATABASE.TYPE.TAG.OFFICE,
+                        Constant.DATABASE.TYPE.TAG.HOTEL,
+                        Constant.DATABASE.TYPE.TAG.OTHER
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
                 }
             }),
             async (ctx) => {

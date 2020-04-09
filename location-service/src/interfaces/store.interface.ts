@@ -1,41 +1,44 @@
 declare namespace IStoreRequest {
 
     interface IStore {
-        id?: string,
-        storeId?: number,
-        cityId?: number,
-        countryId?: number,
-        provinceId?: number,
-        areaId?: number,
-        streetId?: number,
-        districtId?: number,
-        mapId?: number,
-        menuId?: number,
-        name_en?: string,
-        name_ar?: string,
-        phone1?: string,
-        phone2?: string,
-        services?: {
+        id: number,
+        storeId: number,
+        sdmStoreId: number,
+        menuId: number,
+        webMenuId: number,
+        countryId: number,
+        active: number,
+        name_en: string,
+        name_ar: string,
+        phone1: string,
+        phone2: string,
+        email: string,
+        services: {
             din: number,
             del: number,
-            tak: number,
+            tak: number
         },
-        active?: number,
-        geoFence?: any,
-        location?: {
-            description: string,
+        location: {
             latitude: number,
-            longitude: number
+            longitude: number,
+            description: string
         },
-        address_en?: string,
-        address_ar?: string,
-        startTime?: string,
-        endTime?: string,
-        nextday?: number,
+        address_en: string,
+        address_ar: string,
+        startTime: string,
+        endTime: string,
+        nextday: number,
+        menuTempId: number,
+        description: string,
+        areaId: number,
+        cityId: number,
+        provinceId: number,
+        districtId: number,
+        mapId: number,
+        streetId: number,
+        storeIdAs: string,
+        geoFence?: any,
         isOnline?: boolean,
-        sdmStoreId?: number,
-        webMenuId?: number,
-        menuTempId?: number,
     }
 
     interface IFetchStore {
@@ -44,4 +47,7 @@ declare namespace IStoreRequest {
     }
 
     interface IValidateCoordinates extends ICommonRequest.ICordinatesOpt { }
+
+    interface IGetNearestStore extends ICommonRequest.ICordinatesOpt { }
+
 }

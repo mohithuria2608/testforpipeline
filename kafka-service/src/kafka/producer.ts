@@ -26,6 +26,7 @@ class KafkaProducer {
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HIDDEN,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_HOME,
+
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_USER,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_USER,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_USER,
@@ -39,7 +40,7 @@ class KafkaProducer {
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_CONFIG,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_APP_VERSION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.M_LOGGER,
-                config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
+                // config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_STORE,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,
             ], (error, data) => {

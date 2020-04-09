@@ -55,6 +55,7 @@ export enum SET_NAME {
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
+    RETRY = "retry",
 
     SDM_MENU = "sdm_menu",
     CMS_MENU = "cms_menu",
@@ -298,8 +299,19 @@ export const DATABASE = {
         },
 
         ADDRESS: {
-            PICKUP: "PICKUP",
-            DELIVERY: "DELIVERY"
+            PICKUP: {
+                TYPE: "PICKUP",
+                SUBTYPE: {
+                    CARHOP: "CARHOP",
+                    STORE: "STORE",
+                }
+            },
+            DELIVERY: {
+                TYPE: "DELIVERY",
+                SUBTYPE: {
+                    DELIVERY: "DELIVERY"
+                }
+            }
         },
 
         ADDRESS_BIN: {
@@ -314,7 +326,7 @@ export const DATABASE = {
             },
             PICKUP: {
                 AS: "PICKUP",
-                SDM: 2,
+                SDM: 2
             }
         },
 
@@ -993,6 +1005,22 @@ export const STATUS_MSG = {
                 "message": "This address does not exists",
                 "message_Ar": "هذا العنوان غير موجود",
                 "message_En": "This address does not exists"
+            },
+            "INVALID_ADDRESS_INFO": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_ADDRESS_INFO",
+                "message": "Invalid address information",
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "Invalid address information"
+            },
+            "INVALID_DELIVERY_INSTRUCTION": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "type": "INVALID_DELIVERY_INSTRUCTION",
+                "message": "Please enter a valid delivery instruction",
+                "message_Ar": "هذا العنوان غير موجود",
+                "message_En": "Please enter a valid delivery instruction"
             },
             "INVALID_OTP": {
                 "statusCode": 422,

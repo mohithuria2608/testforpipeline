@@ -20,7 +20,7 @@ export interface Iorder extends Document {
     items: any,
     itemsHash: string
     address: IAddress,
-    store: IStore,
+    store: IStoreInOrder,
     amount: IAmount[],
     language: string,
     promo: IPromotionGrpcRequest.IValidatePromotionRes,
@@ -29,7 +29,8 @@ export interface Iorder extends Document {
     validationRemarks: string,
     amountValidationPassed: boolean,
     orderConfirmationNotified: boolean,
-    transferFromOrderId: number
+    newOrderId: number,
+    transferDone: boolean
     payment: {
         paymentMethodId: number,
         amount: number,
@@ -64,12 +65,16 @@ interface IAmount {
     action?: string
 }
 
-interface IStore {
+interface IStoreInOrder {
     storeId: number,
     countryId: number,
     areaId: number,
     cityId: number,
-    location: any,
+    location: {
+        description: string,
+        latitude: number
+        longitude: number
+    },
     address_en: string,
     address_ar: string,
     name_en: string,
@@ -165,8 +170,8 @@ const orderSchema = new Schema({
         },
         addressType: {
             type: String, enaum: [
-                Constant.DATABASE.TYPE.ADDRESS.PICKUP,
-                Constant.DATABASE.TYPE.ADDRESS.DELIVERY]
+                Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+                Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE]
         },
         bldgName: { type: String },
         description: { type: String },
@@ -223,7 +228,8 @@ const orderSchema = new Schema({
     isFreeItem: { type: Boolean },
     amountValidationPassed: { type: Boolean, default: false, required: true },
     orderConfirmationNotified: { type: Boolean, default: false, required: true },
-    transferFromOrderId: { type: Number, default: 0, required: true },
+    newOrderId: { type: Number, default: 0, required: true },
+    transferDone: { type: Boolean },
     env: { type: Number, required: true },
 });
 

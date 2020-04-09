@@ -49,8 +49,6 @@ export class OrderController {
                     let firstTry = data.firstTry
                     await this.syncOnSdm(headers, userData, address, order, firstTry)
                 }
-                if (payload.sdm.get)
-                    await ENTITY.OrderE.getSdmOrder(data)
             }
             return {}
         } catch (error) {
@@ -92,7 +90,7 @@ export class OrderController {
             consolelog(process.cwd(), "step 3", new Date(), false)
 
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language })
-            if (store && store.id && store.id != "" && store.menuId == payload.curMenuId) {
+            if (store && store.id && store.menuId == payload.curMenuId) {
                 const menu = await menuService.fetchMenu({
                     menuId: payload.curMenuId,
                     language: headers.language,
@@ -130,7 +128,7 @@ export class OrderController {
             if (totalAmount[0].amount > Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
 
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrder(headers, cart, getAddress, store, userData)
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrderMongo(headers, cart, getAddress, store, userData)
             consolelog(process.cwd(), "step 6", new Date(), false)
 
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
@@ -280,7 +278,7 @@ export class OrderController {
      * */
     async orderStatusPing(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderStatus, auth: ICommonRequest.AuthorizationObj) {
         try {
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1 })
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1, store: 1 })
             if (order && order._id) {
                 order['nextPing'] = getFrequency({
                     status: order.status,
@@ -326,16 +324,6 @@ export class OrderController {
 
             let getSdmOrderRef = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { status: 1 })
             if (getSdmOrderRef && getSdmOrderRef._id) {
-                await ENTITY.OrderE.getSdmOrder({
-                    sdmOrderRef: sdmOrder,
-                    language: headers.language,
-                    timeInterval: getFrequency({
-                        status: getSdmOrderRef.status,
-                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
-                        prevTimeInterval: 0,
-                        statusChanged: false
-                    }).nextPingMs
-                })
                 let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0 })
                 if (order && order._id) {
                     if (userData.id != order.userId)
@@ -360,42 +348,47 @@ export class OrderController {
         }
     }
 
-    /**
-     * @description : Bootstraping pending orders after server restart
-     */
-    async bootstrapPendingOrders() {
+    async getSdmOrderScheduler() {
         try {
             let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
                 env: Constant.SERVER.ENV[config.get("env")],
-                status: {
-                    $in: [Constant.CONF.ORDER_STATUS.PENDING.MONGO,
-                        // Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO
-                    ]
-                }
-            }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1, }, { lean: true })
+                $or: [
+                    {
+                        status: {
+                            $nin: [
+                                Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                                Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
+                                Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+                            ]
+                        }
+                    },
+                    {
+                        status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+                        trackUntil: { $gte: new Date().getTime() }
+                    }
+                ]
+
+            }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1 }, { lean: true })
             if (getPendingOrders && getPendingOrders.length > 0) {
                 getPendingOrders.forEach(async order => {
-                    if ((order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) > new Date().getTime()
-                        // || order.status == Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO
-                    ) {
-                        ENTITY.OrderE.getSdmOrder({
+                    if ((order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime() && order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO)
+                        ENTITY.OrderE.maxPendingReachedHandler(order)
+                    else {
+                        let nextPingMs = getFrequency({
+                            status: order.status,
+                            type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+                            prevTimeInterval: 0,
+                            statusChanged: false
+                        }).nextPingMs
+                        ENTITY.OrderE.getSdmOrderScheduler({
                             sdmOrderRef: order.sdmOrderRef,
-                            language: order.language,
-                            timeInterval: getFrequency({
-                                status: order.status,
-                                type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
-                                prevTimeInterval: 0,
-                                statusChanged: false
-                            }).nextPingMs
+                            language: order.language
                         })
                     }
-                    else
-                        ENTITY.OrderE.maxPendingReachedHandler(order)
                 });
             }
-            return {}
         } catch (error) {
-            consolelog(process.cwd(), "bootstrapPendingOrders", JSON.stringify(error), false)
+            consolelog(process.cwd(), "orderStatusPing", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

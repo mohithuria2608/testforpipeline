@@ -1,78 +1,408 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-  xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
-  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
-  xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy" 
-  xmlns:tns="http://tempuri.org/" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
   xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
+  xmlns:tns="http://tempuri.org/" 
+  xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
+  xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
   <soap:Body>
     <UpdateOrder xmlns="http://tempuri.org/">
-      <licenseCode>AmericanaWeb</licenseCode>
+      <licenseCode>PizzaHutApp</licenseCode>
+      <language>en</language>
       <conceptID>3</conceptID>
       <order>
-        <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10514480</q247:AddressID>
+        <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10522817</q247:AddressID>
         <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
         <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
-        <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7695133</q247:CustomerID>
+        <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7703721</q247:CustomerID>
         <q247:DeliveryChargeID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">279</q247:DeliveryChargeID>
         <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
         <q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
           <q247:CEntry>
             <q247:DealID>0</q247:DealID>
+            <q247:Entries>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910001</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Original</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>890</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910001</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Original</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>890</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910001</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Original</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>890</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910001</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Original</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>890</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910001</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Original</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>890</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>910002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Chicken Pc - Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>633</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>511001</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Crispy Strips Original</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>693</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>511002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Crispy Strips Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>240</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>511002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Crispy Strips Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>240</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>511002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Crispy Strips Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>240</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+              <q247:CEntry>
+                <q247:DealID>0</q247:DealID>
+                <q247:ID>0</q247:ID>
+                <q247:ItemID>511002</q247:ItemID>
+                <q247:ModCode>NONE</q247:ModCode>
+                <q247:Name>Crispy Strips Spicy</q247:Name>
+                <q247:QCComponent>1</q247:QCComponent>
+                <q247:QCInstanceID>240</q247:QCInstanceID>
+                <q247:QCLevel>0</q247:QCLevel>
+                <q247:QCProID>32</q247:QCProID>
+              </q247:CEntry>
+            </q247:Entries>
             <q247:ID>0</q247:ID>
-            <q247:ItemID>110005</q247:ItemID>
+            <q247:ItemID>410013</q247:ItemID>
             <q247:ModCode>NONE</q247:ModCode>
-            <q247:Name>Mighty Zinger</q247:Name>
+            <q247:Name>21 Pcs Super Bucket</q247:Name>
             <q247:QCComponent>1</q247:QCComponent>
-            <q247:QCInstanceID>583</q247:QCInstanceID>
+            <q247:QCInstanceID>636</q247:QCInstanceID>
             <q247:QCLevel>0</q247:QCLevel>
-            <q247:QCProID>65</q247:QCProID>
+            <q247:QCProID>32</q247:QCProID>
           </q247:CEntry>
           <q247:CEntry>
             <q247:DealID>0</q247:DealID>
             <q247:ID>0</q247:ID>
-            <q247:ItemID>110003</q247:ItemID>
+            <q247:ItemID>510030</q247:ItemID>
             <q247:ModCode>NONE</q247:ModCode>
-            <q247:Name>Twister Sandwich - Original</q247:Name>
+            <q247:Name>Loaded Fries Family</q247:Name>
             <q247:QCComponent>2</q247:QCComponent>
-            <q247:QCInstanceID>583</q247:QCInstanceID>
+            <q247:QCInstanceID>636</q247:QCInstanceID>
             <q247:QCLevel>0</q247:QCLevel>
-            <q247:QCProID>65</q247:QCProID>
+            <q247:QCProID>32</q247:QCProID>
           </q247:CEntry>
           <q247:CEntry>
             <q247:DealID>0</q247:DealID>
-            <q247:ID>346832489</q247:ID>
-            <q247:ItemID>510004</q247:ItemID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>510080</q247:ItemID>
             <q247:ModCode>NONE</q247:ModCode>
-            <q247:Name>Regular Fries</q247:Name>
+            <q247:Name>Family Loaded Fries Pepper - Chili Sauce</q247:Name>
             <q247:QCComponent>3</q247:QCComponent>
-            <q247:QCInstanceID>583</q247:QCInstanceID>
+            <q247:QCInstanceID>636</q247:QCInstanceID>
             <q247:QCLevel>0</q247:QCLevel>
-            <q247:QCProID>65</q247:QCProID>
+            <q247:QCProID>32</q247:QCProID>
           </q247:CEntry>
           <q247:CEntry>
             <q247:DealID>0</q247:DealID>
-            <q247:ID>346832490</q247:ID>
-            <q247:ItemID>600002</q247:ItemID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>510002</q247:ItemID>
             <q247:ModCode>NONE</q247:ModCode>
-            <q247:Name>Pepsi Regular</q247:Name>
+            <q247:Name>Coleslaw Salad Large</q247:Name>
             <q247:QCComponent>4</q247:QCComponent>
-            <q247:QCInstanceID>583</q247:QCInstanceID>
+            <q247:QCInstanceID>636</q247:QCInstanceID>
             <q247:QCLevel>0</q247:QCLevel>
-            <q247:QCProID>65</q247:QCProID>
+            <q247:QCProID>32</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>510002</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>Coleslaw Salad Large</q247:Name>
+            <q247:QCComponent>5</q247:QCComponent>
+            <q247:QCInstanceID>636</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>32</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>610033</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>Orange Juice 1L</q247:Name>
+            <q247:QCComponent>6</q247:QCComponent>
+            <q247:QCInstanceID>636</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>32</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:ItemID>710002</q247:ItemID>
+            <q247:Level>0</q247:Level>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>Chocolate Cake</q247:Name>
+            <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
+            <q247:Price>9.5</q247:Price>
+            <q247:Status>NOTAPPLIED</q247:Status>
           </q247:CEntry>
         </q247:Entries>
+        <q247:Notes xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+          <q247:CNote>
+            <q247:NT_FREE_TEXT>Test Orders - Appinventiv</q247:NT_FREE_TEXT>
+            <q247:NT_ID></q247:NT_ID>
+          </q247:CNote>
+        </q247:Notes>
         <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
         <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:OrderMode>
         <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
         <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-        <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1240</q247:StoreID>
+        <q247:ServiceCharge xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:ServiceCharge>
+        <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">97</q247:StoreID>
         <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
       </order>
       <autoApprove>true</autoApprove>
       <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
+      <orderNotes1>Test Orders - Appinventiv 674</orderNotes1>
+      <orderNotes2>Test Orders - Appinventiv 5e7cab3b85b358e76e3071fc</orderNotes2>
       <creditCardPaymentbool>false</creditCardPaymentbool>
+      <isSuspended>false</isSuspended>
       <menuTemplateID>17</menuTemplateID>
     </UpdateOrder>
   </soap:Body>

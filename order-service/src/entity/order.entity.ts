@@ -13,6 +13,348 @@ export class OrderClass extends BaseEntity {
         super(Constant.SET_NAME.ORDER)
     }
 
+    /**
+    * @method INTERNAL
+    * */
+    async createOrderMongo(
+        headers: ICommonRequest.IHeaders,
+        cartData: ICartRequest.ICartData,
+        address: IUserGrpcRequest.IFetchAddressRes,
+        store: IStoreGrpcRequest.IStore,
+        userData: IUserRequest.IUserData) {
+        try {
+            let amount = cartData.amount
+            if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS) {
+                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
+            }
+            let items = cartData.items
+            if (headers.language == Constant.DATABASE.LANGUAGE.EN)
+                items = items.concat(cartData.selFreeItem.en)
+            else
+                items = items.concat(cartData.selFreeItem.ar)
+            let orderData = {
+                orderType: address.addressType,
+                cartId: cartData.cartId,
+                cmsCartRef: cartData.cmsCartRef,
+                sdmOrderRef: 0,
+                cmsOrderRef: 0,
+                userId: userData.id,
+                sdmUserRef: userData.sdmUserRef,
+                country: headers.country,
+                language: headers.language,
+                status: Constant.CONF.ORDER_STATUS.CART.MONGO,
+                sdmOrderStatus: -1,
+                items: items,
+                amount: amount,
+                vat: cartData.vat,
+                address: {
+                    addressId: address.id,
+                    sdmAddressRef: address.sdmAddressRef,
+                    cmsAddressRef: address.cmsAddressRef,
+                    tag: address.tag,
+                    bldgName: address.bldgName,
+                    description: address.description,
+                    flatNum: address.flatNum,
+                    addressType: address.addressType,
+                    lat: address.lat,
+                    lng: address.lng,
+                    countryId: address.countryId,
+                    areaId: address.areaId,
+                    cityId: address.cityId,
+                    storeId: address.storeId
+                },
+                store: {
+                    storeId: store.storeId,
+                    countryId: store.countryId,
+                    areaId: store.areaId,
+                    cityId: store.cityId ? store.cityId : 17,
+                    location: store.location,
+                    address_en: store.address_en,
+                    address_ar: store.address_ar,
+                    name_en: store.name_en,
+                    name_ar: store.name_ar
+                },
+                payment: {},
+                transLogs: [],
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
+                trackUntil: 0,
+                isActive: 1,
+                paymentMethodAddedOnSdm: 0,
+                amountValidationPassed: false,
+                orderConfirmationNotified: false,
+                newOrderId: 0,
+                transferDone: false,
+                env: Constant.SERVER.ENV[config.get("env")]
+            }
+            if (cartData.promo && cartData.promo.couponId) {
+                if (config.get("sdm.promotion.default")) {
+                    orderData['promo'] = {}
+                } else {
+                    orderData['promo'] = cartData.promo
+                    if (cartData.selFreeItem && cartData.selFreeItem.ar && cartData.selFreeItem.ar.length > 0)
+                        orderData['isFreeItem'] = true
+                }
+            } else
+                orderData['promo'] = {}
+
+            let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
+            return order
+        } catch (error) {
+            consolelog(process.cwd(), "createOrderMongo", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number) {
+        try {
+            let noonpayRedirectionUrl = ""
+            let dataToUpdateOrder = {
+                payment: {
+                    paymentMethodId: paymentMethodId,
+                    amount: totalAmount,
+                    name: ""
+                },
+                status: Constant.CONF.ORDER_STATUS.PENDING.MONGO
+            }
+            switch (paymentMethodId) {
+                case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
+                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
+                    dataToUpdateOrder['transLogs'] = []
+                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
+                    if (order.cmsOrderRef)
+                        CMS.OrderCMSE.updateOrder({
+                            order_id: order.cmsOrderRef,
+                            payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                            order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
+                            sdm_order_id: order.sdmOrderRef,
+                            validation_remarks: ""
+                        })
+                    break;
+                }
+                case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
+                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
+                    let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
+                        orderId: order._id.toString(),
+                        amount: totalAmount,
+                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                        paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
+                        channel: "Mobile",
+                        locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
+                    })
+                    if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
+                        noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
+                        dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
+                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
+                        if (order.cmsOrderRef)
+                            CMS.TransactionCMSE.createTransaction({
+                                order_id: order.cmsOrderRef,
+                                message: initiatePaymentObj.paymentStatus,
+                                type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
+                                payment_data: {
+                                    id: initiatePaymentObj.noonpayOrderId.toString(),
+                                    data: JSON.stringify(initiatePaymentObj)
+                                }
+                            })
+                        if (order.cmsOrderRef)
+                            CMS.OrderCMSE.updateOrder({
+                                order_id: order.cmsOrderRef,
+                                payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
+                                order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
+                                sdm_order_id: order.sdmOrderRef,
+                                validation_remarks: ""
+                            })
+                    } else {
+                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+                    }
+                    break;
+                }
+                default: {
+                    order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+                    break;
+                }
+            }
+            return { noonpayRedirectionUrl, order }
+        } catch (error) {
+            consolelog(process.cwd(), "initiatePaymentHandler", JSON.stringify(error), false)
+            this.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method GRPC
+    * @description : Create order on SDM
+    * */
+    async createSdmOrder(payload: IOrderRequest.IPostOrderOnSdm) {
+        let order: IOrderRequest.IOrderData = payload.order
+        let validationRemarks = ""
+        try {
+            let preHook = await this.postSdmOrderPreHandler(payload)
+            order.address.sdmAddressRef = preHook.address.sdmAddressRef
+            let Comps
+            if (order.promo &&
+                order.promo.couponId &&
+                order.promo.couponCode &&
+                order.promo.posId &&
+                !order.isFreeItem
+            ) {
+                let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
+                if (discountAmount && discountAmount.length > 0) {
+                    Comps = {
+                        KeyValueOfdecimalCCompkckD9yn_P: {
+                            Key: order.promo.posId,
+                            Value: {
+                                Amount: discountAmount[0].amount,
+                                CompID: order.promo.posId,
+                                EnterAmount: discountAmount[0].amount,
+                                Name: order.promo.couponCode
+                            }
+                        }
+                    }
+                }
+            }
+            if (config.get("sdm.promotion.default")) {
+                let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
+                if (discountAmount && discountAmount.length > 0) {
+                    let promo = await promotionService.validatePromotion({ couponCode: config.get("sdm.promotion.defaultCode") })
+                    if (promo && promo.isValid) {
+                        Comps = {
+                            KeyValueOfdecimalCCompkckD9yn_P: {
+                                Key: promo.posId,
+                                Value: {
+                                    Amount: discountAmount[0].amount,
+                                    CompID: promo.posId,
+                                    EnterAmount: discountAmount[0].amount,
+                                    Name: promo.couponCode
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            let serviceAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
+            let serviceCharge = undefined;
+            if (serviceAmount && serviceAmount.length > 0)
+                serviceCharge = (serviceAmount[0].amount != undefined) ? serviceAmount[0].amount : 0
+            else
+                serviceCharge = 0
+            let Payments = undefined
+            if (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
+                let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
+                Payments = {
+                    CC_ORDER_PAYMENT: {
+                        PAY_AMOUNT: totalAmount[0].amount,
+                        // PAY_CREDITCARD_NUMBER: "",
+                        // PAY_CREDITCARD_HOLDERNAME: "",
+                        // PAY_CREDITCARD_CCV: "",
+                        // PAY_CREDITCARD_EXPIREDATE: "",
+                        // PAY_REF_GATEWAY: "",
+                        // PAY_REF_NO: "",
+                        PAY_STATUS: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
+                        PAY_STORE_TENDERID: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
+                        PAY_SUB_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
+                        PAY_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
+                    }
+                }
+            }
+            let Notes = undefined
+            Notes = {
+                CNote: [{
+                    NT_FREE_TEXT: "Test Orders - Appinventiv : " + order._id.toString(),
+                    NT_ID: new Date().getTime()
+                }]
+            }
+            let sdmOrderObj = {
+                AddressID: order.address.sdmAddressRef,
+                Comps: Comps,
+                ConceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
+                CountryID: 1,
+                CustomerID: order.sdmUserRef,
+                DeliveryChargeID: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.CONF.GENERAL.DELIVERY_CHARGE_ID : undefined,
+                DistrictID: -1,
+                Entries: this.createCEntries(order.items),
+                Notes: Notes,
+                OrderID: 0,
+                OrderMode: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM : Constant.DATABASE.TYPE.ORDER.PICKUP.SDM,
+                OrderType: 0,
+                Payments: Payments,
+                ProvinceID: 7,
+                ServiceCharge: serviceCharge,
+                StoreID: order.address.storeId,
+                StreetID: 315
+            }
+
+            /**
+             * @step 1 :create order on sdm 
+             */
+            let data: IOrderSdmRequest.ICreateOrder = {
+                licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
+                language: "en",
+                conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
+                order: sdmOrderObj,
+                autoApprove: true,
+                useBackupStoreIfAvailable: true,
+                orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order.cmsOrderRef : order.cmsOrderRef,
+                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order._id.toString() : order._id.toString(),
+                creditCardPaymentbool: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
+                isSuspended: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
+                menuTemplateID: 17,
+            }
+
+            let createOrder = await OrderSDME.createOrder(data)
+            if (createOrder && typeof createOrder == 'string') {
+                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                    orderId: createOrder,
+                    sdmOrderRef: createOrder,
+                    isActive: 1,
+                    updatedAt: new Date().getTime()
+                }, { new: true })
+                if (order && order._id)
+                    this.getSdmOrderScheduler({
+                        sdmOrderRef: order.sdmOrderRef,
+                        language: order.language
+                    })
+                if (order.cmsOrderRef != 0)
+                    order = await this.updateOneEntityMdb({ _id: payload.order._id }, { isActive: 1 }, { new: true })
+                if (order.cmsOrderRef)
+                    CMS.OrderCMSE.updateOrder({
+                        order_id: order.cmsOrderRef,
+                        payment_status: "",
+                        order_status: "",
+                        sdm_order_id: order.sdmOrderRef,
+                        validation_remarks: ""
+                    })
+                return {}
+            } else {
+                return Promise.reject(createOrder)
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
+            if (payload.firstTry) {
+                payload.firstTry = false
+                setTimeout(() => {
+                    kafkaService.kafkaSync({
+                        set: this.set,
+                        sdm: {
+                            create: true,
+                            argv: JSON.stringify(payload)
+                        },
+                        inQ: true
+                    })
+                }, 1000)
+            } else {
+                validationRemarks = (validationRemarks == "") ? Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE : validationRemarks
+                if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
+                    validationRemarks = error.SDKResult.ResultText
+                else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
+                    validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
+                this.orderFailureHandler(order, 1, validationRemarks)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
+            }
+        }
+    }
+
     async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms, orderPayload: IOrderRequest.IPostOrder, cart: ICartRequest.ICartData) {
         try {
             let preHook = await this.postCmsOrderPreHandler(payload)
@@ -628,488 +970,117 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    /**
-    * @method GRPC
-    * @description : Create order on SDM
-    * */
-    async createSdmOrder(payload: IOrderRequest.IPostOrderOnSdm) {
-        let order: IOrderRequest.IOrderData = payload.order
+    async getSdmOrderScheduler(payload: IOrderRequest.IGetSdmOrderScheduler) {
         try {
-            let preHook = await this.postSdmOrderPreHandler(payload)
-            order.address.sdmAddressRef = preHook.address.sdmAddressRef
-            let Comps
-            if (order.promo &&
-                order.promo.couponId &&
-                order.promo.couponCode &&
-                order.promo.posId &&
-                !order.isFreeItem
-            ) {
-                let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
-                if (discountAmount && discountAmount.length > 0) {
-                    Comps = {
-                        KeyValueOfdecimalCCompkckD9yn_P: {
-                            Key: order.promo.posId,
-                            Value: {
-                                Amount: discountAmount[0].amount,
-                                CompID: order.promo.posId,
-                                EnterAmount: discountAmount[0].amount,
-                                Name: order.promo.couponCode
-                            }
+            let recheck = true
+            let statusChanged = false
+            let order: IOrderRequest.IOrderData = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, selFreeItem: 0, freeItems: 0 })
+            if (order && order._id) {
+                let oldSdmStatus = order.sdmOrderStatus
+                consolelog(process.cwd(), `scheduler old sdm status : ${order.sdmOrderRef} : ${oldSdmStatus}`, "", true)
+                if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
+                    consolelog(process.cwd(), `scheduler stop fetching order detail from sdm after 30 mins : ${new Date()}`, "", true)
+                    recheck = false
+                }
+                if (recheck) {
+                    if (order.sdmOrderRef && order.sdmOrderRef != 0) {
+                        if (order.transferDone)
+                            order.sdmOrderRef = order.newOrderId
+                        let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
+                        if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
+                            let transferOrder = await this.transferOrderHandler(order, sdmOrder)
+                            recheck = transferOrder.recheck;
+                            order = transferOrder.order;
                         }
-                    }
-                }
-            }
-            if (config.get("sdm.promotion.default")) {
-                let discountAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT })
-                if (discountAmount && discountAmount.length > 0) {
-                    let promo = await promotionService.validatePromotion({ couponCode: config.get("sdm.promotion.defaultCode") })
-                    if (promo && promo.isValid) {
-                        Comps = {
-                            KeyValueOfdecimalCCompkckD9yn_P: {
-                                Key: promo.posId,
-                                Value: {
-                                    Amount: discountAmount[0].amount,
-                                    CompID: promo.posId,
-                                    EnterAmount: discountAmount[0].amount,
-                                    Name: promo.couponCode
-                                }
+                        consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
+                        if (sdmOrder.Status && typeof sdmOrder.Status) {
+                            if (oldSdmStatus != parseInt(sdmOrder.Status)) {
+                                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                    updatedAt: new Date().getTime(),
+                                    sdmOrderStatus: parseInt(sdmOrder.Status)
+                                }, { new: true })
+                                statusChanged = true
                             }
-                        }
-                    }
-                }
-            }
-            let serviceAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
-            let serviceCharge = undefined;
-            if (serviceAmount && serviceAmount.length > 0)
-                serviceCharge = (serviceAmount[0].amount != undefined) ? serviceAmount[0].amount : 0
-            else
-                serviceCharge = 0
-            let Payments = undefined
-            if (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) {
-                let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-                Payments = {
-                    CC_ORDER_PAYMENT: {
-                        PAY_AMOUNT: totalAmount[0].amount,
-                        // PAY_CREDITCARD_NUMBER: "",
-                        // PAY_CREDITCARD_HOLDERNAME: "",
-                        // PAY_CREDITCARD_CCV: "",
-                        // PAY_CREDITCARD_EXPIREDATE: "",
-                        // PAY_REF_GATEWAY: "",
-                        // PAY_REF_NO: "",
-                        PAY_STATUS: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
-                        PAY_STORE_TENDERID: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
-                        PAY_SUB_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
-                        PAY_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
-                    }
-                }
-            }
-            let sdmOrderObj = {
-                AddressID: order.address.sdmAddressRef,
-                Comps: Comps,
-                ConceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
-                CountryID: 1,
-                CustomerID: order.sdmUserRef,
-                DeliveryChargeID: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.CONF.GENERAL.DELIVERY_CHARGE_ID : undefined,
-                DistrictID: -1,
-                Entries: this.createCEntries(order.items),
-                OrderID: 0,
-                OrderMode: (order['orderType'] == Constant.DATABASE.TYPE.ORDER.DELIVERY.AS) ? Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM : Constant.DATABASE.TYPE.ORDER.PICKUP.SDM,
-                OrderType: 0,
-                Payments: Payments,
-                ProvinceID: 7,
-                ServiceCharge: serviceCharge,
-                StoreID: order.address.storeId,
-                StreetID: 315
-            }
+                            if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
+                                let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)
+                                recheck = amountValidation.recheck;
+                                order = amountValidation.order;
+                            }
 
-            /**
-             * @step 1 :create order on sdm 
-             */
-            let data: IOrderSdmRequest.ICreateOrder = {
-                licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.LICENSE_CODE,
-                language: "en",
-                conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.headers.country].SDM.CONCEPT_ID,
-                order: sdmOrderObj,
-                autoApprove: true,
-                useBackupStoreIfAvailable: true,
-                orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order.cmsOrderRef : order.cmsOrderRef,
-                orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order._id.toString() : order._id.toString(),
-                creditCardPaymentbool: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
-                isSuspended: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
-                menuTemplateID: 17,
-            }
+                            let remarksValidation = await this.validationRemarksHandler(recheck, order, sdmOrder)
+                            recheck = remarksValidation.recheck;
+                            order = remarksValidation.order;
 
-            let createOrder = await OrderSDME.createOrder(data)
-            if (createOrder && typeof createOrder == 'string') {
-                order = await this.updateOneEntityMdb({ _id: order._id }, {
-                    orderId: createOrder,
-                    sdmOrderRef: createOrder,
-                    isActive: 1,
-                    updatedAt: new Date().getTime()
-                }, { new: true })
-                if (order.cmsOrderRef != 0)
-                    order = await this.updateOneEntityMdb({ _id: payload.order._id }, { isActive: 1 }, { new: true })
-                if (order.cmsOrderRef)
-                    CMS.OrderCMSE.updateOrder({
-                        order_id: order.cmsOrderRef,
-                        payment_status: "",
-                        order_status: "",
-                        sdm_order_id: order.sdmOrderRef,
-                        validation_remarks: ""
-                    })
-                if (order && order._id) {
-                    this.getSdmOrder({
-                        sdmOrderRef: order.sdmOrderRef,
-                        language: order.language,
-                        timeInterval: getFrequency({
-                            status: order.status,
-                            type: Constant.DATABASE.TYPE.FREQ_TYPE.GET,
-                            prevTimeInterval: 0,
-                            statusChanged: false
-                        }).nextPingMs
-                    })
-                }
-                return {}
-            } else {
-                let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_FAIL
-                if (createOrder.ResultText) {
-                    if (typeof createOrder.ResultText == 'object')
-                        validationRemarks = JSON.stringify(createOrder.SDKResult.ResultText)
-                    else
-                        validationRemarks = createOrder.SDKResult.ResultText
-                }
-                this.orderFailureHandler(order, -1, validationRemarks)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
-            }
-        } catch (error) {
-            if (payload.firstTry) {
-                payload.firstTry = false
-                setTimeout(() => {
-                    kafkaService.kafkaSync({
-                        set: this.set,
-                        sdm: {
-                            create: true,
-                            argv: JSON.stringify(payload)
-                        },
-                        inQ: true
-                    })
-                }, 1000)
-            } else {
-                let validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE
-                if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
-                    validationRemarks = error.SDKResult.ResultText
-                else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
-                    validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
-                this.orderFailureHandler(order, 1, validationRemarks)
-                consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
-                return Promise.reject(error)
-            }
-        }
-    }
-
-    /**
-    * @method INTERNAL
-    * */
-    async createOrder(
-        headers: ICommonRequest.IHeaders,
-        cartData: ICartRequest.ICartData,
-        address: IUserGrpcRequest.IFetchAddressRes,
-        store: IStoreGrpcRequest.IStore,
-        userData: IUserRequest.IUserData) {
-        try {
-            let amount = cartData.amount
-            if (address.addressType == Constant.DATABASE.TYPE.ORDER.PICKUP.AS) {
-                amount = amount.filter(obj => { return obj.type != Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
-            }
-            let items = cartData.items
-            if (headers.language == Constant.DATABASE.LANGUAGE.EN)
-                items = items.concat(cartData.selFreeItem.en)
-            else
-                items = items.concat(cartData.selFreeItem.ar)
-            let orderData = {
-                orderType: address.addressType,
-                cartId: cartData.cartId,
-                cmsCartRef: cartData.cmsCartRef,
-                sdmOrderRef: 0,
-                cmsOrderRef: 0,
-                userId: userData.id,
-                sdmUserRef: userData.sdmUserRef,
-                country: headers.country,
-                language: headers.language,
-                status: Constant.CONF.ORDER_STATUS.CART.MONGO,
-                sdmOrderStatus: -1,
-                items: items,
-                amount: amount,
-                vat: cartData.vat,
-                address: {
-                    addressId: address.id,
-                    sdmAddressRef: address.sdmAddressRef,
-                    cmsAddressRef: address.cmsAddressRef,
-                    tag: address.tag,
-                    bldgName: address.bldgName,
-                    description: address.description,
-                    flatNum: address.flatNum,
-                    addressType: address.addressType,
-                    lat: address.lat,
-                    lng: address.lng,
-                    countryId: address.countryId,
-                    areaId: address.areaId,
-                    cityId: address.cityId,
-                    storeId: address.storeId
-                },
-                store: {
-                    storeId: store.storeId,
-                    countryId: store.countryId,
-                    areaId: store.areaId,
-                    cityId: store.cityId ? store.cityId : 17,
-                    location: store.location,
-                    address_en: store.address_en,
-                    address_ar: store.address_ar,
-                    name_en: store.name_en,
-                    name_ar: store.name_ar
-                },
-                payment: {},
-                transLogs: [],
-                createdAt: new Date().getTime(),
-                updatedAt: new Date().getTime(),
-                trackUntil: 0,
-                isActive: 1,
-                paymentMethodAddedOnSdm: 0,
-                amountValidationPassed: false,
-                orderConfirmationNotified: false,
-                transferFromOrderId: 0,
-                env: Constant.SERVER.ENV[config.get("env")]
-            }
-            if (cartData.promo && cartData.promo.couponId) {
-                if (config.get("sdm.promotion.default")) {
-                    orderData['promo'] = {}
-                } else {
-                    orderData['promo'] = cartData.promo
-                    if (cartData.selFreeItem && cartData.selFreeItem.ar && cartData.selFreeItem.ar.length > 0)
-                        orderData['isFreeItem'] = true
-                }
-            } else
-                orderData['promo'] = {}
-
-            let order: IOrderRequest.IOrderData = await this.createOneEntityMdb(orderData)
-            return order
-        } catch (error) {
-            consolelog(process.cwd(), "createOrder", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    async initiatePaymentHandler(headers: ICommonRequest.IHeaders, paymentMethodId: number, order: IOrderRequest.IOrderData, totalAmount: number) {
-        try {
-            let noonpayRedirectionUrl = ""
-            let dataToUpdateOrder = {
-                payment: {
-                    paymentMethodId: paymentMethodId,
-                    amount: totalAmount,
-                    name: ""
-                },
-                status: Constant.CONF.ORDER_STATUS.PENDING.MONGO
-            }
-            switch (paymentMethodId) {
-                case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
-                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
-                    dataToUpdateOrder['transLogs'] = []
-                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
-                    if (order.cmsOrderRef)
-                        CMS.OrderCMSE.updateOrder({
-                            order_id: order.cmsOrderRef,
-                            payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                            order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
-                            sdm_order_id: order.sdmOrderRef,
-                            validation_remarks: ""
-                        })
-                    break;
-                }
-                case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
-                    dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
-                    let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                        orderId: order._id.toString(),
-                        amount: totalAmount,
-                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                        paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
-                        channel: "Mobile",
-                        locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
-                    })
-                    if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
-                        noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
-                        dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
-                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder)
-                        if (order.cmsOrderRef)
-                            CMS.TransactionCMSE.createTransaction({
-                                order_id: order.cmsOrderRef,
-                                message: initiatePaymentObj.paymentStatus,
-                                type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
-                                payment_data: {
-                                    id: initiatePaymentObj.noonpayOrderId.toString(),
-                                    data: JSON.stringify(initiatePaymentObj)
-                                }
-                            })
-                        if (order.cmsOrderRef)
-                            CMS.OrderCMSE.updateOrder({
-                                order_id: order.cmsOrderRef,
-                                payment_status: Constant.DATABASE.STATUS.PAYMENT.INITIATED,
-                                order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
-                                sdm_order_id: order.sdmOrderRef,
-                                validation_remarks: ""
-                            })
-                    } else {
-                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
-                    }
-                    break;
-                }
-                default: {
-                    order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
-                    break;
-                }
-            }
-            return { noonpayRedirectionUrl, order }
-        } catch (error) {
-            consolelog(process.cwd(), "initiatePaymentHandler", JSON.stringify(error), false)
-            this.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-    * @method GRPC
-    * @param {string} sdmOrderRef : sdm order id
-    * @param {number} timeInterval : set timeout interval
-    * */
-    async getSdmOrder(payload: IOrderRequest.IGetSdmOrder) {
-        try {
-            setTimeout(async () => {
-                let recheck = true
-                let statusChanged = false
-                let order: IOrderRequest.IOrderData = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, selFreeItem: 0, freeItems: 0 })
-                if (order && order._id) {
-                    let oldSdmStatus = order.sdmOrderStatus
-                    consolelog(process.cwd(), `old sdm status : ${order.sdmOrderRef} : ${oldSdmStatus}`, "", true)
-                    if ((order.createdAt + (30 * 60 * 60 * 1000)) < new Date().getTime()) {
-                        consolelog(process.cwd(), `stop fetching order detail from sdm after 30 mins : ${new Date()}`, "", true)
-                        recheck = false
-                    }
-                    if (recheck) {
-                        if (order.sdmOrderRef && order.sdmOrderRef != 0) {
-                            if (order.transferFromOrderId)
-                                order.sdmOrderRef = order.transferFromOrderId
-                            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
-                            consolelog(process.cwd(), `current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
-                            if (sdmOrder.Status && typeof sdmOrder.Status) {
-                                if (oldSdmStatus != parseInt(sdmOrder.Status)) {
-                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                        updatedAt: new Date().getTime(),
-                                        sdmOrderStatus: parseInt(sdmOrder.Status)
-                                    }, { new: true })
-                                    statusChanged = true
-                                }
-                                if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
-                                    let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)
-                                    recheck = amountValidation.recheck;
-                                    order = amountValidation.order;
-                                }
-
-                                let remarksValidation = await this.validationRemarksHandler(recheck, order, sdmOrder)
-                                recheck = remarksValidation.recheck;
-                                order = remarksValidation.order;
-
-                                if (recheck && sdmOrder && sdmOrder.OrderID) {
-                                    switch (parseInt(sdmOrder.Status)) {
-                                        case 0:
-                                        case 96:
-                                        case 1: {
-                                            let pendingHandler = await this.sdmPendingOrderHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                            recheck = pendingHandler.recheck;
-                                            order = pendingHandler.order;
-                                            break;
+                            if (recheck && sdmOrder && sdmOrder.OrderID) {
+                                switch (parseInt(sdmOrder.Status)) {
+                                    case 0:
+                                    case 96:
+                                    case 1: {
+                                        let pendingHandler = await this.sdmPendingOrderHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                        recheck = pendingHandler.recheck;
+                                        order = pendingHandler.order;
+                                        break;
+                                    }
+                                    case 2: {
+                                        let confirmedHandler = await this.sdmConfirmedHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                        recheck = confirmedHandler.recheck;
+                                        order = confirmedHandler.order;
+                                        break;
+                                    }
+                                    case 8: {
+                                        let readyHandler = await this.sdmReadyHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                        recheck = readyHandler.recheck;
+                                        order = readyHandler.order;
+                                        break;
+                                    }
+                                    case 16:
+                                    case 32: {
+                                        let onTheWayHandler = await this.sdmOnTheWayHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                        recheck = onTheWayHandler.recheck;
+                                        order = onTheWayHandler.order;
+                                        break;
+                                    }
+                                    case 64:
+                                    case 128:
+                                    case 2048: {
+                                        let deliveredHandler = await this.sdmDeliveredHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                        recheck = deliveredHandler.recheck;
+                                        order = deliveredHandler.order;
+                                        break;
+                                    }
+                                    case 256:
+                                    case 512:
+                                    case 1024:
+                                    case 4096:
+                                    case 8192: {
+                                        if (order.transferDone ||
+                                            (sdmOrder.TransferFromOrderID == "" || sdmOrder.TransferFromOrderID == "0") && (sdmOrder.TransferFromStoreID == "" || sdmOrder.TransferFromStoreID == "0")
+                                        ) {
+                                            let cancelledHandler = await this.sdmCancelledHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                            recheck = cancelledHandler.recheck;
+                                            order = cancelledHandler.order;
                                         }
-                                        case 2: {
-                                            let confirmedHandler = await this.sdmConfirmedHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                            recheck = confirmedHandler.recheck;
-                                            order = confirmedHandler.order;
-                                            break;
-                                        }
-                                        case 8: {
-                                            let readyHandler = await this.sdmReadyHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                            recheck = readyHandler.recheck;
-                                            order = readyHandler.order;
-                                            break;
-                                        }
-                                        case 16:
-                                        case 32: {
-                                            let onTheWayHandler = await this.sdmOnTheWayHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                            recheck = onTheWayHandler.recheck;
-                                            order = onTheWayHandler.order;
-                                            break;
-                                        }
-                                        case 64:
-                                        case 128:
-                                        case 2048: {
-                                            let deliveredHandler = await this.sdmDeliveredHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                            recheck = deliveredHandler.recheck;
-                                            order = deliveredHandler.order;
-                                            break;
-                                        }
-                                        case 256:
-                                        case 512:
-                                        case 1024:
-                                        case 4096:
-                                        case 8192: {
-                                            if (sdmOrder && sdmOrder.TransferFromOrderID == "" && sdmOrder.TransferFromStoreID == "") {
-                                                let cancelledHandler = await this.sdmCancelledHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                                recheck = cancelledHandler.recheck;
-                                                order = cancelledHandler.order;
-                                            } else {
-                                                let transferOrder = await this.transferOrderHandler(order, sdmOrder)
-                                                recheck = transferOrder.recheck;
-                                                order = transferOrder.order;
-                                            }
-                                            break;
-                                        }
-                                        default: {
-                                            recheck = false
-                                            consolelog(process.cwd(), `UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
-                                            break;
-                                        }
+                                        break;
+                                    }
+                                    default: {
+                                        recheck = false
+                                        consolelog(process.cwd(), `scheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                        break;
                                     }
                                 }
-
-                                if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
-                                    (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
-                                    recheck = false
-                                    order = await this.maxPendingReachedHandler(order);
-                                }
-                                if (payload.timeInterval != 0 && recheck)
-                                    payload.timeInterval = getFrequency({
-                                        status: order.status,
-                                        type: Constant.DATABASE.TYPE.FREQ_TYPE.GET,
-                                        prevTimeInterval: payload.timeInterval,
-                                        statusChanged: statusChanged
-                                    }).nextPingMs
-                                else
-                                    recheck = false
-                            } else
-                                recheck = false
-
-                            consolelog(process.cwd(), `final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}, timeInterval: ${payload.timeInterval}`, "", true)
-                            if (recheck) {
-                                kafkaService.kafkaSync({
-                                    set: this.set,
-                                    sdm: {
-                                        get: true,
-                                        argv: JSON.stringify(payload)
-                                    },
-                                    inQ: true
-                                })
                             }
-                        }
+                            if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
+                                (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
+                                recheck = false
+                                order = await this.maxPendingReachedHandler(order);
+                            }
+                        } else
+                            recheck = false
+
+                        consolelog(process.cwd(), `scheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
                     }
                 }
-            }, payload.timeInterval)
+            }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "getSdmOrder", JSON.stringify(error), false)
@@ -1678,23 +1649,27 @@ export class OrderClass extends BaseEntity {
 
     async transferOrderHandler(order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: parseInt(sdmOrder.TransferFromStoreID), language: order.language })
-            order = await this.updateOneEntityMdb({ _id: order._id }, {
-                store: {
-                    storeId: store.storeId,
-                    countryId: store.countryId,
-                    areaId: store.areaId,
-                    cityId: store.cityId ? store.cityId : 17,
-                    location: store.location,
-                    address_en: store.address_en,
-                    address_ar: store.address_ar,
-                    name_en: store.name_en,
-                    name_ar: store.name_ar
-                },
-                transferFromOrderId: sdmOrder.TransferFromOrderID
-            }, { new: true })
+            let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: parseInt(sdmOrder.StoreID), language: order.language })
+            if (store && store.id) {
+                order = await this.updateOneEntityMdb({ _id: order._id }, {
+                    store: {
+                        storeId: store.storeId,
+                        countryId: store.countryId,
+                        areaId: store.areaId,
+                        cityId: store.cityId ? store.cityId : 17,
+                        location: store.location,
+                        address_en: store.address_en,
+                        address_ar: store.address_ar,
+                        name_en: store.name_en,
+                        name_ar: store.name_ar
+                    },
+                    newOrderId: sdmOrder.OrderID,
+                    transferDone: true
+                }, { new: true })
 
-            return { recheck: true, order: order }
+                return { recheck: true, order: order }
+            } else
+                return { recheck: false, order: order }
         } catch (error) {
             consolelog(process.cwd(), "transferOrderHandler", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -1882,6 +1857,7 @@ export class OrderClass extends BaseEntity {
             return Promise.reject(error)
         }
     }
+
     /**
     * @method AGGREGATE
     * @param {number} page : page number

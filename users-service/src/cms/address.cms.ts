@@ -93,6 +93,7 @@ export class AddressCMSEntity extends BaseCMS {
                 "description": asAddress[0].description,
                 "addressIs": '1',
                 "addressType": asAddress[0].addressType,
+                "addressSubType": asAddress[0].addressSubType,
                 "telephone": userData.fullPhnNo,
                 "bldgName": asAddress[0].bldgName,
                 "flatNum": asAddress[0].flatNum,
