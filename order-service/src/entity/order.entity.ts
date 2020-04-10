@@ -1325,6 +1325,7 @@ export class OrderClass extends BaseEntity {
                                             dataToUpdateOrder['$addToSet'] = {
                                                 transLogs: { $each: transLogs.reverse() }
                                             }
+                                        console.log("dataToUpdateOrderdataToUpdateOrderdataToUpdateOrder", dataToUpdateOrder)
                                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                                         if (order && order._id) {
                                             if (order.cmsOrderRef)
