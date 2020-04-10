@@ -133,7 +133,7 @@ Hands-on Microservices with TypeScript 3
     * username: root
     ​* password: WebApp@2020
     * git push http://52.142.115.201:10002/americana-foods/amf_backend.git prod:prod_final
-    *  
+    *  https://gitlab.americanarest.com/americana-foods/amf_backend
 
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json
