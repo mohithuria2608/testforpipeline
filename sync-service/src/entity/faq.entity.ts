@@ -62,7 +62,7 @@ export class FaqEntity extends BaseEntity {
     async getFaq(payload: IFaqRequest.IFetchFaq) {
         try {
             let getArg: IAerospike.Get = {
-                key: generateFaqId(payload.country, payload.language),
+                key: generateFaqId(payload.language, payload.country),
                 set: this.set,
             }
             let faqData = await Aerospike.get(getArg)
