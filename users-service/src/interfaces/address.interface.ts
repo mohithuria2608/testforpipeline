@@ -36,7 +36,6 @@ declare namespace IAddressRequest {
         description?: string,
         flatNum?: string,
         tag?: string,
-        dlvryInst?: string,
         sdmAddressRef?: number,
         cmsAddressRef?: number,
     }

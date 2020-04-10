@@ -22,15 +22,7 @@
 ----> faq
 ----> more configs
 
-----> kafka schedulers and lapse time
-----> blob storage url to production
-----> otp maxed out time
-----> sms and emails are sent only once
-----> single notification fire event only
-----> service.del and service.tak check on location service on validateCoords
-----> 1. Saving the address >> Flat number is not getting saved *MAJOR
-----> 2. Create 2 users at the application end >> with arabic names >> MAJOR > when i checked that customer details  Sdm User Ref, Sdm Corp Ref is 0 for both the customer
-----> kafka retry mechanism change
+
 
 changes : 
 1. user addition on cms and sdm async via kafka

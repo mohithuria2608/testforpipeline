@@ -3,7 +3,9 @@ declare namespace IOrderCMSRequest {
     interface ICreateOrderCms extends ICartCMSRequest.ICreateCartCms {
         address_id?: number,
         payment_method: string,
-        mongo_order_id: string
+        mongo_order_id: string,
+        contactless_dlvry: number
+        dlvry_instr: string
     }
 
     interface IUpdateOrderCms {

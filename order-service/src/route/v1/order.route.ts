@@ -25,6 +25,9 @@ export default (router: Router) => {
                     lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     couponCode: Joi.string().allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
+
+                    contactlessDlvry: Joi.number().valid(0, 1).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
+                    dlvryInstr: Joi.string().min(30).allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_DELIVERY_INSTRUCTION.message)),
                 }
             }),
             async (ctx) => {

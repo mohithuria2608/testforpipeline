@@ -68,6 +68,8 @@ export class OrderController {
      * @param {string} lat
      * @param {string} lng
      * @param {string} couponCode
+     * @param {number} contactlessDlvry
+     * @param {string} dlvryInstr
      * */
     async postOrder(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IPostOrder, auth: ICommonRequest.AuthorizationObj) {
         try {
@@ -133,7 +135,7 @@ export class OrderController {
             if (totalAmount[0].amount > Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_COD_CART_VALUE && payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.MAX_COD_CART_VALUE_VOILATION)
 
-            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrderMongo(headers, cart, getAddress, store, userData)
+            let order: IOrderRequest.IOrderData = await ENTITY.OrderE.createOrderMongo(headers, payload, cart, getAddress, store, userData)
             consolelog(process.cwd(), "step 6", new Date(), false)
 
             let initiatePayment = await ENTITY.OrderE.initiatePaymentHandler(
@@ -205,7 +207,9 @@ export class OrderController {
                 let cmsOrderReq = {
                     ...cmsReq.req,
                     payment_method: orderPayload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD ? "cashondelivery" : "noonpay",
-                    mongo_order_id: mongoOrder._id.toString()
+                    mongo_order_id: mongoOrder._id.toString(),
+                    contactless_dlvry: mongoOrder.contactlessDlvry,
+                    dlvry_instr: mongoOrder.dlvryInstr
                 }
                 await ENTITY.OrderE.createOrderOnCMS({
                     headers: headers,
