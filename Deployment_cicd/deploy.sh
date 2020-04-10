@@ -25,8 +25,8 @@ template=`echo "$template" | sed "s@{{Home_image}}@$Home_image@g"`
 # apply the yml with the substituted value
 echo "$template" | kubectl apply -f -
 
-  
-kubectl apply -f ./Deployment_cicd/hpa.yaml 
+#Apply HPA  
+#kubectl apply -f ./Deployment_cicd/hpa.yaml 
 
-kubectl apply -f ./Deployment_cicd/ingress.yaml
+#kubectl apply -f ./Deployment_cicd/ingress.yaml
 

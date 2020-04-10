@@ -18,6 +18,7 @@ export class OrderClass extends BaseEntity {
     * */
     async createOrderMongo(
         headers: ICommonRequest.IHeaders,
+        payload: IOrderRequest.IPostOrder,
         cartData: ICartRequest.ICartData,
         address: IUserGrpcRequest.IFetchAddressRes,
         store: IStoreGrpcRequest.IStore,
@@ -84,6 +85,8 @@ export class OrderClass extends BaseEntity {
                 amountValidationPassed: false,
                 newOrderId: 0,
                 transferDone: false,
+                contactlessDlvry: payload.contactlessDlvry,
+                dlvryInstr: payload.dlvryInstr,
                 notification: {
                     confirmed: false,
                     cancel: false,
@@ -364,6 +367,7 @@ export class OrderClass extends BaseEntity {
             let preHook = await this.postCmsOrderPreHandler(payload)
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
             payload.cmsOrderReq['cms_user_id'] = preHook.userData.cmsUserRef
+            
             let cmsOrder = await CMS.OrderCMSE.createOrder(payload.cmsOrderReq)
 
             if (cmsOrder && cmsOrder['order_id']) {

@@ -17,7 +17,11 @@ export class LocationServiceValidator {
                         Constant.DATABASE.LANGUAGE.AR,
                         Constant.DATABASE.LANGUAGE.EN
                     ).default(Constant.DATABASE.LANGUAGE.EN).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LANGUAGE.message)),
-                    serviceType: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    serviceType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY,
+                        Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY,
+                        Constant.DATABASE.TYPE.STORE_SERVICE.DINEIN
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
@@ -35,7 +39,11 @@ export class LocationServiceValidator {
                 let dataToValidate = Joi.object().keys({
                     lat: Joi.number().min(-90).max(90).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     lng: Joi.number().min(-180).max(180).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
-                    serviceType: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    serviceType: Joi.string().valid(
+                        Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY,
+                        Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY,
+                        Constant.DATABASE.TYPE.STORE_SERVICE.DINEIN
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)

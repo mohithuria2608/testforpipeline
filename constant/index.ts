@@ -57,8 +57,10 @@ export enum SET_NAME {
 
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
-    RETRY = "retry",
     SYNC_Q = "sync_q",
+    RETRY1 = "retry1",
+    RETRY2 = "retry2",
+    RETRY3 = "retry3",
 
     SDM_MENU = "sdm_menu",
     CMS_MENU = "cms_menu",
@@ -1529,6 +1531,7 @@ export const CONF = {
 
         MAX_OTP_RETRY: 5,
         OTP_COOLDOWN: 1 * 60,//seconds
+        DEFAULT_RETRY_COUNT: 3
     },
     COUNTRY_SPECIFIC: {
         UAE: {

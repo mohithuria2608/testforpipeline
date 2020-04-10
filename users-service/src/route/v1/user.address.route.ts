@@ -27,7 +27,6 @@ export default (router: Router) => {
                         Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE,
                     ).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),
                     storeId: Joi.number(),
-                    dlvryInst: Joi.string().max(30).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_DELIVERY_INSTRUCTION.type)),
                     lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.type)),
                     bldgName: Joi.string().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_ADDRESS_INFO.type)),

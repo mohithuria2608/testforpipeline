@@ -14,6 +14,7 @@ declare namespace IKafkaRequest {
         q?: string,
         error?: string,
         inQ: boolean,
+        mainTopic?: string
     }
 
     interface IChangeAerospike {

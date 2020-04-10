@@ -40,9 +40,9 @@ gulp.task("compile", function () {
 		.js.pipe(gulp.dest(outputFolder));
 });
 
-gulp.task("copyContent", function () {
-	return gulp.src(["Dockerfile"]).pipe(gulp.dest(outputFolder));
-});
+// gulp.task("copyContent", function () {
+// 	return gulp.src(["Dockerfile"]).pipe(gulp.dest(outputFolder));
+// });
 
 gulp.task("copyProto", function () {
 	return gulp.src(['../proto/**/*']).pipe(gulp.dest("./proto"));
@@ -60,7 +60,7 @@ gulp.task("copyLua", function () {
 	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
 });
 
-gulp.task('default', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
+gulp.task('default', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
 
 
 gulp.task('local', function () {
@@ -106,6 +106,6 @@ gulp.task('qa', function () {
 	});
 });
 
-gulp.task('local', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", 'local'));
-gulp.task('dev', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "dev"));
-gulp.task('qa', gulp.series("clean", "copyConstant", "copyContent", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "qa"));
+gulp.task('local', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile", 'local'));
+gulp.task('dev', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile", "dev"));
+gulp.task('qa', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile", "qa"));

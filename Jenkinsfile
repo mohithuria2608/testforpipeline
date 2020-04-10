@@ -1,31 +1,31 @@
 pipeline {
     environment {
-        registry = "amfuatneacr01.azurecr.io"
-        registryCredential = "acrcredentials"
-        Users_image="amfuatneacr01.azurecr.io/users" + ":Users-Image_${env.BUILD_NUMBER}"
-        Auth_image="amfuatneacr01.azurecr.io/auth" + ":auth-service_${env.BUILD_NUMBER}"
-        Menu_image="amfuatneacr01.azurecr.io/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
-        Order_image="amfuatneacr01.azurecr.io/order"+ ":Order-service_${env.BUILD_NUMBER}"
-        Deeplink_image="amfuatneacr01.azurecr.io/deeplink"+ ":Deeplink-service_${env.BUILD_NUMBER}"
-        Kafka_image="amfuatneacr01.azurecr.io/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}"
-        Sync_image="amfuatneacr01.azurecr.io/sync"+ ":Sync-service_${env.BUILD_NUMBER}"
-        Location_image="amfuatneacr01.azurecr.io/location"+ ":Location-service_${env.BUILD_NUMBER}"
-        Upload_image="amfuatneacr01.azurecr.io/upload"+ ":Upload-service_${env.BUILD_NUMBER}"
-        Promotion_image="amfuatneacr01.azurecr.io/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}"
-        Payment_image="amfuatneacr01.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
-        Notification_image="amfuatneacr01.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
-        Log_image="amfuatneacr01.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
-        Home_image="amfuatneacr01.azurecr.io/home"+ ":Home-service_${env.BUILD_NUMBER}"
+        registry = "amfprodnecontregist.azurecr.io"
+        registryCredential = "ACR_Cred_Prod"
+        Users_image="amfprodnecontregist.azurecr.io/users" + ":Users-Image_${env.BUILD_NUMBER}"
+        Auth_image="amfprodnecontregist.azurecr.io/auth" + ":auth-service_${env.BUILD_NUMBER}"
+        Menu_image="amfprodnecontregist.azurecr.io/menu"+ ":Menu-service_${env.BUILD_NUMBER}"
+        Order_image="amfprodnecontregist.azurecr.io/order"+ ":Order-service_${env.BUILD_NUMBER}"
+        Deeplink_image="amfprodnecontregist.azurecr.io/deeplink"+ ":Deeplink-service_${env.BUILD_NUMBER}"
+        Kafka_image="amfprodnecontregist.azurecr.io/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}"
+        Sync_image="amfprodnecontregist.azurecr.io/sync"+ ":Sync-service_${env.BUILD_NUMBER}"
+        Location_image="amfprodnecontregist.azurecr.io/location"+ ":Location-service_${env.BUILD_NUMBER}"
+        Upload_image="amfprodnecontregist.azurecr.io/upload"+ ":Upload-service_${env.BUILD_NUMBER}"
+        Promotion_image="amfprodnecontregist.azurecr.io/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}"
+        Payment_image="amfprodnecontregist.azurecr.io/payment"+ ":Payment-service_${env.BUILD_NUMBER}"
+        Notification_image="amfprodnecontregist.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
+        Log_image="amfprodnecontregist.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
+        Home_image="amfprodnecontregist.azurecr.io/home"+ ":Home-service_${env.BUILD_NUMBER}"
     }
     agent any
 
-    stages{
-    	stage('Email'){
+    stages{/*
+    	stage('EmailProd'){
                 steps{
                     emailext body: "<body><p><font size='+2'><b>Build Status: </b>Started <br> <b>Build Job: </b> ${env.JOB_NAME} <br><b> Build Number: </b> ${env.BUILD_NUMBER} </font> <br><br> <font size='+1'>More info at:  ${env.BUILD_URL}</font></p></body>", subject: "Americana UAT : Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com'
             
                 }
-        }
+        }*/
         stage('Clone repository') {
             steps{
                 checkout scm
@@ -47,7 +47,6 @@ pipeline {
         stage('Build image') {
             steps{
                 script{
-                    sh "whoami"
                     AuthImage=docker.build(registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/auth-service/Dockerfile  .")
                     UsersImage=docker.build(registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/users-service/Dockerfile .")
                     MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")
@@ -69,7 +68,7 @@ pipeline {
         stage('Push Image to Azure Container Registry') {
             steps{
                 script {
-                    docker.withRegistry("https://amfuatneacr01.azurecr.io", registryCredential ) {
+                    docker.withRegistry("https://amfprodnecontregist.azurecr.io", registryCredential ) {
                         AuthImage.push()
                         UsersImage.push()
                         MenuImage.push()
@@ -98,11 +97,11 @@ pipeline {
             }
         }
     }
-    
+    /*
     post{
         always{
             emailext attachLog: true,
             body: "<body><p><font size='+2'><b>Build status: </b>${currentBuild.currentResult} <br><b>Jenkins Job: </b>${env.JOB_NAME}<br><b>Build Number: </b>${env.BUILD_NUMBER}</font><br>View More info at:  <b> ${env.BUILD_URL}</b></font></p></body>",subject: "Americana UAT : Jenkins Build Job : ${env.JOB_NAME}", to: 'suruchi.singh@appinventiv.com,ankit.kumar@appinventiv.com'
         }
-    }
+    }*/
 }

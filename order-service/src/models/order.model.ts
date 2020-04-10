@@ -29,7 +29,9 @@ export interface Iorder extends Document {
     validationRemarks: string,
     amountValidationPassed: boolean,
     newOrderId: number,
-    transferDone: boolean
+    transferDone: boolean,
+    contactlessDlvry: number,
+    dlvryInstr: string,
     payment: {
         paymentMethodId: number,
         amount: number,
@@ -233,6 +235,8 @@ const orderSchema = new Schema({
     amountValidationPassed: { type: Boolean, default: false, required: true },
     newOrderId: { type: Number, default: 0, required: true },
     transferDone: { type: Boolean },
+    contactlessDlvry: { type: Number, default: 0, required: true },
+    dlvryInstr: { type: String },
     notification: {
         confirmed: { type: Boolean, default: false, required: true },
         cancel: { type: Boolean, default: false, required: true },

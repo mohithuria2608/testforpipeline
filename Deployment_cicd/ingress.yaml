@@ -1,3 +1,4 @@
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -75,4 +76,4 @@ spec:
             servicePort: 4013
           path: /home-service/*
     tls:
-    - secretName: mobapi-secret
+    - secretName: americanarest.tls.secret

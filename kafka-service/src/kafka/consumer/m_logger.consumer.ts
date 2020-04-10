@@ -1,9 +1,9 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { logService } from "../../grpc/client"
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.M_LOGGER
+const topic =topicNameCreator(config.get("env"),Constant.KAFKA_TOPIC.M_LOGGER)
 
 class MLoggerConsumer extends BaseConsumer {
 
@@ -18,7 +18,7 @@ class MLoggerConsumer extends BaseConsumer {
             })
     }
 
-    private async logMessages(message) {
+    async logMessages(message) {
         try {
             let res = await logService.sync(message)
             return res

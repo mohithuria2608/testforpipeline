@@ -40,3 +40,12 @@ log
 
 #constant directories in each service
 *-service/src/constant
+
+#Docker files 
+*-service/Dockerfile
+
+#Jenkinsfile
+Jenkinsfile
+
+#Deployment_cicd
+Deployment_cicd

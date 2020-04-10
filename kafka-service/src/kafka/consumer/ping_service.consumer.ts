@@ -1,10 +1,10 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { userService, orderService, paymentService, promotionService, menuService, homeService, locationService, deeplinkService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.PING_SERVICE
+const topic = topicNameCreator(config.get("env"),Constant.KAFKA_TOPIC.PING_SERVICE)
 
 class PingServiceConsumer extends BaseConsumer {
 
@@ -20,61 +20,65 @@ class PingServiceConsumer extends BaseConsumer {
             })
     }
 
-    private async pingService(message: IKafkaRequest.IKafkaBody) {
+    async pingService(message: IKafkaRequest.IKafkaBody) {
         try {
-            let data: ICommonRequest.IPingService = JSON.parse(message.as.argv)
-            if (data.service && data.service.length > 0) {
-                data.service.map(service => {
-                    switch (service) {
-                        case Constant.MICROSERVICE.PAYMENT: {
-                            paymentService.sync(message)
-                            break;
+            if (message.count > 0) {
+                let data: ICommonRequest.IPingService = JSON.parse(message.as.argv)
+                if (data.service && data.service.length > 0) {
+                    data.service.map(service => {
+                        switch (service) {
+                            case Constant.MICROSERVICE.PAYMENT: {
+                                paymentService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.ORDER: {
+                                orderService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.USER: {
+                                userService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.DEEPLINK: {
+                                deeplinkService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.HOME: {
+                                homeService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.LOCATION: {
+                                locationService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.MENU: {
+                                menuService.sync(message)
+                                break;
+                            }
+                            case Constant.MICROSERVICE.PROMOTION: {
+                                promotionService.sync(message)
+                                break;
+                            }
                         }
-                        case Constant.MICROSERVICE.ORDER: {
-                            orderService.sync(message)
-                            break;
-                        }
-                        case Constant.MICROSERVICE.USER: {
-                            userService.sync(message)
-                            break;
-                        }
-                        case Constant.MICROSERVICE.DEEPLINK: {
-                            deeplinkService.sync(message)
-                            break;
-                        }
-                        case Constant.MICROSERVICE.HOME: {
-                            homeService.sync(message)
-                            break;
-                        }
-                        case Constant.MICROSERVICE.LOCATION: {
-                            locationService.sync(message)
-                            break;
-                        }
-                        case Constant.MICROSERVICE.MENU: {
-                            menuService.sync(message)
-                            break;
-                        }
-                        case Constant.MICROSERVICE.PROMOTION: {
-                            promotionService.sync(message)
-                            break;
-                        }
-                    }
-                })
+                    })
+                }
             }
             return {}
         } catch (error) {
             consolelog(process.cwd(), `pingService`, JSON.stringify(error), false);
-            if (message.count > 0) {
-                message.count = message.count - 1
-                if (message.count == 0) {
+            switch (message.count) {
+                case 1:
+                case 2:
+                case 3: {
+                    message.count = message.count + 1
+                    kafkaController.kafkaSync(message)
+                    break;
+                }
+                default: {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
+                    break;
                 }
-                else
-                    kafkaController.kafkaSync(message)
-            } else {
-                message.error = JSON.stringify(error)
-                kafkaController.produceToFailureTopic(message)
             }
             return Promise.reject(error)
         }

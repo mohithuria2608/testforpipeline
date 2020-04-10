@@ -11,7 +11,7 @@ export default (router: Router) => {
         .post('/',
             ...getMiddleware([
                 // Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                // Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
                 // headers: JOI_CMS_HEADERS,

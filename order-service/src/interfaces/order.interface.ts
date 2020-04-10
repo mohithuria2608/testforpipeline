@@ -29,7 +29,9 @@ declare namespace IOrderRequest {
         validationRemarks: string,
         amountValidationPassed: boolean,
         newOrderId: number,
-        transferDone: boolean
+        transferDone: boolean,
+        contactlessDlvry: number,
+        dlvryInstr: string,
         payment: {
             paymentMethodId: number,
             amount: number,
@@ -92,7 +94,9 @@ declare namespace IOrderRequest {
         cartId: string,
         curMenuId: number,
         menuUpdatedAt: number,
-        couponCode?: string
+        couponCode?: string,
+        contactlessDlvry?: number
+        dlvryInstr?: string
     }
 
     interface IPostOrderOnCms extends IPostOrderPreHookPayload {

@@ -1,9 +1,10 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { kafkaController } from '../../controllers'
-const topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.FAIL_Q
+
+const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.FAIL_Q)
 
 class FailConsumer extends BaseConsumer {
 
@@ -19,7 +20,7 @@ class FailConsumer extends BaseConsumer {
             })
     }
 
-    private async handleFailReq(message) {
+    async handleFailReq(message) {
         try {
             consolelog(process.cwd(), "Data in fail queue", message, true)
             let data: ICommonRequest.IActivityLogger = {

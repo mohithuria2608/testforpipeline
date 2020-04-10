@@ -1,11 +1,11 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { syncService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_CONFIG
+const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.AS_CONFIG)
 class AsConfigConsumer extends BaseConsumer {
 
     constructor() {
@@ -21,27 +21,29 @@ class AsConfigConsumer extends BaseConsumer {
             })
     }
 
-    private async syncConfig(message: IKafkaRequest.IKafkaBody) {
+    async syncConfig(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count >=0) {
+            if (message.count > 0) {
                 let res = await syncService.sync(message)
                 return res
             }
             else
                 return {}
         } catch (error) {
-            consolelog(process.cwd(), "syncConfig", JSON.stringify(error), false);
-            if (message.count > 0) {
-                message.count = message.count - 1
-                if (message.count == 0){
+            consolelog(process.cwd(), "syncConfig in error ", message.count, false);
+            switch (message.count) {
+                case 1:
+                case 2:
+                case 3: {
+                    message.count = message.count + 1
+                    kafkaController.kafkaSync(message)
+                    break;
+                }
+                default: {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
+                    break;
                 }
-                else
-                    kafkaController.kafkaSync(message)
-            } else{
-                message.error = JSON.stringify(error)
-                kafkaController.produceToFailureTopic(message)
             }
             return {}
         }

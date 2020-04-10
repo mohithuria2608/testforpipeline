@@ -1,11 +1,11 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { userService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
-const topic =config.get("env") + "_" + Constant.KAFKA_TOPIC.SDM_USER
+const topic = topicNameCreator(config.get("env") ,Constant.KAFKA_TOPIC.SDM_USER)
 class SdmUserConsumer extends BaseConsumer {
 
     constructor() {
@@ -21,9 +21,9 @@ class SdmUserConsumer extends BaseConsumer {
             })
     }
 
-    private async syncUser(message: IKafkaRequest.IKafkaBody) {
+    async syncUser(message: IKafkaRequest.IKafkaBody) {
         try {
-            if (message.count >=0) {
+            if (message.count > 0) {
                 let res = await userService.sync(message)
                 return res
             }
@@ -31,17 +31,19 @@ class SdmUserConsumer extends BaseConsumer {
                 return {}
         } catch (error) {
             consolelog(process.cwd(), "syncUser", JSON.stringify(error), false);
-            if (message.count > 0) {
-                message.count = message.count - 1
-                if (message.count == 0){
+            switch (message.count) {
+                case 1:
+                case 2:
+                case 3: {
+                    message.count = message.count + 1
+                    kafkaController.kafkaSync(message)
+                    break;
+                }
+                default: {
                     message.error = JSON.stringify(error)
                     kafkaController.produceToFailureTopic(message)
+                    break;
                 }
-                else
-                    kafkaController.kafkaSync(message)
-            } else{
-                message.error = JSON.stringify(error)
-                kafkaController.produceToFailureTopic(message)
             }
             return {}
         }

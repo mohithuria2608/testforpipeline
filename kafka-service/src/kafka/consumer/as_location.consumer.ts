@@ -1,14 +1,16 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog } from "../../utils"
+import { consolelog, topicNameCreator } from "../../utils"
 import { locationService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
+
+const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.AS_LOCATION)
 
 class ASLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION,config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_LOCATION);
+        super(topic, topic);
     }
 
     handleMessage() {
@@ -20,52 +22,59 @@ class ASLocationConsumer extends BaseConsumer {
                     case "location_sync": this.syncLocationFromCMS(message); break;
                     case "store_status_sync": this.syncStoreStatus(message); break;
                 }
-                this.syncLocationFromCMS(message);
                 return null;
             })
     }
 
-    private async syncLocationFromCMS(message: IKafkaRequest.IKafkaBody) {
+    async syncLocationFromCMS(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await locationService.syncLocationFromCMS(message)
-            return res
+            if (message.count > 0) {
+                let res = await locationService.syncLocationFromCMS(message)
+                return res
+            } else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false);
-            if (message.count > 0) {
-                message.count = message.count - 1
-                kafkaController.kafkaSync(message)
-            }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
-            }
-            else {
-                message.error = JSON.stringify(error)
-                kafkaController.produceToFailureTopic(message)
+            switch (message.count) {
+                case 1:
+                case 2:
+                case 3: {
+                    message.count = message.count + 1
+                    kafkaController.kafkaSync(message)
+                    break;
+                }
+                default: {
+                    message.error = JSON.stringify(error)
+                    kafkaController.produceToFailureTopic(message)
+                    break;
+                }
             }
             return {}
         }
     }
 
-    private async syncStoreStatus(message: IKafkaRequest.IKafkaBody) {
+    async syncStoreStatus(message: IKafkaRequest.IKafkaBody) {
         try {
-            let res = await locationService.syncStoreStatus(message)
-            return res
+            if (message.count > 0) {
+                let res = await locationService.syncStoreStatus(message)
+                return res
+            } else
+                return {}
         } catch (error) {
             consolelog(process.cwd(), "syncStoreStatusToAS", JSON.stringify(error), false);
-            if (message.count > 0) {
-                message.count = message.count - 1
-                kafkaController.kafkaSync(message)
-            }
-            else if (message.count == -1) {
-                /**
-                 * @description : ignore
-                 */
-            }
-            else {
-                message.error = JSON.stringify(error)
-                kafkaController.produceToFailureTopic(message)
+            switch (message.count) {
+                case 1:
+                case 2:
+                case 3: {
+                    message.count = message.count + 1
+                    kafkaController.kafkaSync(message)
+                    break;
+                }
+                default: {
+                    message.error = JSON.stringify(error)
+                    kafkaController.produceToFailureTopic(message)
+                    break;
+                }
             }
             return {}
         }

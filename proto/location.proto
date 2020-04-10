@@ -12,6 +12,8 @@ service LocationService {
 
 message IFetchStoreReq {
     required int32 storeId = 1;
+    required string language = 2;
+    required string serviceType = 3;
 }
 
 message IUploadPickupReq { }
@@ -61,6 +63,7 @@ message IKafkaReq {
     optional string q = 7;
     optional string error = 8;
     required bool inQ = 9;
+    optional string mainTopic = 10;
 }
 
 message IValidateCoordinateReq {
