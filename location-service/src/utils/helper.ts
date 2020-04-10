@@ -401,7 +401,7 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
         return statsObj
 }
 
-export let checkOnlineStore = function (start, end, nextday?) {
+export let checkOnlineStore = function (start, end, nextday) {
     let curTime = new Date().getTime()
     let startTime = new Date(new Date(new Date().setUTCHours(new Date(start).getUTCHours())).setUTCMinutes(new Date(start).getUTCMinutes())).setUTCSeconds(new Date(start).getUTCSeconds())
     let endTime = (nextday == 0) ?

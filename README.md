@@ -120,6 +120,7 @@ Hands-on Microservices with TypeScript 3
     
 * https://prod-api.americanarest.com/
 * public ip : https://51.104.147.206/
+* aerospike.aerospike.svc.cluster.local:3000  :: old aerospike
 * aerospike new on UAT 
     * ip: 40.127.244.213:10008
     * ssh :

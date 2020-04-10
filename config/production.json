@@ -209,7 +209,7 @@
         "url": "10.4.1.5:9092,10.4.1.6:9092"
     },
     "aerospike": {
-        "hosts": "aerospike.aerospike.svc.cluster.local:3000",
+        "hosts": "40.127.244.213:10008",
         "username": "",
         "password": "",
         "config": {
