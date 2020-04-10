@@ -198,7 +198,7 @@ export class OrderClass extends BaseEntity {
         let validationRemarks = ""
         try {
             let preHook = await this.postSdmOrderPreHandler(payload)
-            if (order.sdmUserRef == 0) {
+            if (order.sdmUserRef == 0 || order.address.sdmAddressRef == 0) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, { sdmUserRef: preHook.userData.sdmUserRef, "address.sdmAddressRef": preHook.address.sdmAddressRef }, { new: true })
             }
             let Comps
@@ -1313,6 +1313,7 @@ export class OrderClass extends BaseEntity {
                                             }
                                         }
                                     }
+                                    console.log("captureStatus", captureStatus)
                                     if (captureStatus) {
                                         let dataToUpdateOrder = {
                                             status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
