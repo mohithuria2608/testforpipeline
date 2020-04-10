@@ -281,5 +281,13 @@ declare namespace ISyncGrpcRequest {
         language: string
     }
 
-    interface IFaq { }
+    interface IFaq {
+        category: string,
+        questionair: [
+            {
+                ans: string,
+                ques: string
+            }
+        ]
+    }
 }

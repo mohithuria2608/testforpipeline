@@ -66,7 +66,7 @@ export class SyncService {
             }
         })
     }
-    async fetchFaq(payload: ISyncGrpcRequest.IFetchFaq): Promise<ISyncGrpcRequest.IFaq[]> {
+    async fetchFaq(payload: ISyncGrpcRequest.IFetchFaq): Promise<ISyncGrpcRequest.IFaq> {
         return new Promise(async (resolve, reject) => {
             try {
                 await syncServiceValidator.fetchFaqValidator(payload)
