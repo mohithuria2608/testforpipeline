@@ -12,6 +12,8 @@ service LocationService {
 
 message IFetchStoreReq {
     required int32 storeId = 1;
+    required string language = 2;
+    required string serviceType = 3;
 }
 
 message IUploadPickupReq { }
