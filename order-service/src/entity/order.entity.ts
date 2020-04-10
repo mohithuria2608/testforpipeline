@@ -198,9 +198,8 @@ export class OrderClass extends BaseEntity {
         let validationRemarks = ""
         try {
             let preHook = await this.postSdmOrderPreHandler(payload)
-            order.address.sdmAddressRef = preHook.address.sdmAddressRef
             if (order.sdmUserRef == 0) {
-                order = await this.updateOneEntityMdb({ _id: order._id }, { sdmUserRef: preHook.userData.sdmUserRef, "order.address.sdmAddressRef": preHook.address.sdmAddressRef }, { new: true })
+                order = await this.updateOneEntityMdb({ _id: order._id }, { sdmUserRef: preHook.userData.sdmUserRef, "address.sdmAddressRef": preHook.address.sdmAddressRef }, { new: true })
             }
             let Comps
             if (order.promo &&
