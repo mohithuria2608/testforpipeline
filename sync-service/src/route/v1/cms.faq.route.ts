@@ -8,6 +8,10 @@ import { cmsFaqController } from '../../controllers';
 export default (router: Router) => {
     router
         .post('/',
+            ...getMiddleware([
+                // Constant.MIDDLEWARE.AUTH,
+                Constant.MIDDLEWARE.ACTIVITY_LOG
+            ]),
             validate({
                 // headers: JOI_CMS_HEADERS,
                 body: {
