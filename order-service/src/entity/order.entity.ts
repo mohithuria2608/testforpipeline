@@ -367,7 +367,7 @@ export class OrderClass extends BaseEntity {
             let preHook = await this.postCmsOrderPreHandler(payload)
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
             payload.cmsOrderReq['cms_user_id'] = preHook.userData.cmsUserRef
-            
+
             let cmsOrder = await CMS.OrderCMSE.createOrder(payload.cmsOrderReq)
 
             if (cmsOrder && cmsOrder['order_id']) {
@@ -450,17 +450,15 @@ export class OrderClass extends BaseEntity {
                                 product.bundleProductOptions.forEach(bpo => {
                                     if (bpo && bpo.productLinks.length > 0) {
                                         bpo.productLinks.forEach(pl => {
-                                            let plDefaultSdm = false
-                                            if (pl.selected == 1) {
-                                                if (pl.subOptions && pl.subOptions.length > 0) {
-                                                    pl.subOptions.forEach(dsplso => {
-                                                        if (dsplso.is_sdm_default == 1)
-                                                            plDefaultSdm = true
-                                                    })
-                                                    let checkSendNone = false
+                                            if (pl.subOptions && pl.subOptions.length > 0) {
+                                                let plDefaultSdm = false
+                                                pl.subOptions.forEach(dsplso => {
+                                                    if (dsplso.is_sdm_default == 1)
+                                                        plDefaultSdm = true
+                                                })
+                                                if (pl.selected == 1) {
                                                     pl.subOptions.forEach(so => {
                                                         if (so.selected == 1) {
-                                                            checkSendNone = true
                                                             if (so.title == "None") { }
                                                             else if (so.title == "Regular") {
                                                                 if (so.sdmId) {
@@ -523,17 +521,16 @@ export class OrderClass extends BaseEntity {
                                                             }
                                                         }
                                                     })
-                                                    if (plDefaultSdm && !checkSendNone) {
-                                                        obj.Entries.CEntry.push({
-                                                            ID: 0,
-                                                            ItemID: pl.subOptions[0].sdmId,
-                                                            ModCode: "NONE",
-                                                            ModgroupID: pl.subOptions[0].modGroupId ? pl.subOptions[0].modGroupId : -1,
-                                                            Name: pl.name,
-                                                            OrdrMode: "OM_SAVED",
-                                                            Weight: 0,
-                                                        })
-                                                    }
+                                                } else {
+                                                    obj.Entries.CEntry.push({
+                                                        ID: 0,
+                                                        ItemID: pl.subOptions[0].sdmId,
+                                                        ModCode: "NONE",
+                                                        ModgroupID: pl.subOptions[0].modGroupId ? pl.subOptions[0].modGroupId : -1,
+                                                        Name: pl.name,
+                                                        OrdrMode: "OM_SAVED",
+                                                        Weight: 0,
+                                                    })
                                                 }
                                             }
                                         })
@@ -684,23 +681,65 @@ export class OrderClass extends BaseEntity {
                                                                                  */
                                                                                 if (plbpo.productLinks && plbpo.productLinks.length > 0) {
                                                                                     plbpo.productLinks.forEach(dspl => {
-                                                                                        let plDefaultSdm = false
                                                                                         if (dspl.subOptions && dspl.subOptions.length > 0) {
+                                                                                            let plDefaultSdm = false
                                                                                             dspl.subOptions.forEach(dsplso => {
                                                                                                 if (dsplso.is_sdm_default == 1)
                                                                                                     plDefaultSdm = true
                                                                                             })
-                                                                                            console.log("plDefaultSdm", plDefaultSdm)
-                                                                                            let checkSendNone = false
-                                                                                            dspl.subOptions.forEach(dsplso => {
-                                                                                                if (dsplso.sdmId && dsplso.selected == 1) {
-                                                                                                    checkSendNone = true
-                                                                                                    if (dsplso.title == "None") {
-                                                                                                    }
-                                                                                                    else if (dsplso.title == "Regular") {
-                                                                                                        if (dsplso.sdmId) {
-                                                                                                            if (dsplso.is_sdm_default != undefined) {
-                                                                                                                if (!plDefaultSdm)
+                                                                                            if (dspl.selected) {
+                                                                                                console.log("plDefaultSdm", plDefaultSdm)
+                                                                                                dspl.subOptions.forEach(dsplso => {
+                                                                                                    if (dsplso.sdmId && dsplso.selected == 1) {
+                                                                                                        if (dsplso.title == "None") {
+                                                                                                        }
+                                                                                                        else if (dsplso.title == "Regular") {
+                                                                                                            if (dsplso.sdmId) {
+                                                                                                                if (dsplso.is_sdm_default != undefined) {
+                                                                                                                    if (!plDefaultSdm)
+                                                                                                                        obj.Entries.CEntry.push({
+                                                                                                                            ID: 0,
+                                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                                            ModCode: "WITH",
+                                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                                            Name: dspl.name,
+                                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                                            Weight: 0,
+                                                                                                                        })
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } else if (dsplso.title == "Extra") {
+                                                                                                            if (dsplso.sdmId) {
+                                                                                                                if (dsplso.is_sdm_default != undefined) {
+                                                                                                                    if (plDefaultSdm)
+                                                                                                                        obj.Entries.CEntry.push({
+                                                                                                                            ID: 0,
+                                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                                            ModCode: "WITH",
+                                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                                            Name: dspl.name,
+                                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                                            Weight: 0,
+                                                                                                                        })
+                                                                                                                    else
+                                                                                                                        obj.Entries.CEntry.push({
+                                                                                                                            ID: 0,
+                                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                                            ModCode: "WITH",
+                                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                                            Name: dspl.name,
+                                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                                            Weight: 0,
+                                                                                                                        }, {
+                                                                                                                            ID: 0,
+                                                                                                                            ItemID: dsplso.sdmId,
+                                                                                                                            ModCode: "WITH",
+                                                                                                                            ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
+                                                                                                                            Name: dspl.name,
+                                                                                                                            OrdrMode: "OM_SAVED",
+                                                                                                                            Weight: 0,
+                                                                                                                        })
+                                                                                                                } else {
                                                                                                                     obj.Entries.CEntry.push({
                                                                                                                         ID: 0,
                                                                                                                         ItemID: dsplso.sdmId,
@@ -710,64 +749,22 @@ export class OrderClass extends BaseEntity {
                                                                                                                         OrdrMode: "OM_SAVED",
                                                                                                                         Weight: 0,
                                                                                                                     })
+                                                                                                                }
                                                                                                             }
                                                                                                         }
-                                                                                                    } else if (dsplso.title == "Extra") {
-                                                                                                        if (dsplso.sdmId) {
-                                                                                                            if (dsplso.is_sdm_default != undefined) {
-                                                                                                                if (plDefaultSdm)
-                                                                                                                    obj.Entries.CEntry.push({
-                                                                                                                        ID: 0,
-                                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                                        ModCode: "WITH",
-                                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                        Name: dspl.name,
-                                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                                        Weight: 0,
-                                                                                                                    })
-                                                                                                                else
-                                                                                                                    obj.Entries.CEntry.push({
-                                                                                                                        ID: 0,
-                                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                                        ModCode: "WITH",
-                                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                        Name: dspl.name,
-                                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                                        Weight: 0,
-                                                                                                                    }, {
-                                                                                                                        ID: 0,
-                                                                                                                        ItemID: dsplso.sdmId,
-                                                                                                                        ModCode: "WITH",
-                                                                                                                        ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                        Name: dspl.name,
-                                                                                                                        OrdrMode: "OM_SAVED",
-                                                                                                                        Weight: 0,
-                                                                                                                    })
-                                                                                                            } else {
-                                                                                                                obj.Entries.CEntry.push({
-                                                                                                                    ID: 0,
-                                                                                                                    ItemID: dsplso.sdmId,
-                                                                                                                    ModCode: "WITH",
-                                                                                                                    ModgroupID: dspl.modGroupId ? dspl.modGroupId : -1,
-                                                                                                                    Name: dspl.name,
-                                                                                                                    OrdrMode: "OM_SAVED",
-                                                                                                                    Weight: 0,
-                                                                                                                })
-                                                                                                            }
-                                                                                                        }
                                                                                                     }
-                                                                                                }
-                                                                                            })
-                                                                                            if (plDefaultSdm && !checkSendNone) {
-                                                                                                obj.Entries.CEntry.push({
-                                                                                                    ID: 0,
-                                                                                                    ItemID: dspl.subOptions[0].sdmId,
-                                                                                                    ModCode: "NONE",
-                                                                                                    ModgroupID: dspl.subOptions[0].modGroupId ? dspl.subOptions[0].modGroupId : -1,
-                                                                                                    Name: dspl.name,
-                                                                                                    OrdrMode: "OM_SAVED",
-                                                                                                    Weight: 0,
                                                                                                 })
+                                                                                            } else {
+                                                                                                if (plDefaultSdm)
+                                                                                                    obj.Entries.CEntry.push({
+                                                                                                        ID: 0,
+                                                                                                        ItemID: dspl.subOptions[0].sdmId,
+                                                                                                        ModCode: "NONE",
+                                                                                                        ModgroupID: dspl.subOptions[0].modGroupId ? dspl.subOptions[0].modGroupId : -1,
+                                                                                                        Name: dspl.name,
+                                                                                                        OrdrMode: "OM_SAVED",
+                                                                                                        Weight: 0,
+                                                                                                    })
                                                                                             }
                                                                                         }
                                                                                     })
@@ -815,89 +812,89 @@ export class OrderClass extends BaseEntity {
                                                         }
                                                         if (bpo.productLinks && bpo.productLinks.length > 0) {
                                                             bpo.productLinks.forEach(bpopl => {
-                                                                let plDefaultSdm = false
                                                                 if (bpopl.subOptions && bpopl.subOptions.length > 0) {
+                                                                    let plDefaultSdm = false
                                                                     bpopl.subOptions.forEach(dsplso => {
                                                                         if (dsplso.is_sdm_default == 1)
                                                                             plDefaultSdm = true
                                                                     })
-                                                                    let checkSendNone = false
-                                                                    bpopl.subOptions.forEach(bpoplso => {
-                                                                        if (bpoplso.sdmId && bpoplso.selected == 1) {
-                                                                            checkSendNone = true
-                                                                            if (bpoplso.title == "None") { }
-                                                                            else if (bpoplso.title == "Regular") {
-                                                                                if (bpoplso.sdmId) {
-                                                                                    if (bpoplso.is_sdm_default != undefined) {
-                                                                                        if (!plDefaultSdm)
-                                                                                            lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                                ID: 0,
-                                                                                                ItemID: bpoplso.sdmId,
-                                                                                                ModCode: "WITH",
-                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                                Name: bpopl.name,
-                                                                                                OrdrMode: "OM_SAVED",
-                                                                                                Weight: 0,
-                                                                                            })
+                                                                    if (bpopl.selected) {
+                                                                        bpopl.subOptions.forEach(bpoplso => {
+                                                                            if (bpoplso.sdmId && bpoplso.selected == 1) {
+                                                                                if (bpoplso.title == "None") { }
+                                                                                else if (bpoplso.title == "Regular") {
+                                                                                    if (bpoplso.sdmId) {
+                                                                                        if (bpoplso.is_sdm_default != undefined) {
+                                                                                            if (!plDefaultSdm)
+                                                                                                lastProductAddedInCentry.Entries.CEntry.push({
+                                                                                                    ID: 0,
+                                                                                                    ItemID: bpoplso.sdmId,
+                                                                                                    ModCode: "WITH",
+                                                                                                    ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                                                                                    Name: bpopl.name,
+                                                                                                    OrdrMode: "OM_SAVED",
+                                                                                                    Weight: 0,
+                                                                                                })
+                                                                                        }
                                                                                     }
-                                                                                }
-                                                                            } else if (bpoplso.title == "Extra") {
-                                                                                if (bpoplso.sdmId) {
-                                                                                    if (bpoplso.is_sdm_default != undefined) {
-                                                                                        if (plDefaultSdm)
-                                                                                            lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                                ID: 0,
-                                                                                                ItemID: bpoplso.sdmId,
-                                                                                                ModCode: "WITH",
-                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                                Name: bpopl.name,
-                                                                                                OrdrMode: "OM_SAVED",
-                                                                                                Weight: 0,
-                                                                                            })
-                                                                                        else
-                                                                                            lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                                ID: 0,
-                                                                                                ItemID: bpoplso.sdmId,
-                                                                                                ModCode: "WITH",
-                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                                Name: bpopl.name,
-                                                                                                OrdrMode: "OM_SAVED",
-                                                                                                Weight: 0,
-                                                                                            }, {
-                                                                                                ID: 0,
-                                                                                                ItemID: bpoplso.sdmId,
-                                                                                                ModCode: "WITH",
-                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                                Name: bpopl.name,
-                                                                                                OrdrMode: "OM_SAVED",
-                                                                                                Weight: 0,
-                                                                                            })
+                                                                                } else if (bpoplso.title == "Extra") {
+                                                                                    if (bpoplso.sdmId) {
+                                                                                        if (bpoplso.is_sdm_default != undefined) {
+                                                                                            if (plDefaultSdm)
+                                                                                                lastProductAddedInCentry.Entries.CEntry.push({
+                                                                                                    ID: 0,
+                                                                                                    ItemID: bpoplso.sdmId,
+                                                                                                    ModCode: "WITH",
+                                                                                                    ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                                                                                    Name: bpopl.name,
+                                                                                                    OrdrMode: "OM_SAVED",
+                                                                                                    Weight: 0,
+                                                                                                })
+                                                                                            else
+                                                                                                lastProductAddedInCentry.Entries.CEntry.push({
+                                                                                                    ID: 0,
+                                                                                                    ItemID: bpoplso.sdmId,
+                                                                                                    ModCode: "WITH",
+                                                                                                    ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                                                                                    Name: bpopl.name,
+                                                                                                    OrdrMode: "OM_SAVED",
+                                                                                                    Weight: 0,
+                                                                                                }, {
+                                                                                                    ID: 0,
+                                                                                                    ItemID: bpoplso.sdmId,
+                                                                                                    ModCode: "WITH",
+                                                                                                    ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                                                                                    Name: bpopl.name,
+                                                                                                    OrdrMode: "OM_SAVED",
+                                                                                                    Weight: 0,
+                                                                                                })
 
-                                                                                    } else {
-                                                                                        lastProductAddedInCentry.Entries.CEntry.push({
-                                                                                            ID: 0,
-                                                                                            ItemID: bpoplso.sdmId,
-                                                                                            ModCode: "WITH",
-                                                                                            ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
-                                                                                            Name: bpopl.name,
-                                                                                            OrdrMode: "OM_SAVED",
-                                                                                            Weight: 0,
-                                                                                        })
+                                                                                        } else {
+                                                                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                                                                                ID: 0,
+                                                                                                ItemID: bpoplso.sdmId,
+                                                                                                ModCode: "WITH",
+                                                                                                ModgroupID: bpopl.modGroupId ? bpopl.modGroupId : -1,
+                                                                                                Name: bpopl.name,
+                                                                                                OrdrMode: "OM_SAVED",
+                                                                                                Weight: 0,
+                                                                                            })
+                                                                                        }
                                                                                     }
                                                                                 }
                                                                             }
-                                                                        }
-                                                                    })
-                                                                    if (plDefaultSdm && !checkSendNone) {
-                                                                        lastProductAddedInCentry.Entries.CEntry.push({
-                                                                            ID: 0,
-                                                                            ItemID: bpopl.subOptions[0].sdmId,
-                                                                            ModCode: "NONE",
-                                                                            ModgroupID: bpopl.subOptions[0].modGroupId ? bpopl.subOptions[0].modGroupId : -1,
-                                                                            Name: bpopl.name,
-                                                                            OrdrMode: "OM_SAVED",
-                                                                            Weight: 0,
                                                                         })
+                                                                    } else {
+                                                                        if (plDefaultSdm)
+                                                                            lastProductAddedInCentry.Entries.CEntry.push({
+                                                                                ID: 0,
+                                                                                ItemID: bpopl.subOptions[0].sdmId,
+                                                                                ModCode: "NONE",
+                                                                                ModgroupID: bpopl.subOptions[0].modGroupId ? bpopl.subOptions[0].modGroupId : -1,
+                                                                                Name: bpopl.name,
+                                                                                OrdrMode: "OM_SAVED",
+                                                                                Weight: 0,
+                                                                            })
                                                                     }
                                                                 }
                                                             })
