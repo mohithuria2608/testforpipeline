@@ -2,6 +2,7 @@ import * as Router from 'koa-router';
 import * as Constant from '../../constant';
 import { sendSuccess } from '../../utils'
 import { createReadStream } from 'fs';
+import { syncService } from '../../grpc/client'
 
 export default (router: Router) => {
     router
