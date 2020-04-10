@@ -522,15 +522,16 @@ export class OrderClass extends BaseEntity {
                                                         }
                                                     })
                                                 } else {
-                                                    obj.Entries.CEntry.push({
-                                                        ID: 0,
-                                                        ItemID: pl.subOptions[0].sdmId,
-                                                        ModCode: "NONE",
-                                                        ModgroupID: pl.subOptions[0].modGroupId ? pl.subOptions[0].modGroupId : -1,
-                                                        Name: pl.name,
-                                                        OrdrMode: "OM_SAVED",
-                                                        Weight: 0,
-                                                    })
+                                                    if (plDefaultSdm)
+                                                        obj.Entries.CEntry.push({
+                                                            ID: 0,
+                                                            ItemID: pl.subOptions[0].sdmId,
+                                                            ModCode: "NO",
+                                                            ModgroupID: pl.subOptions[0].modGroupId ? pl.subOptions[0].modGroupId : -1,
+                                                            Name: pl.name,
+                                                            OrdrMode: "OM_SAVED",
+                                                            Weight: 0,
+                                                        })
                                                 }
                                             }
                                         })
@@ -759,7 +760,7 @@ export class OrderClass extends BaseEntity {
                                                                                                     obj.Entries.CEntry.push({
                                                                                                         ID: 0,
                                                                                                         ItemID: dspl.subOptions[0].sdmId,
-                                                                                                        ModCode: "NONE",
+                                                                                                        ModCode: "NO",
                                                                                                         ModgroupID: dspl.subOptions[0].modGroupId ? dspl.subOptions[0].modGroupId : -1,
                                                                                                         Name: dspl.name,
                                                                                                         OrdrMode: "OM_SAVED",
@@ -889,7 +890,7 @@ export class OrderClass extends BaseEntity {
                                                                             lastProductAddedInCentry.Entries.CEntry.push({
                                                                                 ID: 0,
                                                                                 ItemID: bpopl.subOptions[0].sdmId,
-                                                                                ModCode: "NONE",
+                                                                                ModCode: "NO",
                                                                                 ModgroupID: bpopl.subOptions[0].modGroupId ? bpopl.subOptions[0].modGroupId : -1,
                                                                                 Name: bpopl.name,
                                                                                 OrdrMode: "OM_SAVED",
