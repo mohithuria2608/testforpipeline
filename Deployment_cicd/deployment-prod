@@ -1,0 +1,568 @@
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: auth-service
+  labels:
+    app: auth-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: auth-service
+        image: {{Auth_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4000
+          name: api
+        - containerPort: 50051
+          name: grpc-auth
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+
+
+---
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: user-service
+        image: {{Users_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4001
+        - containerPort: 50052
+          name: grpc-user
+        resources:
+          limits:
+            cpu: "2000m"
+            memory: "2000Mi"
+          requests:
+            cpu: "2000m"
+            memory: "2000Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+
+---
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: menu-service
+  labels:
+    app: menu-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: menu-service
+  template:
+    metadata:
+      labels:
+        app: menu-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: menu-service
+        image: {{Menu_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4002
+        - containerPort: 50053
+          name: grpc-menu
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+---
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: order-service
+  labels:
+    app: order-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: order-service
+        image: {{Order_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4003
+        - containerPort: 50054
+          name: grpc-order
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+
+    
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: deeplink-service
+  labels:
+    app: deeplink-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: deeplink-service
+  template:
+    metadata:
+      labels:
+        app: deeplink-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: deeplink-service
+        image: {{Deeplink_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4005
+          name: api
+        - containerPort: 50056
+          name: grpc-deeplink
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: kafka-service
+  labels:
+    app: kafka-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: kafka-service
+  template:
+    metadata:
+      labels:
+        app: kafka-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: kafka-service
+        image: {{Kafka_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4006
+          name: api
+        - containerPort: 50057
+          name: grpc-kafka
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: sync-service
+  labels:
+    app: sync-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: sync-service
+  template:
+    metadata:
+      labels:
+        app: sync-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: sync-service
+        image: {{Sync_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4004
+          name: api
+        - containerPort: 50055
+          name: grpc-sync
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: location-service
+  namespace: nodeapp
+  labels:
+    app: location-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: location-service
+  template:
+    metadata:
+      labels:
+        app: location-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: location-service
+        image: {{Location_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4007
+          name: api
+        - containerPort: 50058
+          name: grpc-location
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+---
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: notification-service
+  labels:
+    app: notification-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: notification-service
+        image: {{Notification_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4008
+          name: api
+        - containerPort: 50059
+          name: grpc-location
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+
+---
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: payment-service
+  labels:
+    app: payment-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: payment-service
+        image: {{Payment_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4009
+          name: api
+        - containerPort: 50060
+          name: grpc-payment
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+---
+  
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: promotion-service
+  labels:
+    app: promotion-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: promotion-service
+  template:
+    metadata:
+      labels:
+        app: promotion-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: promotion-service
+        image: {{Promotion_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4010
+          name: api
+        - containerPort: 50061
+          name: grpc-promotion
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+---
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: upload-service
+  labels:
+    app: upload-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: upload-service
+  template:
+    metadata:
+      labels:
+        app: upload-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: upload-service
+        image: {{Upload_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4011
+          name: api
+        - containerPort: 50062
+          name: grpc-upload
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
+---
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: log-service
+  labels:
+    app: log-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: log-service
+  template:
+    metadata:
+      labels:
+        app: log-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: log-service
+        image: {{Log_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4012
+          name: api
+        - containerPort: 50063
+          name: grpc-log
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "500Mi"
+
+      nodeSelector:
+        agentpool: amfprodnenp1
+---
+
+
+apiVersion: apps/v1
+kind: "Deployment"
+metadata:
+  name: home-service
+  labels:
+    app: home-service
+  namespace: nodeapp
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: home-service
+  template:
+    metadata:
+      labels:
+        app: home-service
+    spec:
+      imagePullSecrets:
+      - name: americanasecret
+      containers:
+      - name: home-service
+        image: {{Home_image}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4013
+          name: api
+        - containerPort: 50064
+          name: grpc-auth
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "250Mi"
+          requests:
+            cpu: "200m"
+            memory: "250Mi"
+      nodeSelector:
+        agentpool: amfprodnenp1
