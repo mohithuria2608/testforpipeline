@@ -26,7 +26,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Mozzarella Burger Box</q247:Name>
                         <q247:QCComponent>1</q247:QCComponent>
-                        <q247:QCInstanceID>983</q247:QCInstanceID>
+                        <q247:QCInstanceID>617</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -37,40 +37,30 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Chicken Pc - Original</q247:Name>
                         <q247:QCComponent>2</q247:QCComponent>
-                        <q247:QCInstanceID>983</q247:QCInstanceID>
+                        <q247:QCInstanceID>617</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
                     <q247:CEntry>
                         <q247:DealID>0</q247:DealID>
-                        <q247:Entries>
-                            <q247:CEntry>
-                                <q247:ID>0</q247:ID>
-                                <q247:ItemID>810001</q247:ItemID>
-                                <q247:ModCode>NONE</q247:ModCode>
-                                <q247:ModgroupID>10028</q247:ModgroupID>
-                                <q247:Name>American Cheese</q247:Name>
-                                <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
-                                <q247:Weight>0</q247:Weight>
-                            </q247:CEntry>
-                        </q247:Entries>
+                        <q247:Entries></q247:Entries>
                         <q247:ID>0</q247:ID>
                         <q247:ItemID>110035</q247:ItemID>
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Mozzarella Burger Sandwich Zinger</q247:Name>
                         <q247:QCComponent>3</q247:QCComponent>
-                        <q247:QCInstanceID>983</q247:QCInstanceID>
+                        <q247:QCInstanceID>617</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
                     <q247:CEntry>
                         <q247:DealID>0</q247:DealID>
                         <q247:ID>0</q247:ID>
-                        <q247:ItemID>510006</q247:ItemID>
+                        <q247:ItemID>510004</q247:ItemID>
                         <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Large Fries</q247:Name>
+                        <q247:Name>Regular Fries</q247:Name>
                         <q247:QCComponent>4</q247:QCComponent>
-                        <q247:QCInstanceID>983</q247:QCInstanceID>
+                        <q247:QCInstanceID>617</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -81,26 +71,26 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Coleslaw Salad Small</q247:Name>
                         <q247:QCComponent>5</q247:QCComponent>
-                        <q247:QCInstanceID>983</q247:QCInstanceID>
+                        <q247:QCInstanceID>617</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
                     <q247:CEntry>
                         <q247:DealID>0</q247:DealID>
                         <q247:ID>0</q247:ID>
-                        <q247:ItemID>600004</q247:ItemID>
+                        <q247:ItemID>600002</q247:ItemID>
                         <q247:ModCode>NONE</q247:ModCode>
-                        <q247:Name>Pepsi Large</q247:Name>
+                        <q247:Name>Pepsi Regular</q247:Name>
                         <q247:QCComponent>6</q247:QCComponent>
-                        <q247:QCInstanceID>983</q247:QCInstanceID>
+                        <q247:QCInstanceID>617</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
                 </q247:Entries>
                 <q247:Notes xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
                     <q247:CNote>
-                        <q247:NT_FREE_TEXT>Test Orders - Appinventiv : 5e9065c8b1ceb7f6f12514fb</q247:NT_FREE_TEXT>
-                        <q247:NT_ID>1586521546464</q247:NT_ID>
+                        <q247:NT_FREE_TEXT>Test Orders - Appinventiv : 5e906c6c49b0fe068bf91098</q247:NT_FREE_TEXT>
+                        <q247:NT_ID>1586523246083</q247:NT_ID>
                     </q247:CNote>
                 </q247:Notes>
                 <q247:OrderID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderID>
@@ -108,7 +98,7 @@
                 <q247:OrderType xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderType>
                 <q247:Payments xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
                     <q247:CC_ORDER_PAYMENT>
-                        <q247:PAY_AMOUNT>45</q247:PAY_AMOUNT>
+                        <q247:PAY_AMOUNT>40.5</q247:PAY_AMOUNT>
                         <q247:PAY_STATUS>1</q247:PAY_STATUS>
                         <q247:PAY_STORE_TENDERID>252</q247:PAY_STORE_TENDERID>
                         <q247:PAY_SUB_TYPE>2</q247:PAY_SUB_TYPE>
@@ -123,7 +113,7 @@
             <autoApprove>true</autoApprove>
             <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
             <orderNotes1>0</orderNotes1>
-            <orderNotes2>5e9065c8b1ceb7f6f12514fb</orderNotes2>
+            <orderNotes2>5e906c6c49b0fe068bf91098</orderNotes2>
             <creditCardPaymentbool>false</creditCardPaymentbool>
             <isSuspended>false</isSuspended>
             <menuTemplateID>17</menuTemplateID>
