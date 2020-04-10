@@ -168,27 +168,31 @@ export class StoreController {
                     lng: parseFloat(payload.lng.toString()),
                 }
             }
-            let res: IStoreRequest.IStore[] = await Aerospike.query(geoWithinArg)
-            if (res && res.length > 0) {
-                if (res[0].active == 1) {
-                    let checkStoreOnline = checkOnlineStore(res[0].startTime, res[0].endTime, res[0].nextday)
-                    if (checkStoreOnline) {
-                        return {
-                            cityId: res[0].cityId,
-                            areaId: res[0].areaId,
-                            storeId: res[0].storeId
+            let store: IStoreRequest.IStore[] = await Aerospike.query(geoWithinArg)
+            if (store && store.length > 0) {
+                if (store[0].active == 1) {
+                    if (store[0]['services'][Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY] == 1) {
+                        let checkStoreOnline = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
+                        if (checkStoreOnline) {
+                            return {
+                                cityId: store[0].cityId,
+                                areaId: store[0].areaId,
+                                storeId: store[0].storeId
+                            }
+                        } else {
+                            return {
+                                cityId: store[0].cityId,
+                                areaId: store[0].areaId,
+                                storeId: 0
+                            }
                         }
                     } else {
-                        return {
-                            cityId: res[0].cityId,
-                            areaId: res[0].areaId,
-                            storeId: 0
-                        }
+
                     }
                 } else {
                     return {
-                        cityId: res[0].cityId,
-                        areaId: res[0].areaId,
+                        cityId: store[0].cityId,
+                        areaId: store[0].areaId,
                         storeId: 0
                     }
                 }
