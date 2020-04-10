@@ -564,6 +564,23 @@ export class KafkaController {
                     }
                     break;
                 }
+                case Constant.SET_NAME.SYNC_QUEUE: {
+                    let messages = null;
+                    let topic = null;
+                    let partition = 0;
+                    if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.reset || payload.cms.sync)) {
+                        messages = { ...payload }
+                        delete messages.sdm;
+                        delete messages.as;
+                        delete messages.mdb;
+                        if (!payload.hasOwnProperty('count'))
+                            payload['count'] = payload.cms.create ? Constant.CONF.KAFKA.CMS.SYNC.MAX_RETRY.CREATE : Constant.CONF.KAFKA.CMS.SYNC.MAX_RETRY.UPDATE
+                        topic = config.get("env") + "_" + Constant.KAFKA_TOPIC.SYNC_Q
+                        messages['q'] = topic
+                        kafkaProducerE.sendMessage({ messages: JSON.stringify(messages), topic: topic, partition: partition });
+                    }
+                    break;
+                }
             }
             return { data: 'success' };
         } catch (error) {
@@ -575,7 +592,7 @@ export class KafkaController {
     async produceToRetryTopics(topic, retry, messages, partition) {
         try {
             topic = topic + "_" + retry
-            
+
 
         } catch (error) {
             consolelog(process.cwd(), "produceToRetryTopics", JSON.stringify(error), false)

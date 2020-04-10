@@ -37,6 +37,7 @@ export enum SET_NAME {
     CITY = "city",
     STORE = "store",
     PICKUP = "pickup",
+    SYNC_QUEUE = "sync_queue",
     SYNC_STORE = "sync_store",
     SYNC_CITY = "sync_city",
     SYNC_AREA = "sync_area",
@@ -57,6 +58,7 @@ export enum SET_NAME {
 export enum KAFKA_TOPIC {
     FAIL_Q = "fail_q",
     RETRY = "retry",
+    SYNC_Q = "sync_q",
 
     SDM_MENU = "sdm_menu",
     CMS_MENU = "cms_menu",
@@ -1630,6 +1632,15 @@ export const CONF = {
             }
         },
         CMS: {
+            SYNC: {
+                MAX_RETRY: {
+                    CREATE: 5,
+                    UPDATE: 5,
+                    GET: 5,
+                    SYNC: 5,
+                    RESET: 5
+                }
+            },
             USER: {
                 MAX_RETRY: {
                     CREATE: 5,

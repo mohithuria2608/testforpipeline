@@ -35,21 +35,12 @@
                                 Price
                             </td>
                         </tr>
-                        <% var itemsHash = {};
-                        for(var i=0; i < order.items.length; i++) { 
-                            if(itemsHash[order.items[i].id]) {
-                                itemsHash[order.items[i].id].qty++;
-                                itemsHash[order.items[i].id].price = itemsHash[order.items[i].id].price * 2;
-                            } else {
-                                itemsHash[order.items[i].id] = {name:order.items[i].name, qty: 1, price:order.items[i].finalPrice}
-                            }
-                        }
-                        for(var items in itemsHash) { %>
+                        <% for(var i=0; i < order.items.length; i++) { %>
                         <tr class="height" height="50px">
-                            <td><%=itemsHash[items].name%> </td>
-                            <td><%=itemsHash[items].qty%></td>
+                            <td><%=order.items[i].name%></td>
+                            <td><%=order.items[i].qty%></td>
                             <td class="width" style="text-align: right; width: 150px;">
-                                AED <%= itemsHash[items].price %></td>
+                                AED <%= order.items[i].sellingPrice %></td>
                         </tr>
                         <% } %>
                     </table>

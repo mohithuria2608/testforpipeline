@@ -1,4 +1,5 @@
 import { failConsumerE } from './failure.consumer';
+import { syncConsumerE } from './sync_q.consumer';
 
 import { as_configConsumerE } from './as_config.consumer';
 import { as_appversionConsumerE } from './as_appversion.consumer';
@@ -33,6 +34,7 @@ import { ping_serviceE } from './ping_service.consumer';
 
 export function initConsumers() {
     failConsumerE.handleMessage();
+    syncConsumerE.handleMessage();
 
     as_configConsumerE.handleMessage();
     as_appversionConsumerE.handleMessage();

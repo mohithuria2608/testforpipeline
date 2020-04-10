@@ -43,6 +43,7 @@ class KafkaProducer {
                 // config.get("env") + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.AS_STORE,
                 config.get("env") + "_" + Constant.KAFKA_TOPIC.PING_SERVICE,
+                config.get("env") + "_" + Constant.KAFKA_TOPIC.SYNC_Q,
             ], (error, data) => {
                 if (error) {
                     consolelog(process.cwd(), 'Err in creating topics', error, false);

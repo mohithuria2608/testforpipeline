@@ -101,6 +101,7 @@ export class StoreController {
     /** sync to aerospike */
     async syncToAS(payload) {
         try {
+            await Aerospike.truncate({ set: ENTITY.StoreE.set, before_nanos: 0 });
             console.log("Number of stores synced -> ", payload.length);
             for (let store of payload) {
                 store.menuTempId = 17; //@TODO -remove when it will come from CMS
