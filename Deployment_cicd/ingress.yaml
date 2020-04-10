@@ -76,4 +76,4 @@ spec:
             servicePort: 4013
           path: /home-service/*
     tls:
-    - secretName: americanarest.tls.secret
+    - secretName: {{Ingress_tls_secret}}
