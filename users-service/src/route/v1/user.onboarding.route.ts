@@ -11,6 +11,7 @@ export default (router: Router) => {
     router
         .post('/send-otp',
             ...getMiddleware([
+                Constant.MIDDLEWARE.APP_VERSION,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
