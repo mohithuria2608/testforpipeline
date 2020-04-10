@@ -17,19 +17,19 @@ export default (router: Router) => {
         .get('/faq',
             async (ctx) => {
                 try {
-                    let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let sendResponse
-                    if (headers.language && headers.language == Constant.DATABASE.LANGUAGE.AR)
-                        sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, Constant.DATABASE.FAQ[Constant.DATABASE.LANGUAGE.AR])
-                    else
-                        sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, Constant.DATABASE.FAQ[Constant.DATABASE.LANGUAGE.EN])
-                    ctx.status = sendResponse.statusCode;
-                    ctx.body = sendResponse
-
                     // let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    // let faq = await syncService.fetchFaq({ language: headers.language, country: headers.country })
-                    // ctx.status = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, faq).statusCode
-                    // ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, faq)
+                    // let sendResponse
+                    // if (headers.language && headers.language == Constant.DATABASE.LANGUAGE.AR)
+                    //     sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, Constant.DATABASE.FAQ[Constant.DATABASE.LANGUAGE.AR])
+                    // else
+                    //     sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, Constant.DATABASE.FAQ[Constant.DATABASE.LANGUAGE.EN])
+                    // ctx.status = sendResponse.statusCode;
+                    // ctx.body = sendResponse
+
+                    let headers: ICommonRequest.IHeaders = ctx.request.header;
+                    let faq = await syncService.fetchFaq({ language: headers.language, country: headers.country })
+                    ctx.status = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, faq).statusCode
+                    ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, faq)
                 }
                 catch (error) {
                     throw error
