@@ -26,7 +26,7 @@
             "port": 4005
         },
         "kafka": {
-            "url": "https://prod-api.americanarest.comm/kafka-service/",
+            "url": "https://prod-api.americanarest.com/kafka-service/",
             "port": 4006
         },
         "location": {
