@@ -28,5 +28,8 @@ echo "$template" | kubectl apply -f -
 #Apply HPA  
 #kubectl apply -f ./Deployment_cicd/hpa.yaml 
 
-#kubectl apply -f ./Deployment_cicd/ingress.yaml
+#temp=`cat "./Deployment_cicd/ingress.yaml" | sed "s@{{Ingress_tls_secret}}@$Ingress_tls_secret@g"
+
+
+#echo "$temp" | kubectl apply -f -
 

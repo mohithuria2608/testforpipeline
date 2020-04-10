@@ -16,6 +16,7 @@ pipeline {
         Notification_image="amfprodnecontregist.azurecr.io/notification"+ ":Notification-service_${env.BUILD_NUMBER}"
         Log_image="amfprodnecontregist.azurecr.io/log"+ ":Log-service_${env.BUILD_NUMBER}"
         Home_image="amfprodnecontregist.azurecr.io/home"+ ":Home-service_${env.BUILD_NUMBER}"
+        Ingress_tls_secret= "americanarest.tls.secret"
     }
     agent any
 
@@ -47,20 +48,20 @@ pipeline {
         stage('Build image') {
             steps{
                 script{
-                    AuthImage=docker.build(registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/auth-service/Dockerfile  .")
-                    UsersImage=docker.build(registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/users-service/Dockerfile .")
-                    MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile .")
-                    OrderImage=docker.build(registry + "/order"+ ":Order-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/order-service/Dockerfile .")
-                    DeeplinkImage=docker.build(registry + "/deeplink"+ ":Deeplink-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/deeplink-service/Dockerfile .")
-                    KafkaImage=docker.build(registry + "/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/kafka-service/Dockerfile .")
-                    SyncImage=docker.build(registry + "/sync"+ ":Sync-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/sync-service/Dockerfile .")
-                    LocationImage=docker.build(registry + "/location"+ ":Location-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/location-service/Dockerfile .")
-                    UploadImage=docker.build(registry + "/upload"+ ":Upload-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/upload-service/Dockerfile .")
-                    PromotionImage=docker.build(registry + "/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/promotion-service/Dockerfile .")
-                    PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile .")
-                    NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile .")
-                    LogImage=docker.build(registry + "/log"+ ":Log-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/log-service/Dockerfile .")
-                    HomeImage=docker.build(registry + "/home"+ ":Home-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/home-service/Dockerfile .")
+                    AuthImage=docker.build(registry + "/auth" + ":auth-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/auth-service/Dockerfile_prod  .")
+                    UsersImage=docker.build(registry + "/users" + ":Users-Image_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/users-service/Dockerfile_prod .")
+                    MenuImage=docker.build(registry + "/menu"+ ":Menu-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/menu-service/Dockerfile_prod .")
+                    OrderImage=docker.build(registry + "/order"+ ":Order-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/order-service/Dockerfile_prod .")
+                    DeeplinkImage=docker.build(registry + "/deeplink"+ ":Deeplink-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/deeplink-service/Dockerfile_prod .")
+                    KafkaImage=docker.build(registry + "/kafka"+ ":Kafka-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/kafka-service/Dockerfile_prod .")
+                    SyncImage=docker.build(registry + "/sync"+ ":Sync-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/sync-service/Dockerfile_prod .")
+                    LocationImage=docker.build(registry + "/location"+ ":Location-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/location-service/Dockerfile_prod .")
+                    UploadImage=docker.build(registry + "/upload"+ ":Upload-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/upload-service/Dockerfile_prod .")
+                    PromotionImage=docker.build(registry + "/promotion"+ ":Promotion-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/promotion-service/Dockerfile_prod .")
+                    PaymentImage=docker.build(registry + "/payment"+ ":Payment-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/payment-service/Dockerfile_prod .")
+                    NotificationImage=docker.build(registry + "/notification"+ ":Notification-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/notification-service/Dockerfile_prod .")
+                    LogImage=docker.build(registry + "/log"+ ":Log-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/log-service/Dockerfile_prod .")
+                    HomeImage=docker.build(registry + "/home"+ ":Home-service_${env.BUILD_NUMBER}","-f ${env.WORKSPACE}/home-service/Dockerfile_prod .")
 
                 }
             }
