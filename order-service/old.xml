@@ -26,7 +26,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Mozzarella Burger Box</q247:Name>
                         <q247:QCComponent>1</q247:QCComponent>
-                        <q247:QCInstanceID>723</q247:QCInstanceID>
+                        <q247:QCInstanceID>946</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -37,7 +37,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Chicken Pc - Original</q247:Name>
                         <q247:QCComponent>2</q247:QCComponent>
-                        <q247:QCInstanceID>723</q247:QCInstanceID>
+                        <q247:QCInstanceID>946</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -47,7 +47,7 @@
                             <q247:CEntry>
                                 <q247:ID>0</q247:ID>
                                 <q247:ItemID>810001</q247:ItemID>
-                                <q247:ModCode>NONE</q247:ModCode>
+                                <q247:ModCode>NO</q247:ModCode>
                                 <q247:ModgroupID>10028</q247:ModgroupID>
                                 <q247:Name>American Cheese</q247:Name>
                                 <q247:OrdrMode>OM_SAVED</q247:OrdrMode>
@@ -59,7 +59,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Mozzarella Burger Sandwich Zinger</q247:Name>
                         <q247:QCComponent>3</q247:QCComponent>
-                        <q247:QCInstanceID>723</q247:QCInstanceID>
+                        <q247:QCInstanceID>946</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -70,7 +70,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Regular Fries</q247:Name>
                         <q247:QCComponent>4</q247:QCComponent>
-                        <q247:QCInstanceID>723</q247:QCInstanceID>
+                        <q247:QCInstanceID>946</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -81,7 +81,7 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Coleslaw Salad Small</q247:Name>
                         <q247:QCComponent>5</q247:QCComponent>
-                        <q247:QCInstanceID>723</q247:QCInstanceID>
+                        <q247:QCInstanceID>946</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
@@ -92,15 +92,15 @@
                         <q247:ModCode>NONE</q247:ModCode>
                         <q247:Name>Pepsi Regular</q247:Name>
                         <q247:QCComponent>6</q247:QCComponent>
-                        <q247:QCInstanceID>723</q247:QCInstanceID>
+                        <q247:QCInstanceID>946</q247:QCInstanceID>
                         <q247:QCLevel>0</q247:QCLevel>
                         <q247:QCProID>328</q247:QCProID>
                     </q247:CEntry>
                 </q247:Entries>
                 <q247:Notes xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
                     <q247:CNote>
-                        <q247:NT_FREE_TEXT>Test Orders - Appinventiv : 5e90719d7775ec0aae8e85ac</q247:NT_FREE_TEXT>
-                        <q247:NT_ID>1586524575498</q247:NT_ID>
+                        <q247:NT_FREE_TEXT>Test Orders - Appinventiv : 5e908b59f506e53537a329b2</q247:NT_FREE_TEXT>
+                        <q247:NT_ID>1586531166385</q247:NT_ID>
                     </q247:CNote>
                 </q247:Notes>
                 <q247:OrderID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderID>
@@ -123,7 +123,7 @@
             <autoApprove>true</autoApprove>
             <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
             <orderNotes1>0</orderNotes1>
-            <orderNotes2>5e90719d7775ec0aae8e85ac</orderNotes2>
+            <orderNotes2>5e908b59f506e53537a329b2</orderNotes2>
             <creditCardPaymentbool>false</creditCardPaymentbool>
             <isSuspended>false</isSuspended>
             <menuTemplateID>17</menuTemplateID>
