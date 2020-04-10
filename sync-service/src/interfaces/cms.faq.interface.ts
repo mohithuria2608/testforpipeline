@@ -1,6 +1,8 @@
 declare namespace ICmsFaqRequest {
 
     interface ICmsFaq {
+        type: string
+        action: string
         data: ICmsFaqData[],
     }
 

@@ -16,6 +16,7 @@ export default (router: Router) => {
                 // headers: JOI_CMS_HEADERS,
                 body: {
                     type: Joi.string().valid("faq_data"),
+                    action: Joi.string().required().valid(Constant.DATABASE.TYPE.SYNC_ACTION.RESET).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
                     data: Joi.any().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),
