@@ -372,7 +372,6 @@ export class KafkaController {
                     topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.AS_LOCATION)
                     messages['q'] = topic
                     messages['mainTopic'] = Constant.KAFKA_TOPIC.AS_LOCATION
-                    console.log("payload.inQ", payload.inQ)
                     if (payload.inQ)
                         this.produceToRetryTopics(topic, messages, partition)
                     else {
