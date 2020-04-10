@@ -15,7 +15,7 @@ export class CmsFaqController {
     async postFaq(payload: ICmsFaqRequest.ICmsFaq) {
         try {
             payload.data.map(async faq => {
-                faq['id'] = generateFaqId(faq.language, faq.country)
+                faq['id'] = generateFaqId(faq.language, "UAE")// faq.country)
                 let putArg: IAerospike.Put = {
                     bins: faq,
                     set: ENTITY.FaqE.set,
