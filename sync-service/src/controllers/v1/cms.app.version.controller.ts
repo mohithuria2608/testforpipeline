@@ -37,6 +37,7 @@ export class CmsAppversionController {
             if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                 if (payload.as.reset) {
                     if (data.data && data.data.length > 0) {
+                        Aerospike.truncate({ set: ENTITY.AppversionE.set })
                         data.data.map(async appversion => {
                             let putArg: IAerospike.Put = {
                                 bins: appversion,
@@ -84,7 +85,7 @@ export class CmsAppversionController {
      * @param {any} payload
      * @description creates a appversion from CMS to aerospike
      */
-    async postAppversion( payload: ICmsAppversionRequest.ICmsAppversion) {
+    async postAppversion(payload: ICmsAppversionRequest.ICmsAppversion) {
         try {
             let appversionChange: IKafkaGrpcRequest.IKafkaBody = {
                 set: ENTITY.AppversionE.set,

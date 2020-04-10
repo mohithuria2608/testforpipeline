@@ -6,6 +6,12 @@ declare namespace ICmsAppversionRequest {
     }
 
     interface ICmsAppversionData {
-        
+        id: string,
+        type: string,
+        deviceType: string,
+        appversion: string,
+        isActive: string,
+        createdAt: string,
+        updatedAt: string,
     }
 }
