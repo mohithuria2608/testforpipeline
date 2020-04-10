@@ -5,10 +5,12 @@ import { consolelog, topicNameCreator } from "../../utils"
 import { homeService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
+const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.AS_HOME)
+
 class AsHomeConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_HOME, topicNameCreator(config.get("env"),Constant.KAFKA_TOPIC.AS_HOME));
+        super(topic, topic);
     }
 
     handleMessage() {

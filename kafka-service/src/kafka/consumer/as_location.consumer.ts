@@ -5,10 +5,12 @@ import { consolelog, topicNameCreator } from "../../utils"
 import { locationService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
+const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.AS_LOCATION)
+
 class ASLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.AS_LOCATION, topicNameCreator(config.get("env"),Constant.KAFKA_TOPIC.AS_LOCATION));
+        super(topic, topic);
     }
 
     handleMessage() {
@@ -20,7 +22,6 @@ class ASLocationConsumer extends BaseConsumer {
                     case "location_sync": this.syncLocationFromCMS(message); break;
                     case "store_status_sync": this.syncStoreStatus(message); break;
                 }
-                this.syncLocationFromCMS(message);
                 return null;
             })
     }

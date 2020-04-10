@@ -66,7 +66,7 @@ export class LocationController {
                                                         delete s.sdmStoreId
                                                         delete s.webMenuId
                                                         delete s.menuTempId
-
+                                                        console.log("s.storeId", s.storeId)
                                                         s.startTime = new Date(+new Date(s.startTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
                                                         s.endTime = new Date(+new Date(s.endTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
 

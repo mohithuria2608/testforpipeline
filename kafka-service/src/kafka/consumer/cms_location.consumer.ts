@@ -5,10 +5,12 @@ import { consolelog, topicNameCreator } from "../../utils"
 import { locationService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
+const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.CMS_LOCATION)
+
 class CMSLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(process.env.NODE_ENV + "_" + Constant.KAFKA_TOPIC.CMS_LOCATION, topicNameCreator(config.get("env") ,Constant.KAFKA_TOPIC.CMS_LOCATION));
+        super(topic, topic);
     }
 
     handleMessage() {

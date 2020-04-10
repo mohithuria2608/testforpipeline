@@ -31,10 +31,10 @@ export class KafkaService {
                 await kafkaServiceValidator.kafkaValidator(payload)
                 this.kafkaClient.kafkaSync(payload, (error, res) => {
                     if (!error) {
-                        consolelog(process.cwd(), "successfully produced config data on kafka for syncing", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully produced data on kafka for syncing", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in producing config data on kafka  for syncing", JSON.stringify(error), false)
+                        consolelog(process.cwd(), "Error in producing data on kafka  for syncing", JSON.stringify(error), false)
                         reject(error)
                     }
                 })
