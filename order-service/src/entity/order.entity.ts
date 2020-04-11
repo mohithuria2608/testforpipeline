@@ -341,8 +341,7 @@ export class OrderClass extends BaseEntity {
             }
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
-            if (payload.firstTry) {
-                payload.firstTry = false
+            if (!payload.failOrder) {
                 setTimeout(() => {
                     kafkaService.kafkaSync({
                         set: this.set,
@@ -391,8 +390,7 @@ export class OrderClass extends BaseEntity {
             }
             return cmsOrder
         } catch (error) {
-            if (payload.firstTry) {
-                payload.firstTry = false
+            if (!payload.failOrder) {
                 setTimeout(() => {
                     kafkaService.kafkaSync({
                         set: this.set,
@@ -405,7 +403,7 @@ export class OrderClass extends BaseEntity {
                                 address: payload.address,
                                 cart: cart,
                                 order: payload.order,
-                                firstTry: payload.firstTry
+                                failOrder: payload.failOrder
                             })
                         },
                         inQ: true

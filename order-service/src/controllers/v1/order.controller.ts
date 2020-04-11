@@ -35,8 +35,8 @@ export class OrderController {
                     let address = data.address
                     let cart = data.cart
                     let order = data.order
-                    let firstTry = data.firstTry
-                    await this.syncOnCms(orderPayload, headers, userData, address, cart, order, firstTry)
+                    let failOrder = (payload.count == Constant.CONF.GENERAL.DEFAULT_RETRY_COUNT) ? true : false
+                    await this.syncOnCms(orderPayload, headers, userData, address, cart, order, failOrder)
                 }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get)) {
@@ -46,8 +46,8 @@ export class OrderController {
                     let userData = data.userData
                     let address = data.address
                     let order = data.order
-                    let firstTry = data.firstTry
-                    await this.syncOnSdm(headers, userData, address, order, firstTry)
+                    let failOrder = (payload.count == Constant.CONF.GENERAL.DEFAULT_RETRY_COUNT) ? true : false
+                    await this.syncOnSdm(headers, userData, address, order, failOrder)
                 }
             }
             return {}
@@ -149,7 +149,7 @@ export class OrderController {
             if (initiatePayment.order && initiatePayment.order._id) {
                 order = initiatePayment.order
                 if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO) {
-                    this.syncOnLegacy(payload, headers, userData, getAddress, cart, order, true)
+                    this.syncOnLegacy(payload, headers, userData, getAddress, cart, order, false)
                     if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
                         ENTITY.CartE.resetCart(cart.cartId)
                 }
@@ -176,10 +176,10 @@ export class OrderController {
         address: IUserGrpcRequest.IFetchAddressRes,
         cart: ICartRequest.ICartData,
         mongoOrder: IOrderRequest.IOrderData,
-        firstTry: boolean) {
+        failOrder: boolean) {
         try {
-            this.syncOnCms(orderPayload, headers, userData, address, cart, mongoOrder, firstTry)
-            this.syncOnSdm(headers, userData, address, mongoOrder, firstTry)
+            this.syncOnCms(orderPayload, headers, userData, address, cart, mongoOrder, failOrder)
+            this.syncOnSdm(headers, userData, address, mongoOrder, failOrder)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncOnLegacy", error, false)
@@ -194,7 +194,7 @@ export class OrderController {
         address: IUserGrpcRequest.IFetchAddressRes,
         cart: ICartRequest.ICartData,
         mongoOrder: IOrderRequest.IOrderData,
-        firstTry: boolean
+        failOrder: boolean
     ) {
         try {
             if (mongoOrder.cmsOrderRef == 0) {
@@ -217,7 +217,7 @@ export class OrderController {
                     userData: userData,
                     address: address,
                     order: mongoOrder,
-                    firstTry: firstTry
+                    failOrder: failOrder
                 }, orderPayload, cart)
             }
             return {}
@@ -232,7 +232,7 @@ export class OrderController {
         userData: IUserRequest.IUserData,
         address: IUserGrpcRequest.IFetchAddressRes,
         mongoOrder: IOrderRequest.IOrderData,
-        firstTry: boolean) {
+        failOrder: boolean) {
         try {
             if (mongoOrder.sdmOrderRef == 0) {
                 await ENTITY.OrderE.createSdmOrder({
@@ -240,7 +240,7 @@ export class OrderController {
                     userData: userData,
                     address: address,
                     order: mongoOrder,
-                    firstTry: firstTry
+                    failOrder: failOrder
                 })
             }
             return {}

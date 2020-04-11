@@ -109,7 +109,7 @@ declare namespace IOrderRequest {
         userData: IUserRequest.IUserData,
         address: IUserGrpcRequest.IFetchAddressRes,
         order: IOrderRequest.IOrderData,
-        firstTry: boolean
+        failOrder: boolean
     }
     interface IOrderHistory extends ICommonRequest.ICordinatesOpt, ICommonRequest.IPagination {
         isActive: number
