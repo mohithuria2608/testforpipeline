@@ -66,14 +66,26 @@ declare namespace ICmsConfigRequest {
             noonpay_reverse_payment_end_point: string,
             noonpay_refund_payment_end_point: string,
             code: string,
-            status: string
+            status: string,
+            sdm: {
+                pay_status: string,
+                pay_store_tender_id: string,
+                pay_sub_type: string,
+                pay_type: string
+            }
         },
         cod_info: {
             status: string,
             name: string,
             code: string,
             min_order_total: string,
-            max_order_total: string
+            max_order_total: string,
+            sdm: {
+                pay_status: string,
+                pay_store_tender_id: string,
+                pay_sub_type: string,
+                pay_type: string
+            }
         }
     }
 

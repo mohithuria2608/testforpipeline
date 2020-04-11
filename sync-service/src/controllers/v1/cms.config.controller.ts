@@ -991,6 +991,12 @@ export class CmsConfigController {
                                                     noonpayRefundPaymentEndPoint: paymentConf.noon_pay_config.noonpay_refund_payment_end_point ? paymentConf.noon_pay_config.noonpay_refund_payment_end_point : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.noonpayRefundPaymentEndPoint,
                                                     code: paymentConf.noon_pay_config.code ? paymentConf.noon_pay_config.code : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.code,
                                                     status: paymentConf.noon_pay_config.status ? parseInt(paymentConf.noon_pay_config.status) : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.status,
+                                                    sdm: {
+                                                        pay_status: paymentConf.noon_pay_config.sdm.pay_status ? parseInt(paymentConf.noon_pay_config.sdm.pay_status) : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.SDM.PAY_STATUS,
+                                                        pay_store_tender_id: paymentConf.noon_pay_config.sdm.pay_store_tender_id ? parseInt(paymentConf.noon_pay_config.sdm.pay_store_tender_id) : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.SDM.PAY_STORE_TENDERID,
+                                                        pay_sub_type: paymentConf.noon_pay_config.sdm.pay_sub_type ? parseInt(paymentConf.noon_pay_config.sdm.pay_sub_type) : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.SDM.PAY_SUB_TYPE,
+                                                        pay_type: paymentConf.noon_pay_config.sdm.pay_type ? parseInt(paymentConf.noon_pay_config.sdm.pay_type) : Constant.CONF.PAYMENT[paymentConf.store_code].noonpayConfig.SDM.PAY_TYPE,
+                                                    }
                                                 },
                                                 codInfo: {
                                                     status: paymentConf.cod_info.status ? parseInt(paymentConf.cod_info.status) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.status,
@@ -998,6 +1004,12 @@ export class CmsConfigController {
                                                     code: paymentConf.cod_info.code ? paymentConf.cod_info.code : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.code,
                                                     min_order_total: paymentConf.cod_info.min_order_total ? parseInt(paymentConf.cod_info.min_order_total) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.min_order_total,
                                                     max_order_total: paymentConf.cod_info.max_order_total ? parseInt(paymentConf.cod_info.max_order_total) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.max_order_total,
+                                                    sdm: {
+                                                        pay_status: paymentConf.cod_info.sdm.pay_status ? parseInt(paymentConf.cod_info.sdm.pay_status) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.SDM.PAY_STATUS,
+                                                        pay_store_tender_id: paymentConf.cod_info.sdm.pay_store_tender_id ? parseInt(paymentConf.cod_info.sdm.pay_store_tender_id) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.SDM.PAY_STORE_TENDERID,
+                                                        pay_sub_type: paymentConf.cod_info.sdm.pay_sub_type ? parseInt(paymentConf.cod_info.sdm.pay_sub_type) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.SDM.PAY_SUB_TYPE,
+                                                        pay_type: paymentConf.cod_info.sdm.pay_type ? parseInt(paymentConf.cod_info.sdm.pay_type) : Constant.CONF.PAYMENT[paymentConf.store_code].codInfo.SDM.PAY_TYPE,
+                                                    }
                                                 }
                                             },
                                             createdAt: new Date().getTime()

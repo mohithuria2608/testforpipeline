@@ -2687,7 +2687,13 @@ interface IPayment {
         noonpayReversePaymentEndPoint: string,
         noonpayRefundPaymentEndPoint: string,
         code: string,
-        status: number
+        status: number,
+        sdm: {
+            pay_status: string,
+            pay_store_tender_id: string,
+            pay_sub_type: string,
+            pay_type: string
+        }
     },
     codInfo: {
         status: number,
@@ -2695,6 +2701,12 @@ interface IPayment {
         code: string,
         min_order_total: number,
         max_order_total: number,
+        sdm: {
+            pay_status: string,
+            pay_store_tender_id: string,
+            pay_sub_type: string,
+            pay_type: string
+        }
     }
 }
 interface IPaymentMethods {
@@ -2751,6 +2763,16 @@ export const paymentConfigSync = function (store_code: string, config: IPayment,
             CONF.PAYMENT[store_code].noonpayConfig.noonpayInitiatePaymentEndPoint = config.noonpayConfig.noonpayInitiatePaymentEndPoint
         if (config.noonpayConfig.noonpayGetOrderByReferenceEndPoint)
             CONF.PAYMENT[store_code].noonpayConfig.noonpayGetOrderByReferenceEndPoint = config.noonpayConfig.noonpayGetOrderByReferenceEndPoint
+        if (config.noonpayConfig.sdm) {
+            if (config.noonpayConfig.sdm.pay_status)
+                CONF.PAYMENT[store_code].noonpayConfig.SDM.PAY_STATUS = config.noonpayConfig.sdm.pay_status
+            if (config.noonpayConfig.sdm.pay_store_tender_id)
+                CONF.PAYMENT[store_code].noonpayConfig.SDM.PAY_STORE_TENDERID = config.noonpayConfig.sdm.pay_store_tender_id
+            if (config.noonpayConfig.sdm.pay_sub_type)
+                CONF.PAYMENT[store_code].noonpayConfig.SDM.PAY_SUB_TYPE = config.noonpayConfig.sdm.pay_sub_type
+            if (config.noonpayConfig.sdm.pay_type)
+                CONF.PAYMENT[store_code].noonpayConfig.SDM.PAY_TYPE = config.noonpayConfig.sdm.pay_type
+        }
     }
     if (config.codInfo) {
         if (config.codInfo.min_order_total)
@@ -2763,6 +2785,16 @@ export const paymentConfigSync = function (store_code: string, config: IPayment,
             CONF.PAYMENT[store_code].codInfo.status = config.codInfo.status
         if (config.codInfo.max_order_total)
             CONF.PAYMENT[store_code].codInfo.max_order_total = config.codInfo.max_order_total
+        if (config.codInfo.sdm) {
+            if (config.codInfo.sdm.pay_status)
+                CONF.PAYMENT[store_code].codInfo.SDM.PAY_STATUS = config.codInfo.sdm.pay_status
+            if (config.codInfo.sdm.pay_store_tender_id)
+                CONF.PAYMENT[store_code].codInfo.SDM.PAY_STORE_TENDERID = config.codInfo.sdm.pay_store_tender_id
+            if (config.codInfo.sdm.pay_sub_type)
+                CONF.PAYMENT[store_code].codInfo.SDM.PAY_SUB_TYPE = config.codInfo.sdm.pay_sub_type
+            if (config.codInfo.sdm.pay_type)
+                CONF.PAYMENT[store_code].codInfo.SDM.PAY_TYPE = config.codInfo.sdm.pay_type
+        }
     }
     console.log("new", CONF.PAYMENT)
     global.configSync.payment = date;

@@ -27,7 +27,7 @@ export default (router: Router) => {
                     couponCode: Joi.string().allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_COUPON.message)),
 
                     contactlessDlvry: Joi.number().valid(0, 1).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),
-                    dlvryInstr: Joi.string().min(30).allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_DELIVERY_INSTRUCTION.message)),
+                    dlvryInstr: Joi.string().max(30).allow("").error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_DELIVERY_INSTRUCTION.message)),
                 }
             }),
             async (ctx) => {
