@@ -359,6 +359,7 @@ export class OrderClass extends BaseEntity {
                         validationRemarks = error.SDKResult.ResultText
                     else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
                         validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
+                    order = await this.getOneEntityMdb({ _id: order._id }, { items: 0 })
                     this.orderFailureHandler(order, 1, validationRemarks)
                     return Promise.reject(error)
                 } else
