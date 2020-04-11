@@ -1319,7 +1319,6 @@ export class OrderClass extends BaseEntity {
                                             }
                                         }
                                     }
-                                    console.log("captureStatus", captureStatus)
                                     if (captureStatus) {
                                         let dataToUpdateOrder = {
                                             status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
@@ -1331,7 +1330,6 @@ export class OrderClass extends BaseEntity {
                                             dataToUpdateOrder['$addToSet'] = {
                                                 transLogs: { $each: transLogs.reverse() }
                                             }
-                                        console.log("dataToUpdateOrderdataToUpdateOrderdataToUpdateOrder", dataToUpdateOrder)
                                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                                         if (order && order._id) {
                                             if (order.cmsOrderRef)

@@ -770,7 +770,6 @@ export class CartClass extends BaseEntity {
                 update: true,
             }
             await Aerospike.put(putArg)
-            console.log("dataToUpdate cart", dataToUpdate)
             return dataToUpdate
         } catch (error) {
             consolelog(process.cwd(), "updateCart", error, false)
