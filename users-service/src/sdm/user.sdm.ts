@@ -67,9 +67,9 @@ export class UserSDMEntity extends BaseSDM {
     /**
     * @method SDK
     * */
-    async updateCustomerOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
+    async updateCustomerOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            let naemRes = nameConstructor(payload.name.trim())
+            let naemRes = nameConstructor(userData.name.trim())
             let data: IUserSDMRequest.IUpdateUserReq = {
                 name: "UpdateCustomer",
                 req: {
@@ -77,20 +77,20 @@ export class UserSDMEntity extends BaseSDM {
                     language: headers.language.toLowerCase(),
                     customer: {
                         CUST_CLASSID: -1,
-                        CUST_CORPID: payload.sdmCorpRef,
-                        CUST_EMAIL: payload.email,
+                        CUST_CORPID: userData.sdmCorpRef,
+                        CUST_EMAIL: userData.email,
                         CUST_FIRSTNAME: naemRes.firstName,
-                        CUST_ID: payload.sdmUserRef,
+                        CUST_ID: userData.sdmUserRef,
                         CUST_LASTNAME: naemRes.lastName,
                         CUST_NATID: -1,
-                        CUST_NOTIFICATION_MOBILE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_NOTIFICATION_MOBILE,
-                        CUST_PHONEAREACODE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONEAREACODE,
-                        CUST_PHONECOUNTRYCODE: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONECOUNTRYCODE,
-                        CUST_PHONELOOKUP: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONELOOKUP,
-                        CUST_PHONENUMBER: phnNoConstructor(payload.phnNo, payload.cCode).CUST_PHONENUMBER,
+                        CUST_NOTIFICATION_MOBILE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_NOTIFICATION_MOBILE,
+                        CUST_PHONEAREACODE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONEAREACODE,
+                        CUST_PHONECOUNTRYCODE: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONECOUNTRYCODE,
+                        CUST_PHONELOOKUP: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONELOOKUP,
+                        CUST_PHONENUMBER: phnNoConstructor(userData.phnNo, userData.cCode).CUST_PHONENUMBER,
                         CUST_PHONETYPE: 2,
-                        PASSWORD: deCryptData(payload.password),
-                        USERNAME: payload.email,
+                        PASSWORD: deCryptData(userData.password),
+                        USERNAME: userData.email,
                         WCUST_FIRSTNAME: naemRes.firstName,
                         WCUST_IS_GUEST: false,
                         WCUST_LASTNAME: naemRes.lastName,

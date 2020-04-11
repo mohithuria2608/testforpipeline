@@ -3,6 +3,7 @@ import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity'
 import { userController, miscController, addressController } from '../../controllers';
 import * as Constant from '../../constant'
+import { request } from "http";
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -84,7 +85,7 @@ server.addService(userProto.UserService.service, {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(call.request), true)
             let userData: IUserRequest.IUserData = JSON.parse(call.request.userData)
             let headers: ICommonRequest.IHeaders = JSON.parse(call.request.headers)
-            let res: IUserRequest.IUserData = await ENTITY.UserE.createUserOnCms(userData, headers)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.createUserOnCms(userData, headers, true)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
@@ -94,7 +95,7 @@ server.addService(userProto.UserService.service, {
     createAddressOnCms: async (call: IUserGrpcRequest.ICreatAddressOnCmsReq, callback) => {
         try {
             consolelog(process.cwd(), "creatAddressOnCms", JSON.stringify(call.request), true)
-            let userData: IUserRequest.IUserData = JSON.parse(call.request.userData)
+            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: JSON.parse(call.request.userData).id })
             let headers: ICommonRequest.IHeaders = JSON.parse(call.request.headers)
             let asAddress: IAddressRequest.IAddress[] = JSON.parse(call.request.asAddress)
             let res: {} = await ENTITY.AddressE.addAddressOnCms(userData, headers, asAddress)
@@ -109,7 +110,7 @@ server.addService(userProto.UserService.service, {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(call.request), true)
             let userData: IUserRequest.IUserData = JSON.parse(call.request.userData)
             let headers: ICommonRequest.IHeaders = JSON.parse(call.request.headers)
-            let res: IUserRequest.IUserData = await ENTITY.UserE.createUserOnSdm(userData, headers)
+            let res: IUserRequest.IUserData = await ENTITY.UserE.createUserOnSdm(userData, headers, true)
             callback(null, res)
         } catch (error) {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
@@ -119,7 +120,7 @@ server.addService(userProto.UserService.service, {
     createAddressOnSdm: async (call: IUserGrpcRequest.ICreatAddressOnSdmReq, callback) => {
         try {
             consolelog(process.cwd(), "createAddressOnSdm", JSON.stringify(call.request), true)
-            let userData: IUserRequest.IUserData = JSON.parse(call.request.userData)
+            let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: JSON.parse(call.request.userData).id })
             let headers: ICommonRequest.IHeaders = JSON.parse(call.request.headers)
             let asAddress: IAddressRequest.IAddress[] = JSON.parse(call.request.asAddress)
             let res: {} = await ENTITY.AddressE.addAddressOnSdm(userData, headers, asAddress)

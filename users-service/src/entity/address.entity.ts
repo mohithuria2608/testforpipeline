@@ -243,90 +243,94 @@ export class AddressEntity extends BaseEntity {
    * */
     async addAddressOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
-            if (asAddress && typeof asAddress == 'string')
-                asAddress = JSON.parse(asAddress)
-            if (asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE) {
-                asAddress[0].bldgName = ""
-                asAddress[0].description = ""
-                asAddress[0].flatNum = ""
-                asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
-            }
-            consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(asAddress), false)
-            let addressSdmData = {
-                licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
-                language: headers.language.toLowerCase(),
-                customerRegistrationID: userData.sdmCorpRef,
-                address: {
-                    ADDR_AREAID: asAddress[0].areaId,// 1786,//  16
-                    ADDR_BLDGNAME: asAddress[0].bldgName,
-                    // ADDR_BLDGNUM: asAddress[0].flatNum,//comment test
-                    ADDR_CITYID: asAddress[0].cityId,// 17,
-                    ADDR_CLASSID: -1,
-                    ADDR_COUNTRYID: 1,
-                    ADDR_CUSTID: userData.sdmUserRef,
-                    ADDR_DESC: asAddress[0].description,
-                    ADDR_DISTRICTID: 1021,// 1008
-                    ADDR_FLATNUM: asAddress[0].flatNum,
-                    // ADDR_FLOOR: asAddress[0].flatNum,//comment test
-                    ADDR_MAPCODE: {
-                        X: asAddress[0].lat,
-                        Y: asAddress[0].lng
-                    },
-                    ADDR_PHONEAREACODE: userData.phnNo.slice(0, 2),
-                    ADDR_PHONECOUNTRYCODE: userData.cCode.replace('+', ''),
-                    ADDR_PHONELOOKUP: userData.phnNo,
-                    ADDR_PHONENUMBER: userData.phnNo.slice(2),
-                    ADDR_PHONETYPE: 2,
-                    ADDR_PROVINCEID: 7,
-                    ADDR_SKETCH: asAddress[0].description,
-                    ADDR_STREETID: 1,
-                    Phones: {
-                        CC_CUSTOMER_PHONE: {
-                            PHONE_AREACODE: userData.phnNo.slice(0, 2),
-                            PHONE_COUNTRYCODE: userData.cCode.replace('+', ''),
-                            PHONE_CUSTID: userData.sdmUserRef,
-                            PHONE_ISDEFAULT: 84,
-                            PHONE_LOOKUP: userData.phnNo,
-                            PHONE_NUMBER: userData.phnNo.slice(2),
-                            PHONE_TYPE: 2,
-                        }
-                    },
-                    WADDR_AREAID: 1786,// 16
-                    WADDR_BUILD_NAME: asAddress[0].bldgName,
-                    // WADDR_BUILD_NUM: asAddress[0].flatNum,//comment test
-                    WADDR_BUILD_TYPE: -1,
-                    WADDR_CITYID: 17,
-                    WADDR_conceptID: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.CONCEPT_ID,
-                    WADDR_COUNTRYID: 1,
-                    WADDR_DIRECTIONS: asAddress[0].description,
-                    WADDR_DISTRICTID: 1021,// 1008
-                    WADDR_DISTRICT_TEXT: "Default",
-                    WADDR_MNUID: 4,
-                    WADDR_PROVINCEID: 7,
-                    WADDR_STATUS: 2,
-                    WADDR_STREETID: 1,
-                    WADDR_TYPE: 1,
-                }
-            }
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
+            // if (userData.sdmUserRef && userData.sdmCorpRef) {
+            //     if (asAddress && typeof asAddress == 'string')
+            //         asAddress = JSON.parse(asAddress)
+            //     if (asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE) {
+            //         asAddress[0].bldgName = ""
+            //         asAddress[0].description = ""
+            //         asAddress[0].flatNum = ""
+            //         asAddress[0].addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
+            //     }
+            //     consolelog(process.cwd(), "going to add adddress on sdm", JSON.stringify(asAddress), false)
+            //     let addressSdmData = {
+            //         licenseCode: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.LICENSE_CODE,
+            //         language: headers.language.toLowerCase(),
+            //         customerRegistrationID: userData.sdmCorpRef,
+            //         address: {
+            //             ADDR_AREAID: asAddress[0].areaId,// 1786,//  16
+            //             ADDR_BLDGNAME: asAddress[0].bldgName,
+            //             // ADDR_BLDGNUM: asAddress[0].flatNum,//comment test
+            //             ADDR_CITYID: asAddress[0].cityId,// 17,
+            //             ADDR_CLASSID: -1,
+            //             ADDR_COUNTRYID: 1,
+            //             ADDR_CUSTID: userData.sdmUserRef,
+            //             ADDR_DESC: asAddress[0].description,
+            //             ADDR_DISTRICTID: 1021,// 1008
+            //             ADDR_FLATNUM: asAddress[0].flatNum,
+            //             // ADDR_FLOOR: asAddress[0].flatNum,//comment test
+            //             ADDR_MAPCODE: {
+            //                 X: asAddress[0].lat,
+            //                 Y: asAddress[0].lng
+            //             },
+            //             ADDR_PHONEAREACODE: userData.phnNo.slice(0, 2),
+            //             ADDR_PHONECOUNTRYCODE: userData.cCode.replace('+', ''),
+            //             ADDR_PHONELOOKUP: userData.phnNo,
+            //             ADDR_PHONENUMBER: userData.phnNo.slice(2),
+            //             ADDR_PHONETYPE: 2,
+            //             ADDR_PROVINCEID: 7,
+            //             ADDR_SKETCH: asAddress[0].description,
+            //             ADDR_STREETID: 1,
+            //             Phones: {
+            //                 CC_CUSTOMER_PHONE: {
+            //                     PHONE_AREACODE: userData.phnNo.slice(0, 2),
+            //                     PHONE_COUNTRYCODE: userData.cCode.replace('+', ''),
+            //                     PHONE_CUSTID: userData.sdmUserRef,
+            //                     PHONE_ISDEFAULT: 84,
+            //                     PHONE_LOOKUP: userData.phnNo,
+            //                     PHONE_NUMBER: userData.phnNo.slice(2),
+            //                     PHONE_TYPE: 2,
+            //                 }
+            //             },
+            //             WADDR_AREAID: 1786,// 16
+            //             WADDR_BUILD_NAME: asAddress[0].bldgName,
+            //             // WADDR_BUILD_NUM: asAddress[0].flatNum,//comment test
+            //             WADDR_BUILD_TYPE: -1,
+            //             WADDR_CITYID: 17,
+            //             WADDR_conceptID: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SDM.CONCEPT_ID,
+            //             WADDR_COUNTRYID: 1,
+            //             WADDR_DIRECTIONS: asAddress[0].description,
+            //             WADDR_DISTRICTID: 1021,// 1008
+            //             WADDR_DISTRICT_TEXT: "Default",
+            //             WADDR_MNUID: 4,
+            //             WADDR_PROVINCEID: 7,
+            //             WADDR_STATUS: 2,
+            //             WADDR_STREETID: 1,
+            //             WADDR_TYPE: 1,
+            //         }
+            //     }
 
-            let sdmAdd = await SDM.AddressSDME.createAddress(addressSdmData)
-            let bin = asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-            let asAddr = await this.updateAddress(headers, { addressId: asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
-            if (asAddr.cmsAddressRef) {
-                kafkaService.kafkaSync({
-                    set: this.set,
-                    cms: {
-                        update: true,
-                        argv: JSON.stringify({
-                            userData: userData,
-                            headers: headers,
-                            asAddress: [asAddr]
-                        })
-                    },
-                    inQ: true
-                })
-            }
-            return {}
+            //     let sdmAdd = await SDM.AddressSDME.createAddress(addressSdmData)
+            //     let bin = asAddress[0].addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+            //     let asAddr = await this.updateAddress(headers, { addressId: asAddress[0].id, sdmAddressRef: parseInt(sdmAdd.ADDR_ID) }, bin, userData, false)
+            //     if (asAddr.cmsAddressRef) {
+            //         kafkaService.kafkaSync({
+            //             set: this.set,
+            //             cms: {
+            //                 update: true,
+            //                 argv: JSON.stringify({
+            //                     userData: userData,
+            //                     headers: headers,
+            //                     asAddress: [asAddr]
+            //                 })
+            //             },
+            //             inQ: true
+            //         })
+            //     }
+            //     return {}
+            // } else
+            //     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_SDM)
         } catch (error) {
             consolelog(process.cwd(), "addAddressOnSdm", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -339,28 +343,32 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddressOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
-            consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(asAddress), false)
-            let res = await CMS.AddressCMSE.createAddresssOnCms(userData, asAddress)
-            if (res && res.customerId) {
-                if (res.addressIds && res.addressIds.length > 0) {
-                    for (const iterator of res.addressIds) {
-                        if (iterator.id && iterator.addressId) {
-                            let updateAddressOnAs: IAddressRequest.IUpdateAddress = {
-                                addressId: iterator.id,
-                                cmsAddressRef: parseInt(iterator.addressId),
+            if (userData.cmsUserRef) {
+                consolelog(process.cwd(), "going to add adddress on cms", JSON.stringify(asAddress), false)
+                let res = await CMS.AddressCMSE.createAddresssOnCms(userData, asAddress)
+                if (res && res.customerId) {
+                    if (res.addressIds && res.addressIds.length > 0) {
+                        for (const iterator of res.addressIds) {
+                            if (iterator.id && iterator.addressId) {
+                                let updateAddressOnAs: IAddressRequest.IUpdateAddress = {
+                                    addressId: iterator.id,
+                                    cmsAddressRef: parseInt(iterator.addressId),
+                                }
+                                let bin = ""
+                                asAddress.forEach(obj => {
+                                    if (obj.id == iterator.id)
+                                        bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
+                                })
+                                if (bin != "")
+                                    await this.updateAddress(headers, updateAddressOnAs, bin, userData, false)
                             }
-                            let bin = ""
-                            asAddress.forEach(obj => {
-                                if (obj.id == iterator.id)
-                                    bin = obj.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE ? Constant.DATABASE.TYPE.ADDRESS_BIN.DELIVERY : Constant.DATABASE.TYPE.ADDRESS_BIN.PICKUP
-                            })
-                            if (bin != "")
-                                await this.updateAddress(headers, updateAddressOnAs, bin, userData, false)
                         }
                     }
-                }
-            }
-            return {}
+                } else
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
+                return {}
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
         } catch (error) {
             consolelog(process.cwd(), "addAddressOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -373,9 +381,12 @@ export class AddressEntity extends BaseEntity {
     * */
     async updateAddressOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, asAddress: IAddressRequest.IAddress[]) {
         try {
-            consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData), false)
-            let res = await CMS.AddressCMSE.updateAddresssOnCms(userData, headers, asAddress)
-            return {}
+            if (userData.cmsUserRef) {
+                consolelog(process.cwd(), "going to update adddress on cms", JSON.stringify(userData), false)
+                let res = await CMS.AddressCMSE.updateAddresssOnCms(userData, headers, asAddress)
+                return {}
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E400.USER_NOT_CREATED_ON_CMS)
         } catch (error) {
             consolelog(process.cwd(), "updateAddressOnCms", JSON.stringify(error), false)
             return Promise.reject(error)

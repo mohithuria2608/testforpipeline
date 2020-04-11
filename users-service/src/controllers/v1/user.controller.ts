@@ -29,27 +29,17 @@ export class UserController {
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
                 let data = JSON.parse(payload.cms.argv)
-                data.userData = await ENTITY.UserE.getUser({ userId: data.userData.id })
-                if (payload.cms.create) {
-                    if (data.userData.cmsUserRef == 0)
-                        await ENTITY.UserE.createUserOnCms(data.userData, data.headers)
-                }
-                if (payload.cms.update) {
-                    if (data.userData.cmsUserRef)
-                        await ENTITY.UserE.updateUserOnCms(data.userData, data.headers)
-                }
+                if (payload.cms.create)
+                    await ENTITY.UserE.createUserOnCms(data.userData, data.headers, true)
+                if (payload.cms.update)
+                    await ENTITY.UserE.updateUserOnCms(data.userData, data.headers)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
-                data.userData = await ENTITY.UserE.getUser({ userId: data.userData.id })
-                if (payload.sdm.create) {
-                    if (data.userData.sdmUserRef == 0)
-                        await ENTITY.UserE.createUserOnSdm(data.userData, data.headers)
-                }
-                if (payload.sdm.update) {
-                    if (data.userData.sdmUserRef)
-                        await ENTITY.UserE.updateUserOnSdm(data.userData, data.headers)
-                }
+                if (payload.sdm.create)
+                    await ENTITY.UserE.createUserOnSdm(data.userData, data.headers, true)
+                if (payload.sdm.update)
+                    await ENTITY.UserE.updateUserOnSdm(data.userData, data.headers)
                 if (payload.sdm.sync)
                     await this.validateUserOnSdm(data.userData, true, data.headers)
             }
@@ -661,6 +651,7 @@ export class UserController {
 
     async validateUserOnSdm(userData: IUserRequest.IUserData, async: boolean, headers: ICommonRequest.IHeaders) {
         try {
+            userData = await ENTITY.UserE.getUser({ userId: userData.id })
             consolelog(process.cwd(), "validateUserOnSdm", JSON.stringify(userData), false)
             consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
             let updateOnSdm = false
@@ -697,7 +688,7 @@ export class UserController {
                         inQ: true
                     })
                 } else {
-                    userData = await ENTITY.UserE.createUserOnSdm(userData, headers)
+                    userData = await ENTITY.UserE.createUserOnSdm(userData, headers, false)
                 }
             }
             if (createOnCms) {
@@ -714,7 +705,7 @@ export class UserController {
                         inQ: true
                     })
                 } else {
-                    userData = await ENTITY.UserE.createUserOnCms(userData, headers)
+                    userData = await ENTITY.UserE.createUserOnCms(userData, headers, false)
                 }
             }
             if (updateAs && Object.keys(updateAs).length > 0) {

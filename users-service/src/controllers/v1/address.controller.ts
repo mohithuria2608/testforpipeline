@@ -24,14 +24,10 @@ export class AddressController {
                 let headers = data.headers
                 let asAddress = data.asAddress
                 userData = await ENTITY.UserE.getUser({ userId: userData.id })
-                if (payload.cms.create) {
-                    if (userData.cmsUserRef)
-                        await ENTITY.AddressE.addAddressOnCms(userData, headers, asAddress)
-                }
-                if (payload.cms.update) {
-                    if (userData.cmsUserRef)
-                        await ENTITY.AddressE.updateAddressOnCms(userData, headers, asAddress)
-                }
+                if (payload.cms.create)
+                    await ENTITY.AddressE.addAddressOnCms(userData, headers, asAddress)
+                if (payload.cms.update)
+                    await ENTITY.AddressE.updateAddressOnCms(userData, headers, asAddress)
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
@@ -39,12 +35,8 @@ export class AddressController {
                 let headers = data.headers
                 let asAddress = data.asAddress
                 userData = await ENTITY.UserE.getUser({ userId: userData.id })
-                if (payload.sdm.create) {
-                    if (userData.sdmUserRef)
-                        await ENTITY.AddressE.addAddressOnSdm(userData, headers, asAddress)
-                }
-                if (payload.sdm.update) {
-                }
+                if (payload.sdm.create)
+                    await ENTITY.AddressE.addAddressOnSdm(userData, headers, asAddress)
             }
             return {}
         } catch (error) {

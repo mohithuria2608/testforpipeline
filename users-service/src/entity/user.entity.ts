@@ -240,85 +240,29 @@ export class UserEntity extends BaseEntity {
      * @description Create user on SDM
      * @param userData 
      */
-    async createUserOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
+    async createUserOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, recheckUser: boolean) {
         try {
             consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(userData), false)
             consolelog(process.cwd(), "headers", JSON.stringify(headers), false)
-            /**
-             * @todo : remove getUser query
-             */
-            let res = await SDM.UserSDME.createCustomerOnSdm(userData, headers)
-
-            let putArg: IAerospike.Put = {
-                bins: {
-                    sdmUserRef: parseInt(res.CUST_ID.toString()),
-                    sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
-                },
-                set: this.set,
-                key: userData.id,
-                update: true,
-            }
-            await Aerospike.put(putArg)
-            if (userData.socialKey) {
-                SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
-            }
-            userData = await this.getUser({ userId: userData.id })
-            if (userData.cmsUserRef != 0) {
-                kafkaService.kafkaSync({
-                    set: this.set,
-                    cms: {
-                        update: true,
-                        argv: JSON.stringify({
-                            userData: userData,
-                            headers: headers
-                        })
-                    },
-                    inQ: true
-                })
-            }
-            return userData
-        } catch (error) {
-            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @description Update user on SDM
-     * @param payload 
-     */
-    async updateUserOnSdm(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
-        try {
-            let res = await SDM.UserSDME.updateCustomerOnSdm(payload, headers)
-            return res
-        } catch (error) {
-            consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @description Create user on CMS
-     * @param userData 
-     */
-    async createUserOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
-        try {
-            /**
-             * @todo : remove getUser query
-             */
-            let res = await CMS.UserCMSE.createCustomerOnCms(userData)
-            if (res && res.customerId) {
+            if (recheckUser)
+                userData = await this.getUser({ userId: userData.id })
+            if (!userData.sdmUserRef) {
+                let res = await SDM.UserSDME.createCustomerOnSdm(userData, headers)
                 let putArg: IAerospike.Put = {
                     bins: {
-                        cmsUserRef: parseInt(res.customerId.toString()),
+                        sdmUserRef: parseInt(res.CUST_ID.toString()),
+                        sdmCorpRef: parseInt(res.CUST_CORPID.toString()),
                     },
                     set: this.set,
                     key: userData.id,
                     update: true,
                 }
                 await Aerospike.put(putArg)
+                if (userData.socialKey) {
+                    SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
+                }
                 userData = await this.getUser({ userId: userData.id })
-                if (userData.sdmUserRef && userData.sdmCorpRef) {
+                if (userData.cmsUserRef != 0) {
                     kafkaService.kafkaSync({
                         set: this.set,
                         cms: {
@@ -332,8 +276,71 @@ export class UserEntity extends BaseEntity {
                     })
                 }
                 return userData
-            }
-            return userData
+            } else
+                return userData
+        } catch (error) {
+            consolelog(process.cwd(), "createUserOnSdm", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @description Update user on SDM
+     * @param userData 
+     */
+    async updateUserOnSdm(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
+        try {
+            userData = await this.getUser({ userId: userData.id })
+            if (userData.sdmUserRef) {
+                let res = await SDM.UserSDME.updateCustomerOnSdm(userData, headers)
+                return res
+            } else
+                return {}
+        } catch (error) {
+            consolelog(process.cwd(), "updateUserOnSdm", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+     * @description Create user on CMS
+     * @param userData 
+     */
+    async createUserOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders, recheckUser: boolean) {
+        try {
+            if (recheckUser)
+                userData = await this.getUser({ userId: userData.id })
+            if (!userData.cmsUserRef) {
+                let res = await CMS.UserCMSE.createCustomerOnCms(userData)
+                if (res && res.customerId) {
+                    let putArg: IAerospike.Put = {
+                        bins: {
+                            cmsUserRef: parseInt(res.customerId.toString()),
+                        },
+                        set: this.set,
+                        key: userData.id,
+                        update: true,
+                    }
+                    await Aerospike.put(putArg)
+                    userData = await this.getUser({ userId: userData.id })
+                    if (userData.sdmUserRef && userData.sdmCorpRef) {
+                        kafkaService.kafkaSync({
+                            set: this.set,
+                            cms: {
+                                update: true,
+                                argv: JSON.stringify({
+                                    userData: userData,
+                                    headers: headers
+                                })
+                            },
+                            inQ: true
+                        })
+                    }
+                    return userData
+                }
+                return userData
+            } else
+                return userData
         } catch (error) {
             consolelog(process.cwd(), "createUserOnCms", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -342,12 +349,13 @@ export class UserEntity extends BaseEntity {
 
     /**
      * @description Update user on CMS
-     * @param payload 
+     * @param userData 
      */
-    async updateUserOnCms(payload: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
+    async updateUserOnCms(userData: IUserRequest.IUserData, headers: ICommonRequest.IHeaders) {
         try {
-            if (payload.cmsUserRef) {
-                let res = await CMS.UserCMSE.updateCustomerOnCms(payload)
+            userData = await this.getUser({ userId: userData.id })
+            if (userData.cmsUserRef) {
+                let res = await CMS.UserCMSE.updateCustomerOnCms(userData)
                 consolelog(process.cwd(), "updateUserOnCms", res, false)
             }
             return {}
