@@ -1001,97 +1001,99 @@ export class OrderClass extends BaseEntity {
                         if (order.transferDone)
                             order.sdmOrderRef = order.newOrderId
                         let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
-                        if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
-                            let transferOrder = await this.transferOrderHandler(order, sdmOrder)
-                            recheck = transferOrder.recheck;
-                            order = transferOrder.order;
-                        }
-                        consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
-                        if (sdmOrder.Status && typeof sdmOrder.Status) {
-                            if (oldSdmStatus != parseInt(sdmOrder.Status)) {
-                                order = await this.updateOneEntityMdb({ _id: order._id }, {
-                                    updatedAt: new Date().getTime(),
-                                    sdmOrderStatus: parseInt(sdmOrder.Status)
-                                }, { new: true })
-                                statusChanged = true
+                        if (sdmOrder && sdmOrder.OrderID && !isNaN(parseInt(sdmOrder.OrderID))) {
+                            if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
+                                let transferOrder = await this.transferOrderHandler(order, sdmOrder)
+                                recheck = transferOrder.recheck;
+                                order = transferOrder.order;
                             }
-                            if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
-                                let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)
-                                recheck = amountValidation.recheck;
-                                order = amountValidation.order;
-                            }
+                            consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
+                            if (sdmOrder.Status && typeof sdmOrder.Status) {
+                                if (oldSdmStatus != parseInt(sdmOrder.Status)) {
+                                    order = await this.updateOneEntityMdb({ _id: order._id }, {
+                                        updatedAt: new Date().getTime(),
+                                        sdmOrderStatus: parseInt(sdmOrder.Status)
+                                    }, { new: true })
+                                    statusChanged = true
+                                }
+                                if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
+                                    let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)
+                                    recheck = amountValidation.recheck;
+                                    order = amountValidation.order;
+                                }
 
-                            let remarksValidation = await this.validationRemarksHandler(recheck, order, sdmOrder)
-                            recheck = remarksValidation.recheck;
-                            order = remarksValidation.order;
+                                let remarksValidation = await this.validationRemarksHandler(recheck, order, sdmOrder)
+                                recheck = remarksValidation.recheck;
+                                order = remarksValidation.order;
 
-                            if (recheck && sdmOrder && sdmOrder.OrderID) {
-                                switch (parseInt(sdmOrder.Status)) {
-                                    case 0:
-                                    case 96:
-                                    case 1: {
-                                        let pendingHandler = await this.sdmPendingOrderHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                        recheck = pendingHandler.recheck;
-                                        order = pendingHandler.order;
-                                        break;
-                                    }
-                                    case 2: {
-                                        let confirmedHandler = await this.sdmConfirmedHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                        recheck = confirmedHandler.recheck;
-                                        order = confirmedHandler.order;
-                                        break;
-                                    }
-                                    case 8: {
-                                        let readyHandler = await this.sdmReadyHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                        recheck = readyHandler.recheck;
-                                        order = readyHandler.order;
-                                        break;
-                                    }
-                                    case 16:
-                                    case 32: {
-                                        let onTheWayHandler = await this.sdmOnTheWayHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                        recheck = onTheWayHandler.recheck;
-                                        order = onTheWayHandler.order;
-                                        break;
-                                    }
-                                    case 64:
-                                    case 128:
-                                    case 2048: {
-                                        let deliveredHandler = await this.sdmDeliveredHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                        recheck = deliveredHandler.recheck;
-                                        order = deliveredHandler.order;
-                                        break;
-                                    }
-                                    case 256:
-                                    case 512:
-                                    case 1024:
-                                    case 4096:
-                                    case 8192: {
-                                        if (order.transferDone ||
-                                            (sdmOrder.TransferFromOrderID == "" || sdmOrder.TransferFromOrderID == "0") && (sdmOrder.TransferFromStoreID == "" || sdmOrder.TransferFromStoreID == "0")
-                                        ) {
-                                            let cancelledHandler = await this.sdmCancelledHandler(recheck, oldSdmStatus, order, sdmOrder)
-                                            recheck = cancelledHandler.recheck;
-                                            order = cancelledHandler.order;
+                                if (recheck && sdmOrder && sdmOrder.OrderID) {
+                                    switch (parseInt(sdmOrder.Status)) {
+                                        case 0:
+                                        case 96:
+                                        case 1: {
+                                            let pendingHandler = await this.sdmPendingOrderHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                            recheck = pendingHandler.recheck;
+                                            order = pendingHandler.order;
+                                            break;
                                         }
-                                        break;
-                                    }
-                                    default: {
-                                        recheck = false
-                                        consolelog(process.cwd(), `scheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
-                                        break;
+                                        case 2: {
+                                            let confirmedHandler = await this.sdmConfirmedHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                            recheck = confirmedHandler.recheck;
+                                            order = confirmedHandler.order;
+                                            break;
+                                        }
+                                        case 8: {
+                                            let readyHandler = await this.sdmReadyHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                            recheck = readyHandler.recheck;
+                                            order = readyHandler.order;
+                                            break;
+                                        }
+                                        case 16:
+                                        case 32: {
+                                            let onTheWayHandler = await this.sdmOnTheWayHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                            recheck = onTheWayHandler.recheck;
+                                            order = onTheWayHandler.order;
+                                            break;
+                                        }
+                                        case 64:
+                                        case 128:
+                                        case 2048: {
+                                            let deliveredHandler = await this.sdmDeliveredHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                            recheck = deliveredHandler.recheck;
+                                            order = deliveredHandler.order;
+                                            break;
+                                        }
+                                        case 256:
+                                        case 512:
+                                        case 1024:
+                                        case 4096:
+                                        case 8192: {
+                                            if (order.transferDone ||
+                                                (sdmOrder.TransferFromOrderID == "" || sdmOrder.TransferFromOrderID == "0") && (sdmOrder.TransferFromStoreID == "" || sdmOrder.TransferFromStoreID == "0")
+                                            ) {
+                                                let cancelledHandler = await this.sdmCancelledHandler(recheck, oldSdmStatus, order, sdmOrder)
+                                                recheck = cancelledHandler.recheck;
+                                                order = cancelledHandler.order;
+                                            }
+                                            break;
+                                        }
+                                        default: {
+                                            recheck = false
+                                            consolelog(process.cwd(), `scheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                            if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
-                                (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
+                                if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
+                                    (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
+                                    recheck = false
+                                    order = await this.maxPendingReachedHandler(order);
+                                }
+                            } else
                                 recheck = false
-                                order = await this.maxPendingReachedHandler(order);
-                            }
-                        } else
-                            recheck = false
 
-                        consolelog(process.cwd(), `scheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
+                            consolelog(process.cwd(), `scheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
+                        }
                     }
                 }
             }
