@@ -57,6 +57,8 @@ export class GuestController {
     * */
     async guestCheckout(headers: ICommonRequest.IHeaders, payload: IGuestRequest.IGuestCheckout, auth: ICommonRequest.AuthorizationObj) {
         try {
+            if (payload.email)
+                payload.email = payload.email.toLowerCase()
             const otp = generateOtp()
             let address
             const fullPhnNo = payload.cCode + payload.phnNo;

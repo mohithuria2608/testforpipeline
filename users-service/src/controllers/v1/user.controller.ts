@@ -274,6 +274,9 @@ export class UserController {
     * */
     async socialAuthValidate(headers: ICommonRequest.IHeaders, payload: IUserRequest.IAuthSocial) {
         try {
+            if (payload.email)
+                payload.email = payload.email.toLowerCase()
+
             const otp = generateOtp()
             let userData: IUserRequest.IUserData = {}
             let updateName = false
@@ -448,6 +451,8 @@ export class UserController {
     * */
     async createProfile(headers: ICommonRequest.IHeaders, payload: IUserRequest.ICreateProfile, auth: ICommonRequest.AuthorizationObj) {
         try {
+            if (payload.email)
+                payload.email = payload.email.toLowerCase()
             const otp = generateOtp()
             const fullPhnNo = payload.cCode + payload.phnNo;
             const username = headers.brand + "_" + fullPhnNo;

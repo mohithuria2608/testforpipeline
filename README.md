@@ -135,6 +135,10 @@ Hands-on Microservices with TypeScript 3
     ​* password: WebApp@2020
     * git push https://gitlab.americanarest.com/americana-foods/amf_backend prod:prod_final
 
+* Jenkins URL : http://52.142.115.201:10001/
+    * admin
+    * WebApp@2020
+
 # Blob url
 * 205 server : https://bloobstorage.blob.core.windows.net/americana/testing/kfc_uae_1_En.json
 * 207 server : https://bloobstorage.blob.core.windows.net/americana/development/kfc_uae_1_En.json
