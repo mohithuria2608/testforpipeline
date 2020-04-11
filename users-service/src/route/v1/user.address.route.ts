@@ -11,8 +11,7 @@ export default (router: Router) => {
     router
         .post('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: COMMON_HEADERS,
@@ -62,8 +61,7 @@ export default (router: Router) => {
             })
         .patch('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: COMMON_HEADERS,
@@ -97,8 +95,7 @@ export default (router: Router) => {
             })
         .get('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: COMMON_HEADERS
@@ -119,8 +116,7 @@ export default (router: Router) => {
             })
         .delete('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: COMMON_HEADERS,

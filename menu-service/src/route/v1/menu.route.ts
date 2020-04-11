@@ -5,18 +5,12 @@ import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { menuController } from '../../controllers';
 import * as JOI from './common.joi.validator';
-import * as ENTITY from '../../entity'
-import * as fs from 'fs'
-const protobuf = require("protobufjs");
 
 
 export default (router: Router) => {
     router
         .get('/',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
+            ...getMiddleware([]),
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {

@@ -5,7 +5,7 @@ import { consolelog, configIdGenerator } from '../../utils'
 import * as ENTITY from '../../entity'
 import { Aerospike } from '../../aerospike'
 import { kafkaService } from '../../grpc/client'
-import { configuration } from '../../configuration';
+import { configuration } from '../../sync-config/configuration'
 
 export class CmsConfigController {
 
@@ -36,731 +36,6 @@ export class CmsConfigController {
     */
     async syncConfigFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
-            let configssss = [
-                {
-                    "type": "general",
-                    "action": "reset",
-                    "data": [
-                        {
-                            "cms_page_data": [
-                                {
-                                    "title": "404 Not Found",
-                                    "identifier": "no-route"
-                                },
-                                {
-                                    "title": "Home page",
-                                    "identifier": "home"
-                                },
-                                {
-                                    "title": "Enable Cookies",
-                                    "identifier": "enable-cookies"
-                                },
-                                {
-                                    "title": "Privacy and Cookie Policy",
-                                    "identifier": "privacy-policy-cookie-restriction-mode"
-                                }
-                            ],
-                            "ttl_for_menu": null,
-                            "ttl_for_cart": "86400",
-                            "initial_user_ttl": "604800",
-                            "initial_guest_ttl": "86400",
-                            "bypass_otp": "1212",
-                            "otp_expire": "600000",
-                            "access_token_expire_time": "8640000",
-                            "refresh_token_expire_time": "8640000",
-                            "cms_auth_exp": null,
-                            "reg_ex_for_validation": "^[1-9]\\\\d{8}$|^[1-9]\\\\d{8}$",
-                            "country_codes": "+971",
-                            "resent_otp_attempts": null,
-                            "upgrade": null,
-                            "tnclink": null,
-                            "maximum_order_items": null,
-                            "app_reset_time_stamp": null,
-                            "cdn_base_url": null,
-                            "maximum_cart_price": null,
-                            "support": "666666666",
-                            "appstore_url": null,
-                            "play_store_url": null,
-                            "customer_care_email": "kfc_uae@gmail.com",
-                            "user_change_ttl": "900",
-                            "max_pending_state": "480000",
-                            "minimum_cart_price": "23",
-                            "payment_api_timeout": "3 * 1000",
-                            "payment_api_key_prefix": "Key_",
-                            "display_color": "true",
-                            "deeplink_fallback": "https://uae.kfc.me//",
-                            "auth_mech": "Bearer",
-                            "addr_show_time": "3",
-                            "track_order": null,
-                            "android_scheme_host": null,
-                            "android_package_name": null,
-                            "ios_scheme_host": null,
-                            "splash_expr_time": null,
-                            "chunk_size_user_migration": null,
-                            "payment_success_fallback": null,
-                            "payment_failure_fallback": null,
-                            "delivery_charge_id": null,
-                            "img_etag_threshold": null,
-                            "sdm_store_time_offset": null,
-                            "success": true
-                        }
-                    ]
-                },
-                {
-                    "type": "kafka",
-                    "action": "reset",
-                    "data": [
-                        {
-                            "sdm": {
-                                "user_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "address_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "menu_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "promotion_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "hidden_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "order_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    },
-                                    "interval": {
-                                        "get": null,
-                                        "get_once": null,
-                                        "get_max": null,
-                                        "next_ping": null
-                                    }
-                                }
-                            },
-                            "user": {
-                                "user_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "address_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "menu_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "promotion_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "hidden_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "order_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                }
-                            },
-                            "as": {
-                                "user_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "address_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "menu_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "promotion_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "hidden_config": {
-                                    "max_try": {
-                                        "create": "5",
-                                        "update": "5",
-                                        "get": "5",
-                                        "sync": "5",
-                                        "reset": "5"
-                                    }
-                                },
-                                "configuration_config": {
-                                    "max_try": {
-                                        "create": null,
-                                        "update": null,
-                                        "get": null,
-                                        "sync": null,
-                                        "reset": null
-                                    }
-                                },
-                                "app_config": {
-                                    "max_try": {
-                                        "create": null,
-                                        "update": null,
-                                        "get": null,
-                                        "sync": null,
-                                        "reset": null
-                                    }
-                                },
-                                "faq_config": {
-                                    "max_try": {
-                                        "create": null,
-                                        "update": null,
-                                        "get": null,
-                                        "sync": null,
-                                        "reset": null
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "order_status",
-                    "action": "reset",
-                    "data": [
-                        {
-                            "cart_config": {
-                                "as": "CART",
-                                "mongo": null,
-                                "cms": null,
-                                "sdm": null,
-                                "freq": {
-                                    "get": null,
-                                    "geet_once": null,
-                                    "get_max": null,
-                                    "next_ping": null
-                                }
-                            }
-                        },
-                        {
-                            "pending_config": {
-                                "as": "PENDING",
-                                "mongo": "PENDING",
-                                "cms": "pending",
-                                "sdm": "0,1,96",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "confirmed_config": {
-                                "as": "CONFIRMED",
-                                "mongo": "CONFIRMED",
-                                "cms": "processing",
-                                "sdm": "2",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "prepared_config": {
-                                "as": "BEING_PREPARED",
-                                "mongo": "BEING_PREPARED",
-                                "cms": "being_prepared",
-                                "sdm": "2",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "ready_config": {
-                                "as": "READY",
-                                "mongo": "READY",
-                                "cms": "ready",
-                                "sdm": "8",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "ontheway_config": {
-                                "as": "ON_THE_WAY",
-                                "mongo": "ON_THE_WAY",
-                                "cms": "shipped",
-                                "sdm": "16,32",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "delivered_config": {
-                                "as": "DELIVERED",
-                                "mongo": "DELIVERED",
-                                "cms": "complete",
-                                "sdm": "64,128,2048",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "closed_config": {
-                                "as": null,
-                                "mongo": null,
-                                "cms": "closed",
-                                "sdm": null,
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "cancelled_config": {
-                                "as": "CANCELLED",
-                                "mongo": "CANCELED",
-                                "cms": "canceled",
-                                "sdm": "512,256,1024,4096,8192",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        },
-                        {
-                            "failure_config": {
-                                "as": "FAILURE",
-                                "mongo": "FAILURE",
-                                "cms": "failed",
-                                "sdm": "-2",
-                                "freq": {
-                                    "get": "5000",
-                                    "geet_once": "0",
-                                    "get_max": "65000",
-                                    "next_ping": "15"
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "payment",
-                    "action": "reset",
-                    "data": [
-                        {
-                            "cod_info": {
-                                "status": "1",
-                                "name": "Cash On Delivery",
-                                "min_order_total": null,
-                                "max_order_total": null,
-                                "code": "cashondelivery",
-                                "sdm": {
-                                    "pay_status": null,
-                                    "pay_store_tender_id": null,
-                                    "pay_sub_type": null,
-                                    "pay_type": null
-                                }
-                            },
-                            "noon_pay_config": {
-                                "brand_code": "KFC",
-                                "country_code": "AE",
-                                "currency_code": "AED",
-                                "channel": "Mobile",
-                                "decimal": "2",
-                                "payment_methods": [
-                                    {
-                                        "id": "1",
-                                        "name": "Card",
-                                        "order_category": "kfc_3ds"
-                                    }
-                                ],
-                                "payment_retry_interval": "10000",
-                                "max_try": "2",
-                                "noonpay_order_expiration_time": "600000",
-                                "businessIdentifier": "americana_test_cognizant",
-                                "app_identifier": "kfc_uae_test",
-                                "app_access_key": "65c5cc823a3f4c079de1c2928d927ebd",
-                                "apiKey": null,
-                                "environment": "Test",
-                                "noonpay_base_url": "https://api.noonpayments.com/payment/v1",
-                                "noonpay_initiate_payment_end_point": "/order",
-                                "noonpay_get_order_end_point": null,
-                                "noonpay_get_order_refrence_end_point": null,
-                                "noonpay_capture_payment_endpoint": null,
-                                "noonpay_reverse_payment_endpoint": null,
-                                "noonpay_refund_payment_endpoint": null,
-                                "code": "noonpay",
-                                "status": "1",
-                                "sdm": {
-                                    "pay_status": null,
-                                    "pay_store_tender_id": null,
-                                    "pay_sub_type": null,
-                                    "pay_type": null
-                                }
-                            },
-                            "store_code": "uae_store",
-                            "store_id": "3"
-                        },
-                        {
-                            "store_code": "ksa_store",
-                            "store_id": "2",
-                            "noon_pay_config": {
-                                "brand_code": "ksa",
-                                "country_code": "us",
-                                "currency_code": null,
-                                "channel": null,
-                                "decimal": null,
-                                "payment_methods": [
-                                    {
-                                        "id": "1",
-                                        "name": "Card",
-                                        "order_category": "kfc_3ds"
-                                    }
-                                ],
-                                "payment_retry_interval": null,
-                                "max_try": null,
-                                "noonpay_order_expiration_time": null,
-                                "businessIdentifier": null,
-                                "app_identifier": null,
-                                "app_access_key": null,
-                                "apiKey": null,
-                                "environment": null,
-                                "noonpay_base_url": null,
-                                "noonpay_initiate_payment_end_point": null,
-                                "noonpay_get_order_end_point": null,
-                                "noonpay_get_order_refrence_end_point": null,
-                                "noonpay_capture_payment_endpoint": null,
-                                "noonpay_reverse_payment_endpoint": null,
-                                "noonpay_refund_payment_endpoint": null,
-                                "code": "noonpay",
-                                "status": "1",
-                                "sdm": {
-                                    "pay_status": null,
-                                    "pay_store_tender_id": null,
-                                    "pay_sub_type": null,
-                                    "pay_type": null
-                                }
-                            },
-                            "cod_info": {
-                                "status": "1",
-                                "name": "Cash On Delivery",
-                                "min_order_total": null,
-                                "max_order_total": null,
-                                "code": "cashondelivery",
-                                "sdm": {
-                                    "pay_status": null,
-                                    "pay_store_tender_id": null,
-                                    "pay_sub_type": null,
-                                    "pay_type": null
-                                }
-                            }
-                        },
-                        {
-                            "store_code": "main_website_store",
-                            "store_id": "1",
-                            "noon_pay_config": {
-                                "brand_code": "ksa",
-                                "country_code": "us",
-                                "currency_code": null,
-                                "channel": null,
-                                "decimal": null,
-                                "payment_methods": [
-
-                                ],
-                                "payment_retry_interval": null,
-                                "max_try": null,
-                                "noonpay_order_expiration_time": null,
-                                "businessIdentifier": null,
-                                "app_identifier": null,
-                                "app_access_key": null,
-                                "apiKey": null,
-                                "environment": null,
-                                "noonpay_base_url": null,
-                                "noonpay_initiate_payment_end_point": null,
-                                "noonpay_get_order_end_point": null,
-                                "noonpay_get_order_refrence_end_point": null,
-                                "noonpay_capture_payment_endpoint": null,
-                                "noonpay_reverse_payment_endpoint": null,
-                                "noonpay_refund_payment_endpoint": null,
-                                "code": "noonpay",
-                                "status": "1",
-                                "sdm": {
-                                    "pay_status": null,
-                                    "pay_store_tender_id": null,
-                                    "pay_sub_type": null,
-                                    "pay_type": null
-                                }
-                            },
-                            "cod_info": {
-                                "status": "1",
-                                "name": "Cash On Delivery",
-                                "min_order_total": null,
-                                "max_order_total": null,
-                                "code": "cashondelivery",
-                                "sdm": {
-                                    "pay_status": null,
-                                    "pay_store_tender_id": null,
-                                    "pay_sub_type": null,
-                                    "pay_type": null
-                                }
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "country_specific",
-                    "action": "reset",
-                    "data": [
-                        {
-                            "country_code": "BHM",
-                            "country_name": "Bharat Mata",
-                            "concept_id": "bot bda concept hai",
-                            "sdm_url": "ptaa ni",
-                            "base_currency": "upper currency",
-                            "licence": "licence hi licence hai",
-                            "channel_data": [
-                                {
-                                    "template_id": "1",
-                                    "template_status": "1",
-                                    "channel_name": "Star Sports",
-                                    "menu_data": [
-                                        {
-                                            "menu_id": "2",
-                                            "menu_state": "2",
-                                            "menu_cluster": "2",
-                                            "frequency_cron": "2",
-                                            "time_cron": "2"
-                                        },
-                                        {
-                                            "menu_id": "234",
-                                            "menu_state": "delhi",
-                                            "menu_cluster": "cluster",
-                                            "frequency_cron": "bot jaldi",
-                                            "time_cron": "2 mint"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "template_id": "2",
-                                    "template_status": "1",
-                                    "channel_name": "Nat Geo",
-                                    "menu_data": [
-                                        {
-                                            "menu_id": "2",
-                                            "menu_state": "2",
-                                            "menu_cluster": "2",
-                                            "frequency_cron": "2",
-                                            "time_cron": "2"
-                                        }
-                                    ]
-                                }
-                            ],
-                            "home_overlay": {
-                                "En": {
-                                    "mediaUrl": null,
-                                    "gif": null,
-                                    "mediaType": null,
-                                    "extension": null,
-                                    "action": {
-                                        "id": null,
-                                        "type": null,
-                                        "delimeters": null
-                                    }
-                                },
-                                "Ar": {
-                                    "mediaUrl": null,
-                                    "gif": null,
-                                    "mediaType": null,
-                                    "extension": null,
-                                    "action": {
-                                        "id": null,
-                                        "type": null,
-                                        "delimeters": null
-                                    }
-                                }
-                            },
-                            "sdm": {
-                                "licence_code": null,
-                                "concept_id": null,
-                                "menu_template_id": null
-                            },
-                            "ccode": null,
-                            "customer_care": null,
-                            "support_email": null,
-                            "min_cart_value": null,
-                            "min_cod_cart_value": null
-                        }
-                    ]
-                },
-                {
-                    "type": "shipment",
-                    "action": "reset",
-                    "data": [
-                        {
-                            "1": {
-                                "store_code": "main_website_store",
-                                "store_id": "1",
-                                "free_shipping": {
-                                    "status": "1",
-                                    "title": "Free Shipping",
-                                    "min_order_total": "1",
-                                    "price": 0,
-                                    "code": "freeshipping"
-                                },
-                                "flat_rate": {
-                                    "status": "1",
-                                    "title": "Flat Rate",
-                                    "price": 6.5,
-                                    "code": "flatrate"
-                                }
-                            },
-                            "2": {
-                                "store_code": "ksa_store",
-                                "store_id": "2",
-                                "free_shipping": {
-                                    "status": "1",
-                                    "title": "Free Shipping",
-                                    "min_order_total": "1",
-                                    "price": 0,
-                                    "code": "freeshipping"
-                                },
-                                "flat_rate": {
-                                    "status": "1",
-                                    "title": "Flat Rate",
-                                    "price": 6.5,
-                                    "code": "flatrate"
-                                }
-                            },
-                            "3": {
-                                "store_code": "uae_store",
-                                "store_id": "3",
-                                "free_shipping": {
-                                    "status": "1",
-                                    "title": "Free Shipping",
-                                    "min_order_total": "1",
-                                    "price": 0,
-                                    "code": "freeshipping"
-                                },
-                                "flat_rate": {
-                                    "status": "1",
-                                    "title": "Flat Rate",
-                                    "price": 6.5,
-                                    "code": "flatrate"
-                                }
-                            }
-                        }
-                    ]
-                }
-            ]
             let data: ICmsConfigRequest.ICmsConfig = JSON.parse(payload.as.argv)
             switch (data.type) {
                 case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
@@ -854,7 +129,191 @@ export class CmsConfigController {
                                     let dataToSave: IConfigRequest.IConfig = {
                                         id: data.type,
                                         type: data.type,
-                                        kafka: {},
+                                        kafka: {
+                                            sdm: {
+                                                user_config: {
+                                                    max_try: {
+                                                        create: config.sdm.user_config.max_try.create ? parseInt(config.sdm.user_config.max_try.create) : Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.CREATE,
+                                                        update: config.sdm.user_config.max_try.update ? parseInt(config.sdm.user_config.max_try.update) : Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.UPDATE,
+                                                        get: config.sdm.user_config.max_try.get ? parseInt(config.sdm.user_config.max_try.get) : Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.GET,
+                                                        sync: config.sdm.user_config.max_try.sync ? parseInt(config.sdm.user_config.max_try.sync) : Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.SYNC,
+                                                        reset: config.sdm.user_config.max_try.reset ? parseInt(config.sdm.user_config.max_try.reset) : Constant.CONF.KAFKA.SDM.USER.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                address_config: {
+                                                    max_try: {
+                                                        create: config.sdm.address_config.max_try.create ? parseInt(config.sdm.address_config.max_try.create) : Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.CREATE,
+                                                        update: config.sdm.address_config.max_try.update ? parseInt(config.sdm.address_config.max_try.update) : Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.UPDATE,
+                                                        get: config.sdm.address_config.max_try.get ? parseInt(config.sdm.address_config.max_try.get) : Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.GET,
+                                                        sync: config.sdm.address_config.max_try.sync ? parseInt(config.sdm.address_config.max_try.sync) : Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.SYNC,
+                                                        reset: config.sdm.address_config.max_try.reset ? parseInt(config.sdm.address_config.max_try.reset) : Constant.CONF.KAFKA.SDM.ADDRESS.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                menu_config: {
+                                                    max_try: {
+                                                        create: config.sdm.menu_config.max_try.create ? parseInt(config.sdm.menu_config.max_try.create) : Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.CREATE,
+                                                        update: config.sdm.menu_config.max_try.update ? parseInt(config.sdm.menu_config.max_try.update) : Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.UPDATE,
+                                                        get: config.sdm.menu_config.max_try.get ? parseInt(config.sdm.menu_config.max_try.get) : Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.GET,
+                                                        sync: config.sdm.menu_config.max_try.sync ? parseInt(config.sdm.menu_config.max_try.sync) : Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.SYNC,
+                                                        reset: config.sdm.menu_config.max_try.reset ? parseInt(config.sdm.menu_config.max_try.reset) : Constant.CONF.KAFKA.SDM.MENU.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                promotion_config: {
+                                                    max_try: {
+                                                        create: config.sdm.promotion_config.max_try.create ? parseInt(config.sdm.promotion_config.max_try.create) : Constant.CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.CREATE,
+                                                        update: config.sdm.promotion_config.max_try.update ? parseInt(config.sdm.promotion_config.max_try.update) : Constant.CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.UPDATE,
+                                                        get: config.sdm.promotion_config.max_try.get ? parseInt(config.sdm.promotion_config.max_try.get) : Constant.CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.GET,
+                                                        sync: config.sdm.promotion_config.max_try.sync ? parseInt(config.sdm.promotion_config.max_try.sync) : Constant.CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.SYNC,
+                                                        reset: config.sdm.promotion_config.max_try.reset ? parseInt(config.sdm.promotion_config.max_try.reset) : Constant.CONF.KAFKA.SDM.PROMOTION.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                hidden_config: {
+                                                    max_try: {
+                                                        create: config.sdm.hidden_config.max_try.create ? parseInt(config.sdm.hidden_config.max_try.create) : Constant.CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.CREATE,
+                                                        update: config.sdm.hidden_config.max_try.update ? parseInt(config.sdm.hidden_config.max_try.update) : Constant.CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.UPDATE,
+                                                        get: config.sdm.hidden_config.max_try.get ? parseInt(config.sdm.hidden_config.max_try.get) : Constant.CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.GET,
+                                                        sync: config.sdm.hidden_config.max_try.sync ? parseInt(config.sdm.hidden_config.max_try.sync) : Constant.CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.SYNC,
+                                                        reset: config.sdm.hidden_config.max_try.reset ? parseInt(config.sdm.hidden_config.max_try.reset) : Constant.CONF.KAFKA.SDM.HIDDEN.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                order_config: {
+                                                    max_try: {
+                                                        create: config.sdm.order_config.max_try.create ? parseInt(config.sdm.order_config.max_try.create) : Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.CREATE,
+                                                        update: config.sdm.order_config.max_try.update ? parseInt(config.sdm.order_config.max_try.update) : Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.UPDATE,
+                                                        get: config.sdm.order_config.max_try.get ? parseInt(config.sdm.order_config.max_try.get) : Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.GET,
+                                                        sync: config.sdm.order_config.max_try.sync ? parseInt(config.sdm.order_config.max_try.sync) : Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.SYNC,
+                                                        reset: config.sdm.order_config.max_try.reset ? parseInt(config.sdm.order_config.max_try.reset) : Constant.CONF.KAFKA.SDM.ORDER.MAX_RETRY.RESET
+                                                    },
+                                                    interval: {
+                                                        get: config.sdm.order_config.interval.get ? parseInt(config.sdm.order_config.interval.get) : Constant.CONF.KAFKA.SDM.ORDER.INTERVAL.GET,
+                                                        get_once: config.sdm.order_config.interval.get_once ? parseInt(config.sdm.order_config.interval.get_once) : Constant.CONF.KAFKA.SDM.ORDER.INTERVAL.GET_ONCE,
+                                                        get_max: config.sdm.order_config.interval.get_max ? parseInt(config.sdm.order_config.interval.get_max) : Constant.CONF.KAFKA.SDM.ORDER.INTERVAL.GET_MAX,
+                                                        next_ping: config.sdm.order_config.interval.next_ping ? parseInt(config.sdm.order_config.interval.next_ping) : Constant.CONF.KAFKA.SDM.ORDER.INTERVAL.NEXT_PING
+                                                    }
+                                                }
+                                            },
+                                            cms: {
+                                                user_config: {
+                                                    max_try: {
+                                                        create: config.cms.user_config.max_try.create ? parseInt(config.cms.user_config.max_try.create) : Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.CREATE,
+                                                        update: config.cms.user_config.max_try.update ? parseInt(config.cms.user_config.max_try.update) : Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.UPDATE,
+                                                        get: config.cms.user_config.max_try.get ? parseInt(config.cms.user_config.max_try.get) : Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.GET,
+                                                        sync: config.cms.user_config.max_try.sync ? parseInt(config.cms.user_config.max_try.sync) : Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.SYNC,
+                                                        reset: config.cms.user_config.max_try.reset ? parseInt(config.cms.user_config.max_try.reset) : Constant.CONF.KAFKA.CMS.USER.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                address_config: {
+                                                    max_try: {
+                                                        create: config.cms.address_config.max_try.create ? parseInt(config.cms.address_config.max_try.create) : Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.CREATE,
+                                                        update: config.cms.address_config.max_try.update ? parseInt(config.cms.address_config.max_try.update) : Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.UPDATE,
+                                                        get: config.cms.address_config.max_try.get ? parseInt(config.cms.address_config.max_try.get) : Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.GET,
+                                                        sync: config.cms.address_config.max_try.sync ? parseInt(config.cms.address_config.max_try.sync) : Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.SYNC,
+                                                        reset: config.cms.address_config.max_try.reset ? parseInt(config.cms.address_config.max_try.reset) : Constant.CONF.KAFKA.CMS.ADDRESS.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                menu_config: {
+                                                    max_try: {
+                                                        create: config.cms.menu_config.max_try.create ? parseInt(config.cms.menu_config.max_try.create) : Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.CREATE,
+                                                        update: config.cms.menu_config.max_try.update ? parseInt(config.cms.menu_config.max_try.update) : Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.UPDATE,
+                                                        get: config.cms.menu_config.max_try.get ? parseInt(config.cms.menu_config.max_try.get) : Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.GET,
+                                                        sync: config.cms.menu_config.max_try.sync ? parseInt(config.cms.menu_config.max_try.sync) : Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.SYNC,
+                                                        reset: config.cms.menu_config.max_try.reset ? parseInt(config.cms.menu_config.max_try.reset) : Constant.CONF.KAFKA.CMS.MENU.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                promotion_config: {
+                                                    max_try: {
+                                                        create: config.cms.promotion_config.max_try.create ? parseInt(config.cms.promotion_config.max_try.create) : Constant.CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.CREATE,
+                                                        update: config.cms.promotion_config.max_try.update ? parseInt(config.cms.promotion_config.max_try.update) : Constant.CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.UPDATE,
+                                                        get: config.cms.promotion_config.max_try.get ? parseInt(config.cms.promotion_config.max_try.get) : Constant.CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.GET,
+                                                        sync: config.cms.promotion_config.max_try.sync ? parseInt(config.cms.promotion_config.max_try.sync) : Constant.CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.SYNC,
+                                                        reset: config.cms.promotion_config.max_try.reset ? parseInt(config.cms.promotion_config.max_try.reset) : Constant.CONF.KAFKA.CMS.PROMOTION.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                hidden_config: {
+                                                    max_try: {
+                                                        create: config.cms.hidden_config.max_try.create ? parseInt(config.cms.hidden_config.max_try.create) : Constant.CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.CREATE,
+                                                        update: config.cms.hidden_config.max_try.update ? parseInt(config.cms.hidden_config.max_try.update) : Constant.CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.UPDATE,
+                                                        get: config.cms.hidden_config.max_try.get ? parseInt(config.cms.hidden_config.max_try.get) : Constant.CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.GET,
+                                                        sync: config.cms.hidden_config.max_try.sync ? parseInt(config.cms.hidden_config.max_try.sync) : Constant.CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.SYNC,
+                                                        reset: config.cms.hidden_config.max_try.reset ? parseInt(config.cms.hidden_config.max_try.reset) : Constant.CONF.KAFKA.CMS.HIDDEN.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                order_config: {
+                                                    max_try: {
+                                                        create: config.cms.order_config.max_try.create ? parseInt(config.cms.order_config.max_try.create) : Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.CREATE,
+                                                        update: config.cms.order_config.max_try.update ? parseInt(config.cms.order_config.max_try.update) : Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.UPDATE,
+                                                        get: config.cms.order_config.max_try.get ? parseInt(config.cms.order_config.max_try.get) : Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.GET,
+                                                        sync: config.cms.order_config.max_try.sync ? parseInt(config.cms.order_config.max_try.sync) : Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.SYNC,
+                                                        reset: config.cms.order_config.max_try.reset ? parseInt(config.cms.order_config.max_try.reset) : Constant.CONF.KAFKA.CMS.ORDER.MAX_RETRY.RESET
+                                                    }
+                                                }
+                                            },
+                                            as: {
+                                                user_config: {
+                                                    max_try: {
+                                                        create: config.as.user_config.max_try.create ? parseInt(config.as.user_config.max_try.create) : Constant.CONF.KAFKA.AS.USER.MAX_RETRY.CREATE,
+                                                        update: config.as.user_config.max_try.update ? parseInt(config.as.user_config.max_try.update) : Constant.CONF.KAFKA.AS.USER.MAX_RETRY.UPDATE,
+                                                        get: config.as.user_config.max_try.get ? parseInt(config.as.user_config.max_try.get) : Constant.CONF.KAFKA.AS.USER.MAX_RETRY.GET,
+                                                        sync: config.as.user_config.max_try.sync ? parseInt(config.as.user_config.max_try.sync) : Constant.CONF.KAFKA.AS.USER.MAX_RETRY.SYNC,
+                                                        reset: config.as.user_config.max_try.reset ? parseInt(config.as.user_config.max_try.reset) : Constant.CONF.KAFKA.AS.USER.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                address_config: {
+                                                    max_try: {
+                                                        create: config.as.address_config.max_try.create ? parseInt(config.as.address_config.max_try.create) : Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.CREATE,
+                                                        update: config.as.address_config.max_try.update ? parseInt(config.as.address_config.max_try.update) : Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.UPDATE,
+                                                        get: config.as.address_config.max_try.get ? parseInt(config.as.address_config.max_try.get) : Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.GET,
+                                                        sync: config.as.address_config.max_try.sync ? parseInt(config.as.address_config.max_try.sync) : Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.SYNC,
+                                                        reset: config.as.address_config.max_try.reset ? parseInt(config.as.address_config.max_try.reset) : Constant.CONF.KAFKA.AS.ADDRESS.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                menu_config: {
+                                                    max_try: {
+                                                        create: config.as.menu_config.max_try.create ? parseInt(config.as.menu_config.max_try.create) : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.CREATE,
+                                                        update: config.as.menu_config.max_try.update ? parseInt(config.as.menu_config.max_try.update) : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.UPDATE,
+                                                        get: config.as.menu_config.max_try.get ? parseInt(config.as.menu_config.max_try.get) : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.GET,
+                                                        sync: config.as.menu_config.max_try.sync ? parseInt(config.as.menu_config.max_try.sync) : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.SYNC,
+                                                        reset: config.as.menu_config.max_try.reset ? parseInt(config.as.menu_config.max_try.reset) : Constant.CONF.KAFKA.AS.MENU.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                promotion_config: {
+                                                    max_try: {
+                                                        create: config.as.promotion_config.max_try.create ? parseInt(config.as.promotion_config.max_try.create) : Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.CREATE,
+                                                        update: config.as.promotion_config.max_try.update ? parseInt(config.as.promotion_config.max_try.update) : Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.UPDATE,
+                                                        get: config.as.promotion_config.max_try.get ? parseInt(config.as.promotion_config.max_try.get) : Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.GET,
+                                                        sync: config.as.promotion_config.max_try.sync ? parseInt(config.as.promotion_config.max_try.sync) : Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.SYNC,
+                                                        reset: config.as.promotion_config.max_try.reset ? parseInt(config.as.promotion_config.max_try.reset) : Constant.CONF.KAFKA.AS.PROMOTION.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                hidden_config: {
+                                                    max_try: {
+                                                        create: config.as.hidden_config.max_try.create ? parseInt(config.as.hidden_config.max_try.create) : Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.CREATE,
+                                                        update: config.as.hidden_config.max_try.update ? parseInt(config.as.hidden_config.max_try.update) : Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.UPDATE,
+                                                        get: config.as.hidden_config.max_try.get ? parseInt(config.as.hidden_config.max_try.get) : Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.GET,
+                                                        sync: config.as.hidden_config.max_try.sync ? parseInt(config.as.hidden_config.max_try.sync) : Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.SYNC,
+                                                        reset: config.as.hidden_config.max_try.reset ? parseInt(config.as.hidden_config.max_try.reset) : Constant.CONF.KAFKA.AS.HIDDEN.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                configuration_config: {
+                                                    max_try: {
+                                                        create: config.as.configuration_config.max_try.create ? parseInt(config.as.configuration_config.max_try.create) : Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.CREATE,
+                                                        update: config.as.configuration_config.max_try.update ? parseInt(config.as.configuration_config.max_try.update) : Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.UPDATE,
+                                                        get: config.as.configuration_config.max_try.get ? parseInt(config.as.configuration_config.max_try.get) : Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.GET,
+                                                        sync: config.as.configuration_config.max_try.sync ? parseInt(config.as.configuration_config.max_try.sync) : Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.SYNC,
+                                                        reset: config.as.configuration_config.max_try.reset ? parseInt(config.as.configuration_config.max_try.reset) : Constant.CONF.KAFKA.AS.CONFIG.MAX_RETRY.RESET
+                                                    }
+                                                },
+                                                app_config: {
+                                                    max_try: {
+                                                        create: config.as.app_config.max_try.create ? parseInt(config.as.app_config.max_try.create) : Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.CREATE,
+                                                        update: config.as.app_config.max_try.update ? parseInt(config.as.app_config.max_try.update) : Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.UPDATE,
+                                                        get: config.as.app_config.max_try.get ? parseInt(config.as.app_config.max_try.get) : Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.GET,
+                                                        sync: config.as.app_config.max_try.sync ? parseInt(config.as.app_config.max_try.sync) : Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.SYNC,
+                                                        reset: config.as.app_config.max_try.reset ? parseInt(config.as.app_config.max_try.reset) : Constant.CONF.KAFKA.AS.APP_VERSION.MAX_RETRY.RESET
+                                                    }
+                                                }
+                                            }
+                                        },
                                         createdAt: new Date().getTime()
                                     }
                                     configToSync.push(dataToSave)
@@ -915,7 +374,128 @@ export class CmsConfigController {
                                     let dataToSave: IConfigRequest.IConfig = {
                                         id: data.type,
                                         type: data.type,
-                                        orderStatus: {},
+                                        orderStatus: {
+                                            cart_config: {
+                                                as: config.cart_config.as ? config.cart_config.as : Constant.CONF.ORDER_STATUS.CART.AS,
+                                                mongo: config.cart_config.mongo ? config.cart_config.mongo : Constant.CONF.ORDER_STATUS.CART.MONGO,
+                                                cms: config.cart_config.cms ? config.cart_config.cms : Constant.CONF.ORDER_STATUS.CART.CMS,
+                                                sdm: config.cart_config.sdm ? config.cart_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.CART.SDM,
+                                                freq: {
+                                                    get: config.cart_config.freq.get ? parseInt(config.cart_config.freq.get) : Constant.CONF.ORDER_STATUS.CART.FREQ.GET,
+                                                    geet_once: config.cart_config.freq.geet_once ? parseInt(config.cart_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.CART.FREQ.GET_ONCE,
+                                                    get_max: config.cart_config.freq.get_max ? parseInt(config.cart_config.freq.get_max) : Constant.CONF.ORDER_STATUS.CART.FREQ.GET_MAX,
+                                                    next_ping: config.cart_config.freq.next_ping ? parseInt(config.cart_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.CART.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            pending_config: {
+                                                as: config.pending_config.as ? config.pending_config.as : Constant.CONF.ORDER_STATUS.PENDING.AS,
+                                                mongo: config.pending_config.mongo ? config.pending_config.mongo : Constant.CONF.ORDER_STATUS.PENDING.MONGO,
+                                                cms: config.pending_config.cms ? config.pending_config.cms : Constant.CONF.ORDER_STATUS.PENDING.CMS,
+                                                sdm: config.pending_config.sdm ? config.pending_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.PENDING.SDM,
+                                                freq: {
+                                                    get: config.pending_config.freq.get ? parseInt(config.pending_config.freq.get) : Constant.CONF.ORDER_STATUS.PENDING.FREQ.GET,
+                                                    geet_once: config.pending_config.freq.geet_once ? parseInt(config.pending_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.PENDING.FREQ.GET_ONCE,
+                                                    get_max: config.pending_config.freq.get_max ? parseInt(config.pending_config.freq.get_max) : Constant.CONF.ORDER_STATUS.PENDING.FREQ.GET_MAX,
+                                                    next_ping: config.pending_config.freq.next_ping ? parseInt(config.pending_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.PENDING.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            confirmed_config: {
+                                                as: config.confirmed_config.as ? config.confirmed_config.as : Constant.CONF.ORDER_STATUS.CONFIRMED.AS,
+                                                mongo: config.confirmed_config.mongo ? config.confirmed_config.mongo : Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
+                                                cms: config.confirmed_config.cms ? config.confirmed_config.cms : Constant.CONF.ORDER_STATUS.CONFIRMED.CMS,
+                                                sdm: config.confirmed_config.sdm ? config.confirmed_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.CONFIRMED.SDM,
+                                                freq: {
+                                                    get: config.confirmed_config.freq.get ? parseInt(config.confirmed_config.freq.get) : Constant.CONF.ORDER_STATUS.CONFIRMED.FREQ.GET,
+                                                    geet_once: config.confirmed_config.freq.geet_once ? parseInt(config.confirmed_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.CONFIRMED.FREQ.GET_ONCE,
+                                                    get_max: config.confirmed_config.freq.get_max ? parseInt(config.confirmed_config.freq.get_max) : Constant.CONF.ORDER_STATUS.CONFIRMED.FREQ.GET_MAX,
+                                                    next_ping: config.confirmed_config.freq.next_ping ? parseInt(config.confirmed_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.CONFIRMED.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            prepared_config: {
+                                                as: config.prepared_config.as ? config.prepared_config.as : Constant.CONF.ORDER_STATUS.BEING_PREPARED.AS,
+                                                mongo: config.prepared_config.mongo ? config.prepared_config.mongo : Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
+                                                cms: config.prepared_config.cms ? config.prepared_config.cms : Constant.CONF.ORDER_STATUS.BEING_PREPARED.CMS,
+                                                sdm: config.prepared_config.sdm ? config.prepared_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.BEING_PREPARED.SDM,
+                                                freq: {
+                                                    get: config.prepared_config.freq.get ? parseInt(config.prepared_config.freq.get) : Constant.CONF.ORDER_STATUS.BEING_PREPARED.FREQ.GET,
+                                                    geet_once: config.prepared_config.freq.geet_once ? parseInt(config.prepared_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.BEING_PREPARED.FREQ.GET_ONCE,
+                                                    get_max: config.prepared_config.freq.get_max ? parseInt(config.prepared_config.freq.get_max) : Constant.CONF.ORDER_STATUS.BEING_PREPARED.FREQ.GET_MAX,
+                                                    next_ping: config.prepared_config.freq.next_ping ? parseInt(config.prepared_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.BEING_PREPARED.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            ready_config: {
+                                                as: config.ready_config.as ? config.ready_config.as : Constant.CONF.ORDER_STATUS.READY.AS,
+                                                mongo: config.ready_config.mongo ? config.ready_config.mongo : Constant.CONF.ORDER_STATUS.READY.MONGO,
+                                                cms: config.ready_config.cms ? config.ready_config.cms : Constant.CONF.ORDER_STATUS.READY.CMS,
+                                                sdm: config.ready_config.sdm ? config.ready_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.READY.SDM,
+                                                freq: {
+                                                    get: config.ready_config.freq.get ? parseInt(config.ready_config.freq.get) : Constant.CONF.ORDER_STATUS.READY.FREQ.GET,
+                                                    geet_once: config.ready_config.freq.geet_once ? parseInt(config.ready_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.READY.FREQ.GET_ONCE,
+                                                    get_max: config.ready_config.freq.get_max ? parseInt(config.ready_config.freq.get_max) : Constant.CONF.ORDER_STATUS.READY.FREQ.GET_MAX,
+                                                    next_ping: config.ready_config.freq.next_ping ? parseInt(config.ready_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.READY.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            ontheway_config: {
+                                                as: config.ontheway_config.as ? config.ontheway_config.as : Constant.CONF.ORDER_STATUS.ON_THE_WAY.AS,
+                                                mongo: config.ontheway_config.mongo ? config.ontheway_config.mongo : Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO,
+                                                cms: config.ontheway_config.cms ? config.ontheway_config.cms : Constant.CONF.ORDER_STATUS.ON_THE_WAY.CMS,
+                                                sdm: config.ontheway_config.sdm ? config.ontheway_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.ON_THE_WAY.SDM,
+                                                freq: {
+                                                    get: config.ontheway_config.freq.get ? parseInt(config.ontheway_config.freq.get) : Constant.CONF.ORDER_STATUS.ON_THE_WAY.FREQ.GET,
+                                                    geet_once: config.ontheway_config.freq.geet_once ? parseInt(config.ontheway_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.ON_THE_WAY.FREQ.GET_ONCE,
+                                                    get_max: config.ontheway_config.freq.get_max ? parseInt(config.ontheway_config.freq.get_max) : Constant.CONF.ORDER_STATUS.ON_THE_WAY.FREQ.GET_MAX,
+                                                    next_ping: config.ontheway_config.freq.next_ping ? parseInt(config.ontheway_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.ON_THE_WAY.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            delivered_config: {
+                                                as: config.delivered_config.as ? config.delivered_config.as : Constant.CONF.ORDER_STATUS.DELIVERED.AS,
+                                                mongo: config.delivered_config.mongo ? config.delivered_config.mongo : Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+                                                cms: config.delivered_config.cms ? config.delivered_config.cms : Constant.CONF.ORDER_STATUS.DELIVERED.CMS,
+                                                sdm: config.delivered_config.sdm ? config.delivered_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.DELIVERED.SDM,
+                                                freq: {
+                                                    get: config.delivered_config.freq.get ? parseInt(config.delivered_config.freq.get) : Constant.CONF.ORDER_STATUS.DELIVERED.FREQ.GET,
+                                                    geet_once: config.delivered_config.freq.geet_once ? parseInt(config.delivered_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.DELIVERED.FREQ.GET_ONCE,
+                                                    get_max: config.delivered_config.freq.get_max ? parseInt(config.delivered_config.freq.get_max) : Constant.CONF.ORDER_STATUS.DELIVERED.FREQ.GET_MAX,
+                                                    next_ping: config.delivered_config.freq.next_ping ? parseInt(config.delivered_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.DELIVERED.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            closed_config: {
+                                                as: config.closed_config.as ? config.closed_config.as : Constant.CONF.ORDER_STATUS.CLOSED.AS,
+                                                mongo: config.closed_config.mongo ? config.closed_config.mongo : Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+                                                cms: config.closed_config.cms ? config.closed_config.cms : Constant.CONF.ORDER_STATUS.CLOSED.CMS,
+                                                sdm: config.closed_config.sdm ? config.closed_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.CLOSED.SDM,
+                                                freq: {
+                                                    get: config.closed_config.freq.get ? parseInt(config.closed_config.freq.get) : Constant.CONF.ORDER_STATUS.CART.FREQ.GET,
+                                                    geet_once: config.closed_config.freq.geet_once ? parseInt(config.closed_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.CLOSED.FREQ.GET_ONCE,
+                                                    get_max: config.closed_config.freq.get_max ? parseInt(config.closed_config.freq.get_max) : Constant.CONF.ORDER_STATUS.CLOSED.FREQ.GET_MAX,
+                                                    next_ping: config.closed_config.freq.next_ping ? parseInt(config.closed_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.CLOSED.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            cancelled_config: {
+                                                as: config.cancelled_config.as ? config.cancelled_config.as : Constant.CONF.ORDER_STATUS.CANCELED.AS,
+                                                mongo: config.cancelled_config.mongo ? config.cancelled_config.mongo : Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                                                cms: config.cancelled_config.cms ? config.cancelled_config.cms : Constant.CONF.ORDER_STATUS.CANCELED.CMS,
+                                                sdm: config.cancelled_config.sdm ? config.cancelled_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.CANCELED.SDM,
+                                                freq: {
+                                                    get: config.cancelled_config.freq.get ? parseInt(config.cancelled_config.freq.get) : Constant.CONF.ORDER_STATUS.CANCELED.FREQ.GET,
+                                                    geet_once: config.cancelled_config.freq.geet_once ? parseInt(config.cancelled_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.CANCELED.FREQ.GET_ONCE,
+                                                    get_max: config.cancelled_config.freq.get_max ? parseInt(config.cancelled_config.freq.get_max) : Constant.CONF.ORDER_STATUS.CANCELED.FREQ.GET_MAX,
+                                                    next_ping: config.cancelled_config.freq.next_ping ? parseInt(config.cancelled_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.CANCELED.FREQ.NEXT_PING
+                                                }
+                                            },
+                                            failure_config: {
+                                                as: config.failure_config.as ? config.failure_config.as : Constant.CONF.ORDER_STATUS.FAILURE.AS,
+                                                mongo: config.failure_config.mongo ? config.failure_config.mongo : Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
+                                                cms: config.failure_config.cms ? config.failure_config.cms : Constant.CONF.ORDER_STATUS.FAILURE.CMS,
+                                                sdm: config.failure_config.sdm ? config.failure_config.sdm.split(",").map(obj => { if (obj) { return parseInt(obj.trim()) } }) : Constant.CONF.ORDER_STATUS.FAILURE.SDM,
+                                                freq: {
+                                                    get: config.failure_config.freq.get ? parseInt(config.failure_config.freq.get) : Constant.CONF.ORDER_STATUS.FAILURE.FREQ.GET,
+                                                    geet_once: config.failure_config.freq.geet_once ? parseInt(config.failure_config.freq.geet_once) : Constant.CONF.ORDER_STATUS.FAILURE.FREQ.GET_ONCE,
+                                                    get_max: config.failure_config.freq.get_max ? parseInt(config.failure_config.freq.get_max) : Constant.CONF.ORDER_STATUS.FAILURE.FREQ.GET_MAX,
+                                                    next_ping: config.failure_config.freq.next_ping ? parseInt(config.failure_config.freq.next_ping) : Constant.CONF.ORDER_STATUS.FAILURE.FREQ.NEXT_PING
+                                                }
+                                            },
+                                        },
                                         createdAt: new Date().getTime()
                                     }
                                     configToSync.push(dataToSave)
@@ -1069,7 +649,7 @@ export class CmsConfigController {
                         if (payload.as.reset) {
                             let conf: ICmsConfigRequest.ICmsConfigShipment[] = data.data
                             if (conf && conf.length > 0) {
-                                conf.map(async shipmentConf => {
+                                for (const shipmentConf of conf) {
                                     if (shipmentConf.store_code == Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE) {
                                         let dataToSave: IConfigRequest.IConfig = {
                                             id: configIdGenerator(data.type, shipmentConf.store_code),
@@ -1108,7 +688,7 @@ export class CmsConfigController {
                                         }
                                         kafkaService.kafkaSync(pingServices)
                                     }
-                                })
+                                }
                             } else {
                                 return Promise.reject("Unhandled error while saving payment configs from cms")
                             }
@@ -1124,50 +704,89 @@ export class CmsConfigController {
                         if (payload.as.reset) {
                             let conf: ICmsConfigRequest.ICmsConfigCountrySpecifc[] = data.data
                             if (conf && conf.length > 0) {
-                                let store_code = data.data['store_code']
-                                conf.map(async config => {
-                                    let dataToSave = {
-                                        id: config.country_code,
-                                        type: data.type,
-                                        createdAt: new Date().getTime()
-                                    }
-                                    if (config.country_code)
-                                        dataToSave['country_code'] = config.country_code
-                                    if (config.country_name)
-                                        dataToSave['country_name'] = config.country_name
-                                    if (config.concept_id)
-                                        dataToSave['concept_id'] = config.concept_id
-                                    if (config.base_currency)
-                                        dataToSave['base_currency'] = config.base_currency
-                                    if (config.licence)
-                                        dataToSave['licence'] = config.licence
-                                    if (config.ccode)
-                                        dataToSave['ccode'] = config.ccode
+                                for (const countrySpcificConf of conf) {
+                                    if (countrySpcificConf.country_code == "AE") {
+                                        countrySpcificConf.country_code = "UAE"
+                                        let dataToSave: IConfigRequest.IConfig = {
+                                            id: countrySpcificConf.country_code,
+                                            type: data.type,
+                                            countrySpecific: {
+                                                country_code: countrySpcificConf.country_code ? countrySpcificConf.country_code : Constant.CONF.COUNTRY_SPECIFIC.UAE.COUNTRY_CODE,
+                                                country_name: countrySpcificConf.country_name ? countrySpcificConf.country_name : Constant.CONF.COUNTRY_SPECIFIC.UAE.COUNTRY_NAME,
+                                                base_currency: countrySpcificConf.base_currency ? countrySpcificConf.base_currency : Constant.CONF.COUNTRY_SPECIFIC.UAE.BASE_CURRENCY,
+                                                channel_data: undefined,
+                                                home_overlay: {
+                                                    En: {
+                                                        mediaUrl: countrySpcificConf.home_overlay.En.mediaUrl ? countrySpcificConf.home_overlay.En.mediaUrl : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.mediaUrl,
+                                                        gif: countrySpcificConf.home_overlay.En.gif ? countrySpcificConf.home_overlay.En.gif : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.gif,
+                                                        mediaType: countrySpcificConf.home_overlay.En.mediaType ? countrySpcificConf.home_overlay.En.mediaType : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.mediaType,
+                                                        extension: countrySpcificConf.home_overlay.En.extension ? countrySpcificConf.home_overlay.En.extension : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.extension,
+                                                        action: {
+                                                            id: countrySpcificConf.home_overlay.En.action.id ? parseInt(countrySpcificConf.home_overlay.En.action.id) : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.action.id,
+                                                            type: countrySpcificConf.home_overlay.En.action.type ? countrySpcificConf.home_overlay.En.action.type : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.action.type,
+                                                            delimeters: countrySpcificConf.home_overlay.En.action.delimeters ? countrySpcificConf.home_overlay.En.action.delimeters : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.En.action.delimeters
+                                                        }
+                                                    },
+                                                    Ar: {
+                                                        mediaUrl: countrySpcificConf.home_overlay.Ar.mediaUrl ? countrySpcificConf.home_overlay.Ar.mediaUrl : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.mediaUrl,
+                                                        gif: countrySpcificConf.home_overlay.Ar.gif ? countrySpcificConf.home_overlay.Ar.gif : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.gif,
+                                                        mediaType: countrySpcificConf.home_overlay.Ar.mediaType ? countrySpcificConf.home_overlay.Ar.mediaType : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.mediaType,
+                                                        extension: countrySpcificConf.home_overlay.Ar.extension ? countrySpcificConf.home_overlay.Ar.extension : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.extension,
+                                                        action: {
+                                                            id: countrySpcificConf.home_overlay.Ar.action.id ? parseInt(countrySpcificConf.home_overlay.Ar.action.id) : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.action.id,
+                                                            type: countrySpcificConf.home_overlay.Ar.action.type ? countrySpcificConf.home_overlay.Ar.action.type : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.action.type,
+                                                            delimeters: countrySpcificConf.home_overlay.Ar.action.delimeters ? countrySpcificConf.home_overlay.Ar.action.delimeters : Constant.CONF.COUNTRY_SPECIFIC.UAE.HOME_OVERLAY.Ar.action.delimeters
+                                                        }
+                                                    }
+                                                },
+                                                sdm: {
+                                                    sdm_url: countrySpcificConf.sdm_url ? countrySpcificConf.sdm_url : Constant.CONF.COUNTRY_SPECIFIC.UAE.SDM.SDM_URL,
+                                                    licence_code: countrySpcificConf.sdm.licence_code ? countrySpcificConf.sdm.licence_code : Constant.CONF.COUNTRY_SPECIFIC.UAE.SDM.LICENSE_CODE,
+                                                    concept_id: countrySpcificConf.sdm.concept_id ? parseInt(countrySpcificConf.sdm.concept_id) : Constant.CONF.COUNTRY_SPECIFIC.UAE.SDM.CONCEPT_ID,
+                                                    menu_template_id: countrySpcificConf.sdm.menu_template_id ? parseInt(countrySpcificConf.sdm.menu_template_id) : Constant.CONF.COUNTRY_SPECIFIC.UAE.SDM.MENU_TEMPLATE_ID,
+                                                },
+                                                ccode: countrySpcificConf.ccode ? countrySpcificConf.ccode : Constant.CONF.COUNTRY_SPECIFIC.UAE.CCODE,
+                                                customer_care: countrySpcificConf.customer_care ? countrySpcificConf.customer_care : Constant.CONF.COUNTRY_SPECIFIC.UAE.CUSTOMER_CARE,
+                                                support_email: countrySpcificConf.support_email ? countrySpcificConf.support_email : Constant.CONF.COUNTRY_SPECIFIC.UAE.SUPPORT_EMAIL,
+                                                min_cart_value: countrySpcificConf.min_cart_value ? parseInt(countrySpcificConf.min_cart_value) : Constant.CONF.COUNTRY_SPECIFIC.UAE.MIN_CART_VALUE,
+                                                min_cod_cart_value: countrySpcificConf.min_cod_cart_value ? parseInt(countrySpcificConf.min_cod_cart_value) : Constant.CONF.COUNTRY_SPECIFIC.UAE.MIN_COD_CART_VALUE,
+                                            },
+                                            createdAt: new Date().getTime()
+                                        }
+                                        let channel_data = []
+                                        if (countrySpcificConf.channel_data && countrySpcificConf.channel_data.length > 0) {
 
-                                    let putArg: IAerospike.Put = {
-                                        bins: dataToSave,
-                                        set: ENTITY.ConfigE.set,
-                                        key: dataToSave['id'],
-                                        createOrReplace: true,
+                                        } else {
+                                            channel_data = Constant.CONF.COUNTRY_SPECIFIC.UAE.CHANNEL_DATA
+                                        }
+                                        dataToSave['channel_data'] = channel_data
+                                        let putArg: IAerospike.Put = {
+                                            bins: dataToSave,
+                                            set: ENTITY.ConfigE.set,
+                                            key: dataToSave['id'],
+                                            createOrReplace: true,
+                                        }
+                                        await Aerospike.put(putArg)
+                                        let pingServices: IKafkaGrpcRequest.IKafkaBody = {
+                                            set: Constant.SET_NAME.PING_SERVICE,
+                                            as: {
+                                                create: true,
+                                                argv: JSON.stringify({
+                                                    set: Constant.SET_NAME.CONFIG,
+                                                    service: [
+                                                        Constant.MICROSERVICE.ORDER,
+                                                        Constant.MICROSERVICE.USER,
+                                                        Constant.MICROSERVICE.MENU,
+                                                        Constant.MICROSERVICE.NOTIFICATION,
+                                                    ],
+                                                    country: countrySpcificConf.country_code
+                                                })
+                                            },
+                                            inQ: true
+                                        }
+                                        kafkaService.kafkaSync(pingServices)
                                     }
-                                    await Aerospike.put(putArg)
-                                })
-                                let pingServices: IKafkaGrpcRequest.IKafkaBody = {
-                                    set: Constant.SET_NAME.PING_SERVICE,
-                                    as: {
-                                        create: true,
-                                        argv: JSON.stringify({
-                                            set: Constant.SET_NAME.CONFIG,
-                                            service: [
-                                                Constant.MICROSERVICE.ORDER,
-                                                Constant.MICROSERVICE.USER
-                                            ],
-                                            store_code: store_code
-                                        })
-                                    },
-                                    inQ: true
                                 }
-                                kafkaService.kafkaSync(pingServices)
                             } else {
                                 return Promise.reject("Unhandled error while saving country specific configs from cms")
                             }

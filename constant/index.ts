@@ -1535,6 +1535,9 @@ export const CONF = {
     },
     COUNTRY_SPECIFIC: {
         UAE: {
+            COUNTRY_CODE: "UAE",
+            COUNTRY_NAME: "United Arab Emirates",
+            BASE_CURRENCY: "AED",
             HOME_OVERLAY: {
                 En: {
                     "mediaUrl": "ic_red@3x.png",
@@ -1559,7 +1562,46 @@ export const CONF = {
                     }
                 }
             },
+            CHANNEL_DATA: [
+                {
+                    template_id: 17,
+                    template_status: 1,
+                    channel_name: "App",
+                    menu_data: [
+                        {
+                            menu_id: 1,
+                            menu_state: 1,
+                            menu_cluster: 0,
+                            frequency_cron: 1,
+                            time_cron: 1
+                        }
+                    ]
+                }
+            ],
+            ADDRESS_TYPE: [
+                {
+                    type: DATABASE.TYPE.ADDRESS.DELIVERY.TYPE,
+                    enable: true,
+                    subType: [{
+                        type: DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY,
+                        enable: true
+                    }]
+                },
+                {
+                    type: DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
+                    enable: true,
+                    subType: [{
+                        type: DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.CARHOP,
+                        enable: true
+                    },
+                    {
+                        type: DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE,
+                        enable: true
+                    }]
+                }
+            ],
             SDM: {
+                SDM_URL: "https://sdkuatuae.americana.com.sa:1995/?wsdl",
                 LICENSE_CODE: "PizzaHutApp",// "AmericanaWeb",
                 CONCEPT_ID: 3,
                 MENU_TEMPLATE_ID: 17
@@ -2030,6 +2072,44 @@ export const CONF = {
                 }
             }
         }
+    },
+    SHIPMENT: {
+        main_website_store: {
+            free_shipping: {
+                status: "1",
+                title: "Free Shipping",
+                min_order_total: "1",
+                price: 0,
+                code: "freeshipping"
+            },
+            flat_rate: {
+                status: "1",
+                title: "Flat Rate",
+                price: 6.5,
+                code: "flatrate"
+            }
+        }
+    }
+}
+
+export const APP_VERSION = {
+    ANDROID: {
+        id: 1,
+        type: "NORMAL",
+        deviceType: "ANDROID",
+        appversion: "1.0.0",
+        isActive: 1,
+        createdAt: 1586639026000,
+        updatedAt: 1586639026000
+    },
+    IOS: {
+        id: 2,
+        type: "NORMAL",
+        deviceType: "IOS",
+        appversion: "1.0.0",
+        isActive: 1,
+        createdAt: 1586639026000,
+        updatedAt: 1586639026000
     }
 }
 
@@ -2089,7 +2169,33 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
 }
 
 interface IKafka {
-    sdm: {
+    sdm?: {
+        user_config: {
+            max_try: IMaxRetry
+        },
+        address_config: {
+            max_try: IMaxRetry
+        },
+        menu_config: {
+            max_try: IMaxRetry
+        },
+        promotion_config: {
+            max_try: IMaxRetry
+        },
+        hidden_config: {
+            max_try: IMaxRetry
+        },
+        order_config: {
+            max_try: IMaxRetry,
+            interval: {
+                get: number,
+                get_once: number,
+                get_max: number,
+                next_ping: number
+            }
+        }
+    },
+    cms?: {
         user_config: {
             max_try: IMaxRetry
         },
@@ -2109,27 +2215,7 @@ interface IKafka {
             max_try: IMaxRetry
         }
     },
-    cms: {
-        user_config: {
-            max_try: IMaxRetry
-        },
-        address_config: {
-            max_try: IMaxRetry
-        },
-        menu_config: {
-            max_try: IMaxRetry
-        },
-        promotion_config: {
-            max_try: IMaxRetry
-        },
-        hidden_config: {
-            max_try: IMaxRetry
-        },
-        order_config: {
-            max_try: IMaxRetry
-        }
-    },
-    as: {
+    as?: {
         user_config: {
             max_try: IMaxRetry
         },
@@ -2153,7 +2239,6 @@ interface IKafka {
         }
     }
 }
-
 interface IMaxRetry {
     create: number,
     update: number,
@@ -2161,7 +2246,6 @@ interface IMaxRetry {
     sync: number,
     reset: number
 }
-
 export const kafkaConfigSync = function (config: IKafka, date: number) {
     if (config.as) {
         if (config.as.user_config) {
@@ -2434,16 +2518,16 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
 }
 
 interface IOrderStatus {
-    cart_config: IStatus,
-    pending_config: IStatus,
-    confirmed_config: IStatus,
-    prepared_config: IStatus,
-    ready_config: IStatus,
-    ontheway_config: IStatus,
-    delivered_config: IStatus,
-    closed_config: IStatus,
-    cancelled_config: IStatus,
-    failure_config: IStatus
+    cart_config?: IStatus,
+    pending_config?: IStatus,
+    confirmed_config?: IStatus,
+    prepared_config?: IStatus,
+    ready_config?: IStatus,
+    ontheway_config?: IStatus,
+    delivered_config?: IStatus,
+    closed_config?: IStatus,
+    cancelled_config?: IStatus,
+    failure_config?: IStatus
 }
 interface IStatus {
     as: string,
@@ -2457,7 +2541,6 @@ interface IStatus {
         next_ping: number
     }
 }
-
 export const orderStatusConfigSync = function (config: IOrderStatus, date: number) {
     if (config.cart_config) {
         if (config.cart_config.as)
@@ -2714,7 +2797,6 @@ interface IPaymentMethods {
     name?: string,
     orderCategory?: string
 }
-
 export const paymentConfigSync = function (store_code: string, config: IPayment, date: number) {
     console.log("old", CONF.PAYMENT)
     if (config.noonpayConfig) {
@@ -2810,15 +2892,164 @@ interface IShipment {
         code: string
     },
     flat_rate: {
+
         status: string,
         title: string,
         price: number,
         code: string
     }
 }
-
 export const shipmentConfigSync = function (store_code: string, config: IShipment, date: number) {
-
+    if (config.flat_rate) {
+        if (config.flat_rate.status)
+            CONF.SHIPMENT[store_code].flat_rate.status = config.flat_rate.status
+        if (config.flat_rate.title)
+            CONF.SHIPMENT[store_code].flat_rate.title = config.flat_rate.title
+        if (config.flat_rate.price)
+            CONF.SHIPMENT[store_code].flat_rate.price = config.flat_rate.price
+        if (config.flat_rate.code)
+            CONF.SHIPMENT[store_code].flat_rate.code = config.flat_rate.code
+    }
+    if (config.free_shipping) {
+        if (config.free_shipping.status)
+            CONF.SHIPMENT[store_code].free_shipping.status = config.free_shipping.status
+        if (config.free_shipping.title)
+            CONF.SHIPMENT[store_code].free_shipping.title = config.free_shipping.title
+        if (config.free_shipping.price)
+            CONF.SHIPMENT[store_code].free_shipping.price = config.free_shipping.price
+        if (config.free_shipping.code)
+            CONF.SHIPMENT[store_code].free_shipping.code = config.free_shipping.code
+        if (config.free_shipping.min_order_total)
+            CONF.SHIPMENT[store_code].free_shipping.min_order_total = config.free_shipping.min_order_total
+    }
     global.configSync.shipment = date;
+    return {}
+}
+
+interface ICountrySpecific {
+    country_code: string,
+    country_name: string,
+    base_currency: string,
+    channel_data: [
+        {
+            template_id: number,
+            template_status: number,
+            channel_name: string,
+            menu_data: [
+                {
+                    menu_id: number,
+                    menu_state: number,
+                    menu_cluster: number,
+                    frequency_cron: number,
+                    time_cron: number
+                }
+            ]
+        }
+    ],
+    home_overlay: {
+        En: {
+            mediaUrl: string,
+            gif: string,
+            mediaType: string,
+            extension: string,
+            action: {
+                id: number,
+                type: string,
+                delimeters: string
+            }
+        },
+        Ar: {
+            mediaUrl: string,
+            gif: string,
+            mediaType: string,
+            extension: string,
+            action: {
+                id: number,
+                type: string,
+                delimeters: string
+            }
+        }
+    },
+    sdm: {
+        sdm_url: string,
+        licence_code: string,
+        concept_id: number,
+        menu_template_id: number
+    },
+    ccode: string,
+    customer_care: string,
+    support_email: string,
+    min_cart_value: number,
+    min_cod_cart_value: number
+}
+export const countrySpecificConfigSync = function (country: string, config: ICountrySpecific, date: number) {
+    if (config.country_code)
+        CONF.COUNTRY_SPECIFIC[country].COUNTRY_CODE = config.country_code
+    if (config.country_name)
+        CONF.COUNTRY_SPECIFIC[country].COUNTRY_CODE = config.country_name
+    if (config.base_currency)
+        CONF.COUNTRY_SPECIFIC[country].COUNTRY_CODE = config.base_currency
+    if (config.channel_data)
+        CONF.COUNTRY_SPECIFIC[country].CHANNEL_DATA = config.channel_data
+    if (config.home_overlay) {
+        if (config.home_overlay.Ar) {
+            if (config.home_overlay.Ar.mediaUrl)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.mediaUrl = config.home_overlay.Ar.mediaUrl
+            if (config.home_overlay.Ar.gif)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.gif = config.home_overlay.Ar.gif
+            if (config.home_overlay.Ar.mediaType)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.mediaType = config.home_overlay.Ar.mediaType
+            if (config.home_overlay.Ar.extension)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.extension = config.home_overlay.Ar.extension
+            if (config.home_overlay.Ar.action) {
+                if (config.home_overlay.Ar.action.id)
+                    CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.action.id = config.home_overlay.Ar.action.id
+                if (config.home_overlay.Ar.action.type)
+                    CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.action.type = config.home_overlay.Ar.action.type
+                if (config.home_overlay.Ar.action.delimeters)
+                    CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.Ar.action.delimeters = config.home_overlay.Ar.action.delimeters
+            }
+        }
+        if (config.home_overlay.En) {
+            if (config.home_overlay.En.mediaUrl)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.mediaUrl = config.home_overlay.En.mediaUrl
+            if (config.home_overlay.En.gif)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.gif = config.home_overlay.En.gif
+            if (config.home_overlay.En.mediaType)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.mediaType = config.home_overlay.En.mediaType
+            if (config.home_overlay.En.extension)
+                CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.extension = config.home_overlay.En.extension
+            if (config.home_overlay.En.action) {
+                if (config.home_overlay.En.action.id)
+                    CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.action.id = config.home_overlay.En.action.id
+                if (config.home_overlay.En.action.type)
+                    CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.action.type = config.home_overlay.En.action.type
+                if (config.home_overlay.En.action.delimeters)
+                    CONF.COUNTRY_SPECIFIC[country].HOME_OVERLAY.En.action.delimeters = config.home_overlay.En.action.delimeters
+            }
+        }
+    }
+    if (config.sdm) {
+        if (config.sdm.sdm_url)
+            CONF.COUNTRY_SPECIFIC[country].SDM.SDM_URL = config.sdm.sdm_url
+        if (config.sdm.licence_code)
+            CONF.COUNTRY_SPECIFIC[country].SDM.LICENSE_CODE = config.sdm.licence_code
+        if (config.sdm.concept_id)
+            CONF.COUNTRY_SPECIFIC[country].SDM.CONCEPT_ID = config.sdm.concept_id
+        if (config.sdm.menu_template_id)
+            CONF.COUNTRY_SPECIFIC[country].SDM.MENU_TEMPLATE_ID = config.sdm.menu_template_id
+    }
+    if (config.ccode)
+        CONF.COUNTRY_SPECIFIC[country].CCODE = config.ccode
+    if (config.customer_care)
+        CONF.COUNTRY_SPECIFIC[country].CUSTOMER_CARE = config.customer_care
+    if (config.support_email)
+        CONF.COUNTRY_SPECIFIC[country].SUPPORT_EMAIL = config.support_email
+    if (config.min_cart_value)
+        CONF.COUNTRY_SPECIFIC[country].MIN_CART_VALUE = config.min_cart_value
+    if (config.min_cod_cart_value)
+        CONF.COUNTRY_SPECIFIC[country].MIN_COD_CART_VALUE = config.min_cod_cart_value
+
+    global.configSync.countrySpecific = date;
     return {}
 }

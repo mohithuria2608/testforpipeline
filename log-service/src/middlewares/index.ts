@@ -4,10 +4,8 @@ import * as logger from 'koa-logger';
 import * as cors from '@koa/cors';
 import * as bodyParser from 'koa-bodyparser';
 import * as serve from 'koa-static';
-import * as Constant from '../constant'
 
 import handleErrors from './error'
-import activityLog from './activityLog'
 
 export default function middleware() {
   return compose([

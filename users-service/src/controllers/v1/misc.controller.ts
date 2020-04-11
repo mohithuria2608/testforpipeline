@@ -2,7 +2,7 @@ import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { syncService } from '../../grpc/client';
-import { configuration } from '../../sync/configuration';
+import { configuration } from '../../sync-config/configuration';
 
 export class MiscController {
 
@@ -36,28 +36,7 @@ export class MiscController {
                         cashondelivery: 0,
                         minOrderAmount: Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE,
                         // homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language],
-                        addressType: [
-                            {
-                                type: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE,
-                                enable: true,
-                                subType: [{
-                                    type: Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY,
-                                    enable: true
-                                }]
-                            },
-                            {
-                                type: Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE,
-                                enable: true,
-                                subType: [{
-                                    type: Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.CARHOP,
-                                    enable: true
-                                },
-                                {
-                                    type: Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE,
-                                    enable: true
-                                }]
-                            }
-                        ]
+                        addressType: Constant.CONF.COUNTRY_SPECIFIC[headers.country].ADDRESS_TYPE
                     }
                 ],
                 errorMessages: Constant.STATUS_MSG.FRONTEND_ERROR[headers.language],
@@ -106,14 +85,35 @@ export class MiscController {
                                     if (storeCodeConfig[0].createdAt != global.configSync.payment)
                                         Constant.paymentConfigSync(storeCodeConfig[0].store_code, storeCodeConfig[0].payment, storeCodeConfig[0].createdAt)
                                 }
+                                if (storeCodeConfig[0].shipment) {
+                                    if (storeCodeConfig[0].createdAt != global.configSync.shipment)
+                                        Constant.shipmentConfigSync(storeCodeConfig[0].store_code, storeCodeConfig[0].shipment, storeCodeConfig[0].createdAt)
+                                }
                             }
-                        } else if (argv.type) {
+                        } else if (argv.type || argv.country) {
                             let typeConfig: ISyncGrpcRequest.IConfig[] = await syncService.fetchConfig({ type: argv.type })
                             if (typeConfig && typeConfig.length > 0) {
                                 switch (argv.type) {
                                     case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
                                         if (typeConfig[0].createdAt != global.configSync.general)
                                             Constant.generalConfigSync(typeConfig[0].general, typeConfig[0].createdAt)
+                                        break;
+                                    }
+                                    case Constant.DATABASE.TYPE.CONFIG.KAFKA: {
+                                        if (typeConfig[0].createdAt != global.configSync.kafka)
+                                            Constant.kafkaConfigSync(typeConfig[0].kafka, typeConfig[0].createdAt)
+                                        break;
+                                    }
+                                    case Constant.DATABASE.TYPE.CONFIG.ORDER_STATUS: {
+                                        if (typeConfig[0].createdAt != global.configSync.orderStatus)
+                                            Constant.orderStatusConfigSync(typeConfig[0].orderStatus, typeConfig[0].createdAt)
+                                        break;
+                                    }
+                                    case Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC: {
+                                        if (argv.country) {
+                                            if (typeConfig[0].createdAt != global.configSync.countrySpecific)
+                                                Constant.countrySpecificConfigSync(argv.country, typeConfig[0].countrySpecific, typeConfig[0].createdAt)
+                                        }
                                         break;
                                     }
                                 }

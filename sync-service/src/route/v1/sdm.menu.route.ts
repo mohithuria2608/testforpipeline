@@ -4,14 +4,12 @@ import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { sdmMenuController } from '../../controllers';
-import { JOI_CMS_HEADERS } from './common.joi.validator'
 
 export default (router: Router) => {
     router
         .post('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 body: {

@@ -10,8 +10,7 @@ export default (router: Router) => {
     router
         .patch('/create',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
@@ -49,7 +48,6 @@ export default (router: Router) => {
         .patch('/edit',
             ...getMiddleware([
                 Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,

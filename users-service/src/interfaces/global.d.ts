@@ -10,7 +10,8 @@ declare namespace NodeJS {
             kafka?: number,
             orderStatus?: number,
             payment?: number,
-            shipment?: number
+            shipment?: number,
+            countrySpecific?: number
         }
     }
 }

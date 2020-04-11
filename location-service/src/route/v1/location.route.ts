@@ -9,9 +9,7 @@ import * as JOI from './common.joi.validator';
 export default (router: Router) => {
     router
         .get('/validate',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
+            ...getMiddleware([]),
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
@@ -33,11 +31,9 @@ export default (router: Router) => {
                 }
             })
         .get('/pickup',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
+            ...getMiddleware([]),
             validate({
-                // headers: JOI.COMMON_HEADERS,
+                headers: JOI.COMMON_HEADERS,
                 query: {
                     lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                     lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),

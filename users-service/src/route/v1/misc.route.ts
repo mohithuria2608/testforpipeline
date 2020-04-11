@@ -9,9 +9,6 @@ import * as JOI from './common.joi.validator';
 export default (router: Router) => {
     router
         .get('/',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
             }),

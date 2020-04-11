@@ -8,6 +8,7 @@ import * as Constant from '../constant'
 
 import handleErrors from './error'
 import activityLog from './activityLog'
+import appVersion from './app.version'
 
 export default function middleware() {
   return compose([
@@ -24,6 +25,8 @@ export * from './joi.validator'
 
 export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[] {
   let temp: IMiddleware[] = []
+  if (middlewares.indexOf(Constant.MIDDLEWARE.APP_VERSION) != -1)
+    temp.push(appVersion())
   if (middlewares.indexOf(Constant.MIDDLEWARE.ACTIVITY_LOG) != -1)
     temp.push(activityLog())
   return temp

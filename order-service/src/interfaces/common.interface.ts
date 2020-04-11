@@ -70,13 +70,16 @@ declare namespace ICommonRequest {
         service: string[],
         store_code?: string,
         type?: string,
+        language?: string,
+        country?: string
         data?: ISyncGrpcRequest.IConfig
     }
 
     interface IInitConfiguration {
         store_code?: string,
         type?: string,
-        bootstrap: boolean
+        bootstrap: boolean,
+        country?: string
     }
 
     interface IGrpcHealthCheck {

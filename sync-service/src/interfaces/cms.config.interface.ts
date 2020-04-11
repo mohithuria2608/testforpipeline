@@ -125,7 +125,13 @@ declare namespace ICmsConfigRequest {
                 max_try: IMaxRetry
             },
             order_config: {
-                max_try: IMaxRetry
+                max_try: IMaxRetry,
+                interval: {
+                    get: string,
+                    get_once: string,
+                    get_max: string,
+                    next_ping: string
+                }
             }
         },
         cms: {
@@ -182,16 +188,16 @@ declare namespace ICmsConfigRequest {
         licence: string,
         channel_data: [
             {
-                template_id: string,
-                template_status: string,
-                channel_name: string,
-                menu_data: [
+                template_id?: string,
+                template_status?: string,
+                channel_name?: string,
+                menu_data?: [
                     {
-                        menu_id: string,
-                        menu_state: string,
-                        menu_cluster: string,
-                        frequency_cron: string,
-                        time_cron: string
+                        menu_id?: string,
+                        menu_state?: string,
+                        menu_cluster?: string,
+                        frequency_cron?: string,
+                        time_cron?: string
                     }
                 ]
             }

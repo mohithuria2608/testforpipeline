@@ -1,7 +1,7 @@
 import { Aerospike } from "../aerospike";
 import { SDM } from '../sdm'
-import { configuration } from '../sync/configuration';
-import { appversion } from '../sync/appversion';
+import { configuration } from '../sync-config/configuration';
+import { appversion } from '../sync-config/appversion';
 
 export let bootstrap = async function (server) {
     await Aerospike.init();

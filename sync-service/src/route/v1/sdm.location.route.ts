@@ -1,18 +1,12 @@
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { sdmLocationController } from '../../controllers';
-import { JOI_CMS_HEADERS } from './common.joi.validator'
 
 export default (router: Router) => {
     router
         .post('/',
-            ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
@@ -28,10 +22,6 @@ export default (router: Router) => {
                 }
             })
         .post('/store-status',
-            ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;

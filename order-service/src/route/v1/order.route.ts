@@ -46,8 +46,7 @@ export default (router: Router) => {
             })
         .get('/',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
@@ -72,8 +71,7 @@ export default (router: Router) => {
             })
         .get('/detail',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
@@ -97,8 +95,7 @@ export default (router: Router) => {
             })
         .get('/status',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
@@ -122,8 +119,7 @@ export default (router: Router) => {
             })
         .get('/track',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,

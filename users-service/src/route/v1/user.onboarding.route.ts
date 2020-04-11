@@ -10,9 +10,6 @@ import * as JOI from './common.joi.validator';
 export default (router: Router) => {
     router
         .post('/send-otp',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
@@ -34,9 +31,6 @@ export default (router: Router) => {
                 }
             })
         .post('/verify-otp',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {
@@ -70,9 +64,6 @@ export default (router: Router) => {
                 }
             })
         .post('/social-validate',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
                 body: {

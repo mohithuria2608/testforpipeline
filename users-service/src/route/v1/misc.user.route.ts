@@ -9,8 +9,7 @@ export default (router: Router) => {
     router
         .post('/refresh-token',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
@@ -34,8 +33,7 @@ export default (router: Router) => {
             })
         .post('/logout',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,

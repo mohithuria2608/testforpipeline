@@ -9,9 +9,6 @@ import * as JOI from './common.route.validator';
 export default (router: Router) => {
     router
         .get('/deeplink/:path/:id',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
                 params: {
                     "0": Joi.string(),
@@ -34,8 +31,7 @@ export default (router: Router) => {
             })
         .get('/mapper',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,

@@ -10,8 +10,7 @@ export default (router: Router) => {
     router
         .get('/methods',
             ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
+                Constant.MIDDLEWARE.AUTH
             ]),
             validate({
                 headers: JOI.COMMON_HEADERS,
@@ -36,7 +35,6 @@ export default (router: Router) => {
             })
         .post('/initiate',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -66,7 +64,6 @@ export default (router: Router) => {
             })
         .get('/status',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -102,7 +99,6 @@ export default (router: Router) => {
             })
         .post('/capture',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -130,7 +126,6 @@ export default (router: Router) => {
             })
         .post('/reverse',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({
@@ -156,7 +151,6 @@ export default (router: Router) => {
             })
         .post('/refund',
             ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
                 Constant.MIDDLEWARE.ACTIVITY_LOG
             ]),
             validate({

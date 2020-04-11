@@ -1,14 +1,6 @@
-import { configuration } from '../configuration';
+import { configuration } from '../sync-config/configuration';
 
 export let bootstrap = async function (server) {
-    await configuration.init({ bootstrap: true });;
-    // console.log(__dirname);
-    // ejs.renderFile(`${__dirname}/../../templates/En/order_cancel_email.ejs`, { user: {}, meta: {}, order: orderData, moment }, {}, function (err, emailer) {
-    //     if (err) console.log("ERRROR -> ", err);
-    //     else {
-    //         fs.writeFileSync('welcome.html', emailer, {});
-    //     }
-    // })
-
+    await configuration.init({ bootstrap: true });
     return {}
 }

@@ -59,7 +59,13 @@ declare namespace ISyncGrpcRequest {
                 max_try: IMaxRetry
             },
             order_config: {
-                max_try: IMaxRetry
+                max_try: IMaxRetry,
+                interval: {
+                    get: number,
+                    get_once: number,
+                    get_max: number,
+                    next_ping: number
+                }
             }
         },
         cms?: {
@@ -211,22 +217,19 @@ declare namespace ISyncGrpcRequest {
     interface ICountrySpecific {
         country_code: string,
         country_name: string,
-        concept_id: string,
-        sdm_url: string,
         base_currency: string,
-        licence: string,
         channel_data: [
             {
-                template_id: string,
-                template_status: string,
+                template_id: number,
+                template_status: number,
                 channel_name: string,
                 menu_data: [
                     {
-                        menu_id: string,
-                        menu_state: string,
-                        menu_cluster: string,
-                        frequency_cron: string,
-                        time_cron: string
+                        menu_id: number,
+                        menu_state: number,
+                        menu_cluster: number,
+                        frequency_cron: number,
+                        time_cron: number
                     }
                 ]
             }
@@ -238,7 +241,7 @@ declare namespace ISyncGrpcRequest {
                 mediaType: string,
                 extension: string,
                 action: {
-                    id: string,
+                    id: number,
                     type: string,
                     delimeters: string
                 }
@@ -249,22 +252,23 @@ declare namespace ISyncGrpcRequest {
                 mediaType: string,
                 extension: string,
                 action: {
-                    id: string,
+                    id: number,
                     type: string,
                     delimeters: string
                 }
             }
         },
         sdm: {
+            sdm_url: string,
             licence_code: string,
-            concept_id: string,
-            menu_template_id: string
+            concept_id: number,
+            menu_template_id: number
         },
         ccode: string,
         customer_care: string,
         support_email: string,
-        min_cart_value: string,
-        min_cod_cart_value: string
+        min_cart_value: number,
+        min_cod_cart_value: number
     }
 
     interface IFetchConfig {

@@ -1,20 +1,14 @@
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware, validate } from '../../middlewares'
+import { validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
-import { cmsMenuController, cmsLocationController } from '../../controllers';
-import { JOI_CMS_HEADERS } from './common.joi.validator'
+import { cmsLocationController } from '../../controllers';
 
 export default (router: Router) => {
     router
         .post('/',
-            ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
-                // Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
-                // headers: JOI_CMS_HEADERS,
                 body: {
                     action: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.SYNC_ACTION.CREATE,

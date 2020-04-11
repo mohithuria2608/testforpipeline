@@ -1,6 +1,6 @@
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware, validate } from '../../middlewares'
+import { validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { cmsFaqController } from '../../controllers';
@@ -8,12 +8,7 @@ import { cmsFaqController } from '../../controllers';
 export default (router: Router) => {
     router
         .post('/',
-            ...getMiddleware([
-                // Constant.MIDDLEWARE.AUTH,
-                Constant.MIDDLEWARE.ACTIVITY_LOG
-            ]),
             validate({
-                // headers: JOI_CMS_HEADERS,
                 body: {
                     type: Joi.string().valid("faq_data"),
                     action: Joi.string().required().valid(Constant.DATABASE.TYPE.SYNC_ACTION.RESET).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message)),

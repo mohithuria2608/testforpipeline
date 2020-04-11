@@ -75,7 +75,8 @@ declare namespace ICommonRequest {
     interface IInitConfiguration {
         store_code?: string,
         type?: string,
-        bootstrap: boolean
+        bootstrap: boolean,
+        country?: string
     }
     interface ISDM {
         licenseCode: string,

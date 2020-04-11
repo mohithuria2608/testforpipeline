@@ -5,7 +5,8 @@ global.configSync = {
   kafka: 0,
   orderStatus: 0,
   payment: 0,
-  shipment: 0
+  shipment: 0,
+  countrySpecific: 0,
 }
 import * as config from "config"
 import * as Koa from 'koa'

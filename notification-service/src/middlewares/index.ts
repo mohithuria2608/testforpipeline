@@ -20,6 +20,7 @@ export default function middleware() {
   ])
 }
 
+
 export function getMiddleware(middlewares: Constant.MIDDLEWARE[]): IMiddleware[] {
   let temp: IMiddleware[] = []
   if (middlewares.indexOf(Constant.MIDDLEWARE.ACTIVITY_LOG) != -1)
