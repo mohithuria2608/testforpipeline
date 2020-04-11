@@ -7,7 +7,6 @@ import { syncService } from '../../grpc/client'
 export default (router: Router) => {
     router
         .get('/', async (ctx: Router.IRouterContext) => {
-            console.log("healthcheck------------>", global.healthcheck)
             if (global.healthcheck.as &&
                 global.healthcheck.sdm) {
                 ctx.body = "<html>  <head>  </head> <body> user-service@KFC</body> </html>"

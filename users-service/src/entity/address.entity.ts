@@ -177,10 +177,6 @@ export class AddressEntity extends BaseEntity {
     async updateAddress(headers: ICommonRequest.IHeaders, addressUpdate: IAddressRequest.IUpdateAddress, bin: string, userData: IUserRequest.IUserData, isDelete: boolean) {
         try {
             let listaddress = await this.getAddress({ userId: userData.id, bin: bin })
-            console.log("listaddress", listaddress)
-            console.log("addressUpdate", addressUpdate)
-            console.log("bin", bin)
-            console.log("isDelete", isDelete)
             let sdmAddressRef = addressUpdate.sdmAddressRef ? addressUpdate.sdmAddressRef : 0
             let cmsAddressRef = addressUpdate.cmsAddressRef ? addressUpdate.cmsAddressRef : 0
             let index = listaddress.findIndex(x => x.id === addressUpdate.addressId);

@@ -15,7 +15,7 @@ class SdmAddressConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer sdm_address", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer sdm_address", "", true)
                 this.syncAddress(message);
                 return null
             })

@@ -16,7 +16,7 @@ class ASLocationConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_location", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_location", "", true)
                 let messageArgv = JSON.parse(message.as.argv);
                 switch (messageArgv.event) {
                     case "location_sync": this.syncLocationFromCMS(message); break;

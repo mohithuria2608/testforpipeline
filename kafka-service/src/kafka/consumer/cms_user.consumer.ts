@@ -15,7 +15,7 @@ class CmsUserConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer cms_user", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer cms_user", "", true)
                 this.syncUser(message);
                 return null
             })

@@ -15,7 +15,7 @@ class CmsAddressConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer cms_address", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer cms_address", "", true)
                 this.syncAddress(message);
                 return null
             })

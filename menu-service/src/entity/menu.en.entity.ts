@@ -43,7 +43,6 @@ export class MenuClass extends BaseEntity {
                 bins: ["menuId", "updatedAt"]
             }
             let menu = await Aerospike.get(getArg)
-            console.log("menu-------------->", JSON.stringify(menu))
             return menu
         } catch (error) {
             consolelog(process.cwd(), "getMenu en", JSON.stringify(error), false)

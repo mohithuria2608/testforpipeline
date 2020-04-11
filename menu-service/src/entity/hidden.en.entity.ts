@@ -55,7 +55,6 @@ export class HiddenEnClass extends BaseEntity {
      * */
     async postHiddenMenu(data) {
         try {
-            console.log("data------------------------", data)
             let putArg: IAerospike.Put = {
                 bins: data,
                 set: this.set,

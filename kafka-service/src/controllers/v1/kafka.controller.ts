@@ -100,21 +100,21 @@ export class KafkaController {
         try {
             switch (messages.count) {
                 case 1: {
-                    console.log("----------------1 Try----------------", messages.count)
+                    consolelog(process.cwd(), "----------------1 Try----------------", messages.count, false)
                     break;
                 }
                 case 2: {
-                    console.log("----------------1 Re-Try----------------", messages.count)
+                    consolelog(process.cwd(), "----------------1 Re-Try----------------", messages.count, false)
                     topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.RETRY1)
                     break;
                 }
                 case 3: {
-                    console.log("----------------2 Re-Try----------------", messages.count)
+                    consolelog(process.cwd(), "----------------2 Re-Try----------------", messages.count, false)
                     topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.RETRY2)
                     break;
                 }
                 case 4: {
-                    console.log("----------------3 Re-Try----------------", messages.count)
+                    consolelog(process.cwd(), "----------------3 Re-Try----------------", messages.count, false)
                     topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.RETRY3)
                     break;
                 }

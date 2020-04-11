@@ -16,7 +16,7 @@ class AsHomeConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_home", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_home", "", true)
                 this.syncHomeData(message);
                 return null;
             })

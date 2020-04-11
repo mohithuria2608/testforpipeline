@@ -16,7 +16,7 @@ class CMSLocationConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer cms_location", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer cms_location", "", true)
                 this.postLocationDataToCMS(message);
                 return null;
             })

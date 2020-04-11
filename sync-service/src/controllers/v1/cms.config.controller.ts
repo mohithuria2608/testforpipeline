@@ -961,7 +961,6 @@ export class CmsConfigController {
                             if (conf && conf.length > 0) {
                                 for (const paymentConf of conf) {
                                     if (paymentConf.store_code == Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE) {
-                                        console.log("paymentConf", paymentConf)
                                         let dataToSave: IConfigRequest.IConfig = {
                                             id: configIdGenerator(data.type, paymentConf.store_code),
                                             type: data.type,

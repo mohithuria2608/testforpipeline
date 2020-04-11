@@ -15,7 +15,7 @@ class AsConfigConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_config", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_config", "", true)
                 this.syncConfig(message);
                 return null;
             })

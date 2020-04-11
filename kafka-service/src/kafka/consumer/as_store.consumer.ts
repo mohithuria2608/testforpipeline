@@ -15,7 +15,7 @@ class AsStoreConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_store", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_store", "", true)
                 this.syncStores(message);
                 return null;
             })

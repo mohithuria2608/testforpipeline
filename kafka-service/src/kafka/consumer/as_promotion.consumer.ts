@@ -15,7 +15,7 @@ class AsPromotionConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_promotion", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_promotion", "", true)
                 this.syncPromotion(message);
                 return null;
             })

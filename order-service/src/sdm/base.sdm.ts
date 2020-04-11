@@ -46,29 +46,29 @@ export class BaseSDM {
             return new Promise((resolve, reject) => {
                 consolelog(process.cwd(), `${name}   ::`, `   ${JSON.stringify(params)}`, true)
                 BaseSDM.client[name](params, function (error, result, rawResponse, soapHeader, rawRequest) {
-                    console.log(`SDM hit on ------------${name}------------->`, rawRequest)
-                    kafkaService.kafkaSync({
-                        set: Constant.SET_NAME.LOGGER,
-                        mdb: {
-                            create: true,
-                            argv: JSON.stringify({
-                                type: Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
-                                info: {
-                                    request: {
-                                        body: rawRequest,
-                                        baseSOAPUrl: self.baseSOAPUrl
+                    if (name != "GetOrderDetails")
+                        kafkaService.kafkaSync({
+                            set: Constant.SET_NAME.LOGGER,
+                            mdb: {
+                                create: true,
+                                argv: JSON.stringify({
+                                    type: Constant.DATABASE.TYPE.ACTIVITY_LOG.SDM_REQUEST,
+                                    info: {
+                                        request: {
+                                            body: rawRequest,
+                                            baseSOAPUrl: self.baseSOAPUrl
+                                        },
+                                        response: error ? error : rawResponse
                                     },
-                                    response: error ? error : rawResponse
-                                },
-                                description: name,
-                                options: {
-                                    env: Constant.SERVER.ENV[config.get("env")],
-                                },
-                                createdAt: new Date().getTime(),
-                            })
-                        },
-                        inQ: true
-                    })
+                                    description: name,
+                                    options: {
+                                        env: Constant.SERVER.ENV[config.get("env")],
+                                    },
+                                    createdAt: new Date().getTime(),
+                                })
+                            },
+                            inQ: true
+                        })
                     if (error) { reject(error); }
                     else {
                         consolelog(process.cwd(), "sdk response : ", JSON.stringify(result), true)

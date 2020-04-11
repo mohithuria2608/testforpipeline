@@ -12,7 +12,6 @@ export default (router: Router) => {
             upload.single('product'),
             async (ctx) => {
                 try {
-                    console.log('ctx.files', ctx.file);
                     let res = await uploadController.uploadImage(ctx.file);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;

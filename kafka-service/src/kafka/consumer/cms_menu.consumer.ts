@@ -15,7 +15,7 @@ class CmsMenuConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer cms_menu", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer cms_menu", "", true)
                 this.syncMenu(message);
                 return null;
             })

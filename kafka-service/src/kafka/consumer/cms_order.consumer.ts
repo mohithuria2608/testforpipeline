@@ -15,7 +15,7 @@ class CmsOrderStatusConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer cms_order", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer cms_order", "", true)
                 this.cmsOrder(message);
                 return null;
             })

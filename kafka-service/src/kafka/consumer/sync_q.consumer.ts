@@ -15,7 +15,7 @@ class SyncConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer sync", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer sync", "", true)
                 return null
             }
         );

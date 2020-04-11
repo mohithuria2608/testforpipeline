@@ -15,12 +15,10 @@ export class CmsUserController {
         try {
             if (payload.data && payload.data.length > 0) {
                 let chunkedArray = chunk(payload.data, Constant.CONF.GENERAL.CHUNK_SIZE_USER_MIGRATION)
-                console.log("chunkedArray", JSON.stringify(chunkedArray))
                 chunkedArray.forEach(element => {
                     if (element && element.length > 0) {
                         for (const iterator of element) {
                             let userToSave = this.migrateUser(iterator)
-                            console.log("userToSave", userToSave)
                             if (userToSave && userToSave.id) {
                                 let userChange = {
                                     set: ENTITY.UserE.set,

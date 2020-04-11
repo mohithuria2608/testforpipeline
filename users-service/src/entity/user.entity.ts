@@ -163,7 +163,6 @@ export class UserEntity extends BaseEntity {
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
                 userInfo['sdmAddress'] = payload.sdmAddress
 
-            console.log("updateUser=====================>", userInfo)
             let putArg: IAerospike.Put = {
                 bins: userInfo,
                 set: this.set,
@@ -264,7 +263,6 @@ export class UserEntity extends BaseEntity {
                 SDM.UserSDME.updateCustomerTokenOnSdm(userData, headers)
             }
             userData = await this.getUser({ userId: userData.id })
-            console.log("user after getting sdm id", userData)
             if (userData.cmsUserRef != 0) {
                 kafkaService.kafkaSync({
                     set: this.set,
@@ -320,7 +318,6 @@ export class UserEntity extends BaseEntity {
                 }
                 await Aerospike.put(putArg)
                 userData = await this.getUser({ userId: userData.id })
-                console.log("user after getting cms id", userData)
                 if (userData.sdmUserRef && userData.sdmCorpRef) {
                     kafkaService.kafkaSync({
                         set: this.set,

@@ -15,7 +15,7 @@ class AsHiddenConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_hidden", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_hidden", "", true)
                 this.syncHidden(message);
                 return null;
             })

@@ -15,7 +15,7 @@ class PingServiceConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: any) => {
-                consolelog(process.cwd(), "consumer ping_service", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer ping_service", "", true)
                 this.pingService(message);
             })
     }

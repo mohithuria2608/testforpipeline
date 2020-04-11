@@ -15,7 +15,7 @@ class SdmOrderStatusConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer sdm_order", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer sdm_order", "", true)
                 this.sdmOrder(message);
                 return null;
             })

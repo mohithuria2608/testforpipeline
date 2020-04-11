@@ -136,7 +136,6 @@ export class AddressController {
     * */
     async syncOldAddress(headers: ICommonRequest.IHeaders, userId: string, payload: IAddressRequest.ISyncOldAddress) {
         try {
-            console.log("syncOldAddress", userId, payload)
             let userData = await ENTITY.UserE.getUser({ userId: userId })
             let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {

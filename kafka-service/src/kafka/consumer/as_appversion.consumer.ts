@@ -15,7 +15,7 @@ class AsAppversionConsumer extends BaseConsumer {
     handleMessage() {
         this.onMessage<any>().subscribe(
             (message: IKafkaRequest.IKafkaBody) => {
-                consolelog(process.cwd(), "consumer as_app_version", JSON.stringify(message), true)
+                consolelog(process.cwd(), "consumer as_app_version", "", true)
                 this.syncAppversion(message);
                 return null;
             })
