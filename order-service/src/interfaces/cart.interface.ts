@@ -2,7 +2,6 @@ declare namespace ICartRequest {
 
     interface ICartData {
         cartId?: string,
-        cmsCartRef?: number,
         sdmOrderRef?: number,
         cmsOrderRef?: number,
         userId?: string,

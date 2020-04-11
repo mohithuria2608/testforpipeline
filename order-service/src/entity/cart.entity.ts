@@ -21,12 +21,6 @@ export class CartClass extends BaseEntity {
             bin: 'orderId',
             index: 'idx_' + this.set + '_' + 'orderId',
             type: "STRING"
-        },
-        {
-            set: this.set,
-            bin: 'cmsCartRef',
-            index: 'idx_' + this.set + '_' + 'cmsCartRef',
-            type: "NUMERIC"
         }
     ]
 
@@ -162,7 +156,6 @@ export class CartClass extends BaseEntity {
 
     public cartSchema = Joi.object().keys({
         cartId: Joi.string().required().description("pk"),
-        cmsCartRef: Joi.number().required(),
         userId: Joi.string().required().description("sk"),
         orderId: Joi.string().required().description("sk, UAE-1"),
         sdmOrderRef: Joi.number().required().description("sk"),
@@ -274,7 +267,6 @@ export class CartClass extends BaseEntity {
         try {
             let dataToSave: ICartRequest.ICartData = {
                 cartId: payload.userId,
-                cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
                 userId: payload.userId,
@@ -309,7 +301,6 @@ export class CartClass extends BaseEntity {
     async resetCart(userId: string) {
         try {
             let cartUpdate: ICartRequest.ICartData = {
-                cmsCartRef: 0,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
                 userId: userId,
@@ -625,7 +616,6 @@ export class CartClass extends BaseEntity {
             let dataToUpdate: ICartRequest.ICartData = {}
             dataToUpdate['cartId'] = payload.cartId
             dataToUpdate['orderType'] = payload.orderType
-            dataToUpdate['cmsCartRef'] = parseInt(payload.cmsCart.cms_cart_id.toString())
             dataToUpdate['updatedAt'] = new Date().getTime()
             dataToUpdate['isPriceChanged'] = payload.cmsCart.is_price_changed ? 1 : 0
             dataToUpdate['notAvailable'] = []

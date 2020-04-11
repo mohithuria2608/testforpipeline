@@ -12,7 +12,6 @@ declare namespace IOrderGrpcRequest {
 
     interface IGetCartRes {
         cartId?: string,
-        cmsCartRef?: number,
         sdmOrderRef?: number,
         cmsOrderRef?: number,
         userId?: string,

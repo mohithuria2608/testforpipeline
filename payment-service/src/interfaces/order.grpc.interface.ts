@@ -7,7 +7,6 @@ declare namespace IOrderGrpcRequest {
 
     interface IGetOrderRes {
         cartId: string,
-        cmsCartRef: number,
         sdmOrderRef: number,
         cmsOrderRef: number,
         userId: string,

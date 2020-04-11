@@ -4,7 +4,6 @@ import * as Constant from '../constant';
 export interface Iorder extends Document {
     orderType: string,
     cartId: string,
-    cmsCartRef: number,
     sdmOrderRef: number,
     cmsOrderRef: number,
     userId: string,
@@ -95,7 +94,6 @@ const orderSchema = new Schema({
             Constant.DATABASE.TYPE.ORDER.DELIVERY.AS
         ]
     },
-    cmsCartRef: { type: Number, required: true },
     sdmOrderRef: { type: Number, required: true, index: true },
     cmsOrderRef: { type: Number, required: true, index: true },
     userId: { type: String, required: true, index: true },

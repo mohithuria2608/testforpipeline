@@ -36,7 +36,6 @@ export class OrderClass extends BaseEntity {
             let orderData = {
                 orderType: address.addressType,
                 cartId: cartData.cartId,
-                cmsCartRef: cartData.cmsCartRef,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
                 userId: userData.id,
@@ -198,8 +197,10 @@ export class OrderClass extends BaseEntity {
         let validationRemarks = ""
         try {
             let preHook = await this.postSdmOrderPreHandler(payload)
+            payload.userData = preHook.userData
+            payload.address = preHook.address
             if (order.sdmUserRef == 0 || order.address.sdmAddressRef == 0) {
-                order = await this.updateOneEntityMdb({ _id: order._id }, { sdmUserRef: preHook.userData.sdmUserRef, "address.sdmAddressRef": preHook.address.sdmAddressRef }, { new: true })
+                order = await this.updateOneEntityMdb({ _id: order._id }, { sdmUserRef: payload.userData.sdmUserRef, "address.sdmAddressRef": payload.address.sdmAddressRef }, { new: true })
             }
             let Comps
             if (order.promo &&
@@ -367,9 +368,14 @@ export class OrderClass extends BaseEntity {
     async createOrderOnCMS(payload: IOrderRequest.IPostOrderOnCms, orderPayload: IOrderRequest.IPostOrder, cart: ICartRequest.ICartData) {
         try {
             let preHook = await this.postCmsOrderPreHandler(payload)
+            payload.userData = preHook.userData
+            payload.address = preHook.address
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
             payload.cmsOrderReq['cms_user_id'] = preHook.userData.cmsUserRef
 
+            if (payload.order.address.cmsAddressRef == 0) {
+                payload.order = await this.updateOneEntityMdb({ _id: payload.order._id }, { "address.cmsAddressRef": preHook.address.cmsAddressRef }, { new: true })
+            }
             let cmsOrder = await CMS.OrderCMSE.createOrder(payload.cmsOrderReq)
 
             if (cmsOrder && cmsOrder['order_id']) {
