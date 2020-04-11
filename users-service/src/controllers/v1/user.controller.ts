@@ -29,17 +29,27 @@ export class UserController {
             }
             if (payload.cms && (payload.cms.create || payload.cms.update || payload.cms.get || payload.cms.sync)) {
                 let data = JSON.parse(payload.cms.argv)
-                if (payload.cms.create)
-                    await ENTITY.UserE.createUserOnCms(data.userData, data.headers)
-                if (payload.cms.update)
-                    await ENTITY.UserE.updateUserOnCms(data.userData, data.headers)
+                data.userData = await ENTITY.UserE.getUser({ userId: data.userData.id })
+                if (payload.cms.create) {
+                    if (data.userData.cmsUserRef == 0)
+                        await ENTITY.UserE.createUserOnCms(data.userData, data.headers)
+                }
+                if (payload.cms.update) {
+                    if (data.userData.cmsUserRef)
+                        await ENTITY.UserE.updateUserOnCms(data.userData, data.headers)
+                }
             }
             if (payload.sdm && (payload.sdm.create || payload.sdm.update || payload.sdm.get || payload.sdm.sync)) {
                 let data = JSON.parse(payload.sdm.argv)
-                if (payload.sdm.create)
-                    await ENTITY.UserE.createUserOnSdm(data.userData, data.headers)
-                if (payload.sdm.update)
-                    await ENTITY.UserE.updateUserOnSdm(data.userData, data.headers)
+                data.userData = await ENTITY.UserE.getUser({ userId: data.userData.id })
+                if (payload.sdm.create) {
+                    if (data.userData.sdmUserRef == 0)
+                        await ENTITY.UserE.createUserOnSdm(data.userData, data.headers)
+                }
+                if (payload.sdm.update) {
+                    if (data.userData.sdmUserRef)
+                        await ENTITY.UserE.updateUserOnSdm(data.userData, data.headers)
+                }
                 if (payload.sdm.sync)
                     await this.validateUserOnSdm(data.userData, true, data.headers)
             }
@@ -204,10 +214,10 @@ export class UserController {
                     });
                 }
 
-                if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
+                if (userData.cmsUserRef && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
                     CMS.UserCMSE.updateCustomerOnCms(userData)
 
-                if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm))
+                if (userData.sdmUserRef && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm))
                     SDM.UserSDME.updateCustomerOnSdm(userData, headers)
 
                 if (asAddress && asAddress.length > 0) {
@@ -418,8 +428,10 @@ export class UserController {
                 this.validateUserOnSdm(userData, false, headers)
             }
             if (updateName) {
-                CMS.UserCMSE.updateCustomerOnCms(userData)
-                SDM.UserSDME.updateCustomerOnSdm(userData, headers)
+                if (userData.cmsUserRef)
+                    CMS.UserCMSE.updateCustomerOnCms(userData)
+                if (userData.sdmUserRef)
+                    SDM.UserSDME.updateCustomerOnSdm(userData, headers)
             }
 
             let sessionUpdate: ISessionRequest.ISession = {
@@ -656,10 +668,10 @@ export class UserController {
             let createOnSdm = false
             let createOnCms = false
             let updateAs = {}
-            if (!userData.cmsUserRef || userData.cmsUserRef == 0) {
+            if (!userData.cmsUserRef) {
                 createOnCms = true
             }
-            if (!userData.sdmUserRef || userData.sdmUserRef == 0) {
+            if (!userData.sdmUserRef) {
                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: userData.email }, headers)
                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
                     updateOnSdm = true

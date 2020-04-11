@@ -245,12 +245,12 @@ export class GuestController {
 
             userData = await ENTITY.UserE.buildUser(userUpdate)
 
-            if (userData.cmsUserRef && userData.cmsUserRef != 0 && (userchangePayload.chngEmailCms || userchangePayload.chngPhnCms))
+            if (userData.cmsUserRef && (userchangePayload.chngEmailCms || userchangePayload.chngPhnCms))
                 CMS.UserCMSE.updateCustomerOnCms(userData)
 
-            if (userData.sdmUserRef && userData.sdmUserRef != 0 && (userchangePayload.chngEmailSdm || userchangePayload.chngPhnSdm)) {
+            if (userData.sdmUserRef && (userchangePayload.chngEmailSdm || userchangePayload.chngPhnSdm))
                 SDM.UserSDME.updateCustomerOnSdm(userData, headers)
-            }
+
             return userData
         } catch (error) {
             consolelog(process.cwd(), "forceUpdateUserOnGuestCheckout", JSON.stringify(error), false)

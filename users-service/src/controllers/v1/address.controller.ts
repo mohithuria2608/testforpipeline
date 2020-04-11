@@ -25,11 +25,11 @@ export class AddressController {
                 let asAddress = data.asAddress
                 userData = await ENTITY.UserE.getUser({ userId: userData.id })
                 if (payload.cms.create) {
-                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                    if (userData.cmsUserRef)
                         await ENTITY.AddressE.addAddressOnCms(userData, headers, asAddress)
                 }
                 if (payload.cms.update) {
-                    if (userData.cmsUserRef && userData.cmsUserRef != 0)
+                    if (userData.cmsUserRef)
                         await ENTITY.AddressE.updateAddressOnCms(userData, headers, asAddress)
                 }
             }
@@ -40,7 +40,7 @@ export class AddressController {
                 let asAddress = data.asAddress
                 userData = await ENTITY.UserE.getUser({ userId: userData.id })
                 if (payload.sdm.create) {
-                    if (userData.sdmUserRef && userData.sdmUserRef != 0)
+                    if (userData.sdmUserRef)
                         await ENTITY.AddressE.addAddressOnSdm(userData, headers, asAddress)
                 }
                 if (payload.sdm.update) {
