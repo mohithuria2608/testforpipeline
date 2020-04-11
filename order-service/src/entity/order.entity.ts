@@ -987,7 +987,6 @@ export class OrderClass extends BaseEntity {
     async getSdmOrderScheduler(payload: IOrderRequest.IGetSdmOrderScheduler) {
         try {
             let recheck = true
-            let statusChanged = false
             let order: IOrderRequest.IOrderData = await this.getOneEntityMdb({ sdmOrderRef: payload.sdmOrderRef }, { items: 0, selFreeItem: 0, freeItems: 0 })
             if (order && order._id) {
                 let oldSdmStatus = order.sdmOrderStatus
@@ -1014,7 +1013,6 @@ export class OrderClass extends BaseEntity {
                                         updatedAt: new Date().getTime(),
                                         sdmOrderStatus: parseInt(sdmOrder.Status)
                                     }, { new: true })
-                                    statusChanged = true
                                 }
                                 if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
                                     let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)

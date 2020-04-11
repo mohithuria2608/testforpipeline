@@ -68,6 +68,12 @@ export class PromotionController {
                 }
             }
             let promolist = await ENTITY.PromotionE.getPromotion({})
+            promolist.filter(obj => {
+                if (new Date(obj.dateFrom).getTime() < new Date().getTime() &&
+                    new Date().getTime() < new Date(obj.dateTo).getTime()) {
+                    return obj
+                }
+            })
             let returnList = promolist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {
                 list: returnList,
