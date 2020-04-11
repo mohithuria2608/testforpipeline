@@ -35,7 +35,7 @@ export class OrderController {
                     let address = data.address
                     let cart = data.cart
                     let order = data.order
-                    let failOrder = (payload.count == Constant.CONF.GENERAL.DEFAULT_RETRY_COUNT) ? true : false
+                    let failOrder = (payload.count > Constant.CONF.GENERAL.DEFAULT_RETRY_COUNT) ? true : false
                     await this.syncOnCms(orderPayload, headers, userData, address, cart, order, failOrder, false)
                 }
             }
@@ -46,7 +46,7 @@ export class OrderController {
                     let userData = data.userData
                     let address = data.address
                     let order = data.order
-                    let failOrder = (payload.count == Constant.CONF.GENERAL.DEFAULT_RETRY_COUNT) ? true : false
+                    let failOrder = (payload.count > Constant.CONF.GENERAL.DEFAULT_RETRY_COUNT) ? true : false
                     await this.syncOnSdm(headers, userData, address, order, failOrder, false)
                 }
             }
