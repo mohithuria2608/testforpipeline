@@ -1180,14 +1180,6 @@ export const STATUS_MSG = {
                 "type": "INVALID_TOKEN_TYPE",
                 "message_Ar": "نوع الرمز الذي تم إدخاله غير صحيح",
                 "message_En": "Invalid token type provided"
-            },
-            "CREATE_ORDER_ERROR": {
-                "statusCode": 500,
-                "httpCode": 500,
-                "type": "CREATE_ORDER_ERROR",
-                "message": "We have encountered an error while creating an order",
-                "message_Ar": "لقد واجهتنا مشكلة في إنشاء الطلب",
-                "message_En": "We have encountered an error while creating an order"
             }
         },
         "E501": {

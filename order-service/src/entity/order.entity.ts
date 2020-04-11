@@ -341,7 +341,7 @@ export class OrderClass extends BaseEntity {
             }
         } catch (error) {
             consolelog(process.cwd(), "createSdmOrder", JSON.stringify(error), false)
-            if (!payload.failOrder) {
+            if (payload.firstTry) {
                 setTimeout(() => {
                     kafkaService.kafkaSync({
                         set: this.set,
@@ -353,13 +353,16 @@ export class OrderClass extends BaseEntity {
                     })
                 }, 1000)
             } else {
-                validationRemarks = (validationRemarks == "") ? Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE : validationRemarks
-                if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
-                    validationRemarks = error.SDKResult.ResultText
-                else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
-                    validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
-                this.orderFailureHandler(order, 1, validationRemarks)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.CREATE_ORDER_ERROR)
+                if (payload.failOrder) {
+                    validationRemarks = (validationRemarks == "") ? Constant.STATUS_MSG.SDM_ORDER_VALIDATION.SDM_ORDER_PRE_CONDITION_FAILURE : validationRemarks
+                    if (error && error.UpdateOrderResult == "0" && error.SDKResult && error.SDKResult.ResultText)
+                        validationRemarks = error.SDKResult.ResultText
+                    else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
+                        validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
+                    this.orderFailureHandler(order, 1, validationRemarks)
+                    return Promise.reject(error)
+                } else
+                    return Promise.reject(error)
             }
         }
     }
@@ -390,7 +393,8 @@ export class OrderClass extends BaseEntity {
             }
             return cmsOrder
         } catch (error) {
-            if (!payload.failOrder) {
+            consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
+            if (payload.firstTry) {
                 setTimeout(() => {
                     kafkaService.kafkaSync({
                         set: this.set,
@@ -409,10 +413,8 @@ export class OrderClass extends BaseEntity {
                         inQ: true
                     })
                 }, 1000)
-            } else {
-                consolelog(process.cwd(), "createOrderOnCMS", JSON.stringify(error), false)
+            } else
                 return Promise.reject(error)
-            }
         }
     }
 
