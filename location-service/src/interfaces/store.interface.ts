@@ -16,7 +16,8 @@ declare namespace IStoreRequest {
         services: {
             din: number,
             del: number,
-            tak: number
+            tak: number,
+            carHop: number
         },
         location: {
             latitude: number,

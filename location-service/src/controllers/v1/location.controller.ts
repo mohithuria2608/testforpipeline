@@ -109,6 +109,102 @@ export class LocationController {
     }
 
     /**
+     * @method BOOTSTRAP
+     * @description : bootstraps car hop data
+     * */
+    async bootstrapCarHop() {
+        try {
+            await Aerospike.truncate({ set: ENTITY.CarHopE.set, before_nanos: 0 })
+
+            const city: ICityRequest.ICity[] = await ENTITY.CityE.scanAerospike()
+            const area: IAreaRequest.IArea[] = await ENTITY.AreaE.scanAerospike()
+            const store: IStoreRequest.IStore[] = await ENTITY.StoreE.scanAerospike()
+
+            consolelog(process.cwd(), "city", city.length, true)
+            consolelog(process.cwd(), "area", area.length, true)
+            consolelog(process.cwd(), "store", store.length, true)
+            let res = []
+
+            function compare(a, b) {
+                // Use toUpperCase() to ignore character casing
+                const bandA = a.name_en.toUpperCase();
+                const bandB = b.name_en.toUpperCase();
+
+                let comparison = 0;
+                if (bandA > bandB) {
+                    comparison = 1;
+                } else if (bandA < bandB) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
+            if (city && city.length > 0) {
+                for (const c of city) {
+                    if (c) {
+                        let areaCollection = []
+                        if (area && area.length > 0) {
+                            for (const a of area) {
+                                if (a) {
+                                    if (a.cityId == c.cityId) {
+                                        let storeCollection = []
+                                        if (store && store.length > 0) {
+                                            for (const s of store) {
+                                                if (s && s.active == 1 && s.services.carHop == 1) {
+                                                    if (s.areaId == a.areaId) {
+                                                        delete s.phone2
+                                                        delete s.provinceId
+                                                        delete s.countryId
+                                                        delete s.mapId
+                                                        delete s.areaId
+                                                        delete s.streetId
+                                                        delete s.districtId
+                                                        delete s.geoFence
+                                                        delete s.sdmStoreId
+                                                        delete s.webMenuId
+                                                        delete s.menuTempId
+                                                        s.startTime = new Date(+new Date(s.startTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
+                                                        s.endTime = new Date(+new Date(s.endTime) + Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z");
+
+                                                        if (!storeCollection.some(ss => ss.storeId === s.storeId))
+                                                            storeCollection.push(s)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (storeCollection && storeCollection.length > 0) {
+                                            storeCollection.sort(compare)
+                                            a['store'] = storeCollection
+                                            delete a.cityId
+                                            delete a.areaId
+                                            delete a.districtId
+                                            delete a.provinceId
+                                            delete a.countryId
+                                            delete a.streetId
+                                            areaCollection.push(a)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (areaCollection && areaCollection.length > 0) {
+                            areaCollection.sort(compare)
+                            c['area'] = areaCollection
+                            res.push(c)
+                        }
+                    }
+                }
+            }
+            res.sort(compare)
+            await ENTITY.CarHopE.bootstrapCarHop(res)
+            await uploadService.uploadToBlob({ name: "carHop.json", json: JSON.stringify(res) })
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "bootstrapCarHop", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
      * @method GET
      * @param {number} lat : latitue
      * @param {number} lng : longitude
@@ -149,7 +245,7 @@ export class LocationController {
 
     /**
     * @method GET
-    * @description get nested pickup list
+    * @description get nested pickup stores list
     * */
     async getPickupList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.IPickupLocation) {
         try {
@@ -179,6 +275,42 @@ export class LocationController {
                 return []
         } catch (error) {
             consolelog(process.cwd(), "getPickupList", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
+    * @method GET
+    * @description get nested car hop stores list
+    * */
+    async getCarHopStoresList(headers: ICommonRequest.IHeaders, payload: ILocationRequest.ICarHopLocation) {
+        try {
+            let getArgv = {
+                set: ENTITY.CarHopE.set,
+                key: "carHop"
+            }
+            let carHop = await Aerospike.get(getArgv)
+            if (carHop && carHop.carHop && carHop.carHop.length > 0) {
+                carHop.carHop.map(c => {
+                    c['isSelected'] = false
+                    if (c.area && c.area.length > 0) {
+                        c.area.map(a => {
+                            a['isSelected'] = false
+                            if (a.store && a.store.length > 0) {
+                                a.store.map(s => {
+                                    s['isSelected'] = false
+                                    s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextday)
+                                })
+                            }
+                        })
+                    }
+                })
+                return carHop.carHop
+            }
+            else
+                return []
+        } catch (error) {
+            consolelog(process.cwd(), "getCarHopStoresList", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
@@ -217,6 +349,7 @@ export class LocationController {
                 default: return {};
             }
             await this.bootstrapPickup();
+            await this.bootstrapCarHop();
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
             return Promise.reject(error)

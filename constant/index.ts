@@ -37,6 +37,7 @@ export enum SET_NAME {
     CITY = "city",
     STORE = "store",
     PICKUP = "pickup",
+    CARHOP = "carhop",
     SYNC_QUEUE = "sync_queue",
     SYNC_STORE = "sync_store",
     SYNC_CITY = "sync_city",
