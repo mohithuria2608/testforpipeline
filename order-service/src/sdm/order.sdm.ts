@@ -64,6 +64,34 @@ export class OrderSDMEntity extends BaseSDM {
         }
     }
 
+    /**
+    * @method SDK
+    * @description : get active order
+    * */
+    async getActiveOrders(payload: IOrderSdmRequest.IGetActiveOrder) {
+        try {
+            let data = {
+                name: "GetActiveOrdersStatusList",
+                req: {
+                    licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
+                    language: payload.language.toLowerCase().trim(),
+                    conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
+                    source: 23
+                }
+            }
+            let res = await this.requestData(data.name, data.req)
+            if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
+                return res.GetOrderDetailsResult
+            else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
+                return res.SDKResult
+            else
+                return Promise.reject(res)
+        } catch (error) {
+            consolelog(process.cwd(), 'getActiveOrders', JSON.stringify(error), false)
+            return (error)
+        }
+    }
+
     async processCreditCardOnSdm(payload: IOrderSdmRequest.IProcessCreditCardOnSdm) {
         try {
             let data = {

@@ -100,7 +100,7 @@ export class GuestController {
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     brand: headers.brand,
                     country: headers.country,
-                    phnVerified: 0,
+                    phnVerified: phnVerified,
                 }
                 userData = await ENTITY.UserE.buildUser(tempUser)
                 auth.id = userData.id
@@ -125,13 +125,16 @@ export class GuestController {
             let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
             if (asUserByPhone && asUserByPhone.length > 0) {
                 userchangePayload['id'] = asUserByPhone[0].id
-                console.log("guestCheckout step 1=====================>")
+                consolelog(process.cwd(), "guestCheckout step 1=====================>", "", true)
                 if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
-                    console.log("guestCheckout step 2=====================>")
+                    consolelog(process.cwd(), "guestCheckout step 2=====================>", "", true)
                     userchangePayload['deleteUserId'] = auth.id
-                    phnVerified = asUserByPhone[0].phnVerified
+                    // delete userchangePayload.otp
+                    // delete userchangePayload.otpExpAt
+                    // delete userchangePayload.otpVerified
+                    // phnVerified = asUserByPhone[0].phnVerified
                 } else {
-                    console.log("guestCheckout step 3=====================>")
+                    consolelog(process.cwd(), "guestCheckout step 3=====================>", "", true)
                     let queryArg: IAerospike.Query = {
                         equal: {
                             bin: "email",
@@ -142,16 +145,16 @@ export class GuestController {
                     }
                     let asUserByEmail = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                        console.log("guestCheckout step 4=====================>")
+                        consolelog(process.cwd(), "guestCheckout step 4=====================>", "", true)
                         return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                     } else {
-                        console.log("guestCheckout step 5=====================>")
+                        consolelog(process.cwd(), "guestCheckout step 5=====================>", "", true)
                         let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                         if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                            console.log("guestCheckout step 6=====================>")
+                            consolelog(process.cwd(), "guestCheckout step 6=====================>", "", true)
                             return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                         } else {
-                            console.log("guestCheckout step 7=====================>")
+                            consolelog(process.cwd(), "guestCheckout step 7=====================>", "", true)
                             userchangePayload['chngEmailSdm'] = 1
                             userchangePayload['chngEmailCms'] = 1
                             delete userchangePayload.otp
@@ -161,10 +164,10 @@ export class GuestController {
                         }
                     }
                 }
-                console.log("guestCheckout step 8=====================>")
+                consolelog(process.cwd(), "guestCheckout step 8=====================>", "", true)
                 await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload, headers.language)
             } else {
-                console.log("guestCheckout step 9=====================>")
+                consolelog(process.cwd(), "guestCheckout step 9=====================>", "", true)
                 let queryArg: IAerospike.Query = {
                     equal: {
                         bin: "email",
@@ -177,10 +180,10 @@ export class GuestController {
                 if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                     return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                 } else {
-                    console.log("guestCheckout step 10=====================>")
+                    consolelog(process.cwd(), "guestCheckout step 10=====================>", "", true)
                     let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                     if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                        console.log("guestCheckout step 11=====================>")
+                        consolelog(process.cwd(), "guestCheckout step 11=====================>", "", true)
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
                         userchangePayload['chngPhnSdm'] = 1
@@ -188,14 +191,14 @@ export class GuestController {
                         userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
                         userchangePayload['cmsUserRef'] = 0
                     } else {
-                        console.log("guestCheckout step 12=====================>")
+                        consolelog(process.cwd(), "guestCheckout step 12=====================>", "", true)
                         userchangePayload['id'] = auth.id
                         userchangePayload['deleteUserId'] = ""
                         userchangePayload['sdmUserRef'] = 0
                         userchangePayload['sdmCorpRef'] = 0
                         userchangePayload['cmsUserRef'] = 0
                     }
-                    console.log("guestCheckout step 13=====================>")
+                    consolelog(process.cwd(), "guestCheckout step 13=====================>", "", true)
                     await ENTITY.UserchangeE.buildUserchange(auth.id, userchangePayload, headers.language)
                 }
             }
@@ -206,7 +209,7 @@ export class GuestController {
             userData['cCode'] = payload.cCode
             userData['phnVerified'] = phnVerified
             userData['profileStep'] = 0
-            console.log("guestCheckout step 14=====================>")
+            consolelog(process.cwd(), "guestCheckout step 14=====================>", "", true)
 
             if (userchangePayload['chngEmailSdm'] || userchangePayload['chngEmailCms']) {
                 userData = await this.forceUpdateUserOnGuestCheckout(headers, userData, userchangePayload)

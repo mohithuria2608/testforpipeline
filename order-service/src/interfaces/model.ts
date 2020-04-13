@@ -1,3 +1,4 @@
 declare type SetNames =
     'cart' |
-    'order'
+    'order' |
+    'ordercron'

@@ -26,7 +26,8 @@ declare namespace IStoreGrpcRequest {
         services: {
             din: number,
             del: number,
-            tak: number
+            tak: number,
+            carHop: number
         },
         location: {
             latitude: number,

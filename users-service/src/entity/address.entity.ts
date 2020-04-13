@@ -97,7 +97,6 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            console.log("addressData", JSON.stringify(addressData))
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let address: IAddressRequest.IAddress = {
                 id: id,
@@ -113,10 +112,10 @@ export class AddressEntity extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 sdmAddressRef: addressData.sdmAddressRef ? addressData.sdmAddressRef : 0,
                 cmsAddressRef: addressData.cmsAddressRef ? addressData.cmsAddressRef : 0,
-                countryId: store.countryId,//1, //
-                storeId: store.storeId,// 1240,// 1219,// 
-                areaId: store.areaId,// 1786,//16,// 
-                cityId: store.cityId,// 17,// 
+                countryId: store.countryId,
+                storeId: store.storeId,
+                areaId: store.areaId,
+                cityId: store.cityId,
             };
 
             if (addressData.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE) {
@@ -200,7 +199,7 @@ export class AddressEntity extends BaseEntity {
             if (isDelete) {
                 let deleteAdd = listaddress[index]
                 if (deleteAdd.cmsAddressRef && deleteAdd.cmsAddressRef != 0)
-                    await CMS.AddressCMSE.deleteAddresssOnCms({ cmsUserRef: userData.cmsUserRef, cmsAddressRef: deleteAdd.cmsAddressRef })
+                    CMS.AddressCMSE.deleteAddresssOnCms({ cmsUserRef: userData.cmsUserRef, cmsAddressRef: deleteAdd.cmsAddressRef })
                 return {}
             }
 

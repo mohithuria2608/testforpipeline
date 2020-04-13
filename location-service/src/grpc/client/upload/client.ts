@@ -20,7 +20,6 @@ export class UploadService {
     private uploadClient = new this.loadUpload(config.get("grpc.upload.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established upload-service', config.get("grpc.upload.client"), true)
     }
 
     async uploadToBlob(payload): Promise<{}> {

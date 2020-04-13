@@ -20,7 +20,6 @@ export class NotificationService {
     private notificationClient = new this.loadNotification(config.get("grpc.notification.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established notification-service', config.get("grpc.notification.client"), true)
     }
 
     async sendNotification(payload: INotificationGrpcRequest.ISendNotification): Promise<INotificationGrpcRequest.ISendNotificationRes> {

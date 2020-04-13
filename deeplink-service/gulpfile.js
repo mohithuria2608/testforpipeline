@@ -72,7 +72,6 @@ gulp.task('local', function () {
 				"NODE_ENV": "default"
 			}
 		}, function () {
-			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "local");
 			pm2.streamLogs('deeplink', 0);
 		});
 	});
@@ -88,7 +87,6 @@ gulp.task('dev', function () {
 				"NODE_ENV": "development"
 			}
 		}, function () {
-			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "development");
 			pm2.streamLogs('deeplink', 0);
 		});
 	});
@@ -102,7 +100,6 @@ gulp.task('qa', function () {
 				"NODE_ENV": "testing"
 			}
 		}, function () {
-			console.log(process.cwd().split("/")[process.cwd().split("/").length - 1], `--------------pm2--------------`, "testing");
 			pm2.streamLogs('deeplink', 0);
 		});
 	});

@@ -2,6 +2,7 @@ import { smsLib, emailLib } from '../../lib'
 import * as Constant from "../../constant";
 import * as ejs from "ejs";
 import * as moment from "moment";
+import { consolelog } from '../../utils'
 
 export class NotificationController {
 
@@ -36,7 +37,7 @@ export class NotificationController {
                     });
                 }
             } catch (err) {
-                console.log(err);
+                consolelog(process.cwd(), "sendNotification", err, false);
                 resolve();
             }
         });

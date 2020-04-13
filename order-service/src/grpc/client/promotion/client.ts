@@ -20,7 +20,6 @@ export class PromotionService {
     private promotionClient = new this.loadPromotion(config.get("grpc.promotion.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established promotion-service', config.get("grpc.promotion.client"), true)
     }
 
     async validatePromotion(payload: IPromotionGrpcRequest.IValidatePromotion): Promise<IPromotionGrpcRequest.IValidatePromotionRes> {

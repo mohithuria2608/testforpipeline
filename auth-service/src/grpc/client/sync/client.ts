@@ -19,9 +19,7 @@ export class SyncService {
     private loadSync = grpc.loadPackageDefinition(this.packageDefinition).SyncService
     private syncClient = new this.loadSync(config.get("grpc.sync.client"), grpc.credentials.createInsecure());
 
-    constructor() {
-        console.log(process.cwd(), 'GRPC connection established sync-service', config.get("grpc.sync.client"), true)
-    }
+    constructor() {}
 
     async fetchConfig(payload: ISyncGrpcRequest.IFetchConfig): Promise<ISyncGrpcRequest.IConfig[]> {
         return new Promise(async (resolve, reject) => {

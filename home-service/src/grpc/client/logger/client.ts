@@ -20,9 +20,7 @@ export class LogService {
     private loadLog = grpc.loadPackageDefinition(this.packageDefinition).LogService
     private logClient = new this.loadLog(config.get("grpc.log.client"), grpc.credentials.createInsecure());
 
-    constructor() {
-        console.log(process.cwd(), 'GRPC connection established log-service', config.get("grpc.log.client"), true)
-    }
+    constructor() { }
 
     /**
      * @description : this will sync log

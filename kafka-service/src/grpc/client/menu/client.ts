@@ -20,7 +20,6 @@ export class MenuService {
     private menuClient = new this.loadMenu(config.get("grpc.menu.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established menu-service', config.get("grpc.menu.client"), true)
     }
 
     /**
