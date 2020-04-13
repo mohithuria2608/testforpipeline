@@ -199,7 +199,7 @@ export class AddressEntity extends BaseEntity {
             if (isDelete) {
                 let deleteAdd = listaddress[index]
                 if (deleteAdd.cmsAddressRef && deleteAdd.cmsAddressRef != 0)
-                    await CMS.AddressCMSE.deleteAddresssOnCms({ cmsUserRef: userData.cmsUserRef, cmsAddressRef: deleteAdd.cmsAddressRef })
+                    CMS.AddressCMSE.deleteAddresssOnCms({ cmsUserRef: userData.cmsUserRef, cmsAddressRef: deleteAdd.cmsAddressRef })
                 return {}
             }
 
