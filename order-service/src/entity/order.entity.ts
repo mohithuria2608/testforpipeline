@@ -1031,7 +1031,7 @@ export class OrderClass extends BaseEntity {
                             }
                             default: {
                                 recheck = false
-                                consolelog(process.cwd(), `scheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                consolelog(process.cwd(), `getSdmOrderScheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
                                 break;
                             }
                         }
@@ -1043,7 +1043,7 @@ export class OrderClass extends BaseEntity {
                     }
                 } else
                     recheck = false
-                consolelog(process.cwd(), `scheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
+                consolelog(process.cwd(), `getSdmOrderScheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
             }
             return {}
         } catch (error) {
@@ -1076,11 +1076,11 @@ export class OrderClass extends BaseEntity {
                     break;
                 }
                 default: {
-                    consolelog(process.cwd(), `scheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} :  ${order.status} : ${order.sdmOrderStatus}`, "", true)
+                    consolelog(process.cwd(), `donotGetSdmOrderScheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} :  ${order.status} : ${order.sdmOrderStatus}`, "", true)
                     break;
                 }
             }
-            consolelog(process.cwd(), `scheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status} : ${order.sdmOrderStatus}`, "", true)
+            consolelog(process.cwd(), `donotGetSdmOrderScheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status} : ${order.sdmOrderStatus}`, "", true)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "donotGetSdmOrderSchedulerNew", JSON.stringify(error), false)
