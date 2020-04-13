@@ -180,7 +180,7 @@
     "blobBaseUrl": {
         "product": "http://40.123.207.192/pub/media/catalog/product/",
         "home": "http://40.123.207.192/pub/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/amfprodneblobstorage/development/"
+        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/development/"
     },
     "cryptoSecret": "d6F3Efeq",
     "cryptoAlgo": "aes-256-cbc",
