@@ -1351,10 +1351,10 @@ export const STATUS_MSG = {
                 EMPTY_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
                 EMPTY_OTP: "يرجى أدخل رمز التأكيد",
                 EMPTY_NAME: "يرجى إدخال اسم صالح",
-                EMPTY_ORDER_NO: "Please enter order no.",
-                EMPTY_BUILDING_NAME: "Please enter building name.",
-                EMPTY_FLAT_NO: "Please enter flat no.",
-                EMPTY_MAP_LOCATION: "Please choose a location.",
+                EMPTY_ORDER_NO: "الرجاء إدخال رقم الطلب",
+                EMPTY_BUILDING_NAME: "الرجاء إدخال إسم البناء",
+                EMPTY_FLAT_NO: "الرجاء إدخال رقم الشقة",
+                EMPTY_MAP_LOCATION: "الرجاْء إختيار الموقع"
             }
         }
     },
