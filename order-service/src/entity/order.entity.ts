@@ -34,7 +34,7 @@ export class OrderClass extends BaseEntity {
             else
                 items = items.concat(cartData.selFreeItem.ar)
             let orderData = {
-                orderType: address.addressType,
+                orderType: payload.orderType,
                 cartId: cartData.cartId,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
