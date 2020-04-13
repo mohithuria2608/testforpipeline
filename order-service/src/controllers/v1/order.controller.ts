@@ -398,7 +398,7 @@ export class OrderController {
                     updatedAt: new Date().getTime()
                 }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
                 if (checkIfStatusChanged && checkIfStatusChanged._id) {
-                    if (getOrderDetailStatus.indexOf(parseInt(payload.Key)) >= 0)
+                    if (getOrderDetailStatus.indexOf(parseInt(payload.Value)) >= 0)
                         ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
                     else
                         ENTITY.OrderE.donotGetSdmOrderScheduler(checkIfStatusChanged)
