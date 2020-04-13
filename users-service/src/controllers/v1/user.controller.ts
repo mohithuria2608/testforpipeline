@@ -357,9 +357,6 @@ export class UserController {
                                 delete userchange['otpExpAt']
                                 delete userchange['otpVerified']
                                 delete userchange['email']
-                                /**
-                                 * @todo if this email user has address copy those addresses to current user
-                                 */
                             }
                         }
                     }
@@ -604,9 +601,6 @@ export class UserController {
                         userUpdate['cCode'] = asUserByEmail[0].cCode
                         userUpdate['phnNo'] = asUserByEmail[0].phnNo
                         userUpdate['email'] = payload.email
-                        /**
-                         * @todo if this email user has address copy those addresses to current user
-                         */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     if (asUserByEmail && asUserByEmail.length > 0) {

@@ -100,7 +100,7 @@ export class GuestController {
                     profileStep: Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
                     brand: headers.brand,
                     country: headers.country,
-                    phnVerified: 0,
+                    phnVerified: phnVerified,
                 }
                 userData = await ENTITY.UserE.buildUser(tempUser)
                 auth.id = userData.id
@@ -129,7 +129,7 @@ export class GuestController {
                 if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
                     consolelog(process.cwd(), "guestCheckout step 2=====================>", "", true)
                     userchangePayload['deleteUserId'] = auth.id
-                    phnVerified = asUserByPhone[0].phnVerified
+                    // phnVerified = asUserByPhone[0].phnVerified
                 } else {
                     consolelog(process.cwd(), "guestCheckout step 3=====================>", "", true)
                     let queryArg: IAerospike.Query = {

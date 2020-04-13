@@ -160,7 +160,7 @@ export class OrderController {
                     }
                 }
             } else {
-                //@todo order failure
+                ENTITY.OrderE.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
         } catch (error) {

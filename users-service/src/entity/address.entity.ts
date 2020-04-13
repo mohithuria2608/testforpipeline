@@ -112,10 +112,10 @@ export class AddressEntity extends BaseEntity {
                 updatedAt: new Date().getTime(),
                 sdmAddressRef: addressData.sdmAddressRef ? addressData.sdmAddressRef : 0,
                 cmsAddressRef: addressData.cmsAddressRef ? addressData.cmsAddressRef : 0,
-                countryId: store.countryId,//1, //
-                storeId: store.storeId,// 1240,// 1219,// 
-                areaId: store.areaId,// 1786,//16,// 
-                cityId: store.cityId,// 17,// 
+                countryId: store.countryId,
+                storeId: store.storeId,
+                areaId: store.areaId,
+                cityId: store.cityId,
             };
 
             if (addressData.addressType == Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE) {
