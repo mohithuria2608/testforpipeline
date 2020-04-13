@@ -346,7 +346,8 @@ export const DATABASE = {
         STORE_SERVICE: {
             DELIVERY: "del",
             TAKEAWAY: "tak",
-            DINEIN: "din"
+            DINEIN: "din",
+            CARHOP: "carHop",
         },
 
         DEEPLINK_REDIRECTION: {
