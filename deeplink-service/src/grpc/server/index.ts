@@ -1,6 +1,6 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
-import {  miscController } from '../../controllers';
+import { miscController } from '../../controllers';
 import * as Constant from '../../constant'
 
 const grpc = require('grpc')
@@ -29,10 +29,7 @@ server.addService(deeplinkProto.DeeplinkService.service, {
                     res = await miscController.pingService(data)
                     break;
                 }
-                default: {
-                    callback("unhandled grpc : set", {})
-                    break;
-                }
+                default: { res = {}; break; }
             }
             callback(null, res)
         } catch (error) {

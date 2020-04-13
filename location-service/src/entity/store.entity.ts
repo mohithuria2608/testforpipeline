@@ -102,7 +102,7 @@ export class StoreEntity extends BaseEntity {
         try {
             return Aerospike.scan({ set: this.set });
         } catch (err) {
-            console.log(err);
+            consolelog(process.cwd(), "error", err, false)
         }
     }
 

@@ -2,6 +2,7 @@ import * as config from 'config'
 import { connect, set, connection as db } from 'mongoose'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
+// import { ChangeStreamC } from './mongo.changestream'
 const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export class MongoClass {
@@ -24,6 +25,7 @@ export class MongoClass {
                 return Promise.reject(error)
             }
             console.info(displayColors ? '\x1b[32m%s\x1b[0m' : '%s', `Connected to ${self.mongoUrl}`)
+            // ChangeStreamC.ordercronWatch(db)
         })
         return {}
     }

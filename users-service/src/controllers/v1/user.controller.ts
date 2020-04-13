@@ -219,7 +219,7 @@ export class UserController {
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(headers, userData, sdmAddress)
 
             } else {
-                console.log("user not found => invalid otp")
+                consolelog(process.cwd(), "user not found => invalid otp", "", true)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
             }
             let sessionUpdate: ISessionRequest.ISession = {
@@ -299,12 +299,12 @@ export class UserController {
                 if (payload.name && payload.name != "")
                     userUpdate['name'] = payload.name.trim()
                 if (userObj[0].phnVerified == 1) {
-                    console.log("socialAuthValidate step 1=====================>", userUpdate)
+                    consolelog(process.cwd(), "socialAuthValidate step 1=====================>", userUpdate, true)
                     if (userObj[0].name != payload.name)
                         updateName = true
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 } else {
-                    console.log("socialAuthValidate step 2=====================>")
+                    consolelog(process.cwd(), "socialAuthValidate step 2=====================>", "", true)
                     let userchange: IUserchangeRequest.IUserchange = {
                         fullPhnNo: userData.fullPhnNo,
                         cCode: userData.cCode,
@@ -316,7 +316,7 @@ export class UserController {
                         country: headers.country,
                     }
                     if (payload.email && payload.email != "") {
-                        console.log("socialAuthValidate step 3=====================>")
+                        consolelog(process.cwd(), "socialAuthValidate step 3=====================>", "", true)
                         userchange['email'] = payload.email
                         let queryArg: IAerospike.Query = {
                             equal: {
@@ -328,7 +328,7 @@ export class UserController {
                         }
                         let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                         if (asUserByEmail && asUserByEmail.length > 0) {
-                            console.log("socialAuthValidate step 4=====================>", asUserByEmail)
+                            consolelog(process.cwd(), "socialAuthValidate step 4=====================>", asUserByEmail, true)
                             if (!asUserByEmail[0].fullPhnNo || asUserByEmail[0].fullPhnNo == "") {
                                 delete userchange['fullPhnNo']
                                 delete userchange['cCode']
@@ -357,9 +357,6 @@ export class UserController {
                                 delete userchange['otpExpAt']
                                 delete userchange['otpVerified']
                                 delete userchange['email']
-                                /**
-                                 * @todo if this email user has address copy those addresses to current user
-                                 */
                             }
                         }
                     }
@@ -367,7 +364,7 @@ export class UserController {
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                 }
             } else {
-                console.log("socialAuthValidate step 5=====================>")
+                consolelog(process.cwd(), "socialAuthValidate step 5=====================>", "", true)
                 let userId = ENTITY.UserE.ObjectId().toString()
                 let createUser: IUserRequest.IUserData = {
                     id: userId,
@@ -389,7 +386,7 @@ export class UserController {
                     email: payload.email ? payload.email : undefined
                 }
                 if (payload.email && payload.email != "") {
-                    console.log("socialAuthValidate step 6=====================>")
+                    consolelog(process.cwd(), "socialAuthValidate step 6=====================>", "", true)
                     let queryArg: IAerospike.Query = {
                         equal: {
                             bin: "email",
@@ -400,19 +397,19 @@ export class UserController {
                     }
                     userObj = await Aerospike.query(queryArg)
                     if (userObj && userObj.length > 0) {
-                        console.log("socialAuthValidate step 7=====================>")
+                        consolelog(process.cwd(), "socialAuthValidate step 7=====================>", "", true)
                         userchange['id'] = userObj[0].id
                         userData = await ENTITY.UserE.buildUser(userchange)
                     } else {
                         userData = await ENTITY.UserE.buildUser(createUser)
                     }
                 } else {
-                    console.log("socialAuthValidate step 8=====================>")
+                    consolelog(process.cwd(), "socialAuthValidate step 8=====================>", "", true)
                     userData = await ENTITY.UserE.buildUser(createUser)
                     await ENTITY.UserchangeE.buildUserchange(userData.id, userchange, headers.language)
                 }
             }
-            console.log("socialAuthValidate step 9=====================>")
+            consolelog(process.cwd(), "socialAuthValidate step 9=====================>", "", true)
 
             if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
                 this.validateUserOnSdm(userData, false, headers)
@@ -474,7 +471,7 @@ export class UserController {
                         background: false,
                     }
                     let asUserByPhone: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
-                    console.log("createProfile step 1=====================>")
+                    consolelog(process.cwd(), "createProfile step 1=====================>", "", true)
                     let userchangePayload = {
                         username: username,
                         fullPhnNo: fullPhnNo,
@@ -495,12 +492,12 @@ export class UserController {
                     }
                     if (asUserByPhone && asUserByPhone.length > 0) {
                         userchangePayload['id'] = asUserByPhone[0].id
-                        console.log("createProfile step 2=====================>", asUserByPhone)
+                        consolelog(process.cwd(), "createProfile step 2=====================>", asUserByPhone, true)
                         if (asUserByPhone[0].email == undefined || asUserByPhone[0].email == "" || asUserByPhone[0].email == payload.email) {
-                            console.log("createProfile step 3=====================>")
+                            consolelog(process.cwd(), "createProfile step 3=====================>", "", true)
                             userchangePayload['deleteUserId'] = auth.id
                         } else {
-                            console.log("createProfile step 4=====================>")
+                            consolelog(process.cwd(), "createProfile step 4=====================>", "", true)
                             let queryArg: IAerospike.Query = {
                                 equal: {
                                     bin: "email",
@@ -510,29 +507,29 @@ export class UserController {
                                 background: false,
                             }
                             let asUserByEmail = await Aerospike.query(queryArg)
-                            console.log("createProfile step 5=====================>", asUserByEmail)
+                            consolelog(process.cwd(), "createProfile step 5=====================>", asUserByEmail, true)
 
                             if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
-                                console.log("createProfile step 5.1=====================>")
+                                consolelog(process.cwd(), "createProfile step 5.1=====================>", "", true)
                                 return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                             } else {
-                                console.log("createProfile step 6=====================>")
+                                consolelog(process.cwd(), "createProfile step 6=====================>", "", true)
                                 let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                                 if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                                    console.log("createProfile step 7=====================>")
+                                    consolelog(process.cwd(), "createProfile step 7=====================>", "", true)
                                     return Constant.STATUS_MSG.SUCCESS.S215.USER_PHONE_ALREADY_EXIST
                                 } else {
-                                    console.log("createProfile step 8=====================>")
+                                    consolelog(process.cwd(), "createProfile step 8=====================>", "", true)
                                     userchangePayload['deleteUserId'] = auth.id
                                     userchangePayload['chngEmailSdm'] = 1
                                     userchangePayload['chngEmailCms'] = 1
                                 }
                             }
                         }
-                        console.log("createProfile step 9=====================>")
+                        consolelog(process.cwd(), "createProfile step 9=====================>", "", true)
                         await ENTITY.UserchangeE.buildUserchange(asUserByPhone[0].id, userchangePayload, headers.language)
                     } else {
-                        console.log("createProfile step 10=====================>")
+                        consolelog(process.cwd(), "createProfile step 10=====================>", "", true)
                         let queryArg: IAerospike.Query = {
                             equal: {
                                 bin: "email",
@@ -545,10 +542,10 @@ export class UserController {
                         if (asUserByEmail && asUserByEmail.length > 0 && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST) {
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         } else {
-                            console.log("createProfile step 11=====================>")
+                            consolelog(process.cwd(), "createProfile step 11=====================>", "", true)
                             let sdmUserByEmail = await SDM.UserSDME.getCustomerByEmail({ email: payload.email }, headers)
                             if (sdmUserByEmail && sdmUserByEmail.CUST_ID) {
-                                console.log("createProfile step 12=====================>")
+                                consolelog(process.cwd(), "createProfile step 12=====================>", "", true)
                                 userchangePayload['id'] = auth.id
                                 userchangePayload['deleteUserId'] = ""
                                 userchangePayload['chngPhnSdm'] = 1
@@ -556,7 +553,7 @@ export class UserController {
                                 userchangePayload['sdmCorpRef'] = parseInt(sdmUserByEmail.CUST_CORPID)
                                 userchangePayload['cmsUserRef'] = 0
                             } else {
-                                console.log("createProfile step 13=====================>")
+                                consolelog(process.cwd(), "createProfile step 13=====================>", "", true)
                                 userchangePayload['id'] = auth.id
                                 userchangePayload['deleteUserId'] = ""
                                 userchangePayload['sdmUserRef'] = 0
@@ -591,7 +588,7 @@ export class UserController {
                     }
                     let asUserByEmail: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
                     if (asUserByEmail && asUserByEmail.length > 0) {
-                        console.log("createProfile step 14=====================>", asUserByEmail)
+                        consolelog(process.cwd(), "createProfile step 14=====================>", asUserByEmail, true)
                         if (asUserByEmail[0].fullPhnNo && asUserByEmail[0].fullPhnNo != userData.fullPhnNo && asUserByEmail[0].profileStep == Constant.DATABASE.TYPE.PROFILE_STEP.FIRST)
                             return Constant.STATUS_MSG.SUCCESS.S216.USER_EMAIL_ALREADY_EXIST
                         userUpdate['phnVerified'] = 1
@@ -604,9 +601,6 @@ export class UserController {
                         userUpdate['cCode'] = asUserByEmail[0].cCode
                         userUpdate['phnNo'] = asUserByEmail[0].phnNo
                         userUpdate['email'] = payload.email
-                        /**
-                         * @todo if this email user has address copy those addresses to current user
-                         */
                     }
                     userData = await ENTITY.UserE.buildUser(userUpdate)
                     if (asUserByEmail && asUserByEmail.length > 0) {

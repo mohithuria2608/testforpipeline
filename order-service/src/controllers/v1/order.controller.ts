@@ -160,7 +160,7 @@ export class OrderController {
                     }
                 }
             } else {
-                //@todo order failure
+                ENTITY.OrderE.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
         } catch (error) {
@@ -368,6 +368,7 @@ export class OrderController {
                                 Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
                                 Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
                                 Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+                                Constant.CONF.ORDER_STATUS.DELIVERED.MONGO
                             ]
                         }
                     },

@@ -34,7 +34,7 @@ export class OrderClass extends BaseEntity {
             else
                 items = items.concat(cartData.selFreeItem.ar)
             let orderData = {
-                orderType: address.addressType,
+                orderType: payload.orderType,
                 cartId: cartData.cartId,
                 sdmOrderRef: 0,
                 cmsOrderRef: 0,
@@ -85,7 +85,7 @@ export class OrderClass extends BaseEntity {
                 newOrderId: 0,
                 transferDone: false,
                 contactlessDlvry: payload.contactlessDlvry,
-                dlvryInstr: payload.dlvryInstr,
+                dlvryInstr: payload.dlvryInstr ? payload.dlvryInstr : "",
                 notification: {
                     confirmed: false,
                     cancel: false,
@@ -269,9 +269,14 @@ export class OrderClass extends BaseEntity {
                 }
             }
             let Notes = undefined
+            let finalText = ""
+            if (order.contactlessDlvry)
+                finalText = finalText + "100%Contactless-- "
+            if (order.dlvryInstr && order.dlvryInstr != "")
+                finalText = finalText + "Carhop-- " + order.dlvryInstr
             Notes = {
                 CNote: [{
-                    NT_FREE_TEXT: "Test Orders - Appinventiv : " + order._id.toString(),
+                    NT_FREE_TEXT: (finalText && finalText != "") ? finalText : "Test Orders - Appinventiv : " + order._id.toString(),
                     NT_ID: new Date().getTime()
                 }]
             }
@@ -375,7 +380,6 @@ export class OrderClass extends BaseEntity {
             payload.address = preHook.address
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
             payload.cmsOrderReq['cms_user_id'] = preHook.userData.cmsUserRef
-
             if (payload.order.address.cmsAddressRef == 0) {
                 payload.order = await this.updateOneEntityMdb({ _id: payload.order._id }, { "address.cmsAddressRef": preHook.address.cmsAddressRef }, { new: true })
             }
@@ -389,8 +393,6 @@ export class OrderClass extends BaseEntity {
                 }, { new: true })
                 if (payload.order.sdmOrderRef != 0)
                     await this.updateOneEntityMdb({ _id: payload.order._id }, { isActive: 1 }, { new: true })
-            } else {
-                //@todo : initite order failure process
             }
             return cmsOrder
         } catch (error) {
@@ -698,7 +700,6 @@ export class OrderClass extends BaseEntity {
                                                                                                     plDefaultSdm = true
                                                                                             })
                                                                                             if (dspl.selected) {
-                                                                                                console.log("plDefaultSdm", plDefaultSdm)
                                                                                                 dspl.subOptions.forEach(dsplso => {
                                                                                                     if (dsplso.sdmId && dsplso.selected == 1) {
                                                                                                         if (dsplso.title == "None") {

@@ -1,7 +1,7 @@
 import { Schema, Document, model } from 'mongoose'
 import * as Constant from '../constant';
 
-export interface Iorder extends Document {
+export interface IOrder extends Document {
     orderType: string,
     cartId: string,
     sdmOrderRef: number,
@@ -243,4 +243,4 @@ const orderSchema = new Schema({
     env: { type: Number, required: true },
 });
 
-export let order = model<Iorder>('order', orderSchema)
+export let order = model<IOrder>('order', orderSchema)

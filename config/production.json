@@ -178,8 +178,8 @@
         }
     },
     "blobBaseUrl": {
-        "product": "http://40.123.205.1/pub/media/catalog/product/",
-        "home": "http://40.123.205.1/pub/media/homepage/",
+        "product": "http://kfccms.americanarest.com/pub/media/catalog/product/",
+        "home": "http://kfccms.americanarest.com/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/production/"
     },
     "cryptoSecret": "d6F3Efeq",
@@ -189,8 +189,8 @@
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",
-        "userName": "Adigital",
-        "password": "vSqKeZdc",
+        "userName": "Storeuser",
+        "password": "bATNYV89",
         "endPoint": "bulksms/bulksms",
         "source": "KFC",
         "android_key": "Lew4b/w5UpK"
@@ -209,7 +209,7 @@
         "url": "10.4.1.5:9092,10.4.1.6:9092"
     },
     "aerospike": {
-        "hosts": "40.127.244.213:10008",
+        "hosts": "10.2.0.27:3000,10.2.0.33:3000",
         "username": "",
         "password": "",
         "config": {
@@ -228,8 +228,8 @@
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
-        "type": "uat",
+        "baseUrl": "https://sdkliveuae.americana.com.sa:1998/?wsdl",
+        "type": "live",
         "cred": {
             "licenseCode": "PizzaHutApp"
         },
@@ -241,5 +241,5 @@
             ]
         }
     },
-    "loadTest": true
+    "loadTest": false
 }

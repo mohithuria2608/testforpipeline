@@ -238,9 +238,9 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     }
 }
 export let sendSuccess = function (successMsg, language, data) {
-    
+
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-    
+
     if (typeof data === 'object' && data.hasOwnProperty('password')) {
         delete data['password']
     }
@@ -386,17 +386,18 @@ export let sendRequestToCMS = function (type, data) {
 }
 
 export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: string = Constant.DATABASE.LANGUAGE.EN, returnMsg?: boolean, returnErr?: boolean) {
+    let retStatsObj = { ...statsObj }
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-    statsObj.message = statsObj[key];
-    delete statsObj.message_En;
-    delete statsObj.message_Ar;
+    retStatsObj.message = retStatsObj[key];
+    delete retStatsObj.message_En;
+    delete retStatsObj.message_Ar;
     if (returnMsg)
         if (returnErr)
-            return statsObj.message
+            return retStatsObj.message
         else
-            return new Error(statsObj.message)
+            return new Error(retStatsObj.message)
     else
-        return statsObj
+        return retStatsObj
 }
 
 export let checkOnlineStore = function (start, end, nextday) {
@@ -406,9 +407,9 @@ export let checkOnlineStore = function (start, end, nextday) {
         new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds()) :
         new Date(new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds())).setUTCDate(new Date().getUTCDate() + 1)
 
-    console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
-    console.log(startTime < curTime)
-    console.log(curTime < endTime)
+    consolelog(process.cwd(), "", `curTime : ${curTime},     startTime : ${startTime},     endTime : ${endTime}`, true)
+    consolelog(process.cwd(), "", startTime < curTime, true)
+    consolelog(process.cwd(), "", curTime < endTime, true)
 
     if ((startTime < curTime && curTime < endTime) || (startTime > curTime && curTime < endTime && nextday == 1))
         return true

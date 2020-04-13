@@ -31,12 +31,14 @@ export enum SET_NAME {
     PROMOTION = "promotion",
     CART = "cart",
     ORDER = "order",
+    ORDERCRON = "ordercron",
     CONFIG = "config",
     COUNTRY = "country",
     AREA = "area",
     CITY = "city",
     STORE = "store",
     PICKUP = "pickup",
+    CARHOP = "carhop",
     SYNC_QUEUE = "sync_queue",
     SYNC_STORE = "sync_store",
     SYNC_CITY = "sync_city",
@@ -209,6 +211,17 @@ export const DATABASE = {
     },
 
     TYPE: {
+        MONGO_OPERATION: {
+            INSERT: "insert",
+            DELETE: "delete",
+            REPLACE: "replace",
+            UPDATE: "update",
+            DROP: "drop",
+            RENAME: "rename",
+            DROP_DATABASE: "dropDatabase",
+            INVALIDATE: "invalidate",
+        },
+
         PAYMENT_ACTION_HINTS: {
             STATUS_USING_NOONPAY_ID: 'GET_PAYMENT_STATUS_USING_NOONPAY_ID',
             SYNC_CONFIGURATION: 'SYNC_PAYMENT_CONFIGURATION'
@@ -289,6 +302,12 @@ export const DATABASE = {
             ERROR: "ERROR",
             INFO: "INFO",
             SMS: "SMS",
+            PAYMENT_REQUEST: "PAYMENT_REQUEST"
+        },
+
+        ACTIVITY_LOG_ID_INFO: {
+            ORDER_ID: "ORDER_ID",
+            NOON_PAY_ORDER_ID: "NOON_PAY_ORDER_ID"
         },
 
         PROFILE_STEP: {
@@ -338,7 +357,8 @@ export const DATABASE = {
         STORE_SERVICE: {
             DELIVERY: "del",
             TAKEAWAY: "tak",
-            DINEIN: "din"
+            DINEIN: "din",
+            CARHOP: "carHop",
         },
 
         DEEPLINK_REDIRECTION: {
@@ -552,81 +572,6 @@ export const DATABASE = {
             ADD: "add",
             SUBTRACT: "subtract"
         }
-    },
-
-    FAQ: {
-        Ar: [{
-            "category": "الأسئلة المتداولة",
-            "questionair": [{
-                "ques": "كيف سأعرف متى تم استلام طلبي من المطعم؟",
-                "ans": "بمجرد تقديم طلبك، ستُظهر صفحة تأكيد طلب الشراء، الوقت الذي استلم فيه المطعم طلبك، إلى جانب الوقت المتوقع لتحضير أو تسليم طلبك. كما أنك ستستلم رسالة تأكيد طلب الشراء على عنوان البريد الإلكتروني الذي قمت بذكره عند التسجيل. وفي حال كنت غير متأكد من الطلب الذي قمت بتقديمه، بإمكانك دائماً الاتصال بالمطعم مباشرةً."
-            },
-            {
-                "ques": "ما هي خيارات الدفع المتاحة عند طلب الشراء من خلال التطبيق؟",
-                "ans": "يمكنك الدفع إلكترونياً باستخدام بطاقة الائتمانية أوالدفع نقداً عند استلام الطلب."
-            },
-            {
-                "ques": "هل بإمكاني حفظ معلومات بطاقتي الائتمانية من أجل طلبات الشراء في المستقبل؟",
-                "ans": "لا. للحفاظ على خصوصيتك، يتم التعامل مع جميع معلومات بطاقة الائتمان الخاصة بك من خلال بوابة البنك المضمونة و لا يتم حفظ أي معلومة على تطبيق دجاج كنتاكي."
-            },
-            {
-                "ques": "أين بإمكاني تغيير معلومات حسابي؟",
-                "ans": "حالما تقوم بتسجيل الدخول إلى التطبيق باستخدام رقم الجوال الخاص بك، اضغط على \"حسابي\" من القائمة العلوية، حيث بإمكانك تغيير معلومات حسابك من هناك."
-            },
-            {
-                "ques": "هل رسوم التوصيل عند استخدام التطبيق أعلى من رسوم التوصيل المعتادة؟",
-                "ans": "كلا، رسوم التوصيل موحدة بالنسبة للمطعم الذي يستلم الطلب ويوصله إليك، لا يوجد أي فرق بالرسوم."
-            },
-            {
-                "ques": "كيف بإمكاني معرفة رسوم خدمة التوصيل التي سأدفعها؟",
-                "ans": "رسوم التوصيل مدرجة بالتفصيل في قسم ملخص الطلب."
-            },
-            {
-                "ques": "هل هناك حد أدنى لمبلغ طلب الشراء بالنسبة لمعظم طلبات التوصيل؟",
-                "ans": "هناك حد أدنى لمبلغ طلبات الشراء عبر الإنترنت أو بواسطة الهاتف بالنسبة لطلبات التوصيل، وهو 24 درهم. بالإضافة الي رسم التوصيل"
-            },
-            {
-                "ques": "كيف بإمكاني تقديم ملاحظاتي حول تجربتي في مطعم \"دجاج كنتاكي\"؟",
-                "ans": "يسعى مطعم \"دجاج كنتاكي\" دائماً لضمان حصولك على تجربة تناول طعام رائعة ومتميزة في سلسلة فروعه وأثناء استخدامك لتطبيق الجوال. إذا كنت ترغب في إبداء أية ملاحظات حول تجربتك معنا، أدخل إلى القائمة الجانبية للتطبيق ، واضغط على \"الاتصال بالدعم\"."
-            }
-            ]
-        }],
-        En: [{
-            "category": "FAQs",
-            "questionair": [{
-                "ques": "How will I know when the restaurant received my Order?",
-                "ans": "Once you submit your order, the Order Confirmation page will show the time your order was received along with an estimated time that your order will be ready for carryout or delivery. You will also receive a confirmation email at the email address you provided at registration. And if you're still unsure about your order, you can always call the restaurant directly."
-            },
-            {
-                "ques": "What payment options are available through Mobile Application Ordering?",
-                "ans": "You can choose to pay online using your credit card or cash on delivery."
-            },
-            {
-                "ques": "Can I save my credit card information for future purchases?",
-                "ans": "No. For security purposes, all your credit card information are handled through a secured bank gateway and are never saved on the KFC application."
-            },
-            {
-                "ques": "Where can I change my account info?",
-                "ans": "Once you've signed in to the application with your phone number , Click on Your name from the top hamburger menu. You can change your account information there."
-            },
-            {
-                "ques": "Are delivery charges higher for customers who order from KFC application?",
-                "ans": "No. The transportation fee is always the same online as it is offline for the restaurant taking and delivering your order. There is no difference."
-            },
-            {
-                "ques": "How can I tell how much I’m being charged for delivery service?",
-                "ans": "The transtportation fee is listed at checkout in the itemized portion of the cart summary."
-            },
-            {
-                "ques": "Is there a set minimum amount for most delivery orders?",
-                "ans": "For delivery orders placed online or by phone there is a minimum order amount of Dhs. 24 “transportation fee applies”"
-            },
-            {
-                "ques": "How can I give feedback to KFC about my restaurant experience?",
-                "ans": "KFC wants to ensure that you have a terrific experience in our restaurants and in our mobile application. If you would like to provide feedback, From the Side menu, click on \"Call Support\""
-            }
-            ]
-        }]
     }
 };
 
@@ -1401,6 +1346,10 @@ export const STATUS_MSG = {
                 EMPTY_EMAIL: "Please enter a valid email address",
                 EMPTY_OTP: "Please enter OTP",
                 EMPTY_NAME: "Please enter a valid name",
+                EMPTY_ORDER_NO: "Please enter order no.",
+                EMPTY_BUILDING_NAME: "Please enter building name.",
+                EMPTY_FLAT_NO: "Please enter flat no.",
+                EMPTY_MAP_LOCATION: "Please choose a location.",
             }
         },
         Ar: {
@@ -1414,6 +1363,10 @@ export const STATUS_MSG = {
                 EMPTY_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
                 EMPTY_OTP: "يرجى أدخل رمز التأكيد",
                 EMPTY_NAME: "يرجى إدخال اسم صالح",
+                EMPTY_ORDER_NO: "الرجاء إدخال رقم الطلب",
+                EMPTY_BUILDING_NAME: "الرجاء إدخال إسم البناء",
+                EMPTY_FLAT_NO: "الرجاء إدخال رقم الشقة",
+                EMPTY_MAP_LOCATION: "الرجاْء إختيار الموقع"
             }
         }
     },
@@ -2156,6 +2109,8 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
     // CONF.GENERAL.DELIVERY_CHARGE_ID = ;
     // CONF.GENERAL.IMG_ETAG_THRESHOLD = ;
 
+    console.log(`General Configs--------------->${JSON.stringify(CONF.GENERAL)}`)
+
     global.configSync.general = date;
     return {}
 }
@@ -2505,6 +2460,9 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
             // }
         }
     }
+
+    console.log(`Kafka Configs--------------->${JSON.stringify(CONF.KAFKA)}`)
+
     global.configSync.kafka = date;
     return {}
 }
@@ -2734,6 +2692,7 @@ export const orderStatusConfigSync = function (config: IOrderStatus, date: numbe
                 CONF.ORDER_STATUS.FAILURE.FREQ.NEXT_PING = config.failure_config.freq.next_ping
         }
     }
+    console.log(`Order status Configs--------------->${JSON.stringify(CONF.ORDER_STATUS)}`)
     global.configSync.orderStatus = date;
     return {}
 }
@@ -2790,7 +2749,6 @@ interface IPaymentMethods {
     orderCategory?: string
 }
 export const paymentConfigSync = function (store_code: string, config: IPayment, date: number) {
-    console.log("old", CONF.PAYMENT)
     if (config.noonpayConfig) {
         if (config.noonpayConfig.noonpayReversePaymentEndPoint)
             CONF.PAYMENT[store_code].noonpayConfig.noonpayReversePaymentEndPoint = config.noonpayConfig.noonpayReversePaymentEndPoint
@@ -2870,7 +2828,7 @@ export const paymentConfigSync = function (store_code: string, config: IPayment,
                 CONF.PAYMENT[store_code].codInfo.SDM.PAY_TYPE = config.codInfo.sdm.pay_type
         }
     }
-    console.log("new", CONF.PAYMENT)
+    console.log(`Payment Configs--------------->${JSON.stringify(CONF.PAYMENT[store_code])}`)
     global.configSync.payment = date;
     return {}
 }
@@ -2914,6 +2872,7 @@ export const shipmentConfigSync = function (store_code: string, config: IShipmen
         if (config.free_shipping.min_order_total)
             CONF.SHIPMENT[store_code].free_shipping.min_order_total = config.free_shipping.min_order_total
     }
+    console.log(`Shipment Configs--------------->${JSON.stringify(CONF.SHIPMENT[store_code])}`)
     global.configSync.shipment = date;
     return {}
 }
@@ -3042,6 +3001,7 @@ export const countrySpecificConfigSync = function (country: string, config: ICou
     if (config.min_cod_cart_value)
         CONF.COUNTRY_SPECIFIC[country].MIN_COD_CART_VALUE = config.min_cod_cart_value
 
+    console.log(`Country Specific Configs--------------->${JSON.stringify(CONF.COUNTRY_SPECIFIC[country])}`)
     global.configSync.countrySpecific = date;
     return {}
 }

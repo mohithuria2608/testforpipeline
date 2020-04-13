@@ -5,4 +5,7 @@ declare namespace ILocationRequest {
 
     interface IPickupLocation extends ICommonRequest.ICordinatesOpt {
     }
+
+    interface ICarHopLocation extends ICommonRequest.ICordinatesOpt {
+    }
 }

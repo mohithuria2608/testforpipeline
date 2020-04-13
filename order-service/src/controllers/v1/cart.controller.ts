@@ -34,7 +34,7 @@ export class CartController {
                 language: headers.language,
             })
             let invalidMenu = 0
-            console.log(`${menu.updatedAt}    ${payload.menuUpdatedAt}     ${(menu.menuId && menu.updatedAt != payload.menuUpdatedAt)}       ${!menu.menuId}`)
+            consolelog(process.cwd(), "validateCart", `${menu.updatedAt}    ${payload.menuUpdatedAt}     ${(menu.menuId && menu.updatedAt != payload.menuUpdatedAt)}       ${!menu.menuId}`, true)
             if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt))
                 invalidMenu = 1
 
@@ -55,7 +55,6 @@ export class CartController {
                 delete payload['couponCode']
 
             let cmsCart = hitCms ? await ENTITY.CartE.createCartOnCMS(payload, userData) : await ENTITY.CartE.createSudoCartOnCMS(payload, promo)
-            console.log("cmsCart", JSON.stringify(cmsCart))
             cart = await ENTITY.CartE.updateCart({
                 headers: headers,
                 orderType: payload.orderType,

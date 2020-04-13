@@ -20,7 +20,6 @@ export class SyncService {
     private syncClient = new this.loadSync(config.get("grpc.sync.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established sync-service', config.get("grpc.sync.client"), true)
     }
 
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {

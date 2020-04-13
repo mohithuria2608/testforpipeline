@@ -33,7 +33,7 @@ export class EmailClass {
                 return {}
             }
         } catch (err) {
-            console.log("ERROR -> ", err);
+            consolelog(process.cwd(), "sendEmail", err, false);
             return Promise.reject(err)
         }
     }
@@ -53,7 +53,6 @@ export class EmailClass {
     //                 html: payload.message
     //             });
     //     } catch (err) {
-    //         console.log("ERROR -> ", JSON.stringify(err));
     //         return Promise.reject(err)
     //     }
     // }

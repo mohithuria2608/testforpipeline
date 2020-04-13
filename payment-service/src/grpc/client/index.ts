@@ -1,3 +1,5 @@
 export * from './auth/client'
 export * from './sync/client'
 export * from './order/client'
+export * from './kafka/client'
+export * from './logger/client'

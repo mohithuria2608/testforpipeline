@@ -46,8 +46,8 @@ export class StoreController {
                 background: false,
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
-            if (store && store.length > 0 && store[0].active == 1) {
-                if (store[0]['services'][payload.serviceType] == 1) {
+            if (store && store.length > 0 && store[0].active) {
+                if (store[0]['services'][payload.serviceType]) {
                     store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                     return store[0]
                 } else
@@ -77,8 +77,8 @@ export class StoreController {
                 }
             }
             let store = await Aerospike.query(geoWithinArg)
-            if (store && store.length > 0 && store[0].active == 1) {
-                if (store[0]['services'][payload.serviceType] == 1) {
+            if (store && store.length > 0 && store[0].active) {
+                if (store[0]['services'][payload.serviceType]) {
                     store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                     return store[0]
                 } else
@@ -145,7 +145,15 @@ export class StoreController {
                         store.active = storeStatusList[i].active;
                         await ENTITY.StoreE.saveStore(store);
                         if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
-                            storesToSyncWithCMS.push({ restaurant_id: store.id, id: store.id, sdmStoreId: store.storeId, active: store.active });
+                            storesToSyncWithCMS.push({
+                                restaurant_id: store.id,
+                                id: store.id,
+                                sdmStoreId: store.storeId,
+                                active: store.active,
+                                startTime: store.startTime,
+                                endTime: store.endTime,
+                                nextDay: store.nextDay
+                            });
                             storesToSyncWithCMSHash[store.sdmStoreId] = true;
                         }
                     }
@@ -171,8 +179,8 @@ export class StoreController {
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(geoWithinArg)
             if (store && store.length > 0) {
-                if (store[0].active == 1) {
-                    if (store[0]['services'][Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY] == 1) {
+                if (store[0].active) {
+                    if (store[0]['services'][Constant.DATABASE.TYPE.STORE_SERVICE.CARHOP]) {
                         let checkStoreOnline = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                         if (checkStoreOnline) {
                             return {

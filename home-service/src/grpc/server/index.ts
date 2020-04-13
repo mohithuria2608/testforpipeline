@@ -33,10 +33,7 @@ server.addService(homeProto.HomeService.service, {
                     res = await miscController.pingService(data)
                     break;
                 }
-                default: {
-                    callback("unhandled grpc : set", {})
-                    break;
-                }
+                default: { res = {}; break; }
             }
             callback(null, res)
         } catch (error) {

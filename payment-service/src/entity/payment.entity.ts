@@ -199,16 +199,16 @@ export class PaymentClass extends BaseEntity {
      * @param noonpayConfig 
      */
     private getNoonPayAPIKey(noonpayConfig: any): string {
-        console.log("payment environment", noonpayConfig.environment)
+        consolelog(process.cwd(), "payment environment", noonpayConfig.environment, true)
         if (noonpayConfig.environment == "Test") {
             // Format: Key_Environment Base64Encoded(BusinessIdentifier.ApplicationIdentifier:AppKey (case-insensitive))
             let key = `${PaymentClass.API_KEY_PREFIX}${noonpayConfig.environment} ${(new Buffer(`${noonpayConfig.businessIdentifier}.${noonpayConfig.appIdentifier}:${noonpayConfig.appAccessKey}`)).toString('base64')}`;
-            console.log("payment environment key", noonpayConfig.environment, key)
+            consolelog(process.cwd(), "payment environment key", `${noonpayConfig.environment}, ${key}`, true)
             return key;
         } else {
             // Format: Key_Environment Base64Encoded(BusinessIdentifier.ApplicationIdentifier:AppKey (case-insensitive))
             let key = `${PaymentClass.API_KEY_PREFIX}${noonpayConfig.environment} ${noonpayConfig.apiKey}`;
-            console.log("payment environment key", noonpayConfig.environment, key)
+            consolelog(process.cwd(), "payment environment key", `${noonpayConfig.environment}, ${key}`, true)
             return key;
         }
 
@@ -241,7 +241,6 @@ export class PaymentClass extends BaseEntity {
             err.data = paymentResponse;
         }
         err.name = 'PaymentError';
-        console.log('---------error object', err);
         return err;
     }
     /**
@@ -319,7 +318,7 @@ export class PaymentClass extends BaseEntity {
                 timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
 
-            console.log('--Payment INITIATE');
+            consolelog(process.cwd(), '--Payment INITIATE', "", true);
             let result = {
                 resultCode: response.resultCode,
                 message: response.message,
@@ -335,8 +334,6 @@ export class PaymentClass extends BaseEntity {
             // TODO: Update Payment status and noonpay order id
             // To be done in order service
             if (response.resultCode === 0) {
-                console.log('--Payment INITIATE 1', result);
-
                 return result;
             } else {
                 // some error
@@ -377,7 +374,7 @@ export class PaymentClass extends BaseEntity {
             // ACTUAL: Get Error code 19085
             // TODO: In Authorization payment check, compare the order amount with authorized amount - if different -> cancel the transaction and reverse.
             // To be implemented in order service
-            console.log('--Payment ORDER STATUS', JSON.stringify(response));
+            consolelog(process.cwd(), '--Payment ORDER STATUS', JSON.stringify(response), true);
             let result: IPaymentGrpcRequest.IGetPaymentStatusRes = {
                 resultCode: response.resultCode,
                 message: response.message,
@@ -662,7 +659,7 @@ export class PaymentClass extends BaseEntity {
                 json: true,
                 timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
-            console.log('--Payment CAPTURE', JSON.stringify(response));
+            consolelog(process.cwd(), '--Payment CAPTURE', JSON.stringify(response), true);
             let result = {
                 resultCode: response.resultCode,
                 message: response.message,
@@ -753,7 +750,7 @@ export class PaymentClass extends BaseEntity {
                 json: true,
                 timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
-            console.log('--Payment REVERSE', JSON.stringify(response));
+            consolelog(process.cwd(), '--Payment REVERSE', JSON.stringify(response), true);
             let result = {
                 resultCode: response.resultCode,
                 message: response.message,
@@ -849,7 +846,7 @@ export class PaymentClass extends BaseEntity {
                 json: true,
                 timeout: Constant.CONF.GENERAL.PAYMENT_API_TIMEOUT
             });
-            console.log('--Payment REFUND');
+            consolelog(process.cwd(), '--Payment REFUND', JSON.stringify(response), true);
             let result = {
                 resultCode: response.resultCode,
                 message: response.message,

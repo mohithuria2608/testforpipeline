@@ -20,7 +20,6 @@ export class PaymentService {
     private paymentClient = new this.loadPayment(config.get("grpc.payment.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established payment-service', config.get("grpc.payment.client"), true)
     }
 
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {

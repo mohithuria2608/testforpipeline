@@ -53,20 +53,6 @@ export class MiscController {
     }
 
     /**
-    * @method GET
-    * @description : Get List of FAQs
-    * */
-    async faq(headers: ICommonRequest.IHeaders) {
-        try {
-            headers.language = headers.language ? headers.language : Constant.DATABASE.LANGUAGE.EN
-            return Constant.DATABASE.FAQ[headers.language]
-        } catch (error) {
-            consolelog(process.cwd(), "faq", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
     * @method INTERNAL
     * @description : PING SERVICES
     * */

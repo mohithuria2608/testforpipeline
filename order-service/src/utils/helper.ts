@@ -44,7 +44,6 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     let customError: ICommonRequest.IError = Constant.STATUS_MSG.ERROR.E400.DEFAULT
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
     if (error && error.code && error.details) {
-        console.log("isJsonString(error.details)", isJsonString(error.details))
         if (isJsonString(error.details)) {
             if (JSON.parse(error.details).hasOwnProperty("data"))
                 customError.data = JSON.parse(error.details)
@@ -376,17 +375,18 @@ export let validatorErr = function (error) {
 }
 
 export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: string = Constant.DATABASE.LANGUAGE.EN, returnMsg?: boolean, returnErr?: boolean) {
+    let retStatsObj = { ...statsObj }
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-    statsObj.message = statsObj[key];
-    delete statsObj.message_En;
-    delete statsObj.message_Ar;
+    retStatsObj.message = retStatsObj[key];
+    delete retStatsObj.message_En;
+    delete retStatsObj.message_Ar;
     if (returnMsg)
         if (returnErr)
-            return statsObj.message
+            return retStatsObj.message
         else
-            return new Error(statsObj.message)
+            return new Error(retStatsObj.message)
     else
-        return statsObj
+        return retStatsObj
 }
 
 export let getFrequency = function (argv: IOrderRequest.IGetSdmOrderFreq) {
