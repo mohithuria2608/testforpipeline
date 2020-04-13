@@ -27,9 +27,6 @@ export const start = (async () => {
     const port = config.get("server.payment.port")
     const server = app.listen(port)
 
-    // let key = `Key_Test ${(new Buffer(`americana_test_cognizant.kfc_uae_test:65c5cc823a3f4c079de1c2928d927ebd`)).toString('base64')}`;
-    // console.log("payment environment key", key)
-
     await bootstrap(server)
   } catch (error) {
     console.error(error)

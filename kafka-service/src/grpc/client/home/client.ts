@@ -20,7 +20,6 @@ export class HomeService {
     private homeClient = new this.loadHome(config.get("grpc.home.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established home-service', config.get("grpc.home.client"), true)
     }
 
     /**

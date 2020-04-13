@@ -27,4 +27,37 @@
 changes : 
 1. user addition on cms and sdm async via kafka
 2. headers update in all sync apis
-3. 
+
+
+
+1. store sync cron : every 30 mins (peak hrs) ,2 hrs (non peak hrs)
+partial sync update stores 
+
+2. GetActiveOrdersStatusList
+
+3. frequency of status fetching for orders
+
+4. urvesh + abhinav ==> app version
+
+
+
+[18:25] manvendra.singh (Guest)
+    ankit.kumarapp (Guest) apekshamehta.appinventiv (Guest)-
+
+Here is the newly setup Aerospike detail
+
+
+
+Aerospike Cluster on VMs
+Host1: 10.2.0.27
+
+Host 2: 10.2.0.33
+
+​[18:25] manvendra.singh (Guest)
+    
+
+AMC : http://51.104.147.206:10002
+host : localhost
+
+
+

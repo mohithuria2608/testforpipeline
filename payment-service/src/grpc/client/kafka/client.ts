@@ -5,7 +5,6 @@ const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 import { consolelog } from '../../../utils'
 import { logService } from '../logger/client'
-
 export class KafkaService {
 
     private kafkaProto = __dirname + config.get("directory.static.proto.kafka.client");
@@ -22,7 +21,6 @@ export class KafkaService {
     private kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        
     }
 
     async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {
@@ -31,10 +29,12 @@ export class KafkaService {
                 await kafkaServiceValidator.kafkaValidator(payload)
                 this.kafkaClient.kafkaSync(payload, (error, res) => {
                     if (!error) {
-                        consolelog(process.cwd(), "successfully produced order request on kafka ", JSON.stringify(res), false)
+                        consolelog(process.cwd(), "successfully produced data on kafka for syncing", JSON.stringify(res), false)
                         resolve(res)
                     } else {
-                        consolelog(process.cwd(), "Error in producing order request on kafka", JSON.stringify(error), false)
+                        consolelog(process.cwd(), "Error in producing data on kafka  for syncing", JSON.stringify(error), false)
+                        if (error.code === Constant.STATUS_MSG.GRPC_ERROR.TYPE.UNAVAILABLE)
+                            logService.sync(payload)
                         reject(error)
                     }
                 })

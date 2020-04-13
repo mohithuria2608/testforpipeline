@@ -389,8 +389,6 @@ export class OrderClass extends BaseEntity {
                 }, { new: true })
                 if (payload.order.sdmOrderRef != 0)
                     await this.updateOneEntityMdb({ _id: payload.order._id }, { isActive: 1 }, { new: true })
-            } else {
-                //@todo : initite order failure process
             }
             return cmsOrder
         } catch (error) {
@@ -698,7 +696,6 @@ export class OrderClass extends BaseEntity {
                                                                                                     plDefaultSdm = true
                                                                                             })
                                                                                             if (dspl.selected) {
-                                                                                                console.log("plDefaultSdm", plDefaultSdm)
                                                                                                 dspl.subOptions.forEach(dsplso => {
                                                                                                     if (dsplso.sdmId && dsplso.selected == 1) {
                                                                                                         if (dsplso.title == "None") {

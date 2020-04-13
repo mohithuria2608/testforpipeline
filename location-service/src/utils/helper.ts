@@ -238,9 +238,9 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     }
 }
 export let sendSuccess = function (successMsg, language, data) {
-    
+
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-    
+
     if (typeof data === 'object' && data.hasOwnProperty('password')) {
         delete data['password']
     }
@@ -406,9 +406,9 @@ export let checkOnlineStore = function (start, end, nextday) {
         new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds()) :
         new Date(new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds())).setUTCDate(new Date().getUTCDate() + 1)
 
-    console.log("curTime : ", curTime, "     startTime : ", startTime, "     endTime : ", endTime)
-    console.log(startTime < curTime)
-    console.log(curTime < endTime)
+    consolelog(process.cwd(), "", `curTime : ${curTime},     startTime : ${startTime},     endTime : ${endTime}`, true)
+    consolelog(process.cwd(), "", startTime < curTime, true)
+    consolelog(process.cwd(), "", curTime < endTime, true)
 
     if ((startTime < curTime && curTime < endTime) || (startTime > curTime && curTime < endTime && nextday == 1))
         return true

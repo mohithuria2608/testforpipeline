@@ -1,8 +1,9 @@
 import * as config from "config"
 import { consolelog, grpcSendError } from "../../utils"
 import * as ENTITY from '../../entity';
-import {  miscController } from '../../controllers';
+import { miscController } from '../../controllers';
 import * as Constant from '../../constant'
+import { kafkaService } from '../../grpc/client'
 
 const grpc = require('grpc')
 const protoLoader = require('@grpc/proto-loader');
@@ -34,9 +35,55 @@ server.addService(paymentProto.PaymentService.service, {
         try {
             consolelog(process.cwd(), "initiatePayment", JSON.stringify(call.request), true);
             let res: IPaymentGrpcRequest.IInitiatePaymentRes = await ENTITY.PaymentE.initiatePayment(call.request);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.orderId],
+                        idInfo: [Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: res
+                        },
+                        description: "initiatePayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(null, res);
         } catch (error) {
             consolelog(process.cwd(), "initiatePayment", JSON.stringify(error), false);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.orderId],
+                        idInfo: [Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: error
+                        },
+                        description: "initiatePayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(grpcSendError(error));
         }
     },
@@ -64,9 +111,59 @@ server.addService(paymentProto.PaymentService.service, {
                     res = await ENTITY.PaymentE.getPaymentStatus(call.request);
                     break;
             }
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.orderId, call.request.noonpayOrderId],
+                        idInfo: [
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: res
+                        },
+                        description: "getPaymentStatus",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(null, res);
         } catch (error) {
             consolelog(process.cwd(), "getPaymentStatus", JSON.stringify(error), false);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.orderId, call.request.noonpayOrderId],
+                        idInfo: [
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: error
+                        },
+                        description: "getPaymentStatus",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(grpcSendError(error));
         }
     },
@@ -74,9 +171,59 @@ server.addService(paymentProto.PaymentService.service, {
         try {
             consolelog(process.cwd(), "capturePayment", JSON.stringify(call.request), true);
             let res: IPaymentGrpcRequest.ICapturePaymentRes = await ENTITY.PaymentE.capturePayment(call.request);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.orderId, call.request.noonpayOrderId],
+                        idInfo: [
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: res
+                        },
+                        description: "capturePayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(null, res);
         } catch (error) {
             consolelog(process.cwd(), "capturePayment", JSON.stringify(error), false);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.orderId, call.request.noonpayOrderId],
+                        idInfo: [
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
+                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: error
+                        },
+                        description: "capturePayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(grpcSendError(error));
         }
     },
@@ -84,9 +231,55 @@ server.addService(paymentProto.PaymentService.service, {
         try {
             consolelog(process.cwd(), "reversePayment", JSON.stringify(call.request), true);
             let res: IPaymentGrpcRequest.IReversePaymentRes = await ENTITY.PaymentE.reversePayment(call.request);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.noonpayOrderId],
+                        idInfo: [Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: res
+                        },
+                        description: "reversePayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(null, res);
         } catch (error) {
             consolelog(process.cwd(), "reversePayment", JSON.stringify(error), false);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.noonpayOrderId],
+                        idInfo: [Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: error
+                        },
+                        description: "reversePayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(grpcSendError(error));
         }
     },
@@ -94,9 +287,55 @@ server.addService(paymentProto.PaymentService.service, {
         try {
             consolelog(process.cwd(), "refundPayment", JSON.stringify(call.request), true);
             let res: IPaymentGrpcRequest.IRefundPaymentRes = await ENTITY.PaymentE.refundPayment(call.request);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.noonpayOrderId],
+                        idInfo: [Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: res
+                        },
+                        description: "refundPayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(null, res);
         } catch (error) {
             consolelog(process.cwd(), "refundPayment", JSON.stringify(error), false);
+            kafkaService.kafkaSync({
+                set: Constant.SET_NAME.LOGGER,
+                mdb: {
+                    create: true,
+                    argv: JSON.stringify({
+                        type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
+                        id: [call.request.noonpayOrderId],
+                        idInfo: [Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
+                        info: {
+                            request: {
+                                body: call.request
+                            },
+                            response: error
+                        },
+                        description: "refundPayment",
+                        options: {
+                            env: Constant.SERVER.ENV[config.get("env")],
+                        },
+                        createdAt: new Date().getTime(),
+                    })
+                },
+                inQ: true
+            })
             callback(grpcSendError(error));
         }
     },
@@ -110,10 +349,7 @@ server.addService(paymentProto.PaymentService.service, {
                     res = await miscController.pingService(data)
                     break;
                 }
-                default: {
-                    callback("unhandled grpc : set", {})
-                    break;
-                }
+                default: { res = {}; break; }
             }
             callback(null, res)
         } catch (error) {

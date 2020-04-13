@@ -34,10 +34,7 @@ server.addService(promotionProto.PromotionService.service, {
                     res = await miscController.pingService(data)
                     break;
                 }
-                default: {
-                    callback("unhandled grpc : set", {})
-                    break;
-                }
+                default: { res = {}; break; }
             }
             callback(null, res)
         } catch (error) {

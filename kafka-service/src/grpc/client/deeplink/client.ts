@@ -20,7 +20,6 @@ export class DeeplinkService {
     private deeplinkClient = new this.loadDeeplink(config.get("grpc.deeplink.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established deeplink-service', config.get("grpc.deeplink.client"), true)
     }
 
     /**

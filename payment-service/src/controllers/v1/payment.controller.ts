@@ -19,11 +19,9 @@ export class PaymentController {
                 let amount = cart.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
                 let storeCode = Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                 if (amount[0].amount < Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE) {
-                    console.log("1")
                     return []
                 }
                 else if (amount[0].amount > Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_COD_CART_VALUE) {
-                    console.log("2")
                     return [
                         {
                             "id": 1,
@@ -34,7 +32,6 @@ export class PaymentController {
                     ]
                 }
                 else {
-                    console.log("3")
                     return [
                         {
                             "id": 1,

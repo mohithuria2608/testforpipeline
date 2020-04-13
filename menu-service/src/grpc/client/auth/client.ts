@@ -22,7 +22,6 @@ export class AuthService {
     private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(),'GRPC connection established auth-service', config.get("grpc.auth.client"), true)
     }
 
     async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {

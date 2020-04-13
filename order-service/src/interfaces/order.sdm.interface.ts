@@ -9,6 +9,11 @@ declare namespace IOrderSdmRequest {
         country: string
     }
 
+    interface IGetActiveOrder {
+        language: string,
+        country: string
+    }
+
     interface IProcessCreditCardOnSdm {
         sdmOrderRef: number,
         transaction: any,

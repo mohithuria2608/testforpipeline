@@ -3399,7 +3399,6 @@ export const start = (async () => {
                                                 plDefaultSdm = true
                                             })
                                             if (dspl.selected) {
-                                              console.log("plDefaultSdm", plDefaultSdm)
                                               dspl.subOptions.forEach(dsplso => {
                                                 if (dsplso.sdmId && dsplso.selected == 1) {
                                                   if (dsplso.title == "None") {
@@ -3680,7 +3679,7 @@ export const start = (async () => {
       }
     })
 
-    console.log("Entries", JSON.stringify(Entries))
+    consolelog(process.cwd(), "Entries", JSON.stringify(Entries), true)
 
 
     await bootstrap(server)

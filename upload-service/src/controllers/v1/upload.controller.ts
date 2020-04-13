@@ -30,7 +30,7 @@ export class UploadController {
     async uploadJSON(payload) {
         try {
             let uploadStatus = await EnvModelBlob.upload(payload.name, payload.json);
-            console.log("File Uploaded to -> ", uploadStatus.url);
+            consolelog(process.cwd(), "File Uploaded to -> ", uploadStatus.url, true);
             return uploadStatus;
         } catch (error) {
             consolelog(process.cwd(), "uploadJSON", error, false)
