@@ -9,6 +9,8 @@ export default (opts?): Middleware => {
     } catch (error) {
       let language = ctx.request.header.language ? ctx.request.header.language : Constant.DATABASE.LANGUAGE.EN
       let errReturn = sendError(error, language)
+      consolelog(process.cwd(), "-----step 10------", JSON.stringify(errReturn), false)
+
       ctx.status = errReturn.httpCode;
       ctx.body = errReturn.payload;
     }
