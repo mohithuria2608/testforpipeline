@@ -368,6 +368,7 @@ export class OrderController {
                                 Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
                                 Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
                                 Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+                                Constant.CONF.ORDER_STATUS.DELIVERED.MONGO
                             ]
                         }
                     },
