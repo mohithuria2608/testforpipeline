@@ -269,9 +269,14 @@ export class OrderClass extends BaseEntity {
                 }
             }
             let Notes = undefined
+            let finalText = ""
+            if (order.contactlessDlvry)
+                finalText = finalText + "100%Contactless-- "
+            if (order.dlvryInstr && order.dlvryInstr != "")
+                finalText = finalText + "Carhop-- " + order.dlvryInstr
             Notes = {
                 CNote: [{
-                    NT_FREE_TEXT: "Test Orders - Appinventiv : " + order._id.toString(),
+                    NT_FREE_TEXT: (finalText && finalText != "") ? finalText : "Test Orders - Appinventiv : " + order._id.toString(),
                     NT_ID: new Date().getTime()
                 }]
             }
