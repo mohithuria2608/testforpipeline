@@ -21,6 +21,7 @@ export default async function () {
             menuId: Constant.SDM_CONFIG.UAE.MENU_ID,
             menuTempId: 17,
             webMenuId: Constant.SDM_CONFIG.UAE.MENU_ID,
+            storeNumber: parseInt(store.STR_NUM),
             location: {
                 description: store.Locations ? store.Locations.CC_STORE_MAP_LOCATION.MAPL_DESCRIPTION : 'No Location',
                 latitude: store.Locations ? parseFloat(store.Locations.CC_STORE_MAP_LOCATION.MAPL_LATITUDE) : 0,

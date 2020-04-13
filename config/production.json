@@ -189,8 +189,8 @@
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",
-        "userName": "Adigital",
-        "password": "vSqKeZdc",
+        "userName": "Storeuser",
+        "password": "bATNYV89",
         "endPoint": "bulksms/bulksms",
         "source": "KFC",
         "android_key": "Lew4b/w5UpK"
