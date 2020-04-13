@@ -1,74 +1,52 @@
-<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-   <s:Body>
-      <GetCustomerByIDResponse xmlns="http://tempuri.org/">
-         <GetCustomerByIDResult xmlns:a="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <a:CRT_BYUSER>Web</a:CRT_BYUSER>
-            <a:CRT_DATE>2020-04-10T17:56:30</a:CRT_DATE>
-            <a:CUST_CARDNUMBER/>
-            <a:CUST_CLASSID>-1</a:CUST_CLASSID>
-            <a:CUST_COMPANY/>
-            <a:CUST_COMPANYUN/>
-            <a:CUST_CORPID>10362365</a:CUST_CORPID>
-            <a:CUST_DATEADDED>2020-04-10T17:56:30</a:CUST_DATEADDED>
-            <a:CUST_DATEOFBIRHT>9000-01-01T00:00:00</a:CUST_DATEOFBIRHT>
-            <a:CUST_DEPENDENTS>0</a:CUST_DEPENDENTS>
-            <a:CUST_EMAIL>royb5352@gmail.com</a:CUST_EMAIL>
-            <a:CUST_FIRSTNAME>Bindu</a:CUST_FIRSTNAME>
-            <a:CUST_FIRSTNAMEUN/>
-            <a:CUST_GENDER>Female</a:CUST_GENDER>
-            <a:CUST_ID>8683785</a:CUST_ID>
-            <a:CUST_LASTNAME>Roy</a:CUST_LASTNAME>
-            <a:CUST_LASTNAMEUN/>
-            <a:CUST_MARITALSTATUS>Single</a:CUST_MARITALSTATUS>
-            <a:CUST_MIDNAME/>
-            <a:CUST_MIDNAMEUN/>
-            <a:CUST_NATID>-1</a:CUST_NATID>
-            <a:CUST_NOTIFICATION_MOBILE>545432321</a:CUST_NOTIFICATION_MOBILE>
-            <a:CUST_OCCUPATION/>
-            <a:CUST_OCCUPATIONUN/>
-            <a:CUST_PHONEAREACODE>54</a:CUST_PHONEAREACODE>
-            <a:CUST_PHONECOUNTRYCODE/>
-            <a:CUST_PHONEEXTENSTION/>
-            <a:CUST_PHONELOOKUP>545432321</a:CUST_PHONELOOKUP>
-            <a:CUST_PHONENUMBER>5432321</a:CUST_PHONENUMBER>
-            <a:CUST_PHONETYPE>2</a:CUST_PHONETYPE>
-            <a:CUST_PREFERRED_LANGUAGE/>
-            <a:CUST_TITLE>0</a:CUST_TITLE>
-            <a:CUST_USERDATA1/>
-            <a:CUST_USERDATA1UN/>
-            <a:CUST_USERDATA2/>
-            <a:CUST_USERDATA2UN/>
-            <a:Loyalty/>
-            <a:PASSWORD>Kn7r0u9UWu0TOMf5QmXxZU99iMk4uKX1egypFWdoNAZL6Uer</a:PASSWORD>
-            <a:Settings xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
-            <a:UPT_BYUSER>haithamb</a:UPT_BYUSER>
-            <a:UPT_DATE>2020-04-10T18:22:24</a:UPT_DATE>
-            <a:USERNAME>royb5352@gmail.com</a:USERNAME>
-            <a:WCUST_ACTIVE_DATE>9000-01-01T00:00:00</a:WCUST_ACTIVE_DATE>
-            <a:WCUST_CORPID i:nil="true"/>
-            <a:WCUST_FIRSTNAME>Bindu</a:WCUST_FIRSTNAME>
-            <a:WCUST_HASHEDPASSWORD/>
-            <a:WCUST_IS_GUEST>false</a:WCUST_IS_GUEST>
-            <a:WCUST_LASTNAME>Roy</a:WCUST_LASTNAME>
-            <a:WCUST_MIDNAME/>
-            <a:WCUST_OFFER1>0</a:WCUST_OFFER1>
-            <a:WCUST_OFFER2>0</a:WCUST_OFFER2>
-            <a:WCUST_PASSWORD_VERSION>2</a:WCUST_PASSWORD_VERSION>
-            <a:WCUST_SEC_ANSWER/>
-            <a:WCUST_SEC_QUESTION>0</a:WCUST_SEC_QUESTION>
-            <a:WCUST_STATUS>4</a:WCUST_STATUS>
-            <a:WCUST_TOKEN>104492720070935141253</a:WCUST_TOKEN>
-            <a:WCUST_TOKEN_DATE>9000-01-01T00:00:00</a:WCUST_TOKEN_DATE>
-            <a:WEB_CRT_BY>Web</a:WEB_CRT_BY>
-            <a:WEB_CRT_DATE>2020-04-10T17:56:30</a:WEB_CRT_DATE>
-            <a:WEB_UPT_BY>Web</a:WEB_UPT_BY>
-            <a:WEB_UPT_DATE>2020-04-10T17:56:30</a:WEB_UPT_DATE>
-         </GetCustomerByIDResult>
-         <SDKResult xmlns:a="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            <a:ExternalCode>0</a:ExternalCode>
-            <a:ResultCode>Success</a:ResultCode>
-            <a:ResultText/>
-         </SDKResult>
-      </GetCustomerByIDResponse>
-   </s:Body>
-</s:Envelope>
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
+   xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
+   xmlns:tns="http://tempuri.org/" 
+   xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
+   xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+   <soap:Body>
+      <UpdateOrder xmlns="http://tempuri.org/">
+         <licenseCode>PizzaHutApp</licenseCode>
+         <language>en</language>
+         <conceptID>3</conceptID>
+         <order>
+            <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10528595</q247:AddressID>
+            <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
+            <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
+            <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7695204</q247:CustomerID>
+            <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
+            <q247:Notes xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+               <q247:CNote>
+                  <q247:NT_FREE_TEXT>100%Contactless-- </q247:NT_FREE_TEXT>
+                  <q247:NT_ID>1586795666895</q247:NT_ID>
+               </q247:CNote>
+            </q247:Notes>
+            <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
+            <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">2</q247:OrderMode>
+            <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
+            <q247:Payments xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+               <q247:CC_ORDER_PAYMENT>
+                  <q247:PAY_AMOUNT>55</q247:PAY_AMOUNT>
+                  <q247:PAY_STATUS>1</q247:PAY_STATUS>
+                  <q247:PAY_STORE_TENDERID>252</q247:PAY_STORE_TENDERID>
+                  <q247:PAY_SUB_TYPE>2</q247:PAY_SUB_TYPE>
+                  <q247:PAY_TYPE>2</q247:PAY_TYPE>
+               </q247:CC_ORDER_PAYMENT>
+            </q247:Payments>
+            <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
+            <q247:ServiceCharge xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:ServiceCharge>
+            <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1218</q247:StoreID>
+            <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
+         </order>
+         <autoApprove>true</autoApprove>
+         <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
+         <orderNotes1>0</orderNotes1>
+         <orderNotes2>5e949490adaaf06e3d32cde7</orderNotes2>
+         <creditCardPaymentbool>false</creditCardPaymentbool>
+         <isSuspended>false</isSuspended>
+         <menuTemplateID>17</menuTemplateID>
+      </UpdateOrder>
+   </soap:Body>
+</soap:Envelope>
