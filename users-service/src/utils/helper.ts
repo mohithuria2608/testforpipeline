@@ -238,8 +238,8 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
     customError.message_En = customError.message_En ? customError.message_En && customError.message_En.replace('[', '') : ""
     customError.message_En = customError.message_En ? customError.message_En && customError.message_En.replace(']', '') : ""
 
-    consolelog(process.cwd(), "-----step 7------", customError, false)
-    consolelog(process.cwd(), "-----step 7------", stsMsgI18(customError, language), false)
+    consolelog(process.cwd(), "-----step 7------", JSON.stringify(customError), false)
+    consolelog(process.cwd(), "-----step 7------", JSON.stringify(stsMsgI18(customError, language)), false)
 
     return {
         statusCode: customError.statusCode,
