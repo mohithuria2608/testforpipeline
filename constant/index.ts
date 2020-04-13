@@ -294,7 +294,7 @@ export const DATABASE = {
 
         ACTIVITY_LOG_ID_INFO: {
             ORDER_ID: "ORDER_ID",
-            NOON_PAY_ORDER_ID:"NOON_PAY_ORDER_ID"
+            NOON_PAY_ORDER_ID: "NOON_PAY_ORDER_ID"
         },
 
         PROFILE_STEP: {
@@ -2162,6 +2162,8 @@ export const generalConfigSync = function (config: IGeneral, date: number) {
     // CONF.GENERAL.DELIVERY_CHARGE_ID = ;
     // CONF.GENERAL.IMG_ETAG_THRESHOLD = ;
 
+    console.log(`General Configs--------------->${JSON.stringify(CONF.GENERAL)}`)
+
     global.configSync.general = date;
     return {}
 }
@@ -2511,6 +2513,9 @@ export const kafkaConfigSync = function (config: IKafka, date: number) {
             // }
         }
     }
+
+    console.log(`Kafka Configs--------------->${JSON.stringify(CONF.KAFKA)}`)
+
     global.configSync.kafka = date;
     return {}
 }
@@ -2740,6 +2745,7 @@ export const orderStatusConfigSync = function (config: IOrderStatus, date: numbe
                 CONF.ORDER_STATUS.FAILURE.FREQ.NEXT_PING = config.failure_config.freq.next_ping
         }
     }
+    console.log(`Order status Configs--------------->${JSON.stringify(CONF.ORDER_STATUS)}`)
     global.configSync.orderStatus = date;
     return {}
 }
@@ -2796,7 +2802,6 @@ interface IPaymentMethods {
     orderCategory?: string
 }
 export const paymentConfigSync = function (store_code: string, config: IPayment, date: number) {
-    console.log("old", CONF.PAYMENT)
     if (config.noonpayConfig) {
         if (config.noonpayConfig.noonpayReversePaymentEndPoint)
             CONF.PAYMENT[store_code].noonpayConfig.noonpayReversePaymentEndPoint = config.noonpayConfig.noonpayReversePaymentEndPoint
@@ -2876,7 +2881,7 @@ export const paymentConfigSync = function (store_code: string, config: IPayment,
                 CONF.PAYMENT[store_code].codInfo.SDM.PAY_TYPE = config.codInfo.sdm.pay_type
         }
     }
-    console.log("new", CONF.PAYMENT)
+    console.log(`Payment Configs--------------->${JSON.stringify(CONF.PAYMENT[store_code])}`)
     global.configSync.payment = date;
     return {}
 }
@@ -2920,6 +2925,7 @@ export const shipmentConfigSync = function (store_code: string, config: IShipmen
         if (config.free_shipping.min_order_total)
             CONF.SHIPMENT[store_code].free_shipping.min_order_total = config.free_shipping.min_order_total
     }
+    console.log(`Shipment Configs--------------->${JSON.stringify(CONF.SHIPMENT[store_code])}`)
     global.configSync.shipment = date;
     return {}
 }
@@ -3048,6 +3054,7 @@ export const countrySpecificConfigSync = function (country: string, config: ICou
     if (config.min_cod_cart_value)
         CONF.COUNTRY_SPECIFIC[country].MIN_COD_CART_VALUE = config.min_cod_cart_value
 
+    console.log(`Country Specific Configs--------------->${JSON.stringify(CONF.COUNTRY_SPECIFIC[country])}`)
     global.configSync.countrySpecific = date;
     return {}
 }

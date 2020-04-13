@@ -22,7 +22,6 @@ export class KafkaService {
     private kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established kafka-service', config.get("grpc.kafka.client"), true)
     }
 
     async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {

@@ -29,7 +29,7 @@ const loggerSchema = new Schema({
             Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
             Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID
         ]
-    },// description of id
+    },
     info: { type: Schema.Types.Mixed },
     description: { type: String },
     options: {

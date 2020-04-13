@@ -698,7 +698,6 @@ export class OrderClass extends BaseEntity {
                                                                                                     plDefaultSdm = true
                                                                                             })
                                                                                             if (dspl.selected) {
-                                                                                                console.log("plDefaultSdm", plDefaultSdm)
                                                                                                 dspl.subOptions.forEach(dsplso => {
                                                                                                     if (dsplso.sdmId && dsplso.selected == 1) {
                                                                                                         if (dsplso.title == "None") {

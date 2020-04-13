@@ -20,7 +20,6 @@ export class OrderService {
     private orderClient = new this.loadOrder(config.get("grpc.order.client"), grpc.credentials.createInsecure());
 
     constructor() {
-        console.log(process.cwd(), 'GRPC connection established order-service', config.get("grpc.order.client"), true)
     }
 
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {

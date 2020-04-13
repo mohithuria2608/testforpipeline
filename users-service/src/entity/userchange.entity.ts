@@ -99,7 +99,7 @@ export class UserchangeEntity extends BaseEntity {
             if (curUserchnage && curUserchnage.id) {
                 if (curUserchnage.fullPhnNo) {
                     if (curUserchnage.fullPhnNo != (payload.cCode + payload.phnNo)) {
-                        console.log("incorrect phone number => invalid otp")
+                        consolelog(process.cwd(), "incorrect phone number => invalid otp", "", true)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
                     }
                 }

@@ -282,7 +282,6 @@ export class CartClass extends BaseEntity {
                 promo: {},
                 invalidMenu: 0
             }
-            console.log("dataToSave", dataToSave)
             let putArg: IAerospike.Put = {
                 bins: dataToSave,
                 set: this.set,
@@ -350,13 +349,12 @@ export class CartClass extends BaseEntity {
                 if (sitem['originalTypeId'] == 'simple') {
                     if (sitem['type_id'] == 'simple') {
                         if (sitem.id == 0)
-                            console.log("sitem>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", sitem)
-                        cart.push({
-                            product_id: sitem.id,
-                            qty: sitem.qty ? sitem.qty : 1,
-                            price: sitem.sellingPrice,
-                            type_id: sitem['originalTypeId']
-                        })
+                            cart.push({
+                                product_id: sitem.id,
+                                qty: sitem.qty ? sitem.qty : 1,
+                                price: sitem.sellingPrice,
+                                type_id: sitem['originalTypeId']
+                            })
                     } else {
                         let subPrice = 0
                         let product = {};
@@ -497,7 +495,6 @@ export class CartClass extends BaseEntity {
                     return Promise.reject(JSON.stringify(sitem))
                 }
             })
-            console.log(JSON.stringify(cart))
             let req = {
                 cms_user_id: userData.cmsUserRef,
                 website_id: 1,
@@ -562,7 +559,6 @@ export class CartClass extends BaseEntity {
             }
             if (payload.items && payload.items.length > 0) {
                 payload.items.map(item => {
-                    console.log(`${item.name} ======== ${item.qty} ======== ${item.sellingPrice}`)
                     let price = item.sellingPrice
                     subtotal = subtotal + price
                 })
@@ -576,11 +572,7 @@ export class CartClass extends BaseEntity {
             // shippingTax = Math.round(((shippingAmt - (Math.round(((shippingAmt / 1.05) + Number.EPSILON) * 100) / 100)) + Number.EPSILON) * 100) / 100
             // shippingAmt = shippingAmt - shippingTax
 
-            console.log("grandtotal", grandtotal)
-            console.log("subtotal", subtotal)
-            console.log("tax", tax)
-            console.log("discount", discount)
-            console.log("shippingAmt", shippingAmt)
+            consolelog(process.cwd(), "createSudoCartOnCMS ::::>", `grandtotal : ${grandtotal}, subtotal : ${subtotal}, tax : ${tax}, discount : ${discount}, shippingAmt : ${shippingAmt}`, true)
 
             let sudoCmsres: ICartCMSRequest.ICmsCartRes = {
                 cms_cart_id: 0,
@@ -653,7 +645,6 @@ export class CartClass extends BaseEntity {
                             })
                             let menus = await Promise.all([freeItems_En, freeItems_Ar])
                             if (menus[0] && menus[0].length > 0) {
-                                console.log("freeItems_En.products", menus[0][0].products, menus[0][0].products.length)
                                 if (menus[0][0] && menus[0][0].products && menus[0][0].products.length > 0)
                                     menus[0] = menus[0][0].products.filter(obj => { return (freeItemSku.indexOf(obj.sdmId.toString()) >= 0) })
                                 else

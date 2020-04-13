@@ -97,7 +97,6 @@ export class AddressEntity extends BaseEntity {
      * */
     async addAddress(headers: ICommonRequest.IHeaders, userData: IUserRequest.IUserData, addressData: IAddressRequest.IRegisterAddress, store: IStoreGrpcRequest.IStore) {
         try {
-            console.log("addressData", JSON.stringify(addressData))
             const id = addressData.addressId ? addressData.addressId : this.ObjectId().toString();
             let address: IAddressRequest.IAddress = {
                 id: id,

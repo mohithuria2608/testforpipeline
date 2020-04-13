@@ -28,7 +28,7 @@ export class SmsCLass {
                     function (err, data, b) {
                         if (err) { reject(err); }
                         else {
-                            console.log("--> ", b);
+                            consolelog(process.cwd(), "sendSMS", b, true);
                             resolve({ success: true, data: b });
                         }
                     }
