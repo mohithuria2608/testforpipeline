@@ -3,8 +3,6 @@ import * as config from "config"
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog, getFrequency } from '../utils'
-import { kafkaService, paymentService, notificationService, userService, promotionService, locationService } from '../grpc/client';
-import { OrderSDME } from '../sdm';
 import * as Joi from '@hapi/joi';
 
 
@@ -17,6 +15,12 @@ export class OrdercronClass extends BaseEntity {
             set: this.set,
             bin: 'mongoOrderRef',
             index: 'idx_' + this.set + '_' + 'mongoOrderRef',
+            type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'mOrdercron',
+            index: 'idx_' + this.set + '_' + 'mOrdercron',
             type: "STRING"
         },
         {
@@ -41,23 +45,19 @@ export class OrdercronClass extends BaseEntity {
 
     public ordercronSchema = Joi.object().keys({
         sdmOrderRef: Joi.number().required().description("pk"),
+        mOrdercron: Joi.number().required().description("sk"),
         mongoOrderRef: Joi.number().required().description("sk"),
         cmsOrderRef: Joi.number().required().description("sk"),
-        status: {
-            type: String, enum: [
-                Constant.CONF.ORDER_STATUS.CART.MONGO,
-                Constant.CONF.ORDER_STATUS.PENDING.MONGO,
-                Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
-                Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
-                Constant.CONF.ORDER_STATUS.READY.MONGO,
-                Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO,
-                Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
-                Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
-                Constant.CONF.ORDER_STATUS.FAILURE.MONGO
-            ], required: true,
-            default: Constant.CONF.ORDER_STATUS.PENDING.MONGO,
-        },
-        sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
+        status: Joi.string().valid(Constant.CONF.ORDER_STATUS.CART.MONGO,
+            Constant.CONF.ORDER_STATUS.PENDING.MONGO,
+            Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
+            Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
+            Constant.CONF.ORDER_STATUS.READY.MONGO,
+            Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO,
+            Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+            Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+            Constant.CONF.ORDER_STATUS.FAILURE.MONGO),
+        sdmOrderStatus: Joi.number()
     })
 
     async deleteOrdercronTigger(change) {

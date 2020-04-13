@@ -10,7 +10,7 @@ export class ChangeStream {
     async ordercronWatch(db) {
         try {
             let ordercronCollection = db.collection('ordercron');
-            let ordercronChangeStream = ordercronCollection.watch({ fullDocument: "updateLookup" });
+            let ordercronChangeStream = ordercronCollection.watch();//{ fullDocument: "updateLookup" });
             ordercronChangeStream.on('change', async (change) => {
                 consolelog(process.cwd(), 'listening changes on ordercron', JSON.stringify(change), true)
                 switch (change.operationType) {
