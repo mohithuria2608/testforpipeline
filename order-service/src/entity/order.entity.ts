@@ -85,7 +85,7 @@ export class OrderClass extends BaseEntity {
                 newOrderId: 0,
                 transferDone: false,
                 contactlessDlvry: payload.contactlessDlvry,
-                dlvryInstr: payload.dlvryInstr,
+                dlvryInstr: payload.dlvryInstr ? payload.dlvryInstr : "",
                 notification: {
                     confirmed: false,
                     cancel: false,
@@ -380,7 +380,6 @@ export class OrderClass extends BaseEntity {
             payload.address = preHook.address
             payload.cmsOrderReq['address_id'] = preHook.address.cmsAddressRef
             payload.cmsOrderReq['cms_user_id'] = preHook.userData.cmsUserRef
-
             if (payload.order.address.cmsAddressRef == 0) {
                 payload.order = await this.updateOneEntityMdb({ _id: payload.order._id }, { "address.cmsAddressRef": preHook.address.cmsAddressRef }, { new: true })
             }
