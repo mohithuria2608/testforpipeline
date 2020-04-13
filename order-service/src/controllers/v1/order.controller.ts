@@ -3,6 +3,8 @@ import * as Constant from '../../constant'
 import { consolelog, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, menuService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
+import { OrderSDME } from '../../sdm';
+import { Aerospike } from "../../aerospike"
 
 export class OrderController {
 
@@ -102,14 +104,14 @@ export class OrderController {
                     menuId: payload.curMenuId,
                     language: headers.language,
                 })
-                if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
-                    return {
-                        validateCart: {
-                            ...cart,
-                            invalidMenu: 1
-                        }
-                    }
-                }
+                // if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
+                //     return {
+                //         validateCart: {
+                //             ...cart,
+                //             invalidMenu: 1
+                //         }
+                //     }
+                // }
                 if (!store.active)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                 if (!store.isOnline)
@@ -239,7 +241,7 @@ export class OrderController {
         firstTry: boolean) {
         try {
             if (mongoOrder.sdmOrderRef == 0) {
-                await ENTITY.OrderE.createSdmOrder({
+                mongoOrder = await ENTITY.OrderE.createSdmOrder({
                     headers: headers,
                     userData: userData,
                     address: address,
@@ -357,48 +359,100 @@ export class OrderController {
         }
     }
 
-    async getSdmOrderScheduler() {
-        try {
-            let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
-                env: Constant.SERVER.ENV[config.get("env")],
-                $or: [
-                    {
-                        status: {
-                            $nin: [
-                                Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
-                                Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
-                                Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
-                                Constant.CONF.ORDER_STATUS.DELIVERED.MONGO
-                            ]
-                        }
-                    },
-                    {
-                        status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
-                        trackUntil: { $gte: new Date().getTime() }
-                    }
-                ]
+    // async getSdmOrderScheduler() {
+    //     try {
+    //         let getPendingOrders = await ENTITY.OrderE.getMultipleMdb({
+    //             env: Constant.SERVER.ENV[config.get("env")],
+    //             $or: [
+    //                 {
+    //                     status: {
+    //                         $nin: [
+    //                             Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+    //                             Constant.CONF.ORDER_STATUS.FAILURE.MONGO,
+    //                             Constant.CONF.ORDER_STATUS.CLOSED.MONGO,
+    //                             Constant.CONF.ORDER_STATUS.DELIVERED.MONGO
+    //                         ]
+    //                     }
+    //                 },
+    //                 {
+    //                     status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
+    //                     trackUntil: { $gte: new Date().getTime() }
+    //                 }
+    //             ]
 
-            }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1 }, { lean: true })
-            if (getPendingOrders && getPendingOrders.length > 0) {
-                getPendingOrders.forEach(async order => {
-                    if ((order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime() && order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO)
-                        ENTITY.OrderE.maxPendingReachedHandler(order)
-                    else {
-                        let nextPingMs = getFrequency({
-                            status: order.status,
-                            type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
-                            prevTimeInterval: 0,
-                            statusChanged: false
-                        }).nextPingMs
-                        ENTITY.OrderE.getSdmOrderScheduler({
-                            sdmOrderRef: order.sdmOrderRef,
-                            language: order.language
-                        })
-                    }
-                });
+    //         }, { sdmOrderRef: 1, createdAt: 1, status: 1, transLogs: 1, cmsOrderRef: 1, language: 1, payment: 1 }, { lean: true })
+    //         if (getPendingOrders && getPendingOrders.length > 0) {
+    //             getPendingOrders.forEach(async order => {
+    //                 if ((order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime() && order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO)
+    //                     ENTITY.OrderE.maxPendingReachedHandler(order)
+    //                 else {
+    //                     let nextPingMs = getFrequency({
+    //                         status: order.status,
+    //                         type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
+    //                         prevTimeInterval: 0,
+    //                         statusChanged: false
+    //                     }).nextPingMs
+    //                     ENTITY.OrderE.getSdmOrderScheduler({
+    //                         sdmOrderRef: order.sdmOrderRef,
+    //                         language: order.language
+    //                     })
+    //                 }
+    //             });
+    //         }
+    //     } catch (error) {
+    //         consolelog(process.cwd(), "orderStatusPing", JSON.stringify(error), false)
+    //         return Promise.reject(error)
+    //     }
+    // }
+
+    async getSdmOrderSchedulerNew() {
+        try {
+            let sdmActiveOrders = await OrderSDME.getActiveOrders({
+                language: "En",
+                country: "UAE",
+                ordersIDs: [{ int: 39867166 }]
+            })
+            // {
+            //     "Key": "39783817",
+            //     "Value": "2048"
+            // },
+            let validSdmOrderStatus = [0, 1, 96, 2, 8, 16, 32, 64, 128, 2048, 512, 256, 1024, 4096, 8192]
+            if (sdmActiveOrders && sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0) {
+                sdmActiveOrders.KeyValueOflongint = sdmActiveOrders.KeyValueOflongint.filter(obj => {
+                    return (validSdmOrderStatus.indexOf(parseInt(obj.Value)) >= 0)
+                })
+            }
+            if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0) {
+                sdmActiveOrders.KeyValueOflongint.forEach(obj => {
+                    this.cronPromise(obj)
+                })
+            }else{
+                this.cronPromise(sdmActiveOrders.KeyValueOflongint)
+            }
+
+            console.log("sdmActiveOrders", sdmActiveOrders)
+        } catch (error) {
+            consolelog(process.cwd(), "getSdmOrderSchedulerNew", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    async cronPromise(payload) {
+        try {
+            let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
+                _id: "5e947a8bb3f8c45309d73870"
+                // sdmOrderRef: parseInt(payload.Key),
+                // sdmOrderStatus: { $ne: parseInt(payload.Value) }
+            }, {
+                sdmOrderStatus: parseInt(payload.Value),
+                updatedAt: new Date().getTime()
+            }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+            console.log("checkIfStatusChanged", checkIfStatusChanged)
+            if (checkIfStatusChanged && checkIfStatusChanged._id) {
+                ENTITY.OrderE.getSdmOrderSchedulerNew(checkIfStatusChanged)
             }
         } catch (error) {
-            consolelog(process.cwd(), "orderStatusPing", JSON.stringify(error), false)
+            consolelog(process.cwd(), "cronPromise", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

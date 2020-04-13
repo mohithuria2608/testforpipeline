@@ -4,5 +4,6 @@ import { orderController } from '../controllers';
 
 export const job = new CronJob('0 */1 * * * *', function () {
     consolelog(process.cwd(), 'Bootstraping orders every minute', new Date(), true);
-    orderController.getSdmOrderScheduler()
+    // orderController.getSdmOrderScheduler()
+    orderController.getSdmOrderSchedulerNew()
 }, null, true);

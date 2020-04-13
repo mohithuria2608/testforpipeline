@@ -3717,8 +3717,61 @@ export const start = (async () => {
       "isSuspended": false,
       "menuTemplateID": 17
     }
+    // {
+    //   "licenseCode": "PizzaHutApp",
+    //   "language": "en",
+    //   "conceptID": 3,
+    //   "order": {
+    //     "AddressID": 10528595,
+    //     "ConceptID": 3,
+    //     "CountryID": 1,
+    //     "CustomerID": 7695204,
+    //     "DistrictID": -1,
+    //     "Entries": Entries,
+    //     "Notes": {
+    //       CNote: [{
+    //         NT_FREE_TEXT: "100%Contactless-- Carhop--",
+    //         NT_ID: new Date().getTime()
+    //       }]
+    //     },
+    //     "OrderID": 0,
+    //     "OrderMode": 2,
+    //     "OrderType": 0,
+    //     Payments: {
+    //       CC_ORDER_PAYMENT: {
+    //         PAY_AMOUNT: 34,
+    //         PAY_STATUS: 1,
+    //         PAY_STORE_TENDERID: 252,
+    //         PAY_SUB_TYPE: 2,
+    //         PAY_TYPE: 2,
+    //         // PAY_STATUS: 1,
+    //         // PAY_STORE_TENDERID: 252,
+    //         // PAY_SUB_TYPE: 9,
+    //         // PAY_TYPE: 1,
+    //       }
+    //     },
+    //     "ProvinceID": 7,
+    //     "ServiceCharge": 0,
+    //     "StoreID": 1218,
+    //     "StreetID": 315
+    //   },
+    //   "autoApprove": true,
+    //   "useBackupStoreIfAvailable": true,
+    //   "orderNotes1": "Contactless Delivery: Leave at door step",
+    //   "orderNotes2": "5e7cab3b85b358e76e3071fc",
+    //   "creditCardPaymentbool": false,
+    //   "isSuspended": false,
+    //   "menuTemplateID": 17
+    // }
+
+
     // let orderPlaced = await SDM.OrderSDME.createOrder(order)
     // let detail = await SDM.OrderSDME.getOrderDetail({ sdmOrderRef: 49192451, language: "En", country: "UAE" })
+    // await SDM.OrderSDME.getActiveOrders({
+    //   language: "en",
+    //   country: "UAE",
+    //   ordersIDs: [{ int: 39867166 }]
+    // })
     // await SDM.OrderSDME.cancelOrder({
     //   language: "en",
     //   sdmOrderRef: 48698051,

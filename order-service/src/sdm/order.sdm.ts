@@ -76,12 +76,13 @@ export class OrderSDMEntity extends BaseSDM {
                     licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
                     language: payload.language.toLowerCase().trim(),
                     conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
-                    source: 23
+                    source: 23,
+                    ordersIDs:payload.ordersIDs
                 }
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
-                return res.GetOrderDetailsResult
+                return res.GetActiveOrdersStatusListResult
             else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
                 return res.SDKResult
             else

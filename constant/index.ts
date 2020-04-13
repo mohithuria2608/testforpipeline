@@ -31,7 +31,6 @@ export enum SET_NAME {
     PROMOTION = "promotion",
     CART = "cart",
     ORDER = "order",
-    ORDERCRON = "ordercron",
     CONFIG = "config",
     COUNTRY = "country",
     AREA = "area",
@@ -1858,7 +1857,7 @@ export const CONF = {
             CMS: "pending",
             SDM: [0, 1, 96], //@description : ((Suspended = 96)/(open = 1),
             FREQ: {
-                GET: 5000,
+                GET: 10000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
                 NEXT_PING: 30,

@@ -145,7 +145,7 @@ export default (router: Router) => {
             })
         .get('/scheduler',
             async (ctx) => {
-                orderController.getSdmOrderScheduler();
+                // orderController.getSdmOrderScheduler();
                 ctx.status = 200;
                 ctx.body = "success"
             })
