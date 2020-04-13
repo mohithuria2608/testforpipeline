@@ -361,17 +361,12 @@ export class OrderController {
 
     async getSdmOrderScheduler() {
         try {
+            let validSdmOrderStatus = [0, 1, 96, 2, 8, 16, 32, 64, 128, 2048, 512, 256, 1024, 4096, 8192]
             let sdmActiveOrders = await OrderSDME.getActiveOrders({
                 language: "En",
                 country: "UAE",
                 // ordersIDs: [{ int: 39867166 }]
             })
-            // {
-            //     "Key": "39783817",
-            //     "Value": "2048"
-            // },
-            let validSdmOrderStatus = [0, 1, 96, 2, 8, 16, 32, 64, 128, 2048, 512, 256, 1024, 4096, 8192]
-
             if (sdmActiveOrders && sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0) {
                 sdmActiveOrders.KeyValueOflongint = sdmActiveOrders.KeyValueOflongint.filter(obj => {
                     return (validSdmOrderStatus.indexOf(parseInt(obj.Value)) >= 0)
@@ -384,8 +379,6 @@ export class OrderController {
             } else {
                 this.cronPromise(sdmActiveOrders.KeyValueOflongint)
             }
-
-            console.log("sdmActiveOrders", sdmActiveOrders)
         } catch (error) {
             consolelog(process.cwd(), "getSdmOrderSchedulerNew", JSON.stringify(error), false)
             return Promise.reject(error)
