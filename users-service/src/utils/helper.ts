@@ -240,13 +240,15 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
 
     consolelog(process.cwd(), "-----step 8------", JSON.stringify(customError), false)
     consolelog(process.cwd(), "-----step 9------", JSON.stringify(stsMsgI18(customError, language)), false)
-
-    return {
+    let returnData = {
         statusCode: customError.statusCode,
         httpCode: customError.httpCode,
         payload: stsMsgI18(customError, language),
         headers: {}
     }
+    consolelog(process.cwd(), "-----step 10------", JSON.stringify(returnData), false)
+
+    return returnData
 }
 
 export let sendSuccess = function (successMsg, language, data) {
