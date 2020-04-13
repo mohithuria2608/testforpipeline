@@ -60,11 +60,11 @@ export class OrdercronClass extends BaseEntity {
         sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
     })
 
-    async sdmReadyHandler() {
+    async deleteOrdercronTigger(change) {
         try {
-
+            return {}
         } catch (error) {
-            consolelog(process.cwd(), "sdmReadyHandler", JSON.stringify(error), false)
+            consolelog(process.cwd(), "deleteOrdercronTigger", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

@@ -113,6 +113,7 @@ message IService {
     optional int32 din = 1;
     optional int32 del = 2;
     optional int32 tak = 3;
+    optional int32 carHop = 4;
 } 
 
 message ILocation {
