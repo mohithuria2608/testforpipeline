@@ -145,7 +145,15 @@ export class StoreController {
                         store.active = storeStatusList[i].active;
                         await ENTITY.StoreE.saveStore(store);
                         if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
-                            storesToSyncWithCMS.push({ restaurant_id: store.id, id: store.id, sdmStoreId: store.storeId, active: store.active });
+                            storesToSyncWithCMS.push({
+                                restaurant_id: store.id,
+                                id: store.id,
+                                sdmStoreId: store.storeId,
+                                active: store.active,
+                                startTime: store.startTime,
+                                endTime: store.endTime,
+                                nextDay: store.nextDay
+                            });
                             storesToSyncWithCMSHash[store.sdmStoreId] = true;
                         }
                     }
