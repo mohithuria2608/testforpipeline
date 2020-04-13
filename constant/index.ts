@@ -289,6 +289,12 @@ export const DATABASE = {
             ERROR: "ERROR",
             INFO: "INFO",
             SMS: "SMS",
+            PAYMENT_REQUEST: "PAYMENT_REQUEST"
+        },
+
+        ACTIVITY_LOG_ID_INFO: {
+            ORDER_ID: "ORDER_ID",
+            NOON_PAY_ORDER_ID:"NOON_PAY_ORDER_ID"
         },
 
         PROFILE_STEP: {

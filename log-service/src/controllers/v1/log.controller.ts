@@ -16,7 +16,7 @@ export class LogController {
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.CMS_REQUEST:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.INFO:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR:
-                case Constant.DATABASE.TYPE.ACTIVITY_LOG.SMS: {
+                case Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST: {
                     if (!config.get("loadTest")) {
                         ENTITY.LoggerE.createOneEntity(data)
                     }
