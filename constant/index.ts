@@ -211,6 +211,17 @@ export const DATABASE = {
     },
 
     TYPE: {
+        MONGO_OPERATION: {
+            INSERT: "insert",
+            DELETE: "delete",
+            REPLACE: "replace",
+            UPDATE: "update",
+            DROP: "drop",
+            RENAME: "rename",
+            DROP_DATABASE: "dropDatabase",
+            INVALIDATE: "invalidate",
+        },
+
         PAYMENT_ACTION_HINTS: {
             STATUS_USING_NOONPAY_ID: 'GET_PAYMENT_STATUS_USING_NOONPAY_ID',
             SYNC_CONFIGURATION: 'SYNC_PAYMENT_CONFIGURATION'

@@ -13,15 +13,13 @@ export class OrdercronClass extends BaseEntity {
         super(Constant.SET_NAME.ORDERCRON)
     }
     public ordercronSchema = Joi.object().keys({
-        id: Joi.number().required().description("pk"),
-        position: Joi.number().required(),
     })
 
-    async sdmReadyHandler() {
+    async deleteOrdercronTigger(change) {
         try {
-
+            return {}
         } catch (error) {
-            consolelog(process.cwd(), "sdmReadyHandler", JSON.stringify(error), false)
+            consolelog(process.cwd(), "deleteOrdercronTigger", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
