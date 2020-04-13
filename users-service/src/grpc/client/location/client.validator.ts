@@ -20,7 +20,8 @@ export class LocationServiceValidator {
                     serviceType: Joi.string().valid(
                         Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY,
                         Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY,
-                        Constant.DATABASE.TYPE.STORE_SERVICE.DINEIN
+                        Constant.DATABASE.TYPE.STORE_SERVICE.DINEIN,
+                        Constant.DATABASE.TYPE.STORE_SERVICE.CARHOP
                     ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
@@ -41,8 +42,9 @@ export class LocationServiceValidator {
                     serviceType: Joi.string().valid(
                         Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY,
                         Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY,
-                        Constant.DATABASE.TYPE.STORE_SERVICE.DINEIN
-                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                        Constant.DATABASE.TYPE.STORE_SERVICE.DINEIN,
+                        Constant.DATABASE.TYPE.STORE_SERVICE.CARHOP
+                    ).required().error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),,
                 })
                 const { error, value } = dataToValidate.validate(data, { abortEarly: true })
                 if (error)
