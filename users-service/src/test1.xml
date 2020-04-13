@@ -3,27 +3,27 @@
       <GetCustomerByIDResponse xmlns="http://tempuri.org/">
          <GetCustomerByIDResult xmlns:a="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <a:CRT_BYUSER>Web</a:CRT_BYUSER>
-            <a:CRT_DATE>2020-04-10T17:56:30</a:CRT_DATE>
+            <a:CRT_DATE>2020-04-10T14:23:55</a:CRT_DATE>
             <a:CUST_CARDNUMBER/>
             <a:CUST_CLASSID>-1</a:CUST_CLASSID>
             <a:CUST_COMPANY/>
             <a:CUST_COMPANYUN/>
-            <a:CUST_CORPID>10362365</a:CUST_CORPID>
-            <a:CUST_DATEADDED>2020-04-10T17:56:30</a:CUST_DATEADDED>
+            <a:CUST_CORPID>10360874</a:CUST_CORPID>
+            <a:CUST_DATEADDED>2020-04-10T14:23:55</a:CUST_DATEADDED>
             <a:CUST_DATEOFBIRHT>9000-01-01T00:00:00</a:CUST_DATEOFBIRHT>
             <a:CUST_DEPENDENTS>0</a:CUST_DEPENDENTS>
-            <a:CUST_EMAIL>royb5352@gmail.com</a:CUST_EMAIL>
+            <a:CUST_EMAIL>royb5352@gmai.com</a:CUST_EMAIL>
             <a:CUST_FIRSTNAME>Bindu</a:CUST_FIRSTNAME>
             <a:CUST_FIRSTNAMEUN/>
-            <a:CUST_GENDER>Female</a:CUST_GENDER>
-            <a:CUST_ID>8683785</a:CUST_ID>
+            <a:CUST_GENDER>None</a:CUST_GENDER>
+            <a:CUST_ID>8682294</a:CUST_ID>
             <a:CUST_LASTNAME>Roy</a:CUST_LASTNAME>
             <a:CUST_LASTNAMEUN/>
-            <a:CUST_MARITALSTATUS>Single</a:CUST_MARITALSTATUS>
+            <a:CUST_MARITALSTATUS>None</a:CUST_MARITALSTATUS>
             <a:CUST_MIDNAME/>
             <a:CUST_MIDNAMEUN/>
-            <a:CUST_NATID>-1</a:CUST_NATID>
-            <a:CUST_NOTIFICATION_MOBILE>545432321</a:CUST_NOTIFICATION_MOBILE>
+            <a:CUST_NATID>1</a:CUST_NATID>
+            <a:CUST_NOTIFICATION_MOBILE/>
             <a:CUST_OCCUPATION/>
             <a:CUST_OCCUPATIONUN/>
             <a:CUST_PHONEAREACODE>54</a:CUST_PHONEAREACODE>
@@ -33,17 +33,17 @@
             <a:CUST_PHONENUMBER>5432321</a:CUST_PHONENUMBER>
             <a:CUST_PHONETYPE>2</a:CUST_PHONETYPE>
             <a:CUST_PREFERRED_LANGUAGE/>
-            <a:CUST_TITLE>0</a:CUST_TITLE>
+            <a:CUST_TITLE>-1</a:CUST_TITLE>
             <a:CUST_USERDATA1/>
             <a:CUST_USERDATA1UN/>
             <a:CUST_USERDATA2/>
             <a:CUST_USERDATA2UN/>
             <a:Loyalty/>
-            <a:PASSWORD>Kn7r0u9UWu0TOMf5QmXxZU99iMk4uKX1egypFWdoNAZL6Uer</a:PASSWORD>
+            <a:PASSWORD>8IYO7G8ZHmMWv60UIdm9aHQuju7j6R6E+YhYikvAnPyS+XVD</a:PASSWORD>
             <a:Settings xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
-            <a:UPT_BYUSER>haithamb</a:UPT_BYUSER>
-            <a:UPT_DATE>2020-04-10T18:22:24</a:UPT_DATE>
-            <a:USERNAME>royb5352@gmail.com</a:USERNAME>
+            <a:UPT_BYUSER>Web</a:UPT_BYUSER>
+            <a:UPT_DATE>2020-04-10T14:23:55</a:UPT_DATE>
+            <a:USERNAME>royb5352@gmai.com</a:USERNAME>
             <a:WCUST_ACTIVE_DATE>9000-01-01T00:00:00</a:WCUST_ACTIVE_DATE>
             <a:WCUST_CORPID i:nil="true"/>
             <a:WCUST_FIRSTNAME>Bindu</a:WCUST_FIRSTNAME>
@@ -54,15 +54,15 @@
             <a:WCUST_OFFER1>0</a:WCUST_OFFER1>
             <a:WCUST_OFFER2>0</a:WCUST_OFFER2>
             <a:WCUST_PASSWORD_VERSION>2</a:WCUST_PASSWORD_VERSION>
-            <a:WCUST_SEC_ANSWER/>
+            <a:WCUST_SEC_ANSWER>123</a:WCUST_SEC_ANSWER>
             <a:WCUST_SEC_QUESTION>0</a:WCUST_SEC_QUESTION>
-            <a:WCUST_STATUS>4</a:WCUST_STATUS>
-            <a:WCUST_TOKEN>104492720070935141253</a:WCUST_TOKEN>
+            <a:WCUST_STATUS>0</a:WCUST_STATUS>
+            <a:WCUST_TOKEN/>
             <a:WCUST_TOKEN_DATE>9000-01-01T00:00:00</a:WCUST_TOKEN_DATE>
             <a:WEB_CRT_BY>Web</a:WEB_CRT_BY>
-            <a:WEB_CRT_DATE>2020-04-10T17:56:30</a:WEB_CRT_DATE>
+            <a:WEB_CRT_DATE>2020-04-10T14:23:55</a:WEB_CRT_DATE>
             <a:WEB_UPT_BY>Web</a:WEB_UPT_BY>
-            <a:WEB_UPT_DATE>2020-04-10T17:56:30</a:WEB_UPT_DATE>
+            <a:WEB_UPT_DATE>2020-04-10T14:23:55</a:WEB_UPT_DATE>
          </GetCustomerByIDResult>
          <SDKResult xmlns:a="http://schemas.datacontract.org/2004/07/SDM_SDK" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             <a:ExternalCode>0</a:ExternalCode>

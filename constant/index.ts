@@ -1407,6 +1407,10 @@ export const STATUS_MSG = {
                 EMPTY_EMAIL: "Please enter a valid email address",
                 EMPTY_OTP: "Please enter OTP",
                 EMPTY_NAME: "Please enter a valid name",
+                EMPTY_ORDER_NO: "Please enter order no.",
+                EMPTY_BUILDING_NAME: "Please enter building name.",
+                EMPTY_FLAT_NO: "Please enter flat no.",
+                EMPTY_MAP_LOCATION: "Please choose a location.",
             }
         },
         Ar: {
@@ -1420,6 +1424,10 @@ export const STATUS_MSG = {
                 EMPTY_EMAIL: "يرجى إدخال بريد إلكتروني صالح",
                 EMPTY_OTP: "يرجى أدخل رمز التأكيد",
                 EMPTY_NAME: "يرجى إدخال اسم صالح",
+                EMPTY_ORDER_NO: "Please enter order no.",
+                EMPTY_BUILDING_NAME: "Please enter building name.",
+                EMPTY_FLAT_NO: "Please enter flat no.",
+                EMPTY_MAP_LOCATION: "Please choose a location.",
             }
         }
     },
