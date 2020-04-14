@@ -1,15 +1,17 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog, topicNameCreator } from "../../utils"
+import { consolelog, topicNameCreator, generateRandomString } from "../../utils"
 import { userService, menuService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
+
 const topic =topicNameCreator(config.get("env") ,Constant.KAFKA_TOPIC.CMS_MENU)
+const groupId = generateRandomString(16)
 
 class CmsMenuConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, topic);
+         super(topic, groupId);
     }
 
     handleMessage() {

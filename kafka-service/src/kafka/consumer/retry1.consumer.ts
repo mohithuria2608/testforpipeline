@@ -1,7 +1,7 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog, topicNameCreator } from "../../utils"
+import { consolelog, topicNameCreator, generateRandomString } from "../../utils"
 import { kafkaController } from '../../controllers'
 
 import { as_configConsumerE } from './as_config.consumer';
@@ -27,11 +27,12 @@ import { as_storeConsumerE } from "./as_store.consumer";
 
 
 const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.RETRY1)
+const groupId = generateRandomString(16)
 class Retry1Consumer extends BaseConsumer {
 
     sleepTime = 3000
     constructor() {
-        super(topic, topic);
+         super(topic, groupId);
     }
 
     handleMessage() {
