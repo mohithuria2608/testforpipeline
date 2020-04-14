@@ -368,8 +368,7 @@ export class OrderController {
                 language: Constant.DATABASE.LANGUAGE.EN,
                 country: Constant.DATABASE.COUNTRY.UAE,
                 // ordersIDs: [{ int: 39867166 }],
-                fromDate: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),// "2020-04-12T22:16:00",
-                toDate: new Date().toISOString(),//"2020-04-14T22:16:00"
+                fromDate: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
             })
             sdmActiveOrders.KeyValueOflongint = await ENTITY.OrderstatusE.checkOrderstatusValidForCron(sdmActiveOrders.KeyValueOflongint)
             if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0)
