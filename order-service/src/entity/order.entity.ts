@@ -127,7 +127,7 @@ export class OrderClass extends BaseEntity {
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD: {
                     dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD
                     dataToUpdateOrder['transLogs'] = []
-                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                     if (order.cmsOrderRef)
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
@@ -151,7 +151,7 @@ export class OrderClass extends BaseEntity {
                     if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
                         noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
                         dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
-                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                         if (order.cmsOrderRef)
                             CMS.TransactionCMSE.createTransaction({
                                 order_id: order.cmsOrderRef,
@@ -324,7 +324,7 @@ export class OrderClass extends BaseEntity {
                     sdmOrderRef: createOrder,
                     isActive: 1,
                     updatedAt: new Date().getTime()
-                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                }, { new: true })
                 if (order && order._id)
                     this.getSdmOrderScheduler(order)
                 if (order.cmsOrderRef)
@@ -1107,7 +1107,7 @@ export class OrderClass extends BaseEntity {
                 ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
                 ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.PICKUP.SDM) && (amountToCompare == parseFloat(sdmOrder.Total)))
             ) {
-                order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
             } else {
                 consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
                 recheck = false
@@ -1180,7 +1180,7 @@ export class OrderClass extends BaseEntity {
                                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                                     paymentMethodAddedOnSdm: 1,
                                                     updatedAt: new Date().getTime(),
-                                                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                                                }, { new: true })
                                             }
                                             else {
                                                 consolelog(process.cwd(), "PENDING 6:       ", parseInt(sdmOrder.Status), true)
@@ -1239,7 +1239,7 @@ export class OrderClass extends BaseEntity {
                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                     status: Constant.CONF.ORDER_STATUS.BEING_PREPARED.MONGO,
                                     updatedAt: new Date().getTime(),
-                                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                                }, { new: true })
                                 if (order.cmsOrderRef)
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
@@ -1258,7 +1258,7 @@ export class OrderClass extends BaseEntity {
                                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                                     status: Constant.CONF.ORDER_STATUS.CONFIRMED.MONGO,
                                     updatedAt: new Date().getTime(),
-                                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                                }, { new: true })
                                 let transLogs = [];
                                 let captureStatus;
                                 try {
@@ -1308,7 +1308,7 @@ export class OrderClass extends BaseEntity {
                                         dataToUpdateOrder['$addToSet'] = {
                                             transLogs: { $each: transLogs.reverse() }
                                         }
-                                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                                     if (order && order._id) {
                                         if (order.cmsOrderRef)
                                             CMS.TransactionCMSE.createTransaction({
@@ -1355,7 +1355,7 @@ export class OrderClass extends BaseEntity {
                         language: order.language,
                         payload: JSON.stringify({ msg: order, email: { order, user: userData } })
                     });
-                    order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.confirmed": true, select: { items: 0, selFreeItem: 0, freeItems: 0 } }, { new: true })
+                    order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.confirmed": true }, { new: true })
                 }
             }
             return order
@@ -1373,7 +1373,7 @@ export class OrderClass extends BaseEntity {
                 order = await this.updateOneEntityMdb({ _id: order._id }, {
                     status: Constant.CONF.ORDER_STATUS.READY.MONGO,
                     updatedAt: new Date().getTime(),
-                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                }, { new: true })
                 if (order.cmsOrderRef)
                     CMS.OrderCMSE.updateOrder({
                         order_id: order.cmsOrderRef,
@@ -1399,7 +1399,7 @@ export class OrderClass extends BaseEntity {
                     order = await this.updateOneEntityMdb({ _id: order._id }, {
                         status: Constant.CONF.ORDER_STATUS.ON_THE_WAY.MONGO,
                         updatedAt: new Date().getTime(),
-                    }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                    }, { new: true })
                     if (order.cmsOrderRef)
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
@@ -1428,7 +1428,7 @@ export class OrderClass extends BaseEntity {
                         status: Constant.CONF.ORDER_STATUS.DELIVERED.MONGO,
                         updatedAt: new Date().getTime(),
                         trackUntil: new Date().getTime() + Constant.CONF.GENERAL.TRACK_ORDER_UNITIL,
-                    }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                    }, { new: true })
                     if (order.cmsOrderRef)
                         CMS.OrderCMSE.updateOrder({
                             order_id: order.cmsOrderRef,
@@ -1614,7 +1614,7 @@ export class OrderClass extends BaseEntity {
                             language: order.language,
                             payload: JSON.stringify({ msg: order, email: { order, user: userData } })
                         });
-                        order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.cancel": true }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                        order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.cancel": true }, { new: true })
                     }
                 }
             }
@@ -1648,7 +1648,7 @@ export class OrderClass extends BaseEntity {
                     },
                     newOrderId: sdmOrder.OrderID,
                     transferDone: true
-                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                }, { new: true })
 
                 return { recheck: true, order: order }
             } else
@@ -1832,7 +1832,7 @@ export class OrderClass extends BaseEntity {
                         language: order.language,
                         payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
                     });
-                    order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.failure": true, select: { items: 0, selFreeItem: 0, freeItems: 0 } }, { new: true })
+                    order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.failure": true }, { new: true })
                 }
             }
             return order

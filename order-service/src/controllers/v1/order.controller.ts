@@ -104,14 +104,14 @@ export class OrderController {
                     menuId: payload.curMenuId,
                     language: headers.language,
                 })
-                // if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
-                //     return {
-                //         validateCart: {
-                //             ...cart,
-                //             invalidMenu: 1
-                //         }
-                //     }
-                // }
+                if (!menu.menuId || (menu.menuId && menu.updatedAt != payload.menuUpdatedAt)) {
+                    return {
+                        validateCart: {
+                            ...cart,
+                            invalidMenu: 1
+                        }
+                    }
+                }
                 if (!store.active)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
                 if (!store.isOnline)

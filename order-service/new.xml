@@ -1,49 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
-  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
-  xmlns:tns="http://tempuri.org/" 
-  xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
-  xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" 
+  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" 
+  xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" 
+  xmlns:msc=\"http://schemas.microsoft.com/ws/2005/12/wsdl/contract\" 
+  xmlns:tns=\"http://tempuri.org/\" 
+  xmlns:msb=\"http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1\" 
+  xmlns:msf=\"http://schemas.microsoft.com/ws/2006/05/framing/policy\">
   <soap:Body>
-    <UpdateOrder xmlns="http://tempuri.org/">
+    <UpdateOrder xmlns=\"http://tempuri.org/\">
       <licenseCode>PizzaHutApp</licenseCode>
       <language>en</language>
       <conceptID>3</conceptID>
       <order>
-        <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10528595</q247:AddressID>
-        <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
-        <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
-        <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7695204</q247:CustomerID>
-        <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
-        <q247:Notes xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+        <q247:AddressID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">10528637</q247:AddressID>
+        <q247:ConceptID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">3</q247:ConceptID>
+        <q247:CountryID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">1</q247:CountryID>
+        <q247:CustomerID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">7714578</q247:CustomerID>
+        <q247:DeliveryChargeID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">279</q247:DeliveryChargeID>
+        <q247:DistrictID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">-1</q247:DistrictID>
+        <q247:Entries xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\"></q247:Entries>
+        <q247:Notes xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
           <q247:CNote>
-            <q247:NT_FREE_TEXT>100%Contactless-- Carhop--</q247:NT_FREE_TEXT>
-            <q247:NT_ID>1586804861915</q247:NT_ID>
+            <q247:NT_FREE_TEXT>100%Contactless-- </q247:NT_FREE_TEXT>
+            <q247:NT_ID>1586855673379</q247:NT_ID>
           </q247:CNote>
         </q247:Notes>
-        <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
-        <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">2</q247:OrderMode>
-        <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
-        <q247:Payments xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+        <q247:OrderID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderID>
+        <q247:OrderMode xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">1</q247:OrderMode>
+        <q247:OrderType xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderType>
+        <q247:Payments xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
           <q247:CC_ORDER_PAYMENT>
-            <q247:PAY_AMOUNT>34</q247:PAY_AMOUNT>
+            <q247:PAY_AMOUNT>141.5</q247:PAY_AMOUNT>
             <q247:PAY_STATUS>1</q247:PAY_STATUS>
             <q247:PAY_STORE_TENDERID>252</q247:PAY_STORE_TENDERID>
             <q247:PAY_SUB_TYPE>2</q247:PAY_SUB_TYPE>
             <q247:PAY_TYPE>2</q247:PAY_TYPE>
           </q247:CC_ORDER_PAYMENT>
         </q247:Payments>
-        <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-        <q247:ServiceCharge xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:ServiceCharge>
-        <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1218</q247:StoreID>
-        <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
+        <q247:ProvinceID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">7</q247:ProvinceID>
+        <q247:ServiceCharge xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">6.5</q247:ServiceCharge>
+        <q247:StoreID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">1218</q247:StoreID>
+        <q247:StreetID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">315</q247:StreetID>
       </order>
       <autoApprove>true</autoApprove>
       <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
-      <orderNotes1>Contactless Delivery: Leave at door step</orderNotes1>
-      <orderNotes2>5e7cab3b85b358e76e3071fc</orderNotes2>
+      <orderNotes1>0</orderNotes1>
+      <orderNotes2>5e957ef81852150aded622a5</orderNotes2>
       <creditCardPaymentbool>false</creditCardPaymentbool>
       <isSuspended>false</isSuspended>
       <menuTemplateID>17</menuTemplateID>
