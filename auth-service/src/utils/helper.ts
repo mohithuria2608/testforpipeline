@@ -238,9 +238,8 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
 }
 
 export let sendSuccess = function (successMsg, language, data) {
-    
+    consolelog(process.cwd(), "data", JSON.stringify(data), true)
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-    
     if (typeof data === 'object' && data.hasOwnProperty('password')) {
         delete data['password']
     }
