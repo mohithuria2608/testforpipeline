@@ -24,6 +24,8 @@ export class MiscController {
                 addressShownTime: Constant.CONF.GENERAL.ADDR_SHOW_TIME,
                 splashExpireTime: Constant.CONF.GENERAL.SPLASH_EXPR_TIME,
                 imgEtagThreshold: Constant.CONF.GENERAL.IMG_ETAG_THRESHOLD,
+                contactlessVisble: Constant.CONF.GENERAL.CONTACTLESS_VISBILE,
+                contactlessClikable: Constant.CONF.GENERAL.CONTACTLESS_CLICK_ENABLE,
                 contrySpecificValidation: [
                     {
                         country: Constant.DATABASE.COUNTRY.UAE,

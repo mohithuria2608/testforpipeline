@@ -1476,7 +1476,9 @@ export const CONF = {
 
         MAX_OTP_RETRY: 5,
         OTP_COOLDOWN: 1 * 60,//seconds
-        DEFAULT_RETRY_COUNT: 3
+        DEFAULT_RETRY_COUNT: 3,
+        CONTACTLESS_VISBILE: true,
+        CONTACTLESS_CLICK_ENABLE: true,
     },
     COUNTRY_SPECIFIC: {
         UAE: {
