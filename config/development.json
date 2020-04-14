@@ -239,6 +239,20 @@
             "orderMode": [
                 1
             ]
+        },
+        "payment": {
+            "cod": {
+                "payStatus": 1,
+                "payStoreTenderId": 252,
+                "paySubType": 9,
+                "payType": 1
+            },
+            "card": {
+                "payStatus": 1,
+                "payStoreTenderId": 253,
+                "paySubType": 8,
+                "payType": 2
+            }
         }
     },
     "loadTest": false
