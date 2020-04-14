@@ -8,6 +8,8 @@
 changes : 
 2. headers update in all sync apis
 
+3. Blob suffix in configuration
+4. User migration
 
 
 1. store sync cron : every 30 mins (peak hrs) ,2 hrs (non peak hrs)
