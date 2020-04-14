@@ -62,29 +62,28 @@ export class BaseConsumer {
         }
         this.consumer = new kafka.ConsumerGroup(cgOptions, [this.topic])
 
-        const offset = new kafka.Offset(new KafkaClientClass().getKafkaInstance());
+        // const offset = new kafka.Offset(new KafkaClientClass().getKafkaInstance());
 
-        offset.on('ready', () => { });
+        // offset.on('ready', () => { });
 
-        offset.fetch([{ topic: this.topic, partition: 0, time: Date.now(), maxNum: 1 }], (err: any, data: any) => {
-            consolelog(process.cwd(), `offset.fetch ${this.topic} : ${err}`, [JSON.stringify(data)], false);
-        });
+        // offset.fetch([{ topic: this.topic, partition: 0, time: Date.now(), maxNum: 1 }], (err: any, data: any) => {
+        //     consolelog(process.cwd(), `offset.fetch ${this.topic} : ${err}`, [JSON.stringify(data)], false);
+        // });
 
-        offset.commit(groupId, [{ topic: this.topic, partition: 0, offset: 10 }], (err, data) => {
-            consolelog(process.cwd(), `commit ${this.topic} : ${err}`, [JSON.stringify(data)], false);
-        });
+        // offset.commit(groupId, [{ topic: this.topic, partition: 0, offset: 10 }], (err, data) => {
+        //     consolelog(process.cwd(), `commit ${this.topic} : ${err}`, [JSON.stringify(data)], false);
+        // });
 
-        offset.fetchCommits(groupId, [{ topic: this.topic, partition: 0 }], (err, data) => {
-            consolelog(process.cwd(), `fetchCommits ${this.topic} : ${err}`, [JSON.stringify(data)], false);
-        });
+        // offset.fetchCommits(groupId, [{ topic: this.topic, partition: 0 }], (err, data) => {
+        //     consolelog(process.cwd(), `fetchCommits ${this.topic} : ${err}`, [JSON.stringify(data)], false);
+        // });
 
-        offset.fetchLatestOffsets([this.topic], (err, offsets) => {
-            consolelog(process.cwd(), `fetchLatestOffsets ${this.topic} : ${err}`, [JSON.stringify(offsets)], false);
-        });
-        offset.fetchEarliestOffsets([this.topic], (err, offsets) => {
-            consolelog(process.cwd(), `fetchEarliestOffsets ${this.topic} : ${err}`, [JSON.stringify(offsets)], false);
-        });
-
+        // offset.fetchLatestOffsets([this.topic], (err, offsets) => {
+        //     consolelog(process.cwd(), `fetchLatestOffsets ${this.topic} : ${err}`, [JSON.stringify(offsets)], false);
+        // });
+        // offset.fetchEarliestOffsets([this.topic], (err, offsets) => {
+        //     consolelog(process.cwd(), `fetchEarliestOffsets ${this.topic} : ${err}`, [JSON.stringify(offsets)], false);
+        // });
     }
 
     protected onMessage<T>(): Observable<T> {
