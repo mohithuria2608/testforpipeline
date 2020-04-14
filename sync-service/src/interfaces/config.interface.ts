@@ -171,12 +171,12 @@ declare namespace IConfigRequest {
             noonpayRefundPaymentEndPoint: string,
             code: string,
             status: number,
-            sdm: {
-                pay_status: string,
-                pay_store_tender_id: string,
-                pay_sub_type: string,
-                pay_type: string
-            }
+            // sdm: {
+            //     pay_status: string,
+            //     pay_store_tender_id: string,
+            //     pay_sub_type: string,
+            //     pay_type: string
+            // }
         },
         codInfo: {
             status: number,
@@ -184,12 +184,12 @@ declare namespace IConfigRequest {
             code: string,
             min_order_total: number,
             max_order_total: number,
-            sdm: {
-                pay_status: string,
-                pay_store_tender_id: string,
-                pay_sub_type: string,
-                pay_type: string
-            }
+            // sdm: {
+            //     pay_status: string,
+            //     pay_store_tender_id: string,
+            //     pay_sub_type: string,
+            //     pay_type: string
+            // }
         }
     }
     interface IPaymentMethods {

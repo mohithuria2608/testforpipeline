@@ -239,37 +239,37 @@ export let sendError = function (error, language: string = Constant.DATABASE.LAN
 }
 
 export let sendSuccess = function (successMsg, language, data) {
-    
+    consolelog(process.cwd(), "data", JSON.stringify(data), true)
     let key = (language && language == Constant.DATABASE.LANGUAGE.AR) ? `message_${Constant.DATABASE.LANGUAGE.AR}` : `message_${Constant.DATABASE.LANGUAGE.EN}`
-    
     if (typeof data === 'object' && data.hasOwnProperty('password')) {
         delete data['password']
     }
     if (typeof data === 'object' && data.hasOwnProperty('statusCode') && data.hasOwnProperty('message')) {
         return {
             statusCode: data.statusCode,
+            httpCode: data.httpCode,
             message: data[key] ? data[key] : data.message,
             type: data.type,
             data: data.data || null
         }
-
     }
     else if (successMsg != null && typeof successMsg === 'object' && successMsg.hasOwnProperty('statusCode') && successMsg.hasOwnProperty('message')) {
         successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT
         return {
             statusCode: successMsg.statusCode,
+            httpCode: successMsg.httpCode,
             message: successMsg[key],
-            data: data || null,
-            type: (successMsg.type) ? successMsg.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type
+            type: (successMsg.type) ? successMsg.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type,
+            data: data || null
         }
-
     } else {
         successMsg = successMsg || Constant.STATUS_MSG.SUCCESS.S200.DEFAULT[key]
         return {
             statusCode: 200,
+            httpCode: 200,
             message: successMsg,
+            type: (data.type) ? data.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type,
             data: data || null,
-            type: (data.type) ? data.type : Constant.STATUS_MSG.SUCCESS.S200.DEFAULT.type
         }
     }
 }

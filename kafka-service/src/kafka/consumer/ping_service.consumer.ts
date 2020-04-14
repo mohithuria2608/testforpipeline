@@ -1,15 +1,17 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog, topicNameCreator } from "../../utils"
+import { consolelog, topicNameCreator, generateRandomString } from "../../utils"
 import { userService, orderService, paymentService, promotionService, menuService, homeService, locationService, deeplinkService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
+
 const topic = topicNameCreator(config.get("env"),Constant.KAFKA_TOPIC.PING_SERVICE)
+const groupId = generateRandomString(16)
 
 class PingServiceConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, topic);
+         super(topic, groupId);
     }
 
     handleMessage() {

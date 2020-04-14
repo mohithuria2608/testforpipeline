@@ -3,9 +3,6 @@
 import * as Joi from '@hapi/joi';
 import * as Constant from '../../constant'
 
-
-//@generic headers :on basis of platforms that which keys are required + mandatory
-//@app version seperate apis
 export const COMMON_HEADERS = {
     language: Joi.string().valid(
         Constant.DATABASE.LANGUAGE.AR,
@@ -27,4 +24,5 @@ export const COMMON_HEADERS = {
     osversion: Joi.string().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
     deviceid: Joi.string().trim().required().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
     timezone: Joi.string().trim().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
+    channel: Joi.string().valid(Constant.DATABASE.TYPE.API_CHANNEL.KFC_APP).trim().error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.type)),
 }

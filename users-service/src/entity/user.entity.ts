@@ -97,9 +97,8 @@ export class UserEntity extends BaseEntity {
                     return {}
                 }
             }
-            else {
+             else
                 return {}
-            }
         } catch (error) {
             consolelog(process.cwd(), "getUser", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -76,12 +76,15 @@ export class OrderSDMEntity extends BaseSDM {
                     licenseCode: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.LICENSE_CODE,
                     language: payload.language.toLowerCase().trim(),
                     conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
-                    source: 23
+                    source: 23,
+                    ordersIDs: payload.ordersIDs,
+                    fromDate: payload.fromDate,
+                    toDate: payload.toDate
                 }
             }
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success"))
-                return res.GetOrderDetailsResult
+                return res.GetActiveOrdersStatusListResult
             else if (res && res.SDKResult && (res.SDKResult.ResultCode == "0"))
                 return res.SDKResult
             else
@@ -101,10 +104,10 @@ export class OrderSDMEntity extends BaseSDM {
                     conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
                     language: payload.language.toLowerCase().trim(),
                     orderID: payload.sdmOrderRef,
-                    paymentType: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
-                    paymentSubType: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
-                    paymentStatus: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
-                    paymentTenderID: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
+                    paymentType: config.get("sdm.payment.cod.payType"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
+                    paymentSubType: config.get("sdm.payment.cod.paySubType"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
+                    paymentStatus: config.get("sdm.payment.cod.payStatus"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
+                    paymentTenderID: config.get("sdm.payment.cod.payStoreTenderId"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
                     amount: payload.transaction.amount,
                     refNumber: payload.transaction.transactions[0].id,
                     refGateway: "noonpay",
@@ -148,9 +151,8 @@ export class OrderSDMEntity extends BaseSDM {
                     return res.SDKResult
                 else
                     return Promise.reject(res)
-            } else {
+            } else
                 return {}
-            }
         } catch (error) {
             consolelog(process.cwd(), 'cancelOrder', JSON.stringify(error), false)
             return (error)

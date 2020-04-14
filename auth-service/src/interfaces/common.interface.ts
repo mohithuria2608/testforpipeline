@@ -10,6 +10,7 @@ declare namespace ICommonRequest {
         osversion: string,
         deviceid: string
         timezone: string,
+        channel: string
     }
 
     interface AuthorizationObj {
@@ -21,7 +22,7 @@ declare namespace ICommonRequest {
         sessionTime: number
     }
 
-     interface IError {
+    interface IError {
         name?: string,
         statusCode: number,
         httpCode: number,

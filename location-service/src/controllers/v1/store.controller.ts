@@ -196,7 +196,11 @@ export class StoreController {
                             }
                         }
                     } else {
-
+                        return {
+                            cityId: store[0].cityId,
+                            areaId: store[0].areaId,
+                            storeId: 0
+                        }
                     }
                 } else {
                     return {
