@@ -11,7 +11,7 @@ console.log("------------groupId---------------", groupId)
 class CMSLocationConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, groupId);
+        super(topic, topic);
     }
 
     handleMessage() {
