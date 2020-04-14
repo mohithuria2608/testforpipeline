@@ -390,6 +390,12 @@ export class OrderController {
             let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
             if (payload.Key && payload.Value) {
                 let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
+                    status: {
+                        $nin: [
+                            Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                            Constant.CONF.ORDER_STATUS.FAILURE.MONGO
+                        ]
+                    },
                     sdmOrderRef: parseInt(payload.Key),
                     sdmOrderStatus: { $ne: parseInt(payload.Value) }
                 }, {
