@@ -182,8 +182,8 @@
         "container": "americana",
         "accessKey": "2JnjQ7U6rC4mFobPG6oq2ycUM/tr7zGmGH3GieJ+F3QEHxG6+XSPH3mPnYs3JlAB1TJoLT8KoJcrrlJsp7FP3A==",
         "SASToken": "",
-        "product": "http://kfccms.americanarest.com/pub/media/catalog/product/",
-        "home": "http://kfccms.americanarest.com/pub/media/homepage/",
+        "product": "http://mobcms.americana-food.com/pub/media/catalog/product/",
+        "home": "http://mobcms.americana-food.com/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/production/"
     },
     "cryptoSecret": "d6F3Efeq",
