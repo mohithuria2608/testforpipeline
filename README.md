@@ -81,18 +81,13 @@ Hands-on Microservices with TypeScript 3
     * ssh localadmin@13.74.15.162
     * Localadmin@2020
     * login to jenkins server :
-        * ssh localadmin@amfuatnejnkvm02
+        * ssh localadmin@amfuatnejnkvm01
         * kubectl get pods -n nodeapp
         * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
-        * kubectl exec -it auth-service-5686bf859d-r8flt -n nodeapp bash
-* aerospike
-    * kubectl exec -it aerospike-0 bash -n aerospikedb
 * aerospike new on UAT 
     * ip: 40.127.244.213:10008
     * ssh :
-        * ssh localadmin@13.74.15.162
-        * pass = Localadmin@2020
-        * ssh 10.2.0.30
+        * ssh localadmin@10.2.0.30
         * pass = Localadmin@2020
 * hpa 
     * kubectl get hpa -n nodeapp
