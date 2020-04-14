@@ -96,6 +96,7 @@ export class StoreController {
     async postOnCMS() {
         let storesData = await ENTITY.SyncStoreE.getList();
         await Utils.sendRequestToCMS('SYNC_STORE', storesData);
+        return {}
     }
 
     /** sync to aerospike */
@@ -119,6 +120,7 @@ export class StoreController {
                     await ENTITY.StoreE.saveStore(store);
                 }
             }
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncToAS", JSON.stringify(error), false)
             return Promise.reject(error);
@@ -161,6 +163,7 @@ export class StoreController {
             }
             console.log("UPDATING STORES STATUS FOR COUNT ->", storesToSyncWithCMS.length);
             if (storesToSyncWithCMS.length) await Utils.sendRequestToCMS('SYNC_STORE_STATUS', storesToSyncWithCMS);
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncStoreStatus", JSON.stringify(error), false)
             return Promise.reject(error);

@@ -35,6 +35,7 @@ export class AreaController {
     async postOnCMS() {
         let areaData = await ENTITY.SyncAreaE.getList();
         await Utils.sendRequestToCMS('SYNC_AREA', areaData);
+        return {}
     }
 
     /** sync to aerospike */
@@ -44,6 +45,7 @@ export class AreaController {
             area.id = `1_${area.cityId}_${area.sdmAreaId}`;
             await ENTITY.AreaE.saveData(area);
         }
+        return {}
     }
 }
 

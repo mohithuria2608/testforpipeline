@@ -35,6 +35,7 @@ export class CityController {
     async postOnCMS() {
         let cityData = await ENTITY.SyncCityE.getList();
         await Utils.sendRequestToCMS('SYNC_CITY', cityData);
+        return {}
     }
 
     /** sync to aerospike */
@@ -44,6 +45,7 @@ export class CityController {
             city.id = `1_${city.sdmCityId}`;
             await ENTITY.CityE.saveData(city);
         }
+        return {}
     }
 }
 

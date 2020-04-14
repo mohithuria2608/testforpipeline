@@ -328,6 +328,7 @@ export class LocationController {
                 areaController.postOnCMS(),
                 storeController.postOnCMS()
             ]);
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "postLocationToCMS", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -350,6 +351,7 @@ export class LocationController {
             }
             await this.bootstrapPickup();
             await this.bootstrapCarHop();
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
             return Promise.reject(error)
