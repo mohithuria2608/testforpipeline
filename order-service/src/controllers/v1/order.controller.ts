@@ -278,6 +278,7 @@ export class OrderController {
         try {
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { transLogs: 0, notification: 0 })
             if (order && order._id) {
+                order = await ENTITY.OrderE.maxPendingReachedHandler(order);
                 return order
             } else {
                 return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
@@ -296,6 +297,7 @@ export class OrderController {
         try {
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ _id: payload.orderId }, { status: 1, country: 1, sdmOrderRef: 1, store: 1 })
             if (order && order._id) {
+                order = await ENTITY.OrderE.maxPendingReachedHandler(order);
                 order['nextPing'] = getFrequency({
                     status: order.status,
                     type: Constant.DATABASE.TYPE.FREQ_TYPE.GET_ONCE,
@@ -340,6 +342,7 @@ export class OrderController {
 
             let order: IOrderRequest.IOrderData = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: sdmOrder }, { transLogs: 0, notification: 0 })
             if (order && order._id) {
+                order = await ENTITY.OrderE.maxPendingReachedHandler(order);
                 if (userData.id != order.userId)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.ORDER_NOT_FOUND)
                 order.amount.filter(obj => { return obj.code == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })[0]

@@ -1034,11 +1034,7 @@ export class OrderClass extends BaseEntity {
                             }
                         }
                     }
-                    if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
-                        (order.updatedAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
-                        recheck = false
-                        order = await this.maxPendingReachedHandler(order);
-                    }
+                    order = await this.maxPendingReachedHandler(order);
                 } else
                     recheck = false
                 consolelog(process.cwd(), `getSdmOrderScheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
@@ -1141,7 +1137,11 @@ export class OrderClass extends BaseEntity {
 
     async maxPendingReachedHandler(order: IOrderRequest.IOrderData) {
         try {
-            return await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED)
+            if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
+                (order.updatedAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
+                return await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED)
+            } else
+                return order
         } catch (error) {
             consolelog(process.cwd(), "maxPendingReachedHandler", JSON.stringify(error), false)
             return Promise.reject(error)

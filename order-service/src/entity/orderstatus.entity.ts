@@ -4,9 +4,6 @@ import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
-import { parse } from "path";
-import { EALREADY } from "constants";
-
 
 export class OrderstatusClass extends BaseEntity {
     constructor() {
