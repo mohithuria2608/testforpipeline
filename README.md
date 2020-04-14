@@ -81,7 +81,7 @@ Hands-on Microservices with TypeScript 3
     * ssh localadmin@13.74.15.162
     * Localadmin@2020
     * login to jenkins server :
-        * ssh localadmin@amfuatnejnkvm02
+        * ssh localadmin@amfuatnejnkvm01
         * kubectl get pods -n nodeapp
         * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
         * kubectl exec -it auth-service-5686bf859d-r8flt -n nodeapp bash
