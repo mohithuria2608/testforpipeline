@@ -261,10 +261,10 @@ export class OrderClass extends BaseEntity {
                         // PAY_CREDITCARD_EXPIREDATE: "",
                         // PAY_REF_GATEWAY: "",
                         // PAY_REF_NO: "",
-                        PAY_STATUS: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
-                        PAY_STORE_TENDERID: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
-                        PAY_SUB_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
-                        PAY_TYPE: Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
+                        PAY_STATUS: config.get("sdm.payment.cod.payStatus"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
+                        PAY_STORE_TENDERID: config.get("sdm.payment.cod.payStoreTenderId"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
+                        PAY_SUB_TYPE: config.get("sdm.payment.cod.paySubType"),//Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
+                        PAY_TYPE: config.get("sdm.payment.cod.payType"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
                     }
                 }
             }
