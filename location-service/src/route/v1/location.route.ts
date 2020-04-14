@@ -9,7 +9,7 @@ import * as JOI from './common.joi.validator';
 export default (router: Router) => {
     router
         .get('/validate',
-            ...getMiddleware([]),
+            
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
@@ -31,7 +31,7 @@ export default (router: Router) => {
                 }
             })
         .get('/pickup',
-            ...getMiddleware([]),
+            
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
@@ -53,7 +53,7 @@ export default (router: Router) => {
                 }
             })
         .get('/car-hop',
-            ...getMiddleware([]),
+            
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
