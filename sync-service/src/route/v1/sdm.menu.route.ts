@@ -8,9 +8,6 @@ import { sdmMenuController } from '../../controllers';
 export default (router: Router) => {
     router
         .post('/',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.AUTH
-            ]),
             validate({
                 body: {
                     data: Joi.object().keys({
@@ -21,9 +18,9 @@ export default (router: Router) => {
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
-                    let payload: ISdmMenuRequest.ISdmMenu = ctx.request.body;
+                    let payload = ctx.request.body;
                     let auth: ICommonRequest.AuthorizationObj = ctx.state.user
-                    let res = await sdmMenuController.fetchMenuFromSDM(headers, payload, auth);
+                    let res = await sdmMenuController.fetchMenuFromSDM(headers, payload.data, auth);
                     let sendResponse = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, Constant.DATABASE.LANGUAGE.EN, res)
                     ctx.status = sendResponse.statusCode;
                     ctx.body = sendResponse

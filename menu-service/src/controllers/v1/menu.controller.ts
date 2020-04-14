@@ -118,7 +118,7 @@ export class MenuController {
      */
     async syncToCMS(payload) {
         try {
-            let syncMenuData = Aerospike.get({ set: Constant.SET_NAME.SYNC_MENU, key: payload.menuId });
+            let syncMenuData = await Aerospike.get({ set: Constant.SET_NAME.SYNC_MENU, key: payload.menuId });
             await sendRequestToCMS('SYNC_MENU', syncMenuData);
         } catch (error) {
             consolelog(process.cwd(), "syncToCMS", JSON.stringify(error), false)

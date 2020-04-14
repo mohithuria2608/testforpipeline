@@ -179,7 +179,7 @@
     },
     "blobBaseUrl": {
         "baseUrl": "https://bloobstorage.blob.core.windows.net",
-        "container": "bloobstorage",
+        "container": "americana",
         "accessKey": "2JnjQ7U6rC4mFobPG6oq2ycUM/tr7zGmGH3GieJ+F3QEHxG6+XSPH3mPnYs3JlAB1TJoLT8KoJcrrlJsp7FP3A==",
         "SASToken": "",
         "product": "http://40.123.205.1/pub/media/catalog/product/",
