@@ -13,11 +13,11 @@ class BlobStorageClass {
     private client;
     private container;
     private containerName;
-    private baseUrl = `https://bloobstorage.blob.core.windows.net`;
+    private baseUrl = config.get("blobBaseUrl.baseUrl");
     private basePath: string;
 
     constructor(containerName: string, basePath: string) {
-        const credentails = new StorageSharedKeyCredential("bloobstorage", "2JnjQ7U6rC4mFobPG6oq2ycUM/tr7zGmGH3GieJ+F3QEHxG6+XSPH3mPnYs3JlAB1TJoLT8KoJcrrlJsp7FP3A==");
+        const credentails = new StorageSharedKeyCredential(config.get("blobBaseUrl.container"), config.get("blobBaseUrl.accessKey"));
         this.client = new BlobServiceClient(this.baseUrl, credentails);
         this.container = this.client.getContainerClient(containerName);
         this.containerName = containerName;
@@ -42,9 +42,5 @@ class BlobStorageClass {
     }
 }
 
-export const ProductBlob = new BlobStorageClass("americana", "products/");
-export const ModelBlob = new BlobStorageClass("americana", "models/");
-export const EnvModelBlob = new BlobStorageClass("americana", `${config.get('env')}\/`);
-export const TestBlob = new BlobStorageClass("americana", "test/");
-export const UploadBlob = new BlobStorageClass("americana", "uploads/");
+export const EnvModelBlob = new BlobStorageClass(config.get("blobBaseUrl.container"), `${config.get('env')}\/`);
 
