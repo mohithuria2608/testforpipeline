@@ -77,7 +77,9 @@ export class OrderSDMEntity extends BaseSDM {
                     language: payload.language.toLowerCase().trim(),
                     conceptID: Constant.CONF.COUNTRY_SPECIFIC[payload.country].SDM.CONCEPT_ID,
                     source: 23,
-                    ordersIDs: payload.ordersIDs
+                    ordersIDs: payload.ordersIDs,
+                    fromDate: payload.fromDate,
+                    toDate: payload.toDate
                 }
             }
             let res = await this.requestData(data.name, data.req)
@@ -149,9 +151,8 @@ export class OrderSDMEntity extends BaseSDM {
                     return res.SDKResult
                 else
                     return Promise.reject(res)
-            } else {
+            } else
                 return {}
-            }
         } catch (error) {
             consolelog(process.cwd(), 'cancelOrder', JSON.stringify(error), false)
             return (error)

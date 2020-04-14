@@ -1475,10 +1475,11 @@ export const CONF = {
         SDM_STORE_TIME_OFFSET: (4 * 60 * 60 * 1000),
 
         MAX_OTP_RETRY: 5,
-        OTP_COOLDOWN: 1 * 60,//seconds
+        OTP_COOLDOWN: 30 * 60,//seconds
         DEFAULT_RETRY_COUNT: 3,
         CONTACTLESS_VISBILE: true,
         CONTACTLESS_CLICK_ENABLE: true,
+        ORDERSTATUS_RESET: 24 * 60 * 60,//seconds
     },
     COUNTRY_SPECIFIC: {
         UAE: {

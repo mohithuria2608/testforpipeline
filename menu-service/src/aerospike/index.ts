@@ -441,7 +441,7 @@ class AerospikeClass {
                             .andReturn(this.lists.returnType.VALUE))
                     }
                     if (argv.remByValue)
-                        operations.push(this.lists.remByValue(argv.bin, argv.value))
+                        operations.push(this.lists.removeByValue(argv.bin, argv.value))
                     let res = await this.client.operate(key, operations)
                     resolve(res)
                 } else reject('Client not initialized');

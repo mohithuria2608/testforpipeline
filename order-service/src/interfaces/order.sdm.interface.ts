@@ -12,7 +12,9 @@ declare namespace IOrderSdmRequest {
     interface IGetActiveOrder {
         language: string,
         country: string,
-        ordersIDs?: any
+        ordersIDs?: any,
+        fromDate?: any
+        toDate?: any
     }
 
     interface IProcessCreditCardOnSdm {
@@ -29,5 +31,10 @@ declare namespace IOrderSdmRequest {
         autoApprove?: string,
         language: string,
         country: string
+    }
+
+    interface IGetActiveOrdersResObj {
+        Key: string,
+        Value: string
     }
 }

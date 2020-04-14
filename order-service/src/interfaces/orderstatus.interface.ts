@@ -1,7 +1,13 @@
 declare namespace IOrderstatusRequest {
 
-    interface ICreateTodayOrderStatus {
+    interface IAppendTodayOrderStatus {
+        bin: string,
+        value: number
+    }
 
+    interface IRemoveTodayOrderStatus {
+        bin: string,
+        value: number
     }
 
 }
