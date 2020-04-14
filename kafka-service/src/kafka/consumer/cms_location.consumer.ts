@@ -7,7 +7,7 @@ import { kafkaController } from '../../controllers'
 
 const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.CMS_LOCATION)
 const groupId = generateRandomString(16)
-
+console.log("------------groupId---------------", groupId)
 class CMSLocationConsumer extends BaseConsumer {
 
     constructor() {
