@@ -429,7 +429,10 @@ export class OrderController {
                         ]
                     },
                     sdmOrderRef: parseInt(payload.Key),
-                    sdmOrderStatus: { $ne: parseInt(payload.Value) }
+                    $or: [
+                        { sdmOrderStatus: { $ne: parseInt(payload.Value) } },
+                        { sdmOrderStatus: 96 }
+                    ]
                 }, {
                     sdmOrderStatus: parseInt(payload.Value),
                     updatedAt: new Date().getTime()

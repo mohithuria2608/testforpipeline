@@ -1138,7 +1138,7 @@ export class OrderClass extends BaseEntity {
     async maxPendingReachedHandler(order: IOrderRequest.IOrderData) {
         try {
             if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
-                (order.updatedAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
+                (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
                 return await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED)
             } else
                 return order
