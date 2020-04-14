@@ -54,9 +54,12 @@ export class OrderstatusClass extends BaseEntity {
                 set: this.set,
                 key: "orderstatus",
                 bin: payload.bin,
-                append: true,
                 bins: payload.value
             }
+            if (typeof payload.value == "object")
+                listAppendArg['appendItems'] = true
+            else
+                listAppendArg['append'] = true
             await Aerospike.listOperations(listAppendArg)
             return {}
         } catch (error) {

@@ -2,7 +2,7 @@ declare namespace IOrderstatusRequest {
 
     interface IAppendTodayOrderStatus {
         bin: string,
-        value: number
+        value: any
     }
 
     interface IRemoveTodayOrderStatus {
