@@ -2035,7 +2035,7 @@ export const CONF = {
 }
 
 export const APP_VERSION = {
-    ANDROID: {
+    ANDROID: [{
         id: 1,
         type: "NORMAL",
         deviceType: "ANDROID",
@@ -2043,8 +2043,8 @@ export const APP_VERSION = {
         isActive: 1,
         createdAt: 1586639026000,
         updatedAt: 1586639026000
-    },
-    IOS: {
+    }],
+    IOS: [{
         id: 2,
         type: "NORMAL",
         deviceType: "IOS",
@@ -2052,7 +2052,7 @@ export const APP_VERSION = {
         isActive: 1,
         createdAt: 1586639026000,
         updatedAt: 1586639026000
-    }
+    }]
 }
 
 interface IGeneral {

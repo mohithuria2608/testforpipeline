@@ -7,27 +7,39 @@ export default (opts?): Middleware => {
         try {
             let headers: ICommonRequest.IHeaders = ctx.headers
             let appversion = Constant.APP_VERSION[headers.devicetype]
-            if (appversion && appversion.id) {
-                if (headers.appversion != appversion.appversion) {
-                    switch (appversion.type) {
-                        case Constant.DATABASE.TYPE.APP_VERSION.SKIP: {
-                            ctx.set('X-skip', 1);
-                            break;
-                        }
-                        case Constant.DATABASE.TYPE.APP_VERSION.FORCE: {
-                            return Promise.reject(Constant.STATUS_MSG.ERROR.E410.FORCE_UPDATE)
-                        }
-                        default: {
-                            ctx.set('X-skip', 0);
-                            break;
+            let check = -1;
+            /**
+             * @description  { -1 : force, 0 : skip, 1 : normal}
+             */
+            if (appversion && appversion.length > 0) {
+                appversion.map(obj => {
+                    if (obj.appversion == headers.appversion) {
+                        switch (appversion.type) {
+                            case Constant.DATABASE.TYPE.APP_VERSION.FORCE: {
+                                check = -1
+                                break;
+                            }
+                            case Constant.DATABASE.TYPE.APP_VERSION.SKIP: {
+                                check = 0
+                                break;
+                            }
+                            case Constant.DATABASE.TYPE.APP_VERSION.NORMAL: {
+                                check = 1
+                                break;
+                            }
+                            default: {
+                                break;
+                            }
                         }
                     }
-                } else
-                    ctx.set('X-skip', 0);
-
-            } else
-                ctx.set('X-skip', 0);
-
+                })
+            }
+            switch (check) {
+                case -1: { return Promise.reject(Constant.STATUS_MSG.ERROR.E410.FORCE_UPDATE) }
+                case 0: { ctx.set('X-skip', 1); break; }
+                case 1: { ctx.set('X-skip', 0); break; }
+                default: { return Promise.reject(Constant.STATUS_MSG.ERROR.E410.FORCE_UPDATE) }
+            }
         } catch (error) {
             return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
         }
