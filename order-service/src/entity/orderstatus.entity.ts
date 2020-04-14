@@ -107,16 +107,14 @@ export class OrderstatusClass extends BaseEntity {
             if (payload && payload.length > 0) {
                 let prevOrderstatus = await this.getTodayOrderStatus()
                 for (const elem of payload) {
-                    if (prevOrderstatus.fake && prevOrderstatus.fake.length > 0) {
-                        if (prevOrderstatus.fake.indexOf(parseInt(elem.Key)) == -1) {
-                            let bin = elem.Value
-                            if (validSdmOrderStatus.indexOf(parseInt(bin)) >= 0) {
-                                if (prevOrderstatus && prevOrderstatus[bin] && prevOrderstatus[bin].length > 0) {
-                                    if (prevOrderstatus[bin].indexOf(parseInt(elem.Key)) == -1)
-                                        finalProcessedPayload.push(elem)
-                                } else
+                    if (prevOrderstatus.fake.indexOf(parseInt(elem.Key)) == -1) {
+                        let bin = elem.Value
+                        if (validSdmOrderStatus.indexOf(parseInt(bin)) >= 0) {
+                            if (prevOrderstatus && prevOrderstatus[bin] && prevOrderstatus[bin].length > 0) {
+                                if (prevOrderstatus[bin].indexOf(parseInt(elem.Key)) == -1)
                                     finalProcessedPayload.push(elem)
-                            }
+                            } else
+                                finalProcessedPayload.push(elem)
                         }
                     }
                 }

@@ -407,7 +407,7 @@ export class OrderController {
                         ENTITY.OrderE.donotGetSdmOrderScheduler(checkIfStatusChanged)
                 } else {
                     let checkOrderExists = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: parseInt(payload.Key), }, { _id: 1 })
-                    if (checkOrderExists && checkOrderExists._id)
+                    if (!checkOrderExists)
                         await ENTITY.OrderstatusE.appendTodayOrderStatus({ bin: "fake", value: parseInt(payload.Key) })
                 }
             }
