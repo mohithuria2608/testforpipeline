@@ -33,9 +33,9 @@ export class BaseConsumer {
             topic: this.topic,
             partition: 0
         };
-        if (groupId) {
-            consumerData['groupId'] = groupId;
-        }
+        // if (groupId) {
+        //     consumerData['groupId'] = groupId;
+        // }
         this.consumer = new kafka.Consumer(
             new KafkaClientClass().getKafkaInstance(),
             [
