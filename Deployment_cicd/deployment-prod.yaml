@@ -71,11 +71,11 @@ spec:
           name: grpc-user
         resources:
           limits:
-            cpu: "2000m"
-            memory: "2000Mi"
+            cpu: "1000m"
+            memory: "1000Mi"
           requests:
-            cpu: "2000m"
-            memory: "2000Mi"
+            cpu: "1000m"
+            memory: "1000Mi"
       nodeSelector:
         agentpool: amfprodnenp1
 
@@ -152,11 +152,11 @@ spec:
           name: grpc-order
         resources:
           limits:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "1200m"
+            memory: "1000Mi"
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "1200m"
+            memory: "1000Mi"
       nodeSelector:
         agentpool: amfprodnenp1
 
@@ -234,11 +234,11 @@ spec:
           name: grpc-kafka
         resources:
           limits:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "1200m"
+            memory: "1000Mi"
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "1200m"
+            memory: "1000Mi"
       nodeSelector:
         agentpool: amfprodnenp1
 
