@@ -33,7 +33,7 @@ class AerospikeClass {
                         totalTimeout: config.get("aerospike.config.timeout")
                     }
                     let aerospikeConfig = {
-                        
+
                         hosts: config.get("aerospike.hosts"),
                         username: config.get("aerospike.username") != "" ? config.get("aerospike.username") : undefined,
                         password: config.get("aerospike.password") != "" ? config.get("aerospike.password") : undefined,
@@ -106,7 +106,7 @@ class AerospikeClass {
         if (argv.update) {
             policy['exists'] = aerospike.policy.exists.UPDATE
         }
-        if(argv.createOrReplace) {
+        if (argv.createOrReplace) {
             policy['exists'] = aerospike.policy.exists.CREATE_OR_REPLACE
         }
         return policy
@@ -359,7 +359,7 @@ class AerospikeClass {
         }
     }
 
-    
+
     async exists(argv: IAerospike.Exists) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -433,6 +433,8 @@ class AerospikeClass {
                         this.lists.order.UNORDERED
                     if (argv.append)
                         operations.push(this.lists.append(argv.bin, argv.bins))
+                    if (argv.appendItems)
+                        operations.push(this.lists.appendItems(argv.bin, argv.bins))
                     if (argv.remByIndex) {
                         operations.push(this.lists.removeByIndex(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
@@ -441,6 +443,8 @@ class AerospikeClass {
                         operations.push(this.lists.getByIndexRange(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
                     }
+                    if (argv.remByValue)
+                        operations.push(this.lists.removeByValue(argv.bin, argv.value))
                     let res = await this.client.operate(key, operations)
                     resolve(res)
                 } else reject('Client not initialized');

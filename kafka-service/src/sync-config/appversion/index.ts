@@ -11,9 +11,18 @@ export class Appversion {
         try {
             let appversion = await syncService.fetchAppversion({ isActive: 1 })
             if (appversion && appversion.length > 0) {
+                let androidAppVersion = []
+                let iosAppVersion = []
                 appversion.forEach(vers => {
-                    Constant.APP_VERSION[vers.deviceType] = vers
+                    if (vers.deviceType == Constant.DATABASE.TYPE.DEVICE.ANDROID)
+                        androidAppVersion.push(vers)
+                    else
+                        iosAppVersion.push(vers)
                 })
+                if (androidAppVersion && androidAppVersion.length > 0)
+                    Constant.APP_VERSION[Constant.DATABASE.TYPE.DEVICE.ANDROID] = androidAppVersion
+                if (iosAppVersion && iosAppVersion.length > 0)
+                    Constant.APP_VERSION[Constant.DATABASE.TYPE.DEVICE.IOS] = iosAppVersion
             }
             return {}
         } catch (error) {

@@ -178,12 +178,8 @@
         }
     },
     "blobBaseUrl": {
-        "baseUrl": "https://bloobstorage.blob.core.windows.net",
-        "container": "americana",
-        "accessKey": "2JnjQ7U6rC4mFobPG6oq2ycUM/tr7zGmGH3GieJ+F3QEHxG6+XSPH3mPnYs3JlAB1TJoLT8KoJcrrlJsp7FP3A==",
-        "SASToken": "",
-        "product": "http://40.123.205.1/pub/media/catalog/product/",
-        "home": "http://40.123.205.1/pub/media/homepage/",
+        "product": "http://kfccms.americanarest.com/pub/media/catalog/product/",
+        "home": "http://kfccms.americanarest.com/pub/media/homepage/",
         "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/production/"
     },
     "cryptoSecret": "d6F3Efeq",
@@ -233,7 +229,7 @@
     },
     "sdm": {
         "baseUrl": "https://sdkliveuae.americana.com.sa:1998/?wsdl",
-        "type": "uat",
+        "type": "live",
         "cred": {
             "licenseCode": "PizzaHutApp"
         },
@@ -243,7 +239,21 @@
             "orderMode": [
                 1
             ]
+        },
+        "payment": {
+            "cod": {
+                "payStatus": 1,
+                "payStoreTenderId": 252,
+                "paySubType": 1,
+                "payType": 1
+            },
+            "card": {
+                "payStatus": 1,
+                "payStoreTenderId": 253,
+                "paySubType": 1,
+                "payType": 2
+            }
         }
     },
-    "loadTest": true
+    "loadTest": false
 }

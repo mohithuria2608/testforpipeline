@@ -65,9 +65,8 @@ export class AddressCMSEntity extends BaseCMS {
                         return Promise.reject(cmsRes[0]['error_message'])
                 } else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
-            } else {
+            }  else
                 return {}
-            }
         } catch (error) {
             consolelog(process.cwd(), 'createAddresssOnCms', JSON.stringify(error), false)
             return Promise.reject(error)

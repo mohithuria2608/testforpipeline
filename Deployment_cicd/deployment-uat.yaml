@@ -71,11 +71,11 @@ spec:
           name: grpc-user
         resources:
           limits:
-            cpu: "2000m"
-            memory: "2000Mi"
+            cpu: "400m"
+            memory: "400Mi"
           requests:
-            cpu: "2000m"
-            memory: "2000Mi"
+            cpu: "400m"
+            memory: "400Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 
@@ -152,11 +152,11 @@ spec:
           name: grpc-order
         resources:
           limits:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "300m"
+            memory: "300Mi"
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "300m"
+            memory: "300Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 
@@ -315,11 +315,11 @@ spec:
           name: grpc-location
         resources:
           limits:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "300m"
+            memory: "300Mi"
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "300m"
+            memory: "300Mi"
       nodeSelector:
         agentpool: amfuatnenp1
 ---
@@ -516,11 +516,11 @@ spec:
           name: grpc-log
         resources:
           limits:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "300m"
+            memory: "300Mi"
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "300m"
+            memory: "300Mi"
 
       nodeSelector:
         agentpool: amfuatnenp1

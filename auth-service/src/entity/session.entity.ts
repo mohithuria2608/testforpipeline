@@ -26,9 +26,8 @@ export class SessionEntity extends BaseEntity {
             let prevSession = await Aerospike.get(getArg)
             if (prevSession && prevSession.id) {
                 return prevSession
-            } else {
+            }  else
                 return {}
-            }
         } catch (error) {
             consolelog(process.cwd(), "getSession", JSON.stringify(error), false)
             return Promise.reject(error)

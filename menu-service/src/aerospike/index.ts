@@ -432,6 +432,8 @@ class AerospikeClass {
                         this.lists.order.UNORDERED
                     if (argv.append)
                         operations.push(this.lists.append(argv.bin, argv.bins))
+                    if (argv.appendItems)
+                        operations.push(this.lists.appendItems(argv.bin, argv.bins))
                     if (argv.remByIndex) {
                         operations.push(this.lists.removeByIndex(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
@@ -440,6 +442,8 @@ class AerospikeClass {
                         operations.push(this.lists.getByIndexRange(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
                     }
+                    if (argv.remByValue)
+                        operations.push(this.lists.removeByValue(argv.bin, argv.value))
                     let res = await this.client.operate(key, operations)
                     resolve(res)
                 } else reject('Client not initialized');

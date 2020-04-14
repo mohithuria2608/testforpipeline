@@ -80,9 +80,8 @@ export class UserchangeEntity extends BaseEntity {
             let change = await Aerospike.get(getArg)
             if (change && change.id) {
                 return change
-            } else {
+            }  else
                 return {}
-            }
         } catch (error) {
             consolelog(process.cwd(), "getUserchange", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -1,64 +1,14 @@
-* bypass cms for order placing
 * uanttended order on cms (order placed on sdm but not on cms)
-* ms not responding state handling
-* health check on ms
-* sdm replicate dynamic
 * api gateway
 * aerospike configuration optimization
 
-
-----> UAT stores without geofence => 30, 44, 47, 58, 92
-----> UAT stores with invalid geofence => 613, 493, 201
-
-
-----> LIVE stores without geofence => 70
-----> LIVE stores with invalid geofence => 613(576), 493(469), 81(963)
-
-
-
-31 March Tasks
 ----> kafka failure ==> ping to order that health is false
 ----> single product in cart validation to cms
-----> faq
-----> more configs
-----> guest order place issue
-
 
 changes : 
-1. user addition on cms and sdm async via kafka
 2. headers update in all sync apis
 
 
 
 1. store sync cron : every 30 mins (peak hrs) ,2 hrs (non peak hrs)
-partial sync update stores 
-
-2. GetActiveOrdersStatusList
-
-3. frequency of status fetching for orders
-
-4. urvesh + abhinav ==> app version
-
-
-
-[18:25] manvendra.singh (Guest)
-    ankit.kumarapp (Guest) apekshamehta.appinventiv (Guest)-
-
-Here is the newly setup Aerospike detail
-
-
-
-Aerospike Cluster on VMs
-Host1: 10.2.0.27
-
-Host 2: 10.2.0.33
-
-​[18:25] manvendra.singh (Guest)
-    
-
-AMC : http://51.104.147.206:10002
-host : localhost
-
-
-
-"mongodb://uchatstg_usr:98HQuCd3PMgGgEG2@db-node1:27017,db-node2:27017,db-node3:27017/uchatstg_db?replicaSet=rs0&readPreference=secondaryPreferred&w=majority&wtimeoutMS=5000"
+partial sync update stores
