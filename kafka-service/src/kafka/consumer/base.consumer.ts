@@ -42,7 +42,7 @@ export class BaseConsumer {
                 consumerData
             ],
             {
-                autoCommit: true,
+                autoCommit: false,
 
             }
         );
