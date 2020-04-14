@@ -211,15 +211,8 @@ export const DATABASE = {
     },
 
     TYPE: {
-        MONGO_OPERATION: {
-            INSERT: "insert",
-            DELETE: "delete",
-            REPLACE: "replace",
-            UPDATE: "update",
-            DROP: "drop",
-            RENAME: "rename",
-            DROP_DATABASE: "dropDatabase",
-            INVALIDATE: "invalidate",
+        API_CHANNEL: {
+            KFC_APP: "kfcapp"
         },
 
         PAYMENT_ACTION_HINTS: {
