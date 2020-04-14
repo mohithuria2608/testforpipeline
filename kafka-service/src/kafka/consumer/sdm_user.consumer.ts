@@ -1,15 +1,16 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog, topicNameCreator } from "../../utils"
+import { consolelog, topicNameCreator, generateRandomString } from "../../utils"
 import { userService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
 const topic = topicNameCreator(config.get("env") ,Constant.KAFKA_TOPIC.SDM_USER)
+const groupId = generateRandomString(16)
 class SdmUserConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, topic);
+         super(topic, groupId);
     }
 
     handleMessage() {

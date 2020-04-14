@@ -1,16 +1,17 @@
 import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
-import { consolelog, topicNameCreator } from "../../utils"
+import { consolelog, topicNameCreator, generateRandomString } from "../../utils"
 import { homeService } from "../../grpc/client"
 import { kafkaController } from '../../controllers'
 
 const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.AS_HOME)
+const groupId = generateRandomString(16)
 
 class AsHomeConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, topic);
+         super(topic, groupId);
     }
 
     handleMessage() {
