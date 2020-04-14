@@ -11,7 +11,7 @@ const groupId = generateRandomString(16)
 class CmsOrderStatusConsumer extends BaseConsumer {
 
     constructor() {
-         super(topic, groupId);
+         super(topic, topic);
     }
 
     handleMessage() {

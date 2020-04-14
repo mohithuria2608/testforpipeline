@@ -10,7 +10,7 @@ const groupId = generateRandomString(16)
 class SyncConsumer extends BaseConsumer {
 
     constructor() {
-        super(topic, groupId);
+        super(topic, topic);
     }
 
     handleMessage() {

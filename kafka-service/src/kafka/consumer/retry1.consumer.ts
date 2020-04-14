@@ -32,7 +32,7 @@ class Retry1Consumer extends BaseConsumer {
 
     sleepTime = 3000
     constructor() {
-         super(topic, groupId);
+         super(topic, topic);
     }
 
     handleMessage() {
