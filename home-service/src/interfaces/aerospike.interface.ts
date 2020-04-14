@@ -105,6 +105,7 @@ declare namespace IAerospike {
         ttl?: number,
         index?: number,
         append?: boolean,
+        appendItems?: boolean
         remByIndex?: boolean,
         getByIndexRange?: boolean,
         order: boolean,

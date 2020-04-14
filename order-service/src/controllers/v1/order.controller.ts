@@ -370,52 +370,81 @@ export class OrderController {
             })
             sdmActiveOrders.KeyValueOflongint = await ENTITY.OrderstatusE.checkOrderstatusValidForCron(sdmActiveOrders.KeyValueOflongint)
             if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0)
-                this.cronPromise(sdmActiveOrders.KeyValueOflongint)
+                this.cronUpdate(sdmActiveOrders.KeyValueOflongint)
             else
-                this.cronPromise(sdmActiveOrders.KeyValueOflongint)
+                this.cronUpdate([sdmActiveOrders.KeyValueOflongint])
         } catch (error) {
             consolelog(process.cwd(), "getSdmOrderSchedulerNew", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async cronPromise(payload: IOrderSdmRequest.IGetActiveOrdersResObj[]) {
+    async cronUpdate(payload: IOrderSdmRequest.IGetActiveOrdersResObj[]) {
         try {
-            let fakeSdmOrderIds = []
-            for (const obj of payload) {
-                let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
-                if (obj && obj.Key && obj.Value) {
-                    let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
-                        status: {
-                            $nin: [
-                                Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
-                                Constant.CONF.ORDER_STATUS.FAILURE.MONGO
-                            ]
-                        },
-                        sdmOrderRef: parseInt(obj.Key),
-                        sdmOrderStatus: { $ne: parseInt(obj.Value) }
-                    }, {
-                        sdmOrderStatus: parseInt(obj.Value),
-                        updatedAt: new Date().getTime()
-                    }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
-                    if (checkIfStatusChanged && checkIfStatusChanged._id) {
-                        await ENTITY.OrderstatusE.updateOrderstatusForCron(obj, checkIfStatusChanged)
-                        if (getOrderDetailStatus.indexOf(parseInt(obj.Value)) >= 0)
-                            ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
-                        else
-                            ENTITY.OrderE.donotGetSdmOrderScheduler(checkIfStatusChanged)
-                    } else {
-                        fakeSdmOrderIds.push(parseInt(obj.Key))
-                        // let checkOrderExists = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: parseInt(obj.Key), }, { _id: 1, sdmOrderRef: 1 })
-                        // if (!checkOrderExists)
-                        //     await ENTITY.OrderstatusE.appendTodayOrderStatus({ bin: "fake", value: parseInt(obj.Key) })
-                    }
-                }
+            let promise = []
+            payload.forEach(obj => { promise.push(this.cronPromise(obj)) })
+            let fakeSdmOrderIds = await Promise.all(promise)
+            fakeSdmOrderIds = fakeSdmOrderIds.filter(obj => { return (obj) })
+            if (fakeSdmOrderIds && fakeSdmOrderIds.length > 0) {
+                let checkOrderExists = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: { $in: fakeSdmOrderIds } }, { _id: 1, sdmOrderRef: 1 })
+                let finalSdmOrderIdToBypass = []
+                if (checkOrderExists && checkOrderExists.length > 0) {
+                    fakeSdmOrderIds.forEach(soi => {
+                        if (soi) {
+                            let soiExists = false
+                            checkOrderExists.map(mo => {
+                                if (mo) {
+                                    if (soi == mo.sdmOrderRef)
+                                        soiExists = true
+                                }
+                            })
+                            if (!soiExists)
+                                finalSdmOrderIdToBypass.push(soi)
+                        }
+                    })
+                } else
+                    finalSdmOrderIdToBypass = fakeSdmOrderIds
+
+                await ENTITY.OrderstatusE.appendTodayOrderStatus({ bin: "fake", value: finalSdmOrderIdToBypass })
             }
             return {}
         } catch (error) {
             consolelog(process.cwd(), "cronPromise", JSON.stringify(error), false)
             return Promise.reject(error)
+        }
+    }
+
+    async cronPromise(payload: IOrderSdmRequest.IGetActiveOrdersResObj) {
+        try {
+            let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
+            if (payload && payload.Key && payload.Value) {
+                let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
+                    status: {
+                        $nin: [
+                            Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                            Constant.CONF.ORDER_STATUS.FAILURE.MONGO
+                        ]
+                    },
+                    sdmOrderRef: parseInt(payload.Key),
+                    sdmOrderStatus: { $ne: parseInt(payload.Value) }
+                }, {
+                    sdmOrderStatus: parseInt(payload.Value),
+                    updatedAt: new Date().getTime()
+                }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
+                if (checkIfStatusChanged && checkIfStatusChanged._id) {
+                    await ENTITY.OrderstatusE.updateOrderstatusForCron(payload, checkIfStatusChanged)
+                    if (getOrderDetailStatus.indexOf(parseInt(payload.Value)) >= 0)
+                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
+                    else
+                        ENTITY.OrderE.donotGetSdmOrderScheduler(checkIfStatusChanged)
+                    return
+                } else
+                    return parseInt(payload.Key)
+            } else
+                return
+        } catch (error) {
+            consolelog(process.cwd(), "cronPromise", JSON.stringify(error), false)
+            return
         }
     }
 }

@@ -85,7 +85,6 @@ Hands-on Microservices with TypeScript 3
         * kubectl get pods -n nodeapp
         * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
 * aerospike new on UAT 
-    * ip: 40.127.244.213:10008
     * ssh :
         * ssh localadmin@10.2.0.30
         * pass = Localadmin@2020

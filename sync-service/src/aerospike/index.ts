@@ -434,6 +434,8 @@ class AerospikeClass {
                         this.lists.order.UNORDERED
                     if (argv.append)
                         operations.push(this.lists.append(argv.bin, argv.bins))
+                    if (argv.appendItems)
+                        operations.push(this.lists.appendItems(argv.bin, argv.bins))
                     if (argv.remByIndex) {
                         operations.push(this.lists.removeByIndex(argv.bin, argv.index)
                             .andReturn(this.lists.returnType.VALUE))
