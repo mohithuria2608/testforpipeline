@@ -361,7 +361,7 @@ export class OrderController {
 
     async getSdmOrderScheduler() {
         try {
-            let validSdmOrderStatus = [0, 1, 96, 2, 8, 16, 32, 64, 128, 2048, 512, 256, 1024, 4096, 8192]
+            let validSdmOrderStatus = [0, 1, 96, 2, 8, 16, 32, 64, 128, 512, 256, 1024, 4096, 8192]
             let sdmActiveOrders = await OrderSDME.getActiveOrders({
                 language: "En",
                 country: "UAE",
