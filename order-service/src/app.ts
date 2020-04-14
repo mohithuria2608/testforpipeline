@@ -20,6 +20,7 @@ import * as SDM from './sdm';
 import * as ENTITY from './entity';
 import * as CMS from './cms';
 import * as Constant from './constant'
+import { Aerospike } from './aerospike'
 
 const app = new Koa()
 
@@ -3683,6 +3684,19 @@ export const start = (async () => {
 
 
     await bootstrap(server)
+
+    // let listAppendArg: IAerospike.ListOperation = {
+    //   order: true,
+    //   // bins: 1,
+    //   set: "orderstatus",
+    //   key: "orderstatus",
+    //   bin: "Pending",
+    //   // append: true
+    //   remByValue: true,
+    //   value: 1
+    // }
+    // await Aerospike.listOperations(listAppendArg)
+
     let order = {
       "licenseCode": "PizzaHutApp",
       "language": "en",

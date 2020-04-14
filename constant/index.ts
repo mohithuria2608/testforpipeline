@@ -31,6 +31,7 @@ export enum SET_NAME {
     PROMOTION = "promotion",
     CART = "cart",
     ORDER = "order",
+    ORDERSTATUS = "orderstatus",
     CONFIG = "config",
     COUNTRY = "country",
     AREA = "area",

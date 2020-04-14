@@ -99,7 +99,7 @@ declare namespace IAerospike {
 
     interface ListOperation {
         key?: string,
-        bins?: object,
+        bins?: any,
         bin?: string,
         set: string,
         ttl?: number,
@@ -107,7 +107,9 @@ declare namespace IAerospike {
         append?: boolean,
         remByIndex?: boolean,
         getByIndexRange?: boolean,
-        order: boolean
+        order: boolean,
+        remByValue?: boolean,
+        value?: any
     }
 
     interface MapOperation {
