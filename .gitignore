@@ -11,6 +11,9 @@ exports
 .env.local
 .env.*.local
 
+# local testing config
+config/local-*.json
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

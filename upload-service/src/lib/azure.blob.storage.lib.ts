@@ -13,11 +13,11 @@ class BlobStorageClass {
     private client;
     private container;
     private containerName;
-    private baseUrl = config.get("blobBaseUrl.baseUrl");
+    private baseUrl = config.get("blobStorage.baseUrl");
     private basePath: string;
 
     constructor(containerName: string, basePath: string) {
-        const credentails = new StorageSharedKeyCredential(config.get("blobBaseUrl.container"), config.get("blobBaseUrl.accessKey"));
+        const credentails = new StorageSharedKeyCredential(config.get("blobStorage.container"), config.get("blobStorage.accessKey"));
         this.client = new BlobServiceClient(this.baseUrl, credentails);
         this.container = this.client.getContainerClient(containerName);
         this.containerName = containerName;
@@ -42,5 +42,5 @@ class BlobStorageClass {
     }
 }
 
-export const EnvModelBlob = new BlobStorageClass(config.get("blobBaseUrl.container"), `${config.get('env')}\/`);
+export const EnvModelBlob = new BlobStorageClass(config.get("blobStorage.container"), `${config.get('env')}\/`);
 
