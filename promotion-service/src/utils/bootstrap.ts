@@ -7,7 +7,7 @@ export let bootstrap = async function (server) {
 
     await Aerospike.init();
     await configuration.init({ bootstrap: true });
-    await appversion.init();;
+    await appversion.init();
     
     /**
      * @description Bootstrap promotions

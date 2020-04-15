@@ -9,16 +9,16 @@ export class SdmLocationController {
 
     /**
      * @method POST
-     * @param {any} data
      * */
-    async syncLocationData(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
+    async syncLocationData() {
         try {
-            await ENTITY.LocationE.fetchLocationFromSDM(payload);
+            await ENTITY.LocationE.fetchLocationFromSDM();
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOCATION,
                 cms: { create: true, argv: JSON.stringify({ event: "location_sync" }) },
                 inQ: true
             });
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncLocationData", error, false)
             return Promise.reject(error)
@@ -27,16 +27,16 @@ export class SdmLocationController {
 
     /**
      * @method POST
-     * @param {any} data
      * */
-    async syncStoreStatusData(headers: ICommonRequest.IHeaders, payload: ISdmMenuRequest.ISdmMenu, auth: ICommonRequest.AuthorizationObj) {
+    async syncStoreStatusData() {
         try {
-            let storesStatusDataList = await ENTITY.LocationE.fetchStoresStatusFromSDM(payload);
+            let storesStatusDataList = await ENTITY.LocationE.fetchStoresStatusFromSDM();
             kafkaService.kafkaSync({
                 set: Constant.SET_NAME.LOCATION,
                 as: { create: true, argv: JSON.stringify({ event: "store_status_sync", data: storesStatusDataList }) },
                 inQ: true
             });
+            return {}
         } catch (error) {
             consolelog(process.cwd(), "syncStoreStatusData", error, false)
             return Promise.reject(error)

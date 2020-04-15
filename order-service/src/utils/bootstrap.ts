@@ -11,7 +11,7 @@ export let bootstrap = async function (server) {
     await Aerospike.init();
     await ENTITY.OrderstatusE.bootstrapOrderstatuscron()
     await configuration.init({ bootstrap: true });
-    await appversion.init();;
+    await appversion.init();
     await SDM.init()
     await job.start();
     return
