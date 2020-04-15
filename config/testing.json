@@ -178,15 +178,15 @@
         }
     },
     "blobStorage": {
-        "baseUrl": "https://bloobstorage.blob.core.windows.net",
-        "container": "americana",
-        "accessKey": "2JnjQ7U6rC4mFobPG6oq2ycUM/tr7zGmGH3GieJ+F3QEHxG6+XSPH3mPnYs3JlAB1TJoLT8KoJcrrlJsp7FP3A=="
+        "baseUrl": "https://amfprodneblobstorage.blob.core.windows.net",
+        "container": "amfprodneblobstorage",
+        "accessKey": "YljfMnDpcNF7FWWxQ/FH/2SXXveMWMrnYK2h0STifDNLTSUue2EANZ8Ln3K45HCQpiOn6kEcD7fnjWJoY3znuQ=="
     },
     "blobBaseUrl": {
-        "SASToken": "",
+        "SASToken": "?sv=2019-02-02&ss=bfqt&srt=sco&sp=rl&se=2029-04-09T19:07:24Z&st=2020-04-09T11:07:24Z&spr=https&sig=Z67UuDjY4QScWJCAMeXZmMn7VLH%2F3uL6xv6vpXnInOA%3D",
         "product": "http://40.123.205.1/pub/media/catalog/product/",
         "home": "http://40.123.205.1/pub/media/homepage/",
-        "jsonBase": "https://bloobstorage.blob.core.windows.net/americana/testing/"
+        "jsonBase": "https://amfprodneblobstorage.blob.core.windows.net/amfprodneblobstorage/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
     "cryptoAlgo": "aes-256-cbc",
