@@ -7,7 +7,6 @@ import { startLocationForCMSSequence } from "../service";
 import storeStatusSequence from "../service/statusSync/store.statusSync";
 
 export class LocationClass extends BaseEntity {
-    public sindex: IAerospike.CreateIndex[] = []
 
     constructor() {
         super(Constant.SET_NAME.LOCATION)
@@ -16,9 +15,10 @@ export class LocationClass extends BaseEntity {
     /**
      * fetch location from SDM
      */
-    async fetchLocationFromSDM(payload) {
+    async fetchLocationFromSDM() {
         try {
             await startLocationForCMSSequence();
+            return
         } catch (error) {
             consolelog(process.cwd(), "fetchLocationFromSDM", error, false)
             return Promise.reject(error)
@@ -28,11 +28,11 @@ export class LocationClass extends BaseEntity {
     /**
      * fetch stores from SDM
      */
-    async fetchStoresStatusFromSDM(payload) {
+    async fetchStoresStatusFromSDM() {
         try {
             return storeStatusSequence();
         } catch (error) {
-            consolelog(process.cwd(), "fetchStoresFromSDM", error, false)
+            consolelog(process.cwd(), "fetchStoresStatusFromSDM", error, false)
             return Promise.reject(error)
         }
     }
