@@ -142,9 +142,18 @@ export class StoreController {
                 for (let i = 0; i < storeStatusList.length; i++) {
                     if (
                         store.storeId === storeStatusList[i].sdmStoreId
-                        && store.active !== storeStatusList[i].active
+                        && (
+                            store.active !== storeStatusList[i].active ||
+                            store.startTime !== storeStatusList[i].startTime ||
+                            store.endTime !== storeStatusList[i].endTime ||
+                            store.services !== storeStatusList[i].services
+                        )
                     ) {
                         store.active = storeStatusList[i].active;
+                        store.startTime = storeStatusList[i].startTime;
+                        store.endTime = storeStatusList[i].endTime;
+                        store.nextDay = storeStatusList[i].nextDay;
+                        store.services = storeStatusList[i].services;
                         await ENTITY.StoreE.saveStore(store);
                         if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
                             storesToSyncWithCMS.push({
@@ -154,7 +163,8 @@ export class StoreController {
                                 active: store.active,
                                 startTime: store.startTime,
                                 endTime: store.endTime,
-                                nextDay: store.nextDay
+                                nextDay: store.nextDay,
+                                services: store.services
                             });
                             storesToSyncWithCMSHash[store.sdmStoreId] = true;
                         }
