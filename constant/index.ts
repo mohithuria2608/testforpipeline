@@ -1486,8 +1486,8 @@ export const CONF = {
                     "mediaType": "image",
                     "extension": "png",
                     "action": {
-                        "id": 21,
-                        "type": "category",
+                        "id": 1,
+                        "type": "pickup_carhop",
                         "delimeters": "delimeters"
                     }
                 },
@@ -1497,8 +1497,8 @@ export const CONF = {
                     "mediaType": "image",
                     "extension": "png",
                     "action": {
-                        "id": 21,
-                        "type": "category",
+                        "id": 1,
+                        "type": "pickup_carhop",
                         "delimeters": "delimeters"
                     }
                 }

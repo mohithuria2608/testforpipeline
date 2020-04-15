@@ -37,7 +37,7 @@ export class MiscController {
                         supportEmail: Constant.CONF.COUNTRY_SPECIFIC[headers.country].SUPPORT_EMAIL,
                         cashondelivery: 0,
                         minOrderAmount: Constant.CONF.COUNTRY_SPECIFIC[headers.country].MIN_CART_VALUE,
-                        // homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language],
+                        homeOverlay: Constant.CONF.COUNTRY_SPECIFIC[headers.country].HOME_OVERLAY[headers.language],
                         addressType: Constant.CONF.COUNTRY_SPECIFIC[headers.country].ADDRESS_TYPE
                     }
                 ],
