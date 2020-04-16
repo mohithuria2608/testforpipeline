@@ -12,5 +12,3 @@ changes :
 4. User migration
 
 
-1. store sync cron : every 30 mins (peak hrs) ,2 hrs (non peak hrs)
-partial sync update stores

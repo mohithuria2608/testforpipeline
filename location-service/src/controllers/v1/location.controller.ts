@@ -357,20 +357,6 @@ export class LocationController {
             return Promise.reject(error)
         }
     }
-
-    async uploadPickupOnBlob(payload: IStoreGrpcRequest.IUploadPickupOnBlob) {
-        try {
-            await countryController.bootstrapCountry(payload.sdm)
-            await cityController.bootstrapCity(payload.sdm)
-            await areaController.bootstrapArea(payload.sdm)
-            await storeController.bootstrapStore(payload.sdm)
-            this.bootstrapPickup()
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
 }
 
 export const locationController = new LocationController();

@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as Constant from '../../constant'
 import { consolelog, sendRequestToCMS } from '../../utils'
 import * as ENTITY from '../../entity'
@@ -7,27 +6,6 @@ import { uploadService } from '../../grpc/client';
 
 export class MenuController {
     constructor() { }
-
-    /**
-     * @method BOOTSTRAP
-     * @description : Post bulk menu data
-     * */
-    async bootstrapMenu() {
-        try {
-            await Aerospike.truncate({ set: ENTITY.MenuEnE.set, before_nanos: 0 })
-            await Aerospike.truncate({ set: ENTITY.MenuArE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/menu.json', 'utf-8');
-            let menu = JSON.parse(rawdata);
-            for (const iterator of menu) {
-                ENTITY.MenuEnE.postMenu(iterator)
-                ENTITY.MenuArE.postMenu(iterator)
-            }
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "bootstrapMenu", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
 
     /**
     * @method GET

@@ -34,17 +34,6 @@ server.addService(locationProto.LocationService.service, {
         }
     },
 
-    uploadPickup: async (call: IStoreGrpcRequest.IUploadPickupOnBlobReq, callback) => {
-        try {
-            consolelog(process.cwd(), "grpc fetchPickup", JSON.stringify(call.request), true)
-            let res: any = await locationController.uploadPickupOnBlob(call.request)
-            callback(null, { pickup: JSON.stringify(res) })
-        } catch (error) {
-            consolelog(process.cwd(), "fetchPickup", JSON.stringify(error), false)
-            callback(grpcSendError(error))
-        }
-    },
-
     validateCoordinate: async (call: IStoreGrpcRequest.IValidateCoordinate, callback) => {
         try {
             consolelog(process.cwd(), "grpc validateCoordinate", JSON.stringify(call.request), true)

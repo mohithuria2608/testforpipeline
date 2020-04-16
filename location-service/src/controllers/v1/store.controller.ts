@@ -2,34 +2,12 @@ import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog, checkOnlineStore } from '../../utils'
 import * as ENTITY from '../../entity'
-import * as fs from 'fs'
 import * as Utils from "../../utils";
 import { Aerospike } from '../../aerospike'
 
 export class StoreController {
 
     constructor() { }
-
-    /**
-     * @method BOOTSTRAP
-     * @description : Post bulk store data
-     * */
-    async bootstrapStore(sdmType?: string) {
-        try {
-            let jsonPostfix = sdmType ? sdmType : config.get("sdm.type")
-            consolelog(process.cwd(), "store jsonPostfix", jsonPostfix, true)
-            await Aerospike.truncate({ set: ENTITY.StoreE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + `/../../../model/store_${jsonPostfix}.json`, 'utf-8');
-            let stores = JSON.parse(rawdata);
-            for (const store of stores) {
-                await ENTITY.StoreE.saveStore(store)
-            }
-            return stores
-        } catch (error) {
-            consolelog(process.cwd(), "bootstrapStore", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
 
     /**
     * @method INTERNAL/GRPC
