@@ -108,6 +108,10 @@ Hands-on Microservices with TypeScript 3
         * Mob@pp@@2020
         * kubectl get pods -n nodeapp
         * kubectl logs auth-service-5686bf859d-r8flt  -n nodeapp
+* aerospike 
+    * ssh :
+        * ssh localadmin@10.2.0.27
+        * pass = Localadmin@2020
 * hpa 
     * kubectl get hpa -n nodeapp
 * mongoDB
