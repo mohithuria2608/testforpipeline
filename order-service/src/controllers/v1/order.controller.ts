@@ -263,7 +263,8 @@ export class OrderController {
      * */
     async orderHistory(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderHistory, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.OrderE.getOrderHistory(payload, auth)
+            let orderHistory = await ENTITY.OrderE.getOrderHistory(payload, auth)
+            return orderHistory
         } catch (error) {
             consolelog(process.cwd(), "orderHistory", JSON.stringify(error), false)
             return Promise.reject(error)
