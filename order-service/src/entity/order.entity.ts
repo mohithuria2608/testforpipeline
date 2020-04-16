@@ -981,61 +981,57 @@ export class OrderClass extends BaseEntity {
 
     async getSdmOrderScheduler(order: IOrderRequest.IOrderData) {
         try {
-            let recheck = true
-            if (order.transferDone)
-                order.sdmOrderRef = order.newOrderId
-            let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
-            if (sdmOrder && sdmOrder.OrderID && !isNaN(parseInt(sdmOrder.OrderID))) {
-                if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
-                    let transferOrder = await this.transferOrderHandler(order, sdmOrder)
-                    recheck = transferOrder.recheck;
-                    order = transferOrder.order;
-                }
-                consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
-                if (sdmOrder.Status && typeof sdmOrder.Status) {
-                    if (!order.amountValidationPassed && recheck && sdmOrder.Total) {
-                        let amountValidation = await this.amountValidationHandler(recheck, order, sdmOrder)
-                        recheck = amountValidation.recheck;
-                        order = amountValidation.order;
+            order = await this.maxPendingReachedHandler(order);
+            if (order.isActive) {
+                let proceedFurther = true
+                if (order.transferDone)
+                    order.sdmOrderRef = order.newOrderId
+                let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
+                if (sdmOrder && sdmOrder.OrderID && !isNaN(parseInt(sdmOrder.OrderID))) {
+                    if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
+                        let transferOrder = await this.transferOrderHandler(order, sdmOrder)
+                        proceedFurther = transferOrder.proceedFurther;
+                        order = transferOrder.order;
                     }
+                    consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
+                    if (sdmOrder.Status && typeof sdmOrder.Status) {
+                        if (!order.amountValidationPassed && proceedFurther && sdmOrder.Total) {
+                            let amountValidation = await this.amountValidationHandler(proceedFurther, order, sdmOrder)
+                            proceedFurther = amountValidation.proceedFurther;
+                            order = amountValidation.order;
+                        }
 
-                    let remarksValidation = await this.validationRemarksHandler(recheck, order, sdmOrder)
-                    recheck = remarksValidation.recheck;
-                    order = remarksValidation.order;
+                        let remarksValidation = await this.validationRemarksHandler(proceedFurther, order, sdmOrder)
+                        proceedFurther = remarksValidation.proceedFurther;
+                        order = remarksValidation.order;
 
-                    if (recheck && sdmOrder && sdmOrder.OrderID) {
-                        switch (parseInt(sdmOrder.Status)) {
-                            case 0:
-                            case 96:
-                            case 1: {
-                                let pendingHandler = await this.sdmPendingOrderHandler(recheck, order, sdmOrder)
-                                recheck = pendingHandler.recheck;
-                                order = pendingHandler.order;
-                                break;
-                            }
-                            case 256:
-                            case 512:
-                            case 1024:
-                            case 4096:
-                            case 8192: {
-                                if (order.transferDone || (order.sdmOrderRef == parseInt(sdmOrder.OrderID))) {
-                                    let cancelledHandler = await this.sdmCancelledHandler(recheck, order, sdmOrder)
-                                    recheck = cancelledHandler.recheck;
-                                    order = cancelledHandler.order;
+                        if (proceedFurther && sdmOrder && sdmOrder.OrderID) {
+                            switch (parseInt(sdmOrder.Status)) {
+                                case 0:
+                                case 96:
+                                case 1: {
+                                    order = await this.sdmPendingOrderHandler(order, sdmOrder)
+                                    break;
                                 }
-                                break;
-                            }
-                            default: {
-                                recheck = false
-                                consolelog(process.cwd(), `getSdmOrderScheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
-                                break;
+                                case 256:
+                                case 512:
+                                case 1024:
+                                case 4096:
+                                case 8192: {
+                                    if (order.transferDone || (order.sdmOrderRef == parseInt(sdmOrder.OrderID))) {
+                                        order = await this.sdmCancelledHandler(order, sdmOrder)
+                                    }
+                                    break;
+                                }
+                                default: {
+                                    consolelog(process.cwd(), `getSdmOrderScheduler UNHANDLED SDM ORDER STATUS for orderId : ${order.sdmOrderRef} : ${parseInt(sdmOrder.Status)} : `, parseInt(sdmOrder.Status), true)
+                                    break;
+                                }
                             }
                         }
                     }
-                    order = await this.maxPendingReachedHandler(order);
-                } else
-                    recheck = false
-                consolelog(process.cwd(), `getSdmOrderScheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}, recheck: ${recheck}`, "", true)
+                    consolelog(process.cwd(), `getSdmOrderScheduler final orderstatus: ${order.sdmOrderRef} :  ${order.status}`, "", true)
+                }
             }
             return {}
         } catch (error) {
@@ -1058,7 +1054,6 @@ export class OrderClass extends BaseEntity {
                 case 16:
                 case 32: {
                     order = await this.sdmOnTheWayHandler(order)
-
                     break;
                 }
                 case 64:
@@ -1080,7 +1075,7 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async amountValidationHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
+    async amountValidationHandler(proceedFurther: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
             consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode}`, "", true)
             let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
@@ -1104,29 +1099,29 @@ export class OrderClass extends BaseEntity {
                 order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
             } else {
                 consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
-                recheck = false
+                proceedFurther = false
                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
             }
 
-            return { recheck, order }
+            return { proceedFurther, order }
         } catch (error) {
             consolelog(process.cwd(), "amountValidationHandler", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
 
-    async validationRemarksHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
+    async validationRemarksHandler(proceedFurther: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
             consolelog(process.cwd(), `validation remarks check : ${sdmOrder.ValidationRemarks}`, "", true)
-            if (recheck && sdmOrder.ValidationRemarks &&
+            if (proceedFurther && sdmOrder.ValidationRemarks &&
                 (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
                 sdmOrder.ValidationRemarks != Constant.STATUS_MSG.SDM_ORDER_VALIDATION.EXCEED_ORDER_AMOUNT
             ) {
                 consolelog(process.cwd(), `validationRemarksHandler 1`, "", true)
-                recheck = false
+                proceedFurther = false
                 order = await this.orderFailureHandler(order, 1, sdmOrder.ValidationRemarks)
             }
-            return { recheck, order }
+            return { proceedFurther, order }
         } catch (error) {
             consolelog(process.cwd(), "validationRemarksHandler", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -1146,7 +1141,7 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async sdmPendingOrderHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
+    async sdmPendingOrderHandler(order: IOrderRequest.IOrderData, sdmOrder) {
         try {
             consolelog(process.cwd(), ` PENDING : current sdm status: ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
             if (order && order._id) {
@@ -1185,7 +1180,6 @@ export class OrderClass extends BaseEntity {
                                                 /**
                                                 * @description : in case of failure while adding payment object
                                                 */
-                                                recheck = false
                                                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_ADD_ON_SDM_FAILURE)
                                             }
                                         }
@@ -1212,7 +1206,7 @@ export class OrderClass extends BaseEntity {
                     }
                 }
             }
-            return { recheck, order }
+            return order
         } catch (error) {
             consolelog(process.cwd(), "sdmPendingOrderHandler", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -1444,13 +1438,11 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async sdmCancelledHandler(recheck: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
+    async sdmCancelledHandler(order: IOrderRequest.IOrderData, sdmOrder) {
         try {
             consolelog(process.cwd(), ` CANCELED : current sdm status : ${sdmOrder.Status}, `, "", true)
             if (order && order._id) {
                 consolelog(process.cwd(), "CANCELED 1 :       ", parseInt(sdmOrder.Status), true)
-                if (parseInt(sdmOrder.Status) == 512)
-                    recheck = false
                 if (order.status != Constant.CONF.ORDER_STATUS.CANCELED.MONGO) {
                     let dataToUpdateOrder = {
                         isActive: 0,
@@ -1472,13 +1464,13 @@ export class OrderClass extends BaseEntity {
                                 break;
                             }
                             case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
-                                consolelog(process.cwd(), `CANCELED 3 :       ${recheck}`, parseInt(sdmOrder.Status), true)
+                                consolelog(process.cwd(), `CANCELED 3 :       `, parseInt(sdmOrder.Status), true)
                                 let transLogs = [];
                                 let reverseStatus;
                                 let getReversalStatusType = ""
                                 if (order.payment && order.payment.status) {
                                     if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
-                                        consolelog(process.cwd(), `CANCELED 4 :       ${recheck}`, parseInt(sdmOrder.Status), true)
+                                        consolelog(process.cwd(), `CANCELED 4 :       `, parseInt(sdmOrder.Status), true)
                                         try {
                                             await paymentService.reversePayment({
                                                 noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
@@ -1500,7 +1492,7 @@ export class OrderClass extends BaseEntity {
                                             }
                                         }
                                     } else if (order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.CAPTURE.AS) {
-                                        consolelog(process.cwd(), `CANCELED 5 :       ${recheck}`, parseInt(sdmOrder.Status), true)
+                                        consolelog(process.cwd(), `CANCELED 5 :       `, parseInt(sdmOrder.Status), true)
                                         try {
                                             await paymentService.refundPayment({
                                                 noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
@@ -1524,7 +1516,7 @@ export class OrderClass extends BaseEntity {
                                             }
                                         }
                                     } else {
-                                        consolelog(process.cwd(), `CANCELED 6:       ${recheck}`, "", true)
+                                        consolelog(process.cwd(), `CANCELED 6:       `, "", true)
                                     }
                                     try {
                                         reverseStatus = await paymentService.getPaymentStatus({
@@ -1545,13 +1537,13 @@ export class OrderClass extends BaseEntity {
                                             }
                                         }
                                     }
-                                    consolelog(process.cwd(), `CANCELED 6.5:       ${recheck}`, "", true)
+                                    consolelog(process.cwd(), `CANCELED 6.5:       `, "", true)
                                     if (transLogs && transLogs.length > 0)
                                         dataToUpdateOrder['$addToSet'] = {
                                             transLogs: { $each: transLogs.reverse() }
                                         }
                                 }
-                                consolelog(process.cwd(), `CANCELED 7 :       ${recheck}`, parseInt(sdmOrder.Status), true)
+                                consolelog(process.cwd(), `CANCELED 7 :       `, parseInt(sdmOrder.Status), true)
                                 if (order.cmsOrderRef)
                                     CMS.OrderCMSE.updateOrder({
                                         order_id: order.cmsOrderRef,
@@ -1615,7 +1607,7 @@ export class OrderClass extends BaseEntity {
                     }
                 }
             }
-            return { recheck, order }
+            return order
         } catch (error) {
             consolelog(process.cwd(), "sdmCancelledHandler", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -1647,9 +1639,9 @@ export class OrderClass extends BaseEntity {
                     transferDone: true
                 }, { new: true })
 
-                return { recheck: true, order: order }
+                return { proceedFurther: true, order: order }
             } else
-                return { recheck: false, order: order }
+                return { proceedFurther: false, order: order }
         } catch (error) {
             consolelog(process.cwd(), "transferOrderHandler", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -117,9 +117,8 @@ server.addService(paymentProto.PaymentService.service, {
                     create: true,
                     argv: JSON.stringify({
                         type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
-                        id: [call.request.orderId, call.request.noonpayOrderId],
+                        id: [call.request.noonpayOrderId],
                         idInfo: [
-                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
                             Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
                         info: {
                             request: {
@@ -145,9 +144,8 @@ server.addService(paymentProto.PaymentService.service, {
                     create: true,
                     argv: JSON.stringify({
                         type: Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST,
-                        id: [call.request.orderId, call.request.noonpayOrderId],
+                        id: [call.request.noonpayOrderId],
                         idInfo: [
-                            Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.ORDER_ID,
                             Constant.DATABASE.TYPE.ACTIVITY_LOG_ID_INFO.NOON_PAY_ORDER_ID],
                         info: {
                             request: {
