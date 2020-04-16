@@ -230,7 +230,7 @@
         "password": "AppInvDbUser"
     },
     "cms": {
-        "baseUrl": "http://kfccms.americanarest.com/rest/V1/",
+        "baseUrl": "https://kfccms.americanarest.com/rest/V1/",
         "categoryId": 3
     },
     "sdm": {

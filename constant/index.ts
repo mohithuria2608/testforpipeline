@@ -1448,7 +1448,7 @@ export const CONF = {
         OTP_EXPIRE_TIME: (10 * 60 * 1000), //millisecond
         ACCESS_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
         REFRESH_TOKEN_EXPIRE_TIME: (100 * 24 * 60 * 60),
-        MAX_PENDING_STATE_TIME: (8 * 60 * 1000),//millisecond
+        MAX_PENDING_STATE_TIME: (10 * 60 * 1000),//millisecond
         PAYMENT_API_TIMEOUT: 3 * 1000,// 1 sec
         PAYMENT_API_KEY_PREFIX: "Key_",
         DISPLAY_COLOR: true,
@@ -1857,7 +1857,7 @@ export const CONF = {
                 GET: 10000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
-                NEXT_PING: 30,
+                NEXT_PING: 15,
             }
         },
         CONFIRMED: {
@@ -1869,7 +1869,7 @@ export const CONF = {
                 GET: 5000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
-                NEXT_PING: 30,
+                NEXT_PING: 10,
             }
         },
         BEING_PREPARED: {
@@ -1893,7 +1893,7 @@ export const CONF = {
                 GET: 5000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
-                NEXT_PING: 30,
+                NEXT_PING: 10,
             }
         },
         ON_THE_WAY: {
@@ -1917,7 +1917,7 @@ export const CONF = {
                 GET: 5000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
-                NEXT_PING: 30,
+                NEXT_PING: 60,
             }
         },
         CLOSED: {
@@ -1941,7 +1941,7 @@ export const CONF = {
                 GET: 5000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
-                NEXT_PING: 30,
+                NEXT_PING: 60,
             }
         },
         // 4096 : request for cancel ===> then it goes to 512 ===> final cancelled
@@ -1956,7 +1956,7 @@ export const CONF = {
                 GET: 5000,
                 GET_ONCE: 0,
                 GET_MAX: 65000,
-                NEXT_PING: 30,
+                NEXT_PING: 60,
             }
         },
     },
