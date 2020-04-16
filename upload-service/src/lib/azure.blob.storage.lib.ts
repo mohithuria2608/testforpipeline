@@ -37,10 +37,11 @@ class BlobStorageClass {
         );
         return {
             success: true,
-            url: `${this.baseUrl}/${this.containerName}/${this.basePath}${name}`
+            url: `${this.baseUrl}/${this.containerName}/${this.basePath}${name}${config.get("blobBaseUrl.SASToken")}`
         }
     }
 }
 
+export const TempBlob = new BlobStorageClass(config.get("blobStorage.container"), `temp-images/`);
 export const EnvModelBlob = new BlobStorageClass(config.get("blobStorage.container"), `${config.get('env')}\/`);
 
