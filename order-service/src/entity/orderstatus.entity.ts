@@ -10,40 +10,6 @@ export class OrderstatusClass extends BaseEntity {
         super(Constant.SET_NAME.ORDERSTATUS)
     }
 
-    async bootstrapOrderstatuscron() {
-        try {
-            let orderstatus = {
-                "0": [],
-                "1": [],
-                "96": [],
-                "2": [],
-                "8": [],
-                "16": [],
-                "32": [],
-                "64": [],
-                "128": [],
-                "2048": [],
-                "512": [],
-                "256": [],
-                "1024": [],
-                "4096": [],
-                "8192": [],
-                "fake": []
-            }
-            let putArg: IAerospike.Put = {
-                bins: orderstatus,
-                set: this.set,
-                key: "orderstatus",
-                ttl: Constant.CONF.GENERAL.ORDERSTATUS_RESET,
-                createOrReplace: true,
-            }
-            await Aerospike.put(putArg)
-        } catch (error) {
-            consolelog(process.cwd(), "bootstrapOrderstatuscron", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
     async appendTodayOrderStatus(payload: IOrderstatusRequest.IAppendTodayOrderStatus) {
         try {
             let listAppendArg: IAerospike.ListOperation = {
@@ -107,7 +73,7 @@ export class OrderstatusClass extends BaseEntity {
             if (payload && payload.length > 0) {
                 let prevOrderstatus = await this.getTodayOrderStatus()
                 for (const elem of payload) {
-                    if (prevOrderstatus.fake.indexOf(parseInt(elem.Key)) == -1) {
+                    if ((!prevOrderstatus) || (prevOrderstatus && !prevOrderstatus.fake) || (prevOrderstatus && prevOrderstatus.fake.indexOf(parseInt(elem.Key)) == -1)) {
                         let bin = elem.Value
                         if (validSdmOrderStatus.indexOf(parseInt(bin)) >= 0) {
                             if (prevOrderstatus && prevOrderstatus[bin] && prevOrderstatus[bin].length > 0) {
@@ -132,17 +98,19 @@ export class OrderstatusClass extends BaseEntity {
             let prevOrderstatus = await this.getTodayOrderStatus()
             let removeBin = [];
             validSdmOrderStatus.forEach(obj => {
-                if (prevOrderstatus[obj.toString()] && prevOrderstatus[obj.toString()].length > 0) {
+                if (prevOrderstatus && prevOrderstatus[obj.toString()] && prevOrderstatus[obj.toString()].length > 0) {
                     if (prevOrderstatus[obj.toString()].indexOf(parseInt(payload.Key)) >= 0) {
                         removeBin.push(obj.toString())
                     }
                 }
             })
+            console.log(`removeBin : ${removeBin}`)
             if (removeBin && removeBin.length > 0) {
                 for (const elem of removeBin) {
                     await this.removeTodayOrderStatus({ bin: elem, value: parseInt(payload.Key) })
                 }
             }
+            console.log(`bin : ${payload.Value}   value : ${payload.Key}`)
             await this.appendTodayOrderStatus({ bin: payload.Value, value: parseInt(payload.Key) })
             return {}
         } catch (error) {

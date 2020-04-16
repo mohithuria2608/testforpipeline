@@ -372,6 +372,7 @@ export class OrderController {
             })
             if (sdmActiveOrders && sdmActiveOrders.KeyValueOflongint) {
                 sdmActiveOrders.KeyValueOflongint = await ENTITY.OrderstatusE.checkOrderstatusValidForCron(sdmActiveOrders.KeyValueOflongint)
+
                 if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0)
                     this.cronUpdate(sdmActiveOrders.KeyValueOflongint)
                 else
@@ -390,7 +391,15 @@ export class OrderController {
             let fakeSdmOrderIds = await Promise.all(promise)
             fakeSdmOrderIds = fakeSdmOrderIds.filter(obj => { return (obj) })
             if (fakeSdmOrderIds && fakeSdmOrderIds.length > 0) {
-                let checkOrderExists = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: { $in: fakeSdmOrderIds } }, { _id: 1, sdmOrderRef: 1 })
+                let checkOrderExists = await ENTITY.OrderE.getMultipleMdb({
+                    sdmOrderRef: { $in: fakeSdmOrderIds },
+                    status: {
+                        $nin: [
+                            Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                            Constant.CONF.ORDER_STATUS.FAILURE.MONGO
+                        ]
+                    }
+                }, { _id: 1, sdmOrderRef: 1, sdmOrderStatus: 1 })
                 let finalSdmOrderIdToBypass = []
                 if (checkOrderExists && checkOrderExists.length > 0) {
                     fakeSdmOrderIds.forEach(soi => {

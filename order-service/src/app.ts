@@ -598,7 +598,6 @@ export const start = (async () => {
 
     await bootstrap(server)
 
-
     let order = {
       "licenseCode": "PizzaHutApp",
       "language": "en",

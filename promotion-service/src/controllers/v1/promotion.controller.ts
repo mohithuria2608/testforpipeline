@@ -42,12 +42,9 @@ export class PromotionController {
                 }
             }
             let promolist = await ENTITY.PromotionE.getPromotion({})
-            // promolist.filter(obj => {
-            //     if (new Date(obj.dateFrom).getTime() < new Date().getTime() &&
-            //         new Date().getTime() < new Date(obj.dateTo).getTime()) {
-            //         return obj
-            //     }
-            // })
+            promolist = promolist.filter(obj => {
+                return (new Date(obj.dateFrom).getTime() < new Date().getTime() && new Date().getTime() < new Date(obj.dateTo).getTime())
+            })
             let returnList = promolist.slice(((parseInt(payload.page.toString()) - 1) * 10), (parseInt(payload.page.toString()) * 10))
             return {
                 list: returnList,
@@ -69,8 +66,7 @@ export class PromotionController {
         try {
             let promo = await ENTITY.PromotionE.getPromotion({ couponCode: payload.couponCode })
             if (promo && promo.length > 0) {
-                if (new Date(promo[0].dateFrom).getTime() < new Date().getTime() &&
-                    new Date().getTime() < new Date(promo[0].dateTo).getTime()) {
+                if (new Date(promo[0].dateFrom).getTime() < new Date().getTime() && new Date().getTime() < new Date(promo[0].dateTo).getTime()) {
                     return { isValid: true, ...promo[0] }
                 } else
                     return { isValid: false }
