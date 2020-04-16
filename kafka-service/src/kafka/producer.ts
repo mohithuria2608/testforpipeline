@@ -67,7 +67,7 @@ class KafkaProducer {
                 let messages = JSON.parse(req.messages)
                 messages['inQ'] = false
                 kafkaController.kafkaSync(messages)
-                consolelog(process.cwd(), 'Err in producing to kafka topic', JSON.stringify(error), false);
+                consolelog(process.cwd(), 'Err in producing to kafka topic', error, false);
             } else {
                 consolelog(process.cwd(), 'message produced to kafka successfully', JSON.stringify(data), true);
             }
