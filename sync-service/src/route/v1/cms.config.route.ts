@@ -1,16 +1,14 @@
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware, validate } from '../../middlewares'
+import { validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { cmsConfigController } from '../../controllers';
-import { JOI_CMS_HEADERS } from './common.joi.validator'
 
 export default (router: Router) => {
     router
         .post('/',
             validate({
-                // headers: JOI_CMS_HEADERS,
                 body: {
                     type: Joi.string().required().valid(
                         Constant.DATABASE.TYPE.CONFIG.GENERAL,

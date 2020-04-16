@@ -29,4 +29,16 @@ export default (router: Router) => {
                     throw error
                 }
             })
+        .get('/scheduler/store',
+            async (ctx) => {
+                sdmLocationController.syncLocationData();
+                ctx.status = 200;
+                ctx.body = "success"
+            })
+        .get('/scheduler/store-status',
+            async (ctx) => {
+                sdmLocationController.syncStoreStatusData();
+                ctx.status = 200;
+                ctx.body = "success"
+            })
 }

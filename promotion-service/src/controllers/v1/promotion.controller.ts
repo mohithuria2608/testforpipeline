@@ -1,10 +1,7 @@
-import * as fs from 'fs';
 import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
-import { userService } from '../../grpc/client';
-import { Aerospike } from '../../aerospike'
 
 export class PromotionController {
     constructor() { }
@@ -26,29 +23,6 @@ export class PromotionController {
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncPromoFromKafka", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @method POST
-     * @description : Post bulk promotion data
-     * */
-    async postPromotion() {
-        try {
-            let jsonPostfix = config.get("sdm.type")
-            await Aerospike.truncate({ set: ENTITY.PromotionE.set, before_nanos: 0 })
-
-            let rawdata = fs.readFileSync(__dirname + `/../../../model/promotion_${jsonPostfix}.json`, 'utf-8');
-            let promo = JSON.parse(rawdata);
-
-            for (const iterator of promo) {
-                iterator['couponCodeL'] = iterator['couponCode'].toLowerCase()
-                ENTITY.PromotionE.post(iterator, { create: true })
-            }
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "postPromotion", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }

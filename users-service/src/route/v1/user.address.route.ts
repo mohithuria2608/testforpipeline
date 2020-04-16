@@ -137,5 +137,4 @@ export default (router: Router) => {
                     throw error
                 }
             })
-
 }

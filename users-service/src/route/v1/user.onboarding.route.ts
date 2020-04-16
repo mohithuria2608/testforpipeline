@@ -1,7 +1,7 @@
 import * as config from "config"
 import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
-import { getMiddleware, validate } from '../../middlewares'
+import { validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { userController } from '../../controllers';

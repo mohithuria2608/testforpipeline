@@ -10,7 +10,6 @@ import * as JOI from './common.joi.validator';
 export default (router: Router) => {
     router
         .get('/',
-            
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
