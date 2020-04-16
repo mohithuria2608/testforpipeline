@@ -370,11 +370,13 @@ export class OrderController {
                 // ordersIDs: [{ int: 39867166 }],
                 fromDate: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
             })
-            sdmActiveOrders.KeyValueOflongint = await ENTITY.OrderstatusE.checkOrderstatusValidForCron(sdmActiveOrders.KeyValueOflongint)
-            if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0)
-                this.cronUpdate(sdmActiveOrders.KeyValueOflongint)
-            else
-                this.cronUpdate([sdmActiveOrders.KeyValueOflongint])
+            if (sdmActiveOrders && sdmActiveOrders.KeyValueOflongint) {
+                sdmActiveOrders.KeyValueOflongint = await ENTITY.OrderstatusE.checkOrderstatusValidForCron(sdmActiveOrders.KeyValueOflongint)
+                if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0)
+                    this.cronUpdate(sdmActiveOrders.KeyValueOflongint)
+                else
+                    this.cronUpdate([sdmActiveOrders.KeyValueOflongint])
+            }
         } catch (error) {
             consolelog(process.cwd(), "getSdmOrderSchedulerNew", JSON.stringify(error), false)
             return Promise.reject(error)

@@ -24,6 +24,7 @@
     "aerospike": "^3.13.0",
     "chai-http": "^4.3.0",
     "config": "^3.2.4",
+    "cron": "^1.8.2",
     "grpc": "^1.24.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",

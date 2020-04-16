@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import { consolelog } from '../../../location-service/src/utils'
+import { consolelog } from '../utils'
 import { sdmLocationController } from '../controllers';
 
 export const storejob = new CronJob('0 0 4 * * *', function () {
@@ -14,7 +14,7 @@ export const storestatusjob_0_4 = new CronJob('0 */30 0-4 * * *', function () {
 }, null, true);
 
 
-export const storestatusjob_10_24 = new CronJob('0 */30 10-24 * * *', function () {
+export const storestatusjob_10_24 = new CronJob('0 */30 10-23 * * *', function () {
     consolelog(process.cwd(), 'Bootstraping store status every 30 minutes from 10-24', new Date(), true);
     sdmLocationController.syncStoreStatusData();
 }, null, true);
