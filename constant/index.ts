@@ -1481,7 +1481,7 @@ export const CONF = {
             BASE_CURRENCY: "AED",
             HOME_OVERLAY: {
                 En: {
-                    "mediaUrl": "ic_red@3x.png",
+                    "mediaUrl": "covid-poppup-mob-en.png",
                     "gif": "",
                     "mediaType": "image",
                     "extension": "png",
@@ -1492,7 +1492,7 @@ export const CONF = {
                     }
                 },
                 Ar: {
-                    "mediaUrl": "ic_red@3x.png",
+                    "mediaUrl": "covid-poppup-mob-arb.png",
                     "gif": "",
                     "mediaType": "image",
                     "extension": "png",
