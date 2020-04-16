@@ -4,7 +4,7 @@ import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog, nameConstructor, deCryptData, phnNoConstructor } from '../utils'
 import * as  _ from 'lodash';
-import { kafkaService } from '../grpc/client'
+import { notificationService } from '../grpc/client'
 
 export class UserSDMEntity extends BaseSDM {
 
@@ -49,6 +49,14 @@ export class UserSDMEntity extends BaseSDM {
 
             let res = await this.requestData(data.name, data.req)
             if (res && res.SDKResult && (res.SDKResult.ResultCode == "Success")) {
+                userData.password = deCryptData(userData.password);
+                notificationService.sendNotification({
+                    toSendEmail: true,
+                    emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
+                    emailDestination: userData.email,
+                    language: headers.language,
+                    payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
+                });
                 return res.RegisterCustomerResult
             }
             else {

@@ -6,7 +6,6 @@ import { kafkaService, notificationService } from '../../grpc/client';
 import { addressController } from '../../controllers';
 import * as CMS from '../../cms';
 import * as SDM from '../../sdm';
-import { parse } from 'path';
 
 export class UserController {
     constructor() { }
@@ -194,14 +193,14 @@ export class UserController {
                     this.validateUserOnSdm(userData, false, headers)
 
                     // send welcome email on first time user create
-                    userData.password = deCryptData(userData.password);
-                    notificationService.sendNotification({
-                        toSendEmail: true,
-                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
-                        emailDestination: userData.email,
-                        language: headers.language,
-                        payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
-                    });
+                    // userData.password = deCryptData(userData.password);
+                    // notificationService.sendNotification({
+                    //     toSendEmail: true,
+                    //     emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
+                    //     emailDestination: userData.email,
+                    //     language: headers.language,
+                    //     payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
+                    // });
                 }
 
                 if (userData.cmsUserRef && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
@@ -624,14 +623,14 @@ export class UserController {
                         inQ: true
                     });
                     // send welcome email
-                    userData.password = deCryptData(userData.password);
-                    notificationService.sendNotification({
-                        toSendEmail: true,
-                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
-                        emailDestination: userData.email,
-                        language: headers.language,
-                        payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
-                    });
+                    // userData.password = deCryptData(userData.password);
+                    // notificationService.sendNotification({
+                    //     toSendEmail: true,
+                    //     emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
+                    //     emailDestination: userData.email,
+                    //     language: headers.language,
+                    //     payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
+                    // });
                     return formatUserData(userData, headers, auth.isGuest)
                 }
             } else {
