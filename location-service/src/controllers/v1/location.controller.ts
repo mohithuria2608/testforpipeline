@@ -75,26 +75,26 @@ export class LocationController {
                                                 }
                                             }
                                         }
-                                        if (storeCollection && storeCollection.length > 0) {
-                                            storeCollection.sort(compare)
-                                            a['store'] = storeCollection
-                                            delete a.cityId
-                                            delete a.areaId
-                                            delete a.districtId
-                                            delete a.provinceId
-                                            delete a.countryId
-                                            delete a.streetId
-                                            areaCollection.push(a)
-                                        }
+                                        // if (storeCollection && storeCollection.length > 0) {
+                                        storeCollection.sort(compare)
+                                        a['store'] = storeCollection
+                                        delete a.cityId
+                                        delete a.areaId
+                                        delete a.districtId
+                                        delete a.provinceId
+                                        delete a.countryId
+                                        delete a.streetId
+                                        areaCollection.push(a)
+                                        // }
                                     }
                                 }
                             }
                         }
-                        if (areaCollection && areaCollection.length > 0) {
-                            areaCollection.sort(compare)
-                            c['area'] = areaCollection
-                            res.push(c)
-                        }
+                        // if (areaCollection && areaCollection.length > 0) {
+                        areaCollection.sort(compare)
+                        c['area'] = areaCollection
+                        res.push(c)
+                        // }
                     }
                 }
             }
@@ -171,26 +171,26 @@ export class LocationController {
                                                 }
                                             }
                                         }
-                                        if (storeCollection && storeCollection.length > 0) {
-                                            storeCollection.sort(compare)
-                                            a['store'] = storeCollection
-                                            delete a.cityId
-                                            delete a.areaId
-                                            delete a.districtId
-                                            delete a.provinceId
-                                            delete a.countryId
-                                            delete a.streetId
-                                            areaCollection.push(a)
-                                        }
+                                        // if (storeCollection && storeCollection.length > 0) {
+                                        storeCollection.sort(compare)
+                                        a['store'] = storeCollection
+                                        delete a.cityId
+                                        delete a.areaId
+                                        delete a.districtId
+                                        delete a.provinceId
+                                        delete a.countryId
+                                        delete a.streetId
+                                        areaCollection.push(a)
+                                        // }
                                     }
                                 }
                             }
                         }
-                        if (areaCollection && areaCollection.length > 0) {
-                            areaCollection.sort(compare)
-                            c['area'] = areaCollection
-                            res.push(c)
-                        }
+                        // if (areaCollection && areaCollection.length > 0) {
+                        areaCollection.sort(compare)
+                        c['area'] = areaCollection
+                        res.push(c)
+                        // }
                     }
                 }
             }
@@ -350,7 +350,7 @@ export class LocationController {
                 default: return {};
             }
             await this.bootstrapPickup();
-            await this.bootstrapCarHop();
+            // await this.bootstrapCarHop();
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncLocationFromCMS", JSON.stringify(error), false)
