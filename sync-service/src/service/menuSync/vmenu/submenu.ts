@@ -23,7 +23,7 @@ export default async function (menuId: number) {
                 async (resolve, reject) => {
                     try {
                         let toResolve = { success: false, data: {} };
-                        if (menuItem.Title.match(/^\w/) && menuItem.Title.match(/Deals/i)) {
+                        if (menuItem.Title.match(/^\w/)) {
                             let singleParam = { ...commonParams, submenuID: menuItem.ID },
                                 singleData: any = await SoapManager.requestData('GetSubmenu', singleParam),
                                 single = singleData.GetSubmenuResult;
