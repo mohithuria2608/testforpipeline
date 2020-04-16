@@ -1551,27 +1551,26 @@ export class OrderClass extends BaseEntity {
                                             transLogs: { $each: transLogs.reverse() }
                                         }
                                 }
-                                if (reverseStatus && order && order._id) {
-                                    consolelog(process.cwd(), `CANCELED 7 :       ${recheck}`, parseInt(sdmOrder.Status), true)
-                                    if (order.cmsOrderRef)
-                                        CMS.OrderCMSE.updateOrder({
-                                            order_id: order.cmsOrderRef,
-                                            payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
-                                            order_status: Constant.CONF.ORDER_STATUS.CANCELED.CMS,
-                                            sdm_order_id: order.sdmOrderRef,
-                                            validation_remarks: ""
-                                        })
-                                    if (order.cmsOrderRef)
-                                        CMS.TransactionCMSE.createTransaction({
-                                            order_id: order.cmsOrderRef,
-                                            message: getReversalStatusType,
-                                            type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
-                                            payment_data: {
-                                                id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
-                                                data: JSON.stringify(reverseStatus)
-                                            }
-                                        })
-                                }
+                                consolelog(process.cwd(), `CANCELED 7 :       ${recheck}`, parseInt(sdmOrder.Status), true)
+                                if (order.cmsOrderRef)
+                                    CMS.OrderCMSE.updateOrder({
+                                        order_id: order.cmsOrderRef,
+                                        payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
+                                        order_status: Constant.CONF.ORDER_STATUS.CANCELED.CMS,
+                                        sdm_order_id: order.sdmOrderRef,
+                                        validation_remarks: ""
+                                    })
+                                if (order.cmsOrderRef && reverseStatus)
+                                    CMS.TransactionCMSE.createTransaction({
+                                        order_id: order.cmsOrderRef,
+                                        message: getReversalStatusType,
+                                        type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
+                                        payment_data: {
+                                            id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
+                                            data: JSON.stringify(reverseStatus)
+                                        }
+                                    })
+
                                 break;
                             }
                             default: {
@@ -1768,27 +1767,25 @@ export class OrderClass extends BaseEntity {
                                         transLogs: { $each: transLogs.reverse() }
                                     }
                             }
-                            if (reverseStatus) {
-                                consolelog(process.cwd(), `FAILURE HANDLER 6`, "", true)
-                                if (order.cmsOrderRef)
-                                    CMS.OrderCMSE.updateOrder({
-                                        order_id: order.cmsOrderRef,
-                                        payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
-                                        order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
-                                        sdm_order_id: order.sdmOrderRef,
-                                        validation_remarks: validationRemarks
-                                    })
-                                if (order.cmsOrderRef)
-                                    CMS.TransactionCMSE.createTransaction({
-                                        order_id: order.cmsOrderRef,
-                                        message: getReversalStatusType,
-                                        type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
-                                        payment_data: {
-                                            id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
-                                            data: JSON.stringify(reverseStatus)
-                                        }
-                                    })
-                            }
+                            consolelog(process.cwd(), `FAILURE HANDLER 6`, "", true)
+                            if (order.cmsOrderRef)
+                                CMS.OrderCMSE.updateOrder({
+                                    order_id: order.cmsOrderRef,
+                                    payment_status: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.AS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS,
+                                    order_status: Constant.CONF.ORDER_STATUS.FAILURE.CMS,
+                                    sdm_order_id: order.sdmOrderRef,
+                                    validation_remarks: validationRemarks
+                                })
+                            if (order.cmsOrderRef && reverseStatus)
+                                CMS.TransactionCMSE.createTransaction({
+                                    order_id: order.cmsOrderRef,
+                                    message: getReversalStatusType,
+                                    type: (getReversalStatusType == Constant.DATABASE.STATUS.PAYMENT.CANCELLED) ? Constant.DATABASE.STATUS.TRANSACTION.VOID_AUTHORIZATION.CMS : Constant.DATABASE.STATUS.TRANSACTION.REFUND.CMS,
+                                    payment_data: {
+                                        id: (reverseStatus.transactions && reverseStatus.transactions.length > 0 && reverseStatus.transactions[0].id) ? reverseStatus.transactions[0].id.toString() : order.transLogs[1].noonpayOrderId,
+                                        data: JSON.stringify(reverseStatus)
+                                    }
+                                })
                             break;
                         }
                         default: {
