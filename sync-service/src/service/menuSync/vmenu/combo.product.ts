@@ -13,11 +13,10 @@ const priceToPrecision = function (price: number) {
 
 export default async function (element: any, catId: number) {
     try {
-        let comboASP: any = await Aerospike.get({
+        let combo: any = await Aerospike.get({
             set: Constant.SET_NAME.SYNC_MENU_WEBCOMBO,
             key: parseInt(element.ID)
-        }),
-            combo: any = comboASP.bins;
+        });
 
         // if combo data found
         if (combo) {
