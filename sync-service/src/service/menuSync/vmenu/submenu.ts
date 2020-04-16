@@ -76,13 +76,11 @@ async function vSubMenuFormatter(productList, catId) {
     // for every virtual product, get the detail of virtual group
     for (let vGroupId in vProductList) {
         // get the virtual group data
-        let vGroupASP: any = await Aerospike.get({
+        let vGroupData: any = await Aerospike.get({
             set: Constant.SET_NAME.SYNC_MENU_VGROUP,
             key: parseInt(vGroupId)
         }),
-            vGroupData: any = vGroupASP.bins;
-
-        let variationMetaData: any = await generateVariants(vProductList[vGroupId], vGroupData);
+            variationMetaData: any = await generateVariants(vProductList[vGroupId], vGroupData);
 
         let finalProductData: any = {
             id: parseInt(vGroupId),
@@ -118,11 +116,11 @@ async function generateVariants(vGroupList, groupDataASP) {
             &&
             (vGroupList[0][`sel${selIndex}Value`] !== -1 && vGroupList[0][`sel${selIndex}Value`] !== 0)
         ) {
-            let vSelASP: any = await await Aerospike.get({
+            let vSelData: any = await await Aerospike.get({
                 set: Constant.SET_NAME.SYNC_MENU_VSELECTOR,
                 key: groupDataASP[`selector${selIndex}`]
-            }),
-                vSelData: any = vSelASP.bins;
+            });
+
             variationData.push({
                 id: groupDataASP[`selector${selIndex}`],
                 title_en: vSelData.title_en,
