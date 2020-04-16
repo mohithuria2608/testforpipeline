@@ -4,7 +4,7 @@ import { consolelog, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, menuService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { OrderSDME } from '../../sdm';
-import { Aerospike } from "../../aerospike"
+
 
 export class OrderController {
 

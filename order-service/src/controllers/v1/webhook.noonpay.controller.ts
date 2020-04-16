@@ -65,8 +65,6 @@ export class WebhookNoonpayController {
                         order = await ENTITY.OrderE.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                         if (order && order._id) {
                             if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
-                                if (order.sdmOrderRef)
-                                    ENTITY.OrderE.getSdmOrderScheduler(order)
                                 ENTITY.CartE.resetCart(order.cartId)
                                 if (order.cmsOrderRef)
                                     CMS.TransactionCMSE.createTransaction({
