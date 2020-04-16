@@ -12,3 +12,4 @@ changes :
 4. User migration
 
 
+unhandled order status logger + order db update in array of objects

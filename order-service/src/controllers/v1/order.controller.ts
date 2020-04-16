@@ -429,7 +429,9 @@ export class OrderController {
 
     async cronPromise(payload: IOrderSdmRequest.IGetActiveOrdersResObj) {
         try {
-            let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
+            // let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
+            let donotGetOrderDetailStatus = [8, 16, 32, 64, 128]
+            let getRetrySdmOrderStatus = [96]
             if (payload && payload.Key && payload.Value) {
                 let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
                     status: {
@@ -441,7 +443,7 @@ export class OrderController {
                     sdmOrderRef: parseInt(payload.Key),
                     $or: [
                         { sdmOrderStatus: { $ne: parseInt(payload.Value) } },
-                        { sdmOrderStatus: 96 }
+                        { sdmOrderStatus: { $in: getRetrySdmOrderStatus } }
                     ]
                 }, {
                     sdmOrderStatus: parseInt(payload.Value),
@@ -449,10 +451,10 @@ export class OrderController {
                 }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
                 if (checkIfStatusChanged && checkIfStatusChanged._id) {
                     await ENTITY.OrderstatusE.updateOrderstatusForCron(payload, checkIfStatusChanged)
-                    if (getOrderDetailStatus.indexOf(parseInt(payload.Value)) >= 0)
-                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
-                    else
+                    if (donotGetOrderDetailStatus.indexOf(parseInt(payload.Value)) >= 0)
                         ENTITY.OrderE.donotGetSdmOrderScheduler(checkIfStatusChanged)
+                    else
+                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
                     return
                 } else
                     return parseInt(payload.Key)

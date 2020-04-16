@@ -69,6 +69,7 @@ export class OrderstatusClass extends BaseEntity {
     async checkOrderstatusValidForCron(payload: IOrderSdmRequest.IGetActiveOrdersResObj[]) {
         try {
             let validSdmOrderStatus = [0, 1, 96, 2, 8, 16, 32, 64, 128, 512, 256, 1024, 4096, 8192]
+            let retrySdmOrderStatus = [96]
             let finalProcessedPayload = []
             if (payload && payload.length > 0) {
                 let prevOrderstatus = await this.getTodayOrderStatus()
@@ -79,6 +80,10 @@ export class OrderstatusClass extends BaseEntity {
                             if (prevOrderstatus && prevOrderstatus[bin] && prevOrderstatus[bin].length > 0) {
                                 if (prevOrderstatus[bin].indexOf(parseInt(elem.Key)) == -1)
                                     finalProcessedPayload.push(elem)
+                                else {
+                                    if (retrySdmOrderStatus.indexOf(parseInt(bin)) >= 0)
+                                        finalProcessedPayload.push(elem)
+                                }
                             } else
                                 finalProcessedPayload.push(elem)
                         }
