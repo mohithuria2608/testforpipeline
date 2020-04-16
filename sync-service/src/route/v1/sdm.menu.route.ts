@@ -11,7 +11,8 @@ export default (router: Router) => {
             validate({
                 body: {
                     data: Joi.object().keys({
-                        menuId: Joi.number().required()
+                        menuId: Joi.number().required(),
+                        countryId: Joi.string()
                     }).error(new Error(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR.message))
                 }
             }),

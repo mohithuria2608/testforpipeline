@@ -366,7 +366,7 @@ export let sendRequestToCMS = function (type, data) {
     return new Promise((resolve, reject) => {
         let requestUrl = config.get("cms.baseUrl");
         switch (type) {
-            case 'SYNC_MENU': requestUrl = "menu/create"; break;
+            case 'SYNC_MENU': requestUrl = "menu/generateInputJson"; break;
             default: reject(new Error('Invalid Request Entity Type'));
         }
         console.log("SENDING DATA -> ", type, " -> COUNT: ", data.length);
