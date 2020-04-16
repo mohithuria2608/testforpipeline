@@ -429,8 +429,7 @@ export class OrderController {
 
     async cronPromise(payload: IOrderSdmRequest.IGetActiveOrdersResObj) {
         try {
-            // let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
-            let donotGetOrderDetailStatus = [2, 8, 16, 32, 64, 128]
+            let donotGetOrderDetailStatus = [2, 8, 16, 32, 64, 128, 2048]
             let getRetrySdmOrderStatus = [96]
             if (payload && payload.Key && payload.Value) {
                 let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
