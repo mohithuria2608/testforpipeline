@@ -124,7 +124,6 @@ const orderSchema = new Schema({
         default: Constant.CONF.ORDER_STATUS.PENDING.MONGO,
     },
     sdmOrderStatus: { type: Number, required: true, index: true, default: -1 },
-    sdmOrderLogs: { type: Schema.Types.Mixed, required: true },
     items: { type: Schema.Types.Mixed, required: true },
     amount: [{
         sequence: { type: Number, },
