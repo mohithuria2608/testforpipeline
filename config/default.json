@@ -188,8 +188,8 @@
     },
     "blobBaseUrl": {
         "SASToken": "?sv=2019-02-02&ss=bfqt&srt=sco&sp=rl&se=2029-04-09T19:07:24Z&st=2020-04-09T11:07:24Z&spr=https&sig=Z67UuDjY4QScWJCAMeXZmMn7VLH%2F3uL6xv6vpXnInOA%3D",
-        "product": "http://40.123.205.1/pub/media/catalog/product/",
-        "home": "http://40.123.205.1/pub/media/homepage/",
+        "product": "https://kfcprodnecmsimage.azureedge.net/cmsimages/",
+        "home": "https://kfcprodnecmsimage.azureedge.net/cmsimages/",
         "jsonBase": "https://amfprodneblobstorage.blob.core.windows.net/amfprodneblobstorage/testing/"
     },
     "cryptoSecret": "d6F3Efeq",
