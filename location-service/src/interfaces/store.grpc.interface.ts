@@ -27,11 +27,4 @@ declare namespace IStoreGrpcRequest {
     interface ISyncStoreStatusReq {
         request: any
     }
-    interface IUploadPickupOnBlobReq {
-        request: IUploadPickupOnBlob
-    }
-
-    interface IUploadPickupOnBlob {
-        sdm: string
-    }
 }

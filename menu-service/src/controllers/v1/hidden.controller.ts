@@ -1,35 +1,9 @@
-import * as fs from 'fs';
 import * as Constant from "../../constant";
 import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
-import { Aerospike } from '../../aerospike'
 
 export class HiddenController {
     constructor() { }
-
-    /**
-    * @method BOOTSTRAP
-    * @description : Post bulk hidden data
-    * */
-    async bootstrapHidden() {
-        try {
-            await Aerospike.truncate({ set: ENTITY.HiddenArE.set, before_nanos: 0 })
-            await Aerospike.truncate({ set: ENTITY.HiddenEnE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/hidden.json', 'utf-8');
-            let menu = JSON.parse(rawdata);
-            for (const iterator of menu) {
-                if (iterator.language == Constant.DATABASE.LANGUAGE.AR)
-                    ENTITY.HiddenArE.postHiddenMenu(iterator)
-                if (iterator.language == Constant.DATABASE.LANGUAGE.EN)
-                    ENTITY.HiddenEnE.postHiddenMenu(iterator)
-            }
-            return {}
-
-        } catch (error) {
-            consolelog(process.cwd(), "bootstrapHidden", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
 
     /**
     * @method GET
