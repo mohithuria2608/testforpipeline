@@ -310,7 +310,7 @@ export class OrderClass extends BaseEntity {
                 order: sdmOrderObj,
                 autoApprove: true,
                 useBackupStoreIfAvailable: true,
-                orderNotes1: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order.cmsOrderRef : order.cmsOrderRef,
+                orderNotes1: (finalText && finalText != "") ? finalText : ((process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order.cmsOrderRef : order.cmsOrderRef),
                 orderNotes2: (process.env.NODE_ENV == "development") ? "Test Orders - Appinventiv " + order._id.toString() : order._id.toString(),
                 creditCardPaymentbool: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
                 isSuspended: (order['payment']['paymentMethodId'] == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD) ? false : true,
@@ -1497,7 +1497,7 @@ export class OrderClass extends BaseEntity {
                                             await paymentService.refundPayment({
                                                 noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                                 storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                                amount: parseInt(order.transLogs[2].transactions[0].amount),
+                                                amount: parseFloat(order.transLogs[2].transactions[0].amount),
                                                 captureTransactionId: order.transLogs[2].transactions[0].id
                                             })
                                             dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS
@@ -1714,7 +1714,7 @@ export class OrderClass extends BaseEntity {
                                         await paymentService.refundPayment({
                                             noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                             storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                                            amount: parseInt(order.transLogs[2].transactions[0].amount),
+                                            amount: parseFloat(order.transLogs[2].transactions[0].amount),
                                             captureTransactionId: order.transLogs[2].transactions[0].id
                                         })
                                         dataToUpdateOrder['payment.status'] = Constant.DATABASE.STATUS.TRANSACTION.REFUND.AS

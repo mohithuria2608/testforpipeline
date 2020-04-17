@@ -304,7 +304,8 @@ export class PaymentClass extends BaseEntity {
                 returnUrl: this.getReturnUrl(),
                 locale: payload.locale || Constant.DATABASE.PAYMENT_LOCALE.EN, // default english
                 paymentAction: Constant.DATABASE.ACTION.TRANSACTION.AUTHORIZE,
-                initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString()
+                initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString(),
+                styleProfile: config.styleProfile//"KFC_Theme_1"
             }
         };
 

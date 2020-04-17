@@ -1991,7 +1991,8 @@ export const CONF = {
                 noonpayReversePaymentEndPoint: '/order',
                 noonpayRefundPaymentEndPoint: '/order',
                 code: "noonpay",
-                status: 1
+                status: 1,
+                styleProfile: "KFC_Theme_1"
             },
             codInfo: {
                 status: 1,
