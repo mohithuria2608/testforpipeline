@@ -2,10 +2,10 @@ import { CronJob } from 'cron';
 import { consolelog } from '../utils'
 import { sdmLocationController } from '../controllers';
 
-export const storejob = new CronJob('0 0 4 * * *', function () {
-    consolelog(process.cwd(), 'Bootstraping complete stores on 4 am everyday', new Date(), true);
-    sdmLocationController.syncLocationData();
-}, null, true);
+// export const storejob = new CronJob('0 0 4 * * *', function () {
+//     consolelog(process.cwd(), 'Bootstraping complete stores on 4 am everyday', new Date(), true);
+//     sdmLocationController.syncLocationData();
+// }, null, true);
 
 
 export const storestatusjob_0_4 = new CronJob('0 */30 0-4 * * *', function () {
