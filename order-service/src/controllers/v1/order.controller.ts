@@ -4,7 +4,7 @@ import { consolelog, getFrequency } from '../../utils'
 import { userService, locationService, promotionService, menuService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 import { OrderSDME } from '../../sdm';
-import { Aerospike } from "../../aerospike"
+
 
 export class OrderController {
 
@@ -263,7 +263,8 @@ export class OrderController {
      * */
     async orderHistory(headers: ICommonRequest.IHeaders, payload: IOrderRequest.IOrderHistory, auth: ICommonRequest.AuthorizationObj) {
         try {
-            return await ENTITY.OrderE.getOrderHistory(payload, auth)
+            let orderHistory = await ENTITY.OrderE.getOrderHistory(payload, auth)
+            return orderHistory
         } catch (error) {
             consolelog(process.cwd(), "orderHistory", JSON.stringify(error), false)
             return Promise.reject(error)
@@ -372,6 +373,7 @@ export class OrderController {
             })
             if (sdmActiveOrders && sdmActiveOrders.KeyValueOflongint) {
                 sdmActiveOrders.KeyValueOflongint = await ENTITY.OrderstatusE.checkOrderstatusValidForCron(sdmActiveOrders.KeyValueOflongint)
+
                 if (sdmActiveOrders.KeyValueOflongint && sdmActiveOrders.KeyValueOflongint.length > 0)
                     this.cronUpdate(sdmActiveOrders.KeyValueOflongint)
                 else
@@ -390,7 +392,15 @@ export class OrderController {
             let fakeSdmOrderIds = await Promise.all(promise)
             fakeSdmOrderIds = fakeSdmOrderIds.filter(obj => { return (obj) })
             if (fakeSdmOrderIds && fakeSdmOrderIds.length > 0) {
-                let checkOrderExists = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: { $in: fakeSdmOrderIds } }, { _id: 1, sdmOrderRef: 1 })
+                let checkOrderExists = await ENTITY.OrderE.getMultipleMdb({
+                    sdmOrderRef: { $in: fakeSdmOrderIds },
+                    status: {
+                        $nin: [
+                            Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                            Constant.CONF.ORDER_STATUS.FAILURE.MONGO
+                        ]
+                    }
+                }, { _id: 1, sdmOrderRef: 1, sdmOrderStatus: 1 })
                 let finalSdmOrderIdToBypass = []
                 if (checkOrderExists && checkOrderExists.length > 0) {
                     fakeSdmOrderIds.forEach(soi => {
@@ -420,7 +430,8 @@ export class OrderController {
 
     async cronPromise(payload: IOrderSdmRequest.IGetActiveOrdersResObj) {
         try {
-            let getOrderDetailStatus = [0, 1, 96, 512, 256, 1024, 4096, 8192];
+            let donotGetOrderDetailStatus = [2, 8, 16, 32, 64, 128, 2048]
+            let getRetrySdmOrderStatus = [96]
             if (payload && payload.Key && payload.Value) {
                 let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
                     status: {
@@ -432,7 +443,7 @@ export class OrderController {
                     sdmOrderRef: parseInt(payload.Key),
                     $or: [
                         { sdmOrderStatus: { $ne: parseInt(payload.Value) } },
-                        { sdmOrderStatus: 96 }
+                        { sdmOrderStatus: { $in: getRetrySdmOrderStatus } }
                     ]
                 }, {
                     sdmOrderStatus: parseInt(payload.Value),
@@ -440,10 +451,10 @@ export class OrderController {
                 }, { new: true, select: { items: 0, selFreeItem: 0, freeItems: 0 } })
                 if (checkIfStatusChanged && checkIfStatusChanged._id) {
                     await ENTITY.OrderstatusE.updateOrderstatusForCron(payload, checkIfStatusChanged)
-                    if (getOrderDetailStatus.indexOf(parseInt(payload.Value)) >= 0)
-                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
-                    else
+                    if (donotGetOrderDetailStatus.indexOf(parseInt(payload.Value)) >= 0)
                         ENTITY.OrderE.donotGetSdmOrderScheduler(checkIfStatusChanged)
+                    else
+                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
                     return
                 } else
                     return parseInt(payload.Key)
