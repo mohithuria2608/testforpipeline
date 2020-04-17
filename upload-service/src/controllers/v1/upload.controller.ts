@@ -32,7 +32,7 @@ export class UploadController {
      */
     async singleImage(image: any) {
         try {
-            let allowedTypes = ["image/jpg", "image/jpeg"];
+            let allowedTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "video/mp4"];
             if (allowedTypes.includes(image.mimetype)) {
                 let imageData = await readFile(image.path);
                 await deleteFile(image.path);
@@ -49,7 +49,7 @@ export class UploadController {
      */
     async bulkImage(images: any[]) {
         try {
-            let allowedTypes = ["image/jpg", "image/jpeg"];
+            let allowedTypes = ["image/jpg", "image/jpeg", "image/png", "image/gif", "video/mp4"];
             for (let image of images) {
                 if (!allowedTypes.includes(image.mimetype)) {
                     return { success: false, message: 'Invalid Image Type' };
@@ -72,7 +72,7 @@ export class UploadController {
     * */
     async singleFile(payload: any) {
         try {
-            let allowedTypes = ["application/zip", "image/jpeg"];
+            let allowedTypes = ["application/zip", "application/zip"];
             if (allowedTypes.includes(payload.mimetype)) {
                 decompress(payload.path, __dirname + '/../../../../exports/extracts/', {
                     plugins: [dcpUnz()]
