@@ -231,10 +231,7 @@
         }
     },
     "mongo": {
-        "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db",
-        "hosts": "10.2.0.5",
-        "username": "americana_dbusr_uat",
-        "password": "AppInvDbUser"
+        "url": "mongodb://americana_dbusr_uat:AppInvDbUser@10.2.0.5:27017/americana_db"
     },
     "cms": {
         "baseUrl": "https://mobcms.americana-food.com/rest/V1/",

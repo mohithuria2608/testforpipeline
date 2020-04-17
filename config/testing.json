@@ -231,10 +231,7 @@
         }
     },
     "mongo": {
-        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db",
-        "hosts": "54.176.239.44:2798",
-        "username": "americana_dbusr",
-        "password": "96fMUpk2PGzbu8Hn"
+        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db"
     },
     "cms": {
         "baseUrl": "http://40.123.205.1/rest/V1/",

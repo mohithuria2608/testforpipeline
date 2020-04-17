@@ -231,10 +231,7 @@
         }
     },
     "mongo": {
-        "url": "mongodb://admin:ebaN4cnM7hnu35Km@10.1.4.5:27017/admin",
-        "hosts": "10.1.4.5",
-        "username": "americana_dbusr_uat",
-        "password": "AppInvDbUser"
+        "url": "mongodb://americanaprod_dbusr:7Hph99BhG9kAkEXR@10.1.4.7:27017,10.1.4.5:27017,10.1.4.6:27017/americanaprod_db?replicaSet=rs0&readPreference=secondaryPreferred&w=majority&wtimeoutMS=5000"
     },
     "cms": {
         "baseUrl": "https://kfccms.americanarest.com/rest/V1/",
