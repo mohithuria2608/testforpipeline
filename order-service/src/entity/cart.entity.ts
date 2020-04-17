@@ -687,7 +687,7 @@ export class CartClass extends BaseEntity {
                         type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.DISCOUNT,
                         code: payload.cmsCart.coupon_code,
                         amount: payload.cmsCart.discount_amount,
-                        sequence: 2,
+                        sequence: 3,
                         action: Constant.DATABASE.ACTION.CART_AMOUNT.SUBTRACT
                     })
                 dataToUpdate['couponApplied'] = 1
@@ -731,7 +731,7 @@ export class CartClass extends BaseEntity {
                         type: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
                         code: Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING,
                         amount: payload.cmsCart.shipping[0].price,
-                        sequence: 3,
+                        sequence: 2,
                         action: Constant.DATABASE.ACTION.CART_AMOUNT.ADD,
                     })
             }
