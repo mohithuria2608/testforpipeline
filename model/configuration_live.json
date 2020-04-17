@@ -355,8 +355,8 @@
                 }
             },
             "cancelled_config": {
-                "as": "CANCELLED",
-                "mongo": "CANCELLED",
+                "as": "CANCELED",
+                "mongo": "CANCELED",
                 "cms": "canceled",
                 "sdm": [
                     512,
