@@ -609,7 +609,7 @@ export const NOTIFICATION_MSG = {
             },
             ORDER_PICKUP_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
-                return `شكرًا لاختيارك دجاج كنتاكي. تم تأكيد طلبك وسيكون جاهز للاستلام خلال 30  دقيقة. رقم الطلب ${data.amount[0].amount}. المبلغ: ${data.amount} درهم.`;
+                return `شكرًا لاختيارك دجاج كنتاكي. تم تأكيد طلبك وسيكون جاهز للاستلام خلال 30  دقيقة. رقم الطلب ${data.sdmOrderRef}. المبلغ: ${data.amount[0].amount} درهم.`;
             },
             ORDER_CANCEL: (data) => `تم إلغاء الطلب رقم ${data.sdmOrderRef}. إي أموال تم سحبها سيتم إرجاعها خلال 4 إلى 7 أيام عمل.`,
             ORDER_FAIL: (data) => `عذرًا لم نتمكن من إكمال الطلب. يرجى المحاولة مجددًا بعد قليل`

@@ -26,8 +26,8 @@ export default async function () {
 function getStoreTimings(st, et, nextday) {
     st += 'Z'; et += 'Z';
     return {
-        startTime: new Date(+new Date(st) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString(),
-        endTime: new Date(+new Date(et) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString(),
+        startTime: new Date(+new Date(st) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z"),
+        endTime: new Date(+new Date(et) - Constant.CONF.GENERAL.SDM_STORE_TIME_OFFSET).toISOString().replace(".000Z", "Z"),
         nextDay: parseInt(nextday) ? 1 : 0
     }
 }
