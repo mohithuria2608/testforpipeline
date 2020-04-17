@@ -2,7 +2,7 @@ import * as config from "config"
 import { BaseConsumer } from "./base.consumer";
 import * as Constant from '../../constant'
 import { consolelog, topicNameCreator, generateRandomString } from "../../utils"
-import { kafkaController } from '../../controllers'
+import { logService } from "../../grpc/client"
 
 const topic = topicNameCreator(config.get("env"), Constant.KAFKA_TOPIC.FAIL_Q)
 const groupId = generateRandomString(16)
@@ -36,13 +36,13 @@ class FailConsumer extends BaseConsumer {
                 },
                 createdAt: new Date().getTime(),
             }
-            kafkaController.kafkaSync({
+            logService.sync({
                 set: Constant.SET_NAME.LOGGER,
                 mdb: {
                     create: true,
                     argv: JSON.stringify(data)
                 },
-                inQ: true
+                inQ: false
             })
             return {}
         } catch (error) {
