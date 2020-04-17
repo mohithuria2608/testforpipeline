@@ -181,9 +181,16 @@
             }
         }
     },
+    "imageStorage": {
+        "baseUrl": "https://kfcprodnecmsimage.blob.core.windows.net",
+        "container": "cmsimages",
+        "accountName": "kfcprodnecmsimage",
+        "accessKey": "KqxYMTCLtW3qQvmJB/XbG9lkUh6Ng5zyI//0ZoD+3nLQdBpPPXCS3gzMLCOEqaniVw4iUkir86yB3Eq15ymhwQ=="
+    },
     "blobStorage": {
         "baseUrl": "https://amfprodneblobstorage.blob.core.windows.net",
         "container": "amfprodneblobstorage",
+        "accountName": "amfprodneblobstorage",
         "accessKey": "YljfMnDpcNF7FWWxQ/FH/2SXXveMWMrnYK2h0STifDNLTSUue2EANZ8Ln3K45HCQpiOn6kEcD7fnjWJoY3znuQ=="
     },
     "blobBaseUrl": {

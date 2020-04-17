@@ -629,7 +629,7 @@ export class UserController {
                     //     emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
                     //     emailDestination: userData.email,
                     //     language: headers.language,
-                    //     payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
+                    //     payload: JSON.stringify({ email: { user: userData, isNewUser: Boolean(userData.sdmUserRef) } })
                     // });
                     return formatUserData(userData, headers, auth.isGuest)
                 }

@@ -1,7 +1,7 @@
 /**
- * @file azure.blob.storage
- * @description defines azure blob storage
- * @created 2019-12-04 13:15:20
+ * @file azure.image.storage
+ * @description defines azure image storage
+ * @created 2020-04-17 11:12:39
 */
 
 import * as mime from "mime";
@@ -13,11 +13,11 @@ class BlobStorageClass {
     private client;
     private container;
     private containerName;
-    private baseUrl = config.get("blobStorage.baseUrl");
+    private baseUrl = config.get("imageStorage.baseUrl");
     private basePath: string;
 
     constructor(containerName: string, basePath: string) {
-        const credentails = new StorageSharedKeyCredential(config.get("blobStorage.accountName"), config.get("blobStorage.accessKey"));
+        const credentails = new StorageSharedKeyCredential(config.get("imageStorage.accountName"), config.get("imageStorage.accessKey"));
         this.client = new BlobServiceClient(this.baseUrl, credentails);
         this.container = this.client.getContainerClient(containerName);
         this.containerName = containerName;
@@ -37,10 +37,9 @@ class BlobStorageClass {
         );
         return {
             success: true,
-            url: `${this.baseUrl}/${this.containerName}/${this.basePath}${name}${config.get("blobBaseUrl.SASToken")}`
+            url: `${this.baseUrl}/${this.containerName}/${this.basePath}${name}`
         }
     }
 }
 
-export const EnvModelBlob = new BlobStorageClass(config.get("blobStorage.container"), `${config.get('env')}\/`);
-
+export const ImageBlob = new BlobStorageClass(config.get("imageStorage.container"), `imagestemp/`);

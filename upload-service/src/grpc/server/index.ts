@@ -20,8 +20,8 @@ const server = new grpc.Server()
 server.addService(uploadProto.UploadService.service, {
     UploadJSON: async (call, callback) => {
         try {
-            consolelog(process.cwd(), "UploadJSON", JSON.stringify(call.request), true)
-            let res = await uploadController.uploadJSON(call.request);
+            consolelog(process.cwd(), "UploadJSON", JSON.stringify({ contentLength: JSON.stringify(call.request).length }), true)
+            let res = await uploadController.singleFileWithData(call.request);
             callback(null, res);
             return res;
         } catch (error) {
