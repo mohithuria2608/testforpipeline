@@ -1473,7 +1473,6 @@ export const CONF = {
         CONTACTLESS_VISBILE: true,
         CONTACTLESS_CLICK_ENABLE: true,
         ORDERSTATUS_RESET: 24 * 60 * 60,//seconds
-        ENABLE_BYPASS: true,
     },
     COUNTRY_SPECIFIC: {
         UAE: {
@@ -2072,13 +2071,11 @@ interface IGeneral {
     display_color: boolean,
     deeplink_fallback: string,
     auth_mech: string,
-    addr_show_time: number,
-    enable_bypass_otp: boolean
+    addr_show_time: number
 }
 export const generalConfigSync = function (config: IGeneral, date: number) {
     CONF.GENERAL.DEFAULT_CART_TTL = config.ttl_for_cart;
     CONF.GENERAL.BY_PASS_OTP = config.bypass_otp;
-    CONF.GENERAL.ENABLE_BYPASS = config.enable_bypass_otp ? config.enable_bypass_otp : CONF.GENERAL.ENABLE_BYPASS;
     CONF.GENERAL.OTP_EXPIRE_TIME = config.otp_expire;
     CONF.GENERAL.ACCESS_TOKEN_EXPIRE_TIME = config.access_token_expire_time;
     CONF.GENERAL.REFRESH_TOKEN_EXPIRE_TIME = config.refresh_token_expire_time;

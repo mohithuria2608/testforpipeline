@@ -54,7 +54,6 @@ export class CmsConfigController {
                                             initial_user_ttl: config.initial_user_ttl ? parseInt(config.initial_user_ttl) : 0,
                                             initial_guest_ttl: config.initial_guest_ttl ? parseInt(config.initial_guest_ttl) : 0,
                                             bypass_otp: config.bypass_otp ? parseInt(config.bypass_otp) : Constant.CONF.GENERAL.BY_PASS_OTP,
-                                            enable_bypass_otp: config.bypass_otp ? config.enable_bypass_otp : Constant.CONF.GENERAL.ENABLE_BYPASS,
                                             otp_expire: config.otp_expire ? parseInt(config.otp_expire) : Constant.CONF.GENERAL.OTP_EXPIRE_TIME,
                                             access_token_expire_time: config.access_token_expire_time ? parseInt(config.access_token_expire_time) : Constant.CONF.GENERAL.ACCESS_TOKEN_EXPIRE_TIME,
                                             refresh_token_expire_time: config.refresh_token_expire_time ? parseInt(config.refresh_token_expire_time) : Constant.CONF.GENERAL.REFRESH_TOKEN_EXPIRE_TIME,

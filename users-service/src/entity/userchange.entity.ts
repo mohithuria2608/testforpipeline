@@ -104,7 +104,7 @@ export class UserchangeEntity extends BaseEntity {
                 }
                 if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (!((Constant.CONF.GENERAL.ENABLE_BYPASS && Constant.CONF.GENERAL.BY_PASS_OTP && (payload.otp == Constant.CONF.GENERAL.BY_PASS_OTP)) || (curUserchnage.otp == payload.otp))) {
+                if (!((config.get("enableByPassOtp") && Constant.CONF.GENERAL.BY_PASS_OTP && (payload.otp == Constant.CONF.GENERAL.BY_PASS_OTP)) || (curUserchnage.otp == payload.otp))) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
                 }
                 if (curUserchnage.otpExpAt < new Date().getTime())
