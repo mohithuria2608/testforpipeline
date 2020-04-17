@@ -3,7 +3,6 @@ import { SoapManager } from "./soap";
 import { cmsConfigController, cmsAppversionController } from '../controllers';
 import { configuration } from '../sync-config/configuration';
 import { appversion } from '../sync-config/appversion';
-import { storestatusjob_0_4, storestatusjob_10_24 } from '../lib';
 
 export let bootstrap = async function (server) {
 
@@ -13,7 +12,5 @@ export let bootstrap = async function (server) {
     await appversion.init();
     await cmsAppversionController.bootstrapAppversion()
     await SoapManager.init();
-    storestatusjob_0_4.start();
-    storestatusjob_10_24.start();
     return
 }
