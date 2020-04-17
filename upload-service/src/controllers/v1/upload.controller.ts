@@ -1,4 +1,7 @@
-import { EnvModelBlob, TempBlob } from "../../lib";
+import { EnvModelBlob, ImageBlob } from "../../lib";
+import * as decompress from "decompress";
+import * as dcpTar from "decompress-tar";
+import * as dcpUnz from "decompress-unzip";
 import { consolelog, readFile, deleteFile } from '../../utils'
 
 export class UploadController {
@@ -33,8 +36,31 @@ export class UploadController {
             if (allowedTypes.includes(image.mimetype)) {
                 let imageData = await readFile(image.path);
                 await deleteFile(image.path);
-                return await TempBlob.upload(image.originalname, imageData);
+                return await ImageBlob.upload(image.originalname, imageData);
             } else return { success: false, message: 'Invalid Image Type' };
+        } catch (error) {
+            consolelog(process.cwd(), "singleImage", error, false);
+            return { success: false, message: 'Internal Server Error' };
+        }
+    }
+
+    /**
+     * @method POST
+     */
+    async bulkImage(images: any[]) {
+        try {
+            let allowedTypes = ["image/jpg", "image/jpeg"];
+            for (let image of images) {
+                if (!allowedTypes.includes(image.mimetype)) {
+                    return { success: false, message: 'Invalid Image Type' };
+                }
+            }
+            for (let image of images) {
+                let imageData = await readFile(image.path);
+                await ImageBlob.upload(image.originalname, imageData);
+                deleteFile(image.path);
+            }
+            return { success: true };
         } catch (error) {
             consolelog(process.cwd(), "singleImage", error, false);
             return { success: false, message: 'Internal Server Error' };
@@ -46,15 +72,21 @@ export class UploadController {
     * */
     async singleFile(payload: any) {
         try {
-            let responseData;
-            switch (payload.mimetype) {
-                // case "application/zip": {
-                //     let stream = fs.createReadStream(payload.path).pipe(unzip.Extract({ path: __dirname + '/../../../../exports' }));
-                //     await TempBlob.upload
-                //     break;
-                // }
-                default: return { success: false, message: 'Invalid file type' }
-            }
+            let allowedTypes = ["application/zip", "image/jpeg"];
+            if (allowedTypes.includes(payload.mimetype)) {
+                decompress(payload.path, __dirname + '/../../../../exports/extracts/', {
+                    plugins: [dcpUnz()]
+                }).then(async files => {
+                    for (let file of files) {
+                        let filePath = __dirname + '/../../../../exports/extracts/' + file.path;
+                        let imageData = await readFile(filePath);
+                        await ImageBlob.upload(file.path, imageData);
+                        deleteFile(filePath);
+                    }
+                    deleteFile(payload.path);
+                    return { success: true };
+                });
+            } else return { success: false, message: 'Invalid file type' }
         } catch (error) {
             consolelog(process.cwd(), "uploadImage", error, false)
             return { success: false, message: 'Internal Server Error' };
