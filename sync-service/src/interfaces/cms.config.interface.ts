@@ -32,6 +32,7 @@ declare namespace ICmsConfigRequest {
         deeplink_fallback: string,
         auth_mech: string,
         addr_show_time: string,
+        enable_bypass_otp: boolean
     }
 
     interface ICmsConfigPayment {

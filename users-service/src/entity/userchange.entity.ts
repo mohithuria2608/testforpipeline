@@ -80,7 +80,7 @@ export class UserchangeEntity extends BaseEntity {
             let change = await Aerospike.get(getArg)
             if (change && change.id) {
                 return change
-            }  else
+            } else
                 return {}
         } catch (error) {
             consolelog(process.cwd(), "getUserchange", JSON.stringify(error), false)
@@ -104,7 +104,7 @@ export class UserchangeEntity extends BaseEntity {
                 }
                 if (curUserchnage.otp == 0 && curUserchnage.otpExpAt == 0)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.OTP_SESSION_EXPIRED)
-                if (!((Constant.CONF.GENERAL.BY_PASS_OTP && (payload.otp == Constant.CONF.GENERAL.BY_PASS_OTP)) || (curUserchnage.otp == payload.otp))) {
+                if (!((Constant.CONF.GENERAL.ENABLE_BYPASS && Constant.CONF.GENERAL.BY_PASS_OTP && (payload.otp == Constant.CONF.GENERAL.BY_PASS_OTP)) || (curUserchnage.otp == payload.otp))) {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E400.INVALID_OTP)
                 }
                 if (curUserchnage.otpExpAt < new Date().getTime())

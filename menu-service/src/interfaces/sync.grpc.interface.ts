@@ -40,6 +40,7 @@ declare namespace ISyncGrpcRequest {
         deeplink_fallback: string,
         auth_mech: string,
         addr_show_time: number,
+        enable_bypass_otp: boolean
     }
     interface IKafka {
         sdm?: {
