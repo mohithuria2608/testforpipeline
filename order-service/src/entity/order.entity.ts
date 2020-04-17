@@ -988,12 +988,12 @@ export class OrderClass extends BaseEntity {
                     order.sdmOrderRef = order.newOrderId
                 let sdmOrder = await OrderSDME.getOrderDetail({ sdmOrderRef: order.sdmOrderRef, language: order.language, country: order.country })
                 if (sdmOrder && sdmOrder.OrderID && !isNaN(parseInt(sdmOrder.OrderID))) {
-                    if (order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
+                    if (!order.transferDone && order.sdmOrderRef != parseInt(sdmOrder.OrderID)) {
                         let transferOrder = await this.transferOrderHandler(order, sdmOrder)
                         proceedFurther = transferOrder.proceedFurther;
                         order = transferOrder.order;
                     }
-                    consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status}`, "", true)
+                    consolelog(process.cwd(), `scheduler current sdm status : ${order.sdmOrderRef} : ${sdmOrder.Status} : ${proceedFurther} : ${sdmOrder.newOrderId}`, "", true)
                     if (sdmOrder.Status && typeof sdmOrder.Status) {
                         if (!order.amountValidationPassed && proceedFurther && sdmOrder.Total) {
                             let amountValidation = await this.amountValidationHandler(proceedFurther, order, sdmOrder)
@@ -1018,9 +1018,8 @@ export class OrderClass extends BaseEntity {
                                 case 1024:
                                 case 4096:
                                 case 8192: {
-                                    if (order.transferDone || (order.sdmOrderRef == parseInt(sdmOrder.OrderID))) {
+                                    if (order.transferDone || (order.sdmOrderRef == parseInt(sdmOrder.OrderID)))
                                         order = await this.sdmCancelledHandler(order, sdmOrder)
-                                    }
                                     break;
                                 }
                                 default: {
