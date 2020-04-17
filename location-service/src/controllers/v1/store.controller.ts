@@ -124,14 +124,16 @@ export class StoreController {
                             store.active !== storeStatusList[i].active ||
                             store.startTime !== storeStatusList[i].startTime ||
                             store.endTime !== storeStatusList[i].endTime ||
-                            store.services !== storeStatusList[i].services
+                            store.services.del !== storeStatusList[i].services.del ||
+                            store.services.tak !== storeStatusList[i].services.tak ||
+                            store.services.din !== storeStatusList[i].services.din
                         )
                     ) {
                         store.active = storeStatusList[i].active;
                         store.startTime = storeStatusList[i].startTime;
                         store.endTime = storeStatusList[i].endTime;
                         store.nextDay = storeStatusList[i].nextDay;
-                        store.services = storeStatusList[i].services;
+                        store.services = { ...store.services, ...storeStatusList[i].services };
                         await ENTITY.StoreE.saveStore(store);
                         if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
                             storesToSyncWithCMS.push({
