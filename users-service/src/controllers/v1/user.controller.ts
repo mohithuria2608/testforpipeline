@@ -204,13 +204,28 @@ export class UserController {
                 if (userData.sdmUserRef && (userchange[0].chngEmailSdm || userchange[0].chngPhnSdm))
                     SDM.UserSDME.updateCustomerOnSdm(userData, headers)
 
-                if (asAddress && asAddress.length > 0) {
-                }
-                if (cmsAddress && cmsAddress.length > 0)
+                if (cmsAddress && cmsAddress.length > 0) {
                     ENTITY.AddressE.createCmsAddOnAs(headers, userData, cmsAddress)
+                    let putArg: IAerospike.Put = {
+                        bins: { cmsAddress: [] },
+                        set: ENTITY.UserE.set,
+                        key: userData.id,
+                        update: true
+                    }
+                    await Aerospike.put(putArg)
+                }
 
-                if (sdmAddress && sdmAddress.length > 0)
+                if (sdmAddress && sdmAddress.length > 0) {
                     ENTITY.AddressE.createSdmAddOnCmsAndAs(headers, userData, sdmAddress)
+                    let putArg: IAerospike.Put = {
+                        bins: { sdmAddress: [] },
+                        set: ENTITY.UserE.set,
+                        key: userData.id,
+                        update: true
+                    }
+                    await Aerospike.put(putArg)
+                }
+
 
             } else {
                 consolelog(process.cwd(), "user not found => invalid otp", "", true)
