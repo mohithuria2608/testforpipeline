@@ -54,6 +54,7 @@ export class UserEntity extends BaseEntity {
                 cCode: payload.phone.slice(0, 4),
                 phnNo: payload.phone.slice(4),
                 fullPhnNo: payload.phone,
+                username: Constant.DATABASE.BRAND.KFC + "_" + payload.phone,
                 cmsUserRef: parseInt(payload.customerId),
                 sdmUserRef: parseInt(payload.SdmUserRef),
                 sdmCorpRef: parseInt(payload.SdmCorpRef),
