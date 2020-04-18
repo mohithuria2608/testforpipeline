@@ -60,7 +60,7 @@ gulp.task("copyLua", function () {
 	return gulp.src(['../lua/**/*']).pipe(gulp.dest("./lua"));
 });
 
-gulp.task('default', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
+gulp.task('default', gulp.series("clean", "copyConstant", "copyProto", "copyModel", "copyConfig", "copyLua", "compile"));
 
 
 gulp.task('local', function () {
@@ -72,7 +72,7 @@ gulp.task('local', function () {
 				"NODE_ENV": "default"
 			}
 		}, function () {
-			 
+
 			pm2.streamLogs('user', 0);
 		});
 	});
@@ -86,7 +86,7 @@ gulp.task('dev', function () {
 				"NODE_ENV": "development"
 			}
 		}, function () {
-			
+
 			pm2.streamLogs('user', 0);
 		});
 	});
@@ -100,12 +100,12 @@ gulp.task('qa', function () {
 				"NODE_ENV": "testing"
 			}
 		}, function () {
-			 
+
 			pm2.streamLogs('user', 0);
 		});
 	});
 });
 
-gulp.task('local', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile", 'local'));
-gulp.task('dev', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile", "dev"));
-gulp.task('qa', gulp.series("clean", "copyConstant","copyProto", "copyModel", "copyConfig", "copyLua", "compile", "qa"));
+gulp.task('local', gulp.series("clean", "copyConstant", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", 'local'));
+gulp.task('dev', gulp.series("clean", "copyConstant", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "dev"));
+gulp.task('qa', gulp.series("clean", "copyConstant", "copyProto", "copyModel", "copyConfig", "copyLua", "compile", "qa"));
