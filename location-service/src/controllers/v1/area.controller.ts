@@ -1,6 +1,3 @@
-import * as config from 'config'
-import * as Constant from '../../constant'
-import { consolelog } from '../../utils'
 import * as ENTITY from '../../entity'
 import * as Utils from "../../utils";
 import { Aerospike } from '../../aerospike'

@@ -37,13 +37,13 @@ export class PaymentController {
                             "id": 1,
                             "name": Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD,
                             "image": "",
-                            default: 0
+                            default: 1
                         },
                         {
                             "id": 0,
                             "name": Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.COD,
                             "image": "",
-                            default: 1
+                            default: 0
                         }
                     ]
 

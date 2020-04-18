@@ -2,7 +2,7 @@ import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
-import { consolelog, sendSuccess, stsMsgI18 } from '../../utils'
+import { consolelog, sendSuccess } from '../../utils'
 import { deeplinkController } from '../../controllers';
 import * as JOI from './common.route.validator';
 

@@ -1,5 +1,4 @@
 'use strict';
-import * as config from "config"
 import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog, nameConstructor, deCryptData, phnNoConstructor } from '../utils'

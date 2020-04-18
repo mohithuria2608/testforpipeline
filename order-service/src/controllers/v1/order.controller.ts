@@ -147,23 +147,17 @@ export class OrderController {
                 totalAmount[0].amount
             )
             consolelog(process.cwd(), "step 7", new Date(), false)
-
-            if (initiatePayment.order && initiatePayment.order._id) {
-                order = initiatePayment.order
-                if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO) {
-                    this.syncOnLegacy(payload, headers, userData, getAddress, cart, order, false, true)
-                    if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
-                        ENTITY.CartE.resetCart(cart.cartId)
+            order = initiatePayment.order
+            if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO) {
+                this.syncOnLegacy(payload, headers, userData, getAddress, cart, order, false, true)
+                if (payload.paymentMethodId == Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD)
+                    ENTITY.CartE.resetCart(cart.cartId)
+            }
+            return {
+                orderPlaced: {
+                    noonpayRedirectionUrl: initiatePayment.noonpayRedirectionUrl,
+                    orderInfo: order
                 }
-                return {
-                    orderPlaced: {
-                        noonpayRedirectionUrl: initiatePayment.noonpayRedirectionUrl,
-                        orderInfo: order
-                    }
-                }
-            } else {
-                ENTITY.OrderE.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E500.IMP_ERROR)
             }
         } catch (error) {
             consolelog(process.cwd(), "postOrder", error, false)

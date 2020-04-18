@@ -1,13 +1,9 @@
-import * as Joi from '@hapi/joi';
 import * as Router from 'koa-router'
 import { getMiddleware, validate } from '../../middlewares'
 import * as Constant from '../../constant'
 import { sendSuccess } from '../../utils'
 import { homeController } from '../../controllers';
 import * as JOI from './common.joi.validator';
-import * as ENTITY from '../../entity'
-import * as fs from 'fs'
-const protobuf = require("protobufjs");
 
 
 export default (router: Router) => {

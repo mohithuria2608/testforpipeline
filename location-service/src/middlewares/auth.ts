@@ -1,4 +1,3 @@
-import * as config from 'config'
 import { Middleware, Context } from 'koa'
 import { authService } from '../grpc/client'
 import * as Constant from '../constant'

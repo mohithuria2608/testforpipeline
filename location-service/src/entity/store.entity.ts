@@ -1,9 +1,7 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
-import * as fs from "fs";
 import * as Constant from '../constant'
-import { consolelog, generateRandomString } from '../utils'
+import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 const aerospike = require('aerospike');
 
@@ -31,42 +29,6 @@ export class StoreEntity extends BaseEntity {
     constructor() {
         super(Constant.SET_NAME.STORE)
     }
-
-    public storeSchema = Joi.object().keys({
-        storeIdAs: Joi.string().trim().required().description("pk"),
-        id: Joi.string().trim().required().description("cms id"),
-        storeId: Joi.number().required().description("sk NUMERIC"),
-        countryId: Joi.number().required(),
-        provinceId: Joi.number().required(),
-        areaId: Joi.number().required(),
-        streetId: Joi.number().required(),
-        districtId: Joi.number().required(),
-        mapId: Joi.number().required(),
-        menuId: Joi.number().required().description("sk NUMERIC"),
-        name_en: Joi.string().trim().required(),
-        name_ar: Joi.string().trim().required(),
-        phone1: Joi.string().trim().required(),
-        phone2: Joi.string().trim().required(),
-        services: Joi.object().keys({
-            din: Joi.number(),
-            del: Joi.number(),
-            tak: Joi.number(),
-        }),
-        active: Joi.number().required(),
-        location: Joi.object().keys({
-            description: Joi.string(),
-            latitude: Joi.number(),
-            longitude: Joi.number(),
-        }),
-        address_en: Joi.string(),
-        address_ar: Joi.string(),
-        startTime: Joi.string(),
-        endTime: Joi.string(),
-        geoFence: Joi.object().keys({
-            type: Joi.string().valid('Polygon'),
-            coordinates: Joi.array().items(Joi.array().items(Joi.number()))
-        })
-    });
 
     async saveStore(data) {
         try {

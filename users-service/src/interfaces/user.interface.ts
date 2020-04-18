@@ -20,6 +20,7 @@ declare namespace IUserRequest {
         profileStep?: number,
         password?: string,
         createdAt?: number,
+        migrate?: number
     }
 
     interface TempAddressArray {

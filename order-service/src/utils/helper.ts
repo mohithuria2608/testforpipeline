@@ -1,12 +1,10 @@
 'use strict'
-const hash = require('object-hash');
 import * as config from 'config'
 import * as Joi from '@hapi/joi'
 import * as Constant from '../constant'
 import * as randomstring from 'randomstring';
 import * as crypto from 'crypto'
 import { logger } from '../lib'
-const displayColors = Constant.CONF.GENERAL.DISPLAY_COLOR
 
 export let grpcSendError = function (error, language = Constant.DATABASE.LANGUAGE.EN) {
     consolelog(process.cwd(), "In grpcSendError", JSON.stringify(error), true)
@@ -278,11 +276,6 @@ export let sendSuccess = function (successMsg, language, data) {
 export let authorizationHeaderObj = Joi.object({
     authorization: Joi.string().required().description("bearer space accessToken")
 }).unknown()
-
-
-export let hashObj = function (data: any) {
-    return hash(data)
-}
 
 export let cryptData = function (text: string) {
     var mykey = crypto.createCipher(config.get('cryptoAlgo'), config.get('cryptoSecret'));

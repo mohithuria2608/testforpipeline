@@ -4,7 +4,7 @@ import * as request from 'request-promise';
 import * as _config from "config";
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import { consolelog, sendSuccess } from '../utils'
+import { consolelog } from '../utils'
 import { cloneObject } from '../utils/helper';
 import { configuration } from '../sync-config/configuration';
 

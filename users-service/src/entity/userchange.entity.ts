@@ -1,5 +1,4 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
@@ -26,46 +25,6 @@ export class UserchangeEntity extends BaseEntity {
     constructor() {
         super(Constant.SET_NAME.USERCHANGE)
     }
-
-    public userchangeSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk, user id"),
-        username: Joi.string().trim().required().description("sk - unique"),
-        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-        email: Joi.string().email().lowercase().trim().required(),
-        fullPhnNo: Joi.string().trim().required(),
-        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-        phnNo: Joi.string().trim().required(),
-        sdmUserRef: Joi.number().required(),
-        sdmCorpRef: Joi.number().required(),
-        cmsUserRef: Joi.number().required(),
-        phnVerified: Joi.number().valid(0, 1).required(),
-        name: Joi.string().trim().required(),
-        profileStep: Joi.number().valid(
-            Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-            Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-        ).required(),
-        socialKey: Joi.string().trim().required(),
-        medium: Joi.string().trim().valid(
-            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
-            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
-            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
-        ).required(),
-        password: Joi.string(),
-        createdAt: Joi.number().required(),
-        /**
-         * @description extra validator keys
-         */
-        isGuest: Joi.number().valid(0, 1),
-        otp: Joi.number(),
-        otpExpAt: Joi.number(),
-        otpVerified: Joi.number(),
-        deleteUserId: Joi.string(),
-        chngEmailCms: Joi.number(),
-        chngPhnCms: Joi.number(),
-        chngEmailSdm: Joi.number(),
-        chngPhnSdm: Joi.number(),
-    });
 
     /**
      * @description Get userchange

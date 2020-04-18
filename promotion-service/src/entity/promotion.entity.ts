@@ -1,5 +1,4 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
@@ -29,28 +28,6 @@ export class PromotionClass extends BaseEntity {
     constructor() {
         super(Constant.SET_NAME.PROMOTION)
     }
-
-    public promotionSchema = Joi.object().keys({
-        id: Joi.number().required().description("pk"),
-        couponId: Joi.string().trim().required().description("sk"),
-        couponCode: Joi.string().trim().required().description("sk"),
-        couponCodeL: Joi.string().trim().required().description("sk"),
-        promotionType: Joi.string().trim().required(),
-        discountAmount: Joi.number().required(),
-        maxDiscountApp: Joi.number().required(),
-        usesPerCoupon: Joi.number().required(),
-        usesPerCust: Joi.number().required(),
-        timesUsed: Joi.number().required(),
-        dateFrom: Joi.string().trim().required(),
-        dateTo: Joi.string().trim().required(),
-        ruleName: Joi.string().trim().required(),
-        shortDesc: Joi.string().trim().required(),
-        activeFlag: Joi.number().required(),
-        posId: Joi.number().required(),
-        maxDiscountAmt: Joi.number().required(),
-        isVisible: Joi.number().required(),
-        termsAndCond: Joi.string().trim().required()
-    });
 
     /**
      * @method Bootstrap

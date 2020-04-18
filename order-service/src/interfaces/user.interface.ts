@@ -21,6 +21,7 @@ declare namespace IUserRequest {
         password?: string,
         cartId?: string,
         createdAt?: number,
+        migrate?: number
     }
 
     interface TempAddressArray {

@@ -1,8 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog, validatorErr } from "../../../utils"
-import * as Constant from '../../../constant'
+import { validatorErr } from "../../../utils"
 
 export class OrderServiceValidator {
     constructor() {
@@ -24,23 +23,6 @@ export class OrderServiceValidator {
             }
         })
     }
-
-    // async updateCartValidator(data: IOrderGrpcRequest.IUpdateCart) {
-    //     return new Promise((resolve, reject) => {
-    //         try {
-    //             let dataToValidate = Joi.object().keys({
-    //                 cartId: Joi.string().required(),
-    //                 cmsCart: Joi.string().required(),
-    //             })
-    //             const { error, value } = dataToValidate.validate(data, { abortEarly: true })
-    //             if (error)
-    //                 reject(error.message)
-    //             resolve({})
-    //         } catch (error) {
-    //             reject(validatorErr(error.message))
-    //         }
-    //     })
-    // }
 }
 
 

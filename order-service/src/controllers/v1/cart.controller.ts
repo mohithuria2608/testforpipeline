@@ -1,6 +1,6 @@
 import * as config from "config"
 import * as Constant from '../../constant'
-import { consolelog, hashObj } from '../../utils'
+import { consolelog } from '../../utils'
 import { menuService, userService, promotionService } from '../../grpc/client'
 import * as ENTITY from '../../entity'
 

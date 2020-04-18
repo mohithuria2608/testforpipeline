@@ -1,8 +1,6 @@
-import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
 import { syncService } from '../../grpc/client';
-
 
 export class MiscController {
 

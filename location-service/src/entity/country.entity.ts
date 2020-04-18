@@ -1,8 +1,6 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
 export class CountryEntity extends BaseEntity {
@@ -17,13 +15,6 @@ export class CountryEntity extends BaseEntity {
     constructor() {
         super(Constant.SET_NAME.COUNTRY)
     }
-
-    public countrySchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
-        countryId: Joi.number().required().description("sk NUMERIC"),
-        name_en: Joi.string().trim().required(),
-        name_ar: Joi.string().trim().required()
-    });
 
     async bootstrapCountry(data) {
         try {

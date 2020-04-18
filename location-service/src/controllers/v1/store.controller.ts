@@ -1,4 +1,3 @@
-import * as config from 'config'
 import * as Constant from '../../constant'
 import { consolelog, checkOnlineStore } from '../../utils'
 import * as ENTITY from '../../entity'

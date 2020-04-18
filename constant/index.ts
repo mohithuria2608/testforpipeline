@@ -645,6 +645,14 @@ export const EMAIL_META = {
 export const STATUS_MSG = {
     "ERROR": {
         "E400": {
+            "CHANGE_PAYMENT_METHOD": {
+                "statusCode": 400,
+                "httpCode": 400,
+                "message": "Please try again by changing mode of payment.",
+                "type": "CHANGE_PAYMENT_METHOD",
+                "message_Ar": "Please try again by changing mode of payment.",
+                "message_En": "Please try again by changing mode of payment."
+            },
             "OTP_RETRY_MAXED_OUT": {
                 "statusCode": 400,
                 "httpCode": 400,

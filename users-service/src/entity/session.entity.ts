@@ -3,8 +3,6 @@ import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog, generateSessionId } from '../utils'
-import * as CMS from "../cms";
-import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
 
 export class SessionEntity extends BaseEntity {

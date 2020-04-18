@@ -1,5 +1,5 @@
 import { Middleware, Context } from 'koa'
-import { sendError, consolelog } from '../utils'
+import { sendError } from '../utils'
 import * as Constant from '../constant'
 
 export default (opts?): Middleware => {

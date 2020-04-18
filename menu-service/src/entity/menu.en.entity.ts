@@ -1,14 +1,10 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
 import { Aerospike } from '../aerospike'
 
 export class MenuClass extends BaseEntity {
-
-
-
     constructor() {
         super(Constant.SET_NAME.MENU_EN)
     }

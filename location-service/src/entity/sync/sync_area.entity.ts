@@ -1,10 +1,7 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from '../base.entity'
 import * as Constant from '../../constant'
-import { consolelog, generateRandomString } from '../../utils'
 import { Aerospike } from '../../aerospike'
-const aerospike = require('aerospike');
 
 export class AreaEntity extends BaseEntity {
     public sindex: IAerospike.CreateIndex[] = [

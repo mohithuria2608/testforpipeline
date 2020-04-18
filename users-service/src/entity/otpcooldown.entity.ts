@@ -1,20 +1,13 @@
 'use strict';
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog } from '../utils'
-import * as CMS from "../cms";
-import * as SDM from '../sdm';
 import { Aerospike } from '../aerospike'
 
 export class OtpcooldownEntity extends BaseEntity {
     constructor() {
         super(Constant.SET_NAME.OTPCOOLDOWN)
     }
-
-    public otpcooldownSchema = Joi.object().keys({
-        count: Joi.number(),
-    });
 
     /**
      * @description Get single otpcooldown

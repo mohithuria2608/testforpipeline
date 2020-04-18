@@ -1,6 +1,4 @@
 'use strict';
-import * as config from "config"
-import * as Joi from '@hapi/joi';
 import { BaseEntity } from './base.entity'
 import * as Constant from '../constant'
 import { consolelog, cryptData, generateRandomString } from '../utils'
@@ -29,40 +27,17 @@ export class UserEntity extends BaseEntity {
             bin: 'email',
             index: 'idx_' + this.set + '_' + 'email',
             type: "STRING"
+        },
+        {
+            set: this.set,
+            bin: 'migrate',
+            index: 'idx_' + this.set + '_' + 'migrate',
+            type: "NUMERIC"
         }
     ]
     constructor() {
         super(Constant.SET_NAME.USER)
     }
-
-    public userSchema = Joi.object().keys({
-        id: Joi.string().trim().required().description("pk"),
-        username: Joi.string().trim().required().description("sk - unique"),
-        brand: Joi.string().valid(Constant.DATABASE.BRAND.KFC, Constant.DATABASE.BRAND.PH),
-        country: Joi.string().valid(Constant.DATABASE.COUNTRY.UAE).trim().required(),
-        email: Joi.string().email().lowercase().trim().required(),
-        emailVerified: Joi.number().valid(0, 1).required(),
-        fullPhnNo: Joi.string().trim().required().description("sk"),
-        cCode: Joi.string().valid(Constant.DATABASE.CCODE.UAE).required(),
-        phnNo: Joi.string().trim().required(),
-        sdmUserRef: Joi.number().required(),
-        sdmCorpRef: Joi.number().required(),
-        cmsUserRef: Joi.number().required(),
-        phnVerified: Joi.number().valid(0, 1).required(),
-        name: Joi.string().trim().required(),
-        profileStep: Joi.number().valid(
-            Constant.DATABASE.TYPE.PROFILE_STEP.INIT,
-            Constant.DATABASE.TYPE.PROFILE_STEP.FIRST
-        ).required(),
-        socialKey: Joi.string().trim().required(),
-        medium: Joi.string().trim().valid(
-            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.FB,
-            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.GOOGLE,
-            Constant.DATABASE.TYPE.SOCIAL_PLATFORM.APPLE
-        ).required(),
-        password: Joi.string(),
-        createdAt: Joi.number().required()
-    });
 
     /**
     * @method INTERNAL/GRPC
@@ -97,7 +72,7 @@ export class UserEntity extends BaseEntity {
                     return {}
                 }
             }
-             else
+            else
                 return {}
         } catch (error) {
             consolelog(process.cwd(), "getUser", JSON.stringify(error), false)
@@ -112,12 +87,17 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
-            let userInfo: IUserRequest.IUserData = await this.getUser({ userId: payload.id })
+            let userInfo: IUserRequest.IUserData = {}
+            if (!payload.migrate)
+                userInfo = await this.getUser({ userId: payload.id })
             if (userInfo && userInfo.id) {
             } else {
-                userInfo = {}
                 userInfo['id'] = payload.id
                 userInfo['password'] = cryptData(generateRandomString(9))
+                if (payload.migrate != undefined)
+                    userInfo['migrate'] = payload.migrate
+                else
+                    userInfo['migrate'] = 0
                 this.createDefaultCart(payload.id)
             }
             if (payload.username)

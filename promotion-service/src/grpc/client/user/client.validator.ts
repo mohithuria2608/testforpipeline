@@ -1,7 +1,7 @@
 
 'use strict';
 import * as Joi from '@hapi/joi';
-import { consolelog ,validatorErr} from "../../../utils"
+import { validatorErr} from "../../../utils"
 
 export class UserServiceValidator {
     constructor() {

@@ -113,6 +113,7 @@ message IUserData {
     required int32 sdmCorpRef = 16;
     required string fullPhnNo = 17;
     required string password = 18;
+    required int32 migrate = 19;
 }
 
 message IFetchAddressReq {

@@ -1,6 +1,4 @@
 'use strict';
-import * as Joi from '@hapi/joi';
-import * as Constant from '../constant'
 import { BaseSDM } from './base.sdm'
 import { consolelog } from '../utils'
 import * as  _ from 'lodash';

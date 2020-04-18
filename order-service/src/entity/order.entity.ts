@@ -2,7 +2,7 @@
 import * as config from "config"
 import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
-import { consolelog, getFrequency } from '../utils'
+import { consolelog } from '../utils'
 import * as CMS from "../cms"
 import { kafkaService, paymentService, notificationService, userService, promotionService, locationService } from '../grpc/client';
 import { OrderSDME } from '../sdm';
@@ -140,14 +140,20 @@ export class OrderClass extends BaseEntity {
                 }
                 case Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD: {
                     dataToUpdateOrder['payment']['name'] = Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD
-                    let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes = await paymentService.initiatePayment({
-                        orderId: order._id.toString(),
-                        amount: totalAmount,
-                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
-                        paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
-                        channel: "Mobile",
-                        locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
-                    })
+                    let initiatePaymentObj: IPaymentGrpcRequest.IInitiatePaymentRes
+                    try {
+                        initiatePaymentObj = await paymentService.initiatePayment({
+                            orderId: order._id.toString(),
+                            amount: totalAmount,
+                            storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                            paymentMethodId: Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD,
+                            channel: "Mobile",
+                            locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
+                        })
+                    } catch (error) {
+                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E400.CHANGE_PAYMENT_METHOD)
+                    }
                     if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
                         noonpayRedirectionUrl = initiatePaymentObj.noonpayRedirectionUrl
                         dataToUpdateOrder['transLogs'] = [initiatePaymentObj]
@@ -170,9 +176,8 @@ export class OrderClass extends BaseEntity {
                                 sdm_order_id: order.sdmOrderRef,
                                 validation_remarks: ""
                             })
-                    } else {
+                    } else
                         order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
-                    }
                     break;
                 }
                 default: {
@@ -255,16 +260,10 @@ export class OrderClass extends BaseEntity {
                 Payments = {
                     CC_ORDER_PAYMENT: {
                         PAY_AMOUNT: totalAmount[0].amount,
-                        // PAY_CREDITCARD_NUMBER: "",
-                        // PAY_CREDITCARD_HOLDERNAME: "",
-                        // PAY_CREDITCARD_CCV: "",
-                        // PAY_CREDITCARD_EXPIREDATE: "",
-                        // PAY_REF_GATEWAY: "",
-                        // PAY_REF_NO: "",
-                        PAY_STATUS: config.get("sdm.payment.cod.payStatus"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STATUS,
-                        PAY_STORE_TENDERID: config.get("sdm.payment.cod.payStoreTenderId"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_STORE_TENDERID,
-                        PAY_SUB_TYPE: config.get("sdm.payment.cod.paySubType"),//Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_SUB_TYPE,
-                        PAY_TYPE: config.get("sdm.payment.cod.payType"),// Constant.CONF.PAYMENT[Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE].codInfo.SDM.PAY_TYPE,
+                        PAY_STATUS: config.get("sdm.payment.cod.payStatus"),
+                        PAY_STORE_TENDERID: config.get("sdm.payment.cod.payStoreTenderId"),
+                        PAY_SUB_TYPE: config.get("sdm.payment.cod.paySubType"),
+                        PAY_TYPE: config.get("sdm.payment.cod.payType"),
                     }
                 }
             }
