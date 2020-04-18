@@ -811,6 +811,14 @@ export const STATUS_MSG = {
             }
         },
         "E409": {
+            "CONFIG_NOT_FOUND": {
+                "statusCode": 409,
+                "httpCode": 409,
+                "message": "Configurations not found",
+                "type": "CONFIG_NOT_FOUND",
+                "message_Ar": "الطلب غير موجود، يرجى إدخال رقم هاتف صحيح وإعادة الطلب",
+                "message_En": "Configurations not found"
+            },
             "ORDER_NOT_FOUND": {
                 "statusCode": 409,
                 "httpCode": 409,

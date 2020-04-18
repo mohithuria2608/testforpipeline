@@ -56,11 +56,12 @@ export class Configuration {
             if (generalConfig && generalConfig.length > 0) {
                 if (generalConfig[0].general && (generalConfig[0].createdAt != global.configSync.general))
                     Constant.generalConfigSync(generalConfig[0].general, generalConfig[0].createdAt)
-            }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "initGeneralConfig", JSON.stringify(error), false)
-            return {}
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
         }
     }
 
@@ -70,11 +71,12 @@ export class Configuration {
             if (kafkaConfig && kafkaConfig.length > 0) {
                 if (kafkaConfig[0].kafka && (kafkaConfig[0].createdAt != global.configSync.kafka))
                     Constant.kafkaConfigSync(kafkaConfig[0].kafka, kafkaConfig[0].createdAt)
-            }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "initKafkaConfig", JSON.stringify(error), false)
-            return {}
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
         }
     }
 
@@ -84,11 +86,12 @@ export class Configuration {
             if (orderStatusConfig && orderStatusConfig.length > 0) {
                 if (orderStatusConfig[0].orderStatus && (orderStatusConfig[0].createdAt != global.configSync.orderStatus))
                     Constant.orderStatusConfigSync(orderStatusConfig[0].orderStatus, orderStatusConfig[0].createdAt)
-            }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "initOrderStatusConfig", JSON.stringify(error), false)
-            return {}
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
         }
     }
 
@@ -114,11 +117,12 @@ export class Configuration {
                         }
                     }
                 })
-            }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "initStoreCodeConfig", JSON.stringify(error), false)
-            return {}
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
         }
     }
 
@@ -130,11 +134,12 @@ export class Configuration {
             if (countrySpecificConfig && countrySpecificConfig.length > 0) {
                 if (countrySpecificConfig[0].countrySpecific && (countrySpecificConfig[0].createdAt != global.configSync.kafka))
                     Constant.countrySpecificConfigSync(country, countrySpecificConfig[0].countrySpecific, countrySpecificConfig[0].createdAt)
-            }
+            } else
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
             return {}
         } catch (error) {
             consolelog(process.cwd(), "initCountryConfig", JSON.stringify(error), false)
-            return {}
+            return Promise.reject(Constant.STATUS_MSG.ERROR.E409.CONFIG_NOT_FOUND)
         }
     }
 }

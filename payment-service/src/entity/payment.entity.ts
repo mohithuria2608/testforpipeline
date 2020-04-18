@@ -6,6 +6,7 @@ import * as Constant from '../constant'
 import { BaseEntity } from './base.entity'
 import { consolelog, sendSuccess } from '../utils'
 import { cloneObject } from '../utils/helper';
+import { configuration } from '../sync-config/configuration';
 
 /**
  * Version: 1.0.0
@@ -191,8 +192,16 @@ export class PaymentClass extends BaseEntity {
      * @param storeCode
      */
     private async getNoonpayConfig(storeCode: string) {
-        // TODO: Get from Aerospike
-        return Constant.CONF.PAYMENT[storeCode].noonpayConfig;
+        try {
+            // TODO: Get from Aerospike
+            await configuration.initStoreCodeConfig(storeCode)
+            return Constant.CONF.PAYMENT[storeCode].noonpayConfig;
+        } catch (error) {
+            if (error && !error.name) {
+                error.name = 'PaymentError';
+            }
+            return Promise.reject(error);
+        }
     }
     /**
      * @description Generates and returns API key for specified configuration
@@ -284,32 +293,31 @@ export class PaymentClass extends BaseEntity {
             consolelog(process.cwd(), 'Payment INITIATE Validation error', JSON.stringify(error), false);
             return Promise.reject(Constant.STATUS_MSG.ERROR.E422.DEFAULT_VALIDATION_ERROR);
         }
-        // get payment method details
-        const config = await this.getNoonpayConfig(payload.storeCode);
-        const paymentMethodDetails = config.paymentMethods.filter((pMethod) => { if (pMethod.id === payload.paymentMethodId) { return pMethod; } })[0];
-        // get noonpay API key
-        const apiKey = this.getNoonPayAPIKey(config);
-
-        let initiatePayload = {
-            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.INITIATE,
-            order: {
-                name: 'Order from KFC App', // TODO: Confirm what needs to be sent here ?
-                amount: payload.amount,
-                currency: config.currencyCode,
-                channel: payload.channel,
-                category: paymentMethodDetails.orderCategory,
-                reference: payload.orderId
-            },
-            configuration: {
-                returnUrl: this.getReturnUrl(),
-                locale: payload.locale || Constant.DATABASE.PAYMENT_LOCALE.EN, // default english
-                paymentAction: Constant.DATABASE.ACTION.TRANSACTION.AUTHORIZE,
-                initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString(),
-                styleProfile: config.styleProfile//"KFC_Theme_1"
-            }
-        };
-
         try {
+            // get payment method details
+            const config = await this.getNoonpayConfig(payload.storeCode);
+            const paymentMethodDetails = config.paymentMethods.filter((pMethod) => { if (pMethod.id === payload.paymentMethodId) { return pMethod; } })[0];
+            // get noonpay API key
+            const apiKey = this.getNoonPayAPIKey(config);
+
+            let initiatePayload = {
+                apiOperation: Constant.DATABASE.ACTION.TRANSACTION.INITIATE,
+                order: {
+                    name: 'Order from KFC App', // TODO: Confirm what needs to be sent here ?
+                    amount: payload.amount,
+                    currency: config.currencyCode,
+                    channel: payload.channel,
+                    category: paymentMethodDetails.orderCategory,
+                    reference: payload.orderId
+                },
+                configuration: {
+                    returnUrl: this.getReturnUrl(),
+                    locale: payload.locale || Constant.DATABASE.PAYMENT_LOCALE.EN, // default english
+                    paymentAction: Constant.DATABASE.ACTION.TRANSACTION.AUTHORIZE,
+                    initiationValidity: new Date(Date.now() + (config.noonpayOrderExpirationTime)).toISOString(),
+                    styleProfile: config.styleProfile//"KFC_Theme_1"
+                }
+            };
             let response: any = await request.post(`${config.noonpayBaseUrl}${config.noonpayInitiatePaymentEndPoint}`, {
                 body: initiatePayload,
                 headers: {
@@ -360,10 +368,10 @@ export class PaymentClass extends BaseEntity {
         if (!payload.noonpayOrderId && !payload.orderId) {
             return Promise.reject('Either Noonpay order id or CMS order id required');
         }
-        const config = await this.getNoonpayConfig(payload.storeCode);
-        const apiKey = this.getNoonPayAPIKey(config);
-
         try {
+            const config = await this.getNoonpayConfig(payload.storeCode);
+            const apiKey = this.getNoonPayAPIKey(config);
+
             let response: any = await request.get(`${config.noonpayBaseUrl}${payload.noonpayOrderId ? config.noonpayGetOrderEndPoint + '/' + payload.noonpayOrderId : config.noonpayGetOrderByReferenceEndPoint + '/' + payload.orderId}`, {
                 headers: {
                     Authorization: apiKey
@@ -635,23 +643,23 @@ export class PaymentClass extends BaseEntity {
             consolelog(process.cwd(), 'Payment CAPTURE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
-        const config = await this.getNoonpayConfig(payload.storeCode);
-        const apiKey = this.getNoonPayAPIKey(config);
-
-        let capturePayload = {
-            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.CAPTURE,
-            order: {
-                id: payload.noonpayOrderId
-            },
-            transaction: {
-                /** IMPORTANT: If the requested capture amount is less than authorized amount then system(Noonpay) will automatically reverse the remaining amount. */
-                amount: payload.amount,
-                currency: config.currencyCode,
-                finalCapture: true
-            }
-        };
-
         try {
+            const config = await this.getNoonpayConfig(payload.storeCode);
+            const apiKey = this.getNoonPayAPIKey(config);
+
+            let capturePayload = {
+                apiOperation: Constant.DATABASE.ACTION.TRANSACTION.CAPTURE,
+                order: {
+                    id: payload.noonpayOrderId
+                },
+                transaction: {
+                    /** IMPORTANT: If the requested capture amount is less than authorized amount then system(Noonpay) will automatically reverse the remaining amount. */
+                    amount: payload.amount,
+                    currency: config.currencyCode,
+                    finalCapture: true
+                }
+            };
+
             let response: any = await request.post(`${config.noonpayBaseUrl}${config.noonpayCapturePaymentEndPoint}`, {
                 body: capturePayload,
                 headers: {
@@ -732,17 +740,17 @@ export class PaymentClass extends BaseEntity {
             consolelog(process.cwd(), 'Payment REVERSE Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
-        const config = await this.getNoonpayConfig(payload.storeCode);
-        const apiKey = this.getNoonPayAPIKey(config);
-
-        let reversePayload = {
-            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.REVERSE,
-            order: {
-                id: payload.noonpayOrderId
-            }
-        };
-
         try {
+            const config = await this.getNoonpayConfig(payload.storeCode);
+            const apiKey = this.getNoonPayAPIKey(config);
+
+            let reversePayload = {
+                apiOperation: Constant.DATABASE.ACTION.TRANSACTION.REVERSE,
+                order: {
+                    id: payload.noonpayOrderId
+                }
+            };
+
             let response: any = await request.post(`${config.noonpayBaseUrl}${config.noonpayReversePaymentEndPoint}`, {
                 body: reversePayload,
                 headers: {
@@ -823,22 +831,22 @@ export class PaymentClass extends BaseEntity {
             consolelog(process.cwd(), 'Payment REFUND Validation error', JSON.stringify(error), false);
             return Promise.reject(error);
         }
-        const config = await this.getNoonpayConfig(payload.storeCode);
-        const apiKey = this.getNoonPayAPIKey(config);
-
-        let refundPayload = {
-            apiOperation: Constant.DATABASE.ACTION.TRANSACTION.REFUND,
-            order: {
-                id: payload.noonpayOrderId
-            },
-            transaction: {
-                amount: payload.amount,
-                currency: config.currencyCode,
-                targetTransactionId: payload.captureTransactionId
-            }
-        };
-
         try {
+            const config = await this.getNoonpayConfig(payload.storeCode);
+            const apiKey = this.getNoonPayAPIKey(config);
+
+            let refundPayload = {
+                apiOperation: Constant.DATABASE.ACTION.TRANSACTION.REFUND,
+                order: {
+                    id: payload.noonpayOrderId
+                },
+                transaction: {
+                    amount: payload.amount,
+                    currency: config.currencyCode,
+                    targetTransactionId: payload.captureTransactionId
+                }
+            };
+
             let response: any = await request.post(`${config.noonpayBaseUrl}${config.noonpayRefundPaymentEndPoint}`, {
                 body: refundPayload,
                 headers: {
