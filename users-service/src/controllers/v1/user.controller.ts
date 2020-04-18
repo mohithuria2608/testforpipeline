@@ -197,16 +197,6 @@ export class UserController {
                         sdmAddress = sdmAddress.concat(userData.sdmAddress)
 
                     this.validateUserOnSdm(userData, false, headers)
-
-                    // send welcome email on first time user create
-                    // userData.password = deCryptData(userData.password);
-                    // notificationService.sendNotification({
-                    //     toSendEmail: true,
-                    //     emailCode: Constant.NOTIFICATION_CODE.EMAIL.USER_WELCOME_EMAIL,
-                    //     emailDestination: userData.email,
-                    //     language: headers.language,
-                    //     payload: JSON.stringify({ email: { user: userData, isNewUser: true } })
-                    // });
                 }
 
                 if (userData.cmsUserRef && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))

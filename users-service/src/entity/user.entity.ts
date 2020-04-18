@@ -87,7 +87,7 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
-            let userInfo: IUserRequest.IUserData = {}
+            let userInfo: IUserRequest.IUserData = await this.getUser({ userId: payload.id })
             if (!payload.migrate)
                 userInfo = await this.getUser({ userId: payload.id })
             if (userInfo && userInfo.id) {
@@ -142,6 +142,7 @@ export class UserEntity extends BaseEntity {
             if (payload.sdmAddress && payload.sdmAddress.length > 0)
                 userInfo['sdmAddress'] = payload.sdmAddress
 
+            console.log("userInfo----------------->", userInfo)
             let putArg: IAerospike.Put = {
                 bins: userInfo,
                 set: this.set,
