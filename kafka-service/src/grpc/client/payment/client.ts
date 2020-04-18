@@ -17,9 +17,10 @@ export class PaymentService {
             oneofs: true
         });
     private loadPayment = grpc.loadPackageDefinition(this.packageDefinition).PaymentService
-    private paymentClient = new this.loadPayment(config.get("grpc.payment.client"), grpc.credentials.createInsecure());
+    private paymentClient
 
     constructor() {
+        this.paymentClient = new this.loadPayment(config.get("grpc.payment.client"), grpc.credentials.createInsecure());
     }
 
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {

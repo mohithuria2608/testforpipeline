@@ -17,9 +17,10 @@ export class UserService {
             oneofs: true
         });
     private loadUser = grpc.loadPackageDefinition(this.packageDefinition).UserService
-    private userClient = new this.loadUser(config.get("grpc.user.client"), grpc.credentials.createInsecure());
+    private userClient
 
     constructor() {
+        this.userClient = new this.loadUser(config.get("grpc.user.client"), grpc.credentials.createInsecure());
     }
 
     async fetchUser(payload: IUserRequest.IFetchUser): Promise<IUserRequest.IUserData> {

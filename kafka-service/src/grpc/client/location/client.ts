@@ -17,10 +17,10 @@ export class LocationService {
             oneofs: true
         });
     private loadLocation = grpc.loadPackageDefinition(this.packageDefinition).LocationService
-    private locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
+    private locationClient
 
     constructor() {
-        consolelog(process.cwd(), 'GRPC connection established location-service', config.get("grpc.location.client"), true)
+        this.locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
     }
 
     /**

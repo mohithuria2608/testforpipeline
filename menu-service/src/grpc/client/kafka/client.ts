@@ -19,9 +19,10 @@ export class KafkaService {
             oneofs: true
         });
     private loadKafka = grpc.loadPackageDefinition(this.packageDefinition).KafkaService
-    private kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
+    private kafkaClient
 
     constructor() {
+        this.kafkaClient = new this.loadKafka(config.get("grpc.kafka.client"), grpc.credentials.createInsecure());
     }
 
     async kafkaSync(payload: IKafkaGrpcRequest.IKafkaBody): Promise<{}> {

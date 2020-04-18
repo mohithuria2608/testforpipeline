@@ -17,9 +17,10 @@ export class LogService {
             oneofs: true
         });
     private loadLog = grpc.loadPackageDefinition(this.packageDefinition).LogService
-    private logClient = new this.loadLog(config.get("grpc.log.client"), grpc.credentials.createInsecure());
+    private logClient
 
     constructor() {
+        this.logClient = new this.loadLog(config.get("grpc.log.client"), grpc.credentials.createInsecure());
     }
 
     /**

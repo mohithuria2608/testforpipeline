@@ -19,10 +19,10 @@ export class AuthService {
             oneofs: true
         });
     private loadAuth = grpc.loadPackageDefinition(this.packageDefinition).AuthService
-    private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
+    private authClient
 
     constructor() {
-        consolelog(process.cwd(),'Connection established from upload service to auth service', config.get("grpc.auth.client"), true)
+        this.authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
     }
 
     async verifyToken(payload: IAuthServiceRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
@@ -30,10 +30,10 @@ export class AuthService {
             await authServiceValidator.verifyTokenValidator(payload)
             this.authClient.verifyToken({ token: payload.token }, (error, res) => {
                 if (!error) {
-                    consolelog(process.cwd(),"successfully verified token", JSON.stringify(res), false)
+                    consolelog(process.cwd(), "successfully verified token", JSON.stringify(res), false)
                     resolve(res)
                 } else {
-                    consolelog(process.cwd(),"Error in verifying token", JSON.stringify(error), false)
+                    consolelog(process.cwd(), "Error in verifying token", JSON.stringify(error), false)
                     reject(error)
                 }
             })

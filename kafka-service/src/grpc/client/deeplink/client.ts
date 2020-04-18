@@ -17,9 +17,10 @@ export class DeeplinkService {
             oneofs: true
         });
     private loadDeeplink = grpc.loadPackageDefinition(this.packageDefinition).DeeplinkService
-    private deeplinkClient = new this.loadDeeplink(config.get("grpc.deeplink.client"), grpc.credentials.createInsecure());
+    private deeplinkClient
 
     constructor() {
+        this.deeplinkClient = new this.loadDeeplink(config.get("grpc.deeplink.client"), grpc.credentials.createInsecure());
     }
 
     /**

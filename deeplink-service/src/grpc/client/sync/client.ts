@@ -17,9 +17,11 @@ export class SyncService {
             oneofs: true
         });
     private loadSync = grpc.loadPackageDefinition(this.packageDefinition).SyncService
-    private syncClient = new this.loadSync(config.get("grpc.sync.client"), grpc.credentials.createInsecure());
+    private syncClient
 
-    constructor() {}
+    constructor() {
+        this.syncClient = new this.loadSync(config.get("grpc.sync.client"), grpc.credentials.createInsecure());
+    }
 
     async fetchConfig(payload: ISyncGrpcRequest.IFetchConfig): Promise<ISyncGrpcRequest.IConfig[]> {
         return new Promise(async (resolve, reject) => {

@@ -17,9 +17,10 @@ export class UploadService {
             oneofs: true
         });
     private loadUpload = grpc.loadPackageDefinition(this.packageDefinition).UploadService
-    private uploadClient = new this.loadUpload(config.get("grpc.upload.client"), grpc.credentials.createInsecure());
+    private uploadClient
 
     constructor() {
+        this.uploadClient = new this.loadUpload(config.get("grpc.upload.client"), grpc.credentials.createInsecure());
     }
 
     async uploadToBlob(payload): Promise<{}> {

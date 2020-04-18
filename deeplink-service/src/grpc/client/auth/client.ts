@@ -17,10 +17,10 @@ export class AuthService {
             oneofs: true
         });
     private loadAuth = grpc.loadPackageDefinition(this.packageDefinition).AuthService
-    private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
+    private authClient
 
-    constructor() {
-        consolelog(process.cwd(), `GRPC connection established with auth-service`, config.get("grpc.auth.client"), true)
+    constructor() { 
+        this.authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
     }
 
     async createToken(payload: IAuthGrpcRequest.ICreateTokenData): Promise<IAuthGrpcRequest.IToken> {

@@ -17,9 +17,10 @@ export class HomeService {
             oneofs: true
         });
     private loadHome = grpc.loadPackageDefinition(this.packageDefinition).HomeService
-    private homeClient = new this.loadHome(config.get("grpc.home.client"), grpc.credentials.createInsecure());
+    private homeClient
 
     constructor() {
+        this.homeClient = new this.loadHome(config.get("grpc.home.client"), grpc.credentials.createInsecure());
     }
 
     /**

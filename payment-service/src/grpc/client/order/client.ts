@@ -17,9 +17,10 @@ export class OrderService {
             oneofs: true
         });
     private loadOrder = grpc.loadPackageDefinition(this.packageDefinition).OrderService
-    private orderClient = new this.loadOrder(config.get("grpc.order.client"), grpc.credentials.createInsecure());
+    private orderClient
 
     constructor() {
+        this.orderClient = new this.loadOrder(config.get("grpc.order.client"), grpc.credentials.createInsecure());
     }
 
     async getCart(payload: IOrderGrpcRequest.IGetOrder): Promise<IOrderGrpcRequest.IGetOrderRes> {

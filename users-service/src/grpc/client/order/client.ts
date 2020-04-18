@@ -17,16 +17,17 @@ export class OrderService {
             oneofs: true
         });
     private loadOrder = grpc.loadPackageDefinition(this.packageDefinition).OrderService
-    private orderClient = new this.loadOrder(config.get("grpc.order.client"), grpc.credentials.createInsecure());
+    private orderClient
 
     constructor() {
+        this.orderClient = new this.loadOrder(config.get("grpc.order.client"), grpc.credentials.createInsecure());
     }
 
     async createDefaultCart(payload: IOrderGrpcRequest.ICreateDefaultCart): Promise<IOrderGrpcRequest.ICreateDefaultCartRes> {
         return new Promise(async (resolve, reject) => {
             try {
                 await orderServiceValidator.createDefaultCartValidator(payload)
-                this.orderClient.createDefaultCart({  userId: payload.userId }, (error, res) => {
+                this.orderClient.createDefaultCart({ userId: payload.userId }, (error, res) => {
                     if (!error) {
                         consolelog(process.cwd(), "successfully created default cart", JSON.stringify(res), false)
                         resolve(res)

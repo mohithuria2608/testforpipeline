@@ -17,9 +17,10 @@ export class NotificationService {
             oneofs: true
         });
     private loadNotification = grpc.loadPackageDefinition(this.packageDefinition).NotificationService
-    private notificationClient = new this.loadNotification(config.get("grpc.notification.client"), grpc.credentials.createInsecure());
+    private notificationClient
 
     constructor() {
+        this.notificationClient = new this.loadNotification(config.get("grpc.notification.client"), grpc.credentials.createInsecure());
     }
 
     async sendNotification(payload: INotificationGrpcRequest.ISendNotification): Promise<INotificationGrpcRequest.ISendNotificationRes> {

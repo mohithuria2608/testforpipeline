@@ -17,9 +17,10 @@ export class PromotionService {
             oneofs: true
         });
     private loadPromotion = grpc.loadPackageDefinition(this.packageDefinition).PromotionService
-    private promotionClient = new this.loadPromotion(config.get("grpc.promotion.client"), grpc.credentials.createInsecure());
+    private promotionClient
 
     constructor() {
+        this.promotionClient = new this.loadPromotion(config.get("grpc.promotion.client"), grpc.credentials.createInsecure());
     }
 
     async sync(payload: IKafkaRequest.IKafkaBody): Promise<{}> {

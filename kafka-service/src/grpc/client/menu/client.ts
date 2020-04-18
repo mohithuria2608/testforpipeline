@@ -17,9 +17,10 @@ export class MenuService {
             oneofs: true
         });
     private loadMenu = grpc.loadPackageDefinition(this.packageDefinition).MenuService
-    private menuClient = new this.loadMenu(config.get("grpc.menu.client"), grpc.credentials.createInsecure());
+    private menuClient
 
     constructor() {
+        this.menuClient = new this.loadMenu(config.get("grpc.menu.client"), grpc.credentials.createInsecure());
     }
 
     /**

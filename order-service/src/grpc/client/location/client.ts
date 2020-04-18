@@ -17,9 +17,10 @@ export class LocationService {
             oneofs: true
         });
     private loadLocation = grpc.loadPackageDefinition(this.packageDefinition).LocationService
-    private locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
+    private locationClient
 
     constructor() {
+        this.locationClient = new this.loadLocation(config.get("grpc.location.client"), grpc.credentials.createInsecure());
     }
 
     async fetchStore(payload: IStoreGrpcRequest.IFetchStore): Promise<IStoreGrpcRequest.IStore> {

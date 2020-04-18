@@ -158,3 +158,5 @@ Hands-on Microservices with TypeScript 3
 # Aerospike error codes
 * https://github.com/aerospike/aerospike-client-java/blob/master/client/src/com/aerospike/client/ResultCode.java
 
+# gRPC
+* https://grpc.github.io/grpc/node/grpc.Client.html#getChannel__anchor

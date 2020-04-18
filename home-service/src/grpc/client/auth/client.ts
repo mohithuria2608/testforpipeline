@@ -19,9 +19,12 @@ export class AuthService {
             oneofs: true
         });
     private loadAuth = grpc.loadPackageDefinition(this.packageDefinition).AuthService
-    private authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
+    private authClient
 
-    constructor() { }
+    constructor() { 
+        this.authClient = new this.loadAuth(config.get("grpc.auth.client"), grpc.credentials.createInsecure());
+    }
+
 
     async verifyToken(payload: IAuthGrpcRequest.IVerifyTokenObj): Promise<ICommonRequest.AuthorizationObj> {
         return new Promise(async (resolve, reject) => {
