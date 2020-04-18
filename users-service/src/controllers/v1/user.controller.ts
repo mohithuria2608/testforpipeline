@@ -190,14 +190,13 @@ export class UserController {
 
                 userData = await ENTITY.UserE.buildUser(userUpdate)
                 if (userData.email && userData.phnNo && (userData.sdmUserRef == undefined || userData.sdmUserRef == 0 || userData.cmsUserRef == undefined || userData.cmsUserRef == 0)) {
-                    if (userData.cmsAddress && userData.cmsAddress.length > 0)
-                        cmsAddress = cmsAddress.concat(userData.cmsAddress)
-
-                    if (userData.sdmAddress && userData.sdmAddress.length > 0)
-                        sdmAddress = sdmAddress.concat(userData.sdmAddress)
-
                     this.validateUserOnSdm(userData, false, headers)
                 }
+                if (userData.cmsAddress && userData.cmsAddress.length > 0)
+                    cmsAddress = cmsAddress.concat(userData.cmsAddress)
+
+                if (userData.sdmAddress && userData.sdmAddress.length > 0)
+                    sdmAddress = sdmAddress.concat(userData.sdmAddress)
 
                 if (userData.cmsUserRef && (userchange[0].chngEmailCms || userchange[0].chngPhnCms))
                     CMS.UserCMSE.updateCustomerOnCms(userData)
