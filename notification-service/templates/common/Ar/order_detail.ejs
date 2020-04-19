@@ -69,11 +69,11 @@
                         <tr class="height" height="50px">
                             <td style="text-align: right;">
                                 <% switch(order.amount[j].type) {
-                                    case "SUB_TOTAL": %>Sub Total<% break;
-                                    case "DISCOUNT": %>Discount<% break;
-                                    case "TAX": %>vat @ 5%<% break;
-                                    case "SHIPPING": %>Shipping<% break;
-                                    case "TOTAL": %><span style="font-weight:600">Grand Total</span><% break;
+                                    case "SUB_TOTAL": %>المجموع الفرعي<% break;
+                                    case "DISCOUNT": %>الخصم<% break;
+                                    case "TAX": %>VAT @ 5%<% break;
+                                    case "SHIPPING": %>الشحن<% break;
+                                    case "TOTAL": %><span style="font-weight:600">المجموع الكلي</span><% break;
                                 }
                                 %>
                             </td>
