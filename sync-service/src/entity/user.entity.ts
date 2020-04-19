@@ -11,10 +11,8 @@ export class UserEntity extends BaseEntity {
 
     async postUser(payload: ICmsUserRequest.ICmsUser[]) {
         try {
-            console.log("payload", payload.length)
             if (payload && payload.length > 0) {
                 let chunkedArray = chunk(payload, 5000)
-                console.log("chunkedArray", chunkedArray.length)
                 for (let i = 0; i < chunkedArray.length; i++) {
                     setTimeout(() => {
                         console.log("in action mode", chunkedArray[i].length, i)
@@ -34,7 +32,7 @@ export class UserEntity extends BaseEntity {
                                 }
                             }
                         }
-                    }, i * 6000)
+                    }, i * 7000)
                 }
             }
             return {}
