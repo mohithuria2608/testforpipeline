@@ -1476,7 +1476,7 @@ export const CONF = {
         ANDROID_PACKAGE_NAME: "com.android.kfc",
         IOS_SCHEME_HOST: "americanaKFCUAE://",
         SPLASH_EXPR_TIME: 1589523974000,
-        CHUNK_SIZE_USER_MIGRATION: 50000,
+        CHUNK_SIZE_USER_MIGRATION: 1000,
         PAYMENT_SUCCESS_FALLBACK: "payment/success",
         PAYMENT_FAILURE_FALLBACK: "payment/failure",
         DELIVERY_CHARGE_ID: 279,

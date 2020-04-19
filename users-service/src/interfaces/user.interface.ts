@@ -64,6 +64,7 @@ declare namespace IUserRequest {
         userId?: string,
         cCode?: string,
         phnNo?: string,
+        email?: string
     }
 
 }

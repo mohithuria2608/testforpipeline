@@ -72,6 +72,22 @@ export class UserEntity extends BaseEntity {
                     return {}
                 }
             }
+            else if (payload.email) {
+                let queryArg: IAerospike.Query = {
+                    equal: {
+                        bin: "email",
+                        value: payload.email
+                    },
+                    set: this.set,
+                    background: false,
+                }
+                let checkUser: IUserRequest.IUserData[] = await Aerospike.query(queryArg)
+                if (checkUser && checkUser.length > 0) {
+                    return checkUser[0]
+                } else {
+                    return {}
+                }
+            }
             else
                 return {}
         } catch (error) {
@@ -87,11 +103,17 @@ export class UserEntity extends BaseEntity {
      */
     async buildUser(payload: IUserRequest.IUserData) {
         try {
-            let userInfo: IUserRequest.IUserData = await this.getUser({ userId: payload.id })
+            let newUser = false
+            let userInfo
             if (!payload.migrate)
                 userInfo = await this.getUser({ userId: payload.id })
+            else
+                userInfo = await this.getUser({ email: payload.email })
             if (userInfo && userInfo.id) {
+                if (payload.migrate)
+                    return userInfo
             } else {
+                newUser = true
                 userInfo['id'] = payload.id
                 userInfo['password'] = cryptData(generateRandomString(9))
                 if (payload.migrate != undefined)
@@ -149,6 +171,8 @@ export class UserEntity extends BaseEntity {
                 createOrReplace: true
             }
             await Aerospike.put(putArg)
+            // if (newUser)
+            //     this.createOneEntityMdb(userInfo)
             return userInfo
         } catch (error) {
             consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)
