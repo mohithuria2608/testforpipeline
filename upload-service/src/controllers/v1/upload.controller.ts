@@ -72,13 +72,13 @@ export class UploadController {
     * */
     async singleFile(payload: any) {
         try {
-            let allowedTypes = ["application/zip", "application/zip"];
+            let allowedTypes = ["application/zip"];
             if (allowedTypes.includes(payload.mimetype)) {
-                decompress(payload.path, __dirname + '/../../../../exports/extracts/', {
+                decompress(payload.path, __dirname + '/../../exports/extracts/', {
                     plugins: [dcpUnz()]
                 }).then(async files => {
                     for (let file of files) {
-                        let filePath = __dirname + '/../../../../exports/extracts/' + file.path;
+                        let filePath = __dirname + '/../../exports/extracts/' + file.path;
                         let imageData = await readFile(filePath);
                         await ImageBlob.upload(file.path, imageData);
                         deleteFile(filePath);

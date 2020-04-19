@@ -4,7 +4,7 @@ import { sendSuccess } from '../../utils'
 import * as Constant from '../../constant'
 import { uploadController } from '../../controllers';
 
-const upload = multer({ dest: __dirname + '/../../../../exports' });
+const upload = multer({ dest: __dirname + '/../../exports' });
 
 export default (router: Router) => {
     router
