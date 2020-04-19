@@ -11,8 +11,8 @@ export default (router: Router) => {
             validate({
                 body: {
                     // fileNo: Joi.string(),
-                    start: Joi.string(),
-                    end: Joi.string(),
+                    start: Joi.number(),
+                    end: Joi.number(),
                 }
             }),
             async (ctx) => {
