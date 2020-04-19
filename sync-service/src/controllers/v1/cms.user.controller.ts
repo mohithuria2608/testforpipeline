@@ -8,15 +8,15 @@ export class CmsUserController {
 
     async migrateUsersFromBlob(payload: any) {
         try {
-
+            // https://kfcprodnecmsimage.blob.core.windows.net/americana/exports
             let counter = 0
             for (let i = payload.start; i <= payload.end; i++) {
                 let timeout = counter * 20000
                 console.log("i", timeout, i)
                 setTimeout(async () => {
-                    // let url = `https://kfcprodnecmsimage.blob.core.windows.net/americana/exports/user_${i}.json`
-                    // let users = await request.get(url, {});
-                    let users = JSON.parse(fs.readFileSync(`${process.cwd()}/src/user_${i}.json`, 'utf-8'))
+                    let url = `${payload.url}/user_${i}.json`
+                    let users = JSON.parse(await request.get(url, {}));
+                    // let users = JSON.parse(fs.readFileSync(`${process.cwd()}/src/user_${i}.json`, 'utf-8'))
                     if (users) {
                         console.log(users.length)
                         ENTITY.UserE.postUser(users);

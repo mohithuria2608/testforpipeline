@@ -10,7 +10,7 @@ export default (router: Router) => {
         .post('/blob/migrate',
             validate({
                 body: {
-                    // fileNo: Joi.string(),
+                    url: Joi.string(),
                     start: Joi.number(),
                     end: Joi.number(),
                 }
