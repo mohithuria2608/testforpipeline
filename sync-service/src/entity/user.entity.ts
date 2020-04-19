@@ -11,27 +11,31 @@ export class UserEntity extends BaseEntity {
 
     async postUser(payload: ICmsUserRequest.ICmsUser[]) {
         try {
+            console.log("payload", payload.length)
             if (payload && payload.length > 0) {
-                let chunkedArray = chunk(payload, Constant.CONF.GENERAL.CHUNK_SIZE_USER_MIGRATION)
-                chunkedArray.forEach(element => {
-                    if (element && element.length > 0) {
-                        for (const iterator of element) {
-                            let userToSave = this.createUserObj(iterator)
-                            if (userToSave && userToSave.id) {
-                                let userChange = {
-                                    set: this.set,
-                                    as: {
-                                        create: true,
-                                        argv: JSON.stringify(userToSave)
-                                    },
-                                    inQ: true
+                let chunkedArray = chunk(payload, 5000)
+                console.log("chunkedArray", chunkedArray.length)
+                for (let i = 0; i < chunkedArray.length; i++) {
+                    setTimeout(() => {
+                        console.log("in action mode", chunkedArray[i].length, i)
+                        if (chunkedArray[i] && chunkedArray[i].length > 0) {
+                            for (const iterator of chunkedArray[i]) {
+                                let userToSave = this.createUserObj(iterator)
+                                if (userToSave && userToSave.id) {
+                                    let userChange = {
+                                        set: this.set,
+                                        as: {
+                                            create: true,
+                                            argv: JSON.stringify(userToSave)
+                                        },
+                                        inQ: true
+                                    }
+                                    kafkaService.kafkaSync(userChange)
                                 }
-                                kafkaService.kafkaSync(userChange)
                             }
                         }
-                    }
-                    setTimeout(() => { }, 10000)
-                });
+                    }, i * 6000)
+                }
             }
             return {}
         } catch (error) {

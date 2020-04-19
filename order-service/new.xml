@@ -1,76 +1,168 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" 
-  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" 
-  xmlns:tns="http://tempuri.org/" 
-  xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" 
-  xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+<?xml version=\"1.0\" encoding=\"utf-8\"?>
+<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" 
+  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" 
+  xmlns:wsu=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd\" 
+  xmlns:msc=\"http://schemas.microsoft.com/ws/2005/12/wsdl/contract\" 
+  xmlns:tns=\"http://tempuri.org/\" 
+  xmlns:msb=\"http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1\" 
+  xmlns:msf=\"http://schemas.microsoft.com/ws/2006/05/framing/policy\">
   <soap:Body>
-    <UpdateOrder xmlns="http://tempuri.org/">
+    <UpdateOrder xmlns=\"http://tempuri.org/\">
       <licenseCode>PizzaHutApp</licenseCode>
       <language>en</language>
       <conceptID>3</conceptID>
       <order>
-        <q247:AddressID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">10528639</q247:AddressID>
-        <q247:ConceptID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">3</q247:ConceptID>
-        <q247:CountryID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1</q247:CountryID>
-        <q247:CustomerID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7714579</q247:CustomerID>
-        <q247:DistrictID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">-1</q247:DistrictID>
-        <q247:Entries xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+        <q247:AddressID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">13780171</q247:AddressID>
+        <q247:ConceptID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">3</q247:ConceptID>
+        <q247:CountryID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">1</q247:CountryID>
+        <q247:CustomerID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">8711503</q247:CustomerID>
+        <q247:DistrictID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">-1</q247:DistrictID>
+        <q247:Entries xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
           <q247:CEntry>
             <q247:DealID>0</q247:DealID>
             <q247:ID>0</q247:ID>
-            <q247:ItemID>413002</q247:ItemID>
+            <q247:ItemID>310001</q247:ItemID>
             <q247:ModCode>NONE</q247:ModCode>
-            <q247:Name>Super Mega Deal - Original</q247:Name>
+            <q247:Name>وجبة دينر - عادي</q247:Name>
             <q247:QCComponent>1</q247:QCComponent>
-            <q247:QCInstanceID>543</q247:QCInstanceID>
+            <q247:QCInstanceID>511</q247:QCInstanceID>
             <q247:QCLevel>0</q247:QCLevel>
-            <q247:QCProID>55</q247:QCProID>
+            <q247:QCProID>39</q247:QCProID>
           </q247:CEntry>
           <q247:CEntry>
             <q247:DealID>0</q247:DealID>
             <q247:ID>0</q247:ID>
-            <q247:ItemID>510005</q247:ItemID>
+            <q247:ItemID>510050</q247:ItemID>
             <q247:ModCode>NONE</q247:ModCode>
-            <q247:Name>Family Fries</q247:Name>
+            <q247:Name>بطاطا حجم وسط</q247:Name>
             <q247:QCComponent>2</q247:QCComponent>
-            <q247:QCInstanceID>543</q247:QCInstanceID>
+            <q247:QCInstanceID>511</q247:QCInstanceID>
             <q247:QCLevel>0</q247:QCLevel>
-            <q247:QCProID>55</q247:QCProID>
+            <q247:QCProID>39</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>510001</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>كول سلو حجم صغير</q247:Name>
+            <q247:QCComponent>3</q247:QCComponent>
+            <q247:QCInstanceID>511</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>39</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>600003</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>بيبسى حجم وسط</q247:Name>
+            <q247:QCComponent>4</q247:QCComponent>
+            <q247:QCInstanceID>511</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>39</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:Entries></q247:Entries>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>110005</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>مايتي زنجر</q247:Name>
+            <q247:QCComponent>1</q247:QCComponent>
+            <q247:QCInstanceID>298</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>65</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:Entries></q247:Entries>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>110003</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>تويستر ساندويتش - عادي</q247:Name>
+            <q247:QCComponent>2</q247:QCComponent>
+            <q247:QCInstanceID>298</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>65</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>510004</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>بطاطا حجم عادي</q247:Name>
+            <q247:QCComponent>3</q247:QCComponent>
+            <q247:QCInstanceID>298</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>65</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>600002</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>بيبسى حجم عادي</q247:Name>
+            <q247:QCComponent>4</q247:QCComponent>
+            <q247:QCInstanceID>298</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>65</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:Entries></q247:Entries>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>110014</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>تويستر ماكس ساندويتش - سبايسي</q247:Name>
+            <q247:QCComponent>-1</q247:QCComponent>
+            <q247:QCInstanceID>857</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>-1</q247:QCProID>
+          </q247:CEntry>
+          <q247:CEntry>
+            <q247:DealID>0</q247:DealID>
+            <q247:Entries></q247:Entries>
+            <q247:ID>0</q247:ID>
+            <q247:ItemID>110013</q247:ItemID>
+            <q247:ModCode>NONE</q247:ModCode>
+            <q247:Name>تويستر ماكس ساندويتش - عادي</q247:Name>
+            <q247:QCComponent>-1</q247:QCComponent>
+            <q247:QCInstanceID>966</q247:QCInstanceID>
+            <q247:QCLevel>0</q247:QCLevel>
+            <q247:QCProID>-1</q247:QCProID>
           </q247:CEntry>
         </q247:Entries>
-        <q247:Notes xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+        <q247:Notes xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
           <q247:CNote>
-            <q247:NT_FREE_TEXT>100%Contactless-- </q247:NT_FREE_TEXT>
-            <q247:NT_ID>1586858208493</q247:NT_ID>
+            <q247:NT_FREE_TEXT>100%Contactless-- Carhop-- ٨٨ ،٩٩٩</q247:NT_FREE_TEXT>
+            <q247:NT_ID>1587283406645</q247:NT_ID>
           </q247:CNote>
         </q247:Notes>
-        <q247:OrderID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderID>
-        <q247:OrderMode xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">2</q247:OrderMode>
-        <q247:OrderType xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:OrderType>
-        <q247:Payments xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">
+        <q247:OrderID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderID>
+        <q247:OrderMode xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">2</q247:OrderMode>
+        <q247:OrderType xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:OrderType>
+        <q247:Payments xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">
           <q247:CC_ORDER_PAYMENT>
-            <q247:PAY_AMOUNT>49</q247:PAY_AMOUNT>
+            <q247:PAY_AMOUNT>87</q247:PAY_AMOUNT>
             <q247:PAY_STATUS>1</q247:PAY_STATUS>
             <q247:PAY_STORE_TENDERID>252</q247:PAY_STORE_TENDERID>
-            <q247:PAY_SUB_TYPE>2</q247:PAY_SUB_TYPE>
-            <q247:PAY_TYPE>2</q247:PAY_TYPE>
+            <q247:PAY_SUB_TYPE>1</q247:PAY_SUB_TYPE>
+            <q247:PAY_TYPE>1</q247:PAY_TYPE>
           </q247:CC_ORDER_PAYMENT>
         </q247:Payments>
-        <q247:ProvinceID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">7</q247:ProvinceID>
-        <q247:ServiceCharge xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">0</q247:ServiceCharge>
-        <q247:StoreID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">1218</q247:StoreID>
-        <q247:StreetID xmlns:q247="http://schemas.datacontract.org/2004/07/SDM_SDK">315</q247:StreetID>
+        <q247:ProvinceID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">7</q247:ProvinceID>
+        <q247:ServiceCharge xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">0</q247:ServiceCharge>
+        <q247:StoreID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">97</q247:StoreID>
+        <q247:StreetID xmlns:q247=\"http://schemas.datacontract.org/2004/07/SDM_SDK\">315</q247:StreetID>
       </order>
       <autoApprove>true</autoApprove>
       <useBackupStoreIfAvailable>true</useBackupStoreIfAvailable>
-      <orderNotes1>0</orderNotes1>
-      <orderNotes2>5e9588dfcf7be5ad6184164a</orderNotes2>
+      <orderNotes1>100%Contactless-- Carhop-- ٨٨ ،٩٩٩</orderNotes1>
+      <orderNotes2>5e9c05cefea9cd0014b5b48d</orderNotes2>
       <creditCardPaymentbool>false</creditCardPaymentbool>
       <isSuspended>false</isSuspended>
       <menuTemplateID>17</menuTemplateID>
     </UpdateOrder>
   </soap:Body>
-</soap:Envelope>
+</s
