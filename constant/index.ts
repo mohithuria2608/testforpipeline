@@ -636,9 +636,9 @@ export const NOTIFICATION_MSG = {
 }
 
 export const EMAIL_META = {
-    baseImageUrl: 'http://40.123.205.1/pub/media/catalog/product/emailer/',
+    baseImageUrl: 'https://kfcprodnecmsimage.azureedge.net/cmsimages/imagestemp/emailers/',
     ctaLink: '',
-    contactEmail: 'support@americana-food.com',
+    contactEmail: 'digiteam@americana-food.com',
     contactNumber: '600522252'
 }
 
