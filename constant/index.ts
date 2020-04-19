@@ -648,10 +648,10 @@ export const STATUS_MSG = {
             "CHANGE_PAYMENT_METHOD": {
                 "statusCode": 400,
                 "httpCode": 400,
-                "message": "Please try again by changing mode of payment.",
+                "message": "Online Payment is currently taking longer than usual. Please proceed with Cash as mode of payment.",
                 "type": "CHANGE_PAYMENT_METHOD",
-                "message_Ar": "Please try again by changing mode of payment.",
-                "message_En": "Please try again by changing mode of payment."
+                "message_Ar": "يستغرق الدفع الالكتروني وقتاً أكثر من المعتاد حالياً. الرجاء اختيار الدفع نقداً",
+                "message_En": "Online Payment is currently taking longer than usual. Please proceed with Cash as mode of payment."
             },
             "OTP_RETRY_MAXED_OUT": {
                 "statusCode": 400,

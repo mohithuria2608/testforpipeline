@@ -111,7 +111,7 @@ Hands-on Microservices with TypeScript 3
 * aerospike 
     * ssh :
         * ssh Localadmin@10.2.0.27
-        * pass = Mob@pp@@2020
+        * Mob@pp@@2020
 * hpa 
     * kubectl get hpa -n nodeapp
 * mongoDB

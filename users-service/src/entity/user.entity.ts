@@ -171,8 +171,6 @@ export class UserEntity extends BaseEntity {
                 createOrReplace: true
             }
             await Aerospike.put(putArg)
-            // if (newUser)
-            //     this.createOneEntityMdb(userInfo)
             return userInfo
         } catch (error) {
             consolelog(process.cwd(), "updateUser", JSON.stringify(error), false)
