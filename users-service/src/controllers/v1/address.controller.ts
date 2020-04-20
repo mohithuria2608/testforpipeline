@@ -65,8 +65,8 @@ export class AddressController {
                 let serviceType = (payload.addressSubType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE) ? Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY : Constant.DATABASE.TYPE.STORE_SERVICE.CARHOP
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language, serviceType)
                 if (store && store.id && store.areaId) {
-                    if (!store.active)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    // if (!store.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     payload['lat'] = store.location.latitude
@@ -83,8 +83,8 @@ export class AddressController {
                 // payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY
                 store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (store && store.id && store.areaId) {
-                    if (!store.active)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    // if (!store.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }
@@ -133,7 +133,11 @@ export class AddressController {
             let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language, Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY)
-                if (store && store.id) {
+                if (store && store.id && store.areaId) {
+                    // if (!store.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.isOnline)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     payload['addressId'] = payload.addressId
                     payload['lat'] = store.location.latitude
                     payload['lng'] = store.location.longitude
@@ -145,13 +149,12 @@ export class AddressController {
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
 
             } else if (payload.lat && payload.lng) {
-                let validateStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
-                if (validateStore && validateStore.id) {
-                    if (!validateStore.active)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    if (!validateStore.isOnline)
+                store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
+                if (store && store.id && store.areaId) {
+                    // if (!store.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
-                    store = validateStore
                 }
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
@@ -202,11 +205,11 @@ export class AddressController {
         try {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             if (payload.lat && payload.lng) {
-                let validateStore: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
-                if (validateStore && validateStore.id) {
-                    if (!validateStore.active)
-                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
-                    if (!validateStore.isOnline)
+                let store: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
+                if (store && store.id) {
+                    // if (!store.active)
+                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }
                 else
