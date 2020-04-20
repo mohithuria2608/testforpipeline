@@ -900,6 +900,7 @@ export class CmsConfigController {
                                                         Constant.MICROSERVICE.MENU,
                                                         Constant.MICROSERVICE.NOTIFICATION,
                                                     ],
+                                                    type: Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC,
                                                     country: countrySpcificConf.country_code
                                                 })
                                             },
