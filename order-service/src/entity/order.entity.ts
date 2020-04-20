@@ -1113,8 +1113,8 @@ export class OrderClass extends BaseEntity {
             consolelog(process.cwd(), `validation remarks check : ${sdmOrder.ValidationRemarks}`, "", true)
             if (proceedFurther && sdmOrder.ValidationRemarks &&
                 (sdmOrder.ValidationRemarks != null || sdmOrder.ValidationRemarks != "null") &&
-                (sdmOrder.ValidationRemarks != Constant.STATUS_MSG.SDM_ORDER_VALIDATION.EXCEED_ORDER_AMOUNT ||
-                    sdmOrder.ValidationRemarks != Constant.STATUS_MSG.SDM_ORDER_VALIDATION.DELIVERY_AMOUNT_NOT_REACHED)
+                !(sdmOrder.ValidationRemarks == Constant.STATUS_MSG.SDM_ORDER_VALIDATION.EXCEED_ORDER_AMOUNT ||
+                    sdmOrder.ValidationRemarks == Constant.STATUS_MSG.SDM_ORDER_VALIDATION.DELIVERY_AMOUNT_NOT_REACHED)
             ) {
                 consolelog(process.cwd(), `validationRemarksHandler 1`, "", true)
                 proceedFurther = false
