@@ -112,6 +112,9 @@ Hands-on Microservices with TypeScript 3
     * ssh :
         * ssh Localadmin@10.2.0.27
         * Mob@pp@@2020
+* AMC : 
+    * http://51.104.147.206:10002
+    * host : localhost
 * hpa 
     * kubectl get hpa -n nodeapp
 * mongoDB

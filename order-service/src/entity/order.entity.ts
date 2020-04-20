@@ -1000,9 +1000,9 @@ export class OrderClass extends BaseEntity {
                             order = amountValidation.order;
                         }
 
-                        let remarksValidation = await this.validationRemarksHandler(proceedFurther, order, sdmOrder)
-                        proceedFurther = remarksValidation.proceedFurther;
-                        order = remarksValidation.order;
+                        // let remarksValidation = await this.validationRemarksHandler(proceedFurther, order, sdmOrder)
+                        // proceedFurther = remarksValidation.proceedFurther;
+                        // order = remarksValidation.order;
 
                         if (proceedFurther && sdmOrder && sdmOrder.OrderID) {
                             switch (parseInt(sdmOrder.Status)) {
