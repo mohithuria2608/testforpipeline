@@ -410,7 +410,7 @@ export const DATABASE = {
                     },
                     {
                         name: "DISCOUNT",
-                        value: " خدمة التوصيل"
+                        value: "خصم"
                     },
                     {
                         name: "TAX",
@@ -419,7 +419,7 @@ export const DATABASE = {
                     },
                     {
                         name: "SHIPPING",
-                        value: "رسوم النقل"
+                        value: "رسوم التوصيل"
                     },
                     {
                         name: "TOTAL",
