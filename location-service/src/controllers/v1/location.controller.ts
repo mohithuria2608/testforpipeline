@@ -255,13 +255,10 @@ export class LocationController {
             let pickup = await Aerospike.get(getArgv)
             if (pickup && pickup.pickup && pickup.pickup.length > 0) {
                 pickup.pickup.map(c => {
-                    c['isSelected'] = false
                     if (c.area && c.area.length > 0) {
                         c.area.map(a => {
-                            a['isSelected'] = false
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
-                                    s['isSelected'] = false
                                     s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextday)
                                 })
                             }
@@ -291,13 +288,10 @@ export class LocationController {
             let carHop = await Aerospike.get(getArgv)
             if (carHop && carHop.carHop && carHop.carHop.length > 0) {
                 carHop.carHop.map(c => {
-                    c['isSelected'] = false
                     if (c.area && c.area.length > 0) {
                         c.area.map(a => {
-                            a['isSelected'] = false
                             if (a.store && a.store.length > 0) {
                                 a.store.map(s => {
-                                    s['isSelected'] = false
                                     s['isOnline'] = checkOnlineStore(s.startTime, s.endTime, s.nextday)
                                 })
                             }
