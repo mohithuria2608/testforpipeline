@@ -30,7 +30,8 @@ export class NotificationController {
                             emailLib.sendEmail({
                                 message: emailer,
                                 destination: payload.emailDestination,
-                                subject: Constant.NOTIFICATION_MSG.EMAIL[payload.language][payload.emailCode]
+                                subject: Constant.NOTIFICATION_MSG.EMAIL[payload.language][payload.emailCode],
+                                isFailureEmail: payload.emailCode === Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL
                             });
                             resolve();
                         }
