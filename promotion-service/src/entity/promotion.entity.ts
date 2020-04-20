@@ -82,7 +82,7 @@ export class PromotionClass extends BaseEntity {
      */
     filterPromotionData(promotionPayload) {
         promotionPayload.dateFrom = new Date(promotionPayload.dateFrom).toISOString();
-        promotionPayload.dateTo = new Date(promotionPayload.dateTo).toISOString();
+        promotionPayload.dateTo = new Date(new Date(new Date(promotionPayload.dateTo).setUTCHours(23)).setUTCMinutes(59)).toISOString()
         return promotionPayload;
     }
 
