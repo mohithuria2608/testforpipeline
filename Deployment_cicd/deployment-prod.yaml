@@ -275,11 +275,11 @@ spec:
           name: grpc-sync
         resources:
           limits:
-            cpu: "2000m"
-            memory: "2000Mi"
+            cpu: "500m"
+            memory: "500Mi"
           requests:
-            cpu: "2000m"
-            memory: "2000Mi"
+            cpu: "500m"
+            memory: "500Mi"
       nodeSelector:
         agentpool: amfprodnenp1
 
