@@ -1,11 +1,14 @@
 import * as config from "config"
 import { Middleware, Context } from 'koa'
 import * as Constant from '../constant';
+import { consolelog } from '../utils';
+
 
 export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
             let headers: ICommonRequest.IHeaders = ctx.headers
+            consolelog(process.cwd(), "fe appversion-----------------", headers.appversion, true)
             let appversion = Constant.APP_VERSION[headers.devicetype]
             let check = -1;
             /**
@@ -13,8 +16,9 @@ export default (opts?): Middleware => {
              */
             if (appversion && appversion.length > 0) {
                 appversion.map(obj => {
+                    consolelog(process.cwd(), "ms appversion-----------------", JSON.stringify(obj), true)
                     if (obj.appversion == headers.appversion) {
-                        switch (appversion.type) {
+                        switch (obj.type) {
                             case Constant.DATABASE.TYPE.APP_VERSION.FORCE: {
                                 check = -1
                                 break;
@@ -36,7 +40,7 @@ export default (opts?): Middleware => {
             }
             switch (check) {
                 case -1: { return Promise.reject(Constant.STATUS_MSG.ERROR.E410.FORCE_UPDATE) }
-                case 0: { ctx.set('X-skip', 1); break; }
+                case 0: { ctx.set('X-skip', 1); break; } // show popup only once
                 case 1: { ctx.set('X-skip', 0); break; }
                 default: { return Promise.reject(Constant.STATUS_MSG.ERROR.E410.FORCE_UPDATE) }
             }

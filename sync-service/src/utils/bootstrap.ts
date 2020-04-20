@@ -10,7 +10,6 @@ export let bootstrap = async function (server) {
     await cmsConfigController.bootstrapConfiguration();
     await configuration.init({ bootstrap: true });
     await appversion.init();
-    await cmsAppversionController.bootstrapAppversion()
     await SoapManager.init();
     return
 }

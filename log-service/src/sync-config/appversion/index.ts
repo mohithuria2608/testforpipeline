@@ -1,7 +1,7 @@
 import * as config from "config"
 import * as Constant from '../../constant'
 import { consolelog } from '../../utils'
-import * as ENTITY from '../../entity'
+import { syncService } from '../../grpc/client';
 
 export class Appversion {
 
@@ -9,7 +9,7 @@ export class Appversion {
 
     async init() {
         try {
-            let appversion = await ENTITY.AppversionE.getAppversion({ isActive: 1 })
+            let appversion = await syncService.fetchAppversion({ isActive: 1 })
             if (appversion && appversion.length > 0) {
                 let androidAppVersion = []
                 let iosAppVersion = []

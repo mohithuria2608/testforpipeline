@@ -10,6 +10,7 @@ export default (router: Router) => {
     router
         .post('/',
             ...getMiddleware([
+                // Constant.MIDDLEWARE.APP_VERSION,
                 Constant.MIDDLEWARE.AUTH
             ]),
             validate({

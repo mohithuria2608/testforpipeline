@@ -33,7 +33,7 @@ export class Configuration {
                         }
                         case Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC: {
                             if (argv.country)
-                                promise.push(this.initCountryConfig(argv.type))
+                                promise.push(this.initCountryConfig(argv.country))
                             break;
                         }
                     }

@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV == 'staging')
   require('newrelic');
-require('events').EventEmitter.defaultMaxListeners = 15;
+require('events').EventEmitter.defaultMaxListeners = 60;
 global.configSync = {
   general: 0,
   kafka: 0,

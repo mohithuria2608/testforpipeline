@@ -2050,7 +2050,7 @@ export const APP_VERSION = {
         id: 1,
         type: "NORMAL",
         deviceType: "ANDROID",
-        appversion: "1.0.0",
+        appversion: "0.0.42",
         isActive: 1,
         createdAt: 1586639026000,
         updatedAt: 1586639026000
