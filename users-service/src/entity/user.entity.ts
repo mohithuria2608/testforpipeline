@@ -33,6 +33,24 @@ export class UserEntity extends BaseEntity {
             bin: 'migrate',
             index: 'idx_' + this.set + '_' + 'migrate',
             type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'cmsUserRef',
+            index: 'idx_' + this.set + '_' + 'cmsUserRef',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'sdmUserRef',
+            index: 'idx_' + this.set + '_' + 'sdmUserRef',
+            type: "NUMERIC"
+        },
+        {
+            set: this.set,
+            bin: 'sdmCorpRef',
+            index: 'idx_' + this.set + '_' + 'sdmCorpRef',
+            type: "NUMERIC"
         }
     ]
     constructor() {

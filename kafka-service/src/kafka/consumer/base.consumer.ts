@@ -16,7 +16,7 @@ export class BaseConsumer {
         this.topic = topic;
         this.initConsumer(groupId);
         this.handleMessages();
-        // this.consumer.setOffset(topic, 0, 0);
+        this.consumer.setOffset(topic, 0, 0);
         // this.consumer.addTopics(
         //     [topic],
         //     (error, data) => {

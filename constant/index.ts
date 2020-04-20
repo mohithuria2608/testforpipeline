@@ -693,21 +693,25 @@ export const STATUS_MSG = {
                 "message_Ar": "لقد واجهتنا مشكلة، يرجى المحاولة بعد قليل",
                 "message_En": "We have encountered some issue. Please try after sometime"
             },
-            "MIN_CART_VALUE_VOILATION": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "MIN_CART_VALUE_VOILATION",
-                "message": "The minimum amount for an order is 23 Dhs. Please add more items to place the order",
-                "message_Ar": "الحد الأدنى للطلب يجب أن يكون 23 درهم",
-                "message_En": "The minimum amount for an order is 23 Dhs. Please add more items to place the order"
+            "MIN_CART_VALUE_VOILATION": (amount) => {
+                return {
+                    "statusCode": 400,
+                    "httpCode": 400,
+                    "type": "MIN_CART_VALUE_VOILATION",
+                    "message": `The minimum amount for an order is ${amount} Dhs. Please add more items to place the order`,
+                    "message_Ar": `الحد الأدنى للطلب يجب أن يكون ${amount} درهم`,
+                    "message_En": `The minimum amount for an order is ${amount} Dhs. Please add more items to place the order`,
+                }
             },
-            "MAX_COD_CART_VALUE_VOILATION": {
-                "statusCode": 400,
-                "httpCode": 400,
-                "type": "MAX_COD_CART_VALUE_VOILATION",
-                "message": "Maximum COD allowed is 300 AED",
-                "message_Ar": "الحد الأقصى المتاح 300 درهم",
-                "message_En": "Maximum COD allowed is 300 AED"
+            "MAX_COD_CART_VALUE_VOILATION": (amount) => {
+                return {
+                    "statusCode": 400,
+                    "httpCode": 400,
+                    "type": "MAX_COD_CART_VALUE_VOILATION",
+                    "message": `Maximum COD allowed is ${amount} AED`,
+                    "message_Ar": `الحد الأقصى المتاح ${amount} درهم`,
+                    "message_En": `Maximum COD allowed is ${amount} AED`
+                }
             },
             "INVALID_PROMO": {
                 "statusCode": 400,
