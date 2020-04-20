@@ -16,7 +16,7 @@ export default (opts?): Middleware => {
                 appversion.map(obj => {
                     console.log("obj-----------------", obj)
                     if (obj.appversion == headers.appversion) {
-                        switch (appversion.type) {
+                        switch (obj.type) {
                             case Constant.DATABASE.TYPE.APP_VERSION.FORCE: {
                                 check = -1
                                 break;
@@ -30,9 +30,12 @@ export default (opts?): Middleware => {
                                 break;
                             }
                             default: {
+                                console.log("else check-----------------", check)
                                 break;
                             }
                         }
+                    } else {
+                        console.log("else check-----------------", check)
                     }
                 })
             }
