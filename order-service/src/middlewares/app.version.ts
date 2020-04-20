@@ -16,7 +16,7 @@ export default (opts?): Middleware => {
              */
             if (appversion && appversion.length > 0) {
                 appversion.map(obj => {
-                    consolelog(process.cwd(), "ms appversion-----------------", obj, true)
+                    consolelog(process.cwd(), "ms appversion-----------------", JSON.stringify(obj), true)
                     if (obj.appversion == headers.appversion) {
                         switch (obj.type) {
                             case Constant.DATABASE.TYPE.APP_VERSION.FORCE: {
