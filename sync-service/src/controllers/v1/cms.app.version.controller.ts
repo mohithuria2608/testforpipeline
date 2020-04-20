@@ -10,25 +10,6 @@ export class CmsAppversionController {
     constructor() { }
 
     /**
-    * @method BOOTSTRAP
-    * @description : Post bulk appversion data
-    * */
-    async bootstrapAppversion() {
-        try {
-            await Aerospike.truncate({ set: ENTITY.AppversionE.set, before_nanos: 0 })
-            let rawdata = fs.readFileSync(__dirname + '/../../../model/appversion.json', 'utf-8');
-            let appversion = JSON.parse(rawdata);
-            for (const iterator of appversion) {
-                ENTITY.AppversionE.postAppversion(iterator)
-            }
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "bootstrapAppversion", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
    * @method GRPC
    */
     async syncAppversionFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
