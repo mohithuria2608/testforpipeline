@@ -32,10 +32,128 @@ export class CmsConfigController {
     }
 
     /**
+     * @method POST
+     * @param {any} payload
+     * @description creates a config from CMS to aerospike
+     */
+    async postConfig(headers: ICommonRequest.IHeaders, payload: ICmsConfigRequest.ICmsConfig) {
+        try {
+            let configChange: IKafkaGrpcRequest.IKafkaBody = {
+                set: ENTITY.ConfigE.set,
+                as: {
+                    reset: true,
+                    argv: JSON.stringify(payload)
+                },
+                inQ: true
+            }
+            kafkaService.kafkaSync(configChange)
+            return {}
+        } catch (error) {
+            consolelog(process.cwd(), "postConfig", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
+    /**
     * @method GRPC
     */
     async syncConfigFromKafka(payload: IKafkaGrpcRequest.IKafkaBody) {
         try {
+            // let data = {
+            //     "type": "country_specific",
+            //     "action": "reset",
+            //     "data": [
+            //         {
+            //             "success": true,
+            //             "data": [
+            //                 {
+            //                     "country_code": "AE",
+            //                     "country_name": "United Arab Emirates",
+            //                     "concept_id": "3",
+            //                     "sdm_url": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
+            //                     "base_currency": "AED",
+            //                     "licence": "AmericanaWeb",
+            //                     "channel_data": [
+            //                         {
+            //                             "template_id": "17",
+            //                             "template_status": "1",
+            //                             "channel_name": "kfc_app",
+            //                             "menu_data": [
+            //                                 {
+            //                                     "menu_id": "1",
+            //                                     "menu_state": "0",
+            //                                     "menu_cluster": "0",
+            //                                     "frequency_cron": "0",
+            //                                     "time_cron": "0"
+            //                                 }
+            //                             ]
+            //                         }
+            //                     ],
+            //                     "address_object": [
+            //                         {
+            //                             "type": "DELIVERY",
+            //                             "enable": 1,
+            //                             "subType": [
+            //                                 {
+            //                                     "type": "DELIVERY",
+            //                                     "enable": 1
+            //                                 }
+            //                             ]
+            //                         },
+            //                         {
+            //                             "type": "PICKUP",
+            //                             "enable": 1,
+            //                             "subType": [
+            //                                 {
+            //                                     "type": "PICKUP",
+            //                                     "enable": 1
+            //                                 },
+            //                                 {
+            //                                     "type": "CARHOP",
+            //                                     "enable": 1
+            //                                 }
+            //                             ]
+            //                         }
+            //                     ],
+            //                     "home_overlay": {
+            //                         "En": {
+            //                             "mediaUrl": "covid-poppup-mob-en.png",
+            //                             "gif": "-",
+            //                             "mediaType": "image",
+            //                             "extension": "png",
+            //                             "action": {
+            //                                 "id": "1",
+            //                                 "type": "pickup_carhop",
+            //                                 "delimeters": "delimeters"
+            //                             }
+            //                         },
+            //                         "Ar": {
+            //                             "mediaUrl": null,
+            //                             "gif": null,
+            //                             "mediaType": null,
+            //                             "extension": null,
+            //                             "action": {
+            //                                 "id": null,
+            //                                 "type": null,
+            //                                 "delimeters": null
+            //                             }
+            //                         }
+            //                     },
+            //                     "sdm": {
+            //                         "licence_code": "AmericanaWeb",
+            //                         "concept_id": "3",
+            //                         "menu_template_id": null
+            //                     },
+            //                     "ccode": "+971",
+            //                     "customer_care": "600522252",
+            //                     "support_email": "digiteam@americana-food.com",
+            //                     "min_cart_value": "23",
+            //                     "min_cod_cart_value": "300"
+            //                 }
+            //             ]
+            //         }
+            //     ]
+            // }
             let data: ICmsConfigRequest.ICmsConfig = JSON.parse(payload.as.argv)
             switch (data.type) {
                 case Constant.DATABASE.TYPE.CONFIG.GENERAL: {
@@ -702,6 +820,9 @@ export class CmsConfigController {
                 case Constant.DATABASE.TYPE.CONFIG.COUNTRY_SPECIFIC: {
                     if (payload.as && (payload.as.create || payload.as.update || payload.as.reset || payload.as.get)) {
                         if (payload.as.reset) {
+                            data.data = data.data.map(obj => {
+                                return obj.data[0]
+                            })
                             let conf: ICmsConfigRequest.ICmsConfigCountrySpecifc[] = data.data
                             if (conf && conf.length > 0) {
                                 for (const countrySpcificConf of conf) {
@@ -801,29 +922,6 @@ export class CmsConfigController {
             return {}
         } catch (error) {
             consolelog(process.cwd(), "syncConfigFromKafka", JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
-    }
-
-    /**
-     * @method POST
-     * @param {any} payload
-     * @description creates a config from CMS to aerospike
-     */
-    async postConfig(headers: ICommonRequest.IHeaders, payload: ICmsConfigRequest.ICmsConfig) {
-        try {
-            let configChange: IKafkaGrpcRequest.IKafkaBody = {
-                set: ENTITY.ConfigE.set,
-                as: {
-                    reset: true,
-                    argv: JSON.stringify(payload)
-                },
-                inQ: true
-            }
-            kafkaService.kafkaSync(configChange)
-            return {}
-        } catch (error) {
-            consolelog(process.cwd(), "postConfig", JSON.stringify(error), false)
             return Promise.reject(error)
         }
     }
