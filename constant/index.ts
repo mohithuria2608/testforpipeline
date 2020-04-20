@@ -2048,7 +2048,7 @@ export const CONF = {
 export const APP_VERSION = {
     ANDROID: [{
         id: 1,
-        type: "SKIP",
+        type: "NORMAL",
         deviceType: "ANDROID",
         appversion: "0.0.42",
         isActive: 1,
