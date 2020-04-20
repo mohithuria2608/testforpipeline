@@ -141,11 +141,12 @@ export class StoreController {
                                 restaurant_id: store.id,
                                 id: store.id,
                                 sdmStoreId: store.storeId,
+                                status: storeStatusList[i].active,
                                 active: storeStatusList[i].active,
                                 startTime: storeStatusList[i].startTime,
                                 endTime: storeStatusList[i].endTime,
                                 nextDay: storeStatusList[i].nextDay,
-                                services: storeStatusList[i].services
+                                services: { ...store.services, ...storeStatusList[i].services }
                             });
                             storesToSyncWithCMSHash[store.sdmStoreId] = true;
                         }
