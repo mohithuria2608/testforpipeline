@@ -117,9 +117,9 @@ export class StoreController {
 
             for (let store of storesList) {
                 for (let i = 0; i < storeStatusList.length; i++) {
-                    if (
-                        store.storeId === storeStatusList[i].sdmStoreId
-                        && (
+                    if (store.storeId === storeStatusList[i].sdmStoreId) {
+                        // only update in case these variables are changed
+                        if (
                             store.active !== storeStatusList[i].active ||
                             store.startTime !== storeStatusList[i].startTime ||
                             store.endTime !== storeStatusList[i].endTime ||
@@ -127,30 +127,32 @@ export class StoreController {
                             store.services.del !== storeStatusList[i].services.del ||
                             store.services.tak !== storeStatusList[i].services.tak ||
                             store.services.din !== storeStatusList[i].services.din
-                        )
-                    ) {
-                        store.active = storeStatusList[i].active;
-                        store.startTime = storeStatusList[i].startTime;
-                        store.endTime = storeStatusList[i].endTime;
-                        store.nextDay = storeStatusList[i].nextDay;
-                        store.services = { ...store.services, ...storeStatusList[i].services };
-                        await ENTITY.StoreE.saveStore(store);
+                        ) {
+                            store.active = storeStatusList[i].active;
+                            store.startTime = storeStatusList[i].startTime;
+                            store.endTime = storeStatusList[i].endTime;
+                            store.nextDay = storeStatusList[i].nextDay;
+                            store.services = { ...store.services, ...storeStatusList[i].services };
+                            await ENTITY.StoreE.saveStore(store);
+                        }
+
                         if (!storesToSyncWithCMSHash[store.sdmStoreId]) {
                             storesToSyncWithCMS.push({
                                 restaurant_id: store.id,
                                 id: store.id,
                                 sdmStoreId: store.storeId,
-                                active: store.active,
-                                startTime: store.startTime,
-                                endTime: store.endTime,
-                                nextDay: store.nextDay,
-                                services: store.services
+                                active: storeStatusList[i].active,
+                                startTime: storeStatusList[i].startTime,
+                                endTime: storeStatusList[i].endTime,
+                                nextDay: storeStatusList[i].nextDay,
+                                services: storeStatusList[i].services
                             });
                             storesToSyncWithCMSHash[store.sdmStoreId] = true;
                         }
                     }
                 }
             }
+
             console.log("UPDATING STORES STATUS FOR COUNT ->", storesToSyncWithCMS.length);
             if (storesToSyncWithCMS.length) await Utils.sendRequestToCMS('SYNC_STORE_STATUS', storesToSyncWithCMS);
             return {}
