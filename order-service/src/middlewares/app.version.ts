@@ -13,6 +13,7 @@ export default (opts?): Middleware => {
              */
             if (appversion && appversion.length > 0) {
                 appversion.map(obj => {
+                    console.log("obj-----------------", obj)
                     if (obj.appversion == headers.appversion) {
                         switch (appversion.type) {
                             case Constant.DATABASE.TYPE.APP_VERSION.FORCE: {
@@ -34,6 +35,7 @@ export default (opts?): Middleware => {
                     }
                 })
             }
+            console.log("check-----------------", check)
             switch (check) {
                 case -1: { return Promise.reject(Constant.STATUS_MSG.ERROR.E410.FORCE_UPDATE) }
                 case 0: { ctx.set('X-skip', 1); break; }
