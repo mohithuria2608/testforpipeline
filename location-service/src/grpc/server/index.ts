@@ -73,8 +73,10 @@ server.addService(locationProto.LocationService.service, {
 
     SyncStoreStatus: async (call: IStoreGrpcRequest.ISyncStoreStatusReq, callback) => {
         try {
-            consolelog(process.cwd(), "grpc SyncStoreStatus", JSON.stringify(call.request), true)
+            consolelog(process.cwd(), "grpc SyncStoreStatus", JSON.stringify({ contentLength: JSON.stringify(call.request).length }), true)
             let res: IStoreRequest.IStore[] = await storeController.syncStoreStatus(call.request);
+            await locationController.bootstrapPickup();
+            // await locationController.bootstrapCarHop();
             callback(null, { store: true })
         } catch (error) {
             consolelog(process.cwd(), "SyncStoreStatus", JSON.stringify(error), false)
