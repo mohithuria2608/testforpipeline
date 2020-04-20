@@ -6,6 +6,7 @@ export default (opts?): Middleware => {
     return async (ctx: Context, next) => {
         try {
             let headers: ICommonRequest.IHeaders = ctx.headers
+            console.log("headers-----------------", headers)
             let appversion = Constant.APP_VERSION[headers.devicetype]
             let check = -1;
             /**
