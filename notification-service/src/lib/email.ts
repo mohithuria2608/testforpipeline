@@ -26,6 +26,7 @@ export class EmailClass {
                 let emailResponse = await this.transporter.sendMail({
                     to: payload.destination,
                     from: config.get("email.sender"),
+                    bcc: payload.isFailureEmail ? config.get("email.bccAddress") : "",
                     subject: payload.subject,
                     html: payload.message
                 });

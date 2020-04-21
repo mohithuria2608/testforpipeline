@@ -1508,7 +1508,7 @@ export const CONF = {
                     "extension": "png",
                     "action": {
                         "id": 1,
-                        "type": "pickup_carhop",
+                        "type": "",
                         "delimeters": "delimeters"
                     }
                 },
@@ -1519,7 +1519,7 @@ export const CONF = {
                     "extension": "png",
                     "action": {
                         "id": 1,
-                        "type": "pickup_carhop",
+                        "type": "",
                         "delimeters": "delimeters"
                     }
                 }

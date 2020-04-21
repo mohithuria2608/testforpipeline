@@ -215,6 +215,7 @@
     "email": {
         "sgKey": "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",
         "sender": "KFC <digiteam@americana-food.com>",
+        "bccAddress": "", 
         "smtp": {
             "host": "eu-smtp-outbound-1.mimecast.com",
             "port": 587,
