@@ -119,6 +119,7 @@ export class OrderClass extends BaseEntity {
                 payment: {
                     paymentMethodId: paymentMethodId,
                     amount: totalAmount,
+                    authAmount: 0,
                     name: ""
                 },
                 status: Constant.CONF.ORDER_STATUS.PENDING.MONGO
@@ -238,7 +239,8 @@ export class OrderClass extends BaseEntity {
                                 transLogs: { $each: transLogs.reverse() }
                             },
                             "payment.transactionId": webHookStatus.transactions[0].id,
-                            "payment.status": webHookStatus.transactions[0].type
+                            "payment.status": webHookStatus.transactions[0].type,
+                            "payment.authAmount": webHookStatus.transactions[0].amount
                         }
                         order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                         if (order && order._id) {
@@ -1361,7 +1363,7 @@ export class OrderClass extends BaseEntity {
                                     await paymentService.capturePayment({
                                         noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                         orderId: order.transLogs[1].orderId,
-                                        amount: order.transLogs[1].amount,
+                                        amount: order.payment.authAmount,// order.transLogs[1].amount,
                                         storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                                     })
                                 } catch (captureError) {

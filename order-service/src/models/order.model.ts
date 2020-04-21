@@ -34,6 +34,7 @@ export interface IOrder extends Document {
     payment: {
         paymentMethodId: number,
         amount: number,
+        authAmount: number,
         name: string,
         status: string
     },
@@ -205,6 +206,7 @@ const orderSchema = new Schema({
     payment: {
         paymentMethodId: { type: Number, enum: [Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.COD, Constant.DATABASE.TYPE.PAYMENT_METHOD_ID.CARD] },
         amount: { type: Number, default: 0 },
+        authAmount: { type: Number, default: 0 },
         name: {
             type: String, enum: [
                 Constant.DATABASE.TYPE.PAYMENT_METHOD.TYPE.CARD,

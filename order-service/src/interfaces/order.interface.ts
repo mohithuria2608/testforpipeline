@@ -34,6 +34,7 @@ declare namespace IOrderRequest {
         payment: {
             paymentMethodId: number,
             amount: number,
+            authAmount: number,
             name: string,
             status: string
         },
