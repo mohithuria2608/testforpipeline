@@ -151,7 +151,7 @@ export class OrderClass extends BaseEntity {
                             locale: (headers.language == Constant.DATABASE.LANGUAGE.EN) ? Constant.DATABASE.PAYMENT_LOCALE.EN : Constant.DATABASE.PAYMENT_LOCALE.AR,
                         })
                     } catch (error) {
-                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, false)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E400.CHANGE_PAYMENT_METHOD)
                     }
                     if (initiatePaymentObj.noonpayRedirectionUrl && initiatePaymentObj.noonpayRedirectionUrl != "") {
@@ -177,18 +177,18 @@ export class OrderClass extends BaseEntity {
                                 validation_remarks: ""
                             })
                     } else
-                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+                        order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, false)
                     break;
                 }
                 default: {
-                    order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+                    order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, false)
                     break;
                 }
             }
             return { noonpayRedirectionUrl, order }
         } catch (error) {
             consolelog(process.cwd(), "initiatePaymentHandler", JSON.stringify(error), false)
-            this.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+            this.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, false)
             return Promise.reject(error)
         }
     }
@@ -279,7 +279,7 @@ export class OrderClass extends BaseEntity {
                         validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
                 }
                 if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO)
-                    await this.orderFailureHandler(order, 1, validationRemarks)
+                    await this.orderFailureHandler(order, 1, validationRemarks, false)
                 redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
                 consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
                 return { redirectUrl, order }
@@ -290,7 +290,7 @@ export class OrderClass extends BaseEntity {
             }
         } catch (error) {
             consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
-            this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+            this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE, false)
             redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
             return { redirectUrl, order }
         }
@@ -462,7 +462,7 @@ export class OrderClass extends BaseEntity {
                     else if (error.statusCode && error.statusCode == Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.statusCode)
                         validationRemarks = Constant.STATUS_MSG.ERROR.E455.SDM_INVALID_CORP_ID.message
                     order = await this.getOneEntityMdb({ _id: order._id }, { items: 0 })
-                    this.orderFailureHandler(order, 1, validationRemarks)
+                    this.orderFailureHandler(order, 1, validationRemarks, false)
                     return Promise.reject(error)
                 } else
                     return Promise.reject(error)
@@ -1201,7 +1201,7 @@ export class OrderClass extends BaseEntity {
             } else {
                 consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
                 proceedFurther = false
-                order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
+                order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH, false)
             }
 
             return { proceedFurther, order }
@@ -1221,7 +1221,7 @@ export class OrderClass extends BaseEntity {
             ) {
                 consolelog(process.cwd(), `validationRemarksHandler 1`, "", true)
                 proceedFurther = false
-                order = await this.orderFailureHandler(order, 1, sdmOrder.ValidationRemarks)
+                order = await this.orderFailureHandler(order, 1, sdmOrder.ValidationRemarks, false)
             }
             return { proceedFurther, order }
         } catch (error) {
@@ -1234,7 +1234,7 @@ export class OrderClass extends BaseEntity {
         try {
             if (order.status == Constant.CONF.ORDER_STATUS.PENDING.MONGO &&
                 (order.createdAt + Constant.CONF.GENERAL.MAX_PENDING_STATE_TIME) < new Date().getTime()) {
-                return await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED)
+                return await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.MAX_PENDING_TIME_REACHED, true)
             } else
                 return order
         } catch (error) {
@@ -1282,7 +1282,7 @@ export class OrderClass extends BaseEntity {
                                                 /**
                                                 * @description : in case of failure while adding payment object
                                                 */
-                                                order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_ADD_ON_SDM_FAILURE)
+                                                order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_ADD_ON_SDM_FAILURE, false)
                                             }
                                         }
                                     } else {
@@ -1752,11 +1752,11 @@ export class OrderClass extends BaseEntity {
         }
     }
 
-    async orderFailureHandler(order: IOrderRequest.IOrderData, voidReason: number, validationRemarks: string) {
+    async orderFailureHandler(order: IOrderRequest.IOrderData, voidReason: number, validationRemarks: string, doNotTriggerNotification: boolean) {
         try {
             if (order && order._id) {
                 consolelog(process.cwd(), ` FAILURE HANDLER : voidReason : ${voidReason}, validationRemarks : ${validationRemarks}`, "", true)
-                if (voidReason >= 0)
+                if (voidReason >= 0 && !doNotTriggerNotification)
                     OrderSDME.cancelOrder({
                         sdmOrderRef: order.sdmOrderRef,
                         voidReason: voidReason,
@@ -1910,7 +1910,7 @@ export class OrderClass extends BaseEntity {
                         })
                 }
                 order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
-                if (order && order._id && order.notification && !order.notification.failure) {
+                if (order && order._id && order.notification && !order.notification.failure && !doNotTriggerNotification) {
                     // send notification(sms + email) on order failure
                     let userData = await userService.fetchUser({ userId: order.userId });
                     notificationService.sendNotification({
