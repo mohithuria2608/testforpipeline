@@ -452,8 +452,12 @@ export class OrderController {
                 } else {
                     if (getRetrySdmOrderStatus.indexOf(parseInt(payload.Value)) >= 0) {
                         let order = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: parseInt(payload.Key) }, { items: 0, selFreeItem: 0, freeItems: 0 })
-                        ENTITY.OrderE.getSdmOrderScheduler(order)
-                        return
+                        if (order && order._id) {
+                            ENTITY.OrderE.getSdmOrderScheduler(order)
+                            return
+                        } else
+                            return parseInt(payload.Key)
+
                     } else
                         return parseInt(payload.Key)
                 }
