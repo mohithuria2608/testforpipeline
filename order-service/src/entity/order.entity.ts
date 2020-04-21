@@ -216,8 +216,10 @@ export class OrderClass extends BaseEntity {
                     })
                     transLogs.push(webHookStatus)
                 } catch (statusError) {
+                    if (!payload.apiCall)
+                        return { redirectUrl: "", order: order }
                     isFailed = true
-                    validationRemarks = JSON.stringify(statusError.details)
+                    validationRemarks = statusError.details
                     if (statusError.data) {
                         if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
                             transLogs.push(statusError.data)
