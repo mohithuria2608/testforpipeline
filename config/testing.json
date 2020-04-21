@@ -264,6 +264,6 @@
             }
         }
     },
-    "loadTest": true,
+    "loadTest": false,
     "enableByPassOtp": true
 }
