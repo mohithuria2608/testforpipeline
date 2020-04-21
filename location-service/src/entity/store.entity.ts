@@ -24,7 +24,13 @@ export class StoreEntity extends BaseEntity {
             bin: 'geoFence',
             index: 'idx_' + this.set + '_' + 'geoFence',
             type: "GEO2DSPHERE"
-        }
+        },
+        {
+            set: this.set,
+            bin: 'active',
+            index: 'idx_' + this.set + '_' + 'active',
+            type: "NUMERIC"
+        },
     ]
     constructor() {
         super(Constant.SET_NAME.STORE)

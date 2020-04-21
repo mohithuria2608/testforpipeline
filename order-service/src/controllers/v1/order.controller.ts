@@ -120,7 +120,7 @@ export class OrderController {
                 if (!store.isOnline)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             consolelog(process.cwd(), "step 4", new Date(), false)
 
             if (config.get("sdm.promotion.default"))
