@@ -465,7 +465,6 @@ export class OrderController {
                             return
                         } else
                             return parseInt(payload.Key)
-
                     } else
                         return parseInt(payload.Key)
                 }

@@ -96,8 +96,8 @@ const orderSchema = new Schema({
         ]
     },
     sdmOrderRef: { type: Number, required: true, index: true },
-    cmsOrderRef: { type: Number, required: true, index: true },
-    userId: { type: String, required: true, index: true },
+    cmsOrderRef: { type: Number, required: true },
+    userId: { type: String, required: true },
     sdmUserRef: { type: Number, required: true },
     country: {
         type: String, required: true, enum: [
@@ -244,5 +244,7 @@ const orderSchema = new Schema({
     },
     env: { type: Number, required: true },
 });
+
+orderSchema.index({ "status": 1, "sdmOrderRef": 1 })
 
 export let order = model<IOrder>('order', orderSchema)
