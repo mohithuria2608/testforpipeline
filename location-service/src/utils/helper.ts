@@ -402,16 +402,18 @@ export let stsMsgI18 = function (statsObj: ICommonRequest.IError, language: stri
 
 export let checkOnlineStore = function (start, end, nextday) {
     let curTime = new Date().getTime()
-    let startTime = new Date(new Date(new Date().setUTCHours(new Date(start).getUTCHours())).setUTCMinutes(new Date(start).getUTCMinutes())).setUTCSeconds(new Date(start).getUTCSeconds())
+
+    let startTime = new Date(new Date(new Date().setUTCHours(new Date(start).getUTCHours() - 4)).setUTCMinutes(new Date(start).getUTCMinutes())).setUTCSeconds(new Date(start).getUTCSeconds())
+
     let endTime = (nextday == 0) ?
-        new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds()) :
-        new Date(new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours())).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds())).setUTCDate(new Date().getUTCDate() + 1)
+        new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours() - 4)).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds()) :
+        new Date(new Date(new Date(new Date().setUTCHours(new Date(end).getUTCHours() - 4)).setUTCMinutes(new Date(end).getUTCMinutes())).setUTCSeconds(new Date(end).getUTCSeconds())).setUTCDate(new Date().getUTCDate() + 1)
 
     consolelog(process.cwd(), "", `curTime : ${curTime},     startTime : ${startTime},     endTime : ${endTime}`, true)
     consolelog(process.cwd(), "", startTime < curTime, true)
     consolelog(process.cwd(), "", curTime < endTime, true)
 
-    if ((startTime < curTime && curTime < endTime) || (startTime > curTime && curTime < endTime && nextday == 1))
+    if (startTime <= curTime && curTime < endTime)
         return true
     else
         return false

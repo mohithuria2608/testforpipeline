@@ -98,6 +98,9 @@ export class OrderController {
                 serviceType = Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY
             else
                 serviceType = Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY
+            // let validatedStore = await locationService.validateCoordinate({ lat: getAddress.lat, lng: getAddress.lng, serviceType: serviceType })
+            // if (validatedStore.storeId != getAddress.storeId) {
+            // }
             let store: IStoreGrpcRequest.IStore = await locationService.fetchStore({ storeId: getAddress.storeId, language: headers.language, serviceType: serviceType })
             if (store && store.id && store.menuId == payload.curMenuId) {
                 const menu = await menuService.fetchMenu({
