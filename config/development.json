@@ -1,60 +1,60 @@
 {
-    "env": "development",
+    "env": "production",
     "server": {
         "auth": {
-            "url": "https://americananode.appskeeper.com/auth-service/",
+            "url": "https://prod-api.americanarest.com/auth-service/",
             "port": 4000
         },
         "user": {
-            "url": "https://americananode.appskeeper.com/user-service/",
+            "url": "https://prod-api.americanarest.com/user-service/",
             "port": 4001
         },
         "menu": {
-            "url": "https://americananode.appskeeper.com/menu-service/",
+            "url": "https://prod-api.americanarest.com/menu-service/",
             "port": 4002
         },
         "order": {
-            "url": "https://americananode.appskeeper.com/order-service/",
+            "url": "https://prod-api.americanarest.com/order-service/",
             "port": 4003
         },
         "sync": {
-            "url": "https://americananode.appskeeper.com/sync-service/",
+            "url": "https://prod-api.americanarest.com/sync-service/",
             "port": 4004
         },
         "deeplink": {
-            "url": "https://americananode.appskeeper.com/deeplink-service/",
+            "url": "https://prod-api.americanarest.com/deeplink-service/",
             "port": 4005
         },
         "kafka": {
-            "url": "https://americananode.appskeeper.com/kafka-service/",
+            "url": "https://prod-api.americanarest.com/kafka-service/",
             "port": 4006
         },
         "location": {
-            "url": "https://americananode.appskeeper.com/location-service/",
+            "url": "https://prod-api.americanarest.com/location-service/",
             "port": 4007
         },
         "notification": {
-            "url": "https://americananode.appskeeper.com/notification-service/",
+            "url": "https://prod-api.americanarest.com/notification-service/",
             "port": 4008
         },
         "payment": {
-            "url": "https://americananode.appskeeper.com/payment-service/",
+            "url": "https://prod-api.americanarest.com/payment-service/",
             "port": 4009
         },
         "promotion": {
-            "url": "https://americananode.appskeeper.com/promotion-service/",
+            "url": "https://prod-api.americanarest.com/promotion-service/",
             "port": 4010
         },
         "upload": {
-            "url": "https://americananode.appskeeper.com/upload-service/",
+            "url": "https://prod-api.americanarest.com/upload-service/",
             "port": 4011
         },
         "log": {
-            "url": "https://americananode.appskeeper.com/log-service/",
+            "url": "https://prod-api.americanarest.com/log-service/",
             "port": 4012
         },
         "home": {
-            "url": "https://americananode.appskeeper.com/home-service/",
+            "url": "https://prod-api.americanarest.com/home-service/",
             "port": 4013
         }
     },
@@ -63,60 +63,60 @@
             "keepalive_timeout_ms": 1500
         },
         "auth": {
-            "server": "localhost:50051",
-            "client": "127.0.0.1:50051"
+            "server": "0.0.0.0:50051",
+            "client": "10.2.0.6:50051"
         },
         "user": {
-            "server": "localhost:50052",
-            "client": "127.0.0.1:50052"
+            "server": "0.0.0.0:50052",
+            "client": "10.2.0.7:50052"
         },
         "menu": {
-            "server": "localhost:50053",
-            "client": "127.0.0.1:50053"
+            "server": "0.0.0.0:50053",
+            "client": "10.2.0.8:50053"
         },
         "order": {
-            "server": "localhost:50054",
-            "client": "127.0.0.1:50054"
+            "server": "0.0.0.0:50054",
+            "client": "10.2.0.9:50054"
         },
         "sync": {
-            "server": "localhost:50055",
-            "client": "127.0.0.1:50055"
+            "server": "0.0.0.0:50055",
+            "client": "10.2.0.13:50055"
         },
         "deeplink": {
-            "server": "localhost:50056",
-            "client": "127.0.0.1:50056"
+            "server": "0.0.0.0:50056",
+            "client": "10.2.0.11:50056"
         },
         "kafka": {
-            "server": "localhost:50057",
-            "client": "127.0.0.1:50057"
+            "server": "0.0.0.0:50057",
+            "client": "10.2.0.12:50057"
         },
         "location": {
-            "server": "localhost:50058",
-            "client": "127.0.0.1:50058"
+            "server": "0.0.0.0:50058",
+            "client": "10.2.0.14:50058"
         },
         "notification": {
-            "server": "localhost:50059",
-            "client": "127.0.0.1:50059"
+            "server": "0.0.0.0:50059",
+            "client": "10.2.0.15:50059"
         },
         "payment": {
-            "server": "localhost:50060",
-            "client": "127.0.0.1:50060"
+            "server": "0.0.0.0:50060",
+            "client": "10.2.0.16:50060"
         },
         "promotion": {
-            "server": "localhost:50061",
-            "client": "127.0.0.1:50061"
+            "server": "0.0.0.0:50061",
+            "client": "10.2.0.17:50061"
         },
         "upload": {
-            "server": "localhost:50062",
-            "client": "127.0.0.1:50062"
+            "server": "0.0.0.0:50062",
+            "client": "10.2.0.18:50062"
         },
         "log": {
-            "server": "localhost:50063",
-            "client": "127.0.0.1:50063"
+            "server": "0.0.0.0:50063",
+            "client": "10.2.0.19:50063"
         },
         "home": {
-            "server": "localhost:50064",
-            "client": "127.0.0.1:50064"
+            "server": "0.0.0.0:50064",
+            "client": "10.2.0.20:50064"
         }
     },
     "directory": {
@@ -193,7 +193,7 @@
         "SASToken": "?sv=2019-02-02&ss=bfqt&srt=sco&sp=rl&se=2029-04-09T19:07:24Z&st=2020-04-09T11:07:24Z&spr=https&sig=Z67UuDjY4QScWJCAMeXZmMn7VLH%2F3uL6xv6vpXnInOA%3D",
         "product": "https://kfcprodnecmsimage.azureedge.net/cmsimages/",
         "home": "https://kfcprodnecmsimage.azureedge.net/cmsimages/imagestemp/",
-        "jsonBase": "https://amfprodneblobstorage.blob.core.windows.net/amfprodneblobstorage/development/"
+        "jsonBase": "https://amfprodneblobstorage.blob.core.windows.net/amfprodneblobstorage/production/"
     },
     "cryptoSecret": "d6F3Efeq",
     "cryptoAlgo": "aes-256-cbc",
@@ -202,8 +202,8 @@
     "sms": {
         "host": "sms.rmlconnect.net",
         "port": "2345",
-        "userName": "Adigital",
-        "password": "vSqKeZdc",
+        "userName": "Storeuser",
+        "password": "bATNYV89",
         "endPoint": "bulksms/bulksms",
         "source": "KFC",
         "android_key": "Lew4b/w5UpK"
@@ -211,7 +211,7 @@
     "email": {
         "sgKey": "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",
         "sender": "KFC <digiteam@americana-food.com>",
-        "bccAddress": "",
+        "bccAddress": "ramohamed@americana-food.com,nkhan@americana-food.com,mvijayaraghavan@americana-food.com,ntiwari@americana-food.com",
         "smtp": {
             "host": "eu-smtp-outbound-1.mimecast.com",
             "port": 587,
@@ -220,27 +220,27 @@
         }
     },
     "kafka": {
-        "url": "20.46.146.2:9092"
+        "url": "10.4.1.5:9092,10.4.1.6:9091,10.4.1.4:9093"
     },
     "aerospike": {
-        "hosts": "40.123.212.40:3000",
-        "username": "aerospikeusr",
-        "password": "GM2nGDQkN5yMdPZs",
+        "hosts": "10.2.0.27:3000,10.2.0.33:3000",
+        "username": "",
+        "password": "",
         "config": {
-            "timeout": 30000,
-            "maxConnsPerNode": 20000
+            "timeout": 10000,
+            "maxConnsPerNode": 10000
         }
     },
     "mongo": {
-        "url": "mongodb://americana_dbusr:96fMUpk2PGzbu8Hn@54.176.239.44:2798/americana_db"
+        "url": "mongodb://americanaprod_dbusr:7Hph99BhG9kAkEXR@10.1.4.7:27017,mongo-2:27017,mongo-3:27017/americanaprod_db?replicaSet=rs0&readPreference=secondaryPreferred&w=majority&wtimeoutMS=5000"
     },
     "cms": {
-        "baseUrl": "http://40.123.207.192/rest/V1/",
+        "baseUrl": "https://kfccms.americanarest.com/rest/V1/",
         "categoryId": 3
     },
     "sdm": {
-        "baseUrl": "https://sdkuatuae.americana.com.sa:1995/?wsdl",
-        "type": "uat",
+        "baseUrl": "https://sdkliveuae.americana.com.sa:1998/?wsdl",
+        "type": "live",
         "cred": {
             "licenseCode": "PizzaHutApp"
         },
@@ -255,13 +255,13 @@
             "cod": {
                 "payStatus": 1,
                 "payStoreTenderId": 252,
-                "paySubType": 9,
+                "paySubType": 1,
                 "payType": 1
             },
             "card": {
                 "payStatus": 1,
                 "payStoreTenderId": 253,
-                "paySubType": 8,
+                "paySubType": 1,
                 "payType": 2
             }
         }
