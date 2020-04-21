@@ -1856,6 +1856,7 @@ export class OrderClass extends BaseEntity {
                     },
                     {
                         sdmOrderRef: { '$ne': 0 },
+                        sdmOrderStatus: { '$ne': 96 },
                         status: {
                             $in: [
                                 Constant.CONF.ORDER_STATUS.PENDING.MONGO,
