@@ -451,7 +451,8 @@ export class OrderController {
                     return
                 } else {
                     if (getRetrySdmOrderStatus.indexOf(parseInt(payload.Value)) >= 0) {
-                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
+                        let order = await ENTITY.OrderE.getOneEntityMdb({ sdmOrderRef: parseInt(payload.Key) }, { items: 0, selFreeItem: 0, freeItems: 0 })
+                        ENTITY.OrderE.getSdmOrderScheduler(order)
                         return
                     } else
                         return parseInt(payload.Key)
