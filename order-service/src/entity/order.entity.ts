@@ -193,6 +193,87 @@ export class OrderClass extends BaseEntity {
         }
     }
 
+    async authorizePaymentHandler(order: IOrderRequest.IOrderData) {
+        try {
+            let isFailed = false;
+            let validationRemarks = "";
+            let transLogs = [];
+            let webHookStatus;
+            try {
+                webHookStatus = await paymentService.getPaymentStatus({
+                    noonpayOrderId: order.transLogs[0].noonpayOrderId,
+                    storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                    paymentStatus: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                })
+                transLogs.push(webHookStatus)
+            } catch (statusError) {
+                isFailed = true
+                validationRemarks = JSON.stringify(statusError.details)
+                if (statusError.data) {
+                    if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                        transLogs.push(statusError.data)
+                    } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                        transLogs.push(statusError.data)
+                    } else {
+                        consolelog(process.cwd(), "authorizePaymentHandler", JSON.stringify(statusError), false)
+                    }
+                }
+            }
+            consolelog(process.cwd(), "authorizePaymentHandler : isFailed", isFailed, true)
+            if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO) {
+                if (!isFailed && webHookStatus && webHookStatus.resultCode == 0 && webHookStatus.transactions && webHookStatus.transactions.length > 0) {
+                    let dataToUpdateOrder = {
+                        $addToSet: {
+                            transLogs: { $each: transLogs.reverse() }
+                        },
+                        "payment.transactionId": webHookStatus.transactions[0].id,
+                        "payment.status": webHookStatus.transactions[0].type
+                    }
+                    order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                    if (order && order._id) {
+                        if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
+                            if (order.cmsOrderRef)
+                                CMS.TransactionCMSE.createTransaction({
+                                    order_id: order.cmsOrderRef,
+                                    message: webHookStatus.transactions[0].type,
+                                    type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
+                                    payment_data: {
+                                        id: webHookStatus.transactions[0].id.toString(),
+                                        data: JSON.stringify(webHookStatus)
+                                    }
+                                })
+                            if (order.cmsOrderRef)
+                                CMS.OrderCMSE.updateOrder({
+                                    order_id: order.cmsOrderRef,
+                                    payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                                    order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
+                                    sdm_order_id: order.sdmOrderRef,
+                                    validation_remarks: ""
+                                })
+                            return order
+                        } else
+                            isFailed = true
+                    } else
+                        isFailed = true
+                }
+            }
+            if (isFailed) {
+                validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE
+            } else {
+                if (order.validationRemarks && order.validationRemarks != "")
+                    validationRemarks = order.validationRemarks
+                else
+                    validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
+            }
+            if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO)
+                order = await this.orderFailureHandler(order, 1, validationRemarks)
+            return order
+        } catch (error) {
+            consolelog(process.cwd(), "authorizePaymentHandler", JSON.stringify(error), false)
+            return Promise.reject(error)
+        }
+    }
+
     /**
     * @method GRPC
     * @description : Create order on SDM
@@ -1182,6 +1263,8 @@ export class OrderClass extends BaseEntity {
                                                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_ADD_ON_SDM_FAILURE)
                                             }
                                         }
+                                    } else {
+                                        await this.authorizePaymentHandler(order)
                                     }
                                     break;
                                 }

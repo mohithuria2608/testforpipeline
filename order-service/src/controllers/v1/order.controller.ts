@@ -389,7 +389,7 @@ export class OrderController {
             let fakeSdmOrderIds = await Promise.all(promise)
             fakeSdmOrderIds = fakeSdmOrderIds.filter(obj => { return (obj) })
             if (fakeSdmOrderIds && fakeSdmOrderIds.length > 0) {
-                let checkOrderExists = await ENTITY.OrderE.getMultipleMdb({
+                let checkOrderExistsByUpdatingOrder = await ENTITY.OrderE.getMultipleMdb({
                     sdmOrderRef: { $in: fakeSdmOrderIds },
                     status: {
                         $nin: [
@@ -399,11 +399,11 @@ export class OrderController {
                     }
                 }, { _id: 1, sdmOrderRef: 1, sdmOrderStatus: 1 })
                 let finalSdmOrderIdToBypass = []
-                if (checkOrderExists && checkOrderExists.length > 0) {
+                if (checkOrderExistsByUpdatingOrder && checkOrderExistsByUpdatingOrder.length > 0) {
                     fakeSdmOrderIds.forEach(soi => {
                         if (soi) {
                             let soiExists = false
-                            checkOrderExists.map(mo => {
+                            checkOrderExistsByUpdatingOrder.map(mo => {
                                 if (mo) {
                                     if (soi == mo.sdmOrderRef)
                                         soiExists = true
@@ -437,11 +437,7 @@ export class OrderController {
                             Constant.CONF.ORDER_STATUS.FAILURE.MONGO
                         ]
                     },
-                    sdmOrderRef: parseInt(payload.Key),
-                    $or: [
-                        { sdmOrderStatus: { $ne: parseInt(payload.Value) } },
-                        { sdmOrderStatus: { $in: getRetrySdmOrderStatus } }
-                    ]
+                    sdmOrderRef: parseInt(payload.Key)
                 }, {
                     sdmOrderStatus: parseInt(payload.Value),
                     updatedAt: new Date().getTime()
@@ -453,8 +449,13 @@ export class OrderController {
                     else
                         ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
                     return
-                } else
-                    return parseInt(payload.Key)
+                } else {
+                    if (getRetrySdmOrderStatus.indexOf(parseInt(payload.Value)) >= 0) {
+                        ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
+                        return
+                    } else
+                        return parseInt(payload.Key)
+                }
             } else
                 return
         } catch (error) {
