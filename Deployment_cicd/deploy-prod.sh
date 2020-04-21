@@ -26,10 +26,10 @@ template=`echo "$template" | sed "s@{{Home_image}}@$Home_image@g"`
 echo "$template" | kubectl apply -f -
 
 #Apply HPA  
-kubectl apply -f ./Deployment_cicd/hpa.yaml 
+#kubectl apply -f ./Deployment_cicd/hpa.yaml 
 
-temp=`cat "./Deployment_cicd/ingress.yaml" | sed "s@{{Ingress_tls_secret}}@$Ingress_tls_secret@g"
+#temp=`cat "./Deployment_cicd/ingress.yaml" | sed "s@{{Ingress_tls_secret}}@$Ingress_tls_secret@g"
 
 
-echo "$temp" | kubectl apply -f -
+#echo "$temp" | kubectl apply -f -
 
