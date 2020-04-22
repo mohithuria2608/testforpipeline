@@ -1181,30 +1181,37 @@ export class OrderClass extends BaseEntity {
     async amountValidationHandler(proceedFurther: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
             consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode}`, "", true)
-            let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-            let amountToCompare = totalAmount[0].amount
-            consolelog(process.cwd(), `amountValidationHandler 1 : totalAmount : ${totalAmount[0].amount}, sdmTotal : ${sdmOrder.Total}`, "", true)
-            if (parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) {
-                /**
-                 *@description Delivery order
-                 */
-                let deliveryCharge = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
-                consolelog(process.cwd(), `amountValidationHandler 2 : deliveryCharge : ${deliveryCharge}`, "", true)
-                if (deliveryCharge && deliveryCharge.length > 0)
-                    amountToCompare = amountToCompare - deliveryCharge[0].amount
-            }
-            consolelog(process.cwd(), `amountValidationHandler 3 : amountToCompare : ${amountToCompare}, sdmOrder.Total : ${sdmOrder.Total}`, "", true)
-
-            if (
-                ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
-                ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.PICKUP.SDM) && (amountToCompare == parseFloat(sdmOrder.Total)))
-            ) {
+            if (parseFloat(sdmOrder.Total) == order.payment.amount) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
             } else {
-                consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
+                consolelog(process.cwd(), `amountValidationHandler 1`, "", true)
                 proceedFurther = false
                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
             }
+            // let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
+            // let amountToCompare = totalAmount[0].amount
+            // consolelog(process.cwd(), `amountValidationHandler 1 : totalAmount : ${totalAmount[0].amount}, sdmTotal : ${sdmOrder.Total}`, "", true)
+            // if (parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) {
+            //     /**
+            //      *@description Delivery order
+            //      */
+            //     let deliveryCharge = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
+            //     consolelog(process.cwd(), `amountValidationHandler 2 : deliveryCharge : ${deliveryCharge}`, "", true)
+            //     if (deliveryCharge && deliveryCharge.length > 0)
+            //         amountToCompare = amountToCompare - deliveryCharge[0].amount
+            // }
+            // consolelog(process.cwd(), `amountValidationHandler 3 : amountToCompare : ${amountToCompare}, sdmOrder.Total : ${sdmOrder.Total}`, "", true)
+
+            // if (
+            //     ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
+            //     ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.PICKUP.SDM) && (amountToCompare == parseFloat(sdmOrder.Total)))
+            // ) {
+            //     order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
+            // } else {
+            //     consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
+            //     proceedFurther = false
+            //     order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
+            // }
 
             return { proceedFurther, order }
         } catch (error) {
