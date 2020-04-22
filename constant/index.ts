@@ -1495,6 +1495,7 @@ export const CONF = {
         CONTACTLESS_VISBILE: true,
         CONTACTLESS_CLICK_ENABLE: true,
         ORDERSTATUS_RESET: 24 * 60 * 60,//seconds
+        LOGGER_EXPIRE_TIME: (7 * 24 * 60 * 60 * 1000),//millisecond
     },
     COUNTRY_SPECIFIC: {
         UAE: {

@@ -1,24 +1,12 @@
 import * as mongoose from "mongoose";
 import { consolelog } from '../utils';
 import { authService, locationService, orderService } from '../grpc/client';
-import * as Services from '../mongo/dao';
 
 export class BaseEntity {
     public ObjectId = mongoose.Types.ObjectId;
-    public DAOManager = new Services.DAOManager();
     public set: SetNames;
     constructor(set?) {
         this.set = set
-    }
-
-    async createOneEntityMdb(saveData: Object) {
-        try {
-            let data = await this.DAOManager.saveData(this.set, saveData)
-            return data
-        } catch (error) {
-            consolelog(process.cwd(), 'Base entity createOneEntityMdb', JSON.stringify(error), false)
-            return Promise.reject(error)
-        }
     }
 
     /**
