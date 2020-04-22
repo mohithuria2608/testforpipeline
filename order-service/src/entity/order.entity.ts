@@ -1180,11 +1180,11 @@ export class OrderClass extends BaseEntity {
 
     async amountValidationHandler(proceedFurther: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode}`, "", true)
+            consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode} : order amount : ${order.payment.amount} : sdm order amount : ${parseFloat(sdmOrder.Total)}`, "", true)
             if (parseFloat(sdmOrder.Total) == order.payment.amount) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
             } else {
-                consolelog(process.cwd(), `amountValidationHandler 1`, "", true)
+                consolelog(process.cwd(), `amountValidationHandler failed`, "", true)
                 proceedFurther = false
                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
             }
