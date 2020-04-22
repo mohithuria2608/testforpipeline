@@ -1457,7 +1457,8 @@ export const STATUS_MSG = {
         PAYMENT_FAILURE: "Payment failure",
         PAYMENT_ADD_ON_SDM_FAILURE: "Failure in adding payment on sdm",
         SDM_ORDER_PRE_CONDITION_FAILURE: "Failure in order pre condition wrt SDM",
-        SDM_ORDER_FAIL: "Error in creating order on SDM"
+        SDM_ORDER_FAIL: "Error in creating order on SDM",
+        STORE_OUT_OF_WORKING_HOURS: "Store is out of working hours"
     }
 };
 
@@ -1494,6 +1495,7 @@ export const CONF = {
         CONTACTLESS_VISBILE: true,
         CONTACTLESS_CLICK_ENABLE: true,
         ORDERSTATUS_RESET: 24 * 60 * 60,//seconds
+        LOGGER_EXPIRE_TIME: (10 * 24 * 60 * 60 * 1000),//millisecond
     },
     COUNTRY_SPECIFIC: {
         UAE: {

@@ -18,6 +18,7 @@ export class LogController {
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.ERROR:
                 case Constant.DATABASE.TYPE.ACTIVITY_LOG.PAYMENT_REQUEST: {
                     if (!config.get("loadTest")) {
+                        data['expiresAt'] = new Date(new Date().getTime() + Constant.CONF.GENERAL.LOGGER_EXPIRE_TIME)
                         ENTITY.LoggerE.createOneEntity(data)
                     }
                     break;

@@ -36,6 +36,7 @@ const loggerSchema = new Schema({
         env: { type: Number },
     },
     createdAt: { type: Number },
+    expiresAt: { type: Date, expires: 0 }
 });
 
 export let logger = model<Ilogger>('logger', loggerSchema)

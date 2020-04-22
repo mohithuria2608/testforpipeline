@@ -217,6 +217,8 @@ export class LocationController {
             let store = await storeController.validateCoords(validateCoordsPayload)
             consolelog(process.cwd(), "store", JSON.stringify(store), true)
             if (store && store.id) {
+                if (!store.active)
+                    return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                 let res = {
                     menuId: store.menuId,
                     store: {

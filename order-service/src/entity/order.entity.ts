@@ -119,6 +119,7 @@ export class OrderClass extends BaseEntity {
                 payment: {
                     paymentMethodId: paymentMethodId,
                     amount: totalAmount,
+                    authAmount: 0,
                     name: ""
                 },
                 status: Constant.CONF.ORDER_STATUS.PENDING.MONGO
@@ -190,6 +191,110 @@ export class OrderClass extends BaseEntity {
             consolelog(process.cwd(), "initiatePaymentHandler", JSON.stringify(error), false)
             this.orderFailureHandler(order, -1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
             return Promise.reject(error)
+        }
+    }
+
+    async authorizePaymentHandler(payload: IWebhookNoonpayRequest.IOrderProcessPayment) {
+        let order: IOrderRequest.IOrderData
+        let redirectUrl = config.get("server.order.url")
+        try {
+            order = await this.getOneEntityMdb({
+                "transLogs.noonpayOrderId": payload.orderId
+            }, { transLogs: 1, status: 1, payment: 1, userId: 1, cmsOrderRef: 1, sdmOrderRef: 1, language: 1, cartId: 1 }, { lean: true })
+            if (order && order._id) {
+                /**
+                 * @description step 1 get noonpay order status
+                 */
+                let isFailed = false;
+                let validationRemarks = "";
+                let transLogs = [];
+                let webHookStatus;
+                try {
+                    webHookStatus = await paymentService.getPaymentStatus({
+                        noonpayOrderId: payload.orderId,
+                        storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE,
+                        paymentStatus: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                    })
+                    transLogs.push(webHookStatus)
+                } catch (statusError) {
+                    if (!payload.apiCall)
+                        return { redirectUrl: "", order: order }
+                    isFailed = true
+                    validationRemarks = statusError.details
+                    if (statusError.data) {
+                        if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.STATUS_USING_NOONPAY_ID) {
+                            transLogs.push(statusError.data)
+                        } else if (statusError.data.actionHint == Constant.DATABASE.TYPE.PAYMENT_ACTION_HINTS.SYNC_CONFIGURATION) {
+                            transLogs.push(statusError.data)
+                        } else {
+                            consolelog(process.cwd(), "authorizePaymentHandler : unhandled payment error web hook status", "", false)
+                        }
+                    }
+                }
+                consolelog(process.cwd(), "authorizePaymentHandler : isFailed", isFailed, true)
+                if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO) {
+                    if (!isFailed && webHookStatus && webHookStatus.resultCode == 0 && webHookStatus.transactions && webHookStatus.transactions.length > 0) {
+                        let dataToUpdateOrder = {
+                            $addToSet: {
+                                transLogs: { $each: transLogs.reverse() }
+                            },
+                            "payment.transactionId": webHookStatus.transactions[0].id,
+                            "payment.status": webHookStatus.transactions[0].type,
+                            "payment.authAmount": webHookStatus.transactions[0].amount
+                        }
+                        order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
+                        if (order && order._id) {
+                            if (order.payment && order.payment.status == Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.AS) {
+                                if (order.cmsOrderRef)
+                                    CMS.TransactionCMSE.createTransaction({
+                                        order_id: order.cmsOrderRef,
+                                        message: webHookStatus.transactions[0].type,
+                                        type: Constant.DATABASE.STATUS.TRANSACTION.AUTHORIZATION.CMS,
+                                        payment_data: {
+                                            id: webHookStatus.transactions[0].id.toString(),
+                                            data: JSON.stringify(webHookStatus)
+                                        }
+                                    })
+                                if (order.cmsOrderRef)
+                                    CMS.OrderCMSE.updateOrder({
+                                        order_id: order.cmsOrderRef,
+                                        payment_status: Constant.DATABASE.STATUS.PAYMENT.AUTHORIZED,
+                                        order_status: Constant.CONF.ORDER_STATUS.PENDING.CMS,
+                                        sdm_order_id: order.sdmOrderRef,
+                                        validation_remarks: ""
+                                    })
+                                redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_SUCCESS_FALLBACK
+                                consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
+                                return { redirectUrl, order }
+                            } else
+                                isFailed = true
+                        } else
+                            isFailed = true
+                    }
+                }
+                if (isFailed) {
+                    validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE
+                } else {
+                    if (order.validationRemarks && order.validationRemarks != "")
+                        validationRemarks = order.validationRemarks
+                    else
+                        validationRemarks = Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH
+                }
+                if (order.status != Constant.CONF.ORDER_STATUS.FAILURE.MONGO)
+                    await this.orderFailureHandler(order, 1, validationRemarks)
+                redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
+                consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
+                return { redirectUrl, order }
+            } else {
+                redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
+                consolelog(process.cwd(), "redirectUrl", redirectUrl, true)
+                return { redirectUrl, order }
+            }
+        } catch (error) {
+            consolelog(process.cwd(), "authorizePayment", JSON.stringify(error), false)
+            this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_FAILURE)
+            redirectUrl = redirectUrl + Constant.CONF.GENERAL.PAYMENT_FAILURE_FALLBACK
+            return { redirectUrl, order }
         }
     }
 
@@ -1075,31 +1180,38 @@ export class OrderClass extends BaseEntity {
 
     async amountValidationHandler(proceedFurther: boolean, order: IOrderRequest.IOrderData, sdmOrder) {
         try {
-            consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode}`, "", true)
-            let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
-            let amountToCompare = totalAmount[0].amount
-            consolelog(process.cwd(), `amountValidationHandler 1 : totalAmount : ${totalAmount[0].amount}, sdmTotal : ${sdmOrder.Total}`, "", true)
-            if (parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) {
-                /**
-                 *@description Delivery order
-                 */
-                let deliveryCharge = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
-                consolelog(process.cwd(), `amountValidationHandler 2 : deliveryCharge : ${deliveryCharge}`, "", true)
-                if (deliveryCharge && deliveryCharge.length > 0)
-                    amountToCompare = amountToCompare - deliveryCharge[0].amount
-            }
-            consolelog(process.cwd(), `amountValidationHandler 3 : amountToCompare : ${amountToCompare}, sdmOrder.Total : ${sdmOrder.Total}`, "", true)
-
-            if (
-                ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
-                ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.PICKUP.SDM) && (amountToCompare == parseFloat(sdmOrder.Total)))
-            ) {
+            consolelog(process.cwd(), `Amount validation check order mode : ${sdmOrder.OrderMode} : order amount : ${order.payment.amount} : sdm order amount : ${parseFloat(sdmOrder.Total)}`, "", true)
+            if (parseFloat(sdmOrder.Total) == order.payment.amount) {
                 order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
             } else {
-                consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
+                consolelog(process.cwd(), `amountValidationHandler failed`, "", true)
                 proceedFurther = false
                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
             }
+            // let totalAmount = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL })
+            // let amountToCompare = totalAmount[0].amount
+            // consolelog(process.cwd(), `amountValidationHandler 1 : totalAmount : ${totalAmount[0].amount}, sdmTotal : ${sdmOrder.Total}`, "", true)
+            // if (parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) {
+            //     /**
+            //      *@description Delivery order
+            //      */
+            //     let deliveryCharge = order.amount.filter(obj => { return obj.type == Constant.DATABASE.TYPE.CART_AMOUNT.TYPE.SHIPPING })
+            //     consolelog(process.cwd(), `amountValidationHandler 2 : deliveryCharge : ${deliveryCharge}`, "", true)
+            //     if (deliveryCharge && deliveryCharge.length > 0)
+            //         amountToCompare = amountToCompare - deliveryCharge[0].amount
+            // }
+            // consolelog(process.cwd(), `amountValidationHandler 3 : amountToCompare : ${amountToCompare}, sdmOrder.Total : ${sdmOrder.Total}`, "", true)
+
+            // if (
+            //     ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.DELIVERY.SDM) && (amountToCompare == parseFloat(sdmOrder.Total) || totalAmount[0].amount == parseFloat(sdmOrder.Total))) ||
+            //     ((parseInt(sdmOrder.OrderMode) == Constant.DATABASE.TYPE.ORDER.PICKUP.SDM) && (amountToCompare == parseFloat(sdmOrder.Total)))
+            // ) {
+            //     order = await this.updateOneEntityMdb({ _id: order._id }, { amountValidationPassed: true }, { new: true })
+            // } else {
+            //     consolelog(process.cwd(), `amountValidationHandler 4`, "", true)
+            //     proceedFurther = false
+            //     order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.ORDER_AMOUNT_MISMATCH)
+            // }
 
             return { proceedFurther, order }
         } catch (error) {
@@ -1182,6 +1294,8 @@ export class OrderClass extends BaseEntity {
                                                 order = await this.orderFailureHandler(order, 1, Constant.STATUS_MSG.SDM_ORDER_VALIDATION.PAYMENT_ADD_ON_SDM_FAILURE)
                                             }
                                         }
+                                    } else {
+                                        await this.authorizePaymentHandler({ orderId: order.transLogs[0].noonpayOrderId, apiCall: false })
                                     }
                                     break;
                                 }
@@ -1256,7 +1370,7 @@ export class OrderClass extends BaseEntity {
                                     await paymentService.capturePayment({
                                         noonpayOrderId: parseInt(order.transLogs[1].noonpayOrderId),
                                         orderId: order.transLogs[1].orderId,
-                                        amount: order.transLogs[1].amount,
+                                        amount: order.payment.authAmount,// order.transLogs[1].amount,
                                         storeCode: Constant.DATABASE.STORE_CODE.MAIN_WEB_STORE
                                     })
                                 } catch (captureError) {
@@ -1651,7 +1765,7 @@ export class OrderClass extends BaseEntity {
         try {
             if (order && order._id) {
                 consolelog(process.cwd(), ` FAILURE HANDLER : voidReason : ${voidReason}, validationRemarks : ${validationRemarks}`, "", true)
-                if (voidReason >= 0)
+                if (voidReason >= 0 && order.sdmOrderStatus != 96)
                     OrderSDME.cancelOrder({
                         sdmOrderRef: order.sdmOrderRef,
                         voidReason: voidReason,
@@ -1807,17 +1921,19 @@ export class OrderClass extends BaseEntity {
                 order = await this.updateOneEntityMdb({ _id: order._id }, dataToUpdateOrder, { new: true })
                 if (order && order._id && order.notification && !order.notification.failure) {
                     // send notification(sms + email) on order failure
-                    let userData = await userService.fetchUser({ userId: order.userId });
-                    notificationService.sendNotification({
-                        toSendMsg: true,
-                        msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
-                        msgDestination: `${userData.cCode}${userData.phnNo}`,
-                        toSendEmail: true,
-                        emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
-                        emailDestination: userData.email,
-                        language: order.language,
-                        payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
-                    });
+                    if (order.sdmOrderStatus != 96) {
+                        let userData = await userService.fetchUser({ userId: order.userId });
+                        notificationService.sendNotification({
+                            toSendMsg: true,
+                            msgCode: Constant.NOTIFICATION_CODE.SMS.ORDER_FAIL,
+                            msgDestination: `${userData.cCode}${userData.phnNo}`,
+                            toSendEmail: true,
+                            emailCode: Constant.NOTIFICATION_CODE.EMAIL.ORDER_FAIL,
+                            emailDestination: userData.email,
+                            language: order.language,
+                            payload: JSON.stringify({ msg: order, email: { order, user: userData, meta: {} } })
+                        });
+                    }
                     order = await this.updateOneEntityMdb({ _id: order._id }, { "notification.failure": true }, { new: true })
                 }
             }
@@ -1856,6 +1972,7 @@ export class OrderClass extends BaseEntity {
                     },
                     {
                         sdmOrderRef: { '$ne': 0 },
+                        sdmOrderStatus: { '$ne': 96 },
                         status: {
                             $in: [
                                 Constant.CONF.ORDER_STATUS.PENDING.MONGO,

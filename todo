@@ -12,3 +12,5 @@ changes :
 4. User migration
 5. default payment configs as null 
 
+
+maxpendingLoging : {remove mails and sms, donot show in order history, donot trigger cancel api of sdm}

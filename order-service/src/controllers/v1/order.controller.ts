@@ -120,7 +120,7 @@ export class OrderController {
                 if (!store.isOnline)
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
             } else
-                return Promise.reject(Constant.STATUS_MSG.ERROR.E412.SERVICE_UNAVAILABLE)
+                return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             consolelog(process.cwd(), "step 4", new Date(), false)
 
             if (config.get("sdm.promotion.default"))
@@ -389,7 +389,7 @@ export class OrderController {
             let fakeSdmOrderIds = await Promise.all(promise)
             fakeSdmOrderIds = fakeSdmOrderIds.filter(obj => { return (obj) })
             if (fakeSdmOrderIds && fakeSdmOrderIds.length > 0) {
-                let checkOrderExists = await ENTITY.OrderE.getMultipleMdb({
+                let checkOrderExistsByUpdatingOrder = await ENTITY.OrderE.getMultipleMdb({
                     sdmOrderRef: { $in: fakeSdmOrderIds },
                     status: {
                         $nin: [
@@ -399,11 +399,11 @@ export class OrderController {
                     }
                 }, { _id: 1, sdmOrderRef: 1, sdmOrderStatus: 1 })
                 let finalSdmOrderIdToBypass = []
-                if (checkOrderExists && checkOrderExists.length > 0) {
+                if (checkOrderExistsByUpdatingOrder && checkOrderExistsByUpdatingOrder.length > 0) {
                     fakeSdmOrderIds.forEach(soi => {
                         if (soi) {
                             let soiExists = false
-                            checkOrderExists.map(mo => {
+                            checkOrderExistsByUpdatingOrder.map(mo => {
                                 if (mo) {
                                     if (soi == mo.sdmOrderRef)
                                         soiExists = true
@@ -428,7 +428,7 @@ export class OrderController {
     async cronPromise(payload: IOrderSdmRequest.IGetActiveOrdersResObj) {
         try {
             let donotGetOrderDetailStatus = [2, 8, 16, 32, 64, 128, 2048]
-            let getRetrySdmOrderStatus = [96]
+            let getRetrySdmOrderStatus = [96, 0]
             if (payload && payload.Key && payload.Value) {
                 let checkIfStatusChanged = await ENTITY.OrderE.updateOneEntityMdb({
                     status: {
@@ -437,11 +437,7 @@ export class OrderController {
                             Constant.CONF.ORDER_STATUS.FAILURE.MONGO
                         ]
                     },
-                    sdmOrderRef: parseInt(payload.Key),
-                    $or: [
-                        { sdmOrderStatus: { $ne: parseInt(payload.Value) } },
-                        { sdmOrderStatus: { $in: getRetrySdmOrderStatus } }
-                    ]
+                    sdmOrderRef: parseInt(payload.Key)
                 }, {
                     sdmOrderStatus: parseInt(payload.Value),
                     updatedAt: new Date().getTime()
@@ -453,8 +449,25 @@ export class OrderController {
                     else
                         ENTITY.OrderE.getSdmOrderScheduler(checkIfStatusChanged)
                     return
-                } else
-                    return parseInt(payload.Key)
+                } else {
+                    if (getRetrySdmOrderStatus.indexOf(parseInt(payload.Value)) >= 0) {
+                        let order = await ENTITY.OrderE.getOneEntityMdb({
+                            status: {
+                                $nin: [
+                                    Constant.CONF.ORDER_STATUS.CANCELED.MONGO,
+                                    Constant.CONF.ORDER_STATUS.FAILURE.MONGO
+                                ]
+                            },
+                            sdmOrderRef: parseInt(payload.Key)
+                        }, { items: 0, selFreeItem: 0, freeItems: 0 })
+                        if (order && order._id) {
+                            ENTITY.OrderE.getSdmOrderScheduler(order)
+                            return
+                        } else
+                            return parseInt(payload.Key)
+                    } else
+                        return parseInt(payload.Key)
+                }
             } else
                 return
         } catch (error) {

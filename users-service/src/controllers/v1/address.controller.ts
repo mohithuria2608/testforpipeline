@@ -60,13 +60,11 @@ export class AddressController {
             let userData: IUserRequest.IUserData = await ENTITY.UserE.getUser({ userId: auth.id })
             let store: IStoreGrpcRequest.IStore
             if (payload.storeId) {
-                // payload.addressType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.TYPE
-                // payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE
                 let serviceType = (payload.addressSubType == Constant.DATABASE.TYPE.ADDRESS.PICKUP.SUBTYPE.STORE) ? Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY : Constant.DATABASE.TYPE.STORE_SERVICE.CARHOP
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language, serviceType)
                 if (store && store.id && store.areaId) {
-                    // if (!store.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     payload['lat'] = store.location.latitude
@@ -79,12 +77,10 @@ export class AddressController {
                 else
                     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
             } else if (payload.lat && payload.lng) {
-                // payload.addressType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.TYPE
-                // payload.addressSubType = Constant.DATABASE.TYPE.ADDRESS.DELIVERY.SUBTYPE.DELIVERY
                 store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (store && store.id && store.areaId) {
-                    // if (!store.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }
@@ -134,8 +130,8 @@ export class AddressController {
             if (payload.storeId) {
                 store = await ENTITY.UserE.fetchStore(payload.storeId, headers.language, Constant.DATABASE.TYPE.STORE_SERVICE.TAKEAWAY)
                 if (store && store.id && store.areaId) {
-                    // if (!store.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                     payload['addressId'] = payload.addressId
@@ -151,8 +147,8 @@ export class AddressController {
             } else if (payload.lat && payload.lng) {
                 store = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (store && store.id && store.areaId) {
-                    // if (!store.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }
@@ -207,8 +203,8 @@ export class AddressController {
             if (payload.lat && payload.lng) {
                 let store: IStoreGrpcRequest.IStore = await ENTITY.UserE.validateCoordinate(payload.lat, payload.lng, Constant.DATABASE.TYPE.STORE_SERVICE.DELIVERY)
                 if (store && store.id) {
-                    // if (!store.active)
-                    //     return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
+                    if (!store.active)
+                        return Promise.reject(Constant.STATUS_MSG.ERROR.E409.SERVICE_UNAVAILABLE)
                     if (!store.isOnline)
                         return Promise.reject(Constant.STATUS_MSG.ERROR.E411.STORE_NOT_WORKING)
                 }

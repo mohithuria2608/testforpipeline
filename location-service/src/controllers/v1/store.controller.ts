@@ -23,7 +23,7 @@ export class StoreController {
                 background: false,
             }
             let store: IStoreRequest.IStore[] = await Aerospike.query(queryArg)
-            if (store && store.length > 0 && store[0].active) {
+            if (store && store.length > 0) {
                 if (store[0]['services'][payload.serviceType]) {
                     store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                     return store[0]
@@ -54,7 +54,7 @@ export class StoreController {
                 }
             }
             let store = await Aerospike.query(geoWithinArg)
-            if (store && store.length > 0 && store[0].active) {
+            if (store && store.length > 0) {
                 if (store[0]['services'][payload.serviceType]) {
                     store[0]['isOnline'] = checkOnlineStore(store[0].startTime, store[0].endTime, store[0].nextday)
                     return store[0]
