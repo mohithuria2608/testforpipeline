@@ -19,8 +19,8 @@ export class AddressEntity extends BaseEntity {
          */
         id: Joi.string().trim().required().description("pk"),
         description: Joi.string(),
-        lat: Joi.number().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
-        lng: Joi.number().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+        lat: Joi.number().unsafe().min(-90).max(90).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+        lng: Joi.number().unsafe().min(-180).max(180).error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
         bldgName: Joi.string(),
         flatNum: Joi.string(),
         tag: Joi.string().valid(
