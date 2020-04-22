@@ -13,8 +13,8 @@ export default (router: Router) => {
             validate({
                 headers: JOI.COMMON_HEADERS,
                 query: {
-                    lat: Joi.number().min(-90).max(90),//.error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
-                    lng: Joi.number().min(-180).max(180),//.error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lat: Joi.number().unsafe().min(-90).max(90),//.error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
+                    lng: Joi.number().unsafe().min(-180).max(180),//.error(new Error(Constant.STATUS_MSG.ERROR.E422.INVALID_LOCATION.message)),
                 }
             }),
             async (ctx) => {
