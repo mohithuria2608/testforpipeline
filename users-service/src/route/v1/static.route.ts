@@ -16,9 +16,9 @@ export default (router: Router) => {
                 ctx.status = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.httpCode
         })
         .get('/faq',
-            ...getMiddleware([
-                Constant.MIDDLEWARE.APP_VERSION,
-            ]),
+            // ...getMiddleware([
+            //     Constant.MIDDLEWARE.APP_VERSION,
+            // ]),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
