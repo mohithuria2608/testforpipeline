@@ -592,11 +592,11 @@ export const NOTIFICATION_MSG = {
             USER_OTP_VERIFICATION: (data) => `<#> ${data.otp} is an OTP to login to your KFC account. It is valid for the next 10 minutes. Please do not share this OTP with anyone. ${data.key}`,
             ORDER_DELIVERY_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
-                return `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next 20 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount[0].amount} AED.`
+                return `Thank you for choosing KFC! We will deliver your food hot and fresh at your doorstep. Your order is expected to arrive in the next ${CONF.GENERAL.CONFIRMED_DELIVERY_MINUTES} mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount[0].amount} AED.`
             },
             ORDER_PICKUP_CONFIRM: (data) => {
                 data.amount = data.amount.filter(obj => { return obj.type == DATABASE.TYPE.CART_AMOUNT.TYPE.TOTAL });
-                return `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next 30 mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount[0].amount} AED.`
+                return `Thank you for choosing KFC! Your order has been confirmed and will be ready in the next ${CONF.GENERAL.CONFIRMED_PICKUP_MINUTES} mins. Order no. ${data.sdmOrderRef} | Amount: ${data.amount[0].amount} AED.`
             },
             ORDER_CANCEL: (data) => `Your order no. ${data.sdmOrderRef} was cancelled. We regret the inconvenience caused.  Any payments if deducted will get refunded within 4-7 business days.`,
             ORDER_FAIL: (data) => `Your order failed due to unavoidable reasons. Please try after some time.`,
@@ -1496,6 +1496,8 @@ export const CONF = {
         CONTACTLESS_CLICK_ENABLE: true,
         ORDERSTATUS_RESET: 24 * 60 * 60,//seconds
         LOGGER_EXPIRE_TIME: (10 * 24 * 60 * 60 * 1000),//millisecond
+        CONFIRMED_DELIVERY_MINUTES: 20,
+        CONFIRMED_PICKUP_MINUTES: 30
     },
     COUNTRY_SPECIFIC: {
         UAE: {
