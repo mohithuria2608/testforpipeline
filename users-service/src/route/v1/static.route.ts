@@ -1,4 +1,5 @@
 import * as Router from 'koa-router';
+import { getMiddleware } from '../../middlewares'
 import * as Constant from '../../constant';
 import { sendSuccess } from '../../utils'
 import { createReadStream } from 'fs';
@@ -15,6 +16,9 @@ export default (router: Router) => {
                 ctx.status = Constant.STATUS_MSG.ERROR.E404.RESOURCE_NOT_FOUND.httpCode
         })
         .get('/faq',
+            ...getMiddleware([
+                Constant.MIDDLEWARE.APP_VERSION,
+            ]),
             async (ctx) => {
                 try {
                     let headers: ICommonRequest.IHeaders = ctx.request.header;
@@ -25,7 +29,7 @@ export default (router: Router) => {
                     } else {
                         ctx.status = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, []).statusCode
                         ctx.body = sendSuccess(Constant.STATUS_MSG.SUCCESS.S200.DEFAULT, headers.language, [])
-                    }                    
+                    }
                 }
                 catch (error) {
                     throw error
