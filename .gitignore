@@ -43,3 +43,6 @@ log
 
 #constant directories in each service
 *-service/src/constant
+
+#ignreo this path
+/home/vm4/gitrepo/jenkfile/testforpipeline/Deployment_cicd
